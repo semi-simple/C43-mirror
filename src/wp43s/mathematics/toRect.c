@@ -22,14 +22,16 @@
 
 
 
-void fnToRect(uint16_t unusedParamButMandatory) {
-  uint32_t dataTypeX, dataTypeY, yAngularMode;
+void fnToRect(uint16_t unusedButMandatoryParameter) {
+  uint32_t dataTypeX, dataTypeY;
   real_t x, y;
 
   dataTypeX = getRegisterDataType(REGISTER_X);
   dataTypeY = getRegisterDataType(REGISTER_Y);
 
   if((dataTypeX == dtReal34 || dataTypeX == dtLongInteger) && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
+    angularMode_t yAngularMode = getRegisterAngularMode(REGISTER_Y);
+
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
     switch(dataTypeX) {
@@ -41,18 +43,17 @@ void fnToRect(uint16_t unusedParamButMandatory) {
       }
     }
 
-    yAngularMode = getRegisterAngularMode(REGISTER_Y);
-    if(yAngularMode == AM_NONE) {
+    if(yAngularMode == amNone) {
       yAngularMode = currentAngularMode;
     }
 
     switch(dataTypeY) {
       case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-                          convertAngleFromTo(&y, currentAngularMode, AM_RADIAN, &ctxtReal39);
+                          convertAngleFromTo(&y, currentAngularMode, amRadian, &ctxtReal39);
                           break;
 
       case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-                          convertAngleFromTo(&y, yAngularMode, AM_RADIAN, &ctxtReal39);
+                          convertAngleFromTo(&y, yAngularMode, amRadian, &ctxtReal39);
                           break;
 
       default: {
@@ -63,8 +64,8 @@ void fnToRect(uint16_t unusedParamButMandatory) {
 
     realPolarToRectangular(&x, &y, &x, &y, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
 
@@ -75,12 +76,12 @@ void fnToRect(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot convert (%s, %s) to rectangular coordinates!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false), getDataTypeName(getRegisterDataType(REGISTER_Y), false, false));
       moreInfoOnError("In function fnToRect:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 
 
-
+/* never used
 void real34PolarToRectangular(const real34_t *magnitude34, const real34_t *theta34, real34_t *real34, real34_t *imag34) {
   real_t real, imag, magnitude, theta;
 
@@ -92,7 +93,7 @@ void real34PolarToRectangular(const real34_t *magnitude34, const real34_t *theta
   realToReal34(&real, real34);
   realToReal34(&imag, imag34);
 }
-
+*/
 
 void realPolarToRectangular(const real_t *mag, const real_t *the, real_t *real, real_t *imag, realContext_t *realContext) {
   ///////////////////////////////////////////
@@ -277,7 +278,7 @@ void realPolarToRectangular(const real_t *mag, const real_t *the, real_t *real, 
     //  +----+----+-------------+------+------+
     //  |r   |θ   |             |r·cosθ|r·sinθ| 18
 
-  WP34S_Cvt2RadSinCosTan(&theta, AM_RADIAN, &sin, &cos, NULL, realContext);
+  WP34S_Cvt2RadSinCosTan(&theta, amRadian, &sin, &cos, NULL, realContext);
   realMultiply(&magnitude, &cos, real, realContext);
   realMultiply(&magnitude, &sin, imag, realContext);
 }

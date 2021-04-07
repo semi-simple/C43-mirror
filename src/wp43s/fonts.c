@@ -21,22 +21,22 @@
 #include "wp43s.h"
 
 // Little hexadecimal font for generating a not found glyph
-const char *hexaFont = "\x69\x99\x99\x60"  // 0
-                       "\x22\x22\x22\x20"  // 1
-                       "\xe1\x16\x88\xf0"  // 2
-                       "\xe1\x16\x11\xe0"  // 3
-                       "\x99\x9f\x11\x10"  // 4
-                       "\xf8\x8e\x11\xe0"  // 5
-                       "\x68\x8e\x99\x60"  // 6
-                       "\xf1\x11\x11\x10"  // 7
-                       "\x69\x96\x99\x60"  // 8
-                       "\x69\x97\x11\x60"  // 9
-                       "\x69\x9f\x99\x90"  // A
-                       "\x88\x8e\x99\xe0"  // b
-                       "\x78\x88\x88\x70"  // C
-                       "\x11\x17\x99\x70"  // d
-                       "\xf8\x8e\x88\xf0"  // E
-                       "\xf8\x8e\x88\x80"; // F
+TO_QSPI const char *hexaFont = "\x69\x99\x99\x60"  // 0
+                               "\x22\x22\x22\x20"  // 1
+                               "\xe1\x16\x88\xf0"  // 2
+                               "\xe1\x16\x11\xe0"  // 3
+                               "\x99\x9f\x11\x10"  // 4
+                               "\xf8\x8e\x11\xe0"  // 5
+                               "\x68\x8e\x99\x60"  // 6
+                               "\xf1\x11\x11\x10"  // 7
+                               "\x69\x96\x99\x60"  // 8
+                               "\x69\x97\x11\x60"  // 9
+                               "\x69\x9f\x99\x90"  // A
+                               "\x88\x8e\x99\xe0"  // b
+                               "\x78\x88\x88\x70"  // C
+                               "\x11\x17\x99\x70"  // d
+                               "\xf8\x8e\x88\xf0"  // E
+                               "\xf8\x8e\x88\x80"; // F
 
 
 
@@ -96,7 +96,7 @@ int16_t findGlyph(const font_t *font, uint16_t charCode) {
  ***********************************************/
 void generateNotFoundGlyph(int16_t font, uint16_t charCode) {
   int16_t i;
-  int8_t  nibble1, nibble2;
+  uint8_t  nibble1, nibble2;
 
 
   if(charCode >= 0x8000) {

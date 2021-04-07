@@ -25,10 +25,10 @@
  * \brief (c, b, a) ==> (x1, x2, r) c ==> regL
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSlvq(uint16_t unusedParamButMandatory) {
+void fnSlvq(uint16_t unusedButMandatoryParameter) {
   bool_t realCoefs=true, realRoots=true;
   real_t aReal, bReal, cReal, rReal, x1Real, x2Real;
   real_t aImag, bImag, cImag, rImag, x1Imag, x2Imag;
@@ -51,7 +51,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                           sprintf(errorMessage, "cannot SLVQ with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
                           moreInfoOnError("In function fnSlqv:", errorMessage, NULL, NULL);
-                        #endif
+                        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
                         return;
   }
 
@@ -73,7 +73,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                           sprintf(errorMessage, "cannot SLVQ with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
                           moreInfoOnError("In function fnSlqv:", errorMessage, NULL, NULL);
-                        #endif
+                        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
                         return;
   }
 
@@ -95,7 +95,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
                           sprintf(errorMessage, "cannot SLVQ with %s in Z", getRegisterDataTypeName(REGISTER_Z, true, false));
                           moreInfoOnError("In function fnSlqv:", errorMessage, NULL, NULL);
-                        #endif
+                        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
                         return;
   }
 
@@ -104,7 +104,7 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function fnSlqv:", "cannot use 0 for Y and Z as input of SLVQ", NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -249,40 +249,40 @@ void fnSlvq(uint16_t unusedParamButMandatory) {
   }
 
   if(realRoots) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
-    reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
+    reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
     realToReal34(&rReal,  REGISTER_REAL34_DATA(REGISTER_Z));
   }
   else { // !realRoots
     if(realIsZero(&x1Imag)) { // x1 is real
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x1Real, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(&x1Imag, REGISTER_IMAG34_DATA(REGISTER_X));
     }
 
     if(realIsZero(&x2Imag)) { // x2 is real
-      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
     }
     else {
-      reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Y, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x2Real, REGISTER_REAL34_DATA(REGISTER_Y));
       realToReal34(&x2Imag, REGISTER_IMAG34_DATA(REGISTER_Y));
     }
 
     if(realIsZero(&rImag)) { // r is real
-      reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Z, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_Z));
     }
     else {
-      reallocateRegister(REGISTER_Z, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_Z, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_Z));
       realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_Z));
     }

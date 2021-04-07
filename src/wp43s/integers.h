@@ -30,13 +30,13 @@ void     longIntegerSubtract         (longInteger_t opY, longInteger_t opX, long
  * modified and adapted
  */
 int64_t  WP34S_build_value          (const uint64_t x, const int32_t sign);
-uint64_t WP34S_intAdd               (uint64_t term1,      uint64_t term2);
-uint64_t WP34S_intSubtract          (uint64_t term1,      uint64_t term2);
-uint64_t WP34S_intMultiply          (uint64_t multiplier, uint64_t multiplicand);
-uint64_t WP34S_intDivide            (uint64_t dividend,   uint64_t divisor);
-uint64_t WP34S_intPower             (uint64_t base,       uint64_t exponent);
-uint64_t WP34S_intSqr               (uint64_t x);
-uint64_t WP34S_intCube              (uint64_t x);
+uint64_t WP34S_intAdd               (uint64_t y, uint64_t x);
+uint64_t WP34S_intSubtract          (uint64_t y, uint64_t x);
+uint64_t WP34S_intMultiply          (uint64_t y, uint64_t x);
+uint64_t WP34S_intDivide            (uint64_t y, uint64_t x);
+uint64_t WP34S_intPower             (uint64_t b, uint64_t e);
+//uint64_t WP34S_intSqr               (uint64_t x); Never used
+//uint64_t WP34S_intCube              (uint64_t x); Never used
 uint64_t WP34S_intLCM               (uint64_t y, uint64_t x);
 uint64_t WP34S_intGCD               (uint64_t y, uint64_t x);
 uint64_t WP34S_intChs               (uint64_t x);
@@ -52,3 +52,5 @@ uint64_t WP34S_intLog2              (uint64_t x);
 uint64_t WP34S_intLog10             (uint64_t x);
 uint64_t WP34S_extract_value        (const uint64_t val, int32_t *const sign);
 int64_t  WP34S_intFib               (int64_t x);
+uint64_t WP34S_mulmod               (const uint64_t a, uint64_t b, const uint64_t c);
+uint64_t WP34S_expmod               (const uint64_t a, uint64_t b, const uint64_t c);

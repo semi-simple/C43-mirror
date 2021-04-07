@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
+TO_QSPI void (* const gd[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
 // regX ==> 1            2       3         4            5            6            7            8            9             10
 //          Long integer Real34  Complex34 Time         Date         String       Real34 mat   Complex34 m  Short integer Config data
             gdLonI,      gdReal, gdCplx,   gdTypeError, gdTypeError, gdTypeError, gdTypeError, gdTypeError, gdTypeError,  gdTypeError
@@ -43,7 +43,7 @@ void gdTypeError(uint16_t gdOrInvGd) {
       sprintf(errorMessage, "cannot calculate invGd(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
       moreInfoOnError("In function fnInvGd:", errorMessage, NULL, NULL);
     }
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 static void gdError(uint16_t gdOrInvGd, uint8_t errorCode) {
@@ -57,7 +57,7 @@ static void gdError(uint16_t gdOrInvGd, uint8_t errorCode) {
       sprintf(errorMessage, "cannot calculate invGd(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
       moreInfoOnError("In function fnInvGd:", errorMessage, NULL, NULL);
     }
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 
@@ -65,12 +65,12 @@ static void gdError(uint16_t gdOrInvGd, uint8_t errorCode) {
  * \brief regX ==> regL and gd(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGd(uint16_t unusedParamButMandatory) {
+void fnGd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-  matrix[getRegisterDataType(REGISTER_X)](GD_DIRECT_FUNCTION);
+  gd[getRegisterDataType(REGISTER_X)](GD_DIRECT_FUNCTION);
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
@@ -78,12 +78,12 @@ void fnGd(uint16_t unusedParamButMandatory) {
  * \brief regX ==> regL and invGd(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnInvGd(uint16_t unusedParamButMandatory) {
+void fnInvGd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-  matrix[getRegisterDataType(REGISTER_X)](GD_INVERSE_FUNCTION);
+  gd[getRegisterDataType(REGISTER_X)](GD_INVERSE_FUNCTION);
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
 
@@ -99,7 +99,7 @@ void gdLonI(uint16_t gdOrInvGd) {
     gdError(gdOrInvGd, errorCode);
   }
   else {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
 }
@@ -147,7 +147,7 @@ void gdCplx(uint16_t gdOrInvGd) {
 }
 
 uint8_t GudermannianReal(const real_t *x, real_t *res, realContext_t *realContext) {
-  if (realIsInfinite(x)) {
+  if(realIsInfinite(x)) {
     realCopy(const_piOn2, res);
     if(!realIsPositive(x))
       realChangeSign(res);
@@ -211,14 +211,14 @@ uint8_t InverseGudermannianReal(const real_t *x, real_t *res, realContext_t *rea
        */
       realDivide(x, const_2, res, realContext);       // r = x/2
       realAdd(res, const_piOn4, res, realContext);    // r = x/2 + pi/4
-      WP34S_Cvt2RadSinCosTan(res, AM_RADIAN, &sin, &cos, res, &ctxtReal39); // r = Tan(x/2 + pi/4)
+      WP34S_Cvt2RadSinCosTan(res, amRadian, &sin, &cos, res, &ctxtReal39); // r = Tan(x/2 + pi/4)
       WP34S_Ln(res, res, &ctxtReal39);                // r = Ln(Tan(x/2 + pi/4))
 
       /*
        * InvGd(x) = ArcSinh(Tan(x))
        * -PI/2 < x < PI/2
        */
-      //WP34S_Cvt2RadSinCosTan(x, AM_RADIAN, &sin, &cos, res, &ctxtReal39);
+      //WP34S_Cvt2RadSinCosTan(x, amRadian, &sin, &cos, res, &ctxtReal39);
       //ArcsinhReal(res, res, &ctxtReal39);
     }
   }

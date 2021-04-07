@@ -18,8 +18,12 @@
  * \file division.h
  ***********************************************/
 
-void fnDivide(uint16_t unusedParamButMandatory);
+void fnDivide(uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void divError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define divError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 void divComplexComplex(const real_t *numerReal, const real_t *numerImag, const real_t *denomReal, const real_t *denomImag,    real_t *quotientReal, real_t *quotientImag, realContext_t *realContext);
 void divRealComplex   (const real_t *numer,     const real_t *denomReal, const real_t *denomImag,       real_t *quotientReal, real_t *quotientImag,                       realContext_t *realContext);
@@ -34,6 +38,7 @@ void divLonICplx(void);
 void divTimeLonI(void);
 void divTimeShoI(void);
 void divTimeReal(void);
+void divTimeTime(void);
 
 //      RegYRegX
 void divRemaLonI(void);

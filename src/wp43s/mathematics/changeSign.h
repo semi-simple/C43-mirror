@@ -18,8 +18,12 @@
  * \file changeSign.h
  ***********************************************/
 
-void fnChangeSign(uint16_t unusedParamButMandatory);
+void fnChangeSign(uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void chsError    (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define chsError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 //      RegX
 void chsLonI     (void);

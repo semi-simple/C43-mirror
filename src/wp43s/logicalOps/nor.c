@@ -25,7 +25,7 @@
 
 
 
-void (* const logicalNor[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const logicalNor[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX |    regY ==>   1            2            3           4           5           6           7           8            9             10
 //      V               Long integer Real34       Complex34   Time        Date        String      Real34 mat  Complex34 m  Short integer Config data
 /*  1 Long integer  */ {norLonILonI, norRealLonI, norError24, norError24, norError24, norError24, norError24, norError24,  norError31,   norError24},
@@ -48,14 +48,14 @@ void (* const logicalNor[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_T
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void norError24(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "%s NOR %s", getRegisterDataTypeName(REGISTER_Y, false, false), getRegisterDataTypeName(REGISTER_X, false, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "data type of one of the NOR parameters is not allowed");
     moreInfoOnError("In function norError24:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 void norError31(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
@@ -63,7 +63,7 @@ void norError31(void) {
     sprintf(errorMessage, "%s NOR %s", getRegisterDataTypeName(REGISTER_Y, false, false), getRegisterDataTypeName(REGISTER_X, false, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "NOR doesn't allow mixing data types real/long integer and short integer");
     moreInfoOnError("In function norError31:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 
@@ -72,20 +72,13 @@ void norError31(void) {
  * \brief regX ==> regL NOR regY ÷ regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnLogicalNor(uint16_t unusedParamButMandatory) {
+void fnLogicalNor(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
   logicalNor[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
-  else {
-    fnDropY(NOPARAM);
-  }
+  fnDropY(NOPARAM);
 }
 
 

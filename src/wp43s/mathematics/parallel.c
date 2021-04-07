@@ -22,7 +22,7 @@
 
 
 
-void (* const parallel[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const parallel[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX |    regY ==>   1                 2                 3                 4              5              6              7              8              9              10
 //      V               Long integer      Real34            Complex34         Time           Date           String         Real34 mat     Complex34 m    Short integer  Config data
 /*  1 Long integer  */ {parallelLonILonI, parallelRealLonI, parallelCplxLonI, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError, parallelError},
@@ -42,17 +42,17 @@ void (* const parallel[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYP
 /********************************************//**
  * \brief Data type error in parallel function
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void parallelError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot multiply %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnMultiply:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -60,10 +60,10 @@ void parallelError(void) {
  * \brief regX ==> regL and regY || regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory
+ * \param[in] unusedButMandatoryParameter
  * \return void
  ***********************************************/
-void fnParallel(uint16_t unusedParamButMandatory) {
+void fnParallel(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   parallel[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
@@ -89,7 +89,7 @@ void parallelLonILonI(void) {
   // y || x = xy / (x+y)
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   if(!realIsZero(&x)) {
     realMultiply(&y, &x, &product, &ctxtReal39);
@@ -122,7 +122,7 @@ void parallelLonIReal(void) {
   }
 
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -139,7 +139,7 @@ void parallelRealLonI(void) {
   // y || x = xy / (x+y)
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   if(!realIsZero(&x)) {
     realMultiply(&y, &x, &product, &ctxtReal39);
@@ -148,7 +148,7 @@ void parallelRealLonI(void) {
   }
 
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -198,7 +198,7 @@ void parallelCplxLonI(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
 
   if(!realIsZero(&yReal) || !realIsZero(&yImag)) {
     realMultiply(&x, &yReal, &productReal, &ctxtReal39);
@@ -238,7 +238,7 @@ void parallelRealReal(void) {
   }
 
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -288,7 +288,7 @@ void parallelCplxReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_Y), &yImag);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
 
   if(!realIsZero(&yReal) || !realIsZero(&yImag)) {
     realMultiply(&x, &yReal, &productReal, &ctxtReal39);

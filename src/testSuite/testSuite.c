@@ -53,9 +53,18 @@ const funcTest_t funcTestNoParam[] = {
   {"fnArg",                  fnArg                 },
   {"fnAsr",                  fnAsr                 },
   {"fnBatteryVoltage",       fnBatteryVoltage      },
+  {"fnBessel",               fnBessel              },
+  {"fnBn",                   fnBn                  },
+  {"fnBnStar",               fnBnStar              },
   {"fnCb",                   fnCb                  },
   {"fnCeil",                 fnCeil                },
   {"fnChangeSign",           fnChangeSign          },
+  {"fnChebyshevT",           fnChebyshevT          },
+  {"fnChebyshevU",           fnChebyshevU          },
+  {"fnChi2I",                fnChi2I               },
+  {"fnChi2L",                fnChi2L               },
+  {"fnChi2P",                fnChi2P               },
+  {"fnChi2R",                fnChi2R               },
   {"fnClearRegisters",       fnClearRegisters      },
   {"fnClearStack",           fnClearStack          },
   {"fnClFAll",               fnClFAll              },
@@ -82,6 +91,12 @@ const funcTest_t funcTestNoParam[] = {
   {"fnCvtFToC",              fnCvtFToC             },
   {"fnCvtRadToDeg",          fnCvtRadToDeg         },
   {"fnCyx",                  fnCyx                 },
+  {"fnDateTo",               fnDateTo              },
+  {"fnDateToJulian",         fnDateToJulian        },
+  {"fnDay",                  fnDay                 },
+  {"fnDblDivide",            fnDblDivide           },
+  {"fnDblDivideRemainder",   fnDblDivideRemainder  },
+  {"fnDblMultiply",          fnDblMultiply         },
   {"fnDec",                  fnDec                 },
   {"fnDecomp",               fnDecomp              },
   {"fnDeltaPercent",         fnDeltaPercent        },
@@ -90,8 +105,11 @@ const funcTest_t funcTestNoParam[] = {
   {"fnDot",                  fnDot                 },
   {"fnDrop",                 fnDrop                },
   {"fnDropY",                fnDropY               },
+  {"fnErf",                  fnErf                 },
+  {"fnErfc",                 fnErfc                },
   {"fnExp",                  fnExp                 },
   {"fnExpM1",                fnExpM1               },
+  {"fnExpMod",               fnExpMod              },
   {"fnExpt",                 fnExpt                },
   {"fnFactorial",            fnFactorial           },
   {"fnFib",                  fnFib                 },
@@ -100,7 +118,15 @@ const funcTest_t funcTestNoParam[] = {
   {"fnFp",                   fnFp                  },
   {"fnFreeFlashMemory",      fnFreeFlashMemory     },
   {"fnFreeMemory",           fnFreeMemory          },
+  {"fnF_I",                  fnF_I                 },
+  {"fnF_L",                  fnF_L                 },
+  {"fnF_P",                  fnF_P                 },
+  {"fnF_R",                  fnF_R                 },
   {"fnGamma",                fnGamma               },
+  {"fnGammaP",               fnGammaP              },
+  {"fnGammaQ",               fnGammaQ              },
+  {"fnGammaXyLower",         fnGammaXyLower        },
+  {"fnGammaXyUpper",         fnGammaXyUpper        },
   {"fnGcd",                  fnGcd                 },
   {"fnGd",                   fnGd                  },
   {"fnGetIntegerSignMode",   fnGetIntegerSignMode  },
@@ -109,6 +135,8 @@ const funcTest_t funcTestNoParam[] = {
   {"fnGetSignificantDigits", fnGetSignificantDigits},
   {"fnGetStackSize",         fnGetStackSize        },
   {"fnGetWordSize",          fnGetWordSize         },
+  {"fnHermite",              fnHermite             },
+  {"fnHermiteP",             fnHermiteP            },
   {"fnIDiv",                 fnIDiv                },
   {"fnIDivR",                fnIDivR               },
   {"fnImaginaryPart",        fnImaginaryPart       },
@@ -116,7 +144,12 @@ const funcTest_t funcTestNoParam[] = {
   {"fnInvGd",                fnInvGd               },
   {"fnIp",                   fnIp                  },
   {"fnIsPrime",              fnIsPrime             },
+  {"fnIxyz",                 fnIxyz                },
+  {"fnJulianToDate",         fnJulianToDate        },
+  {"fnLaguerre",             fnLaguerre            },
+  {"fnLaguerreAlpha",        fnLaguerreAlpha       },
   {"fnLcm",                  fnLcm                 },
+  {"fnLegendre",             fnLegendre            },
   {"fnLn",                   fnLn                  },
   {"fnLnP1",                 fnLnP1                },
   {"fnLnGamma",              fnLnGamma             },
@@ -141,9 +174,15 @@ const funcTest_t funcTestNoParam[] = {
   {"fnMant",                 fnMant                },
   {"fnMirror",               fnMirror              },
   {"fnMod",                  fnMod                 },
+  {"fnMonth",                fnMonth               },
+  {"fnMulMod",               fnMulMod              },
   {"fnMultiply",             fnMultiply            },
   {"fnNeighb",               fnNeighb              },
   {"fnNop",                  fnNop                 },
+  {"fnNormalI",              fnNormalI             },
+  {"fnNormalL",              fnNormalL             },
+  {"fnNormalP",              fnNormalP             },
+  {"fnNormalR",              fnNormalR             },
   {"fnParallel",             fnParallel            },
   {"fnPi",                   fnPi                  },
   {"fnPercent",              fnPercent             },
@@ -176,51 +215,65 @@ const funcTest_t funcTestNoParam[] = {
   {"fnSwapXY",               fnSwapXY              },
   {"fnTan",                  fnTan                 },
   {"fnTanh",                 fnTanh                },
+  {"fnToDate",               fnToDate              },
+  {"fnToHms",                fnToHms               },
   {"fnToPolar",              fnToPolar             },
+  {"fnToReal",               fnToReal              },
   {"fnToRect",               fnToRect              },
+  {"fnT_I",                  fnT_I                 },
+  {"fnT_L",                  fnT_L                 },
+  {"fnT_P",                  fnT_P                 },
+  {"fnT_R",                  fnT_R                 },
   {"fnUlp",                  fnUlp                 },
   {"fnUnitVector",           fnUnitVector          },
+  {"fnWday",                 fnWday                },
+  {"fnWinverse",             fnWinverse            },
+  {"fnWnegative",            fnWnegative           },
+  {"fnWpositive",            fnWpositive           },
   {"fnXthRoot",              fnXthRoot             },
+  {"fnXToDate",              fnXToDate             },
+  {"fnYear",                 fnYear                },
+  {"fnZeta",                 fnZeta                },
   {"",                       NULL                  }
 };
 
 const funcTest_t funcTestCvt[] = {
-  {"fnCvtAcreM2",     fnCvtAcreM2    },
-  {"fnCvtAcreusM2",   fnCvtAcreusM2  },
+  {"fnCvtAcreHa",     fnCvtAcreHa    },
+  {"fnCvtAcreusHa",   fnCvtAcreusHa  },
   {"fnCvtAtmPa",      fnCvtAtmPa     },
   {"fnCvtAuM",        fnCvtAuM       },
   {"fnCvtBarPa",      fnCvtBarPa     },
   {"fnCvtBtuJ",       fnCvtBtuJ      },
   {"fnCvtCalJ",       fnCvtCalJ      },
   {"fnCvtCwtKg",      fnCvtCwtKg     },
-  {"fnCvtFlozukM3",   fnCvtFlozukM3  },
-  {"fnCvtFlozusM3",   fnCvtFlozusM3  },
+  {"fnCvtFlozukMl",   fnCvtFlozukMl  },
+  {"fnCvtFlozusMl",   fnCvtFlozusMl  },
   {"fnCvtFtM",        fnCvtFtM       },
-  {"fnCvtGalukM3",    fnCvtGalukM3   },
-  {"fnCvtGalusM3",    fnCvtGalusM3   },
+  {"fnCvtGalukL",     fnCvtGalukL    },
+  {"fnCvtGalusL",     fnCvtGalusL    },
   {"fnCvtHpeW",       fnCvtHpeW      },
   {"fnCvtHpmW",       fnCvtHpmW      },
   {"fnCvtHpukW",      fnCvtHpukW     },
-  {"fnCvtInchM",      fnCvtInchM     },
+  {"fnCvtInchMm",     fnCvtInchMm    },
   {"fnCvtInhgPa",     fnCvtInhgPa    },
   {"fnCvtLbfN",       fnCvtLbfN      },
   {"fnCvtLbfftNm",    fnCvtLbfftNm   },
   {"fnCvtLbKg",       fnCvtLbKg      },
   {"fnCvtLyM",        fnCvtLyM       },
-  {"fnCvtMiM",        fnCvtMiM       },
-  {"fnCvtNmiM",       fnCvtNmiM      },
-  {"fnCvtOzKg",       fnCvtOzKg      },
+  {"fnCvtMiKm",       fnCvtMiKm      },
+  {"fnCvtNmiKm",      fnCvtNmiKm     },
+  {"fnCvtOzG",        fnCvtOzG       },
   {"fnCvtPcM",        fnCvtPcM       },
-  {"fnCvtPointM",     fnCvtPointM    },
+  {"fnCvtPointMm",    fnCvtPointMm   },
   {"fnCvtPsiPa",      fnCvtPsiPa     },
-  {"fnCvtQuartM3",    fnCvtQuartM3   },
+  {"fnCvtQuartL",     fnCvtQuartL    },
   {"fnCvtSfeetM",     fnCvtSfeetM    },
   {"fnCvtShortcwtKg", fnCvtShortcwtKg},
   {"fnCvtShorttonKg", fnCvtShorttonKg},
   {"fnCvtStoneKg",    fnCvtStoneKg   },
   {"fnCvtTonKg",      fnCvtTonKg     },
   {"fnCvtTorrPa",     fnCvtTorrPa    },
-  {"fnCvtTrozKg",     fnCvtTrozKg    },
+  {"fnCvtTrozG",      fnCvtTrozG     },
   {"fnCvtWhJ",        fnCvtWhJ       },
   {"fnCvtYardM",      fnCvtYardM     },
   {"fnCvtYearS",      fnCvtYearS     },
@@ -311,7 +364,7 @@ void strToShortInteger(char *nimBuffer, calcRegister_t regist) {
   longIntegerDivideUInt(maxVal, 2, minVal); // minVal = maxVal / 2
   longIntegerSetNegativeSign(minVal); // minVal = -minVal
 
-  if(shortIntegerMode != SIM_UNSIGN) {
+  if((base != 2) && (base != 4) && (base != 8) && (base != 16) && (shortIntegerMode != SIM_UNSIGN)) {
     longIntegerDivideUInt(maxVal, 2, maxVal); // maxVal /= 2
   }
 
@@ -437,7 +490,8 @@ void getString(char *str) {
 
 void setParameter(char *p) {
   char l[200], r[200], real[200], imag[200], angMod[200]; //, letter;
-  int32_t i, am = AM_DEGREE;
+  int32_t i;
+  angularMode_t am = amDegree;
 
   //printf("  setting %s\n", p);
 
@@ -528,6 +582,15 @@ void setParameter(char *p) {
       else if(!strcmp(l+3, "ASLIFT")) {
         if(r[0] == '0') {clearSystemFlag(FLAG_ASLIFT);}   else {setSystemFlag(FLAG_ASLIFT);}
       }
+      else if(!strcmp(l+3, "YMD")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_YMD);}   else {setSystemFlag(FLAG_YMD);}
+      }
+      else if(!strcmp(l+3, "MDY")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_MDY);}   else {setSystemFlag(FLAG_MDY);}
+      }
+      else if(!strcmp(l+3, "DMY")) {
+        if(r[0] == '0') {clearSystemFlag(FLAG_DMY);}   else {setSystemFlag(FLAG_DMY);}
+      }
       else {
         printf("\nMissformed numbered flag setting. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
@@ -577,24 +640,24 @@ void setParameter(char *p) {
   //Setting angular mode
   else if(strcmp(l, "AM") == 0) {
     if(strcmp(r, "DEG") == 0) {
-      currentAngularMode = AM_DEGREE;
+      currentAngularMode = amDegree;
       //printf("  Set angular mode to DEG\n");
     }
     else if(strcmp(r, "DMS") == 0) {
-      currentAngularMode = AM_DMS;
+      currentAngularMode = amDMS;
       //printf("  Set angular mode to DMS\n");
     }
-    else if(strcmp(r, "GRAD") == 0) {
-      currentAngularMode = AM_GRAD;
-      //printf("  Set angular mode to GRAD\n");
-    }
     else if(strcmp(r, "RAD") == 0) {
-      currentAngularMode = AM_RADIAN;
+      currentAngularMode = amRadian;
       //printf("  Set angular mode to RAD\n");
     }
     else if(strcmp(r, "MULTPI") == 0) {
-      currentAngularMode = AM_MULTPI;
+      currentAngularMode = amMultPi;
       //printf("  Set angular mode to MULTPI\n");
+    }
+    else if(strcmp(r, "GRAD") == 0) {
+      currentAngularMode = amGrad;
+      //printf("  Set angular mode to GRAD\n");
     }
     else {
       printf("\nMissformed angular mode setting. The rvalue must be DEG, DMS, GRAD, RAD or MULTPI.\n");
@@ -659,6 +722,26 @@ void setParameter(char *p) {
     }
     else {
       printf("\nMissformed grouping gap setting. The rvalue must be a number from 0 to 15.\n");
+      abortTest();
+    }
+  }
+
+  //Setting J/G
+  else if(strcmp(l, "JG") == 0) {
+    if(                 (r[0] >= '0' && r[0] <= '9' &&
+        ((r[1] == 0) || (r[1] >= '0' && r[1] <= '9' &&
+        ((r[2] == 0) || (r[2] >= '0' && r[2] <= '9' &&
+        ((r[3] == 0) || (r[3] >= '0' && r[3] <= '9' &&
+        ((r[4] == 0) || (r[4] >= '0' && r[4] <= '9' &&
+        ((r[5] == 0) || (r[5] >= '0' && r[5] <= '9' &&
+        ((r[6] == 0) || (r[6] >= '0' && r[6] <= '9' &&
+        ((r[7] == 0) || (r[7] >= '0' && r[7] <= '9' &&
+        ((r[8] == 0) || (r[8] >= '0' && r[8] <= '9' &&
+        ((r[9] == 0) ))))))))))))))))))) {
+      firstGregorianDay = atoi(r);
+    }
+    else {
+      printf("\nMissformed J/G setting. The rvalue must be a number.\n");
       abortTest();
     }
   }
@@ -780,12 +863,12 @@ void setParameter(char *p) {
       r[i] = 0;
       strcpy(angMod, r + i + 1);
 
-           if(strcmp(angMod, "DEG"   ) == 0) am = AM_DEGREE;
-      else if(strcmp(angMod, "DMS"   ) == 0) am = AM_DMS;
-      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
-      else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
-      else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
-      else if(strcmp(angMod, "NONE"  ) == 0) am = AM_NONE;
+           if(strcmp(angMod, "DEG"   ) == 0) am = amDegree;
+      else if(strcmp(angMod, "DMS"   ) == 0) am = amDMS;
+      else if(strcmp(angMod, "RAD"   ) == 0) am = amRadian;
+      else if(strcmp(angMod, "MULTPI") == 0) am = amMultPi;
+      else if(strcmp(angMod, "GRAD"  ) == 0) am = amGrad;
+      else if(strcmp(angMod, "NONE"  ) == 0) am = amNone;
       else {
         printf("\nMissformed register real%d angular mode. Unknown angular mode after real value.\n", strcmp(l, "RE16") == 0 ? 16 : 34);
         abortTest();
@@ -797,7 +880,7 @@ void setParameter(char *p) {
       r[strlen(r) - 1] = 0;
 
       // replace , with .
-      for(int i=0; i<(int)strlen(r); i++) {
+      for(i=0; i<(int)strlen(r); i++) {
         if(r[i] == ',') r[i] = '.';
       }
 
@@ -806,7 +889,7 @@ void setParameter(char *p) {
     }
     else if(strcmp(l, "STRI") == 0) {
       getString(r + 1);
-      reallocateRegister(regist, dtString, TO_BLOCKS(stringByteLength(r + 1) + 1), AM_NONE);
+      reallocateRegister(regist, dtString, TO_BLOCKS(stringByteLength(r + 1) + 1), amNone);
       strcpy(REGISTER_STRING_DATA(regist), r + 1);
     }
     else if(strcmp(l, "SHOI") == 0) {
@@ -861,18 +944,69 @@ void setParameter(char *p) {
       while(imag[strlen(imag) - 1] == ' ') imag[strlen(imag) - 1] = 0;
 
       // replace , with . in the real part
-      for(int i=0; i<(int)strlen(real); i++) {
+      for(i=0; i<(int)strlen(real); i++) {
         if(real[i] == ',') real[i] = '.';
       }
 
       // replace , with . in the imaginary part
-      for(int i=0; i<(int)strlen(imag); i++) {
+      for(i=0; i<(int)strlen(imag); i++) {
         if(imag[i] == ',') imag[i] = '.';
       }
 
-      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(regist, dtComplex34, COMPLEX34_SIZE, amNone);
       stringToReal34(real, REGISTER_REAL34_DATA(regist));
       stringToReal34(imag, REGISTER_IMAG34_DATA(regist));
+    }
+    else if(strcmp(l, "TIME") == 0) {
+      int32_t k = 0;
+      bool_t isHms = false;
+
+      // find the : separating hours and minutes
+      i = 0;
+      while(r[i] != ':' && r[i] != 0) i++;
+      if(r[i] == ':') { // Input by HMS
+        isHms = true;
+        k = i;
+        r[i] = '.';
+        do {
+          ++k;
+          if((r[k] != ':') && (r[k] != '.') && (r[k] != ',')) {
+            r[++i] = r[k];
+          }
+        } while(r[k] != 0);
+      }
+      am = amNone;
+
+      // remove beginning and ending " and removing leading spaces
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
+      r[strlen(r) - 1] = 0;
+
+      // replace , with .
+      for(i=0; i<(int)strlen(r); i++) {
+        if(r[i] == ',') r[i] = '.';
+      }
+
+      reallocateRegister(regist, dtTime, REAL34_SIZE, amNone);
+      stringToReal34(r, REGISTER_REAL34_DATA(regist));
+      if(isHms) {
+        hmmssInRegisterToSeconds(regist);
+      }
+    }
+    else if(strcmp(l, "DATE") == 0) {
+      // remove beginning and ending " and removing leading spaces
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
+      r[strlen(r) - 1] = 0;
+
+      // replace , with .
+      for(i=0; i<(int)strlen(r); i++) {
+        if(r[i] == ',') r[i] = '.';
+      }
+
+      reallocateRegister(regist, dtReal34, REAL34_SIZE, amNone);
+      stringToReal34(r, REGISTER_REAL34_DATA(regist));
+      convertReal34RegisterToDateRegister(regist, regist);
     }
     else {
       printf("\nMissformed register value. Unknown data type %s for register %s\n", l, p+1);
@@ -900,13 +1034,13 @@ void setParameter(char *p) {
 
 void inParameters(char *token) {
   char parameter[2000];
-  int32_t index, lg;
+  int32_t lg;
 
   strReplace(token, "inf", "9e9999");
 
   while(*token == ' ') token++;
   while(*token != 0) {
-    index = 0;
+    int32_t index = 0;
     while(*token != ' ' && *token != 0) {
       if(*token == '"') { // Inside a string
         lg = endOfString(token) - token;
@@ -929,8 +1063,8 @@ void inParameters(char *token) {
 void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedDataType, uint32_t expectedTag) {
   if(getRegisterDataType(regist) != expectedDataType) {
     if(letter == 0) {
-      printf("\nRegister %u should be %s but it is %s!\n", regist, getDataTypeName(expectedDataType, true, false), getDataTypeName(getRegisterDataType(regist), true, false));
-      printf("R%u = ", regist);
+      printf("\nRegister %d should be %s but it is %s!\n", regist, getDataTypeName(expectedDataType, true, false), getDataTypeName(getRegisterDataType(regist), true, false));
+      printf("R%d = ", regist);
     }
     else {
       printf("\nRegister %c should be %s but it is %s!\n", letter, getDataTypeName(expectedDataType, true, false), getDataTypeName(getRegisterDataType(regist), true, false));
@@ -943,8 +1077,8 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
   if(getRegisterTag(regist) != expectedTag) {
     if(getRegisterDataType(regist) == dtShortInteger) {
       if(letter == 0) {
-        printf("\nRegister %u is a short integer base %u but it should be base %u!\n", regist, expectedTag, getRegisterShortIntegerBase(regist));
-        printf("R%u = ", regist);
+        printf("\nRegister %d is a short integer base %u but it should be base %u!\n", regist, expectedTag, getRegisterShortIntegerBase(regist));
+        printf("R%d = ", regist);
       }
       else {
         printf("\nRegister %c is a short integer base %u but it should be base %u!\n", letter, expectedTag, getRegisterShortIntegerBase(regist));
@@ -955,8 +1089,8 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
     }
     else if(getRegisterDataType(regist) == dtReal34) {
       if(letter == 0) {
-        printf("\nRegister %u should be a real tagged %s but it is tagged %s!\n", regist, getAngularModeName(expectedTag), getAngularModeName(getRegisterAngularMode(regist)));
-        printf("R%u = ", regist);
+        printf("\nRegister %d should be a real tagged %s but it is tagged %s!\n", regist, getAngularModeName(expectedTag), getAngularModeName(getRegisterAngularMode(regist)));
+        printf("R%d = ", regist);
       }
       else {
         printf("\nRegister %c should be a real tagged %s but it is tagged %s!\n", letter, getAngularModeName(expectedTag), getAngularModeName(getRegisterAngularMode(regist)));
@@ -967,11 +1101,11 @@ void checkRegisterType(calcRegister_t regist, char letter, uint32_t expectedData
     }
     else if(getRegisterDataType(regist) == dtLongInteger) {
       if(letter == 0) {
-        printf("\nRegister %u should be a long integer tagged %d but it is tagged %d!\n", regist, expectedTag, getRegisterLongIntegerSign(regist));
-        printf("R%u = ", regist);
+        printf("\nRegister %d should be a long integer tagged %u but it is tagged %u!\n", regist, expectedTag, getRegisterLongIntegerSign(regist));
+        printf("R%d = ", regist);
       }
       else {
-        printf("\nRegister %c should be a long integer tagged %d but it is tagged %d!\n", letter, expectedTag, getRegisterLongIntegerSign(regist));
+        printf("\nRegister %c should be a long integer tagged %u but it is tagged %u!\n", letter, expectedTag, getRegisterLongIntegerSign(regist));
         printf("R%c = ", letter);
       }
       printRegisterToConsole(regist, "", "\n");
@@ -1031,7 +1165,7 @@ int relativeErrorReal34(real34_t *expectedValue34, real34_t *value34, char *numb
 
 void wrongRegisterValue(calcRegister_t regist, char letter, char *expectedValue) {
   if(letter == 0) {
-    printf("\nRegister %u value should be ", regist);
+    printf("\nRegister %d value should be ", regist);
   }
   else {
     printf("\nRegister %c value should be ", letter);
@@ -1047,7 +1181,7 @@ void expectedAndShouldBeValue(calcRegister_t regist, char letter, char *expected
   char str[300];
 
   if(letter == 0) {
-    sprintf(expectedAndValue, "\nRegister %u value should be ", regist);
+    sprintf(expectedAndValue, "\nRegister %d value should be ", regist);
   }
   else {
     sprintf(expectedAndValue, "\nRegister %c value should be ", letter);
@@ -1081,7 +1215,8 @@ bool_t real34AreEqual(real34_t *a, real34_t *b) {
 
 void checkExpectedOutParameter(char *p) {
   char l[2000], r[2000], real[200], imag[200], angMod[200], letter = 0;
-  int32_t i, am = AM_DEGREE;
+  int32_t i;
+  angularMode_t am = amDegree;
   real34_t expectedReal34, expectedImag34;
 
   //printf("  Checking %s\n", p);
@@ -1212,6 +1347,36 @@ void checkExpectedOutParameter(char *p) {
           abortTest();
         }
       }
+      else if(!strcmp(l+3, "YMD")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_YMD)) {
+          printf("\nSystem flag YMD should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_YMD)) {
+          printf("\nSystem flag YMD should be clear but it is set!\n");
+          abortTest();
+        }
+      }
+      else if(!strcmp(l+3, "MDY")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_MDY)) {
+          printf("\nSystem flag MDY should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_MDY)) {
+          printf("\nSystem flag MDY should be clear but it is set!\n");
+          abortTest();
+        }
+      }
+      else if(!strcmp(l+3, "DMY")) {
+        if(r[0] == '1' && !getSystemFlag(FLAG_DMY)) {
+          printf("\nSystem flag DMY should be set but it is clear!\n");
+          abortTest();
+        }
+        else if(r[0] == '0' && getSystemFlag(FLAG_DMY)) {
+          printf("\nSystem flag DMY should be clear but it is set!\n");
+          abortTest();
+        }
+      }
       else {
         printf("\nMissformed numbered flag checking. After FL_ there shall be a number from 0 to 111, a lettered, or a system flag.\n");
         abortTest();
@@ -1274,32 +1439,32 @@ void checkExpectedOutParameter(char *p) {
   //Checking angular mode
   else if(strcmp(l, "AM") == 0) {
     if(strcmp(r, "DEG") == 0) {
-      if(currentAngularMode != AM_DEGREE) {
+      if(currentAngularMode != amDegree) {
         printf("\nAngular mode should be DEGREE but it is not!\n");
         abortTest();
       }
     }
     else if(strcmp(r, "DMS") == 0) {
-      if(currentAngularMode != AM_DMS) {
+      if(currentAngularMode != amDMS) {
         printf("\nAngular mode should be DMS but it is not!\n");
         abortTest();
       }
     }
-    else if(strcmp(r, "GRAD") == 0) {
-      if(currentAngularMode != AM_GRAD) {
-        printf("\nAngular mode should be GRAD but it is not!\n");
-        abortTest();
-      }
-    }
     else if(strcmp(r, "RAD") == 0) {
-      if(currentAngularMode != AM_RADIAN) {
+      if(currentAngularMode != amRadian) {
         printf("\nAngular mode should be RAD but it is not!\n");
         abortTest();
       }
     }
     else if(strcmp(r, "MULTPI") == 0) {
-      if(currentAngularMode != AM_MULTPI) {
+      if(currentAngularMode != amMultPi) {
         printf("\nAngular mode should be MULTPI but it is not!\n");
+        abortTest();
+      }
+    }
+    else if(strcmp(r, "GRAD") == 0) {
+      if(currentAngularMode != amGrad) {
+        printf("\nAngular mode should be GRAD but it is not!\n");
         abortTest();
       }
     }
@@ -1351,6 +1516,31 @@ void checkExpectedOutParameter(char *p) {
     }
     else {
       printf("\nMissformed word size checking. The rvalue must be a number from 0 to 64 (0 is the same as 64).\n");
+      abortTest();
+    }
+  }
+
+  //Checking J/G
+  else if(strcmp(l, "JG") == 0) {
+    if(                 (r[0] >= '0' && r[0] <= '9' &&
+        ((r[1] == 0) || (r[1] >= '0' && r[1] <= '9' &&
+        ((r[2] == 0) || (r[2] >= '0' && r[2] <= '9' &&
+        ((r[3] == 0) || (r[3] >= '0' && r[3] <= '9' &&
+        ((r[4] == 0) || (r[4] >= '0' && r[4] <= '9' &&
+        ((r[5] == 0) || (r[5] >= '0' && r[5] <= '9' &&
+        ((r[6] == 0) || (r[6] >= '0' && r[6] <= '9' &&
+        ((r[7] == 0) || (r[7] >= '0' && r[7] <= '9' &&
+        ((r[8] == 0) || (r[8] >= '0' && r[8] <= '9' &&
+        ((r[9] == 0) ))))))))))))))))))) {
+      uint32_t jg = atoi(r);
+      if(firstGregorianDay != jg) {
+        printf("\nJ/G should be %u but it is %u!\n", jg, firstGregorianDay);
+        abortTest();
+      }
+      firstGregorianDay = atoi(r);
+    }
+    else {
+      printf("\nMissformed J/G setting. The rvalue must be a number.\n");
       abortTest();
     }
   }
@@ -1504,12 +1694,12 @@ void checkExpectedOutParameter(char *p) {
       r[i] = 0;
       strcpy(angMod, r + i + 1);
 
-           if(strcmp(angMod, "DEG"   ) == 0) am = AM_DEGREE;
-      else if(strcmp(angMod, "DMS"   ) == 0) am = AM_DMS;
-      else if(strcmp(angMod, "GRAD"  ) == 0) am = AM_GRAD;
-      else if(strcmp(angMod, "RAD"   ) == 0) am = AM_RADIAN;
-      else if(strcmp(angMod, "MULTPI") == 0) am = AM_MULTPI;
-      else if(strcmp(angMod, "NONE"  ) == 0) am = AM_NONE;
+           if(strcmp(angMod, "DEG"   ) == 0) am = amDegree;
+      else if(strcmp(angMod, "DMS"   ) == 0) am = amDMS;
+      else if(strcmp(angMod, "RAD"   ) == 0) am = amRadian;
+      else if(strcmp(angMod, "MULTPI") == 0) am = amMultPi;
+      else if(strcmp(angMod, "GRAD"  ) == 0) am = amGrad;
+      else if(strcmp(angMod, "NONE"  ) == 0) am = amNone;
       else {
         printf("\nMissformed register real%d angular mode. Unknown angular mode after real value.\n", strcmp(l, "RE16") == 0 ? 16 : 34);
         abortTest();
@@ -1522,7 +1712,7 @@ void checkExpectedOutParameter(char *p) {
       r[strlen(r) - 1] = 0;
 
       // replace , with .
-      for(int i=0; i<(int)strlen(r); i++) {
+      for(i=0; i<(int)strlen(r); i++) {
         if(r[i] == ',') r[i] = '.';
       }
 
@@ -1536,11 +1726,12 @@ void checkExpectedOutParameter(char *p) {
       }
     }
     else if(strcmp(l, "STRI") == 0) {
-      checkRegisterType(regist, letter, dtString, AM_NONE);
+      checkRegisterType(regist, letter, dtString, amNone);
       getString(r + 1);
 
-      char *expected, *is, stringUtf8[200];
+      char *expected, *is;
       if(stringByteLength(r + 1) != stringByteLength(REGISTER_STRING_DATA(regist))) {
+        char stringUtf8[200];
         stringToUtf8(REGISTER_STRING_DATA(regist), (uint8_t *)stringUtf8);
         printf("\nThe 2 strings are not of the same size.\nRegister string: %s\n", stringUtf8);
         for(i=0, is=REGISTER_STRING_DATA(regist); i<=stringByteLength(REGISTER_STRING_DATA(regist)); i++, is++) {
@@ -1594,14 +1785,14 @@ void checkExpectedOutParameter(char *p) {
         }
       }
 
-      strToShortInteger(r, TEMP_REGISTER);
-      checkRegisterType(regist, letter, dtShortInteger, getRegisterTag(TEMP_REGISTER));
-      if(*REGISTER_SHORT_INTEGER_DATA(TEMP_REGISTER) != *REGISTER_SHORT_INTEGER_DATA(regist)) {
+      strToShortInteger(r, TEMP_REGISTER_1);
+      checkRegisterType(regist, letter, dtShortInteger, getRegisterTag(TEMP_REGISTER_1));
+      if(*REGISTER_SHORT_INTEGER_DATA(TEMP_REGISTER_1) != *REGISTER_SHORT_INTEGER_DATA(regist)) {
         wrongRegisterValue(regist, letter, r);
       }
     }
     else if(strcmp(l, "CPLX") == 0) {
-      checkRegisterType(regist, letter, dtComplex34, AM_NONE);
+      checkRegisterType(regist, letter, dtComplex34, amNone);
 
       // remove beginning and ending " and removing leading spaces
       xcopy(r, r + 1, strlen(r));
@@ -1631,12 +1822,12 @@ void checkExpectedOutParameter(char *p) {
       while(imag[strlen(imag) - 1] == ' ') imag[strlen(imag) - 1] = 0;
 
       // replace , with . in the real part
-      for(int i=0; i<(int)strlen(real); i++) {
+      for(i=0; i<(int)strlen(real); i++) {
         if(real[i] == ',') real[i] = '.';
       }
 
       // replace , with . in the imaginary part
-      for(int i=0; i<(int)strlen(imag); i++) {
+      for(i=0; i<(int)strlen(imag); i++) {
         if(imag[i] == ',') imag[i] = '.';
       }
 
@@ -1659,6 +1850,71 @@ void checkExpectedOutParameter(char *p) {
         }
       }
     }
+    else if(strcmp(l, "TIME") == 0) {
+      int32_t k = 0;
+      bool_t isHms = false;
+
+      // find the : separating hours and minutes
+      i = 0;
+      while(r[i] != ':' && r[i] != 0) i++;
+      if(r[i] == ':') { // Input by HMS
+        isHms = true;
+        k = i;
+        r[i] = '.';
+        do {
+          ++k;
+          if((r[k] != ':') && (r[k] != '.') && (r[k] != ',')) {
+            r[++i] = r[k];
+          }
+        } while(r[k] != 0);
+      }
+      am = amNone;
+
+      // remove beginning and ending " and removing leading spaces
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
+      r[strlen(r) - 1] = 0;
+
+      // replace , with .
+      for(i=0; i<(int)strlen(r); i++) {
+        if(r[i] == ',') r[i] = '.';
+      }
+
+      checkRegisterType(regist, letter, dtTime, amNone);
+      stringToReal34(r, &expectedReal34);
+      if(isHms) {
+        hmmssToSeconds(&expectedReal34, &expectedReal34);
+      }
+      if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
+        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
+        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "time", regist, letter) == RE_INACCURATE) {
+          wrongRegisterValue(regist, letter, r);
+        }
+      }
+    }
+    else if(strcmp(l, "DATE") == 0) {
+      // remove beginning and ending " and removing leading spaces
+      xcopy(r, r + 1, strlen(r));
+      while(r[0] == ' ') xcopy(r, r + 1, strlen(r));
+      r[strlen(r) - 1] = 0;
+
+      // replace , with .
+      for(i=0; i<(int)strlen(r); i++) {
+        if(r[i] == ',') r[i] = '.';
+      }
+
+      checkRegisterType(regist, letter, dtDate, amNone);
+      reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, amNone);
+      stringToReal34(r, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
+      convertReal34RegisterToDateRegister(TEMP_REGISTER_1, TEMP_REGISTER_1);
+      real34Copy(REGISTER_REAL34_DATA(TEMP_REGISTER_1), &expectedReal34)
+      if(!real34AreEqual(REGISTER_REAL34_DATA(regist), &expectedReal34)) {
+        expectedAndShouldBeValue(regist, letter, r, registerExpectedAndValue);
+        if(relativeErrorReal34(&expectedReal34, REGISTER_REAL34_DATA(regist), "date", regist, letter) == RE_INACCURATE) {
+          wrongRegisterValue(regist, letter, r);
+        }
+      }
+    }
     else {
       printf("\nMissformed register value. Unknown data type %s for register %s\n", l, p+1);
       abortTest();
@@ -1675,13 +1931,13 @@ void checkExpectedOutParameter(char *p) {
 
 void outParameters(char *token) {
   char parameter[2000];
-  int32_t index, lg;
+  int32_t lg;
 
   strReplace(token, "inf", "9e9999");
 
   while(*token == ' ') token++;
   while(*token != 0) {
-    index = 0;
+    int32_t index = 0;
     while(*token != ' ' && *token != 0) {
       if(*token == '"') { // Inside a string
         lg = endOfString(token) - token;
@@ -1707,10 +1963,10 @@ void callFunction(void) {
 
   switch(funcType) {
     case FUNC_NOPARAM:
-      if(indexOfItems[functionIndex].undoStatus == US_ENABLED) {
+      if((indexOfItems[functionIndex].status & US_STATUS) == US_ENABLED) {
         saveForUndo();
       }
-      else if(indexOfItems[functionIndex].undoStatus == US_CANCEL) {
+      else if((indexOfItems[functionIndex].status & US_STATUS) == US_CANCEL) {
         thereIsSomethingToUndo = false;
       }
 
@@ -1726,10 +1982,10 @@ void callFunction(void) {
 
   if(lastErrorCode == 0) {
     if(functionIndex < LAST_ITEM) {
-      if(indexOfItems[functionIndex].stackLiftStatus == SLS_DISABLED) {
+      if((indexOfItems[functionIndex].status & SLS_STATUS) == SLS_DISABLED) {
         clearSystemFlag(FLAG_ASLIFT);
       }
-      else if(indexOfItems[functionIndex].stackLiftStatus == SLS_ENABLED) {
+      else if((indexOfItems[functionIndex].status & SLS_STATUS) == SLS_ENABLED) {
         setSystemFlag(FLAG_ASLIFT);
       }
     }
@@ -1969,10 +2225,10 @@ void processOneFile(void) {
 
 
 void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const char *catalogName) {
-  int32_t i, nbElements, cmp;
+  int32_t i, nbElements;
 
-  for(nbElements=0, i=0; softmenu[i].menuId; i++) {
-    if(softmenu[i].menuId == -catalogId) {
+  for(nbElements=0, i=0; softmenu[i].menuItem; i++) {
+    if(softmenu[i].menuItem == -catalogId) {
       nbElements = softmenu[i].numItems;
       break;
     }
@@ -1985,6 +2241,7 @@ void checkOneCatalogSorting(const int16_t *catalog, int16_t catalogId, const cha
   printf("Checking sort order of catalog %s (%d elements)\n", catalogName, nbElements);
 
   for(i=1; i<nbElements; i++) {
+    int32_t cmp;
     if((cmp = compareString(indexOfItems[abs(catalog[i - 1])].itemCatalogName, indexOfItems[abs(catalog[i])].itemCatalogName, CMP_EXTENSIVE)) >= 0) {
       printf("In catalog %s, element %d (item %d) should be after element %d (item %d). cmp = %d\n",
                          catalogName, i - 1,  catalog[i - 1],             i,       catalog[i],cmp);
@@ -2003,7 +2260,6 @@ void checkCatalogsSorting(void) {
   checkOneCatalogSorting(menu_SYSFL,      MNU_SYSFL,     "SYS.FL");
   checkOneCatalogSorting(menu_alpha_INTL, MNU_ALPHAINTL, "alphaINTL");
   checkOneCatalogSorting(menu_alpha_intl, MNU_ALPHAintl, "alphaIntl");
-  checkOneCatalogSorting(menu_REGIST,     MNU_REGIST,    "REGIST");
 }
 
 

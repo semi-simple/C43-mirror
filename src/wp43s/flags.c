@@ -22,89 +22,89 @@
 
 void systemFlagAction(uint16_t systemFlag, uint16_t action) {
   switch(systemFlag) {
-    case FLAG_LEAD0:    switch(action) {
-                          case 0: globalFlags[108/16] &= ~(1u << (108%16));
-                                  break;
-                          case 1: globalFlags[108/16] |=   1u << (108%16);
-                                  break;
-                          case 2: globalFlags[108/16] ^=   1u << (108%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_POLAR:    switch(action) {
-                          case 0: globalFlags[100/16] &= ~(1u << (100%16));
-                                  break;
-                          case 1: globalFlags[100/16] |=   1u << (100%16);
-                                  break;
-                          case 2: globalFlags[100/16] ^=   1u << (100%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_CPXRES:   switch(action) {
-                          case 0: globalFlags[109/16] &= ~(1u << (109%16));
-                                  break;
-                          case 1: globalFlags[109/16] |=   1u << (109%16);
-                                  break;
-                          case 2: globalFlags[109/16] ^=   1u << (109%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_SPCRES:   switch(action) {
-                          case 0: globalFlags[107/16] &= ~(1u << (107%16));
-                                  break;
-                          case 1: globalFlags[107/16] |=   1u << (107%16);
-                                  break;
-                          case 2: globalFlags[107/16] ^=   1u << (107%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_TRACE:   switch(action) {
-                          case 0: globalFlags[103/16] &= ~(1u << (103%16));
-                                  break;
-                          case 1: globalFlags[103/16] |=   1u << (103%16);
-                                  break;
-                          case 2: globalFlags[103/16] ^=   1u << (103%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_CARRY:    switch(action) {
-                          case 0: globalFlags[106/16] &= ~(1u << (106%16));
-                                  break;
-                          case 1: globalFlags[106/16] |=   1u << (106%16);
-                                  break;
-                          case 2: globalFlags[106/16] ^=   1u << (106%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
-    case FLAG_OVERFLOW: switch(action) {
-                          case 0: globalFlags[105/16] &= ~(1u << (105%16));
-                                  break;
-                          case 1: globalFlags[105/16] |=   1u << (105%16);
-                                  break;
-                          case 2: globalFlags[105/16] ^=   1u << (105%16);
-                                  break;
-                          default: {}
-                        }
-                        break;
-
     case FLAG_ALLENG:   switch(action) {
                           case 0: globalFlags[FLAG_A/16] &= ~(1u << (FLAG_A%16));
                                   break;
                           case 1: globalFlags[FLAG_A/16] |=   1u << (FLAG_A%16);
                                   break;
                           case 2: globalFlags[FLAG_A/16] ^=   1u << (FLAG_A%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_OVERFLOW: switch(action) {
+                          case 0: globalFlags[FLAG_B/16] &= ~(1u << (FLAG_B%16));
+                                  break;
+                          case 1: globalFlags[FLAG_B/16] |=   1u << (FLAG_B%16);
+                                  break;
+                          case 2: globalFlags[FLAG_B/16] ^=   1u << (FLAG_B%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_CARRY:    switch(action) {
+                          case 0: globalFlags[FLAG_C/16] &= ~(1u << (FLAG_C%16));
+                                  break;
+                          case 1: globalFlags[FLAG_C/16] |=   1u << (FLAG_C%16);
+                                  break;
+                          case 2: globalFlags[FLAG_C/16] ^=   1u << (FLAG_C%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_SPCRES:   switch(action) {
+                          case 0: globalFlags[FLAG_D/16] &= ~(1u << (FLAG_D%16));
+                                  break;
+                          case 1: globalFlags[FLAG_D/16] |=   1u << (FLAG_D%16);
+                                  break;
+                          case 2: globalFlags[FLAG_D/16] ^=   1u << (FLAG_D%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_CPXRES:   switch(action) {
+                          case 0: globalFlags[FLAG_I/16] &= ~(1u << (FLAG_I%16));
+                                  break;
+                          case 1: globalFlags[FLAG_I/16] |=   1u << (FLAG_I%16);
+                                  break;
+                          case 2: globalFlags[FLAG_I/16] ^=   1u << (FLAG_I%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_LEAD0:    switch(action) {
+                          case 0: globalFlags[FLAG_L/16] &= ~(1u << (FLAG_L%16));
+                                  break;
+                          case 1: globalFlags[FLAG_L/16] |=   1u << (FLAG_L%16);
+                                  break;
+                          case 2: globalFlags[FLAG_L/16] ^=   1u << (FLAG_L%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_TRACE:   switch(action) {
+                          case 0: globalFlags[FLAG_T/16] &= ~(1u << (FLAG_T%16));
+                                  break;
+                          case 1: globalFlags[FLAG_T/16] |=   1u << (FLAG_T%16);
+                                  break;
+                          case 2: globalFlags[FLAG_T/16] ^=   1u << (FLAG_T%16);
+                                  break;
+                          default: {}
+                        }
+                        break;
+
+    case FLAG_POLAR:    switch(action) {
+                          case 0: globalFlags[FLAG_X/16] &= ~(1u << (FLAG_X%16));
+                                  break;
+                          case 1: globalFlags[FLAG_X/16] |=   1u << (FLAG_X%16);
+                                  break;
+                          case 2: globalFlags[FLAG_X/16] ^=   1u << (FLAG_X%16);
                                   break;
                           default: {}
                         }
@@ -143,10 +143,10 @@ bool_t getFlag(uint16_t flag) {
     return (globalFlags[flag/16] & (1u << (flag%16))) != 0;
   }
   else { // Local flag
-    if(numberOfLocalFlags != 0) {
+    if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        return (allLocalRegisterPointer->localFlags & (1u << flag)) != 0;
+        return (currentLocalFlags->localFlags & (1u << (uint32_t)flag)) != 0;
       }
       else {
         sprintf(errorMessage, "In function getFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -157,7 +157,7 @@ bool_t getFlag(uint16_t flag) {
     else {
       moreInfoOnError("In function getFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
     }
-    #endif
+    #endif // PC_BUILD
   }
   return false;
  }
@@ -193,9 +193,9 @@ void fnSetFlag(uint16_t flag) {
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
+        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));
         moreInfoOnError("In function fnSetFlag:", "Tying to set a write", errorMessage, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
     else {
@@ -216,10 +216,10 @@ void fnSetFlag(uint16_t flag) {
     }
   }
   else { // Local flag
-    if(numberOfLocalFlags != 0) {
+    if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        allLocalRegisterPointer->localFlags |=  (1u << flag);
+        currentLocalFlags->localFlags |=  (1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnSetFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -227,10 +227,10 @@ void fnSetFlag(uint16_t flag) {
       }
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function fnSetFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
-    #endif
+      else {
+        moreInfoOnError("In function fnSetFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
+    #endif // PC_BUILD
   }
 }
 
@@ -248,9 +248,9 @@ void fnClearFlag(uint16_t flag) {
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
+        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));
         moreInfoOnError("In function fnClearFlag:", "Tying to clear a write", errorMessage, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
     else {
@@ -271,10 +271,10 @@ void fnClearFlag(uint16_t flag) {
     }
   }
   else { // Local flag
-    if(numberOfLocalFlags != 0) {
+    if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        allLocalRegisterPointer->localFlags &= ~(1u << flag);
+        currentLocalFlags->localFlags &= ~(1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnClearFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -282,10 +282,10 @@ void fnClearFlag(uint16_t flag) {
       }
     }
     #ifdef PC_BUILD
-    else {
-     moreInfoOnError("In function fnClearFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
-   #endif
+      else {
+       moreInfoOnError("In function fnClearFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
+    #endif // PC_BUILD
   }
 }
 
@@ -303,9 +303,9 @@ void fnFlipFlag(uint16_t flag) {
       temporaryInformation = TI_NO_INFO;
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", flag & 0x3fff);
+        sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));
         moreInfoOnError("In function fnFlipFlag:", "Tying to flip a write", errorMessage, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
     else {
@@ -326,10 +326,10 @@ void fnFlipFlag(uint16_t flag) {
     }
   }
   else { // Local flag
-    if(numberOfLocalFlags != 0) {
+    if(currentLocalFlags != NULL) {
       flag -= NUMBER_OF_GLOBAL_FLAGS;
       if(flag < NUMBER_OF_LOCAL_FLAGS) {
-        allLocalRegisterPointer->localFlags ^=  (1u << flag);
+        currentLocalFlags->localFlags ^=  (1u << (uint32_t)flag);
       }
       else {
         sprintf(errorMessage, "In function fnFlipFlag: local flag %" PRIu16 " is not defined! Must be from 0 to %d.", flag, NUMBER_OF_LOCAL_FLAGS - 1);
@@ -337,34 +337,33 @@ void fnFlipFlag(uint16_t flag) {
       }
     }
     #ifdef PC_BUILD
-    else {
-      moreInfoOnError("In function fnFlipFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
-    }
-    #endif
+      else {
+        moreInfoOnError("In function fnFlipFlag:", "no local flags defined!", "To do so, you can find LocR here:", "[g] [P.FN] [g] [F5]");
+      }
+    #endif // PC_BUILD
   }
 }
 
 
 
 /********************************************//**
- * \brief Clear all global and local flags
+ * \brief Clear all global from 00 to 99 and the local flags
  *
  * \param[in] flags uint16_t
  * \return void
  ***********************************************/
-void fnClFAll(uint16_t unusedParamButMandatory) {
-  memset(globalFlags, 0, sizeof(globalFlags));
-  clearSystemFlag(FLAG_ALLENG);
-  clearSystemFlag(FLAG_OVERFLOW);
-  clearSystemFlag(FLAG_CARRY);
-  clearSystemFlag(FLAG_SPCRES);
-  clearSystemFlag(FLAG_CPXRES);
-  clearSystemFlag(FLAG_LEAD0);
-  clearSystemFlag(FLAG_TRACE);
-  clearSystemFlag(FLAG_POLAR);
+void fnClFAll(uint16_t confirmation) {
+  if(confirmation == NOT_CONFIRMED) {
+    setConfirmationMode(fnClAll);
+  }
+  else {
+    // Leave lettered flags as they are
+    memset(globalFlags, 0, sizeof(globalFlags) - sizeof(uint16_t)); // Clear flags from 00 to 95
+    globalFlags[6] &= 0xfff0; // Clear flags from 96 to 99
 
-  if(numberOfLocalFlags != 0) {
-    allLocalRegisterPointer->localFlags = 0;
+    if(currentLocalFlags != NULL) {
+      currentLocalFlags->localFlags = 0;
+    }
   }
 }
 

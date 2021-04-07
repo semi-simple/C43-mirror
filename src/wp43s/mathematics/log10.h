@@ -18,8 +18,12 @@
  * \file log10.h
  ***********************************************/
 
-void   fnLog10   (uint16_t unusedParamButMandatory);
+void   fnLog10   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void   log10Error(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define log10Error typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void   log10LonI (void);
 void   log10Rema (void);
 void   log10Cxma (void);

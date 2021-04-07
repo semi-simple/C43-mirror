@@ -18,9 +18,13 @@
  * \file lnbeta.h
  ***********************************************/
 
-void fnLnBeta      (uint16_t unusedParamButMandatory);
+void fnLnBeta      (uint16_t unusedButMandatoryParameter);
 
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void lnbetaError   (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define lnbetaError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 void lnbetaLonILonI(void);
 void lnbetaRealLonI(void);
@@ -33,3 +37,5 @@ void lnbetaCplxReal(void);
 void lnbetaLonICplx(void);
 void lnbetaRealCplx(void);
 void lnbetaCplxCplx(void);
+
+void LnBeta(const real_t *x, const real_t *y, real_t *res, realContext_t *realContext);

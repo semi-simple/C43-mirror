@@ -34,55 +34,6 @@
 					<Add library="gmp" />
 				</Linker>
 			</Target>
-			<Target title="generateConstants">
-				<Option output="bin/Debug/generateConstants" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="/home/martin/Martin/developpement/codeblocks/applications/wp43s" />
-				<Option object_output="obj/Debug/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-g" />
-				</Compiler>
-			</Target>
-			<Target title="generateCatalogs">
-				<Option output="bin/Debug/generateCatalogs" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="/home/martin/Martin/developpement/codeblocks/applications/wp43s" />
-				<Option object_output="obj/Debug/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-g" />
-					<Add option="-DTESTSUITE_BUILD" />
-					<Add option="-DGENERATE_CATALOGS" />
-				</Compiler>
-				<Linker>
-					<Add library="gmp" />
-				</Linker>
-			</Target>
-			<Target title="ttf2RasterFonts">
-				<Option output="bin/Debug/ttf2RasterFonts" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="/home/martin/Martin/developpement/codeblocks/applications/wp43s" />
-				<Option object_output="obj/Debug/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-g" />
-					<Add option="`pkg-config --cflags freetype2`" />
-				</Compiler>
-				<Linker>
-					<Add option="`pkg-config --libs freetype2`" />
-				</Linker>
-			</Target>
-			<Target title="testTtf2RasterFonts">
-				<Option output="bin/Debug/testTtf2RasterFonts" prefix_auto="1" extension_auto="1" />
-				<Option working_dir="/home/martin/Martin/developpement/codeblocks/applications/wp43s" />
-				<Option object_output="obj/Debug/" />
-				<Option type="1" />
-				<Option compiler="gcc" />
-				<Compiler>
-					<Add option="-g" />
-				</Compiler>
-			</Target>
 			<Target title="testSuite">
 				<Option output="bin/Release/testSuite" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
@@ -101,6 +52,57 @@
 					<Add library="gmp" />
 				</Linker>
 			</Target>
+			<Target title="generateCatalogs">
+				<Option output="bin/Debug/generateCatalogs" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DTESTSUITE_BUILD" />
+					<Add option="-DGENERATE_CATALOGS" />
+				</Compiler>
+				<Linker>
+					<Add library="gmp" />
+				</Linker>
+			</Target>
+			<Target title="generateConstants">
+				<Option output="bin/Debug/generateConstants" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="generateTestPgms">
+				<Option output="bin/Debug/generateTestPgms" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+			</Target>
+			<Target title="ttf2RasterFonts">
+				<Option output="bin/Debug/ttf2RasterFonts" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="`pkg-config --cflags freetype2`" />
+				</Compiler>
+				<Linker>
+					<Add option="`pkg-config --libs freetype2`" />
+				</Linker>
+			</Target>
+			<Target title="testTtf2RasterFonts">
+				<Option output="bin/Debug/testTtf2RasterFonts" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
 		</Build>
 		<VirtualTargets>
 			<Add alias="All" targets="wp43s;wp43s_debug;testTtf2RasterFonts;ttf2RasterFonts;" />
@@ -117,6 +119,8 @@
 			<Add option="-Wstrict-aliasing" />
 			<Add option="`pkg-config gtk+-3.0 --cflags`" />
 			<Add option="-DPC_BUILD" />
+			<Add option="-DOS64BIT" />
+			<Add option="-DCODEBLOCKS_OVER_SCORE" />
 			<Add directory="decNumberICU" />
 			<Add directory="DMCP" />
 			<Add directory="src/wp43s" />
@@ -215,6 +219,10 @@
 			<Option compilerVar="CC" />
 			<Option target="generateConstants" />
 		</Unit>
+		<Unit filename="src/generateTestPgms/generateTestPgms.c">
+			<Option compilerVar="CC" />
+			<Option target="generateTestPgms" />
+		</Unit>
 		<Unit filename="src/testSuite/10pow.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -269,13 +277,40 @@
 		<Unit filename="src/testSuite/arctanh.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/bessel.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/beta.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/bn.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/bn_star.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/ceil.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/changeSign.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/chebyshev_t.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/chebyshev_u.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/chi2_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/chi2_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/chi2_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/chi2_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/conjugate.txt">
@@ -303,6 +338,24 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/cyx.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dToJ.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dateTo.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/day.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dblDivision.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dblDivisionRemainder.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/dblMultiplication.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/debug.txt">
@@ -344,10 +397,31 @@
 		<Unit filename="src/testSuite/dot.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/erf.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/erfc.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/exp.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/expmod.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/expt.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/f_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/f_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/f_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/f_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/factorial.txt">
@@ -365,10 +439,28 @@
 		<Unit filename="src/testSuite/gamma.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/gammaP.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gammaQ.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gammaXyLower.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/gammaXyUpper.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/gcd.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/gd.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hermite.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hermite_p.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/idiv.txt">
@@ -392,7 +484,22 @@
 		<Unit filename="src/testSuite/invert.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/ixyz.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/jToD.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/laguerre.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/laguerre_alpha.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/lcm.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/legendre.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/ln.txt">
@@ -437,6 +544,12 @@
 		<Unit filename="src/testSuite/modulo.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/month.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/mulmod.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/multiplication_complex.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -465,6 +578,18 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/neighb.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/normal_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/normal_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/normal_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/normal_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/not.txt">
@@ -620,6 +745,18 @@
 		<Unit filename="src/testSuite/swapRealImaginary.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/t_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/t_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/tan.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -636,6 +773,15 @@
 		<Unit filename="src/testSuite/testSuiteList.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/toDate.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/toHms.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/toReal.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/trig.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -648,7 +794,28 @@
 		<Unit filename="src/testSuite/unitVector.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/w_inverse.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/w_negative.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/w_positive.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/wday.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/xToDate.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/xthRoot.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/year.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/zeta.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/ttf2RasterFonts/testTtf2RasterFonts.c">
@@ -715,6 +882,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/bufferize.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/ui/tam.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/ui/tam.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -844,6 +1022,55 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/distributions/chi2.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/chi2.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/distributions.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/f.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/f.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/normal.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/normal.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/t.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/t.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/error.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -929,6 +1156,7 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
+			<Option target="generateTestPgms" />
 		</Unit>
 		<Unit filename="src/wp43s/keyboard.c">
 			<Option compilerVar="CC" />
@@ -1199,6 +1427,28 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/bessel.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/bessel.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/bn.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/bn.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/ceil.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1217,6 +1467,28 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/changeSign.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/checkValue.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/checkValue.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/compare.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/compare.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1322,6 +1594,28 @@
 			<Option target="generateMenuFCNS" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblDivision.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblDivision.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblMultiplication.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/dblMultiplication.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/decomp.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1366,6 +1660,28 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/erf.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/erf.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/erfc.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/erfc.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/exp.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1379,6 +1695,11 @@
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/expMOne.c">
 			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/expMOne.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1449,6 +1770,50 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaP.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaP.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaQ.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaQ.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaXyLower.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaXyLower.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaXyUpper.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/gammaXyUpper.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/gcd.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1504,6 +1869,29 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/incDec.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/incDec.h">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/int.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/int.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/integerPart.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1522,6 +1910,28 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/invert.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/iteration.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/iteration.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ixyz.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ixyz.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1550,6 +1960,11 @@
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/lnPOne.c">
 			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/lnPOne.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1702,6 +2117,28 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/opmod.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/opmod.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ortho_polynom.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/ortho_polynom.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/parallel.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1812,6 +2249,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/rdp.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/rdp.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/reToCx.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1869,6 +2317,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/rsd.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/rsd.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/shiftDigits.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1915,6 +2374,11 @@
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/sincpi.c">
 			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/sincpi.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -2062,6 +2526,39 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_inverse.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_inverse.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_negative.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_negative.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_positive.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/w_positive.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/mathematics/wp34s.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -2084,6 +2581,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/mathematics/zeta.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/zeta.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/memory.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -2095,6 +2603,55 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/programming/decode.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/decode.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/lblGtoXeq.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/lblGtoXeq.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/manage.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/manage.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/nextStep.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/nextStep.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/programming/programming.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/rasterFontsData.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -2102,6 +2659,17 @@
 			<Option target="testTtf2RasterFonts" />
 			<Option target="testSuite" />
 			<Option target="generateCatalogs" />
+		</Unit>
+		<Unit filename="src/wp43s/recall.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/recall.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/registerValueConversions.c">
 			<Option compilerVar="CC" />
@@ -2205,6 +2773,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/statusBar.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/store.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/store.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

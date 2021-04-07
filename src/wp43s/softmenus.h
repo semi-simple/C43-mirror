@@ -18,10 +18,15 @@
  * \file softmenu.h
  ***********************************************/
 
-void showSoftkey            (const char *label, int16_t x, int16_t y, videoMode_t videoMode, bool_t topLine, bool_t bottomLine);
-void showSoftmenuCurrentPart(void);
-void showSoftmenu           (const char *menu, int16_t id, bool_t submenu);
-void initSoftmenuStack      (int16_t softmenu);
-void pushSoftmenu           (int16_t softmenu);
-void popSoftmenu            (void);
-void setCatalogLastPos      (void);
+uint8_t *getNthString           (uint8_t *ptr, int16_t n); // Starting with string 0 (the 1st string is returned for n=0)
+void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
+#ifndef TESTSUITE_BUILD
+  void   showSoftkey            (const char *label, int16_t xSoftkey, int16_t ySoftKey, videoMode_t videoMode, bool_t topLine, bool_t bottomLine);
+  void   showSoftmenuCurrentPart(void);
+  void   showSoftmenu           (int16_t id);
+  void   popSoftmenu            (void);
+  void   setCatalogLastPos      (void);
+  bool_t currentSoftmenuScrolls (void);
+  bool_t isAlphabeticSoftmenu   (void);
+#endif // !TESTSUITE_BUILD
+char    *dynmenuGetLabel        (int16_t menuitem);

@@ -22,7 +22,7 @@
 
 
 
-void (* const magnitude[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const magnitude[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1              2              3              4               5               6               7              8              9              10
 //          Long integer   Real34         complex34      Time            Date            String          Real34 mat     Complex34 m    Short integer  Config data
             magnitudeLonI, magnitudeReal, magnitudeCplx, magnitudeError, magnitudeError, magnitudeError, magnitudeRema, magnitudeCxma, magnitudeShoI, magnitudeError
@@ -36,23 +36,23 @@ void (* const magnitude[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void magnitudeError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate |x| for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnMagnitude:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
 /********************************************//**
  * \brief Returns the absolute value of an integer or a real and the magnitude of a complex
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnMagnitude(uint16_t unusedParamButMandatory) {
+void fnMagnitude(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   magnitude[getRegisterDataType(REGISTER_X)]();
@@ -88,7 +88,7 @@ void magnitudeShoI(void) {
 
 void magnitudeReal(void) {
   real34SetPositiveSign(REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -98,7 +98,7 @@ void magnitudeCplx(void) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   realMultiply(&a, &a, &a, &ctxtReal39);
   realFMA(&b, &b, &a, &a, &ctxtReal39);

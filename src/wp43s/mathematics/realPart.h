@@ -18,8 +18,12 @@
  * \file realPart.h
  ***********************************************/
 
-void fnRealPart   (uint16_t unusedParamButMandatory);
+void fnRealPart   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void realPartError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define realPartError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void realPartCxma (void);
 void realPartCplx (void);
 void realPartReal (void);

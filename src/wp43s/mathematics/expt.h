@@ -18,7 +18,11 @@
  * \file expt.h
  ***********************************************/
 
-void fnExpt   (uint16_t unusedParamButMandatory);
+void fnExpt   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void exptError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define exptError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void exptLonI (void);
 void exptReal (void);

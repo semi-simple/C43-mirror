@@ -25,17 +25,17 @@
 /********************************************//**
  * \brief Sets the calc to meet Chinese standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigChina(uint16_t unusedParamButMandatory) {
+void fnConfigChina(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 4;
   setSystemFlag(FLAG_TDM24); // time format = 24H
   clearSystemFlag(FLAG_DMY); // date format
   clearSystemFlag(FLAG_MDY); // date format
   setSystemFlag(FLAG_YMD);   // date format
-  firstGregorianDay = 1949;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2433191 /* 1 Oct 1949 */;  // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -43,17 +43,17 @@ void fnConfigChina(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet European standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigEurope(uint16_t unusedParamButMandatory) {
+void fnConfigEurope(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   setSystemFlag(FLAG_TDM24); // time format = 24H
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_YMD); // date format
   setSystemFlag(FLAG_DMY);   // date format
-  firstGregorianDay = 1582;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2299161 /* 15 Oct 1582 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -61,17 +61,17 @@ void fnConfigEurope(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet Indian standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigIndia(uint16_t unusedParamButMandatory) {
+void fnConfigIndia(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   setSystemFlag(FLAG_TDM24); // time format = 24H
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_YMD); // date format
   setSystemFlag(FLAG_DMY);   // date format
-  firstGregorianDay = 1752;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -79,17 +79,17 @@ void fnConfigIndia(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet Japanese standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigJapan(uint16_t unusedParamButMandatory) {
+void fnConfigJapan(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   setSystemFlag(FLAG_TDM24); // time format = 24H
   clearSystemFlag(FLAG_MDY); // date format
   clearSystemFlag(FLAG_DMY); // date format
   setSystemFlag(FLAG_YMD);   // date format
-  firstGregorianDay = 1873;  // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2405160 /* 1 Jan 1873 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -97,17 +97,17 @@ void fnConfigJapan(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet English standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigUk(uint16_t unusedParamButMandatory) {
+void fnConfigUk(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   clearSystemFlag(FLAG_TDM24); // time format = 12H
   clearSystemFlag(FLAG_MDY);   // date format
   clearSystemFlag(FLAG_YMD);   // date format
   setSystemFlag(FLAG_DMY);     // date format
-  firstGregorianDay = 1752;    // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -115,17 +115,17 @@ void fnConfigUk(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the calc to meet American standards
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnConfigUsa(uint16_t unusedParamButMandatory) {
+void fnConfigUsa(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
   clearSystemFlag(FLAG_TDM24); // time format = 12H
   clearSystemFlag(FLAG_YMD);   // date format
   clearSystemFlag(FLAG_DMY);   // date format
   setSystemFlag(FLAG_MDY);     // date format
-  firstGregorianDay = 1752;    // JDN of the first day in the Gregorian calendar
+  firstGregorianDay = 2361222 /* 14 Sept 1752 */; // JDN of the first day in the Gregorian calendar
 }
 
 
@@ -146,10 +146,10 @@ void fnIntegerMode(uint16_t mode) {
  * \brief Displays credits to the brave men who
  * made this project work.
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnWho(uint16_t unusedParamButMandatory) {
+void fnWho(uint16_t unusedButMandatoryParameter) {
   temporaryInformation = TI_WHO;
  }
 
@@ -158,10 +158,10 @@ void fnWho(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Displays the version of this software
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnVersion(uint16_t unusedParamButMandatory) {
+void fnVersion(uint16_t unusedButMandatoryParameter) {
   temporaryInformation = TI_VERSION;
 }
 
@@ -170,10 +170,10 @@ void fnVersion(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the amount of free RAM
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFreeMemory(uint16_t unusedParamButMandatory) {
+void fnFreeMemory(uint16_t unusedButMandatoryParameter) {
   longInteger_t mem;
 
   liftStack();
@@ -189,10 +189,10 @@ void fnFreeMemory(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the value of the rounding mode
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
+void fnGetRoundingMode(uint16_t unusedButMandatoryParameter) {
   longInteger_t rounding;
 
   liftStack();
@@ -206,11 +206,31 @@ void fnGetRoundingMode(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
+ * \brief Sets the rounding mode
+ *
+ * \param[in] RM uint16_t
+ * \return void
+ ***********************************************/
+void fnSetRoundingMode(uint16_t RM) {
+  roundingMode = RM;
+}
+
+// "enum rounding" does not match with the specification of WP 43s rounding mode.
+// So you need roundingModeTable[roundingMode] rather than roundingMode
+// to specify rounding mode in the real number functions.
+TO_QSPI const enum rounding roundingModeTable[7] = {
+  DEC_ROUND_HALF_EVEN, DEC_ROUND_HALF_UP, DEC_ROUND_HALF_DOWN,
+  DEC_ROUND_UP, DEC_ROUND_DOWN, DEC_ROUND_CEILING, DEC_ROUND_FLOOR
+};
+
+
+
+/********************************************//**
  * \brief Sets X to the value of the integer mode
  *
  * \return void
  ***********************************************/
-void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
+void fnGetIntegerSignMode(uint16_t unusedButMandatoryParameter) {
   longInteger_t ism;
 
   liftStack();
@@ -226,10 +246,10 @@ void fnGetIntegerSignMode(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Gets the word size
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetWordSize(uint16_t unusedParamButMandatory) {
+void fnGetWordSize(uint16_t unusedButMandatoryParameter) {
   longInteger_t wordSize;
 
   liftStack();
@@ -245,7 +265,7 @@ void fnGetWordSize(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets the word size
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnSetWordSize(uint16_t WS) {
@@ -289,10 +309,10 @@ void fnSetWordSize(uint16_t WS) {
 /********************************************//**
  * \brief Sets X to the amount of free flash memory
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
+void fnFreeFlashMemory(uint16_t unusedButMandatoryParameter) {
   longInteger_t flashMem;
 
   liftStack();
@@ -308,21 +328,21 @@ void fnFreeFlashMemory(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the battery voltage
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnBatteryVoltage(uint16_t unusedParamButMandatory) {
+void fnBatteryVoltage(uint16_t unusedButMandatoryParameter) {
   real_t value;
 
   liftStack();
 
   #ifdef PC_BUILD
     int32ToReal(3100, &value);
-  #endif
+  #endif // PC_BUILD
 
   #ifdef DMCP_BUILD
     int32ToReal(get_vbat(), &value);
-  #endif
+  #endif // DMCP_BUILD
 
   realDivide(&value, const_1000, &value, &ctxtReal39);
   realToReal34(&value, REGISTER_REAL34_DATA(REGISTER_X));
@@ -346,10 +366,10 @@ uint32_t getFreeFlash(void) {
  * \brief Sets X to the number of signficant digits
  * rounding after each operation
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetSignificantDigits(uint16_t unusedParamButMandatory) {
+void fnGetSignificantDigits(uint16_t unusedButMandatoryParameter) {
   longInteger_t sigDigits;
 
   liftStack();
@@ -398,12 +418,13 @@ void fnAngularMode(uint16_t am) {
 
 
 
-void fnFractionType(uint16_t unusedParamButMandatory) {
+void fnFractionType(uint16_t unusedButMandatoryParameter) {
   if(getSystemFlag(FLAG_FRACT)) {
     flipSystemFlag(FLAG_PROPFR);
   }
   else {
     setSystemFlag(FLAG_FRACT);
+    setSystemFlag(FLAG_PROPFR);
   }
 }
 
@@ -420,7 +441,7 @@ void setConfirmationMode(void (*func)(uint16_t)) {
 
 
 
-void fnRange(uint16_t unusedParamButMandatory) {
+void fnRange(uint16_t unusedButMandatoryParameter) {
   longInteger_t longInt;
 
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
@@ -434,7 +455,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot use %s for setting RANGE", getRegisterDataTypeName(REGISTER_X, true, true));
       moreInfoOnError("In function fnRange:", errorMessage, NULL, NULL);
-    #endif
+    #endif //  (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -455,7 +476,7 @@ void fnRange(uint16_t unusedParamButMandatory) {
 
 
 
-void fnGetRange(uint16_t unusedParamButMandatory) {
+void fnGetRange(uint16_t unusedButMandatoryParameter) {
   longInteger_t range;
 
   liftStack();
@@ -478,7 +499,7 @@ void fnClAll(uint16_t confirmation) {
     fnClPAll(CONFIRMED);  // Clears all the programs
     fnClSigma(CONFIRMED); // Clears and releases the memory of all statistical sums
     if(savedStatisticalSumsPointer != NULL) {
-      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
 
     // Clear local registers
@@ -490,43 +511,85 @@ void fnClAll(uint16_t confirmation) {
     }
 
     // Clear saved stack registers
-    for(regist=FIRST_SAVED_STACK_REGISTER; regist<=TEMP_REGISTER; regist++) {
+    for(regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
       clearRegister(regist);
     }
     thereIsSomethingToUndo = false;
 
     // TODO: clear (or delete) named variables
 
-    // Clear flags
-    for(int32_t sixteenFlags=0; sixteenFlags<7; sixteenFlags++) { // 7 times uint16_t = 112 flags
-      globalFlags[sixteenFlags] = 0;
+    // Clear global flags
+    fnClFAll(CONFIRMED);
+
+    temporaryInformation = TI_NO_INFO;
+  }
+}
+
+
+
+void addTestPrograms(void) {
+  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8364)); // Multiple of 4
+
+  resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
+  firstDisplayedStep            = beginOfProgramMemory;
+  currentStep                   = beginOfProgramMemory;
+  currentLocalStepNumber        = 1;
+  firstDisplayedLocalStepNumber = 0;
+
+  #ifdef DMCP_BUILD
+    if(f_open(ppgm_fp, "testPgms.bin", FA_READ) != FR_OK) {
+      *(beginOfProgramMemory)     = 255; // .END.
+      *(beginOfProgramMemory + 1) = 255; // .END.
+      firstFreeProgramByte = beginOfProgramMemory;
+      freeProgramBytes = numberOfBytesForTheTestPrograms - 2;
+    }
+    else {
+      UINT bytesRead;
+      f_read(ppgm_fp, &numberOfBytesUsed,   sizeof(numberOfBytesUsed), &bytesRead);
+      f_read(ppgm_fp, beginOfProgramMemory, numberOfBytesUsed,         &bytesRead);
+      f_close(ppgm_fp);
+
+      firstFreeProgramByte = beginOfProgramMemory + (numberOfBytesUsed - 2);
+      freeProgramBytes = numberOfBytesForTheTestPrograms - numberOfBytesUsed;
     }
 
-    temporaryInformation = TI_NO_INFO;
-  }
-}
+    scanLabelsAndPrograms();
+  #else // !DMCP_BUILD
+    FILE *testPgms;
 
+    testPgms = fopen("DM42 binary/testPgms.bin", "rb");
+    if(testPgms == NULL) {
+      printf("Cannot open file DM42 binary/testPgms.bin\n");
+      *(beginOfProgramMemory)     = 255; // .END.
+      *(beginOfProgramMemory + 1) = 255; // .END.
+      firstFreeProgramByte = beginOfProgramMemory;
+      freeProgramBytes = numberOfBytesForTheTestPrograms - 2;
+    }
+    else {
+      ignore_result(fread(&numberOfBytesUsed, 1, sizeof(numberOfBytesUsed), testPgms));
+      printf("%u bytes\n", numberOfBytesUsed);
+      if(numberOfBytesUsed > numberOfBytesForTheTestPrograms) {
+        printf("Increase allocated memory for programs!\n");
+        fclose(testPgms);
+        exit(0);
+      }
+      ignore_result(fread(beginOfProgramMemory, 1, numberOfBytesUsed, testPgms));
+      fclose(testPgms);
 
+      firstFreeProgramByte = beginOfProgramMemory + (numberOfBytesUsed - 2);
+      freeProgramBytes = numberOfBytesForTheTestPrograms - numberOfBytesUsed;
+    }
 
-void fnClPAll(uint16_t confirmation) {
-  if(confirmation == NOT_CONFIRMED) {
-    setConfirmationMode(fnClPAll);
-  }
-  else {
-    //printf("Running CLPALL\n");
-    // TODO: actually clear all programs
-    programCounter = 0;
-    temporaryInformation = TI_NO_INFO;
-  }
-}
+    printf("freeProgramBytes = %u\n", freeProgramBytes);
 
-
-
-void fnClSigma(uint16_t unusedParamButMandatory) {
-  if(statisticalSumsPointer != NULL) {
-    freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
-    statisticalSumsPointer = NULL;
-  }
+    scanLabelsAndPrograms();
+    #ifndef TESTSUITE_BUILD
+      leavePem();
+    #endif // TESTSUITE_BUILD
+    printf("freeProgramBytes = %u\n", freeProgramBytes);
+    //listPrograms();
+    //listLabelsAndPrograms();
+  #endif // !DMCP_BUILD
 }
 
 
@@ -536,81 +599,58 @@ void fnReset(uint16_t confirmation) {
     setConfirmationMode(fnReset);
   }
   else {
-    fnClAll(CONFIRMED); // Clears pgm and registers
+    void *memPtr;
 
-    systemFlags = 0;
-    setSystemFlag(FLAG_TDM24);
-    fnIntegerMode(SIM_2COMPL);
-    fnDisplayFormatAll(0);
-    fnDisplayFormatGap(3);
-    clearSystemFlag(FLAG_CPXj);
-    fnAngularMode(AM_DEGREE);
-    setSystemFlag(FLAG_DENANY);
-    fnDenMax(0);
-    fnDisplayStack(4);
-    firstGregorianDay = 1752;
-    clearSystemFlag(FLAG_LEAD0);
-    setSystemFlag(FLAG_MULTx);
-    setSystemFlag(FLAG_DECIMP);
-    fnRoundingMode(RM_HALF_EVEN);
-    clearSystemFlag(FLAG_ALLENG);
-    setSystemFlag(FLAG_AUTOFF);
-    clearSystemFlag(FLAG_SSIZE8);
-    //tDisp = -1;
-    fnSetWordSize(64);
-    clearSystemFlag(FLAG_MDY); // date format
-    clearSystemFlag(FLAG_DMY); // date format
-    setSystemFlag(FLAG_YMD);   // date format
-    clearSystemFlag(FLAG_POLAR);
-    clearSystemFlag(FLAG_CPXRES);
-    allocateLocalRegisters(0);
+    if(ram == NULL) {
+      ram = (dataBlock_t *)malloc(TO_BYTES(RAM_SIZE));
+    }
+    memset(ram, 0, TO_BYTES(RAM_SIZE));
+    numberOfFreeMemoryRegions = 1;
+    freeMemoryRegions[0].address = 0;
+    freeMemoryRegions[0].sizeInBlocks = RAM_SIZE - 1; // - 1: one block for an empty program
 
-    clearSystemFlag(FLAG_FRACT);
-    clearSystemFlag(FLAG_PROPFR);
-    clearSystemFlag(FLAG_OVERFLOW);
-    clearSystemFlag(FLAG_CARRY);
-    clearSystemFlag(FLAG_ASLIFT);
-    clearSystemFlag(FLAG_USER);
-    clearSystemFlag(FLAG_LOWBAT);
-    clearSystemFlag(FLAG_USB);
+    if(tmpString == NULL) {
+      #ifdef DMCP_BUILD
+         tmpString        = aux_buf_ptr();   // 2560 byte buffer provided by DMCP
+         errorMessage     = write_buf_ptr(); // 4096 byte buffer provided by DMCP
+       #else // !DMCP_BUILD
+         tmpString        = (char *)malloc(TMP_STR_LENGTH);
+         errorMessage     = (char *)malloc(WRITE_BUFFER_LEN);
+       #endif // DMCP_BUILD
 
-    hourGlassIconEnabled = false;
-    programCounter = 0;
-    watchIconEnabled = false;
-    serialIOIconEnabled = false;
-    printerIconEnabled = false;
-    thereIsSomethingToUndo = false;
+       aimBuffer        = errorMessage + ERROR_MESSAGE_LENGTH;
+       nimBufferDisplay = aimBuffer + AIM_BUFFER_LENGTH;
+       tamBuffer        = nimBufferDisplay + NIM_BUFFER_LENGTH;
+
+       tmpStringLabelOrVariableName = tmpString + 1000;
+    }
+    memset(tmpString,        0, TMP_STR_LENGTH);
+    memset(errorMessage,     0, ERROR_MESSAGE_LENGTH);
+    memset(aimBuffer,        0, AIM_BUFFER_LENGTH);
+    memset(nimBufferDisplay, 0, NIM_BUFFER_LENGTH);
+    memset(tamBuffer,        0, TAM_BUFFER_LENGTH);
+
+    // Empty program initialization
+    beginOfProgramMemory          = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
+    currentStep                   = beginOfProgramMemory;
+    firstFreeProgramByte          = beginOfProgramMemory + 2;
+    firstDisplayedStep            = beginOfProgramMemory;
+    firstDisplayedLocalStepNumber = 0;
+    *(beginOfProgramMemory + 0) = (ITM_END >> 8) | 0x80;
+    *(beginOfProgramMemory + 1) =  ITM_END       & 0xff;
+    *(beginOfProgramMemory + 2) = 255; // .END.
+    *(beginOfProgramMemory + 3) = 255; // .END.
+    freeProgramBytes            = 0;
+    scanLabelsAndPrograms();
+
+    // "Not found glyph" initialization
+    if(glyphNotFound.data == NULL) {
+      glyphNotFound.data = malloc(38);
+    }
+    xcopy(glyphNotFound.data, "\xff\xf8\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\x80\x08\xff\xf8", 38);
 
     // Initialization of user key assignments
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));
-
-    // RNG initialisation
-    pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);
-
-    lastIntegerBase = 0;
-
-    lastFcnsMenuPos = 0;
-    lastMenuMenuPos = 0;
-    lastCnstMenuPos = 0;
-    lastSyFlMenuPos = 0;
-    lastAIntMenuPos = 0;
-
-    initFontBrowser();
-    currentFlgScr = 0;
-    currentRegisterBrowserScreen = 9999;
-
-    #ifndef TESTSUITE_BUILD
-      while(softmenuStackPointer > 0) {
-        popSoftmenu();
-      }
-      calcModeNormal();
-    #endif // TESTSUITE_BUILD
-
-    exponentLimit = 6145;
-    temporaryInformation = TI_RESET;
-    aimBuffer[0] = 0;
-
-    // The following lines are test data
     //kbd_usr[ 0].keyLblAim   = CHR_A_GRAVE;
     //kbd_usr[ 0].fShiftedAim = CHR_A_GRAVE;
     //kbd_usr[ 4].keyLblAim   = CHR_E_ACUTE;
@@ -621,6 +661,183 @@ void fnReset(uint16_t confirmation) {
     //kbd_usr[19].gShifted    = ITM_SXY;
     //kbd_usr[20].gShifted    = ITM_LYtoM;
 
+    // initialize 9 real34 reserved variables: ACC, ↑Lim, ↓Lim, FV, i%/a, NPER, PER/a, PMT, and PV
+    for(int i=0; i<9; i++) {
+      real34Zero(allocWp43s(REAL34_SIZE));
+    }
+
+    // initialize 1 long integer reserved variables: GRAMOD
+    #ifdef OS64BIT
+      memPtr = allocWp43s(3);
+      ((dataBlock_t *)memPtr)->dataMaxLength = 2;
+    #else // !OS64BIT
+      memPtr = allocWp43s(2);
+      ((dataBlock_t *)memPtr)->dataMaxLength = 1;
+    #endif // OS64BIT
+
+    // initialize the global registers
+    memset(globalRegister, 0, sizeof(globalRegister));
+    for(calcRegister_t regist=0; regist<=LAST_GLOBAL_REGISTER; regist++) {
+      setRegisterDataType(regist, dtReal34, amNone);
+      memPtr = allocWp43s(REAL34_SIZE);
+      setRegisterDataPointer(regist, memPtr);
+      real34Zero(memPtr);
+    }
+
+    // initialize the NUMBER_OF_SAVED_STACK_REGISTERS + the NUMBER_OF_TEMP_REGISTERS
+    memset(savedStackRegister, 0, sizeof(savedStackRegister));
+    for(calcRegister_t regist=FIRST_SAVED_STACK_REGISTER; regist<=LAST_TEMP_REGISTER; regist++) {
+      setRegisterDataType(regist, dtReal34, amNone);
+      memPtr = allocWp43s(REAL34_SIZE);
+      setRegisterDataPointer(regist, memPtr);
+      real34Zero(memPtr);
+    }
+
+    // Clear global flags
+    memset(globalFlags, 0, sizeof(globalFlags));
+
+    // allocate space for the local register list
+    allSubroutineLevels.numberOfSubroutineLevels = 1;
+    currentSubroutineLevelData = allocWp43s(3);
+    allSubroutineLevels.ptrToSubroutineLevel0Data = TO_WP43SMEMPTR(currentSubroutineLevelData);
+    currentReturnProgramNumber = 0;
+    currentReturnLocalStep = 0;
+    currentNumberOfLocalRegisters = 0; // No local register
+    currentNumberOfLocalFlags = 0; // No local flags
+    currentSubroutineLevel = 0;
+    currentPtrToNextLevel = WP43S_NULL;
+    currentPtrToPreviousLevel = WP43S_NULL;
+    currentLocalFlags = NULL;
+    currentLocalRegisters = NULL;
+
+    // allocate space for the named variable list
+    numberOfNamedVariables = 0;
+    allNamedVariables = NULL;
+
+
+    allocateNamedVariable("Mat_A", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
+    allocateNamedVariable("Mat_B", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE + 1);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
+    allocateNamedVariable("Mat_X", dtReal34Matrix, REAL34_SIZE + 1);
+    memPtr = getRegisterDataPointer(FIRST_NAMED_VARIABLE + 2);
+    ((dataBlock_t *)memPtr)->matrixRows = 1;
+    ((dataBlock_t *)memPtr)->matrixColumns = 1;
+    real34Zero(memPtr + 4);
+
+    #ifdef PC_BUILD
+      debugWindow = DBG_REGISTERS;
+    #endif // PC_BUILD
+
+    decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
+
+    decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
+    ctxtReal39.digits = 39;
+    ctxtReal39.traps  = 0;
+
+    decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
+    ctxtReal51.digits = 51;
+    ctxtReal51.traps  = 0;
+
+    decContextDefault(&ctxtReal75, DEC_INIT_DECQUAD);
+    ctxtReal75.digits = 75;
+    ctxtReal75.traps  = 0;
+
+    decContextDefault(&ctxtReal1071,  DEC_INIT_DECQUAD);
+    ctxtReal1071.digits = 1071;
+    ctxtReal1071.traps  = 0;
+
+    //decContextDefault(&ctxtReal2139,  DEC_INIT_DECQUAD);
+    //ctxtReal2139.digits = 2139;
+    //ctxtReal2139.traps  = 0;
+
+    statisticalSumsPointer = NULL;
+    savedStatisticalSumsPointer = NULL;
+
+    shortIntegerMode = SIM_2COMPL;
+    fnSetWordSize(64);
+
+    groupingGap = 3;
+
+    systemFlags = 0;
+    displayFormat = DF_ALL;
+    displayFormatDigits = 0;
+    timeDisplayFormatDigits = 0;
+    currentAngularMode = amDegree;
+    denMax = MAX_DENMAX;
+    setSystemFlag(FLAG_DENANY);
+    setSystemFlag(FLAG_MULTx);
+    setSystemFlag(FLAG_DECIMP);
+    setSystemFlag(FLAG_AUTOFF);
+    setSystemFlag(FLAG_TDM24); // time format = 24H
+    setSystemFlag(FLAG_YMD);   // date format = yyyy-mm-dd
+    setSystemFlag(FLAG_ASLIFT);
+    setSystemFlag(FLAG_PROPFR);
+
+    hourGlassIconEnabled = false;
+    watchIconEnabled = false;
+    serialIOIconEnabled = false;
+    printerIconEnabled = false;
+    thereIsSomethingToUndo = false;
+    tam.alpha = false;
+    fnKeyInCatalog = false;
+    shiftF = false;
+    shiftG = false;
+
+    significantDigits = 0;
+    roundingMode = RM_HALF_EVEN;
+    ctxtReal34.round = DEC_ROUND_HALF_EVEN;
+    displayStack = 4;
+
+    initFontBrowser();
+    currentFlgScr = 0;
+    currentRegisterBrowserScreen = 9999;
+
+    memset(softmenuStack, 0, sizeof(softmenuStack)); // This works because the ID of MyMenu is 0
+
+    aimBuffer[0] = 0;
+    lastErrorCode = 0;
+
+    gammaLanczosCoefficients = (real51_t *)const_gammaC01;
+    angle180 = (real39_t *)const_pi;
+    angle90  = (real39_t *)const_piOn2;
+    angle45  = (real39_t *)const_piOn4;
+
+    #ifndef TESTSUITE_BUILD
+      resetAlphaSelectionBuffer();
+    #endif // !TESTSUITE_BUILD
+
+    #ifdef TESTSUITE_BUILD
+      calcMode = CM_NORMAL;
+    #else // TESTSUITE_BUILD
+      calcModeNormal();
+    #endif // TESTSUITE_BUILD
+
+    #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
+      debugMemAllocation = true;
+    #endif // PC_BUILD || TESTSUITE_BUILD
+
+    // RNG initialisation
+    pcg32_srandom(0x1963073019931121ULL, 0x1995062319981019ULL);
+
+    tam.mode = 0;
+    catalog = CATALOG_NONE;
+    memset(lastCatalogPosition, 0, NUMBER_OF_CATALOGS * sizeof(lastCatalogPosition[0]));
+    firstGregorianDay = 2361222 /* 14 Sept 1752 */;
+    exponentLimit = 6145;
+    lastIntegerBase = 0;
+    temporaryInformation = TI_RESET;
+
+    // The following lines are test data
+    addTestPrograms();
     //fnSetFlag(  3);
     //fnSetFlag( 11);
     //fnSetFlag( 33);
@@ -632,15 +849,15 @@ void fnReset(uint16_t confirmation) {
     //setSystemFlag(FLAG_CARRY);
     //setSystemFlag(FLAG_SPCRES);
 
-    //allocateLocalRegisters(2);
+    //allocateLocalRegisters(3);
     //fnSetFlag(FIRST_LOCAL_REGISTER+0);
     //fnSetFlag(NUMBER_OF_GLOBAL_FLAGS+2);
     //reallocateRegister(FIRST_LOCAL_REGISTER+0, dtReal16, REAL16_SIZE, RT_REAL);
     //stringToReal16("5.555", REGISTER_REAL34_DATA(FIRST_LOCAL_REGISTER));
 
-    //strcpy(tmpStr3000, "Pure ASCII string requiring 38 bytes!");
-    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpStr3000) + 1), AM_NONE);
-    //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpStr3000);
+    //strcpy(tmpString, "Pure ASCII string requiring 38 bytes!");
+    //reallocateRegister(FIRST_LOCAL_REGISTER+1, dtString, TO_BLOCKS(strlen(tmpString) + 1), amNone);
+    //strcpy(REGISTER_STRING_DATA(FIRST_LOCAL_REGISTER + 1), tmpString);
 
 
     //allocateNamedVariable("Z" STD_a_DIARESIS "hler");
@@ -651,18 +868,18 @@ void fnReset(uint16_t confirmation) {
       debugWindow = DBG_REGISTERS;
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkHexaString), false);
       refreshDebugPanel();
-    #endif
+    #endif //  (DEBUG_PANEL == 1)
   }
 }
 
 
 
-void backToSystem(uint16_t unusedParamButMandatory) {
+void backToSystem(uint16_t unusedButMandatoryParameter) {
   #ifdef PC_BUILD
     fnOff(NOPARAM);
-  #endif
+  #endif // PC_BUILD
 
   #ifdef DMCP_BUILD
     backToDMCP = true;
-  #endif
+  #endif // DMCP_BUILD
 }

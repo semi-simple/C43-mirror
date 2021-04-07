@@ -25,10 +25,10 @@
  * \brief regX ==> regL and regY+i*regX ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnReToCx(uint16_t unusedParamButMandatory) {
+void fnReToCx(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
   uint32_t dataTypeY = getRegisterDataType(REGISTER_Y);
   bool_t xIsAReal;
@@ -41,29 +41,26 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
 
     xIsAReal = true;
     if(getSystemFlag(FLAG_POLAR)) { // polar mode
-      if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != AM_NONE) {
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), AM_RADIAN);
-        setRegisterAngularMode(REGISTER_X, AM_NONE);
-        dataTypeX = dtReal34;
+      if(dataTypeX == dtReal34 && getRegisterAngularMode(REGISTER_X) != amNone) {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), amRadian);
+        setRegisterAngularMode(REGISTER_X, amNone);
         xIsAReal = false;
       }
     }
 
     if(dataTypeX == dtLongInteger) {
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      dataTypeX = dtReal34;
     }
 
     if(dataTypeY == dtLongInteger) {
       convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-      dataTypeY = dtReal34;
     }
 
     complex34_t temp;
 
     real34Copy(REGISTER_REAL34_DATA(REGISTER_Y), &temp);
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&temp));
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
 
     if(getSystemFlag(FLAG_POLAR)) { // polar mode
       if(real34CompareEqual(VARIABLE_REAL34_DATA(&temp), const34_0)) {
@@ -76,7 +73,7 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
         real34ToReal(VARIABLE_REAL34_DATA(&temp), &magnitude);
         real34ToReal(VARIABLE_IMAG34_DATA(&temp), &theta);
         if(xIsAReal) {
-          convertAngleFromTo(&theta, currentAngularMode, AM_RADIAN, &ctxtReal39);
+          convertAngleFromTo(&theta, currentAngularMode, amRadian, &ctxtReal39);
         }
         if(realCompareLessThan(&magnitude, const_0)) {
           realSetPositiveSign(&magnitude);
@@ -100,6 +97,6 @@ void fnReToCx(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "You cannot use Re->Cx with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
       moreInfoOnError("In function fnReToCx:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }

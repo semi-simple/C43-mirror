@@ -22,7 +22,7 @@
 
 
 
-static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const fib[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1            2          3          4           5           6           7           8           9             10
 //          Long integer Real34     Complex34  Time        Date        String      Real34 mat  Complex34 m Short integer Config data
             fibLonI,     fibReal,   fibCplx,   fibError,   fibError,   fibError,   fibError,   fibError,   fibError,     fibError
@@ -35,26 +35,26 @@ static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void fibError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate fib(%s)", getRegisterDataTypeName(REGISTER_X, false, false));
     moreInfoOnError("In function fnFib:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 /********************************************//**
  * \brief regX ==> regL and fib(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFib(uint16_t unusedParamButMandatory) {
+void fnFib(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  matrix[getRegisterDataType(REGISTER_X)]();
+  fib[getRegisterDataType(REGISTER_X)]();
 
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
 }
@@ -69,9 +69,9 @@ void fibLonI(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-      sprintf(tmpStr3000, "cannot calculate fib(%s)", errorMessage);
-      moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
-    #endif
+      sprintf(tmpString, "cannot calculate fib(%s)", errorMessage);
+      moreInfoOnError("In function fibLonI:", tmpString, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     longIntegerFree(x);
     return;
   }
@@ -80,9 +80,9 @@ void fibLonI(void) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-      sprintf(tmpStr3000, "cannot calculate fib(%s), the limit for UNSIGN is 93", errorMessage);
-      moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
-    #endif
+      sprintf(tmpString, "cannot calculate fib(%s), the limit for UNSIGN is 93", errorMessage);
+      moreInfoOnError("In function fibLonI:", tmpString, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     longIntegerFree(x);
     return;
   }
@@ -90,9 +90,9 @@ void fibLonI(void) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, sizeof(errorMessage), SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
-      sprintf(tmpStr3000, "cannot calculate fib(%s), the limit is 4791, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
-      moreInfoOnError("In function fibLonI:", tmpStr3000, NULL, NULL);
-    #endif
+      sprintf(tmpString, "cannot calculate fib(%s), the limit is 4791, it's to ensure that the 3328 bits limit is not exceeded", errorMessage);
+      moreInfoOnError("In function fibLonI:", tmpString, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     longIntegerFree(x);
     return;
   }
@@ -118,7 +118,7 @@ uint8_t FibonacciReal(const real_t *n, real_t *res, realContext_t *realContext) 
   realPower(const_PHI, n, &a, realContext);                             // a   = PHI^(n)
   realDivide(const_1, &a, &b, realContext);                             // b   = PHI^(-n) = = 1/PHI^(n)
   realMultiply(const_pi, n, res, realContext);                          // res = PI * n
-  WP34S_Cvt2RadSinCosTan(res, AM_RADIAN, NULL, res, NULL, realContext); // res = COS(PI * n)
+  WP34S_Cvt2RadSinCosTan(res, amRadian, NULL, res, NULL, realContext); // res = COS(PI * n)
   realMultiply(&b, res, &b, realContext);                               // b   = PHI^(-n) * COS(PI * n)
   realSquareRoot(const_5, res, realContext);                            // res = SQRT(5)
   realSubtract(&a, &b, &a, realContext);                                // a   = PHI^(n) - PHI^(-n) * COS(PI * n)

@@ -22,7 +22,7 @@
 
 
 
-void fnToPolar(uint16_t unusedParamButMandatory) {
+void fnToPolar(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX, dataTypeY;
   real_t x, y;
 
@@ -51,9 +51,9 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
     }
 
     realRectangularToPolar(&x, &y, &x, &y, &ctxtReal39);
-    convertAngleFromTo(&y, AM_RADIAN, currentAngularMode, &ctxtReal39);
+    convertAngleFromTo(&y, amRadian, currentAngularMode, &ctxtReal39);
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, currentAngularMode);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&y, REGISTER_REAL34_DATA(REGISTER_Y));
@@ -65,7 +65,7 @@ void fnToPolar(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot convert (%s, %s) to polar coordinates!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false), getDataTypeName(getRegisterDataType(REGISTER_Y), false, false));
       moreInfoOnError("In function fnToPolar:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 

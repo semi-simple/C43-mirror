@@ -22,7 +22,7 @@
 
 
 
-void (* const arctanh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const arctanh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1             2            3            4             5             6             7            8            9             10
 //          Long integer  Real34       Complex34    Time          Date          String        Real34 mat   Complex34 m  Short integer Config data
             arctanhLonI,  arctanhReal, arctanhCplx, arctanhError, arctanhError, arctanhError, arctanhRema, arctanhCxma, arctanhError, arctanhError
@@ -36,13 +36,13 @@ void (* const arctanh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void arctanhError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arctanh for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnArctanh:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -50,10 +50,10 @@ void arctanhError(void) {
  * \brief regX ==> regL and arctanh(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnArctanh(uint16_t unusedParamButMandatory) {
+void fnArctanh(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arctanh[getRegisterDataType(REGISTER_X)]();
@@ -69,50 +69,50 @@ void arctanhLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
 
   if(realIsZero(&x)) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     if(realCompareEqual(&x, const_1)) {
       if(getSystemFlag(FLAG_SPCRES)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           moreInfoOnError("In function arctanhLonI:", "X = 1", "and DANGER flag is not set!", NULL);
-        #endif
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
        }
     }
     else if(realCompareEqual(&x, const__1)) {
       if(getSystemFlag(FLAG_SPCRES)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           moreInfoOnError("In function arctanhLonI:", "X = -1", "and DANGER flag is not set!", NULL);
-        #endif
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
        }
     }
     else {
       if(getFlag(FLAG_CPXRES)) {
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
         realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
         real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
         arctanhCplx();
       }
       else if(getSystemFlag(FLAG_SPCRES)) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           moreInfoOnError("In function arctanhLonI:", "|X| > 1", "and CPXRES is not set!", NULL);
-        #endif
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
     }
   }
@@ -149,7 +149,7 @@ void arctanhReal(void) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           moreInfoOnError("In function arctanhReal:", "X = 1", "and DANGER flag is not set!", NULL);
-        #endif
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
        }
     }
     else if(realCompareEqual(&x, const__1)) {
@@ -160,13 +160,13 @@ void arctanhReal(void) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           moreInfoOnError("In function arctanhReal:", "X = -1", "and DANGER flag is not set!", NULL);
-        #endif
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
        }
     }
     else {
       if(realCompareAbsGreaterThan(&x, const_1)) {
         if(getFlag(FLAG_CPXRES)) {
-          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+          reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
           realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
           real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
           arctanhCplx();
@@ -178,7 +178,7 @@ void arctanhReal(void) {
           displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             moreInfoOnError("In function arctanhReal:", "|X| > 1", "and CPXRES is not set!", NULL);
-          #endif
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
         }
       }
       else {
@@ -187,7 +187,7 @@ void arctanhReal(void) {
       }
     }
   }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

@@ -18,8 +18,12 @@
  * \file arcsinh.h
  ***********************************************/
 
-void fnArcsinh   (uint16_t unusedParamButMandatory);
+void fnArcsinh   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void arcsinhError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define arcsinhError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void arcsinhLonI (void);
 void arcsinhRema (void);
 void arcsinhCxma (void);

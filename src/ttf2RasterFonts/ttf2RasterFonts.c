@@ -21,6 +21,9 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+/* Turn off -Wunused-result for a specific function call */
+#define ignore_result(M) if(1==((uint64_t)M)){;}
+
 FT_Library library;
 FT_Error   error;
 FILE       *cFile, *hFile, *sortingOrder;
@@ -43,7 +46,7 @@ const char* getErrorMessage(FT_Error err) {
 }
 
 uint16_t hexToUint(const char *hexa) {
-    // the itialisation to zero prevents a 'variable used is not initialized' warning on Mac:
+    // the inialisation to zero prevents a 'variable used is not initialized' warning on Mac:
     uint16_t uint=0;
 
   if(   (('0' <= hexa[0] && hexa[0] <= '9') || ('A' <= hexa[0] && hexa[0] <= 'F') || ('a' <= hexa[0] && hexa[0] <= 'f'))
@@ -121,7 +124,7 @@ void exportCStructure(char const *ttfName) {
   FT_Vector pen;
   char      glyphName[100];
   char      ttfName2[100], path[200], *fontName;
-  int       x, y, cc, bytesPerRow, bit; // ,dataLength
+  int       x, y, cc, bit; // ,dataLength
   int       fontHeightPixels, unitsPerEm, onePixelSize, numberOfGlyphs;
   int       colsBeforeGlyph, colsGlyph, colsAfterGlyph;
   int       rowsAboveGlyph, rowsGlyph, rowsBelowGlyph;
@@ -193,7 +196,7 @@ void exportCStructure(char const *ttfName) {
   ///////////////////////////////////////
   // Go thru all glyphs to render them //
   ///////////////////////////////////////
-  fprintf(cFile, "const font_t %s = {\n", fontName);
+  fprintf(cFile, "TO_QSPI const font_t %s = {\n", fontName);
   fprintf(cFile, "  .id             = %d,\n", fontName[0] == 'n' ? 0 : 1);
   //fprintf(cFile, "  .name           = \"%s\",\n", fontName);
   //fprintf(cFile, "  .ascender       = %d,\n", face->ascender/onePixelSize);
@@ -274,16 +277,7 @@ void exportCStructure(char const *ttfName) {
       //////////////////////
       // Render the glyph //
       //////////////////////
-      fprintf(cFile, "    // %s \n", glyphName);
-
-      bytesPerRow = colsGlyph;
-
-      if(bytesPerRow % 8 == 0) {
-        bytesPerRow /= 8;
-      }
-      else {
-        bytesPerRow = bytesPerRow/8 + 1;
-      }
+      fprintf(cFile, "    // %s\n", glyphName);
 
       fprintf(cFile, "    {.charCode=0x%04x, .colsBeforeGlyph=%2d, .colsGlyph=%2d, .colsAfterGlyph=%2d, .rowsAboveGlyph=%2d, .rowsGlyph=%2d, .rowsBelowGlyph=%2d, .rank1=%3d, .rank2=%3d,\n",
                       (unsigned int)(charCodes[cc]>=0x0080 ? charCodes[cc]|0x8000 : charCodes[cc]), colsBeforeGlyph, colsGlyph, colsAfterGlyph, rowsAboveGlyph, rowsGlyph, rowsBelowGlyph, rank1, rank2);
@@ -316,7 +310,15 @@ void exportCStructure(char const *ttfName) {
   FT_Done_Face(face);
 }
 
-int main(void) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+int main(int argc, char* argv[]) {
+  #pragma GCC diagnostic pop
+  #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no longer in the correct directory! Why?
+    (*strstr(argv[0], "/bin/")) = 0;
+    chdir(argv[0]);
+  #endif // CODEBLOCKS_OVER_SCORE
+
   ////////////////
   // Open files //
   ////////////////
@@ -329,9 +331,9 @@ int main(void) {
   #elif defined(__APPLE__)
     sortingOrder = fopen("fonts/sortingOrder.csv", "rb");
     cFile        = fopen("src/wp43s/rasterFontsData.c", "wb");
-  #else
+  #else // Unsupported OS
     #error Only Linux, MacOS and Windows MINGW64 are supported for now
-  #endif
+  #endif // OS
 
   if(sortingOrder == NULL) {
     fprintf(stderr, "Cannot open file fonts/sortingOrder.csv\n");
@@ -342,8 +344,8 @@ int main(void) {
   // Read the sorting order //
   ////////////////////////////
   nbGlyphRanks = 0;
-  fgets(line, 500, sortingOrder); // Header
-  fgets(line, 500, sortingOrder);
+  ignore_result(fgets(line, 500, sortingOrder)); // Header
+  ignore_result(fgets(line, 500, sortingOrder));
   while(!feof(sortingOrder)) {
     pos = strlen(line) - 1;
 
@@ -365,7 +367,7 @@ int main(void) {
 
     nbGlyphRanks++;
 
-    fgets(line, 500, sortingOrder);
+    ignore_result(fgets(line, 500, sortingOrder));
   }
 
   /////////////////////////////////////

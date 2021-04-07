@@ -96,7 +96,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
     else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
       moreInfoOnError("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
     }
-  #endif
+  #endif // PC_BUILD
 }*/
 
 
@@ -112,6 +112,17 @@ void fnDisplayFormatGap(uint16_t gap) {
    gap = 0;
  }
   groupingGap = gap;
+}
+
+
+/********************************************//**
+ * \brief Sets the display format for time and refreshes the stack
+ *
+ * \param[in] displayFormatN uint16_t Display format
+ * \return void
+ ***********************************************/
+void fnDisplayFormatTime(uint16_t displayFormatN) {
+  timeDisplayFormatDigits = (uint8_t)displayFormatN;
 }
 
 
@@ -156,7 +167,7 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
     strcat(displayString, STD_SUP_0);
   }
   else {
-    int16_t digit, digitCount=0;
+    int16_t digitCount=0;
     bool_t greaterThan9999;
 
     if(supNumber < 0) {
@@ -167,31 +178,33 @@ void supNumberToDisplayString(int32_t supNumber, char *displayString, char *disp
 
     greaterThan9999 = (supNumber > 9999);
     while(supNumber > 0) {
+      int16_t digit;
+
       digit = supNumber % 10;
       supNumber /= 10;
 
       xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
       if(digit <= 1) {
-        *(displayString)     = *(STD_SUP_0);
-        *(displayString + 1) = *(STD_SUP_0 + 1);
+        displayString[0] = STD_SUP_0[0];
+        displayString[1] = STD_SUP_0[1];
         displayString[1] += digit;
       }
       else if(digit <= 3) {
-        *(displayString)     = *(STD_SUP_2);
-        *(displayString + 1) = *(STD_SUP_2 + 1);
+        displayString[0] = STD_SUP_2[0];
+        displayString[1] = STD_SUP_2[1];
         displayString[1] += digit-2;
       }
       else {
-        *(displayString)     = *(STD_SUP_4);
-        *(displayString + 1) = *(STD_SUP_4 + 1);
+        displayString[0] = STD_SUP_4[0];
+        displayString[1] = STD_SUP_4[1];
         displayString[1] += digit-4;
       }
 
       if(insertGap && greaterThan9999 && supNumber > 0 && groupingGap != 0 && ((++digitCount) % groupingGap) == 0) {
         xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
-        *(displayString)     = *(separator);
-        *(displayString + 1) = *(separator + 1);
+        displayString[0] = separator[0];
+        displayString[1] = separator[1];
       }
     }
   }
@@ -216,16 +229,14 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString, char *disp
     strcat(displayString, STD_SUB_0);
   }
   else {
-    int16_t digit;
-
     while(subNumber > 0) {
-      digit = subNumber % 10;
+      int16_t digit = subNumber % 10;
       subNumber /= 10;
 
       xcopy(displayString + 2, displayString, stringByteLength(displayString) + 1);
 
-      *(displayString)     = *(STD_SUB_0);
-      *(displayString + 1) = *(STD_SUB_0 + 1);
+      displayString[0] = STD_SUB_0[0];
+      displayString[1] = STD_SUB_0[1];
       displayString[1] += digit;
     }
   }
@@ -233,18 +244,18 @@ void subNumberToDisplayString(int32_t subNumber, char *displayString, char *disp
 
 
 
-void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
+void real34ToDisplayString(const real34_t *real34, uint32_t tag, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
   uint8_t savedDisplayFormatDigits = displayFormatDigits;
 
   if(updateDisplayValueX) {
     displayValueX[0] = 0;
   }
 
-  if(angulaMode == AM_NONE) {
+  if(tag == amNone) {
     realToDisplayString2(real34, displayString, displayHasNDigits, limitExponent, separator);
   }
   else {
-    angle34ToDisplayString2(real34, angulaMode, displayString, displayHasNDigits, limitExponent, separator);
+    angle34ToDisplayString2(real34, tag, displayString, displayHasNDigits, limitExponent, separator);
   }
 
   while(stringWidth(displayString, font, true, true) > maxWidth) {
@@ -265,11 +276,11 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
       displayValueX[0] = 0;
     }
 
-    if(angulaMode == AM_NONE) {
+    if(tag == amNone) {
       realToDisplayString2(real34, displayString, displayHasNDigits, limitExponent, separator);
     }
     else {
-      angle34ToDisplayString2(real34, angulaMode, displayString, displayHasNDigits, limitExponent, separator);
+      angle34ToDisplayString2(real34, tag, displayString, displayHasNDigits, limitExponent, separator);
     }
   }
   displayFormatDigits = savedDisplayFormatDigits;
@@ -284,7 +295,7 @@ void real34ToDisplayString(const real34_t *real34, uint32_t angulaMode, char *di
  * \param[in]  x const real16_t*  Value to format
  * \return void
  ***********************************************/
-void realToDisplayString2(const real34_t *real34, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
+static void realToDisplayString2a(const real34_t *real34, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator, bool_t noFix) {
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
@@ -305,7 +316,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     real34SetNegativeSign(&value34);
   }
 
-  bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
+  bcd = (uint8_t *)(tmpString + 256 - MAX_DIGITS);
   memset(bcd, 0, MAX_DIGITS);
 
   sign = real34GetCoefficient(&value34, bcd + 1);
@@ -353,7 +364,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     else if(exponent < -exponentLimit) {
       real34Zero(&value34);
 
-      bcd = (uint8_t *)(tmpStr3000 + 256 - MAX_DIGITS);
+      bcd = (uint8_t *)(tmpString + 256 - MAX_DIGITS);
       memset(bcd, 0, MAX_DIGITS);
 
       sign = 0;
@@ -429,7 +440,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   // ALL mode //
   //////////////
   if(displayFormat == DF_ALL) {
-    if(exponent >= displayHasNDigits || (displayFormatDigits != 0 && exponent < -(int32_t)displayFormatDigits) || (displayFormatDigits == 0 && exponent < numDigits - displayHasNDigits)) { // Display in SCI or ENG format
+    if(noFix || exponent >= displayHasNDigits || (displayFormatDigits != 0 && exponent < -(int32_t)displayFormatDigits) || (displayFormatDigits == 0 && exponent < numDigits - displayHasNDigits)) { // Display in SCI or ENG format
       digitsToDisplay = numDigits - 1;
       digitToRound    = firstDigit + digitsToDisplay;
       ovrSCI = !getSystemFlag(FLAG_ALLENG);
@@ -551,7 +562,7 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   // FIX mode //
   //////////////
   if(displayFormat == DF_FIX) {
-    if(exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
+    if(noFix || exponent >= displayHasNDigits || exponent < -(int32_t)displayFormatDigits) { // Display in SCI or ENG format
       digitsToDisplay = displayFormatDigits;
       digitToRound    = min(firstDigit + digitsToDisplay, lastDigit);
       ovrSCI = !getSystemFlag(FLAG_ALLENG);
@@ -705,7 +716,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // Case when 9.9999 rounds to 10.0000
     if(digitToRound < firstDigit) {
       firstDigit--;
-      lastDigit = firstDigit;
       numDigits = 1;
       exponent++;
     }
@@ -807,7 +817,6 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
     // Case when 9.9999 rounds to 10.0000
     if(digitToRound < firstDigit) {
       firstDigit--;
-      lastDigit = firstDigit;
       numDigits = 1;
       exponent++;
     }
@@ -895,6 +904,10 @@ void realToDisplayString2(const real34_t *real34, char *displayString, int16_t d
   }
 }
 
+void realToDisplayString2(const real34_t *real34, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
+  realToDisplayString2a(real34, displayString, displayHasNDigits, limitExponent, separator, false);
+}
+
 
 
 void complex34ToDisplayString(const complex34_t *complex34, char *displayString, const font_t *font, int16_t maxWidth, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
@@ -939,7 +952,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     real34ToReal(VARIABLE_REAL34_DATA(complex34), &real);
     real34ToReal(VARIABLE_IMAG34_DATA(complex34), &imagIc);
     realRectangularToPolar(&real, &imagIc, &real, &imagIc, &ctxtReal39); // imagIc in radian
-    convertAngleFromTo(&imagIc, AM_RADIAN, currentAngularMode, &ctxtReal39);
+    convertAngleFromTo(&imagIc, amRadian, currentAngularMode, &ctxtReal39);
     realToReal34(&real, &real34);
     realToReal34(&imagIc, &imag34);
   }
@@ -1029,8 +1042,8 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
         gap = 0;
         endingZero++;
         xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-        *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
-        *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
+        displayString[insertAt]     = STD_SPACE_PUNCTUATION[0];
+        displayString[insertAt + 1] = STD_SPACE_PUNCTUATION[1];
       }
 
       u = intPart % 10;
@@ -1068,8 +1081,8 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       gap = 0;
       endingZero++;
       xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-      *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
-      *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
+      displayString[insertAt]     = STD_SPACE_PUNCTUATION[0];
+      displayString[insertAt + 1] = STD_SPACE_PUNCTUATION[1];
     }
 
     u = numer % 10;
@@ -1078,18 +1091,18 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
     xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
 
     if(u <= 1) {
-      *(displayString + insertAt)     = *(STD_SUP_0);
-      *(displayString + insertAt + 1) = *(STD_SUP_0 + 1);
+      displayString[insertAt]     = STD_SUP_0[0];
+      displayString[insertAt + 1] = STD_SUP_0[1];
       displayString[insertAt + 1] += u;
     }
     else if(u <= 3) {
-      *(displayString + insertAt)     = *(STD_SUP_2);
-      *(displayString + insertAt + 1) = *(STD_SUP_2 + 1);
+      displayString[insertAt]     = STD_SUP_2[0];
+      displayString[insertAt + 1] = STD_SUP_2[1];
       displayString[insertAt + 1] += u - 2;
     }
     else {
-      *(displayString + insertAt)     = *(STD_SUP_4);
-      *(displayString + insertAt + 1) = *(STD_SUP_4 + 1);
+      displayString[insertAt]     = STD_SUP_4[0];
+      displayString[insertAt + 1] = STD_SUP_4[1];
       displayString[insertAt + 1] += u - 4;
     }
 
@@ -1110,16 +1123,16 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
       gap = 0;
       endingZero++;
       xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-      *(displayString + insertAt)     = *(STD_SPACE_PUNCTUATION);
-      *(displayString + insertAt + 1) = *(STD_SPACE_PUNCTUATION + 1);
+      displayString[insertAt]     = STD_SPACE_PUNCTUATION[0];
+      displayString[insertAt + 1] = STD_SPACE_PUNCTUATION[1];
     }
 
     u = denom % 10;
     denom /= 10;
     endingZero++;
     xcopy(displayString + insertAt + 2, displayString + insertAt, endingZero++ - insertAt);
-    *(displayString + insertAt)     = *(STD_SUB_0);
-    *(displayString + insertAt + 1) = *(STD_SUB_0 + 1);
+    displayString[insertAt]     = STD_SUB_0[0];
+    displayString[insertAt + 1] = STD_SUB_0[1];
     displayString[insertAt + 1] += u;
   } while(denom != 0);
 
@@ -1137,39 +1150,40 @@ void fractionToDisplayString(calcRegister_t regist, char *displayString) {
 
 
 void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator) {
-  if(mode == AM_DMS) {
+  if(mode == amDMS) {
     char degStr[27];
     uint32_t m, s, fs;
     int16_t sign;
     bool_t overflow;
+    real34_t angle34Dms;
+    real_t angleDms, degrees, minutes, seconds;
 
-    real_t temp, degrees, minutes, seconds;
+    real34FromDegToDms(angle34, &angle34Dms);
+    real34ToReal(&angle34Dms, &angleDms);
 
-    real34ToReal(angle34, &temp);
-
-    sign = realIsNegative(&temp) ? -1 : 1;
-    realSetPositiveSign(&temp);
+    sign = realIsNegative(&angleDms);
+    realSetPositiveSign(&angleDms);
 
     // Get the degrees
-    realToIntegralValue(&temp, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
+    realToIntegralValue(&angleDms, &degrees, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the minutes
-    realSubtract(&temp, &degrees, &temp, &ctxtReal39);
-    realMultiply(&temp, const_100, &temp, &ctxtReal39);
-    realToIntegralValue(&temp, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
+    realSubtract(&angleDms, &degrees, &angleDms, &ctxtReal39);
+    realMultiply(&angleDms, const_100, &angleDms, &ctxtReal39);
+    realToIntegralValue(&angleDms, &minutes, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the seconds
-    realSubtract(&temp, &minutes, &temp, &ctxtReal39);
-    realMultiply(&temp, const_100, &temp, &ctxtReal39);
-    realToIntegralValue(&temp, &seconds, DEC_ROUND_DOWN, &ctxtReal39);
+    realSubtract(&angleDms, &minutes, &angleDms, &ctxtReal39);
+    realMultiply(&angleDms, const_100, &angleDms, &ctxtReal39);
+    realToIntegralValue(&angleDms, &seconds, DEC_ROUND_DOWN, &ctxtReal39);
 
     // Get the fractional seconds
-    realSubtract(&temp, &seconds, &temp, &ctxtReal39);
-    realMultiply(&temp, const_100, &temp, &ctxtReal39);
+    realSubtract(&angleDms, &seconds, &angleDms, &ctxtReal39);
+    realMultiply(&angleDms, const_100, &angleDms, &ctxtReal39);
 
-    realToUInt32(&temp, DEC_ROUND_DOWN, &fs, &overflow);
-    realToUInt32(&seconds, DEC_ROUND_DOWN, &s, &overflow);
-    realToUInt32(&minutes, DEC_ROUND_DOWN, &m, &overflow);
+    realToUInt32(&angleDms, DEC_ROUND_DOWN, &fs, &overflow);
+    realToUInt32(&seconds,  DEC_ROUND_DOWN, &s,  &overflow);
+    realToUInt32(&minutes,  DEC_ROUND_DOWN, &m,  &overflow);
 
     if(fs >= 100) {
       fs -= 100;
@@ -1195,19 +1209,20 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     }
 
     sprintf(displayString, "%s%s" STD_DEGREE "%s%" PRIu32 STD_QUOTE "%s%" PRIu32 "%s%02" PRIu32 STD_DOUBLE_QUOTE,
-                            sign==-1 ? "-" : "",
+                            sign ? "-" : "",
                               degStr,         m < 10 ? STD_SPACE_FIGURE : "",
                                                 m,                   s < 10 ? STD_SPACE_FIGURE : "",
                                                                        s,         RADIX34_MARK_STRING,
                                                                                     fs);
   }
   else {
-    realToDisplayString2(angle34, displayString, displayHasNDigits, limitExponent, separator);
+    realToDisplayString2a(angle34, displayString, displayHasNDigits, limitExponent, separator, mode == amSecond);
 
-         if(mode == AM_DEGREE) strcat(displayString, STD_DEGREE);
-    else if(mode == AM_GRAD)   strcat(displayString, STD_SUP_g);
-    else if(mode == AM_MULTPI) strcat(displayString, STD_pi);
-    else if(mode == AM_RADIAN) strcat(displayString, STD_SUP_r);
+         if(mode == amRadian) strcat(displayString, STD_SUP_r);
+    else if(mode == amMultPi) strcat(displayString, STD_pi);
+    else if(mode == amGrad)   strcat(displayString, STD_SUP_g);
+    else if(mode == amDegree) strcat(displayString, STD_DEGREE);
+    else if(mode == amSecond) strcat(displayString, "s");
     else {
       strcat(displayString, "?");
       sprintf(errorMessage, "In function angle34ToDisplayString2: %" PRIu8 " is an unexpected value for mode!", mode);
@@ -1419,7 +1434,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
     strcpy(displayString, "Integer data representation to wide!");
   }
@@ -1475,7 +1490,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (2)!", displayString, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
     strcpy(displayString, "Integer data representation to wide!");
   }
@@ -1484,7 +1499,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
 
 void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayString, int32_t strLg, int16_t maxWidth, int16_t maxExp, const char *separator) {
-  int16_t len, exponentStep;
+  int16_t exponentStep;
   uint32_t exponentShift, exponentShiftLimit;
   longInteger_t lgInt;
 
@@ -1520,7 +1535,7 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
   longIntegerFree(lgInt);
 
   if(groupingGap > 0) {
-    len = strlen(displayString);
+    int16_t len = strlen(displayString);
     for(int16_t i=len - groupingGap; i>0; i-=groupingGap) {
       if(i != 1 || displayString[0] != '-') {
         xcopy(displayString + i + 2, displayString + i, len - i + 1);
@@ -1617,29 +1632,28 @@ void longIntegerRegisterToDisplayString(calcRegister_t regist, char *displayStri
 
 
 void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t strLen) {
-  int32_t digits, stringLen, counter;
+  int32_t numberOfDigits, stringLen, counter;
   longInteger_t x;
 
   str[0] = '0';
   str[1] = 0;
   if(lgInt->_mp_size == 0) {
-  //if(longIntegerIsZero(lgInt)) {
     return;
   }
 
-  //digits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
-  digits = mpz_sizeinbase(lgInt, 10); // GMP documentation says the result can be 1 to big
-  //if(longIntegerIsNegative(lgInt)) {
+  //numberOfDigits = longIntegerBase10Digits(lgInt); // GMP documentation says the result can be 1 to big
+  numberOfDigits = mpz_sizeinbase(lgInt, 10); // GMP documentation says the result can be 1 to big
   if(lgInt->_mp_size < 0) {
-    stringLen = digits + 2; // 1 for the trailing 0 and 1 for the minus sign
+    stringLen = numberOfDigits + 2; // 1 for the trailing 0 and 1 for the minus sign
     str[0] = '-';
   }
   else {
-    stringLen = digits + 1; // 1 for the trailing 0
+    stringLen = numberOfDigits + 1; // 1 for the trailing 0
   }
 
   if(strLen < stringLen) {
-    printf("In function longIntegerToAllocatedString: the string str (%" PRId32 " bytes) is too small to hold the base 10 representation of lgInt, %" PRId32 " are needed!\n", strLen, stringLen);
+    sprintf(errorMessage, "In function longIntegerToAllocatedString: the string str (%" PRId32 " bytes) is too small to hold the base 10 representation of lgInt, %" PRId32 " are needed!", strLen, stringLen);
+    displayBugScreen(errorMessage);
     return;
   }
 
@@ -1656,7 +1670,7 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 
   stringLen -= 2; // set stringLen to the last digit of the base 10 representation
-  counter = digits;
+  counter = numberOfDigits;
   //while(!longIntegerIsZero(x)) {
   while(x->_mp_size != 0) {
     str[stringLen--] = '0' + mpz_tdiv_ui(x, 10);
@@ -1668,7 +1682,7 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
   }
 
   if(counter == 1) { // digit was 1 too big
-    xcopy(str + stringLen, str + stringLen + 1, digits);
+    xcopy(str + stringLen, str + stringLen + 1, numberOfDigits);
   }
 
   //longIntegerFree(x);
@@ -1678,13 +1692,225 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" PRId64, *(int64_t *)(REGISTER_DATA(regist)));
+  real34_t j, y, yy, m, d;
+  uint64_t yearVal;
+  char sign[] = {0, 0};
+
+  internalDateToJulianDay(REGISTER_REAL34_DATA(regist), &j);
+  decomposeJulianDay(&j, &y, &m, &d);
+  if(real34IsNegative(&y)) sign[0] = '-';
+  real34CopyAbs(&y, &y);
+  real34CopyAbs(&y, &yy);
+  real34DivideRemainder(&y, const34_2p32, &y);
+  real34Divide(&yy, const34_2p32, &yy);
+  real34ToIntegralValue(&yy, &yy, DEC_ROUND_DOWN);
+  yearVal = ((uint64_t)real34ToUInt32(&yy) << 32) | ((uint64_t)real34ToUInt32(&y));
+
+  if(getSystemFlag(FLAG_DMY)) {
+    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu64, real34ToUInt32(&d), real34ToUInt32(&m), sign, yearVal);
+  }
+  else if(getSystemFlag(FLAG_MDY)) {
+    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu64, real34ToUInt32(&m), real34ToUInt32(&d), sign, yearVal);
+  }
+  else { // YMD
+    sprintf(displayString, "%s%04" PRIu64 "-%02" PRIu32 "-%02" PRIu32, sign, yearVal, real34ToUInt32(&m), real34ToUInt32(&d));
+  }
 }
 
 
 
-void timeToDisplayString(calcRegister_t regist, char *displayString) {
-  sprintf(displayString, "%" PRId64, *(int64_t *)(REGISTER_DATA(regist)));
+void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t ignoreTDisp) {
+  real_t real, value, tmp, h, m, s;
+  longInteger_t hli;
+  int32_t sign, i;
+  uint32_t digits, tDigits = 0u, bDigits, m32, s32;
+  char digitBuf[16], digitBuf2[48];
+  char* bufPtr;
+  bool_t isValid12hTime = false, isAfternoon = false, overflow;
+  uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
+
+  real34ToReal(REGISTER_REAL34_DATA(regist), &real);
+  sign = realIsNegative(&real);
+
+  // Short time (displayed like SCI/ENG)
+  if(timeDisplayFormatDigits == 0) {
+    realDivide(const_1, const_1000, &value, &ctxtReal39);
+  }
+  else if((timeDisplayFormatDigits == 1) || (timeDisplayFormatDigits == 2)) {
+    realCopy(const_60, &value);
+  }
+  else {
+    realCopy(const_1, &value);
+    for(i = 3; i < timeDisplayFormatDigits; ++i) {
+      --value.exponent;
+      if(i == 5) break;
+    }
+  }
+  if(realCompareAbsLessThan(&real, const_1)) {
+    realCopy(const_1, &tmp), tmp.exponent -= 33;
+    realDivideRemainder(&real, &tmp, &tmp, &ctxtReal39);
+  }
+  else {
+    realZero(&tmp);
+  }
+  if(realCompareAbsLessThan(&real, &value) || (ignoreTDisp && (!realIsZero(&tmp)))) {
+    if(ignoreTDisp || (timeDisplayFormatDigits == 0)) {
+      displayFormat = DF_ALL;
+      displayFormatDigits = 0;
+    }
+    else {
+      displayFormat = getSystemFlag(FLAG_ALLENG) ? DF_ENG : DF_SCI;
+      displayFormatDigits = 3;
+    }
+    real34ToDisplayString(REGISTER_REAL34_DATA(regist), amSecond, displayString, &standardFont, 2000, ignoreTDisp ? 34 : 16, false, STD_SPACE_4_PER_EM);
+    displayFormatDigits = savedDisplayFormatDigits;
+    displayFormat = savedDisplayFormat;
+    return;
+  }
+  displayFormatDigits = savedDisplayFormatDigits;
+  displayFormat = savedDisplayFormat;
+
+  // Hours
+  realDivide(&real, const_3600, &h, &ctxtReal39);
+  realSetPositiveSign(&h);
+  realToIntegralValue(&h, &h, DEC_ROUND_DOWN, &ctxtReal39);
+
+  // Pre-rounding
+  if(!ignoreTDisp) {
+    switch(timeDisplayFormatDigits) {
+      case 0:
+        int32ToReal(86400, &value);
+        if((!sign) && (!getSystemFlag(FLAG_TDM24)) && realCompareLessThan(&real, &value)) {
+          isValid12hTime = true;
+        }
+        for(bDigits = 0; bDigits < (isValid12hTime ? 14 : 16); ++bDigits) {
+          if(realCompareAbsLessThan(&h, const_100)) break;
+          ++value.exponent;
+        }
+        tDigits = isValid12hTime ? 13 : 15;
+        isValid12hTime = false;
+        goto do_rounding;
+      case 1: case 2: // round to minutes
+        realDivide(&real, const_60, &real, &ctxtReal39);
+        realToIntegralValue(&real, &real, DEC_ROUND_DOWN, &ctxtReal39);
+        realMultiply(&real, const_60, &real, &ctxtReal39);
+        break;
+      default: // round to seconds, milliseconds, microseconds, ...
+        tDigits = timeDisplayFormatDigits + 1;
+        bDigits = 4u;
+      do_rounding:
+        for(digits = bDigits; digits < tDigits; ++digits) {
+          ++real.exponent;
+        }
+        realToIntegralValue(&real, &real, timeDisplayFormatDigits == 0 ? DEC_ROUND_HALF_UP : DEC_ROUND_DOWN, &ctxtReal39);
+        for(digits = bDigits; digits < tDigits; ++digits) {
+          --real.exponent;
+        }
+        tDigits = 0u;
+    }
+  }
+  realSetPositiveSign(&real);
+
+  // Seconds
+  realToIntegralValue(&real, &s, DEC_ROUND_DOWN, &ctxtReal39);
+  realSubtract(&real, &s, &real, &ctxtReal39); // Fractional part
+  // Minutes
+  realDivide(&s, const_60, &m, &ctxtReal39);
+  realToIntegralValue(&m, &m, DEC_ROUND_DOWN, &ctxtReal39);
+  realDivideRemainder(&s, const_60, &s, &ctxtReal39);
+  realDivideRemainder(&m, const_60, &m, &ctxtReal39);
+  // 12-hour time
+  if((!getSystemFlag(FLAG_TDM24)) && (!sign)) {
+    int32ToReal(24, &value);
+    if(realCompareLessThan(&h, &value)) {
+      isValid12hTime = true;
+      int32ToReal(12, &value);
+      if(realCompareGreaterEqual(&h, &value)) {
+        isAfternoon = true;
+        if(!realCompareLessEqual(&h, &value)) {
+          realSubtract(&h, &value, &h, &ctxtReal39);
+        }
+      }
+      else if(realIsZero(&h)) {
+        realAdd(&h, &value, &h, &ctxtReal39);
+      }
+    }
+  }
+
+  // Display Hours
+  strcpy(displayString, sign ? "-" : "");
+  longIntegerInit(hli);
+  convertRealToLongInteger(&h, hli, DEC_ROUND_DOWN);
+  longIntegerToAllocatedString(hli, digitBuf2, sizeof(digitBuf2));
+  longIntegerFree(hli);
+
+  bufPtr = digitBuf2;
+  digitBuf[1] = '\0';
+  for(digits = strlen(digitBuf2); digits > 0; --digits){
+    digitBuf[0] = *bufPtr++;
+    strcat(displayString, digitBuf);
+    if((digits % 3u == 1) && (digits > 1)) {
+      strcat(displayString, STD_SPACE_4_PER_EM);
+    }
+    ++tDigits;
+  }
+
+  if((!ignoreTDisp) && (timeDisplayFormatDigits == 1 || timeDisplayFormatDigits == 2 || (++tDigits) > (isValid12hTime ? 16 : 18))) {
+    // Display Minutes
+    realToUInt32(&m, DEC_ROUND_DOWN, &m32, &overflow);
+    sprintf(digitBuf, ":%02" PRIu32, m32);
+    strcat(displayString, digitBuf);
+  }
+
+  else {
+    // Display MM:SS
+    realToUInt32(&m, DEC_ROUND_DOWN, &m32, &overflow);
+    realToUInt32(&s, DEC_ROUND_DOWN, &s32, &overflow);
+    sprintf(digitBuf, ":%02" PRIu32 ":%02" PRIu32, m32, s32);
+    strcat(displayString, digitBuf);
+
+    // Display fractional part of seconds
+    digits = 0u;
+    realZero(&value);
+    while(1) {
+      realSubtract(&real, &value, &real, &ctxtReal39);
+      if(ignoreTDisp || (timeDisplayFormatDigits == 0)) {
+        if(realIsZero(&real)) {
+          break;
+        }
+      }
+      else {
+        if(digits + 4 > timeDisplayFormatDigits) {
+          break;
+        }
+      }
+      if((!ignoreTDisp) && ((++tDigits) > (isValid12hTime ? 16 : 18))) {
+        break;
+      }
+      realMultiply(&real, const_10, &real, &ctxtReal39);
+      realToIntegralValue(&real, &value, DEC_ROUND_DOWN, &ctxtReal39);
+
+      if(digits == 0u) {
+        strcat(displayString, RADIX34_MARK_STRING);
+      }
+      else if(digits % 3 == 0u) {
+        strcat(displayString, STD_SPACE_4_PER_EM);
+      }
+
+      realToUInt32(&value, DEC_ROUND_DOWN, &s32, &overflow);
+      sprintf(digitBuf, "%" PRIu32, s32);
+      strcat(displayString, digitBuf);
+      ++digits;
+    }
+  }
+
+  // for 12-hour time
+  if(isAfternoon) {
+    strcat(displayString, "p.m.");
+  }
+  else if(isValid12hTime) {
+    strcat(displayString, "a.m.");
+  }
 }
 
 void real34MatrixToDisplayString(calcRegister_t regist, char *displayString) {
@@ -1692,7 +1918,7 @@ void real34MatrixToDisplayString(calcRegister_t regist, char *displayString) {
   sprintf(displayString, "[%" PRIu16" x %" PRIu16" Matrix]", dblock->matrixRows, dblock->matrixColumns);
 }
 
-void fnShow(uint16_t unusedParamButMandatory) {
+void fnShow(uint16_t unusedButMandatoryParameter) {
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
   int16_t source, dest, last, d, maxWidth, offset, bytesProcessed;
   real34_t real34;
@@ -1702,23 +1928,23 @@ void fnShow(uint16_t unusedParamButMandatory) {
   displayFormat = DF_ALL;
   displayFormatDigits = 0;
 
-  tmpStr3000[   0] = 0; // L1
-  tmpStr3000[ 300] = 0; // L2
-  tmpStr3000[ 600] = 0; // L3
-  tmpStr3000[ 900] = 0; // L4
-  tmpStr3000[1200] = 0; // L5
-  tmpStr3000[1500] = 0; // L6
-  tmpStr3000[1800] = 0; // L7
+  tmpString[   0] = 0; // L1
+  tmpString[ 300] = 0; // L2
+  tmpString[ 600] = 0; // L3
+  tmpString[ 900] = 0; // L4
+  tmpString[1200] = 0; // L5
+  tmpString[1500] = 0; // L6
+  tmpString[1800] = 0; // L7
 
   temporaryInformation = TI_SHOW_REGISTER;
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000 + 2100, TMP_STR_LENGTH, 3200, 400, separator);
+      longIntegerRegisterToDisplayString(REGISTER_X, errorMessage, WRITE_BUFFER_LEN, 3200, 400, separator);
 
-      last = 2100 + stringByteLength(tmpStr3000 + 2100);
-      source = 2100;
+      last = stringByteLength(errorMessage);
+      source = 0;
       dest = 0;
 
       if(groupingGap == 0) {
@@ -1730,60 +1956,68 @@ void fnShow(uint16_t unusedParamButMandatory) {
 
       for(d=0; d<=1800 ; d+=300) {
         dest = d;
-        while(source < last && stringWidth(tmpStr3000 + d, &standardFont, true, true) <= maxWidth) {
+        while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= maxWidth) {
           do {
-            tmpStr3000[dest] = tmpStr3000[source];
-            if(tmpStr3000[dest] & 0x80) {
-              tmpStr3000[++dest] = tmpStr3000[++source];
+            tmpString[dest] = errorMessage[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = errorMessage[++source];
             }
             source++;
-            tmpStr3000[++dest] = 0;
-          } while(source < last && groupingGap > 0 && (tmpStr3000[source] != *separator || tmpStr3000[source + 1] != *(separator + 1)));
+            tmpString[++dest] = 0;
+          } while(source < last && groupingGap > 0 && (errorMessage[source] != *separator || errorMessage[source + 1] != *(separator + 1)));
         }
       }
 
       if(source < last) { // The long integer is too long
-        xcopy(tmpStr3000 + dest - 2, STD_ELLIPSIS, 2);
-        xcopy(tmpStr3000 + dest, STD_SPACE_6_PER_EM, 2);
-        tmpStr3000[dest + 2] = 0;
+        xcopy(tmpString + dest - 2, STD_ELLIPSIS, 2);
+        xcopy(tmpString + dest, STD_SPACE_6_PER_EM, 2);
+        tmpString[dest + 2] = 0;
       }
       break;
 
     case dtReal34:
-      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, 2000, 34, false, STD_SPACE_4_PER_EM);
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &standardFont, 2000, 34, false, STD_SPACE_4_PER_EM);
       break;
 
     case dtComplex34:
       // Real part
       separator = STD_SPACE_4_PER_EM;
-      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), AM_NONE, tmpStr3000, &standardFont, 2000, 34, false, separator);
+      real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), amNone, tmpString, &standardFont, 2000, 34, false, separator);
 
       // +/- i×
       real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), &real34);
       last = 300;
-      while(tmpStr3000[last]) last++;
-      xcopy(tmpStr3000 + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
-      xcopy(tmpStr3000 + last++, COMPLEX_UNIT, 1);
-      xcopy(tmpStr3000 + last, PRODUCT_SIGN, 3);
+      while(tmpString[last]) last++;
+      xcopy(tmpString + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
+      xcopy(tmpString + last++, COMPLEX_UNIT, 1);
+      xcopy(tmpString + last, PRODUCT_SIGN, 3);
 
       // Imaginary part
       real34SetPositiveSign(&real34);
-      real34ToDisplayString(&real34, AM_NONE, tmpStr3000 + 600, &standardFont, 2000, 34, false, separator);
+      real34ToDisplayString(&real34, amNone, tmpString + 600, &standardFont, 2000, 34, false, separator);
 
-      if(stringWidth(tmpStr3000 + 300, &standardFont, true, true) + stringWidth(tmpStr3000 + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
+      if(stringWidth(tmpString + 300, &standardFont, true, true) + stringWidth(tmpString + 600, &standardFont, true, true) <= SCREEN_WIDTH) {
         last = 300;
-        while(tmpStr3000[last]) last++;
-        xcopy(tmpStr3000 + last, tmpStr3000 + 600,  strlen(tmpStr3000 + 600) + 1);
-        tmpStr3000[600] = 0;
+        while(tmpString[last]) last++;
+        xcopy(tmpString + last, tmpString + 600, strlen(tmpString + 600) + 1);
+        tmpString[600] = 0;
       }
 
-      if(stringWidth(tmpStr3000, &standardFont, true, true) + stringWidth(tmpStr3000 + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
+      if(stringWidth(tmpString, &standardFont, true, true) + stringWidth(tmpString + 300, &standardFont, true, true) <= SCREEN_WIDTH) {
         last = 0;
-        while(tmpStr3000[last]) last++;
-        xcopy(tmpStr3000 + last, tmpStr3000 +  300, strlen(tmpStr3000 + 300) + 1);
-        xcopy(tmpStr3000 + 300, tmpStr3000 + 600, strlen(tmpStr3000 + 600) + 1);
-        tmpStr3000[600] = 0;
+        while(tmpString[last]) last++;
+        xcopy(tmpString + last, tmpString + 300, strlen(tmpString + 300) + 1);
+        xcopy(tmpString + 300,  tmpString + 600, strlen(tmpString + 600) + 1);
+        tmpString[600] = 0;
       }
+      break;
+
+    case dtTime:
+      timeToDisplayString(REGISTER_X, tmpString, true);
+      break;
+
+    case dtDate:
+      dateToDisplayString(REGISTER_X, tmpString);
       break;
 
     case dtString:
@@ -1791,20 +2025,20 @@ void fnShow(uint16_t unusedParamButMandatory) {
       thereIsANextLine = true;
       bytesProcessed = 0;
       while(thereIsANextLine) {
-        xcopy(tmpStr3000 + offset, REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed, stringByteLength(REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed) + 1);
+        xcopy(tmpString + offset, REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed, stringByteLength(REGISTER_STRING_DATA(REGISTER_X) + bytesProcessed) + 1);
         thereIsANextLine = false;
-        while(stringWidth(tmpStr3000 + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
-          tmpStr3000[offset + stringLastGlyph(tmpStr3000 + offset)] = 0;
+        while(stringWidth(tmpString + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
+          tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
           thereIsANextLine = true;
         }
-        bytesProcessed += stringByteLength(tmpStr3000 + offset);
+        bytesProcessed += stringByteLength(tmpString + offset);
         offset += 300;
-        tmpStr3000[offset] = 0;
+        tmpString[offset] = 0;
       }
       break;
 
     case dtConfig:
-      xcopy(tmpStr3000, "Configuration data", 19);
+      xcopy(tmpString, "Configuration data", 19);
       break;
 
     default:
@@ -1813,7 +2047,7 @@ void fnShow(uint16_t unusedParamButMandatory) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(REGISTER_X, true, false));
         moreInfoOnError("In function fnShow:", errorMessage, NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
 

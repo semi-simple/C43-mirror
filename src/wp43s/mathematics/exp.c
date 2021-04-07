@@ -22,7 +22,7 @@
 
 
 
-void (* const Exp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const Exp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1            2        3         4         5         6         7          8           9             10
 //          Long integer Real34   Complex34 Time      Date      String    Real34 mat Complex34 m Short integer Config data
             expLonI,     expReal, expCplx,  expError, expError, expError, expRema,   expCxma,    expShoI,      expError
@@ -36,13 +36,13 @@ void (* const Exp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void expError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Exp for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnExp:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -50,10 +50,10 @@ void expError(void) {
  * \brief regX ==> regL and exp(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnExp(uint16_t unusedParamButMandatory) {
+void fnExp(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Exp[getRegisterDataType(REGISTER_X)]();
@@ -79,7 +79,7 @@ void expComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t 
   }
 
  realExp(real, &expa, realContext);
- WP34S_Cvt2RadSinCosTan(imag, AM_RADIAN, &sin, &cos, NULL, realContext);
+ WP34S_Cvt2RadSinCosTan(imag, amRadian, &sin, &cos, NULL, realContext);
  realMultiply(&expa, &cos, resReal, realContext);
  realMultiply(&expa, &sin, resImag, realContext);
 }
@@ -97,7 +97,7 @@ void expLonI(void) {
 
   convertLongIntegerRegisterToReal(REGISTER_X, &a, &ctxtReal39);
   realExp(&a, &a, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -120,7 +120,7 @@ void expShoI(void) {
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
   realExp(&x, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -131,7 +131,7 @@ void expReal(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function expReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of exp when flag D is not set", NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -140,7 +140,7 @@ void expReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   realExp(&x, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

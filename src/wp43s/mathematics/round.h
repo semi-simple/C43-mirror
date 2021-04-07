@@ -18,8 +18,12 @@
  * \file round.h
  ***********************************************/
 
-void fnRound   (uint16_t unusedParamButMandatory);
+void fnRound   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void roundError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define roundError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void roundLonI (void);
 void roundTime (void);
 void roundDate (void);

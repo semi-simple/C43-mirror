@@ -22,7 +22,7 @@
 
 
 
-void (* const arcsinh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const arcsinh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1             2            3            4             5             6             7            8            9             10
 //          Long integer  Real34       Complex34    Time          Date          String        Real34 mat   Complex34 m  Short integer Config data
             arcsinhLonI,  arcsinhReal, arcsinhCplx, arcsinhError, arcsinhError, arcsinhError, arcsinhRema, arcsinhCxma, arcsinhError, arcsinhError
@@ -36,13 +36,13 @@ void (* const arcsinh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void arcsinhError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arcsinh for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnArcsinh:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -50,10 +50,10 @@ void arcsinhError(void) {
  * \brief regX ==> regL and arcsinh(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnArcsinh(uint16_t unusedParamButMandatory) {
+void fnArcsinh(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arcsinh[getRegisterDataType(REGISTER_X)]();
@@ -67,7 +67,7 @@ void arcsinhLonI(void) {
   real_t x, xSquared;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
   // arcsinh(x) = ln(x + sqrt(x� + 1))
   realMultiply(&x, &x, &xSquared, &ctxtReal39);
@@ -99,7 +99,7 @@ void arcsinhReal(void) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     ArcsinhReal(&x, &x, &ctxtReal51);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

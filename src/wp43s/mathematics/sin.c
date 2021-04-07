@@ -22,7 +22,7 @@
 
 
 
-void (* const Sin[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const Sin[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1            2        3         4         5         6         7          8           9             10
 //          Long integer Real34   Complex34 Time      Date      String    Real34 mat Complex34 m Short integer Config data
             sinLonI,     sinReal, sinCplx,  sinError, sinError, sinError, sinRema,   sinCxma,    sinError,     sinError
@@ -36,13 +36,13 @@ void (* const Sin[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void sinError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Sin for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnSin:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -50,10 +50,10 @@ void sinError(void) {
  * \brief regX ==> regL and sin(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSin(uint16_t unusedParamButMandatory) {
+void fnSin(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Sin[getRegisterDataType(REGISTER_X)]();
@@ -67,7 +67,7 @@ void sinComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t 
   // sin(a + ib) = sin(a)*cosh(b) + i*cos(a)*sinh(b)
   real_t sina, cosa, sinhb, coshb;
 
-  WP34S_Cvt2RadSinCosTan(real, AM_RADIAN, &sina, &cosa, NULL, realContext);
+  WP34S_Cvt2RadSinCosTan(real, amRadian, &sina, &cosa, NULL, realContext);
   WP34S_SinhCosh(imag, &sinhb, &coshb, realContext);
 
   realMultiply(&sina, &coshb, resReal, realContext);
@@ -82,7 +82,7 @@ void sinLonI(void) {
   longIntegerAngleReduction(REGISTER_X, currentAngularMode, &x);
   WP34S_Cvt2RadSinCosTan(&x, currentAngularMode, &x, NULL, NULL, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -106,14 +106,14 @@ void sinReal(void) {
   }
   else {
     real_t x;
-    uint32_t xAngularMode;
+    angularMode_t xAngularMode;
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
     xAngularMode = getRegisterAngularMode(REGISTER_X);
-    WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == AM_NONE ? currentAngularMode : xAngularMode), &x, NULL, NULL, &ctxtReal39);
+    WP34S_Cvt2RadSinCosTan(&x, (xAngularMode == amNone ? currentAngularMode : xAngularMode), &x, NULL, NULL, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 

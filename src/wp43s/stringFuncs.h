@@ -25,4 +25,5 @@ void fnAlphaRL  (uint16_t regist);
 void fnAlphaSR  (uint16_t regist);
 void fnAlphaSL  (uint16_t regist);
 void fnAlphaPos (uint16_t regist);
-void fnXToAlpha (uint16_t unusedParamButMandatory);
+void fnXToAlpha (uint16_t unusedButMandatoryParameter);
+void fnIsString (uint16_t unusedButMandatoryParameter);

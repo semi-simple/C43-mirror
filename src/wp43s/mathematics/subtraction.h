@@ -18,8 +18,12 @@
  * \file subtraction.h
  ***********************************************/
 
-void fnSubtract (uint16_t unusedParamButMandatory);
+void fnSubtract (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void subError   (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define subError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 //      RegYRegX
 void subLonILonI(void);
@@ -56,7 +60,6 @@ void subShoICplx(void);
 //      RegYRegX
 void subRealLonI(void);
 void subRealTime(void);
-void subRealDate(void);
 void subRealShoI(void);
 void subRealReal(void);
 void subRealCplx(void);

@@ -22,7 +22,7 @@
 
 
 
-void (* const realPart[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const realPart[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1              2              3             4              5              6              7              8             9              10
 //          Long integer   Real34         Complex34     Time           Date           String         Real34 mat     Complex34 m   Short integer  Config data
             realPartError, realPartReal,  realPartCplx, realPartError, realPartError, realPartError, realPartError, realPartCxma, realPartError, realPartError
@@ -36,13 +36,13 @@ void (* const realPart[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void realPartError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Re for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnRealPart:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -50,17 +50,12 @@ void realPartError(void) {
  * \brief regX ==> regL and Re(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnRealPart(uint16_t unusedParamButMandatory) {
+void fnRealPart(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-
   realPart[getRegisterDataType(REGISTER_X)]();
-
-  if(lastErrorCode != 0) {
-    undo();
-  }
 }
 
 
@@ -71,15 +66,15 @@ void realPartCxma(void) {
 
 
 void realPartCplx(void) {
-  real34_t realPart;
+  real34_t rp;
 
-  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &realPart);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
-  real34Copy(&realPart, REGISTER_REAL34_DATA(REGISTER_X));
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &rp);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+  real34Copy(&rp, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
 void realPartReal(void) {
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 

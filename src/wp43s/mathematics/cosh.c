@@ -22,7 +22,7 @@
 
 
 
-void (* const Cosh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const Cosh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1             2         3          4          5          6          7           8            9             10
 //          Long integer  Real34    Complex34  Time       Date       String     Real34 mat  Complex34 m  Short integer Config data
             coshLonI,     coshReal, coshCplx,  coshError, coshError, coshError, coshRema,   coshCxma,    coshError,    coshError
@@ -36,13 +36,13 @@ void (* const Cosh[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void coshError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Cos for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnCosh:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -50,10 +50,10 @@ void coshError(void) {
  * \brief regX ==> regL and cosh(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCosh(uint16_t unusedParamButMandatory) {
+void fnCosh(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   Cosh[getRegisterDataType(REGISTER_X)]();
@@ -69,7 +69,7 @@ void coshLonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_X, &cosh, &ctxtReal39);
   WP34S_SinhCosh(&cosh, NULL, &cosh, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&cosh, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
@@ -92,7 +92,7 @@ void coshReal(void) {
     displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function coshReal:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of cosh when flag D is not set", NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -101,7 +101,7 @@ void coshReal(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   WP34S_SinhCosh(&x, NULL, &x, &ctxtReal39);
   realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -114,7 +114,7 @@ void coshCplx(void) {
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
 
   WP34S_SinhCosh(&a, &sinha, &cosha, &ctxtReal39);
-  WP34S_Cvt2RadSinCosTan(&b, AM_RADIAN, &sinb, &cosb, NULL, &ctxtReal39);
+  WP34S_Cvt2RadSinCosTan(&b, amRadian, &sinb, &cosb, NULL, &ctxtReal39);
 
   realMultiply(&cosha, &cosb, &a, &ctxtReal39);
   realMultiply(&sinha, &sinb, &b, &ctxtReal39);

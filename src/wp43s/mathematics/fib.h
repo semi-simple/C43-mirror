@@ -18,8 +18,12 @@
  * \file fib.h
  ***********************************************/
 
-void fnFib   (uint16_t unusedParamButMandatory);
+void fnFib   (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void fibError(void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define fibError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void fibLonI (void);
 void fibReal (void);
 void fibCplx (void);

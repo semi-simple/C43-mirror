@@ -23,7 +23,7 @@
 static void dotDataTypeError(void);
 
 
-void (* const dot[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const dot[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX |    regY ==>    1                  2                  3                  4                  5                  6                  7                  8                  9                 10
 //      V                Long integer       Real34             Complex34          Time               Date               String             Real34 mat         Complex34 mat      Short integer     Config data
 /*  1 Long integer  */ { dotDataTypeError,  dotDataTypeError,  dotCplxLonI,       dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError,  dotDataTypeError, dotDataTypeError},
@@ -56,16 +56,16 @@ static void dotDataTypeError(void) {
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnDot:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 //static void dotSizeError() {
-//    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+//  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-//#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+//  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 //    sprintf(errorMessage, "cannot calculate DOT product, matrix size mismatch.");
 //    moreInfoOnError("In function fnDot:", errorMessage, NULL, NULL);
-//#endif
+//  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 //}
 
 //=============================================================================
@@ -77,10 +77,10 @@ static void dotDataTypeError(void) {
  * enables stack lift and refreshes the stack.
  * Calculate the dot (or scalar) product between complex and matrix
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnDot(uint16_t unusedParamButMandatory) {
+void fnDot(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   dot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
@@ -118,9 +118,9 @@ void dotRealCplx(void) {
 
   dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -141,9 +141,9 @@ void dotLonICplx(void) {
 
   dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -164,9 +164,9 @@ void dotShoICplx(void) {
 
   dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -187,9 +187,9 @@ void dotCplxCplx(void) {
 
   dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -211,7 +211,7 @@ void dotCplxReal(void) {
   dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -232,9 +232,9 @@ void dotCplxLonI(void) {
 
   dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -255,9 +255,9 @@ void dotCplxShoI(void) {
 
   dotCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 //=============================================================================

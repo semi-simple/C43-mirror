@@ -23,22 +23,22 @@
 
 /*
 // primes less than 212
-const uint8_t smallPrimes[] = {   2,   3,   5,   7,  11,  13,  17,  19,  23,  29,  31,  37,
-                                 41,  43,  47,  53,  59,  61,  67,  71,  73,  79,  83,  89,
-                                 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151,
-                                157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211      };
+TO_QSPI const uint8_t smallPrimes[] = {   2,   3,   5,   7,  11,  13,  17,  19,  23,  29,  31,  37,
+                                         41,  43,  47,  53,  59,  61,  67,  71,  73,  79,  83,  89,
+                                         97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151,
+                                        157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211      };
 
 // pre-calced sieve of Eratosthenes for n = 2, 3, 5, 7
-const uint8_t indices[] = {   1,  11,  13,  17,  19,  23,  29,  31,  37,  41,  43,  47,
-                             53,  59,  61,  67,  71,  73,  79,  83,  89,  97, 101, 103,
-                            107, 109, 113, 121, 127, 131, 137, 139, 143, 149, 151, 157,
-                            163, 167, 169, 173, 179, 181, 187, 191, 193, 197, 199, 209 };
+TO_QSPI const uint8_t indices[] = {   1,  11,  13,  17,  19,  23,  29,  31,  37,  41,  43,  47,
+                                     53,  59,  61,  67,  71,  73,  79,  83,  89,  97, 101, 103,
+                                    107, 109, 113, 121, 127, 131, 137, 139, 143, 149, 151, 157,
+                                    163, 167, 169, 173, 179, 181, 187, 191, 193, 197, 199, 209 };
 
 // distances between sieve values
-const uint8_t offsets[] = {  10,   2,   4,   2,   4,   6,   2,   6,   4,   2,   4,   6,
-                              6,   2,   6,   4,   2,   6,   4,   6,   8,   4,   2,   4,
-                              2,   4,   8,   6,   4,   6,   2,   4,   6,   2,   6,   6,
-                              4,   2,   4,   6,   2,   6,   4,   2,   4,   2,  10,   2 };
+TO_QSPI const uint8_t offsets[] = {  10,   2,   4,   2,   4,   6,   2,   6,   4,   2,   4,   6,
+                                      6,   2,   6,   4,   2,   6,   4,   6,   8,   4,   2,   4,
+                                      2,   4,   8,   6,   4,   6,   2,   4,   6,   2,   6,   6,
+                                      4,   2,   4,   6,   2,   6,   4,   2,   4,   2,  10,   2 };
 
 
 // Test if a number is prime or not using a Miller-Rabin test
@@ -68,16 +68,16 @@ static bool_t longIntegerIsPrime1(longInteger_t primeCandidate) {
   }
 
   #if defined(PC_BUILD) || defined(DMCP_BUILD)
-  if(calcMode == CM_NORMAL) {
-    hourGlassIconEnabled = true;
-    showHideHourGlass();
-    #ifdef PC_BUILD
-      refreshLcd(NULL);
-    #else
-      lcd_refresh();
-    #endif // PC_BUILD
-  }
-  #endif
+    if(calcMode == CM_NORMAL) {
+      hourGlassIconEnabled = true;
+      showHideHourGlass();
+      #ifdef PC_BUILD
+        refreshLcd(NULL);
+      #else // !PC_BUILD
+        lcd_refresh();
+      #endif // PC_BUILD
+    }
+  #endif // PC_BUILD || DMCP_BUILD
 
   longIntegerInit(primeCandidateMinus1);
   longIntegerInit(s);
@@ -144,7 +144,7 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
     #if(EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for PRIME?!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       moreInfoOnError("In function fnIsPrime:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 
   longIntegerSetPositiveSign(primeCandidate);
@@ -152,7 +152,7 @@ void fnIsPrime(uint16_t unusedButMandatoryParameter) {
   showHideHourGlass();
   #ifdef DMCP_BUILD
     lcd_refresh();
-  #else
+  #else // !DMCP_BUILD
     refreshLcd(NULL);
   #endif // DMCP_BUILD
   //temporaryInformation = (longIntegerIsPrime1(primeCandidate) ? TI_TRUE : TI_FALSE);
@@ -183,10 +183,10 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
 
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if(EXTRA_INFO_ON_CALC_ERROR == 1)
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the input type %s is not allowed for PRIME?!", getDataTypeName(getRegisterDataType(REGISTER_X), false, false));
       moreInfoOnError("In function fnIsPrime:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -197,7 +197,7 @@ void fnNextPrime(uint16_t unusedButMandatoryParameter) {
   showHideHourGlass();
   #ifdef DMCP_BUILD
     lcd_refresh();
-  #else
+  #else // !DMCP_BUILD
     refreshLcd(NULL);
   #endif // DMCP_BUILD
   longIntegerNextPrime(currentNumber, nextPrime);

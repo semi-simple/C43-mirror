@@ -23,10 +23,10 @@
 /********************************************//**
  * \brief Clears X and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnClX(uint16_t unusedParamButMandatory) {
+void fnClX(uint16_t unusedButMandatoryParameter) {
   clearRegister(REGISTER_X);
 }
 
@@ -35,11 +35,11 @@ void fnClX(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Clears the stack and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  *
  ***********************************************/
-void fnClearStack(uint16_t unusedParamButMandatory) {
+void fnClearStack(uint16_t unusedButMandatoryParameter) {
   for(calcRegister_t regist=REGISTER_X; regist<=getStackTop(); regist++) {
     clearRegister(regist);
   }
@@ -50,20 +50,18 @@ void fnClearStack(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Drops X from the stack and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnDrop(uint16_t unusedParamButMandatory) {
-  uint16_t sizeInBytes;
-
+void fnDrop(uint16_t unusedButMandatoryParameter) {
   freeRegisterData(REGISTER_X);
   for(calcRegister_t regist=REGISTER_X; regist<getStackTop(); regist++) {
-    reg[regist] = reg[regist + 1];
+    globalRegister[regist] = globalRegister[regist + 1];
   }
 
-  sizeInBytes = TO_BYTES(getRegisterFullSize(getStackTop()));
-  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBytes));
-  xcopy(REGISTER_DATA(getStackTop()-1), REGISTER_DATA(getStackTop()), sizeInBytes);
+  uint16_t sizeInBlocks = getRegisterFullSize(getStackTop());
+  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBlocks));
+  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), TO_BYTES(sizeInBlocks));
 }
 
 
@@ -80,15 +78,15 @@ void liftStack(void) {
   if(getSystemFlag(FLAG_ASLIFT)) {
     freeRegisterData(getStackTop());
     for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
-      reg[i] = reg[i-1];
+      globalRegister[i] = globalRegister[i-1];
     }
   }
   else {
     freeRegisterData(REGISTER_X);
   }
 
-  setRegisterDataPointer(REGISTER_X, allocWp43s(TO_BYTES(REAL34_SIZE)));
-  setRegisterDataType(REGISTER_X, dtReal34, AM_NONE);
+  setRegisterDataPointer(REGISTER_X, allocWp43s(REAL34_SIZE));
+  setRegisterDataType(REGISTER_X, dtReal34, amNone);
 }
 
 
@@ -96,20 +94,18 @@ void liftStack(void) {
 /********************************************//**
  * \brief Drops Y from the stack and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnDropY(uint16_t unusedParamButMandatory) {
-  uint16_t sizeInBytes;
-
+void fnDropY(uint16_t unusedButMandatoryParameter) {
   freeRegisterData(REGISTER_Y);
   for(uint16_t i=REGISTER_Y; i<getStackTop(); i++) {
-    reg[i] = reg[i+1];
+    globalRegister[i] = globalRegister[i+1];
   }
 
-  sizeInBytes = TO_BYTES(getRegisterFullSize(getStackTop()));
-  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBytes));
-  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), sizeInBytes);
+  uint16_t sizeInBlocks = getRegisterFullSize(getStackTop());
+  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBlocks));
+  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), TO_BYTES(sizeInBlocks));
 }
 
 
@@ -117,16 +113,16 @@ void fnDropY(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Rolls the stack up and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnRollUp(uint16_t unusedParamButMandatory) {
-  registerDescriptor_t savedRegister = reg[getStackTop()];
+void fnRollUp(uint16_t unusedButMandatoryParameter) {
+  registerHeader_t savedRegisterHeader = globalRegister[getStackTop()];
 
   for(uint16_t i=getStackTop(); i>REGISTER_X; i--) {
-    reg[i] = reg[i-1];
+    globalRegister[i] = globalRegister[i-1];
   }
-  reg[REGISTER_X] = savedRegister;
+  globalRegister[REGISTER_X] = savedRegisterHeader;
 }
 
 
@@ -134,16 +130,16 @@ void fnRollUp(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Rolls the stack down and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnRollDown(uint16_t unusedParamButMandatory) {
-  registerDescriptor_t savedRegister = reg[REGISTER_X];
+void fnRollDown(uint16_t unusedButMandatoryParameter) {
+  registerHeader_t savedRegisterHeader = globalRegister[REGISTER_X];
 
   for(uint16_t i=REGISTER_X; i<getStackTop(); i++) {
-    reg[i] = reg[i+1];
+    globalRegister[i] = globalRegister[i+1];
   }
-  reg[getStackTop()] = savedRegister;
+  globalRegister[getStackTop()] = savedRegisterHeader;
 }
 
 
@@ -167,18 +163,18 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
  * \return void
  ***********************************************/
 void fnSwapX(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER);
+  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnSwapX:", errorMessage, "is not defined!", NULL);
-  }
-  #endif
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnSwapX:", errorMessage, "is not defined!", NULL);
+    }
+  #endif // PC_BUILD
 }
 
 
@@ -190,18 +186,18 @@ void fnSwapX(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnSwapY(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER);
+  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_Y);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnSwapY:", errorMessage, "is not defined!", NULL);
-  }
-  #endif
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnSwapY:", errorMessage, "is not defined!", NULL);
+    }
+  #endif // PC_BUILD
 }
 
 
@@ -212,18 +208,18 @@ void fnSwapY(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnSwapZ(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER);
+  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_Z);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnSwapZ:", errorMessage, "is not defined!", NULL);
-  }
-  #endif
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnSwapZ:", errorMessage, "is not defined!", NULL);
+    }
+  #endif // PC_BUILD
 }
 
 
@@ -234,55 +230,51 @@ void fnSwapZ(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnSwapT(uint16_t regist) {
-  if(regist < FIRST_LOCAL_REGISTER + allLocalRegisterPointer->numberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER);
+  if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER_1);
     copySourceRegisterToDestRegister(regist, REGISTER_T);
-    copySourceRegisterToDestRegister(TEMP_REGISTER, regist);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
   }
 
   #ifdef PC_BUILD
-  else {
-    sprintf(errorMessage, "local register .%02u", regist - FIRST_LOCAL_REGISTER);
-    moreInfoOnError("In function fnSwapT:", errorMessage, "is not defined!", NULL);
-  }
-  #endif
+    else {
+      sprintf(errorMessage, "local register .%02d", regist - FIRST_LOCAL_REGISTER);
+      moreInfoOnError("In function fnSwapT:", errorMessage, "is not defined!", NULL);
+    }
+  #endif // PC_BUILD
 }
 
 
 /********************************************//**
  * \brief Swaps X and Y and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnSwapXY(uint16_t unusedParamButMandatory) {
-  registerDescriptor_t savedRegister = reg[REGISTER_X];
+void fnSwapXY(uint16_t unusedButMandatoryParameter) {
+  registerHeader_t savedRegisterHeader = globalRegister[REGISTER_X];
 
-  reg[REGISTER_X] = reg[REGISTER_Y];
-  reg[REGISTER_Y] = savedRegister;
+  globalRegister[REGISTER_X] = globalRegister[REGISTER_Y];
+  globalRegister[REGISTER_Y] = savedRegisterHeader;
 }
 
 /********************************************//**
  * \brief Shuffles the registers and and refreshes the stack.
- * the Shuffle order is in the last four chars of the tamBuffer
+ * the Shuffle order determined from the parameter with each
+ * consecutive two bits indicating the number above the X
+ * register
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * For example
+ * - 11100100 indicates X, Y, Z, T
+ * - 10110001 indicates Z, T, X, Y
+ *
+ * \param[in] regist_order uint16_t
  * \return void
  ***********************************************/
-void fnShuffle(uint16_t unusedParamButMandatory) {
+void fnShuffle(uint16_t regist_order) {
   for(int i=0; i<4; i++) {
-    if(tamBuffer[strlen(tamBuffer) - 4 + i] == 'x') {
-      copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X + i);
-    }
-    else if(tamBuffer[strlen(tamBuffer) - 4  + i] == 'y') {
-      copySourceRegisterToDestRegister(SAVED_REGISTER_Y, REGISTER_X + i);
-    }
-    else if(tamBuffer[strlen(tamBuffer) - 4 + i] == 'z') {
-      copySourceRegisterToDestRegister(SAVED_REGISTER_Z, REGISTER_X + i);
-    }
-    else if(tamBuffer[strlen(tamBuffer) - 4 + i] == 't') {
-      copySourceRegisterToDestRegister(SAVED_REGISTER_T, REGISTER_X + i);
-    }
+    uint16_t regist_offset = (regist_order >> (i*2)) & 3;
+    copySourceRegisterToDestRegister(SAVED_REGISTER_X + regist_offset, REGISTER_X + i);
   }
 }
 
@@ -291,21 +283,20 @@ void fnShuffle(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Fills the stack with the value of X and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnFillStack(uint16_t unusedParamButMandatory) {
-  uint16_t dataTypeX = getRegisterDataType(REGISTER_X);
-  uint16_t dataSizeXinBytes = TO_BYTES(getRegisterFullSize(REGISTER_X));
-  uint16_t tag       = getRegisterTag(REGISTER_X);
-  void *newDataPointer;
+void fnFillStack(uint16_t unusedButMandatoryParameter) {
+  uint16_t dataTypeX         = getRegisterDataType(REGISTER_X);
+  uint16_t dataSizeXinBlocks = getRegisterFullSize(REGISTER_X);
+  uint16_t tag               = getRegisterTag(REGISTER_X);
 
   for(uint16_t i=REGISTER_Y; i<=getStackTop(); i++) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX, tag);
-    newDataPointer = allocWp43s(dataSizeXinBytes);
+    void *newDataPointer = allocWp43s(dataSizeXinBlocks);
     setRegisterDataPointer(i, newDataPointer);
-    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), dataSizeXinBytes);
+    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), TO_BYTES(dataSizeXinBlocks));
   }
 }
 
@@ -314,10 +305,10 @@ void fnFillStack(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Sets X to the stack size and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnGetStackSize(uint16_t unusedParamButMandatory) {
+void fnGetStackSize(uint16_t unusedButMandatoryParameter) {
   longInteger_t stack;
 
   liftStack();
@@ -331,6 +322,10 @@ void fnGetStackSize(uint16_t unusedParamButMandatory) {
 
 
 void saveForUndo(void) {
+  if((calcMode == CM_NIM || calcMode == CM_AIM) && thereIsSomethingToUndo) {
+    return;
+  }
+
   savedSystemFlags = systemFlags;
 
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
@@ -341,13 +336,13 @@ void saveForUndo(void) {
 
   if(statisticalSumsPointer == NULL) { // There are no statistical sums to save for undo
     if(savedStatisticalSumsPointer != NULL) {
-      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
       savedStatisticalSumsPointer = NULL;
     }
   }
   else { // There are statistical sums to save for undo
     if(savedStatisticalSumsPointer == NULL) {
-      savedStatisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      savedStatisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
     xcopy(savedStatisticalSumsPointer, statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
   }
@@ -357,15 +352,10 @@ void saveForUndo(void) {
 
 
 
-void fnUndo(uint16_t unusedParamButMandatory) {
+void fnUndo(uint16_t unusedButMandatoryParameter) {
   if(thereIsSomethingToUndo) {
     undo();
   }
-}
-
-
-
-void clearUndoBuffer(void) {
 }
 
 
@@ -382,13 +372,13 @@ void undo(void) {
 
   if(savedStatisticalSumsPointer == NULL) { // There are no statistical sums to restore
     if(statisticalSumsPointer != NULL) {
-      freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
       statisticalSumsPointer = NULL;
     }
   }
   else { // There are statistical sums to restore
     if(statisticalSumsPointer == NULL) {
-      statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+      statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
     xcopy(statisticalSumsPointer, savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
   }

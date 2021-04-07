@@ -22,7 +22,7 @@
 
 
 
-void (* const logBase2[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const logBase2[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1            2         3         4          5          6          7          8           9             10
 //          Long integer Real34    complex34 Time       Date       String     Real34 mat Complex34 m Short integer Config data
             log2LonI,    log2Real, log2Cplx, log2Error, log2Error, log2Error, log2Rema,  log2Cxma,   log2ShoI,     log2Error
@@ -36,13 +36,13 @@ void (* const logBase2[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void log2Error(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate log2 for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnLog2:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -50,10 +50,10 @@ void log2Error(void) {
  * \brief regX ==> regL and log2(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnLog2(uint16_t unusedParamButMandatory) {
+void fnLog2(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   logBase2[getRegisterDataType(REGISTER_X)]();
@@ -76,14 +76,14 @@ void log2LonI(void) {
 
   if(longIntegerIsZero(lgInt)) {
     if(getSystemFlag(FLAG_SPCRES)) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(const_minusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function log2LonI:", "cannot calculate log2(0)", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
   else {
@@ -94,27 +94,27 @@ void log2LonI(void) {
     if(longIntegerIsPositive(lgInt)) {
       WP34S_Ln(&x, &x, &ctxtReal39);
       realDivide(&x, const_ln2, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
      }
     else if(getFlag(FLAG_CPXRES)) {
       realSetPositiveSign(&x);
       WP34S_Ln(&x, &x, &ctxtReal39);
       realDivide(&x, const_ln2, &x, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
       realDivide(const_pi, const_ln2, &x, &ctxtReal39);
       realToReal34(&x, REGISTER_IMAG34_DATA(REGISTER_X));
     }
     else if(getSystemFlag(FLAG_SPCRES)) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function log2LonI:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
 
@@ -152,7 +152,7 @@ void log2Real(void) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function log2Real:", "cannot calculate log2(0)", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
 
@@ -161,7 +161,7 @@ void log2Real(void) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function log2Real:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as X input of log2 when flag D is not set", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
     else if(getFlag(FLAG_CPXRES)) {
@@ -169,7 +169,7 @@ void log2Real(void) {
         realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else {
-        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
         realToReal34(const_plusInfinity, REGISTER_REAL34_DATA(REGISTER_X));
         realDivide(const_pi, const_ln2, &a, &ctxtReal39);
         realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -191,7 +191,7 @@ void log2Real(void) {
       realSetPositiveSign(&a);
       WP34S_Ln(&a, &a, &ctxtReal39);
       realDivide(&a, const_ln2, &a, &ctxtReal39);
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
       realDivide(const_pi, const_ln2, &a, &ctxtReal39);
       realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -203,10 +203,10 @@ void log2Real(void) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function log2Real:", "cannot calculate log2 of a negative number when CPXRES is not set!", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 
@@ -221,7 +221,7 @@ void log2Cplx(void) {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function log2Cplx:", "cannot calculate log2(0)", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
   else {
@@ -233,7 +233,7 @@ void log2Cplx(void) {
     realRectangularToPolar(&a, &b, &a, &b, &ctxtReal39);
     WP34S_Ln(&a, &a, &ctxtReal39);
     realDivide(&a, const_ln2, &a, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
     realDivide(&b, const_ln2, &b, &ctxtReal39);
     realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));

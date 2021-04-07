@@ -27,7 +27,7 @@
 
 // Have to be careful here to ensure that every function we call can handle
 // the increased size of the numbers we're using.
-void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinOut, real_t *cosOut, real_t *tanOut, realContext_t *realContext) {
+void WP34S_Cvt2RadSinCosTan(const real_t *an, angularMode_t angularMode, real_t *sinOut, real_t *cosOut, real_t *tanOut, realContext_t *realContext) {
   bool_t sinNeg = false, cosNeg = false, swap = false;
   real_t angle;
 
@@ -46,11 +46,6 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinO
 
   realCopy(an, &angle);
 
-  if(angularMode == AM_DMS) {
-    angularMode = AM_DEGREE;
-    convertAngleFromTo(&angle, AM_DMS, AM_DEGREE, realContext);
-  }
-
   // sin(-x) = -sin(x), cos(-x) = cos(x)
   if(realIsNegative(&angle)) {
     sinNeg = true;
@@ -58,20 +53,22 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinO
   }
 
   switch(angularMode) {
-    case AM_DEGREE:
-      WP34S_Mod(&angle, const_360,     &angle, realContext); // mod(angle, 360°) --> angle
-      break;
-
-    case AM_GRAD:
-      WP34S_Mod(&angle, const_400,     &angle, realContext); // mod(angle, 400g) --> angle
-      break;
-
-    case AM_RADIAN:
+    case amRadian:
       WP34S_Mod(&angle, const1071_2pi, &angle, realContext); // mod(angle, 2pi) --> angle
       break;
 
-    case AM_MULTPI:
+    case amMultPi:
       WP34S_Mod(&angle, const_2,       &angle, realContext); // mod(angle, 2) --> angle
+      break;
+
+    case amGrad:
+      WP34S_Mod(&angle, const_400,     &angle, realContext); // mod(angle, 400g) --> angle
+      break;
+
+    case amDegree:
+    case amDMS:
+      WP34S_Mod(&angle, const_360,     &angle, realContext); // mod(angle, 360°) --> angle
+      angularMode = amDegree;
       break;
 
     default: {}
@@ -109,7 +106,7 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinO
       swap = !swap;
     }
 
-    convertAngleFromTo(&angle, angularMode, AM_RADIAN, realContext);
+    convertAngleFromTo(&angle, angularMode, amRadian, realContext);
     WP34S_SinCosTanTaylor(&angle, swap, swap?cosOut:sinOut, swap?sinOut:cosOut, tanOut, realContext); // angle in radian
   }
 
@@ -152,9 +149,9 @@ void WP34S_Cvt2RadSinCosTan(const real_t *an, uint32_t angularMode, real_t *sinO
 // Calculate sin, cos by Taylor series and tan by division
 void WP34S_SinCosTanTaylor(const real_t *a, bool_t swap, real_t *sinOut, real_t *cosOut, real_t *tanOut, realContext_t *realContext) { // a in radian
   real_t angle, a2, t, j, z, sin, cos, compare;
-  int i, odd;
+  int i;
   bool_t endSin = (sinOut == NULL), endCos = (cosOut == NULL);
-  int32_t cmp, savedContextDigits;
+  int32_t savedContextDigits;
 
   savedContextDigits = realContext->digits;
   if(realContext->digits > 51) {
@@ -172,25 +169,16 @@ void WP34S_SinCosTanTaylor(const real_t *a, bool_t swap, real_t *sinOut, real_t 
   uInt32ToReal(1, &cos);
 
   for(i=1; !(endSin && endCos) && i<1000; i++) { // i goes up to 31 max in the test suite
-    odd = i & 1;
-
     realAdd(&j, const_1, &j, realContext);
     realDivide(&a2, &j, &z, realContext);
     realMultiply(&t, &z, &t, realContext);
+    realChangeSign(&t);
 
     if(!endCos) {
       realCopy(&cos, &z);
-
-      if(odd) {
-        realSubtract(&cos, &t, &cos, realContext);
-      }
-      else {
-        realAdd(&cos, &t, &cos, realContext);
-      }
-
+      realAdd(&cos, &t, &cos, realContext);
       realCompare(&cos, &z, &compare, realContext);
-      realToInt32(&compare, cmp);
-      endCos = (cmp == 0);
+      endCos = realIsZero(&compare);
     }
 
     realAdd(&j, const_1, &j, realContext);
@@ -198,17 +186,9 @@ void WP34S_SinCosTanTaylor(const real_t *a, bool_t swap, real_t *sinOut, real_t 
 
     if(!endSin) {
       realCopy(&sin, &z);
-
-      if(odd) {
-        realSubtract(&sin, &t, &sin, realContext);
-      }
-      else {
-        realAdd(&sin, &t, &sin, realContext);
-      }
-
+      realAdd(&sin, &t, &sin, realContext);
       realCompare(&sin, &z, &compare, realContext);
-      realToInt32(&compare, cmp);
-      endSin = (cmp == 0);
+      endSin = realIsZero(&compare);
     }
   }
 
@@ -768,11 +748,11 @@ void WP34S_Log(const real_t *xin, const real_t *base, real_t *res, realContext_t
 }
 
 
-
+/* never used
 void WP34S_Log2(const real_t *xin, real_t *res, realContext_t *realContext) {
   WP34S_Log(xin, const_ln2, res, realContext);
 }
-
+*/
 
 
 void WP34S_Log10(const real_t *xin, real_t *res, realContext_t *realContext) {
@@ -803,6 +783,23 @@ bool_t WP34S_RelativeError(const real_t *x, const real_t *y, const real_t *tol, 
   realSetPositiveSign(&a);
   return realCompareLessThan(&a, tol);
 }
+
+
+bool_t WP34S_AbsoluteError(const real_t *x, const real_t *y, const real_t *tol, realContext_t *realContext) {
+	real_t a;
+  realSubtract(x, y, &a, realContext);
+	return realCompareAbsLessThan(&a, tol);
+}
+
+
+bool_t WP34S_ComplexAbsError(const real_t *xReal, const real_t *xImag, const real_t *yReal, const real_t *yImag, const real_t *tol, realContext_t *realContext) {
+	real_t a, b, r, t;
+
+  realSubtract(xReal, yReal, &a, realContext), realSubtract(xImag, yImag, &b, realContext);
+  realRectangularToPolar(&a, &b, &r, &t, realContext);
+	return realCompareAbsLessThan(&r, tol);
+}
+
 
 
 /* Hyperbolic functions.
@@ -869,7 +866,7 @@ void WP34S_Tanh(const real_t *x, real_t *res, realContext_t *realContext) {
 }
 
 
-
+/* never used
 void WP34S_ArcSinh(const real_t *x, real_t *res, realContext_t *realContext) {
   real_t a;
 
@@ -882,9 +879,9 @@ void WP34S_ArcSinh(const real_t *x, real_t *res, realContext_t *realContext) {
   realMultiply(x, &a, &a, realContext);  // y = x * (x / (sqrt(x²+1)+1) + 1)
   WP34S_Ln1P(&a, res, realContext);      // res = ln(1 + (x * (x / (sqrt(x²+1)+1) + 1)))
 }
+*/
 
-
-
+/* never used
 void WP34S_ArcCosh(const real_t *xin, real_t *res, realContext_t *realContext) {
   real_t x, z;
 
@@ -895,7 +892,7 @@ void WP34S_ArcCosh(const real_t *xin, real_t *res, realContext_t *realContext) {
   realAdd(res, &x, &z, realContext);           // z = x + sqrt(x²-1)
   WP34S_Ln(&z, res, realContext);              // res = ln(x + sqrt(x²-1))
 }
-
+*/
 
 
 void WP34S_ArcTanh(const real_t *x, real_t *res, realContext_t *realContext) {
@@ -1104,41 +1101,730 @@ void WP34S_ComplexLnGamma(const real_t *zinReal, const real_t *zinImag, real_t *
 
 
 void WP34S_Mod(const real_t *x, const real_t *y, real_t *res, realContext_t *realContext) {
- /* Declare a structure large enough to hold a really long number.
-  * This structure is likely to be larger than is required.
-  */
- real1071_t out;
+  /* Declare a structure large enough to hold a really long number.
+   * This structure is likely to be larger than is required.
+   */
+  real1071_t out;
 
- realDivideRemainder(x, y, (real_t *)&out, &ctxtReal1071);
- realPlus((real_t *)&out, res, realContext);
+  realDivideRemainder(x, y, (real_t *)&out, &ctxtReal1071);
+  realPlus((real_t *)&out, res, realContext);
 }
 
 
 //void WP34S_BigMod(const real_t *x, const real_t *y, real_t *res, realContext_t *realContext) {
-// /* Declare a structure large enough to hold a really long number.
-//  * This structure is likely to be larger than is required.
-//  */
-// real2139_t out;
+//  /* Declare a structure large enough to hold a really long number.
+//   * This structure is likely to be larger than is required.
+//   */
+//  real2139_t out;
 //
-// realDivideRemainder(x, y, &out, &ctxtReal2139);
-// realPlus((real_t *)&out, res, realContext);
+//  realDivideRemainder(x, y, &out, &ctxtReal2139);
+//  realPlus((real_t *)&out, res, realContext);
 //}
 
 
-void *xcopy(void *dest, const void *source, int n) {
-  char       *pDest   = (char *)dest;
-  const char *pSource = (char *)source;
+static void gser(const real_t *a, const real_t *x, const real_t *gln, real_t *res, realContext_t *realContext) {
+  real_t ap, del, sum, t, u;
+  int32_t i;
 
-  if(pSource > pDest) {
-    while(n--) {
-      *pDest++ = *pSource++;
+  if(realCompareLessEqual(x, const_0)) {
+     realZero(res);
+     return;
+  }
+  realCopy(a, &ap);
+  realDivide(const_1, a, &sum, realContext);
+  realCopy(&sum, &del);
+  for(i=0; i<1000; i++) {
+    realAdd(&ap, const_1, &ap, realContext);
+    realDivide(x, &ap, &t, realContext);
+    realMultiply(&del, &t, &del, realContext);
+    realAdd(&sum, &del, &t, realContext);
+    if(realCompareEqual(&sum, &t)) {
+      break;
+    }
+    realCopy(&t, &sum);
+  }
+  WP34S_Ln(x, &t, realContext);
+  realMultiply(&t, a, &u, realContext);
+  realSubtract(&u, x, &t, realContext);
+  realSubtract(&t, gln, &u, realContext);
+  realExp(&u, &t, realContext);
+  realMultiply(&sum, &t, res, realContext);
+  return;
+}
+
+static void gcheckSmall(real_t *v, realContext_t *realContext) {
+  real_t threshold;
+  stringToReal("1e-10000", &threshold, realContext);
+
+  if(realCompareAbsLessThan(v, &threshold)) {
+    realCopy(&threshold, v);
+  }
+}
+
+static void gcf(const real_t *a, const real_t *x, const real_t *gln, real_t *res, realContext_t *realContext) {
+  real_t an, b, c, d, h, t, u, v, i;
+  int32_t n;
+
+  realAdd(x, const_1, &t, realContext);
+  realSubtract(&t, a, &b, realContext);    // b = (x+1) - a
+  gcheckSmall(&b, realContext);
+  realCopy(const_plusInfinity, &c);
+  realDivide(const_1, &b, &d, realContext);
+  realCopy(&d, &h);
+  realZero(&i);
+  for(n=0; n<1000; n++) {
+   realAdd(&i, const_1, &i, realContext);
+   realSubtract(a, &i, &t, realContext);   // t = a-i
+   realMultiply(&i, &t, &an, realContext); // an = -i (i-a)
+   realAdd(&b, const_2, &b, realContext);
+   realMultiply(&an, &d, &t, realContext);
+   realAdd(&t, &b, &v, realContext);
+   gcheckSmall(&v, realContext);
+   realDivide(const_1, &v, &d, realContext);
+   realDivide(&an, &c, &t, realContext);
+   realAdd(&b, &t, &c, realContext);
+   gcheckSmall(&c, realContext);
+   realMultiply(&d, &c, &t, realContext);
+   realMultiply(&h, &t, &u, realContext);
+   if(realCompareEqual(&u, &h)) {
+     break;
+   }
+   realCopy(&u, &h);
+  }
+  WP34S_Ln(x, &t, realContext);
+  realMultiply(&t, a, &u, realContext);
+  realSubtract(&u, x, &t, realContext);
+  realSubtract(&t, gln, &u, realContext);
+  realExp(&u, &t, realContext);
+  realMultiply(&t, &h, res, realContext);
+  return;
+}
+
+void WP34S_GammaP(const real_t *x, const real_t *a, real_t *res, realContext_t *realContext, bool_t upper, bool_t regularised) {
+  real_t z, lga;
+
+  if(realIsNegative(x) || realCompareLessEqual(a, const_0) || realIsNaN(x) || realIsNaN(a) || realIsInfinite(a)) {
+    realCopy(const_NaN, res);
+    return;
+  }
+
+  if(realIsInfinite(x)) {
+    if(upper) {
+      if(regularised) {
+        realCopy(const_1, res);
+        return;
+      }
+
+      WP34S_Gamma(a, res, realContext);
+      return;
+    }
+
+    realZero(res);
+    return;
+  }
+
+  realAdd(a, const_1, &lga, realContext);
+  realCompare(x, &lga, &z, realContext);
+  if(regularised) {
+    WP34S_LnGamma(a, &lga, realContext);
+  }
+  else {
+    realZero(&lga);
+  }
+  if(realIsNegative(&z)) {
+    /* Deal with a difficult case by using the other expansion */
+    int32ToReal(9000, &z);
+    if(realCompareGreaterThan(a, &z)) {
+      stringToReal("0.995", &z, realContext);
+      realMultiply(a, &z, &z, realContext);
+      if(realCompareGreaterThan(x, &z)) {
+        goto use_cf;
+      }
+    }
+
+    gser(a, x, &lga, res, realContext);
+    if(upper) {
+      goto invert;
     }
   }
-  else if(pSource < pDest) {
-    while(n--) {
-      pDest[n] = pSource[n];
+  else {
+    use_cf:
+    gcf(a, x, &lga, res, realContext);
+    if(!upper) {
+      goto invert;
     }
   }
+  return;
 
-  return dest;
+  invert:
+  if(regularised) {
+    realSubtract(const_1, res, res, realContext);
+    return;
+  }
+  WP34S_Gamma(a, &z, realContext);
+  realSubtract(&z, res, res, realContext);
+  return;
+}
+
+// erf and erfc were embedded library functions on WP 34S
+void WP34S_Erf(const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t p, q;
+
+  if(realIsInfinite(x)) {
+    int32ToReal(realIsNegative(x) ? -1 : 1, res);
+    return;
+  }
+
+  realPower(x, const_2, &p, realContext);
+  WP34S_GammaP(&p, const_1on2, &p, realContext, false, false);
+  realSquareRoot(const_pi, &q, realContext);
+  realDivide(&p, &q, &p, realContext);
+  if(realIsNegative(x)) {
+    realChangeSign(&p);
+  }
+  realCopy(&p, res);
+  return;
+}
+
+void WP34S_Erfc(const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t p;
+
+  realSquareRoot(const_2, &p, realContext);
+  realMultiply(x, &p, &p, realContext);
+  realChangeSign(&p);
+  WP34S_Cdf_Q(&p, &p, realContext);
+  realMultiply(&p, const_2, res, realContext);
+}
+
+
+
+static void check_low(real_t *d) {
+  real_t real_1e_32;
+
+  realCopy(const_1, &real_1e_32); real_1e_32.exponent -= 32;
+  if(realCompareAbsLessThan(d, &real_1e_32)) {
+    realCopy(d, &real_1e_32);
+  }
+}
+
+static void ib_step(const real_t *aa, real_t *d, real_t *c, realContext_t *realContext) {
+  real_t t, u;
+
+  realMultiply(aa, d, &t, realContext);
+  realAdd(&t, const_1, &u, realContext);   // d = 1+aa*d
+  check_low(&u);
+  realDivide(const_1, &u, d, realContext);
+  realDivide(aa, c, &t, realContext);
+  realAdd(&t, const_1, c, realContext);    // c = 1+aa/c
+  check_low(c);
+}
+
+static void betacf(const real_t *a, const real_t *b, const real_t *x, real_t *r, realContext_t *realContext) {
+  real_t aa, c, d, apb, am1, ap1, m, m2, oldr;
+  int i;
+  real_t t, u, v, w;
+
+  hourGlassIconEnabled = true;
+  showHideHourGlass();
+  realAdd(a, const_1, &ap1, realContext);        // ap1 = 1+a
+  realSubtract(a, const_1, &am1, realContext);   // am1 = a-1
+  realAdd(a, b, &apb, realContext);              // apb = a+b
+  realCopy(const_1, &c);                         // c = 1
+  realDivide(x, &ap1, &t, realContext);
+  realMultiply(&t, &apb, &u, realContext);
+  realSubtract(const_1, &u, &t, realContext);    // t = 1-apb*x/ap1
+  check_low(&t);
+  realDivide(const_1, &t, &d, realContext);      // d = 1/t
+  realCopy(&d, r);    // res = d
+  realZero(&m);
+  for(i=0; i<500; i++) {
+    realCopy(r, &oldr);
+    realAdd(&m, const_1, &m, realContext);       // m = i+1
+    realMultiply(&m, const_2, &m2, realContext);
+    realSubtract(b, &m, &t, realContext);
+    realMultiply(&t, &m, &u, realContext);
+    realMultiply(&u, x, &t, realContext);        // t = m*(b-m)*x
+    realAdd(&am1, &m2, &u, realContext);
+    realAdd(a, &m2, &v, realContext);
+    realMultiply(&u, &v, &w, realContext);       // w = (am1+m2)*(a+m2)
+    realDivide(&t, &w, &aa, realContext);        // aa = t/w
+    ib_step(&aa, &d, &c, realContext);
+    realMultiply(r, &d, &t, realContext);
+    realMultiply(&t, &c, r, realContext);        // r = r*d*c
+    realAdd(a, &m, &t, realContext);
+    realAdd(&apb, &m, &u, realContext);
+    realMultiply(&t, &u, &w, realContext);
+    realMultiply(&w, x, &t, realContext);
+    realMultiply(&t, const__1, &w, realContext); // w = -(a+m)*(apb+m)*x
+    realAdd(a, &m2, &t, realContext);
+    realAdd(&ap1, &m2, &u, realContext);
+    realMultiply(&t, &u, &v, realContext);       // v = (a+m2)*(ap1+m2)
+    realDivide(&w, &v, &aa, realContext);        // aa = w/v
+    ib_step(&aa, &d, &c, realContext);
+    realMultiply(&d, &c, &v, realContext);
+    realMultiply(r, &v, r, realContext);         // r *= d*c
+    if(realCompareEqual(&oldr, r)) {
+      break;
+    }
+  }
+}
+
+/* Regularised incomplete beta function Ix(a, b)
+ */
+void WP34S_betai(const real_t *b, const real_t *a, const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t t, u, v, w, y;
+  int32_t limit = 0;
+
+  realCompare(const_1, x, &t, realContext);
+  if(realIsNegative(x) || realIsNegative(&t)) {
+    realCopy(const_NaN, res);
+   return;
+  }
+
+  if(realIsZero(x) || realIsZero(&t)) {
+    limit = 1;
+  }
+  else {
+    LnBeta(a, b, &u, realContext);
+    WP34S_Ln(x, &v, realContext);              // v = ln(x)
+    realMultiply(a, &v, &t, realContext);
+    realSubtract(&t, &u, &v, realContext);     // v = lng(...)+a.ln(x)
+    realSubtract(const_1, x, &y, realContext); // y = 1-x
+    WP34S_Ln(&y, &u, realContext);             // u = ln(1-x)
+    realMultiply(&u, b, &t, realContext);
+    realAdd(&t, &v, &u, realContext);          // u = lng(...)+a.ln(x)+b.ln(1-x)
+    realExp(&u, &w, realContext);
+  }
+
+  realAdd(a, b, &v, realContext);
+  realAdd(&v, const_2, &u, realContext);       // u = a+b+2
+  realAdd(a, const_1, &t, realContext);        // t = a+1
+  realDivide(&t, &u, &v, realContext);         // u = (a+1)/(a+b+2)
+  if(realCompareLessThan(x, &v)) {
+    if(limit) {
+      realCopy(const_0, res);
+    }
+    else {
+      betacf(a, b, x, &t, realContext);
+      realDivide(&t, a, &u, realContext);
+      realMultiply(&w, &u, res, realContext);
+    }
+  }
+  else {
+    if(limit) {
+      realCopy(const_1, res);
+    }
+    else {
+      betacf(b, a, &y, &t, realContext);
+      realDivide(&t, b, &u, realContext);
+      realMultiply(&w, &u, &t, realContext);
+      realSubtract(const_1, &t, res, realContext);
+    }
+  }
+}
+
+
+
+void WP34S_Bernoulli(const real_t *x, real_t *res, bool_t bn_star, realContext_t *realContext) {
+  real_t p;
+
+  if((!realIsAnInteger(x)) || realCompareLessThan(x, const_0)) {
+    realCopy(const_NaN, res);
+    return;
+  }
+  if(realIsZero(x)) {// Bn_0
+    realCopy(bn_star ? const_NaN : const_1, res);
+    return;
+  }
+  if(!bn_star) {
+    if(realCompareEqual(x, const_1)) { // zeta_0
+      realCopy(const_1on2, res);
+      realChangeSign(res);
+      return;
+    }
+    else if(realDivide(x, const_2, &p, realContext), (!realIsAnInteger(&p))) { // Bn_odd
+      realZero(res);
+      return;
+    }
+    realCopy(x, &p);
+  }
+  else {
+    realMultiply(x, const_2, &p, realContext);
+  }
+
+  // bernoulli
+  realSubtract(&p, const_1, &p, realContext);
+	realChangeSign(&p);
+  WP34S_Zeta(&p, &p, realContext);
+  realMultiply(&p, x, &p, realContext);
+  realChangeSign(&p);
+
+  if(bn_star) {
+    realMultiply(&p, const_2, &p, realContext);
+    realSetPositiveSign(&p);
+  }
+  realCopy(&p, res);
+}
+
+
+/**************************************************************************/
+/* Zeta function implementation based on Jean-Marc Baillard's from:
+ *	http://hp41programs.yolasite.com/zeta.php
+ * This is the same algorithm as the C version uses, just with fewer terms and
+ * with the constants computed on the fly.
+ */
+
+static void zeta_calc(const real_t *x, real_t *reg1, real_t *reg7, real_t *res, realContext_t *realContext) {
+  real_t p, q, r, s, reg0, reg3, reg4, reg5, reg6;
+
+  hourGlassIconEnabled = true;
+  showHideHourGlass();
+
+  // zeta_calc
+  int32ToReal(60/*44*/, &reg0);
+  int32ToReal(60/*44*/, &reg3);
+  int32ToReal(1, &reg4);
+  int32ToReal(1, &reg5);
+  int32ToReal(-1, &reg6);
+  realZero(&p);
+  do { // zeta_loop
+    realMultiply(reg1, const__1, &q, realContext);
+    realPower(&reg0, &q, &q, realContext);
+    realMultiply(&reg5, &q, &q, realContext);
+    realChangeSign(&reg6);
+    realMultiply(&q, &reg6, &q, realContext);
+    realAdd(&p, &q, &p, realContext);
+    realMultiply(&reg0, const_2, &q, realContext);
+    realMultiply(&q, &reg0, &q, realContext);
+    realSubtract(&q, &reg0, &q, realContext);
+    realMultiply(&q, &reg4, &q, realContext);
+    realPower(&reg3, const_2, &r, realContext);
+    realSubtract(&reg0, const_1, &s, realContext);
+    realPower(&s, const_2, &s, realContext);
+    realSubtract(&r, &s, &r, realContext);
+    realMultiply(&r, const_2, &r, realContext);
+    realDivide(&q, &r, &q, realContext);
+    realCopy(&q, &reg4);
+    realAdd(&q, &reg5, &reg5, realContext);
+    realSubtract(&reg0, const_1, &reg0, realContext);
+  } while(realCompareGreaterThan(&reg0, const_0));
+  realDivide(&p, &reg5, &p, realContext);
+  realSubtract(const_1, reg1, &r, realContext);
+  realMultiply(const_ln2, &r, &r, realContext);
+  WP34S_ExpM1(&r, &q, realContext);
+  realDivide(&p, &q, res, realContext);
+}
+
+void WP34S_Zeta(const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t p, q, r, reg1, reg7;
+
+  if(realIsZero(x)) {
+    realCopy(const_1on2, res);
+    realChangeSign(res);
+    return;
+  }
+
+  // zeta_int
+  realCopy(x, &reg1);
+  realCopy(x, &reg7);
+  if(realCompareGreaterThan(x, const_1on2)) {
+    zeta_calc(x, &reg1, &reg7, res, realContext);
+  }
+  else { // zeta_neg
+    realSubtract(const_1, x, &q, realContext);
+    realCopy(&q, &reg1);
+    zeta_calc(&q, &reg1, &reg7, &p, realContext);
+    WP34S_Asin(const_1, &q, realContext);
+    realMultiply(&q, &reg7, &q, realContext);
+    WP34S_Cvt2RadSinCosTan(&q, amRadian, &r, NULL, NULL, realContext);
+    realMultiply(&p, &r, &p, realContext);
+    realDivide(&p, const_pi, &p, realContext);
+    realPower(const_2pi, &reg7, &q, realContext);
+    realMultiply(&p, &q, &p, realContext);
+    realCopy(&reg1, &q);
+    WP34S_Gamma(&q, &r, realContext);
+    realMultiply(&r, &p, res, realContext);
+  }
+}
+
+
+
+/**************************************************************************/
+/* A rough guess is made and then Newton's method is used to attain
+ * convergence.  The C version (in ../trunk/unused/lambertW.c) works
+ * similarily but uses Halley's method which converges a cubically
+ * instead of quadratically.
+ *
+ * This code is based on a discussion on the MoHPC.  Search the archives
+ * for "Lambert W (HP-41)" starting on the 2 Sept 2012.  The actual code
+ * is Dieter's from a message posted on the 23rd of Sept 2012.
+ */
+void WP34S_LambertW(const real_t *x, real_t *res, bool_t negativeBranch, realContext_t *realContext) {
+  real_t p, q, r, reg0, reg1, reg2;
+  bool_t converged = false;
+
+  if(realIsSpecial(x)) {
+   realCopy(const_NaN, res);
+   return;
+  }
+  if(realIsZero(x)) {
+   realCopy(negativeBranch ? const_minusInfinity : const_0, res);
+   return;
+  }
+  if(negativeBranch && realIsPositive(x)) {
+   realCopy(const_NaN, res);
+   return;
+  }
+
+  // LamW0_common
+  realCopy(x, &reg0);
+  int32ToReal(7, &reg1);
+  int32ToReal(negativeBranch ? 25 : 35, &p), p.exponent -= 2, realChangeSign(&p);
+  if(realCompareLessEqual(&reg0, &p)) {
+    realDivide(const_1, const_eE, &q, realContext);
+    realAdd(&reg0, &q, &q, realContext);
+    realMultiply(&q, const_eE, &q, realContext);
+    realCopy(&q, &reg2);
+    realMultiply(&q, const_2, &q, realContext);
+    realSquareRoot(&q, &r, realContext);
+    if(negativeBranch) realChangeSign(&r);
+    realDivide(&q, const_3, &q, realContext);
+    realSubtract(&r, &q, &q, realContext);
+
+    // Newton iteration for W+1
+    do { //LamW0_wp1_newton
+      // FILL and x close to -1/e
+      realMultiply(&q, const__1, &p, realContext);
+      WP34S_ExpM1(&p, &p, realContext);
+      realMultiply(&p, &reg0, &p, realContext);
+      realMultiply(&p, const_eE, &p, realContext);
+      realSubtract(&p, &q, &p, realContext);
+      realAdd(&p, &reg2, &p, realContext);
+      realDivide(&p, &q, &p, realContext);
+      realAdd(&p, &q, &p, realContext);
+      if(converged) break;
+      if(WP34S_AbsoluteError(&p, &q, (realContext == &ctxtReal39) ? const_1e_37 : const_1e_49, realContext)) // test if absolute error
+        converged = true;
+      realSubtract(&reg1, const_1, &reg1, realContext);
+      realCopy(&p, &q);
+    } while(realCompareGreaterThan(&reg1, const_0));
+    // LamW0_converged
+    realSubtract(&p, const_1, res, realContext);
+  }
+  else {// LamW0_normal
+    if(negativeBranch) {// LamW0_smallx
+      realMultiply(&reg0, const__1, &q, realContext);
+      WP34S_Ln(&q, &q, realContext);
+      realMultiply(&q, const__1, &r, realContext);
+      WP34S_Ln(&r, &r, realContext);
+      realSubtract(&q, &r, &q, realContext);
+    }
+    else {
+      WP34S_Ln1P(&reg0, &q, realContext);
+      if(realCompareGreaterThan(&q, const_1)) {
+        WP34S_Ln(&q, &r, realContext);
+        realSubtract(&q, &r, &q, realContext);
+      }
+    }
+    // Newton-Halley iteration for W
+    // x not close to -1/e
+    do { // LamW0_halley
+      realExp(&q, &r, realContext);
+      realDivide(&reg0, &r, &r, realContext);
+      realSubtract(&q, &r, &r, realContext);
+      realAdd(&q, const_1, &p, realContext);
+      realDivide(&r, &p, &r, realContext);
+      realDivide(const_1, &p, &p, realContext);
+      realAdd(&p, const_1, &p, realContext);
+      realMultiply(&p, &r, &p, realContext);
+      realDivide(&p, const_2, &p, realContext);
+      realChangeSign(&p);
+      realAdd(&p, const_1, &p, realContext);
+      realDivide(&r, &p, &r, realContext);
+      realSubtract(&q, &r, &r, realContext);
+      // R Q Q
+      if(converged) break;
+      if(WP34S_RelativeError(&r, &q, (realContext == &ctxtReal39) ? const_1e_37 : const_1e_49, realContext)) // test if relative error
+        converged = true;
+      realSubtract(&reg1, const_1, &reg1, realContext);
+      realCopy(&r, &q);
+    } while(realCompareGreaterThan(&reg1, const_0));
+    // LamW0_finish
+    realCopy(&r, res);
+  }
+}
+
+/**************************************************************************/
+/* The positive branch of the complex W function.
+ *
+ * This code is based on Jean-Marc Baillard's HP-41 version from:
+ *	http://hp41programs.yolasite.com/lambertw.php
+ *
+ * Register use:
+ *	.00/.01	z
+ *	.02/.03	w
+ *	.04/.05	temporary
+ */
+void WP34S_ComplexLambertW(const real_t *xReal, const real_t *xImag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
+  real_t pr, pi, qr, qi, zr, zi, wr, wi, tr, ti;
+
+  realCopy(xReal, &zr), realCopy(xImag, &zi);
+  realCopy(const_1, &wr), realCopy(const_1, &wi);
+  realAdd(xReal, const_1, &pr, realContext), realCopy(xImag, &pi);
+  if((!realIsZero(&pr)) || (!realIsZero(&pi))) {
+    lnComplex(&pr, &pi, &pr, &pi, realContext);
+    realCopy(&pr, &wr), realCopy(&pi, &wi);
+  }
+  while(1) { // LamW_cloop
+    expComplex(&pr, &pi, &qr, &qi, realContext);
+    realCopy(&qr, &tr), realCopy(&qi, &ti);
+    mulComplexComplex(&qr, &qi, &wr, &wi, &qr, &qi, realContext);
+    realAdd(&tr, &qr, &tr, realContext), realAdd(&ti, &qi, &ti, realContext);
+    realSubtract(&qr, &zr, &qr, realContext), realSubtract(&qi, &zi, &qi, realContext);
+    divComplexComplex(&qr, &qi, &tr, &ti, &qr, &qi, realContext);
+    realSubtract(&wr, &qr, &wr, realContext), realSubtract(&wi, &qi, &wi, realContext);
+    if(WP34S_ComplexAbsError(&wr, &wi, &pr, &pi, (realContext == &ctxtReal39) ? const_1e_37 : const_1e_49, realContext)) break;
+    realCopy(&wr, &pr), realCopy(&wi, &pi);
+  }
+  realCopy(&wr, resReal), realCopy(&wi, resImag);
+}
+
+/**************************************************************************/
+/* The inverse W function in both real and complex domains.
+ */
+
+void WP34S_InverseW(const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t p;
+
+  realExp(x, &p, realContext);
+  realMultiply(&p, x, res, realContext);
+}
+
+void WP34S_InverseComplexW(const real_t *xReal, const real_t *xImag, real_t *resReal, real_t *resImag, realContext_t *realContext) {
+  real_t p, q;
+
+  expComplex(xReal, xImag, &p, &q, realContext);
+  mulComplexComplex(&p, &q, xReal, xImag, resReal, resImag, realContext);
+}
+
+// Orthogonal Polynomials, common function
+void WP34S_OrthoPoly(uint16_t kind, const real_t *rX, const real_t *rN, const real_t *rParam, real_t *res, realContext_t *realContext) {
+  real_t a, b, c, d, i;
+  real_t rT0, rT1, incB;
+  real_t p, q;
+  bool_t incA = false, incC = false;
+
+  // ortho_default
+  if(realIsSpecial(rX) || (!realIsAnInteger(rN)) || realIsNegative(rN)) {
+    realCopy(const_NaN, res);
+    return;
+  }
+  if(realIsZero(rN)) {
+    realCopy(const_1, res);
+    return;
+  }
+  // Here we are free from the limitation of ISG since the code is ported to C.
+  //if(realCompareGreaterEqual(rN, const_1000)) {
+  //  realCopy(const_NaN, res);
+  //  return;
+  //}
+  realCopy(const_1, &rT0);
+	/* Now initialise everything else */
+  realCopy(const_2, &i);
+  realCopy(const_2, &d);
+  realCopy(const_1, &c);
+  realCopy(const_1, &b);
+  realCopy(rX, &rT1);
+  realMultiply(rX, const_2, &a, realContext);
+
+  // We must initialise this too
+  realCopy(const_0, &incB);
+
+  switch(kind) {
+  /**************************************************************************/
+  /* Legendre's Pn
+   */
+    case ORTHOPOLY_LEGENDRE_P:
+      realAdd(&a, rX, &a, realContext);
+      realMultiply(rX, const_2, &d, realContext);
+    	goto ortho_allinc;
+
+  /**************************************************************************/
+  /* Chebychev's Tn
+   */
+    case ORTHOPOLY_CHEBYSHEV_T:
+      break;
+
+  /**************************************************************************/
+  /* Chebychev's Un
+   */
+    case ORTHOPOLY_CHEBYSHEV_U:
+      realAdd(&rT1, rX, &rT1, realContext);
+      break;
+
+  /**************************************************************************/
+  /* Laguerre's Ln
+   */
+    case ORTHOPOLY_LAGUERRE_L:
+
+  /**************************************************************************/
+  /* Laguerre's Ln with parameter alpha
+   */
+    case ORTHOPOLY_LAGUERRE_L_ALPHA:
+      // laguerre_common
+      if(realIsSpecial(rParam) || realCompareLessEqual(rParam, const__1)) {
+        realCopy(const_NaN, res);
+        return;
+      }
+      realAdd(&b, rParam, &b, realContext);
+      realAdd(rParam, const_3, &a, realContext);
+      realSubtract(&a, rX, &a, realContext);
+      realAdd(rParam, const_1, &rT1, realContext);
+      realSubtract(&rT1, rX, &rT1, realContext);
+    ortho_allinc:
+      incA = true;
+      realCopy(const_1, &incB);
+      incC = true;
+      break;
+
+  /**************************************************************************/
+  /* Hermite's He (Hn)
+   */
+    case ORTHOPOLY_HERMITE_HE:
+      realCopy(rX, &a);
+      realCopy(const_1, &incB);
+      break;
+
+  /**************************************************************************/
+  /* Hermite's H  (Hnp)
+   */
+    case ORTHOPOLY_HERMITE_H:
+      realAdd(&rT1, rX, &rT1, realContext);
+      realCopy(const_2, &b);
+      realCopy(const_2, &incB);
+      break;
+  }
+
+  /**************************************************************************/
+  /* Common evaluation code
+   * Everything is assumed properly set up at this point.
+   */
+  // ortho_common
+  while(realCompareLessEqual(&i, rN)) { // ortho_loop
+    realMultiply(&rT1, &a, &p, realContext);
+    realMultiply(&rT0, &b, &q, realContext);
+    realCopy(&rT1, &rT0);
+    realSubtract(&p, &q, &rT1, realContext);
+
+    if(incC) {
+      realAdd(&c, const_1, &c, realContext);
+      realDivide(&rT1, &c, &rT1, realContext);
+    } // ortho_noC
+    if(incA) {
+      realAdd(&a, &d, &a, realContext);
+    } // ortho_noA
+    realAdd(&b, &incB, &b, realContext);
+    realAdd(&i, const_1, &i, realContext);
+  }
+  realCopy(&rT1, res);
 }

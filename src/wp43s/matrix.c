@@ -79,7 +79,7 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
 
   getMatrixFromRegister(REGISTER_X);
 
-  showSoftmenu(NULL, -MNU_M_EDIT, true);
+  showSoftmenu(-MNU_M_EDIT);
   setIRegisterAsInt(true, 0);
   setJRegisterAsInt(true, 0);
   showMatrixEditor();
@@ -131,13 +131,13 @@ void showMatrixEditor() {
   for(int i = 0; i < rows; i++) {
     showString("[", &numericFont, 1, Y_POS - (rows -1 - i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
     for(int j = 0; j< cols; j++) {
-      real34ToDisplayString(&openMatrixMIMPointer->matrixElements[i*cols+j], AM_NONE, tmpStr3000, &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
+      real34ToDisplayString(&openMatrixMIMPointer->matrixElements[i*cols+j], amNone, tmpString, &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
       if (matSelRow == i && matSelCol == j) {
         vm = vmReverse;
       } else {
         vm = vmNormal;
       }
-      showString(tmpStr3000, &numericFont, 5 + j * MATRIX_LINE_WIDTH_LARGE, Y_POS - (rows -1 -i) * NUMERIC_FONT_HEIGHT, vm, true, false);
+      showString(tmpString, &numericFont, 5 + j * MATRIX_LINE_WIDTH_LARGE, Y_POS - (rows -1 -i) * NUMERIC_FONT_HEIGHT, vm, true, false);
     }
     showString("]", &numericFont, 10 + cols * MATRIX_LINE_WIDTH_LARGE, Y_POS - (rows -1 -i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
     if (colVector == true) {
@@ -145,14 +145,14 @@ void showMatrixEditor() {
     }
   }
 
-  sprintf(tmpStr3000, "%" PRIi16";%" PRIi16"= ", matSelRow+1, matSelCol+1);
-  showString(tmpStr3000, &numericFont, 1, Y_POS + NUMERIC_FONT_HEIGHT, vmNormal, true, false);
+  sprintf(tmpString, "%" PRIi16";%" PRIi16"= ", matSelRow+1, matSelCol+1);
+  showString(tmpString, &numericFont, 1, Y_POS + NUMERIC_FONT_HEIGHT, vmNormal, true, false);
 }
 
-void mimEnter() {
+void mimEnter(void) {
 }
 
-void mimAddNumber() {
+void mimAddNumber(void) {
 
 }
 
@@ -166,13 +166,13 @@ void storeMatrixToXRegister(real34Matrix_t *matrix) {
   //openMatrixMIMPointer = matrix;
   // END WORKING//
 
-  reallocateRegister(REGISTER_X, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(dataBlock_t)), AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(dataBlock_t)), amNone);
   xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(dataBlock_t)));
 }
 
 //real34Matrix_t * getMatrixFromRegister(calcRegister_t regist) {
 void getMatrixFromRegister(calcRegister_t regist) {
-  //uint32_t reg_size = (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t);
+  //uint32_t reg_size = (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(registerHeader_t);
   //real34Matrix_t* matrix = malloc(reg_size);
 
   if (getRegisterDataType(regist) != dtReal34Matrix) {
@@ -194,7 +194,7 @@ void getMatrixFromRegister(calcRegister_t regist) {
   xcopy(matixElements, REGISTER_REAL34_MATRIX_M_ELEMENTS(regist), TO_BLOCKS((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t)));
   //xcopy(&matixElements, REGISTER_REAL34_MATRIX_DBLOCK(regist) + sizeof(dataBlock_t), (header.matrixColumns * header.matrixRows) * sizeof(real34_t));
 
-  real34Matrix_t* matrix = malloc((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t));
+  real34Matrix_t* matrix = malloc((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerHeader_t));
   matrix->header.matrixColumns = header.matrixColumns;
   matrix->header.matrixRows = header.matrixRows;
   int r = dblock->matrixRows;
@@ -206,7 +206,7 @@ void getMatrixFromRegister(calcRegister_t regist) {
   }
   */
 
-  real34Matrix_t* matrix = malloc((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerDescriptor_t));
+  real34Matrix_t* matrix = malloc((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerHeader_t));
 
   matrix->header.matrixColumns = dblock->matrixColumns;
   matrix->header.matrixRows = dblock->matrixRows;

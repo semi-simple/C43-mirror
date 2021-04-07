@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {
+TO_QSPI void (* const lnBeta[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {
 // regX |    regY ==>    1               2               3               4            5            6            7            8             9             10
 //      V                Long integer    Real34          Complex34       Time         Date         String       Real34 mat   Complex34 mat Short integer Config data
 /*  1 Long integer  */ { lnbetaLonILonI, lnbetaRealLonI, lnbetaCplxLonI, lnbetaError, lnbetaError, lnbetaError, lnbetaError, lnbetaError,  lnbetaError,  lnbetaError },
@@ -41,13 +41,13 @@ static void (* const matrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DAT
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void lnbetaError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate lnBeta of %s with base %s", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnLnBeta:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -55,13 +55,13 @@ void lnbetaError(void) {
  * \brief regX ==> regL and lnBeta(regX, RegY) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnLnBeta(uint16_t unusedParamButMandatory) {
+void fnLnBeta(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  matrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  lnBeta[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
@@ -99,7 +99,7 @@ static bool_t _checkLnGammaArgs(int8_t *resultType, real_t *xReal, realContext_t
         EXTRA_INFO_MESSAGE("_checkLnGammaArgs", "cannot use a negative integer as X input of lnbeta when flag D is not set");
       }
       else {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_NaN, REGISTER_REAL34_DATA(REGISTER_X));
       }
 
@@ -229,11 +229,11 @@ static void _lnBeta(real_t *x, real_t *y, realContext_t *realContext) {
 
   if(_lnBetaReal(x, y, &rReal, &rImag, &ctxtReal39)) {
     if(realIsZero(&rImag)) {
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
     }
     else {
-      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
     }
@@ -275,7 +275,7 @@ void lnbetaCplxLonI(void) {
 
   _lnBetaComplex(&xReal, &xImag, &yImag, &yImag, &rReal, &rImag, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
@@ -315,7 +315,7 @@ void lnbetaCplxReal(void) {
 
   _lnBetaComplex(&xReal, &xImag, &yImag, &yImag, &rReal, &rImag, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
 }
@@ -369,4 +369,19 @@ void lnbetaCplxCplx(void)  {
 
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
   realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+}
+
+
+
+void LnBeta(const real_t *x, const real_t *y, real_t *res, realContext_t *realContext) {
+  real_t rReal, rImag;
+  real_t xx, yy;
+
+  realCopy(x, &xx); realCopy(y, &yy);
+  if(_lnBetaReal(&xx, &yy, &rReal, &rImag, realContext) && realIsZero(&rImag)) {
+    realCopy(&rReal, res);
+  }
+  else {
+    realCopy(const_NaN, res);
+  }
 }

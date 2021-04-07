@@ -25,29 +25,29 @@
  * \brief regX ==> regL and re(regX) ==> regY, im(regX) ==> regX or magnitude(regX) ==> regY, angle(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCxToRe(uint16_t unusedParamButMandatory) {
+void fnCxToRe(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
   if(dataTypeX == dtComplex34) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
     setSystemFlag(FLAG_ASLIFT);
     if(getSystemFlag(FLAG_POLAR)) { // polar mode
       liftStack();
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       real34RectangularToPolar(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X)); // X in radians
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_RADIAN, currentAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amRadian, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
       temporaryInformation = TI_THETA_RADIUS;
     }
     else { // rectangular mode
       real34Copy(REGISTER_REAL34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
       liftStack();
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       real34Copy(REGISTER_IMAG34_DATA(REGISTER_L), REGISTER_REAL34_DATA(REGISTER_X));
       temporaryInformation = TI_RE_IM;
     }
@@ -58,6 +58,6 @@ void fnCxToRe(uint16_t unusedParamButMandatory) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "You cannot use Cx->Re with %s in X!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false));
       moreInfoOnError("In function fnCxToRe:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }

@@ -18,8 +18,12 @@
  * \file parallel.h
  ***********************************************/
 
-void fnParallel      (uint16_t unusedParamButMandatory);
+void fnParallel      (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void parallelError   (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define parallelError typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 //      RegYRegX
 void parallelLonILonI(void);

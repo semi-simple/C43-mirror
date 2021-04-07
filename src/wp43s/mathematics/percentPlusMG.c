@@ -22,7 +22,7 @@
 
 static void dataTypeError(void);
 
-static void (* const functionMatrix[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const percentPlusMG[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX |    regY ==>    1                      2                      3              4              5              6              7              8              9              10
 //      V                Long integer           Real34                 Complex34      Time           Date           String         Real34 mat     Complex34 mat  Short integer  Config data
 /*  1 Long integer  */ { percentPlusMGLonILonI, percentPlusMGRealLonI, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError, dataTypeError},
@@ -53,7 +53,7 @@ static void dataTypeError(void) {
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot use %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnPercentPlusMG:", errorMessage, NULL, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 //=============================================================================
@@ -65,13 +65,13 @@ static void dataTypeError(void) {
  * enables stack lift and refreshes the stack.
  * Calculate %Sigma
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnPercentPlusMG(uint16_t unusedParamButMandatory) {
+void fnPercentPlusMG(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  functionMatrix[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
+  percentPlusMG[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
@@ -92,7 +92,7 @@ static bool_t percentPlusMGReal(real_t *xReal, real_t *yReal, real_t *rReal, rea
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnPercentPlusMG:", "cannot divide 0 by 0", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
     }
   }
@@ -105,7 +105,7 @@ static bool_t percentPlusMGReal(real_t *xReal, real_t *yReal, real_t *rReal, rea
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnPercenPlusMG:", "cannot divide a real by 0", NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
     }
   }
@@ -132,9 +132,9 @@ void percentPlusMGLonILonI(void) {
   convertLongIntegerRegisterToReal(REGISTER_Y, &yReal, &ctxtReal39);
 
   if(percentPlusMGReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    setRegisterAngularMode(REGISTER_X, amNone);
   }
 }
 
@@ -170,9 +170,9 @@ void percentPlusMGRealLonI(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &yReal);
 
   if(percentPlusMGReal(&xReal, &yReal, &rReal, &ctxtReal34)) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-    setRegisterAngularMode(REGISTER_X, AM_NONE);
+    setRegisterAngularMode(REGISTER_X, amNone);
   }
 }
 

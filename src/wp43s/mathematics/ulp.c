@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 
-void fnUlp(uint16_t unusedParamButMandatory) {
+void fnUlp(uint16_t unusedButMandatoryParameter) {
   real34_t x34;
   longInteger_t lgInt;
 
@@ -47,7 +47,7 @@ void fnUlp(uint16_t unusedParamButMandatory) {
         displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           moreInfoOnError("In function fnUlp:", "cannot use ±∞ input of ULP?", NULL, NULL);
-        #endif
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
 
       real34NextPlus(REGISTER_REAL34_DATA(REGISTER_X), &x34);
@@ -59,7 +59,7 @@ void fnUlp(uint16_t unusedParamButMandatory) {
         real34Subtract(&x34, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
       }
 
-      setRegisterAngularMode(REGISTER_X, AM_NONE);
+      setRegisterAngularMode(REGISTER_X, amNone);
       break;
 
     default:
@@ -67,7 +67,7 @@ void fnUlp(uint16_t unusedParamButMandatory) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot calculate ULP? with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
         moreInfoOnError("In function fnUlp:", errorMessage, NULL, NULL);
-      #endif
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
 

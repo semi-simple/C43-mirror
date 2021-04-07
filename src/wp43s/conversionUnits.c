@@ -32,14 +32,13 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function unitConversion:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
-    #endif
-    undo();
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -61,10 +60,10 @@ static void unitConversion(const real_t * const coefficient, uint16_t multiplyDi
  * \brief Converts °Celcius to °Fahrenheit: (°Celcius * 1,8) + 32.
  * Refreshes the stack. This is the exact formula.
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCvtCToF(uint16_t unusedParamButMandatory) {
+void fnCvtCToF(uint16_t unusedButMandatoryParameter) {
   real_t reX;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -74,14 +73,13 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function fnCvtCToF:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
-    #endif
-    undo();
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -98,10 +96,10 @@ void fnCvtCToF(uint16_t unusedParamButMandatory) {
  * \brief Converts °Fahrenheit to °Celcius: (°Fahrenheit - 32) / 1,8.
  * Refreshes the stack. This is the exact formula.
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCvtFToC(uint16_t unusedParamButMandatory) {
+void fnCvtFToC(uint16_t unusedButMandatoryParameter) {
   real_t reX;
 
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -111,14 +109,13 @@ void fnCvtFToC(uint16_t unusedParamButMandatory) {
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function fnCvtFToC:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
-    #endif
-    undo();
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -211,8 +208,8 @@ void fnCvtCwtKg(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtOzKg(uint16_t multiplyDivide) {
-  unitConversion(const_OzToKg, multiplyDivide);
+void fnCvtOzG(uint16_t multiplyDivide) {
+  unitConversion(const_OzToG, multiplyDivide);
 }
 
 
@@ -226,8 +223,8 @@ void fnCvtShortcwtKg(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtTrozKg(uint16_t multiplyDivide) {
-  unitConversion(const_TrozToKg, multiplyDivide);
+void fnCvtTrozG(uint16_t multiplyDivide) {
+  unitConversion(const_TrozToG, multiplyDivide);
 }
 
 
@@ -241,8 +238,18 @@ void fnCvtShorttonKg(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtCaratKg(uint16_t multiplyDivide) {
-  unitConversion(const_CaratToKg, multiplyDivide);
+void fnCvtCaratG(uint16_t multiplyDivide) {
+  unitConversion(const_CaratToG, multiplyDivide);
+}
+
+
+void fnCvtLiangKg(uint16_t multiplyDivide) {
+  unitConversion(const_20, multiplyDivide);
+}
+
+
+void fnCvtJinKg(uint16_t multiplyDivide) {
+  unitConversion(const_2, multiplyDivide);
 }
 
 
@@ -251,8 +258,8 @@ void fnCvtAuM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtMiM(uint16_t multiplyDivide) {
-  unitConversion(const_MiToM, multiplyDivide);
+void fnCvtMiKm(uint16_t multiplyDivide) {
+  unitConversion(const_MiToKm, multiplyDivide);
 }
 
 
@@ -261,8 +268,8 @@ void fnCvtLyM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtNmiM(uint16_t multiplyDivide) {
-  unitConversion(const_NmiToM, multiplyDivide);
+void fnCvtNmiKm(uint16_t multiplyDivide) {
+  unitConversion(const_NmiToKm, multiplyDivide);
 }
 
 
@@ -276,8 +283,8 @@ void fnCvtPcM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtInchM(uint16_t multiplyDivide) {
-  unitConversion(const_InchToM, multiplyDivide);
+void fnCvtInchMm(uint16_t multiplyDivide) {
+  unitConversion(const_InchToMm, multiplyDivide);
 }
 
 
@@ -291,8 +298,8 @@ void fnCvtYardM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtPointM(uint16_t multiplyDivide) {
-  unitConversion(const_PointToM, multiplyDivide);
+void fnCvtPointMm(uint16_t multiplyDivide) {
+  unitConversion(const_PointToMm, multiplyDivide);
 }
 
 
@@ -301,23 +308,53 @@ void fnCvtFathomM(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtGalukM3(uint16_t multiplyDivide) {
-  unitConversion(const_GalukToM3, multiplyDivide);
+void fnCvtLiM(uint16_t multiplyDivide) {
+  unitConversion(const_LiToM, multiplyDivide);
 }
 
 
-void fnCvtGalusM3(uint16_t multiplyDivide) {
-  unitConversion(const_GalusToM3, multiplyDivide);
+void fnCvtChiM(uint16_t multiplyDivide) {
+  unitConversion(const_3, multiplyDivide);
 }
 
 
-void fnCvtFlozukM3(uint16_t multiplyDivide) {
-  unitConversion(const_FlozukToM3, multiplyDivide);
+void fnCvtYinM(uint16_t multiplyDivide) {
+  unitConversion(const_YinToM, multiplyDivide);
 }
 
 
-void fnCvtFlozusM3(uint16_t multiplyDivide) {
-  unitConversion(const_FlozusToM3, multiplyDivide);
+void fnCvtCunM(uint16_t multiplyDivide) {
+  unitConversion(const_CunToM, multiplyDivide);
+}
+
+
+void fnCvtZhangM(uint16_t multiplyDivide) {
+  unitConversion(const_ZhangToM, multiplyDivide);
+}
+
+
+void fnCvtFenM(uint16_t multiplyDivide) {
+  unitConversion(const_FenToM, multiplyDivide);
+}
+
+
+void fnCvtGalukL(uint16_t multiplyDivide) {
+  unitConversion(const_GalukToL, multiplyDivide);
+}
+
+
+void fnCvtGalusL(uint16_t multiplyDivide) {
+  unitConversion(const_GalusToL, multiplyDivide);
+}
+
+
+void fnCvtFlozukMl(uint16_t multiplyDivide) {
+  unitConversion(const_FlozukToMl, multiplyDivide);
+}
+
+
+void fnCvtFlozusMl(uint16_t multiplyDivide) {
+  unitConversion(const_FlozusToMl, multiplyDivide);
 }
 
 
@@ -326,23 +363,28 @@ void fnCvtBarrelM3(uint16_t multiplyDivide) {
 }
 
 
-void fnCvtQuartM3(uint16_t multiplyDivide) {
-  unitConversion(const_QuartToM3, multiplyDivide);
+void fnCvtQuartL(uint16_t multiplyDivide) {
+  unitConversion(const_QuartToL, multiplyDivide);
 }
 
 
-void fnCvtAcreM2(uint16_t multiplyDivide) {
-  unitConversion(const_AccreToM2, multiplyDivide);
+void fnCvtAcreHa(uint16_t multiplyDivide) {
+  unitConversion(const_AccreToHa, multiplyDivide);
 }
 
 
-void fnCvtAcreusM2(uint16_t multiplyDivide) {
-  unitConversion(const_AccreusToM2, multiplyDivide);
+void fnCvtAcreusHa(uint16_t multiplyDivide) {
+  unitConversion(const_AccreusToHa, multiplyDivide);
 }
 
 
 void fnCvtHectareM2(uint16_t multiplyDivide) {
   unitConversion(const_10000, multiplyDivide);
+}
+
+
+void fnCvtMuM2(uint16_t multiplyDivide) {
+  unitConversion(const_MuToM2, multiplyDivide);
 }
 
 
@@ -356,7 +398,7 @@ void fnCvtLbfftNm(uint16_t multiplyDivide) {
  * \brief Converts power or field ratio to dB
  * dB = (10 or 20) * log10((power or field) ratio) this is the exact formula
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
@@ -369,14 +411,13 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
-    #endif
-    undo();
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 
@@ -394,7 +435,7 @@ void fnCvtRatioDb(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
  * \brief Converts dB to power or field ratio
  * (power or field) ratio = 10^(dB / 10 or 20) this is the exact formula
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ratio
@@ -407,14 +448,13 @@ void fnCvtDbRatio(uint16_t tenOrTwenty) { // ten: power ratio   twenty: field ra
   }
   else if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal(REGISTER_X, &reX, &ctxtReal39);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function fnCvtRatioDb:", getRegisterDataTypeName(REGISTER_X, true, false), "cannot be converted!", NULL);
-    #endif
-    undo();
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
 

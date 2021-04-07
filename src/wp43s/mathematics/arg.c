@@ -23,7 +23,7 @@
 
 
 
-void (* const arg[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const arg[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX ==> 1            2           3           4            5            6            7            8            9             10
 //          Long integer Real34      Complex34   Time         Date         String       Real34 mat   Complex34 m  Short integer Config data
             argError,    argReal,    argCplx,    argError,    argError,    argError,    argError,    argError,    argError,     argError
@@ -37,13 +37,13 @@ void (* const arg[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void argError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate arg for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnArg:", errorMessage, NULL, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -52,10 +52,10 @@ void argError(void) {
  * \brief regX ==> regL and arctan(regX) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnArg(uint16_t unusedParamButMandatory) {
+void fnArg(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   arg[getRegisterDataType(REGISTER_X)]();
@@ -69,7 +69,7 @@ void fnArg(uint16_t unusedParamButMandatory) {
  * \brief regX ==> regL and arg(regX) = arctan(Im(regX) / Re(regX)) ==> regX
  * enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
 void argReal(void) {
@@ -79,16 +79,16 @@ void argReal(void) {
   }
   else {
     if(real34IsPositive(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsZero(REGISTER_REAL34_DATA(REGISTER_X))){
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(const_0, REGISTER_REAL34_DATA(REGISTER_X));
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, currentAngularMode);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDegree, currentAngularMode);
       setRegisterAngularMode(REGISTER_X, currentAngularMode);
     }
     else
       if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X))) {
-        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         realToReal34(const_180, REGISTER_REAL34_DATA(REGISTER_X));
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), AM_DEGREE, currentAngularMode);
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amDegree, currentAngularMode);
         setRegisterAngularMode(REGISTER_X, currentAngularMode);
       }
   }
@@ -101,7 +101,7 @@ void argCplx(void) {
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &real);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &imag);
   realRectangularToPolar(&real, &imag, &real, &imag, &ctxtReal39);
-  convertAngleFromTo(&imag, AM_RADIAN, currentAngularMode, &ctxtReal39);
+  convertAngleFromTo(&imag, amRadian, currentAngularMode, &ctxtReal39);
 
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
   realToReal34(&imag, REGISTER_REAL34_DATA(REGISTER_X));

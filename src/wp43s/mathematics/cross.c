@@ -22,7 +22,7 @@
 
 static void crossDataTypeError(void);
 
-void (* const cross[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const cross[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX |    regY ==>    1                    2                    3                    4                    5                    6                    7                    8                    9                   10
 //      V                Long integer         Real34               Complex34            Time                 Date                 String               Real34 mat           Complex34 mat        Short integer       Config data
 /*  1 Long integer  */ { crossDataTypeError,  crossDataTypeError,  crossCplxLonI,       crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError,  crossDataTypeError, crossDataTypeError},
@@ -54,16 +54,16 @@ static void crossDataTypeError(void) {
     sprintf(errorMessage, "cannot raise %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnCross:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
+  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 }
 
 //static void crossSizeError() {
-//    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+//  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
 
-//#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+//  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 //    sprintf(errorMessage, "cannot calculate CROSS product, matrix size mismatch.");
 //    moreInfoOnError("In function fnCross:", errorMessage, NULL, NULL);
-//#endif
+//  #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 //}
 
 //=============================================================================
@@ -75,10 +75,10 @@ static void crossDataTypeError(void) {
  * enables stack lift and refreshes the stack.
  * Calculate the cross (or vector) product between complex and matrix
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnCross(uint16_t unusedParamButMandatory) {
+void fnCross(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   cross[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
@@ -117,9 +117,9 @@ void crossRealCplx(void) {
 
   crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -140,9 +140,9 @@ void crossLonICplx(void) {
 
   crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -163,9 +163,9 @@ void crossShoICplx(void) {
 
   crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -186,9 +186,9 @@ void crossCplxCplx(void) {
 
   crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -210,7 +210,7 @@ void crossCplxReal(void) {
   crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -231,9 +231,9 @@ void crossCplxLonI(void) {
 
   crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 /********************************************//**
@@ -254,9 +254,9 @@ void crossCplxShoI(void) {
 
   crossCplx(&xReal, &xImag, &yReal, &yImag, &rReal, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  setRegisterAngularMode(REGISTER_X, AM_NONE);
+  setRegisterAngularMode(REGISTER_X, amNone);
 }
 
 //=============================================================================

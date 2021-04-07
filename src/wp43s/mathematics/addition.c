@@ -22,7 +22,7 @@
 
 
 
-void (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
+TO_QSPI void (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
 // regX |    regY ==>   1            2            3            4            5            6            7            8            9             10
 //      V               Long integer Real34       Complex34    Time         Date         String       Real34 mat   Complex34 m  Short integer Config data
 /*  1 Long integer  */ {addLonILonI, addRealLonI, addCplxLonI, addTimeLonI, addDateLonI, addStriLonI, addError,    addError,    addShoILonI,  addError},
@@ -45,14 +45,14 @@ void (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYP
  * \param void
  * \return void
  ***********************************************/
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void addError(void) {
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-  #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot add %s", getRegisterDataTypeName(REGISTER_X, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "to %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     moreInfoOnError("In function fnAdd:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-  #endif
 }
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
 
@@ -60,10 +60,10 @@ void addError(void) {
  * \brief regX ==> regL and regY + regX ==> regX
  * Drops Y, enables stack lift and refreshes the stack
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] unusedButMandatoryParameter uint16_t
  * \return void
  ***********************************************/
-void fnAdd(uint16_t unusedParamButMandatory) {
+void fnAdd(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
@@ -106,7 +106,8 @@ void addLonILonI(void) {
  * \return void
  ***********************************************/
 void addLonITime(void) {
-  fnToBeCoded();
+  convertLongIntegerRegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
+  real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -118,7 +119,8 @@ void addLonITime(void) {
  * \return void
  ***********************************************/
 void addTimeLonI(void) {
-  fnToBeCoded();
+  convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
+  real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -130,7 +132,11 @@ void addTimeLonI(void) {
  * \return void
  ***********************************************/
 void addLonIDate(void) {
-  fnToBeCoded();
+  real34_t val;
+  convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+  int32ToReal34(86400, &val);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), &val, &val);
+  real34Add(&val, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -142,7 +148,12 @@ void addLonIDate(void) {
  * \return void
  ***********************************************/
 void addDateLonI(void) {
-  fnToBeCoded();
+  real34_t val;
+  convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+  int32ToReal34(86400, &val);
+  real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &val, &val);
+  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
+  real34Add(REGISTER_REAL34_DATA(REGISTER_Y), &val, REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -199,30 +210,21 @@ void addShoILonI(void) {
  ***********************************************/
 void addLonIReal(void) {
   real_t y, x;
-  uint32_t xAngularMode;
+  angularMode_t xAngularMode;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  if(xAngularMode == AM_NONE) {
+  if(xAngularMode == amNone) {
     realAdd(&y, &x, &x, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
-      realAdd(&y, &x, &x, &ctxtReal39);
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
-      realAdd(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-   setRegisterAngularMode(REGISTER_X, currentAngularMode);
+    convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
 
@@ -236,30 +238,21 @@ void addLonIReal(void) {
  ***********************************************/
 void addRealLonI(void) {
   real_t y, x;
-  uint32_t yAngularMode;
+  angularMode_t yAngularMode;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
-  if(yAngularMode == AM_NONE) {
+  if(yAngularMode == amNone) {
     realAdd(&y, &x, &x, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-      realAdd(&y, &x, &x, &ctxtReal39);
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-      realAdd(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
@@ -301,7 +294,7 @@ void addCplxLonI(void) {
 
   realAdd(&a, &c, &c, &ctxtReal39);
 
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
   real34Copy(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 }
@@ -319,7 +312,7 @@ void addCplxLonI(void) {
  * \return void
  ***********************************************/
 void addTimeTime(void) {
-  fnToBeCoded();
+  real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
 }
 
 
@@ -331,7 +324,17 @@ void addTimeTime(void) {
  * \return void
  ***********************************************/
 void addTimeReal(void) {
-  fnToBeCoded();
+  angularMode_t xAngularMode;
+
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(xAngularMode == amNone) {
+    convertReal34RegisterToTimeRegister(REGISTER_X, REGISTER_X);
+    real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 
@@ -343,7 +346,17 @@ void addTimeReal(void) {
  * \return void
  ***********************************************/
 void addRealTime(void) {
-  fnToBeCoded();
+  angularMode_t yAngularMode;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+
+  if(yAngularMode == amNone) {
+    convertReal34RegisterToTimeRegister(REGISTER_Y, REGISTER_Y);
+    real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 
@@ -359,7 +372,21 @@ void addRealTime(void) {
  * \return void
  ***********************************************/
 void addDateReal(void) {
-  fnToBeCoded();
+  angularMode_t xAngularMode;
+  real34_t val;
+
+  xAngularMode = getRegisterAngularMode(REGISTER_X);
+
+  if(xAngularMode == amNone) {
+    int32ToReal34(86400, &val);
+    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X), roundingMode);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &val, &val);
+    reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
+    real34Add(REGISTER_REAL34_DATA(REGISTER_Y), &val, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 
@@ -371,7 +398,20 @@ void addDateReal(void) {
  * \return void
  ***********************************************/
 void addRealDate(void) {
-  fnToBeCoded();
+  angularMode_t yAngularMode;
+  real34_t val;
+
+  yAngularMode = getRegisterAngularMode(REGISTER_Y);
+
+  if(yAngularMode == amNone) {
+    int32ToReal34(86400, &val);
+    real34ToIntegralValue(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_Y), roundingMode);
+    real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), &val, &val);
+    real34Add(&val, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else {
+    addError();
+  }
 }
 
 
@@ -389,26 +429,26 @@ void addRealDate(void) {
 void addStriLonI(void) {
   int16_t len1, len2;
 
-  longIntegerRegisterToDisplayString(REGISTER_X, tmpStr3000, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+  longIntegerRegisterToDisplayString(REGISTER_X, tmpString, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
 
-  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
+  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the resulting string would be %d (Y %d + X %d) characters long. Maximum is %d",
-                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
+                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
-                                                                        stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
+                                                                        stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
       moreInfoOnError("In function addStriLonI:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
     len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
-    len2 = stringByteLength(tmpStr3000) + 1;
+    len2 = stringByteLength(tmpString) + 1;
 
-    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -423,26 +463,26 @@ void addStriLonI(void) {
 void addStriTime(void) {
   int16_t len1, len2;
 
-  timeToDisplayString(REGISTER_X, tmpStr3000);
+  timeToDisplayString(REGISTER_X, tmpString, false);
 
-  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
+  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the resulting string would be %d (Y %d + X %d) characters long. Maximum is %d",
-                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
+                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
-                                                                        stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
+                                                                        stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
       moreInfoOnError("In function addStriTime:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
     len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
-    len2 = stringByteLength(tmpStr3000) + 1;
+    len2 = stringByteLength(tmpString) + 1;
 
-    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -457,26 +497,26 @@ void addStriTime(void) {
 void addStriDate(void) {
   int16_t len1, len2;
 
-  dateToDisplayString(REGISTER_X, tmpStr3000);
+  dateToDisplayString(REGISTER_X, tmpString);
 
-  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
+  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the resulting string would be %d (Y %d + X %d) characters long. Maximum is %d",
-                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
+                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
-                                                                        stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
+                                                                        stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
       moreInfoOnError("In function addStriDate:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
     len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
-    len2 = stringByteLength(tmpStr3000) + 1;
+    len2 = stringByteLength(tmpString) + 1;
 
-    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -500,17 +540,17 @@ void addStriStri(void) {
                                                                         stringGlyphLength(REGISTER_STRING_DATA(REGISTER_X)),
                                                                                                         MAX_NUMBER_OF_GLYPHS_IN_STRING);
       moreInfoOnError("In function addStriStri:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
     len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
     len2 = stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1;
 
-    xcopy(tmpStr3000, REGISTER_STRING_DATA(REGISTER_X), min(TMP_STR_LENGTH, len2));
-    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
+    xcopy(tmpString, REGISTER_STRING_DATA(REGISTER_X), min(TMP_STR_LENGTH, len2));
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -549,26 +589,26 @@ void addStriCxma(void) {
 void addStriShoI(void) {
   int16_t len1, len2;
 
-  shortIntegerToDisplayString(REGISTER_X, tmpStr3000, false);
+  shortIntegerToDisplayString(REGISTER_X, tmpString, false);
 
-  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
+  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the resulting string would be %d (Y %d + X %d) characters long. Maximum is %d",
-                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
+                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
-                                                                        stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
+                                                                        stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
       moreInfoOnError("In function addStriShoI:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
     len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
-    len2 = stringByteLength(tmpStr3000) + 1;
+    len2 = stringByteLength(tmpString) + 1;
 
-    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -583,26 +623,26 @@ void addStriShoI(void) {
 void addStriReal(void) {
   int16_t len1, len2;
 
-  real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpStr3000, &standardFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION);
+  real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &standardFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION);
 
-  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
+  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the resulting string would be %d (Y %d + X %d) characters long. Maximum is %d",
-                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
+                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
-                                                                        stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
+                                                                        stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
       moreInfoOnError("In function addStriReal:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
     len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
-    len2 = stringByteLength(tmpStr3000) + 1;
+    len2 = stringByteLength(tmpString) + 1;
 
-    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X),        REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -617,26 +657,26 @@ void addStriReal(void) {
 void addStriCplx(void) {
   int16_t len1, len2;
 
-  complex34ToDisplayString(REGISTER_COMPLEX34_DATA(REGISTER_X), tmpStr3000, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION);
+  complex34ToDisplayString(REGISTER_COMPLEX34_DATA(REGISTER_X), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION);
 
-  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
+  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "the resulting string would be %d (Y %d + X %d) characters long. Maximum is %d",
-                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpStr3000),
+                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
-                                                                        stringGlyphLength(tmpStr3000),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
+                                                                        stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
       moreInfoOnError("In function addStriCplx:", errorMessage, NULL, NULL);
-    #endif
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {
     len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
-    len2 = stringByteLength(tmpStr3000) + 1;
+    len2 = stringByteLength(tmpString) + 1;
 
-    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), AM_NONE);
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
 
     xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
-    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpStr3000,                       len2);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
   }
 }
 
@@ -723,30 +763,21 @@ void addShoIShoI(void) {
  ***********************************************/
 void addShoIReal(void) {
   real_t y, x;
-  uint32_t xAngularMode;
+  angularMode_t xAngularMode;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  if(xAngularMode == AM_NONE) {
+  if(xAngularMode == amNone) {
     realAdd(&y, &x, &x, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
-      realAdd(&y, &x, &x, &ctxtReal39);
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
-      realAdd(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
-   setRegisterAngularMode(REGISTER_X, currentAngularMode);
+    convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
 
@@ -760,30 +791,21 @@ void addShoIReal(void) {
  ***********************************************/
 void addRealShoI(void) {
   real_t y, x;
-  uint32_t yAngularMode;
+  angularMode_t yAngularMode;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
-  if(yAngularMode == AM_NONE) {
+  if(yAngularMode == amNone) {
     realAdd(&y, &x, &x, &ctxtReal39);
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-      realAdd(&y, &x, &x, &ctxtReal39);
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else {
-      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-      realAdd(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
@@ -812,7 +834,7 @@ void addShoICplx(void) {
 void addCplxShoI(void) {
   convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
   real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X));
 }
 
@@ -829,44 +851,32 @@ void addCplxShoI(void) {
  * \return void
  ***********************************************/
 void addRealReal(void) {
-  uint32_t yAngularMode, xAngularMode;
+  angularMode_t yAngularMode, xAngularMode;
 
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  if(yAngularMode == AM_NONE && xAngularMode == AM_NONE) {
+  if(yAngularMode == amNone && xAngularMode == amNone) {
     real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     real_t y, x;
 
-    if(yAngularMode == AM_NONE) {
+    if(yAngularMode == amNone) {
       yAngularMode = currentAngularMode;
     }
-    else if(xAngularMode == AM_NONE) {
+    else if(xAngularMode == amNone) {
       xAngularMode = currentAngularMode;
     }
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
 
-    if(currentAngularMode == AM_DMS) {
-      convertAngleFromTo(&y, yAngularMode, AM_DEGREE, &ctxtReal39);
-      convertAngleFromTo(&x, xAngularMode, AM_DEGREE, &ctxtReal39);
+    convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
+    convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
 
-      realAdd(&y, &x, &x, &ctxtReal39);
-
-      convertAngleFromTo(&x, AM_DEGREE, AM_DMS, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-      checkDms34(REGISTER_REAL34_DATA(REGISTER_X));
-    }
-    else { //current angular mode is not DMS
-      convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-      convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
-
-      realAdd(&y, &x, &x, &ctxtReal39);
-      realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
-    }
+    realAdd(&y, &x, &x, &ctxtReal39);
+    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 }
@@ -893,7 +903,7 @@ void addRealCplx(void) {
  ***********************************************/
 void addCplxReal(void) {
   real34Add(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_Y)); // real part
-  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, AM_NONE);
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
   complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_Y), REGISTER_COMPLEX34_DATA(REGISTER_X)); // imaginary part
 }
 

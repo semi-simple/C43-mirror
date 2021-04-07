@@ -18,8 +18,12 @@
  * \file or.h
  ***********************************************/
 
-void fnLogicalOr(uint16_t unusedParamButMandatory);
+void fnLogicalOr(uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void orError24  (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define orError24 typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void orError31  (void);
 void orLonILonI (void);
 void orLonIReal (void);

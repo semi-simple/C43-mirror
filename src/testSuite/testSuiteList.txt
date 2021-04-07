@@ -14,6 +14,7 @@
 ;   EC   Error Code: 0=no error or form 1 to 28
 ;   CM   Complex Mode: RECT or POLAR
 ;   GAP  gap setting
+;   JG   The day Gregorian calendar was introduced: in JDN (2299161 in Europe)
 ;   Rn   Register n from 0 to 211
 ;   Rx   Register x in A,B,C,D,I,J,K,L,T,X,Y,Z
 ;      type after equal sign: LonI is a  Long Integer
@@ -21,6 +22,9 @@
 ;                             ShoI is a  Short Integer
 ;                             Real is a  DP Real
 ;                             Cmpx is a  DP Complex
+;                             Time is a  Time, Seconds or H:MM:SS
+;                             Date is a  Date, Y.MD, M.DY, or D.MY
+;                                              setting follows the system flags
 ;      after the colon there is the value of the register between double quotes
 ;      after the Real value there must be a colon followed by the angular mode
 ;      special value infinity for Real is "inf" (lower case inf is mandatory)
@@ -140,6 +144,13 @@ idivr
 modulo
 remainder
 
+mulmod
+expmod
+
+dblDivision
+dblDivisionRemainder
+dblMultiplication
+
 mant
 expt
 
@@ -174,6 +185,9 @@ tanh
 ;The standard calculator performance test arcsin(arccos(arctan(tan(cos(sin(9°))))))-9
 trig
 
+erf
+erfc
+
 conjugate
 reToCx
 cxToRe
@@ -187,6 +201,10 @@ xthRoot
 lnGamma
 gamma
 factorial
+gammaP
+gammaQ
+gammaXyLower
+gammaXyUpper
 
 cyx
 pyx
@@ -223,7 +241,58 @@ deltaPercent
 logxy
 lnbeta
 beta
+ixyz
 fib
 gd
 invGd
 
+bessel
+
+zeta
+bn
+bn_star
+
+hermite
+hermite_p
+laguerre
+laguerre_alpha
+legendre
+chebyshev_t
+chebyshev_u
+
+w_positive
+w_negative
+w_inverse
+
+jToD
+dToJ
+year
+month
+day
+wday
+dateTo
+toDate
+xToDate
+
+toHms
+toReal
+
+normal_p
+normal_l
+normal_r
+normal_i
+
+t_p
+t_l
+t_r
+t_i
+
+chi2_p
+chi2_l
+chi2_r
+chi2_i
+
+f_p
+f_l
+f_r
+f_i

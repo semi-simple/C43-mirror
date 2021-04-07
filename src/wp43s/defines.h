@@ -22,6 +22,7 @@
 //*********************************
 //* General configuration defines *
 //*********************************
+#define DEBUG_INSTEAD_STATUS_BAR         0 // Debug data instead of the status bar
 #define EXTRA_INFO_ON_CALC_ERROR         1 // Print extra information on the console about an error
 #define DEBUG_PANEL                      1 // Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
 #define DEBUG_REGISTER_L                 1 // Showing register L content on the PC GUI
@@ -37,6 +38,9 @@
 
 #define SCREEN_800X480                   1 // Set to 0 if you want a keyboard in addition to the screen on Raspberry pi
 
+#if __linux__ == 1
+  #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
+#endif // __linux__ == 1
 
 
 
@@ -44,10 +48,12 @@
 //*************************
 //* Other defines         *
 //*************************
-#define YEARMONTH                                 "2020.10"
+#define YEARMONTH                                 "2021.03"
 #define VERSION                                   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
 #define COPYRIGHT                                 "The WP43S team"
 #define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
+#define PROGRAM_NAME                              "WP43S"
+#define PROGRAM_VERSION                           "0.1"
 
 #define CHARS_PER_LINE                            80 // Used in the flag browser application
 
@@ -59,19 +65,6 @@
 #define AIM_BUFFER_LENGTH                        400 // 199 double byte glyphs + trailing 0 + 1 byte to round up to a 4 byte boundary
 #define TAM_BUFFER_LENGTH                         32 // TODO: find the exact maximum needed
 #define NIM_BUFFER_LENGTH                        200 // TODO: find the exact maximum needed
-
-// TAM transition system
-#define TT_OPERATION                               0 // +, -, *, /, min, max
-#define TT_LETTER                                  1
-#define TT_VARIABLE                                2
-#define TT_DIGIT                                   3
-#define TT_ENTER                                   4
-#define TT_DOT                                     5 // For local flags and registers
-#define TT_INDIRECT                                6 // For indirect addressing
-#define TT_BACKSPACE                               7
-#define TT_BASE10                                  8
-#define TT_BASE16                                  9
-#define TT_NOTHING                                10
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
 
@@ -112,12 +105,16 @@
 #define ERROR_STRING_WOULD_BE_TOO_LONG            33
 #define ERROR_EMPTY_STRING                        34
 #define ERROR_NO_BACKUP_DATA                      35
-#define ERROR_BAD_INPUT                           36 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_UNDEF_SOURCE_VAR                    36
+#define ERROR_WRITE_PROTECTED_VAR                 37
+#define ERROR_BAD_INPUT                           38 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     37
+#define NUMBER_OF_ERROR_CODES                     39
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
-#define NUMBER_OF_LOCAL_FLAGS                     16 // Could be 32 because 32 bits are available
+#define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
+#define NUMBER_OF_LOCAL_FLAGS                     32
+#define LAST_LOCAL_FLAG                          143
 
 // Global flags
 #define FLAG_X                                   100
@@ -136,13 +133,13 @@
 // System flags
 // Bit 15 (MSB) is always set for a system flag
 // If bit 14 is set the system flag is read only for the user
-#define FLAG_TDM24                            0x8000
-#define FLAG_YMD                              0xc001
-#define FLAG_DMY                              0xc002
-#define FLAG_MDY                              0xc003
+#define FLAG_TDM24                            0x8000 // The system flags
+#define FLAG_YMD                              0xc001 // MUST be in the same
+#define FLAG_DMY                              0xc002 // order as the items
+#define FLAG_MDY                              0xc003 // in items.c and items.h
 #define FLAG_CPXRES                           0x8004
-#define FLAG_CPXj                             0x8005
-#define FLAG_POLAR                            0x8006
+#define FLAG_CPXj                             0x8005 // And TDM24 MUST be
+#define FLAG_POLAR                            0x8006 // the first.
 #define FLAG_FRACT                            0x8007
 #define FLAG_PROPFR                           0x8008
 #define FLAG_DENANY                           0x8009
@@ -197,28 +194,34 @@
 #define Y_TOP_PORTRAIT                           376 // Vertical offset for a portrait calculator
 #define Y_TOP_LANDSCAPE                           30 // vertical offset for a landscape calculator
 
-// Stack Lift Status
-#define SLS_ENABLED                                0 // Stack lift enabled after item execution
-#define SLS_DISABLED                               1 // Stack lift disabled after item execution
-#define SLS_UNCHANGED                              2 // Stack lift unchanged after item execution
+#define TAM_MAX_BITS                              14
+#define TAM_MAX_MASK                          0x3fff
 
-// Undo Status
-#define US_ENABLED                                 0 // The command saves the stack, the statistical sums, and the system flags for later UNDO
-#define US_CANCEL                                  1 // The command cancels the last UNDO data
-#define US_UNCHANGED                               2 // The command leaves the existing UNDO data as is
+// Stack Lift Status (2 bits)
+#define SLS_STATUS                            0x0003
+#define SLS_ENABLED                        ( 0 << 0) // Stack lift enabled after item execution
+#define SLS_DISABLED                       ( 1 << 0) // Stack lift disabled after item execution
+#define SLS_UNCHANGED                      ( 2 << 0) // Stack lift unchanged after item execution
 
-// Item category
-#define CAT_NONE                                   0 // None of the others
-#define CAT_FNCT                                   1 // Function
-#define CAT_MENU                                   2 // Menu
-#define CAT_CNST                                   3 // Constant
-#define CAT_FREE                                   4 // To identify and find the free items
-#define CAT_REGS                                   5 // Registers
-#define CAT_RVAR                                   6 // Reserved variable
-#define CAT_DUPL                                   7 // Duplicate of another item e.g. acus->m^2
-#define CAT_SYFL                                   8 // System flags
-#define CAT_AINT                                   9 // Upper case alpha_INTL
-#define CAT_aint                                  10 // Lower case alpha_intl
+// Undo Status (2 bits)
+#define US_STATUS                             0x000c
+#define US_ENABLED                         ( 0 << 2) // The command saves the stack, the statistical sums, and the system flags for later UNDO
+#define US_CANCEL                          ( 1 << 2) // The command cancels the last UNDO data
+#define US_UNCHANGED                       ( 2 << 2) // The command leaves the existing UNDO data as is
+
+// Item category (4 bits)
+#define CAT_STATUS                            0x00f0
+#define CAT_NONE                           ( 0 << 4) // None of the others
+#define CAT_FNCT                           ( 1 << 4) // Function
+#define CAT_MENU                           ( 2 << 4) // Menu
+#define CAT_CNST                           ( 3 << 4) // Constant
+#define CAT_FREE                           ( 4 << 4) // To identify and find the free items
+#define CAT_REGS                           ( 5 << 4) // Registers
+#define CAT_RVAR                           ( 6 << 4) // Reserved variable
+#define CAT_DUPL                           ( 7 << 4) // Duplicate of another item e.g. acus->m^2
+#define CAT_SYFL                           ( 8 << 4) // System flags
+#define CAT_AINT                           ( 9 << 4) // Upper case alpha_INTL
+#define CAT_aint                           (10 << 4) // Lower case alpha_intl
 
 #define INC_FLAG                                   0
 #define DEC_FLAG                                   1
@@ -226,9 +229,11 @@
 ///////////////////////////////////////////////////////
 // Register numbering:
 //    0 to  111 global resisters
-//  112 to  211 local registers (from .00 to .99) this are 100 local registers but TAM allows only a parameter from 0 to 99 (without indirection)
-// 1000 to 1999 named variables
-// 2000 to 2009 saved stack registers (UNDO item)
+//  112 to  210 local registers (from .00 to .98) this are 99 local registers
+//  212 to  219 saved stack registers (UNDO feature)
+//  220 to  220 temporary registers
+//  221 to 1999 named variables
+// 2000 to 2029 reserved variables
 #define REGISTER_X                               100
 #define REGISTER_Y                               101
 #define REGISTER_Z                               102
@@ -241,20 +246,60 @@
 #define REGISTER_I                               109
 #define REGISTER_J                               110
 #define REGISTER_K                               111
+#define LAST_GLOBAL_REGISTER                     111
+#define NUMBER_OF_GLOBAL_REGISTERS               112 // There are 112 global registers from 0 to 111
 #define FIRST_LOCAL_REGISTER                     112 // There are 112 global registers from 0 to 111
-#define FIRST_NAMED_VARIABLE                    1000
-#define FIRST_SAVED_STACK_REGISTER              2000
-#define SAVED_REGISTER_X                        2000
-#define SAVED_REGISTER_Y                        2001
-#define SAVED_REGISTER_Z                        2002
-#define SAVED_REGISTER_T                        2003
-#define SAVED_REGISTER_A                        2004
-#define SAVED_REGISTER_B                        2005
-#define SAVED_REGISTER_C                        2006
-#define SAVED_REGISTER_D                        2007
-#define SAVED_REGISTER_L                        2008
-#define LAST_SAVED_REGISTER                     2009
-#define TEMP_REGISTER                           2009
+#define LAST_LOCAL_REGISTER                      210 // There are maximum 99 local registers from 112 to 210 (.00 to .98)
+#define NUMBER_OF_SAVED_STACK_REGISTERS            9 // 211 to 219
+#define FIRST_SAVED_STACK_REGISTER               211
+#define SAVED_REGISTER_X                         211
+#define SAVED_REGISTER_Y                         212
+#define SAVED_REGISTER_Z                         213
+#define SAVED_REGISTER_T                         214
+#define SAVED_REGISTER_A                         215
+#define SAVED_REGISTER_B                         216
+#define SAVED_REGISTER_C                         217
+#define SAVED_REGISTER_D                         218
+#define SAVED_REGISTER_L                         219
+#define LAST_SAVED_STACK_REGISTER                219
+#define NUMBER_OF_TEMP_REGISTERS                   1 // 220
+#define FIRST_TEMP_REGISTER                      220
+#define TEMP_REGISTER_1                          220
+#define LAST_TEMP_REGISTER                       220
+#define FIRST_NAMED_VARIABLE                     221
+#define LAST_NAMED_VARIABLE                     1999
+#define FIRST_RESERVED_VARIABLE                 2000
+#define RESERVED_VARIABLE_X                     2000
+#define RESERVED_VARIABLE_Y                     2001
+#define RESERVED_VARIABLE_Z                     2002
+#define RESERVED_VARIABLE_T                     2003
+#define RESERVED_VARIABLE_A                     2004
+#define RESERVED_VARIABLE_B                     2005
+#define RESERVED_VARIABLE_C                     2006
+#define RESERVED_VARIABLE_D                     2007
+#define RESERVED_VARIABLE_L                     2008
+#define RESERVED_VARIABLE_I                     2009
+#define RESERVED_VARIABLE_J                     2010
+#define RESERVED_VARIABLE_K                     2011
+#define RESERVED_VARIABLE_GRAMOD                2012
+#define RESERVED_VARIABLE_ADM                   2013
+#define RESERVED_VARIABLE_DENMAX                2014
+#define RESERVED_VARIABLE_ISM                   2015
+#define RESERVED_VARIABLE_REALDF                2016
+#define RESERVED_VARIABLE_NDEC                  2017
+#define RESERVED_VARIABLE_ACC                   2018
+#define RESERVED_VARIABLE_ULIM                  2019
+#define RESERVED_VARIABLE_LLIM                  2020
+#define RESERVED_VARIABLE_FV                    2021
+#define RESERVED_VARIABLE_IPONA                 2022
+#define RESERVED_VARIABLE_NPER                  2023
+#define RESERVED_VARIABLE_PERONA                2024
+#define RESERVED_VARIABLE_PMT                   2025
+#define RESERVED_VARIABLE_PV                    2026
+#define LAST_RESERVED_VARIABLE                  2026
+#define INVALID_VARIABLE                        2027
+
+#define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 
 
 // If one of the 4 next defines is changed: change also Y_POSITION_OF_???_LINE below
@@ -277,16 +322,16 @@
 #define SCREEN_HEIGHT                            240 // Height of the screen
 #define ON_PIXEL                            0x303030 // blue red green
 #define OFF_PIXEL                           0xe0e0e0 // blue red green
-#define SOFTMENU_STACK_SIZE                        7 // Maximum is 14 else we need to increase LENGTH_SOFTMENUSTKPTR
+#define SOFTMENU_STACK_SIZE                        8
 #define TEMPORARY_INFO_OFFSET                     10 // Vertical offset for temporary informations. I find 4 looks better
-#define REGISTER_LINE_HEIGHT                      36 //
+#define REGISTER_LINE_HEIGHT                      36
 
 #define Y_POSITION_OF_REGISTER_T_LINE             24 // 135 - REGISTER_LINE_HEIGHT*(registerNumber - REGISTER_X)
 #define Y_POSITION_OF_REGISTER_Z_LINE             60
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define MY_ALPHA_MENU                              0  // This is the index of the MyAlpha   softmenu in the softmenu[] array
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               15
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar
@@ -307,6 +352,7 @@
 #define X_BATTERY                                389
 
 #define TIMER_IDX_SCREEN_REFRESH                   0 // use timer 0 to wake up for screen refresh
+#define TIMER_IDX_AUTO_REPEAT                      1 // use timer 1 to wake up for key auto-repeat
 
 #ifdef PC_BUILD
   #if (__linux__ == 1)
@@ -315,19 +361,19 @@
     #define LINEBREAK                         "\n\r"
   #elif defined(__APPLE__)
     #define LINEBREAK                         "\r\n"
-  #else
+  #else // Unsupported OS
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
-  #endif
-#endif
+  #endif // OS
+#endif // PC_BUILD
 
 #define NUMBER_OF_DISPLAY_DIGITS                  16
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS     10
 
 // Number of constants
-#define NUMBER_OF_CONSTANTS_39                   177
+#define NUMBER_OF_CONSTANTS_39                   183
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
-#define NUMBER_OF_CONSTANTS_34                     7
+#define NUMBER_OF_CONSTANTS_34                     8
 
 #define MAX_FREE_REGION                           50 // Maximum number of free memory regions
 
@@ -346,14 +392,6 @@
 #define DF_FIX                                     1
 #define DF_SCI                                     2
 #define DF_ENG                                     3
-
-// Angular mode 3 bits
-#define AM_DEGREE                                  0 // degree must be 0
-#define AM_GRAD                                    1 // grad   must be 1
-#define AM_RADIAN                                  2 // radian must be 2
-#define AM_MULTPI                                  3 // multpi must be 3
-#define AM_DMS                                     4 // dms    must be 4
-#define AM_NONE                                    5
 
 // Date format 2 bits
 #define DF_DMY                                     0
@@ -384,19 +422,16 @@
 // Calc mode 4 bits
 #define CM_NORMAL                                  0 // Normal operation
 #define CM_AIM                                     1 // Alpha input mode
-#define CM_TAM                                     2 // Temporary input mode
-#define CM_NIM                                     3 // Numeric input mode
-#define CM_ASM                                     4 // Alpha selection in FCNS, MENU, and CNST menu
-#define CM_ASM_OVER_TAM                            5 // Alpha selection for system flags selection in TAM
-#define CM_ASM_OVER_AIM                            6 // Alpha selection for system flags selection in TAM
-#define CM_ASSIGN                                  7 // Assign mode
-#define CM_REGISTER_BROWSER                        8 // Register browser
-#define CM_FLAG_BROWSER                            9 // Flag browser
-#define CM_FONT_BROWSER                           10 // Font browser
-#define CM_ERROR_MESSAGE                          11 // Error message in one of the register lines
-#define CM_BUG_ON_SCREEN                          12 // Bug message on screen
-#define CM_CONFIRMATION                           13 // Waiting for confirmation or canceling
-#define CM_MIM                 14 // Matrix imput mode tbd reorder
+#define CM_NIM                                     2 // Numeric input mode
+#define CM_PEM                                     3 // Program entry mode
+#define CM_ASSIGN                                  4 // Assign mode
+#define CM_REGISTER_BROWSER                        5 // Register browser
+#define CM_FLAG_BROWSER                            6 // Flag browser
+#define CM_FONT_BROWSER                            7 // Font browser
+#define CM_ERROR_MESSAGE                           8 // Error message in one of the register lines
+#define CM_BUG_ON_SCREEN                           9 // Bug message on screen
+#define CM_CONFIRMATION                           10 // Waiting for confirmation or canceling
+#define CM_MIM                                    11 // Matrix imput mode tbd reorder
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -415,7 +450,8 @@
 #define TM_FLAGW                               10005
 #define TM_STORCL                              10006
 #define TM_SHUFFLE                             10007
-#define TM_CMP                                 10008 // TM_CMP must be the last in this list
+#define TM_LABEL                               10008
+#define TM_CMP                                 10009 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -463,6 +499,7 @@
 #define TI_BACKUP_RESTORED                        30
 #define TI_XMIN_YMIN                              31
 #define TI_XMAX_YMAX                              32
+#define TI_DAY_OF_WEEK                            33
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -479,13 +516,25 @@
 #define DBG_TMP_SAVED_STACK_REGISTERS              6
 
 // alpha selection menus
-#define ASM_NONE                                   0
-#define ASM_CNST                                   1
-#define ASM_FCNS                                   2
-#define ASM_MENU                                   3
-#define ASM_SYFL                                   4
-#define ASM_AINT                                   5
-#define ASM_aint                                   6
+#define CATALOG_NONE                               0 // CATALOG_NONE must be 0
+#define CATALOG_CNST                               1
+#define CATALOG_FCNS                               2
+#define CATALOG_MENU                               3
+#define CATALOG_SYFL                               4
+#define CATALOG_AINT                               5
+#define CATALOG_aint                               6
+#define CATALOG_PROG                               7
+#define CATALOG_VAR                                8
+#define CATALOG_MATRS                              9
+#define CATALOG_STRINGS                           10
+#define CATALOG_DATES                             11
+#define CATALOG_TIMES                             12
+#define CATALOG_ANGLES                            13
+#define CATALOG_SINTS                             14
+#define CATALOG_LINTS                             15
+#define CATALOG_REALS                             16
+#define CATALOG_CPXS                              17
+#define NUMBER_OF_CATALOGS                        18
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1
@@ -506,11 +555,11 @@
 #define LM_SUMS                                    4
 #define LM_SYSTEM_STATE                            5
 
-// Statistical sums
+// Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2×(7×60 - 4 - 6×16) = 640 bytes
 #define NUMBER_OF_STATISTICAL_SUMS                27
-#define SIGMA_N      ((real_t *)(statisticalSumsPointer))
-#define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE))
-#define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2))
+#define SIGMA_N      ((real_t *)(statisticalSumsPointer)) // could be a 32 bit unsigned integer
+#define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE)) // could be a real34
+#define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2)) // could be a real34
 #define SIGMA_X2     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  3))
 #define SIGMA_X2Y    ((real_t *)(statisticalSumsPointer + REAL_SIZE *  4))
 #define SIGMA_Y2     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  5))
@@ -531,26 +580,94 @@
 #define SIGMA_1onY2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 20))
 #define SIGMA_X3     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 21))
 #define SIGMA_X4     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 22))
-#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23))
-#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24))
-#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25))
-#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26))
+#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23)) // could be a real34
+#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24)) // could be a real34
+#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25)) // could be a real34
+#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26)) // could be a real34
 
-#define TMP_STR_LENGTH                          3000
-#define ERROR_MESSAGE_LENGTH                     512
-#define DISPLAY_VALUE_LEN                         80
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
 #define NUMBER_OF_GLYPH_ROWS                     100 // Used in the font browser application
 
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 
+#define FAST_SCREEN_REFRESH_PERIOD               100 // in milliseconds
 #define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
+#define KEY_AUTOREPEAT_FIRST_PERIOD              400 // in milliseconds
+#define KEY_AUTOREPEAT_PERIOD                    200 // in milliseconds
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
-#define WP43S_NULL                             65535 // NULL pointer
+//#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
 #define CONFIG_SIZE            TO_BLOCKS(sizeof(dtConfigDescriptor_t))
 
+// Type of constant stored in a program
+#define BINARY_SHORT_INTEGER                       1
+#define BINARY_LONG_INTEGER                        2
+#define BINARY_REAL34                              3
+#define BINARY_COMPLEX34                           4
+#define BINARY_DATE                                5
+#define BINARY_TIME                                6
+#define STRING_SHORT_INTEGER                       7
+#define STRING_LONG_INTEGER                        8
+#define STRING_REAL34                              9
+#define STRING_COMPLEX34                          10
+#define STRING_TIME                               11
+#define STRING_DATE                               12
 
+// OP parameter special values
+#define VALUE_0                                  251
+#define VALUE_1                                  252
+#define STRING_LABEL_VARIABLE                    253
+#define INDIRECT_REGISTER                        254
+#define INDIRECT_VARIABLE                        255
+
+// OP parameter type
+#define PARAM_DECLARE_LABEL                        1
+#define PARAM_LABEL                                2
+#define PARAM_REGISTER                             3
+#define PARAM_FLAG                                 4
+#define PARAM_NUMBER_8                             5
+#define PARAM_NUMBER_16                            6
+#define PARAM_COMPARE                              7
+
+#define CHECK_INTEGER                              0
+#define CHECK_INTEGER_EVEN                         1
+#define CHECK_INTEGER_ODD                          2
+#define CHECK_INTEGER_FP                           3
+
+#define CHECK_VALUE_COMPLEX                        0
+#define CHECK_VALUE_REAL                           1
+#define CHECK_VALUE_POSITIVE_ZERO                  2
+#define CHECK_VALUE_NEGATIVE_ZERO                  3
+#define CHECK_VALUE_SPECIAL                        4
+#define CHECK_VALUE_NAN                            5
+#define CHECK_VALUE_INFINITY                       6
+
+#define OPMOD_MULTIPLY                             0
+#define OPMOD_POWER                                1
+
+#define ORTHOPOLY_HERMITE_H                        0
+#define ORTHOPOLY_HERMITE_HE                       1
+#define ORTHOPOLY_LAGUERRE_L                       2
+#define ORTHOPOLY_LAGUERRE_L_ALPHA                 3
+#define ORTHOPOLY_LEGENDRE_P                       4
+#define ORTHOPOLY_CHEBYSHEV_T                      5
+#define ORTHOPOLY_CHEBYSHEV_U                      6
+
+#define QF_NEWTON_F                                0
+#define QF_NEWTON_POISSON                          1
+#define QF_NEWTON_BINOMIAL                         2
+#define QF_NEWTON_GEOMETRIC                        3
+
+#ifndef DMCP_BUILD
+  #define LCD_SET_VALUE                            0 // Black pixel
+  #define LCD_EMPTY_VALUE                        255 // White (or empty) pixel
+  #define TO_QSPI
+#else // DMCP_BUILD
+  #define setBlackPixel(x, y)                bitblt24(x, 1, y, 1, BLT_OR,   BLT_NONE)
+  #define setWhitePixel(x, y)                bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE)
+  #define beep(frequence, length)            {while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(frequence * 1000); sys_delay(length); stop_buzzer();}
+  #define TO_QSPI                            __attribute__ ((section(".qspi")))
+#endif // !DMCP_BUILD
 
 
 //******************************
@@ -569,12 +686,13 @@
 #define flipSystemFlag(sf)                   { systemFlags ^=  ((uint64_t)1 << (sf & 0x3fff)); systemFlagAction(sf, 2); }
 #define shortIntegerIsZero(op)               (((*(uint64_t *)(op)) == 0) || (shortIntegerMode == SIM_SIGNMT && (((*(uint64_t *)(op)) == 1u<<((uint64_t)shortIntegerWordSize-1)))))
 #define getStackTop()                        (getSystemFlag(FLAG_SSIZE8) ? REGISTER_D : REGISTER_T)
-#define freeRegisterData(regist)             freeWp43s((void *)getRegisterDataPointer(regist), TO_BYTES(getRegisterFullSize(regist)))
+#define freeRegisterData(regist)             freeWp43s((void *)getRegisterDataPointer(regist), getRegisterFullSize(regist))
 #define storeToDtConfigDescriptor(config)    (configToStore->config = config)
 #define recallFromDtConfigDescriptor(config) (config = configToRecall->config)
 #define getRecalledSystemFlag(sf)            ((configToRecall->systemFlags &   ((uint64_t)1 << (sf & 0x3fff))) != 0)
 #define TO_BLOCKS(n)                         (((n) + 3) >> 2)
 #define TO_BYTES(n)                          ((n) << 2)
+#define WP43S_NULL                           65535 // NULL pointer
 #define TO_PCMEMPTR(p)                       ((void *)((p) == WP43S_NULL ? NULL : ram + (p)))
 #define TO_WP43SMEMPTR(p)                    ((p) == NULL ? WP43S_NULL : (uint16_t)((dataBlock_t *)(p) - ram))
 #define min(a,b)                             ((a)<(b)?(a):(b))
@@ -587,21 +705,28 @@
 #define RADIX34_MARK_CHAR                    (getSystemFlag(FLAG_DECIMP) ? '.'       : ',')
 #define RADIX34_MARK_STRING                  (getSystemFlag(FLAG_DECIMP) ? "."       : ",")
 #define PRODUCT_SIGN                         (getSystemFlag(FLAG_MULTx)  ? STD_CROSS : STD_DOT)
-
+#define clearScreen()                        lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE)
+#define currentReturnProgramNumber           (currentSubroutineLevelData[0].returnProgramNumber)
+#define currentReturnLocalStep               (currentSubroutineLevelData[0].returnLocalStep)
+#define currentNumberOfLocalFlags            (currentSubroutineLevelData[1].numberOfLocalFlags)
+#define currentNumberOfLocalRegisters        (currentSubroutineLevelData[1].numberOfLocalRegisters)
+#define currentSubroutineLevel               (currentSubroutineLevelData[1].subroutineLevel)
+#define currentPtrToNextLevel                (currentSubroutineLevelData[2].ptrToNextLevel)
+#define currentPtrToPreviousLevel            (currentSubroutineLevelData[2].ptrToPreviousLevel)
 
 //************************
 //* Macros for debugging *
 //************************
 #define TEST_REG(r, comment) { \
-                               if(reg[r].dataPointer >= 500) { \
+                               if(globalRegister[r].dataPointer >= 500) { \
                                  uint32_t a, b; \
                                  a = 1; \
                                  b = 0; \
-                                 printf("\n=====> BAD  REGISTER %d DATA POINTER: %u <===== %s\n", r, reg[r].dataPointer, comment); \
-                                 reg[r].dataType = a/b; \
+                                 printf("\n=====> BAD  REGISTER %d DATA POINTER: %u <===== %s\n", r, globalRegister[r].dataPointer, comment); \
+                                 globalRegister[r].dataType = a/b; \
                                } \
                                else { \
-                                 printf("\n=====> good register %d data pointer: %u <===== %s\n", r, reg[r].dataPointer, comment); \
+                                 printf("\n=====> good register %d data pointer: %u <===== %s\n", r, globalRegister[r].dataPointer, comment); \
                                } \
                              }
 

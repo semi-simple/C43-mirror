@@ -18,8 +18,9 @@
  * \file matrix.c
  ***********************************************/
 
- #include "wp43s.h"
+#include "wp43s.h"
 
+#ifndef TESTSUITE_BUILD
 real34Matrix_t       *openMatrixMIMPointer;
 bool_t                matEditMode;
 
@@ -281,5 +282,4 @@ void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
 
   longIntegerFree(tmp_lgInt);
 }
-
-
+#endif

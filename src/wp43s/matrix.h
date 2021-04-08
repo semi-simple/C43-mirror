@@ -18,18 +18,20 @@
  * \file matrix.h
  ***********************************************/
 
-#define MATRIX_LINE_WIDTH_LARGE      40
-//#define MATRIX_CHAR_LEN              30
-
-void              fnNewMatrix           (uint16_t unusedParamButMandatory);
-void              fnEditMatrix          (uint16_t unusedParamButMandatory);
-void showMatrixEditor(void);
-void mimEnter(void);
-void mimAddNumber(void);
-void storeMatrixToXRegister(real34Matrix_t *matrix);
-void getMatrixFromRegister(calcRegister_t regist);
-int16_t getIRegisterAsInt(bool_t asArrayPointer);
-int16_t getJRegisterAsInt(bool_t asArrayPointer);
-void setIRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
-void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
-//real34Matrix_t * getMatrixFromRegister(calcRegister_t regist);
+#ifndef TESTSUITE_BUILD
+  #define MATRIX_LINE_WIDTH_LARGE      40
+  //#define MATRIX_CHAR_LEN              30
+  
+  void              fnNewMatrix           (uint16_t unusedParamButMandatory);
+  void              fnEditMatrix          (uint16_t unusedParamButMandatory);
+  void showMatrixEditor(void);
+  void mimEnter(void);
+  void mimAddNumber(void);
+  void storeMatrixToXRegister(real34Matrix_t *matrix);
+  void getMatrixFromRegister(calcRegister_t regist);
+  int16_t getIRegisterAsInt(bool_t asArrayPointer);
+  int16_t getJRegisterAsInt(bool_t asArrayPointer);
+  void setIRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
+  void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
+  //real34Matrix_t * getMatrixFromRegister(calcRegister_t regist);
+#endif // TESTSUITE_BUILD

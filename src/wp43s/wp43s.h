@@ -134,6 +134,8 @@
     #define addItemToBuffer fnNop
     #define fnOff           fnNop
     #define fnAim           fnNop
+    #define fnNewMatrix     fnNop
+    #define fnEditMatrix    fnNop
     #define registerBrowser fnNop
     #define flagBrowser     fnNop
     #define fontBrowser     fnNop

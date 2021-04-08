@@ -804,8 +804,8 @@ uint16_t getRegisterFullSize(calcRegister_t regist) {
     case dtTime:            return REAL34_SIZE;
     case dtDate:            return REAL34_SIZE;
     case dtString:          return getRegisterDataPointer(regist)->dataMaxLength + 1;
-    case dtReal34Matrix:    return TO_BLOCKS((getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns) * sizeof(real34_t)) + TO_BLOCKS(sizeof(dataBlock_t)); break;
-    case dtComplex34Matrix: return TO_BLOCKS((getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns) * sizeof(complex34_t)) + TO_BLOCKS(sizeof(dataBlock_t)); break;
+    case dtReal34Matrix:    return TO_BLOCKS((getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns) * sizeof(real34_t)) + TO_BLOCKS(sizeof(dataBlock_t)); break;
+    case dtComplex34Matrix: return TO_BLOCKS((getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns) * sizeof(complex34_t)) + TO_BLOCKS(sizeof(dataBlock_t)); break;
     case dtShortInteger:    return SHORT_INTEGER_SIZE;
     case dtReal34:          return REAL34_SIZE;
     case dtComplex34:       return COMPLEX34_SIZE;

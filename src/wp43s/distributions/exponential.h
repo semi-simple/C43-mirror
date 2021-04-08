@@ -15,21 +15,15 @@
  */
 
 /********************************************//**
- * \file distributions.h
+ * \file exponential.h
  ***********************************************/
 
+void fnExponentialP  (uint16_t unusedButMandatoryParameter);
+void fnExponentialL  (uint16_t unusedButMandatoryParameter);
+void fnExponentialR  (uint16_t unusedButMandatoryParameter);
+void fnExponentialI  (uint16_t unusedButMandatoryParameter);
 
-
-#include "binomial.h"
-#include "cauchy.h"
-#include "chi2.h"
-#include "exponential.h"
-#include "f.h"
-#include "geometric.h"
-#include "hyper.h"
-#include "logistic.h"
-#include "negBinom.h"
-#include "normal.h"
-#include "poisson.h"
-#include "t.h"
-#include "weibull.h"
+void WP34S_Pdf_Expon (const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext);
+void WP34S_Cdfu_Expon(const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext);
+void WP34S_Cdf_Expon (const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext);
+void WP34S_Qf_Expon  (const real_t *x, const real_t *lambda, real_t *res, realContext_t *realContext);

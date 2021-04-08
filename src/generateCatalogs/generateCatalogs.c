@@ -115,9 +115,9 @@ int main(int argc, char* argv[]) {
     }
   #endif // __APPLE__
 
-  catalogFile = fopen("src/wp43s/softmenuCatalogs.h", "wb");
+  catalogFile = fopen("../../src/wp43s/softmenuCatalogs.h", "wb");
   if(catalogFile == NULL) {
-    fprintf(stderr, "Cannot create file src/wp43s/softmenuCatalogs.h\n");
+    fprintf(stderr, "Cannot create file ../../src/wp43s/softmenuCatalogs.h\n");
     exit(1);
   }
 

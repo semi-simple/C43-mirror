@@ -773,9 +773,9 @@ int main(int argc, char* argv[]) {
   generateAllConstants();
 
 
-  constantsH = fopen("src/wp43s/constantPointers.h", "wb");
+  constantsH = fopen("../../src/wp43s/constantPointers.h", "wb");
   if(constantsH == NULL) {
-    fprintf(stderr, "Cannot create file src/wp43s/constantPointers.h\n");
+    fprintf(stderr, "Cannot create file ../../src/wp43s/constantPointers.h\n");
     exit(1);
   }
 
@@ -811,9 +811,9 @@ int main(int argc, char* argv[]) {
 
 
 
-  constantsC = fopen("src/wp43s/constantPointers.c", "wb");
+  constantsC = fopen("../../src/wp43s/constantPointers.c", "wb");
   if(constantsC == NULL) {
-    fprintf(stderr, "Cannot create file src/wp43s/constantPointers.c\n");
+    fprintf(stderr, "Cannot create file ../../src/wp43s/constantPointers.c\n");
     exit(1);
   }
 

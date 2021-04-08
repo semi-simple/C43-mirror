@@ -5,15 +5,15 @@
 # $? out of date dependency list
 # $* target without extension
 
-GENERATECONSTANTS_APP = generateConstants$(EXE)
-GENERATECATALOGS_APP = generateCatalogs$(EXE)
-GENERATETESTPGMS_APP = generateTestPgms$(EXE)
-TTF2RASTERFONTS_APP = ttf2RasterFonts$(EXE)
+BUILD_DIR = build
+GENERATECONSTANTS_APP = $(BUILD_DIR)/generateConstants/generateConstants$(EXE)
+GENERATECATALOGS_APP = $(BUILD_DIR)/generateCatalogs/generateCatalogs$(EXE)
+GENERATETESTPGMS_APP = $(BUILD_DIR)/generateTestPgms/generateTestPgms$(EXE)
+TTF2RASTERFONTS_APP = $(BUILD_DIR)/ttf2RasterFonts/ttf2RasterFonts$(EXE)
 TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
 TESTSUITE_APP = testSuite$(EXE)
 WP43S_APP = wp43s$(EXE)
 EXE =
-BUILD_DIR = build
 
 CC = gcc
 
@@ -134,7 +134,7 @@ GEN_BIN_TESTPGMS         = $(addprefix binaries/dmcp/, testPgms.bin)
 
 GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
 
-STAMP_FILES = .stamp-constantPointers .stamp-rasterFontsData .stamp-softmenuCatalog .stamp-testPgms
+STAMP_FILES = $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-rasterFontsData $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms
 
 vpath %.c dep/decNumberICU src/testSuite src/generateConstants src/generateCatalogs src/generateTestPgms src/ttf2RasterFonts \
           src/wp43s src/wp43s/mathematics src/wp43s/browsers src/wp43s/logicalOps src/wp43s/programming src/wp43s/distributions \
@@ -247,12 +247,12 @@ $(BUILD_DIR)/generateConstants/%.o: %.c | $(BUILD_DIR)/generateConstants
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-.stamp-constantPointers: $(GENERATECONSTANTS_APP)
+$(BUILD_DIR)/.stamp-constantPointers: $(GENERATECONSTANTS_APP)
 	@echo -e "\n====> running $(GENERATECONSTANTS_APP) <===="
 	./$(GENERATECONSTANTS_APP)
 	touch $@
 
-$(GEN_SRC_CONSTANTPOINTERS): .stamp-constantPointers
+$(GEN_SRC_CONSTANTPOINTERS): $(BUILD_DIR)/.stamp-constantPointers
 
 
 
@@ -266,16 +266,16 @@ $(GENERATECATALOGS_APP): $(OBJ_GENERATECATALOGS)
 	@echo -e "\n====> $(GENERATECATALOGS_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_GENERATECATALOGS) -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/generateCatalogs/%.o: %.c .stamp-constantPointers | $(BUILD_DIR)/generateCatalogs
+$(BUILD_DIR)/generateCatalogs/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers | $(BUILD_DIR)/generateCatalogs
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-.stamp-softmenuCatalog: $(GENERATECATALOGS_APP)
+$(BUILD_DIR)/.stamp-softmenuCatalog: $(GENERATECATALOGS_APP)
 	@echo -e "\n====> running $(GENERATECATALOGS_APP) <===="
 	./$(GENERATECATALOGS_APP)
 	touch $@
 
-$(GEN_SRC_SOFTMENUCATALOGS): .stamp-softmenuCatalog
+$(GEN_SRC_SOFTMENUCATALOGS): $(BUILD_DIR)/.stamp-softmenuCatalog
 
 
 
@@ -292,12 +292,12 @@ $(BUILD_DIR)/generateTestPgms/%.o: %.c | $(BUILD_DIR)/generateTestPgms
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-.stamp-testPgms: $(GENERATETESTPGMS_APP)
+$(BUILD_DIR)/.stamp-testPgms: $(GENERATETESTPGMS_APP)
 	@echo -e "\n====> running $(GENERATETESTPGMS_APP) <===="
 	./$(GENERATETESTPGMS_APP)
 	touch $@
 
-$(GEN_BIN_TESTPGMS): .stamp-testPgms
+$(GEN_BIN_TESTPGMS): $(BUILD_DIR)/.stamp-testPgms
 
 
 
@@ -314,14 +314,14 @@ $(BUILD_DIR)/ttf2RasterFonts/%.o: %.c | $(BUILD_DIR)/ttf2RasterFonts
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
-.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
+$(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> running $(TTF2RASTERFONTS_APP) <===="
 	./$(TTF2RASTERFONTS_APP) > /dev/null
 	touch $@
 
-$(BUILD_DIR)/ttf2RasterFonts/rasterFontsData.o: .stamp-rasterFontsData
+$(BUILD_DIR)/ttf2RasterFonts/rasterFontsData.o: $(BUILD_DIR)/.stamp-rasterFontsData
 
-$(GEN_SRC_RASTERFONTSDATA): .stamp-rasterFontsData
+$(GEN_SRC_RASTERFONTSDATA): $(BUILD_DIR)/.stamp-rasterFontsData
 
 
 clean_testTtf2RasterFonts:
@@ -333,7 +333,7 @@ $(TESTTTF2RASTERFONTS_APP): $(OBJ_TESTTTF2RASTERFONTS)
 	@echo -e "\n====> $(TESTTTF2RASTERFONTS_APP): binary/exe <===="
 	$(CC) $(CFLAGS) $(OBJ_TESTTTF2RASTERFONTS) -o $@ $(LDFLAGS)
 
-$(BUILD_DIR)/ttf2RasterFonts/testTtf2RasterFonts.o: .stamp-constantPointers
+$(BUILD_DIR)/ttf2RasterFonts/testTtf2RasterFonts.o: $(BUILD_DIR)/.stamp-constantPointers
 
 
 clean_testSuite:
@@ -346,7 +346,7 @@ $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 	@echo -e "\n====> $(TESTSUITE_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) $(LDFLAGS)
 
-$(BUILD_DIR)/testSuite/%.o: %.c .stamp-constantPointers | $(BUILD_DIR)/testSuite
+$(BUILD_DIR)/testSuite/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers | $(BUILD_DIR)/testSuite
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
 
@@ -361,6 +361,6 @@ $(WP43S_APP): $(OBJ_SIMULATOR)
 	@echo -e "\n====> $(WP43S_APP): binary/exe $@ <===="
 	$(CC) $(CFLAGS) $(OBJ_SIMULATOR) -o $(WP43S_APP) $(LDFLAGS)
 
-$(BUILD_DIR)/simulator/%.o: %.c .stamp-constantPointers .stamp-softmenuCatalog .stamp-testPgms | $(BUILD_DIR)/simulator
+$(BUILD_DIR)/simulator/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/simulator
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) $(INC) -c -o $@ $<

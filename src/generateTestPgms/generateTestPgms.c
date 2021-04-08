@@ -11368,9 +11368,9 @@ int main(int argc, char* argv[]) {
   *(currentStep++) = 255; // .END.
   *(currentStep++) = 255; // .END.
 
-  testPgms = fopen("binaries/dmcp/testPgms.bin", "wb");
+  testPgms = fopen("../../binaries/dmcp/testPgms.bin", "wb");
   if(testPgms == NULL) {
-    fprintf(stderr, "Cannot create file binaries/dmcp/testPgms.bin\n");
+    fprintf(stderr, "Cannot create file ../../binaries/dmcp/testPgms.bin\n");
     exit(1);
   }
 

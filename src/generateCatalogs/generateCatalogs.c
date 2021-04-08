@@ -99,25 +99,9 @@ int main(int argc, char* argv[]) {
     chdir(argv[0]);
   #endif // CODEBLOCKS_OVER_SCORE
 
-  #ifdef __APPLE__
-    // we take the directory where the application is as the root for this application.
-    // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-    if(argc>=1) {
-      char *curdir = malloc(1000);
-      // find last /:
-      char *s = strrchr(argv[0], '/');
-      if(s != 0) {
-        // take the directory before the appname:
-        strncpy(curdir, argv[0], s-argv[0]);
-        chdir(curdir);
-        free(curdir);
-      }
-    }
-  #endif // __APPLE__
-
-  catalogFile = fopen("../../src/wp43s/softmenuCatalogs.h", "wb");
+  catalogFile = fopen("src/wp43s/softmenuCatalogs.h", "wb");
   if(catalogFile == NULL) {
-    fprintf(stderr, "Cannot create file ../../src/wp43s/softmenuCatalogs.h\n");
+    fprintf(stderr, "Cannot create file src/wp43s/softmenuCatalogs.h\n");
     exit(1);
   }
 

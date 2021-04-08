@@ -734,22 +734,6 @@ int main(int argc, char* argv[]) {
     chdir(argv[0]);
   #endif // CODEBLOCKS_OVER_SCORE
 
-  #ifdef __APPLE__
-    // we take the directory where the application is as the root for this application.
-    // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-    if(argc>=1) {
-      char *curdir = malloc(1000);
-      // find last /:
-      char *s = strrchr(argv[0], '/');
-      if(s != 0) {
-        // take the directory before the appname:
-        strncpy(curdir, argv[0], s-argv[0]);
-        chdir(curdir);
-        free(curdir);
-      }
-    }
-   #endif // __APPLE__
-
   decContextDefault(&ctxtReal34,   DEC_INIT_DECQUAD);
   decContextDefault(&ctxtReal39,   DEC_INIT_DECQUAD);
   decContextDefault(&ctxtReal51,   DEC_INIT_DECQUAD);
@@ -773,9 +757,9 @@ int main(int argc, char* argv[]) {
   generateAllConstants();
 
 
-  constantsH = fopen("../../src/wp43s/constantPointers.h", "wb");
+  constantsH = fopen("src/wp43s/constantPointers.h", "wb");
   if(constantsH == NULL) {
-    fprintf(stderr, "Cannot create file ../../src/wp43s/constantPointers.h\n");
+    fprintf(stderr, "Cannot create file src/wp43s/constantPointers.h\n");
     exit(1);
   }
 
@@ -811,9 +795,9 @@ int main(int argc, char* argv[]) {
 
 
 
-  constantsC = fopen("../../src/wp43s/constantPointers.c", "wb");
+  constantsC = fopen("src/wp43s/constantPointers.c", "wb");
   if(constantsC == NULL) {
-    fprintf(stderr, "Cannot create file ../../src/wp43s/constantPointers.c\n");
+    fprintf(stderr, "Cannot create file src/wp43s/constantPointers.c\n");
     exit(1);
   }
 

@@ -75,14 +75,23 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnEditMatrix(uint16_t unusedParamButMandatory) {
-  calcMode = CM_MIM;
+  if((getRegisterDataType(REGISTER_X) == dtReal34Matrix) || (getRegisterDataType(REGISTER_X) == dtComplex34Matrix)) {
+    calcMode = CM_MIM;
 
-  getMatrixFromRegister(REGISTER_X);
+    getMatrixFromRegister(REGISTER_X);
 
-  showSoftmenu(-MNU_M_EDIT);
-  setIRegisterAsInt(true, 0);
-  setJRegisterAsInt(true, 0);
-  showMatrixEditor();
+    showSoftmenu(-MNU_M_EDIT);
+    setIRegisterAsInt(true, 0);
+    setJRegisterAsInt(true, 0);
+    showMatrixEditor();
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType % " PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnEditMatrix:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
 }
 
 

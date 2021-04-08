@@ -283,10 +283,34 @@
 		<Unit filename="src/testSuite/beta.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/binomial_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/binomial_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/binomial_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/binomial_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/bn.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/bn_star.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cauchy_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cauchy_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cauchy_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/cauchy_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/ceil.txt">
@@ -409,6 +433,18 @@
 		<Unit filename="src/testSuite/expmod.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/exponential_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/exponential_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/exponential_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/exponential_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/expt.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -457,10 +493,34 @@
 		<Unit filename="src/testSuite/gd.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/geometric_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/geometric_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/geometric_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/geometric_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/hermite.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/hermite_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hypergeometric_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hypergeometric_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hypergeometric_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hypergeometric_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/idiv.txt">
@@ -515,6 +575,30 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/log2.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logistic_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logistic_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logistic_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logistic_r.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logNormal_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logNormal_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logNormal_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logNormal_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/logxy.txt">
@@ -577,6 +661,18 @@
 		<Unit filename="src/testSuite/multiplication_time.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/negBinomial_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/negBinomial_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/negBinomial_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/negBinomial_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/neighb.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -635,6 +731,18 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/percentT.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/poisson_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/poisson_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/poisson_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/poisson_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/polarToRectangular.txt">
@@ -804,6 +912,18 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/wday.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/weibull_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/weibull_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/weibull_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/weibull_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/xToDate.txt">
@@ -1022,6 +1142,28 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/distributions/binomial.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/binomial.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/cauchy.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/cauchy.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/distributions/chi2.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1038,6 +1180,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/distributions/exponential.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/exponential.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/distributions/f.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1045,6 +1198,50 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/distributions/f.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/geometric.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/geometric.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/hyper.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/hyper.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/logistic.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/logistic.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/negBinom.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/negBinom.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1060,6 +1257,17 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/distributions/poisson.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/poisson.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/distributions/t.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1067,6 +1275,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/distributions/t.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/weibull.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/distributions/weibull.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />

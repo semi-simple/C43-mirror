@@ -28,4 +28,4 @@ void WP34S_Cdfu_F(const real_t *x, const real_t *d1, const real_t *d2, real_t *r
 void WP34S_Cdf_F (const real_t *x, const real_t *d1, const real_t *d2, real_t *res, realContext_t *realContext);
 void WP34S_Qf_F  (const real_t *x, const real_t *d1, const real_t *d2, real_t *res, realContext_t *realContext);
 
-void WP34S_Qf_Newton(uint32_t r_dist, const real_t *target, const real_t *estimate, const real_t *p1, const real_t *p2, real_t *res, realContext_t *realContext);
+void WP34S_Qf_Newton(uint32_t r_dist, const real_t *target, const real_t *estimate, const real_t *p1, const real_t *p2, const real_t *p3, real_t *res, realContext_t *realContext);

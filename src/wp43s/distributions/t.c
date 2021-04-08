@@ -26,7 +26,7 @@ static bool_t checkParamT(real_t *x, real_t *i) {
      || ((getRegisterDataType(REGISTER_I) != dtReal34) && (getRegisterDataType(REGISTER_I) != dtLongInteger))) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "Values in register X and J must be of the real or long integer type");
+        sprintf(errorMessage, "Values in register X and I must be of the real or long integer type");
         moreInfoOnError("In function checkParamT:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;

@@ -187,7 +187,7 @@ bool_t replaceRadix(char *instr) {
 }
 
 
-void realToFloat(real_t *vv, graphtype *v) {
+void realToFloat(const real_t *vv, graphtype *v) {
   char tmpString1[100];                      //allow for 75 digits
   realToString(vv, tmpString1);
   replaceRadix(tmpString1);
@@ -198,7 +198,7 @@ void realToFloat(real_t *vv, graphtype *v) {
 }
 
 
-void realToDouble(real_t *vv, double *v) {
+void realToDouble(const real_t *vv, double *v) {
   char tmpString1[100];                      //allow for 75 digits
   realToString(vv, tmpString1);
   replaceRadix(tmpString1);

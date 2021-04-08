@@ -60,20 +60,22 @@ else
 	CFLAGS += -O2
 endif
 
+CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD
+
 ifeq ($(RASPBERRY),YES32)
-        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -DOS32BIT -DRASPBERRY -MMD
+        CFLAGS += -DOS32BIT -DRASPBERRY
 endif
 
 ifeq ($(RASPBERRY),YES64)
-        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -DOS64BIT -DRASPBERRY -MMD -fshort-enums
+        CFLAGS += -DOS64BIT -DRASPBERRY -fshort-enums
 endif
 
 ifeq ($(RASPBERRY),NO32)
-        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -DOS32BIT -MMD
+        CFLAGS += -DOS32BIT
 endif
 
 ifeq ($(RASPBERRY),NO64)
-        CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -DOS64BIT -MMD -fshort-enums -m64
+        CFLAGS += -DOS64BIT -fshort-enums -m64
         LDFLAGS += -m64
 endif
 
@@ -92,8 +94,10 @@ SRC_WP43S                = $(SRC_DECIMAL) \
                            $(wildcard src/wp43s/distributions/*.c) \
                            $(wildcard src/wp43s/ui/*.c)
 
-OBJ_WP43S                = $(addprefix $(BUILD_DIR)/simulator/,$(notdir $(SRC_WP43S:.c=.o)))
-DEPS_WP43S               = $(addprefix $(BUILD_DIR)/simulator/,$(notdir $(SRC_WP43S:.c=.d)))
+SRC_SIMULATOR            = $(SRC_WP43S) \
+                           $(wildcard src/wp43s-gtk/*.c)
+OBJ_SIMULATOR            = $(addprefix $(BUILD_DIR)/simulator/,$(notdir $(SRC_SIMULATOR:.c=.o)))
+DEPS_SIMULATOR           = $(addprefix $(BUILD_DIR)/simulator/,$(notdir $(SRC_SIMULATOR:.c=.d)))
 
 SRC_TESTSUITE            = $(SRC_WP43S) \
                            $(addprefix src/testSuite/, testSuite.c)
@@ -134,7 +138,7 @@ STAMP_FILES = .stamp-constantPointers .stamp-rasterFontsData .stamp-softmenuCata
 
 vpath %.c dep/decNumberICU src/testSuite src/generateConstants src/generateCatalogs src/generateTestPgms src/ttf2RasterFonts \
           src/wp43s src/wp43s/mathematics src/wp43s/browsers src/wp43s/logicalOps src/wp43s/programming src/wp43s/distributions \
-          src/wp43s/ui
+          src/wp43s/ui src/wp43s-gtk
 
 all: 	wp43s
 ifeq '$(detected_OS)' 'Darwin'
@@ -351,11 +355,11 @@ $(BUILD_DIR)/testSuite/%.o: %.c .stamp-constantPointers | $(BUILD_DIR)/testSuite
 clean_wp43s:
 	rm -rf $(BUILD_DIR)/simulator
 
--include $(DEPS_WP43S)
+-include $(DEPS_SIMULATOR)
 
-$(WP43S_APP): $(OBJ_WP43S)
+$(WP43S_APP): $(OBJ_SIMULATOR)
 	@echo -e "\n====> $(WP43S_APP): binary/exe $@ <===="
-	$(CC) $(CFLAGS) $(OBJ_WP43S) -o $(WP43S_APP) $(LDFLAGS)
+	$(CC) $(CFLAGS) $(OBJ_SIMULATOR) -o $(WP43S_APP) $(LDFLAGS)
 
 $(BUILD_DIR)/simulator/%.o: %.c .stamp-constantPointers .stamp-softmenuCatalog .stamp-testPgms | $(BUILD_DIR)/simulator
 	@echo -e "\n====> $<: $@ <===="

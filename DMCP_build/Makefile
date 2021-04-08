@@ -50,25 +50,10 @@ C_SOURCES += $(wildcard ../src/wp43s/*.c) \
              $(wildcard ../src/wp43s/distributions/*.c) \
              $(wildcard ../src/wp43s/ui/*.c)
 
-# C++ sources
-#CXX_SOURCES += src/xxx.cc
-
-# ASM sources
-#ASM_SOURCES += src/xxx.s
-
-# Additional defines
-#C_DEFS += -DXXX
-
-# Intel library related defines
-#C_DEFS += -DDECIMAL_CALL_BY_REFERENCE=1 -DDECIMAL_GLOBAL_ROUNDING=1 \
-#  -DDECIMAL_GLOBAL_ROUNDING_ACCESS_FUNCTIONS=1 -DDECIMAL_GLOBAL_EXCEPTION_FLAGS=1 \
-#  -DDECIMAL_GLOBAL_EXCEPTION_FLAGS_ACCESS_FUNCTIONS=1
-
 # WP43S related defines
 C_DEFS += -DDMCP_BUILD -DOS32BIT -DUSE_HAL_DRIVER -DSTM32L476xx -DARM
 
 # Libraries
-#LIBS += lib/gcc111libbid_hard.a
 GMPLIB = ../dep/gmp-6.2.0/.libs/libgmp.a
 LIBS += $(GMPLIB)
 
@@ -77,7 +62,6 @@ LIBS += $(GMPLIB)
 # binaries
 #######################################
 CC = arm-none-eabi-gcc
-CXX = arm-none-eabi-g++
 AS = arm-none-eabi-gcc -x assembler-with-cpp
 OBJCOPY = arm-none-eabi-objcopy
 AR = arm-none-eabi-ar
@@ -89,29 +73,19 @@ BIN = $(OBJCOPY) -O binary -S
 # CFLAGS
 #######################################
 # macros for gcc
-AS_DEFS =
 C_DEFS += -D__weak="__attribute__((weak))" -D__packed="__attribute__((__packed__))"
-AS_INCLUDES =
-
-
 CPUFLAGS += -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=nosys.specs
 
-
 # compile gcc flags
-ASFLAGS = $(CPUFLAGS) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+ASFLAGS = $(CPUFLAGS) $(OPT) -Wall -fdata-sections -ffunction-sections
 CFLAGS  = $(CPUFLAGS) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 CFLAGS += -Wno-misleading-indentation
-#DBGFLAGS = -g
-DBGFLAGS =
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -O0 -DDEBUG
 else
 CFLAGS += -O2 -s -fomit-frame-pointer
 endif
-
-CFLAGS  += $(DBGFLAGS)
-LDFLAGS += $(DBGFLAGS)
 
 # Generate dependency information
 CFLAGS += -MD -MP -MF $(BUILD_DIR)/.dep/$(@F).d
@@ -141,9 +115,6 @@ $(BUILD_DIR)/forcecrc32: $(BUILD_DIR)
 # list of objects
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
-# C++ sources
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(CXX_SOURCES:.cc=.o)))
-vpath %.cc $(sort $(dir $(CXX_SOURCES)))
 # list of ASM program objects
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(ASM_SOURCES:.s=.o)))
 vpath %.s $(sort $(dir $(ASM_SOURCES)))
@@ -168,9 +139,6 @@ $(GMPLIB): ../dep/gmp-6.2.0
 
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
-
-$(BUILD_DIR)/%.o: %.cc Makefile | $(BUILD_DIR)
-	$(CXX) -c $(CXXFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.cc=.lst)) $< -o $@
 
 $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 	$(AS) -c $(CFLAGS) $< -o $@

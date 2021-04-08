@@ -64,18 +64,14 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
   //Allocate Memory for Matrix
   uint32_t reg_size;
   reg_size = (rows * cols) * sizeof(real34_t) + sizeof(dataBlock_t);
-  real34Matrix_t* matrix = malloc(reg_size);
+  real34Matrix_t* matrix = allocWp43s(TO_BLOCKS(reg_size));
 
   matrix->header.matrixColumns = cols;
   matrix->header.matrixRows = rows;
 
   //Initialize with 0.
   for(uint32_t i = 0; i < rows * cols; i++) {
-    int32_t zero_int = 0;
-    real34_t zero;
-    //real34_t* zero = malloc(REAL34_SIZE);
-    int32ToReal34(zero_int, &zero);
-    matrix->matrixElements[i] = zero;
+    real34Copy(const34_0, &matrix->matrixElements[i]);
   }
 
   //Drop X_Register and Y_Register
@@ -100,12 +96,14 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
     showSoftmenu(-MNU_M_EDIT);
     setIRegisterAsInt(true, 0);
     setJRegisterAsInt(true, 0);
+    aimBuffer[0] = 0;
+    nimBufferDisplay[0] = 0;
     showMatrixEditor();
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #ifdef PC_BUILD
-    sprintf(errorMessage, "DataType % " PRIu32, getRegisterDataType(REGISTER_X));
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
     moreInfoOnError("In function fnEditMatrix:", errorMessage, "is not a matrix.", "");
     #endif
   }
@@ -135,15 +133,19 @@ void showMatrixEditor() {
   //tbd: Implement right behavior (add row, add col on change)
   if (!getSystemFlag(FLAG_GROW)) {
     if (getIRegisterAsInt(true) < 0) {
-      setIRegisterAsInt(true, rows);
+      setIRegisterAsInt(true, rows - 1);
+      setJRegisterAsInt(true, (getJRegisterAsInt(true) == 0) ? cols - 1 : getJRegisterAsInt(true) - 1);
     } else if (getIRegisterAsInt(true) == rows) {
       setIRegisterAsInt(true, 0);
+      setJRegisterAsInt(true, (getJRegisterAsInt(true) == cols - 1) ? 0 : getJRegisterAsInt(true) + 1);
     }
 
     if (getJRegisterAsInt(true) < 0) {
-      setJRegisterAsInt(true, rows);
+      setJRegisterAsInt(true, cols - 1);
+      setIRegisterAsInt(true, (getIRegisterAsInt(true) == 0) ? rows - 1 : getIRegisterAsInt(true) - 1);
     } else if (getJRegisterAsInt(true) == cols) {
       setJRegisterAsInt(true, 0);
+      setIRegisterAsInt(true, (getIRegisterAsInt(true) == rows - 1) ? 0 : getIRegisterAsInt(true) + 1);
     }
   }
   else {
@@ -171,15 +173,67 @@ void showMatrixEditor() {
     }
   }
 
-  sprintf(tmpString, "%" PRIi16";%" PRIi16"= ", matSelRow+1, matSelCol+1);
-  showString(tmpString, &numericFont, 1, Y_POS + NUMERIC_FONT_HEIGHT, vmNormal, true, false);
+  sprintf(tmpString, "%" PRIi16";%" PRIi16"= %s", matSelRow+1, matSelCol+1, nimBufferDisplay);
+  if(aimBuffer[0] == 0)
+    real34ToDisplayString(&openMatrixMIMPointer->matrixElements[matSelRow*cols+matSelCol], amNone, &tmpString[strlen(tmpString)], &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
+  xCursor = showString(tmpString, &numericFont, 1, Y_POS + NUMERIC_FONT_HEIGHT, vmNormal, true, false) + 3;
+  yCursor = Y_POSITION_OF_NIM_LINE;
 }
 
 void mimEnter(void) {
+  int cols = openMatrixMIMPointer->header.matrixColumns;
+  int16_t row = getIRegisterAsInt(true);
+  int16_t col = getJRegisterAsInt(true);
+
+  if(aimBuffer[0] != 0) {
+    stringToReal34(aimBuffer, &openMatrixMIMPointer->matrixElements[row * cols + col]);
+
+    aimBuffer[0] = 0;
+    nimBufferDisplay[0] = 0;
+    hideCursor();
+    cursorEnabled = false;
+
+    fnDrop(0);
+    storeMatrixToXRegister(openMatrixMIMPointer);
+    setSystemFlag(FLAG_ASLIFT);
+  }
 }
 
-void mimAddNumber(void) {
-
+void mimAddNumber(int16_t item) {
+  switch(item) {
+    case ITM_0 :
+    case ITM_1 :
+    case ITM_2 :
+    case ITM_3 :
+    case ITM_4 :
+    case ITM_5 :
+    case ITM_6 :
+    case ITM_7 :
+    case ITM_8 :
+    case ITM_9 :
+      if(aimBuffer[0] == 0) {
+        aimBuffer[0] = '+';
+        aimBuffer[1] = 0;
+        nimNumberPart = NP_INT_10;
+        cursorEnabled = true;
+        cursorFont = &numericFont;
+      }
+      break;
+    case ITM_BACKSPACE :
+      if(aimBuffer[0] == 0) {
+        return;
+      }
+      else if((aimBuffer[0] == '+') && (aimBuffer[1] != 0) && (aimBuffer[2] == 0)) {
+        aimBuffer[1] = 0;
+        hideCursor();
+        cursorEnabled = false;
+      }
+      break;
+    default:
+      return;
+  }
+  addItemToNimBuffer(item);
+  calcMode = CM_MIM;
 }
 
 void storeMatrixToXRegister(real34Matrix_t *matrix) {
@@ -192,8 +246,9 @@ void storeMatrixToXRegister(real34Matrix_t *matrix) {
   //openMatrixMIMPointer = matrix;
   // END WORKING//
 
-  reallocateRegister(REGISTER_X, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(dataBlock_t)), amNone);
-  xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(dataBlock_t)));
+  reallocateRegister(REGISTER_X, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t)) + TO_BLOCKS(sizeof(dataBlock_t)), amNone);
+  xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, sizeof(dataBlock_t));
+  xcopy(REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_X), matrix->matrixElements, (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t));
 }
 
 //real34Matrix_t * getMatrixFromRegister(calcRegister_t regist) {
@@ -203,7 +258,7 @@ void getMatrixFromRegister(calcRegister_t regist) {
 
   if (getRegisterDataType(regist) != dtReal34Matrix) {
     #ifdef PC_BUILD
-    sprintf(errorMessage, "DataType % " PRIu32, getRegisterDataType(regist));
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(regist));
     moreInfoOnError("In function getMatrixFromRegister:", errorMessage, "is not dataType dtRealMatrix.", "");
     #endif
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -232,7 +287,7 @@ void getMatrixFromRegister(calcRegister_t regist) {
   }
   */
 
-  real34Matrix_t* matrix = malloc((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerHeader_t));
+  real34Matrix_t* matrix = allocWp43s(TO_BLOCKS((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerHeader_t)));
 
   matrix->header.matrixColumns = dblock->matrixColumns;
   matrix->header.matrixRows = dblock->matrixRows;
@@ -240,9 +295,9 @@ void getMatrixFromRegister(calcRegister_t regist) {
   int hr = matrix->header.matrixRows;
   int hc = matrix->header.matrixColumns;
 
-  for(int i = 0; i < dblock->matrixColumns * dblock->matrixRows; i++) {
-    matrix->matrixElements[i] = *matrixElem;
-    matrixElem++;
+  for(int i = 0; i < hc * hr; i++) {
+    //matrix->matrixElements[i] = matrixElem[i];
+    real34Copy(&matrixElem[i], &matrix->matrixElements[i]);
   }
 
 

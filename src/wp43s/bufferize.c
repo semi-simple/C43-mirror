@@ -279,15 +279,19 @@
       //Probably wrong place for this function?! Should Arrow be processed in buffercize.c in this case? //Switch statement better.
       else if(calcMode == CM_MIM) {
         if (item == ITM_RIGHT_ARROW) {
+          mimEnter();
           setJRegisterAsInt(true, getJRegisterAsInt(true) + 1);
         }
         else if (item == ITM_LEFT_ARROW) {
+          mimEnter();
           setJRegisterAsInt(true, getJRegisterAsInt(true) - 1);
         }
         else if (item == ITM_UP_ARROW) {
+          mimEnter();
           setIRegisterAsInt(true, getIRegisterAsInt(true) - 1);
         }
         else if (item == ITM_DOWN_ARROW) {
+          mimEnter();
           setIRegisterAsInt(true, getIRegisterAsInt(true) + 1);
         }
         refreshScreen();
@@ -304,7 +308,7 @@
         case ITM_8 :
         case ITM_9 :
 
-        mimAddNumber();
+        mimAddNumber(item);
         break;
 
         }

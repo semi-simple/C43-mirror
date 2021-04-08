@@ -989,6 +989,10 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         addItemToNimBuffer(ITM_BACKSPACE);
         break;
 
+      case CM_MIM:
+        mimAddNumber(ITM_BACKSPACE);
+        break;
+
       //case CM_ASM_OVER_NORMAL:
       //  addItemToBuffer(ITM_BACKSPACE);
       //  break;

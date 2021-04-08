@@ -804,8 +804,8 @@ uint16_t getRegisterFullSize(calcRegister_t regist) {
     case dtTime:            return REAL34_SIZE;
     case dtDate:            return REAL34_SIZE;
     case dtString:          return getRegisterDataPointer(regist)->dataMaxLength + 1;
-    case dtReal34Matrix:    return getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns * REAL34_SIZE + 1;
-    case dtComplex34Matrix: return getRegisterDataPointer(regist)->matrixRows * getRegisterDataPointer(regist)->matrixColumns * COMPLEX34_SIZE + 1;
+    case dtReal34Matrix:    return TO_BLOCKS((getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns) * sizeof(real34_t)) + TO_BLOCKS(sizeof(dataBlock_t)); break;
+    case dtComplex34Matrix: return TO_BLOCKS((getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns) * sizeof(complex34_t)) + TO_BLOCKS(sizeof(dataBlock_t)); break;
     case dtShortInteger:    return SHORT_INTEGER_SIZE;
     case dtReal34:          return REAL34_SIZE;
     case dtComplex34:       return COMPLEX34_SIZE;
@@ -1012,8 +1012,8 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
       case dtTime:            sizeInBlocks = REAL34_SIZE;                                           break;
       case dtDate:            sizeInBlocks = REAL34_SIZE;                                           break;
       case dtString:          sizeInBlocks = getRegisterDataPointer(sourceRegister)->dataMaxLength; break;
-      case dtReal34Matrix:    sizeInBlocks = getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns * REAL34_SIZE + 1;    break;
-      case dtComplex34Matrix: sizeInBlocks = getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns * COMPLEX34_SIZE + 1; break;
+      case dtReal34Matrix:    sizeInBlocks = TO_BLOCKS((getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns) * sizeof(real34_t)) + TO_BLOCKS(sizeof(dataBlock_t)); break;
+      case dtComplex34Matrix: sizeInBlocks = TO_BLOCKS((getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns) * sizeof(complex34_t)) + TO_BLOCKS(sizeof(dataBlock_t)); break;
       case dtShortInteger:    sizeInBlocks = SHORT_INTEGER_SIZE;                                    break;
       case dtReal34:          sizeInBlocks = REAL34_SIZE;                                           break;
       case dtComplex34:       sizeInBlocks = COMPLEX34_SIZE;                                        break;
@@ -1027,7 +1027,19 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
     reallocateRegister(destRegister, getRegisterDataType(sourceRegister), sizeInBlocks, amNone);
   }
 
-  xcopy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), TO_BYTES(getRegisterFullSize(sourceRegister)));
+  switch(getRegisterDataType(sourceRegister)) {
+    case dtReal34Matrix:
+      xcopy(REGISTER_REAL34_MATRIX_DBLOCK(destRegister), REGISTER_REAL34_MATRIX_DBLOCK(sourceRegister), sizeof(dataBlock_t));
+      xcopy(REGISTER_REAL34_MATRIX_M_ELEMENTS(destRegister), REGISTER_REAL34_MATRIX_M_ELEMENTS(sourceRegister),
+        getRegisterDataPointer(sourceRegister)->matrixRows * getRegisterDataPointer(sourceRegister)->matrixColumns * TO_BYTES(REAL34_SIZE));
+      break;
+    //case dtComplex34Matrix:
+      // to be coded
+      //break;
+
+    default:
+      xcopy(REGISTER_DATA(destRegister), REGISTER_DATA(sourceRegister), TO_BYTES(getRegisterFullSize(sourceRegister)));
+  }
   setRegisterTag(destRegister, getRegisterTag(sourceRegister));
 }
 

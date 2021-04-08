@@ -26,7 +26,7 @@
   void              fnEditMatrix          (uint16_t unusedParamButMandatory);
   void showMatrixEditor(void);
   void mimEnter(void);
-  void mimAddNumber(void);
+  void mimAddNumber(int16_t item);
   void storeMatrixToXRegister(real34Matrix_t *matrix);
   void getMatrixFromRegister(calcRegister_t regist);
   int16_t getIRegisterAsInt(bool_t asArrayPointer);

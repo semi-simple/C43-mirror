@@ -201,6 +201,34 @@ void mimEnter(void) {
 
 void mimAddNumber(int16_t item) {
   switch(item) {
+    case ITM_EXPONENT :
+      if(aimBuffer[0] == 0) {
+        aimBuffer[0] = '+';
+        aimBuffer[1] = '1';
+        aimBuffer[2] = '.';
+        aimBuffer[3] = 0;
+        nimNumberPart = NP_REAL_FLOAT_PART;
+        cursorEnabled = true;
+        cursorFont = &numericFont;
+        lastIntegerBase = 0;
+      }
+      else if(nimNumberPart == NP_REAL_FLOAT_PART) {
+        return; // fractional element is unsupported
+      }
+      break;
+
+    case ITM_PERIOD :
+      if(aimBuffer[0] == 0) {
+        aimBuffer[0] = '+';
+        aimBuffer[1] = '0';
+        aimBuffer[2] = 0;
+        nimNumberPart = NP_INT_10;
+        cursorEnabled = true;
+        cursorFont = &numericFont;
+        lastIntegerBase = 0;
+      }
+      break;
+
     case ITM_0 :
     case ITM_1 :
     case ITM_2 :
@@ -217,8 +245,10 @@ void mimAddNumber(int16_t item) {
         nimNumberPart = NP_INT_10;
         cursorEnabled = true;
         cursorFont = &numericFont;
+        lastIntegerBase = 0;
       }
       break;
+
     case ITM_BACKSPACE :
       if(aimBuffer[0] == 0) {
         return;
@@ -229,6 +259,22 @@ void mimAddNumber(int16_t item) {
         cursorEnabled = false;
       }
       break;
+
+    case ITM_CHS :
+      if(aimBuffer[0] == 0) {
+        int cols = openMatrixMIMPointer->header.matrixColumns;
+        int16_t row = getIRegisterAsInt(true);
+        int16_t col = getJRegisterAsInt(true);
+
+        real34ChangeSign(&openMatrixMIMPointer->matrixElements[row * cols + col]);
+
+        fnDrop(0);
+        storeMatrixToXRegister(openMatrixMIMPointer);
+        setSystemFlag(FLAG_ASLIFT);
+        return;
+      }
+      break;
+
     default:
       return;
   }

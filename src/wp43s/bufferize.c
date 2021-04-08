@@ -297,6 +297,9 @@
         refreshScreen();
 
       switch(item) {
+        case ITM_EXPONENT :
+        case ITM_PERIOD :
+
         case ITM_0 :
         case ITM_1 :
         case ITM_2 :
@@ -307,6 +310,8 @@
         case ITM_7 :
         case ITM_8 :
         case ITM_9 :
+
+        case ITM_CHS : // +/-
 
         mimAddNumber(item);
         break;

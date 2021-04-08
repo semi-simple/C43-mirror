@@ -3,7 +3,7 @@
 pgm=$1
 h=${2:-src/qspi_crc.h}
 
-q=../build/dmcp/${pgm}_qspi.bin
+q=build/dmcp/${pgm}_qspi.bin
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
         # Host is Mac: use gstat for GNU version
@@ -34,7 +34,7 @@ else
 fi
 
 nsz=`filesize $q`
-ncrc=0x`bin/crc32 $q`
+ncrc=0x`DMCP_build/bin/crc32 $q`
 
 # Don't 'fix' the CRC because a particular fixed CRC is needed by DMCP
 #if [ $sz != $nsz -o $crc != $ncrc ]; then

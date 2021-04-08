@@ -5,6 +5,8 @@
 # $? out of date dependency list
 # $* target without extension
 
+# Path to aux build scripts
+BIN_DIR = DMCP_build/bin
 BUILD_DIR = build
 GENERATECONSTANTS_APP = $(BUILD_DIR)/generateConstants/generateConstants$(EXE)
 GENERATECATALOGS_APP = $(BUILD_DIR)/generateCatalogs/generateCatalogs$(EXE)
@@ -13,75 +15,125 @@ TTF2RASTERFONTS_APP = $(BUILD_DIR)/ttf2RasterFonts/ttf2RasterFonts$(EXE)
 TESTTTF2RASTERFONTS_APP = testTtf2RasterFonts$(EXE)
 TESTSUITE_APP = testSuite$(EXE)
 WP43S_APP = wp43s$(EXE)
+WP43S_DMCP = WP43S
 EXE =
+
+CFLAGS += -Wextra -Wall -MMD
+SIM_CFLAGS += -std=c11
+DMCP_CFLAGS += -Wno-unused-parameter
+
+C_INCLUDES = -Idep/decNumberICU -Isrc/wp43s -Isrc/testSuite
+DMCP_INCLUDES = -Idep/DMCP_SDK/dmcp -Idep/gmp-6.2.0 -Isrc/wp43s-dmcp
+
+# Simulator CFLAGS and binaries configuration
 
 CC = gcc
 
 ifeq ($(OS),Windows_NT)
   EXE = .exe
-  CFLAGS += -DWIN32
+  SIM_CFLAGS += -DWIN32
   detected_OS := Windows
 else
   UNAME_S := $(shell uname -s)
   ifeq ($(UNAME_S),Linux)
     detected_OS := Linux
-    CFLAGS += -DLINUX
+    SIM_CFLAGS += -DLINUX
   endif
   ifeq ($(UNAME_S),Darwin)
     detected_OS := Darwin
     CC = clang
-    CFLAGS += -DOSX
+    SIM_CFLAGS += -DOSX
     ifneq ($(wildcard /opt/homebrew/.),)
       # Homebrew on Arm Macs installs into /opt/homebrew
-      CFLAGS += -I/opt/homebrew/include
-      LDFLAGS += -L/opt/homebrew/lib
+      SIM_CFLAGS += -I/opt/homebrew/include
+      SIM_LDFLAGS += -L/opt/homebrew/lib
     else
-      CFLAGS += -I/usr/local/include/
-      LDFLAGS += -L/usr/local/lib
+      SIM_CFLAGS += -I/usr/local/include/
+      SIM_LDFLAGS += -L/usr/local/lib
     endif
   endif
 endif
 
 RASPBERRY = $(shell ./onARaspberry)
 
-C_INCLUDES = -Idep/decNumberICU -Isrc/wp43s -Isrc/testSuite
-
 ifeq ($(DEST), gitlab)
-	CFLAGS += -march=x86-64
+	SIM_CFLAGS += -march=x86-64
 else ifeq ($(detected_OS),Darwin)
 	# Don't add -march=native on macOS as it isn't supported in clang on Arm
 else
-	CFLAGS += -march=native
+	SIM_CFLAGS += -march=native
 endif
 
 ifdef DEBUG_WP43S
-	CFLAGS += -g
+	SIM_CFLAGS += -g
 else
-	CFLAGS += -O2
+	SIM_CFLAGS += -O2
 endif
 
-CFLAGS += -Wextra -Wall -std=c11 -DPC_BUILD -MMD
+SIM_CFLAGS += -DPC_BUILD
 
 ifeq ($(RASPBERRY),YES32)
-        CFLAGS += -DOS32BIT -DRASPBERRY
+        SIM_CFLAGS += -DOS32BIT -DRASPBERRY
 endif
 
 ifeq ($(RASPBERRY),YES64)
-        CFLAGS += -DOS64BIT -DRASPBERRY -fshort-enums
+        SIM_CFLAGS += -DOS64BIT -DRASPBERRY -fshort-enums
 endif
 
 ifeq ($(RASPBERRY),NO32)
-        CFLAGS += -DOS32BIT
+        SIM_CFLAGS += -DOS32BIT
 endif
 
 ifeq ($(RASPBERRY),NO64)
-        CFLAGS += -DOS64BIT -fshort-enums -m64
-        LDFLAGS += -m64
+        SIM_CFLAGS += -DOS64BIT -fshort-enums -m64
+        SIM_LDFLAGS += -m64
 endif
 
-CFLAGS += `pkg-config --cflags freetype2` `pkg-config --cflags gtk+-3.0`
+SIM_CFLAGS += `pkg-config --cflags freetype2` `pkg-config --cflags gtk+-3.0`
+SIM_LDFLAGS += -lgmp -lm `pkg-config --libs freetype2` `pkg-config --libs gtk+-3.0`
 
-LDFLAGS += -lgmp -lm `pkg-config --libs freetype2` `pkg-config --libs gtk+-3.0`
+# DMCP CFLAGS and binaries configuration
+
+# WP43S related defines
+DMCP_CFLAGS += -DDMCP_BUILD -DOS32BIT -DUSE_HAL_DRIVER -DSTM32L476xx -DARM
+
+# Libraries
+GMPLIB = dep/gmp-6.2.0/.libs/libgmp.a
+LIBS += $(GMPLIB)
+
+#######################################
+# binaries
+#######################################
+DMCP_CC = arm-none-eabi-gcc
+DMCP_AS = arm-none-eabi-gcc -x assembler-with-cpp
+DMCP_OBJCOPY = arm-none-eabi-objcopy
+DMCP_SIZE = arm-none-eabi-size
+
+#######################################
+# CFLAGS
+#######################################
+# macros for gcc
+DMCP_CFLAGS += -D__weak="__attribute__((weak))" -D__packed="__attribute__((__packed__))"
+DMCP_CPUFLAGS += -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 --specs=nosys.specs
+
+# compile gcc flags
+DMCP_ASFLAGS = $(DMCP_CPUFLAGS) -Wall -fdata-sections -ffunction-sections
+DMCP_CFLAGS += $(DMCP_CPUFLAGS) $(DMCP_INCLUDES) $(C_INCLUDES) -fdata-sections -ffunction-sections
+
+ifdef DEBUG_WP43S
+DMCP_CFLAGS += -O0 -DDEBUG
+else
+DMCP_CFLAGS += -O2 -s -fomit-frame-pointer
+endif
+
+#######################################
+# LDFLAGS
+#######################################
+# link script
+LDSCRIPT = src/wp43s-dmcp/stm32_program.ld
+DMCP_LDFLAGS = $(DMCP_CPUFLAGS) -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/dmcp/$(WP43S_DMCP).map,--cref -Wl,--gc-sections -Wl,--wrap=_malloc_r
+
+# Common set-up
 
 SRC_DECIMAL              = $(addprefix dep/decNumberICU/, decContext.c decDouble.c decimal128.c decimal64.c decNumber.c decQuad.c)
 
@@ -98,6 +150,13 @@ SRC_SIMULATOR            = $(SRC_WP43S) \
                            $(wildcard src/wp43s-gtk/*.c)
 OBJ_SIMULATOR            = $(addprefix $(BUILD_DIR)/simulator/,$(notdir $(SRC_SIMULATOR:.c=.o)))
 DEPS_SIMULATOR           = $(addprefix $(BUILD_DIR)/simulator/,$(notdir $(SRC_SIMULATOR:.c=.d)))
+
+SRC_DMCP                 = $(SRC_WP43S) \
+                           dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c
+ASM_DMCP                 = dep/DMCP_SDK/dmcp/startup_pgm.s
+OBJ_DMCP                 = $(addprefix $(BUILD_DIR)/dmcp/,$(notdir $(SRC_DMCP:.c=.o))) \
+                           $(addprefix $(BUILD_DIR)/dmcp/,$(notdir $(ASM_DMCP:.s=.o)))
+DEPS_DMCP                = $(addprefix $(BUILD_DIR)/dmcp/,$(notdir $(SRC_DMCP:.c=.d)))
 
 SRC_TESTSUITE            = $(SRC_WP43S) \
                            $(addprefix src/testSuite/, testSuite.c)
@@ -137,8 +196,11 @@ GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN
 STAMP_FILES = $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-rasterFontsData $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms
 
 vpath %.c dep/decNumberICU src/testSuite src/generateConstants src/generateCatalogs src/generateTestPgms src/ttf2RasterFonts \
+          dep/DMCP_SDK/dmcp/sys \
           src/wp43s src/wp43s/mathematics src/wp43s/browsers src/wp43s/logicalOps src/wp43s/programming src/wp43s/distributions \
           src/wp43s/ui src/wp43s-gtk
+vpath %.s dep/DMCP_SDK/dmcp
+
 
 all: 	wp43s
 ifeq '$(detected_OS)' 'Darwin'
@@ -159,6 +221,8 @@ else
   DM_DIST_DIR = wp43s-dm42-$(CI_COMMIT_TAG)
 endif
 
+dmcp: $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm
+
 dist_windows:	wp43s.exe
 	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/binaries/dmcp
 	cp wp43s.exe $(WIN_DIST_DIR)/
@@ -175,15 +239,14 @@ dist_macos:	wp43s
 	cp wp43s_pre.css $(MAC_DIST_DIR)/
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
-dist_dm42:
-	cd DMCP_build && make -j8
+dist_dm42:	dmcp
 	mkdir -p $(DM_DIST_DIR)
 	cp build/dmcp/WP43S.pgm build/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r offimg $(DM_DIST_DIR)
 	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
-.PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite all clean_all mrproper sources rebuild dist_macos
+.PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite clean_dmcp all clean_all mrproper sources rebuild dmcp dist_macos dist_windows dist_dm42
 
 ifneq ($(EXE),)
 generateConstants: $(GENERATECONSTANTS_APP)
@@ -215,22 +278,25 @@ mrproper: clean_all
 
 
 $(BUILD_DIR)/simulator:
-	mkdir -p $(BUILD_DIR)/simulator
+	mkdir -p $@
 
 $(BUILD_DIR)/testSuite:
-	mkdir -p $(BUILD_DIR)/testSuite
+	mkdir -p $@
 
 $(BUILD_DIR)/generateConstants:
-	mkdir -p $(BUILD_DIR)/generateConstants
+	mkdir -p $@
 
 $(BUILD_DIR)/generateCatalogs:
-	mkdir -p $(BUILD_DIR)/generateCatalogs
+	mkdir -p $@
 
 $(BUILD_DIR)/generateTestPgms:
-	mkdir -p $(BUILD_DIR)/generateTestPgms
+	mkdir -p $@
 
 $(BUILD_DIR)/ttf2RasterFonts:
-	mkdir -p $(BUILD_DIR)/ttf2RasterFonts
+	mkdir -p $@
+
+$(BUILD_DIR)/dmcp:
+	mkdir -p $@
 
 
 
@@ -241,11 +307,11 @@ clean_generateConstants:
 
 $(GENERATECONSTANTS_APP): $(OBJ_GENERATECONSTANTS)
 	@echo -e "\n====> $(GENERATECONSTANTS_APP): binary/exe $@ <===="
-	$(CC) $(CFLAGS) $(OBJ_GENERATECONSTANTS) -o $@ $(LDFLAGS)
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_GENERATECONSTANTS) -o $@ $(SIM_LDFLAGS)
 
 $(BUILD_DIR)/generateConstants/%.o: %.c | $(BUILD_DIR)/generateConstants
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-constantPointers: $(GENERATECONSTANTS_APP)
 	@echo -e "\n====> running $(GENERATECONSTANTS_APP) <===="
@@ -264,11 +330,11 @@ clean_generateCatalogs:
 $(GENERATECATALOGS_APP): CFLAGS += -DGENERATE_CATALOGS
 $(GENERATECATALOGS_APP): $(OBJ_GENERATECATALOGS)
 	@echo -e "\n====> $(GENERATECATALOGS_APP): binary/exe $@ <===="
-	$(CC) $(CFLAGS) $(OBJ_GENERATECATALOGS) -o $@ $(LDFLAGS)
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_GENERATECATALOGS) -o $@ $(SIM_LDFLAGS)
 
 $(BUILD_DIR)/generateCatalogs/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers | $(BUILD_DIR)/generateCatalogs
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-softmenuCatalog: $(GENERATECATALOGS_APP)
 	@echo -e "\n====> running $(GENERATECATALOGS_APP) <===="
@@ -286,11 +352,11 @@ clean_generateTestPgms:
 
 $(GENERATETESTPGMS_APP): $(OBJ_GENERATETESTPGMS)
 	@echo -e "\n====> $(GENERATETESTPGMS_APP): binary/exe $@ <===="
-	$(CC) $(CFLAGS) $(OBJ_GENERATETESTPGMS) -o $@ $(LDFLAGS)
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_GENERATETESTPGMS) -o $@ $(SIM_LDFLAGS)
 
 $(BUILD_DIR)/generateTestPgms/%.o: %.c | $(BUILD_DIR)/generateTestPgms
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-testPgms: $(GENERATETESTPGMS_APP)
 	@echo -e "\n====> running $(GENERATETESTPGMS_APP) <===="
@@ -308,11 +374,11 @@ clean_ttf2RasterFonts:
 
 $(TTF2RASTERFONTS_APP): $(OBJ_TTF2RASTERFONTS)
 	@echo -e "\n====> $(TTF2RASTERFONTS_APP): binary/exe $@ <===="
-	$(CC) $(CFLAGS) $(OBJ_TTF2RASTERFONTS) -o $@ $(LDFLAGS)
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_TTF2RASTERFONTS) -o $@ $(SIM_LDFLAGS)
 
 $(BUILD_DIR)/ttf2RasterFonts/%.o: %.c | $(BUILD_DIR)/ttf2RasterFonts
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> running $(TTF2RASTERFONTS_APP) <===="
@@ -331,7 +397,7 @@ clean_testTtf2RasterFonts:
 
 $(TESTTTF2RASTERFONTS_APP): $(OBJ_TESTTTF2RASTERFONTS)
 	@echo -e "\n====> $(TESTTTF2RASTERFONTS_APP): binary/exe <===="
-	$(CC) $(CFLAGS) $(OBJ_TESTTTF2RASTERFONTS) -o $@ $(LDFLAGS)
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_TESTTTF2RASTERFONTS) -o $@ $(SIM_LDFLAGS)
 
 $(BUILD_DIR)/ttf2RasterFonts/testTtf2RasterFonts.o: $(BUILD_DIR)/.stamp-constantPointers
 
@@ -344,11 +410,11 @@ clean_testSuite:
 $(TESTSUITE_APP): CFLAGS += -DTESTSUITE_BUILD
 $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 	@echo -e "\n====> $(TESTSUITE_APP): binary/exe $@ <===="
-	$(CC) $(CFLAGS) $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) $(LDFLAGS)
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) $(SIM_LDFLAGS)
 
 $(BUILD_DIR)/testSuite/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers | $(BUILD_DIR)/testSuite
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 
 
@@ -359,8 +425,64 @@ clean_wp43s:
 
 $(WP43S_APP): $(OBJ_SIMULATOR)
 	@echo -e "\n====> $(WP43S_APP): binary/exe $@ <===="
-	$(CC) $(CFLAGS) $(OBJ_SIMULATOR) -o $(WP43S_APP) $(LDFLAGS)
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_SIMULATOR) -o $(WP43S_APP) $(SIM_LDFLAGS)
 
 $(BUILD_DIR)/simulator/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/simulator
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+
+# Check-out submodule when trying to build pgm_syscalls.c - we may need additional triggers for the submodule init
+dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c:
+	git submodule update --init --recursive dep/DMCP_SDK
+
+# forcecrc32 needed because QSPI update process in DMCP requires a specific CRC
+$(BUILD_DIR)/dmcp/forcecrc32: dep/forcecrc32.c | $(BUILD_DIR)/dmcp
+	gcc $< -o $@
+
+dep/gmp-6.2.0:
+	wget -qO- https://gmplib.org/download/gmp/gmp-6.2.0.tar.lz | tar --lzip -xv -C dep
+
+$(GMPLIB): dep/gmp-6.2.0
+	cd dep/gmp-6.2.0 && ./configure \
+		--build=x86_64-pc-linux-gnu \
+		--host=arm-none-eabi \
+		--disable-assembly \
+		--disable-shared \
+		--disable-fft \
+		--disable-werror \
+		--disable-cxx \
+		LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now' \
+		CFLAGS="-nostartfiles --specs=nosys.specs -mcpu=cortex-m4 -Os -s -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -no-canonical-prefixes -fno-strict-aliasing -fstack-protector -finline-limit=64 -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16"
+	cd dep/gmp-6.2.0 && make -j8 V=1
+
+clean_dmcp:
+	-rm -rf $(BUILD_DIR)/dmcp
+
+-include $(DEPS_DMCP)
+
+$(BUILD_DIR)/dmcp/%.o: %.c $(GMPLIB) $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/dmcp
+	@echo -e "\n====> $<: $@ <===="
+	$(DMCP_CC) $(DMCP_CFLAGS) $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/dmcp/$(notdir $(<:.c=.lst)) -c -o $@ $<
+
+$(BUILD_DIR)/dmcp/%.o: %.s | $(BUILD_DIR)/dmcp
+	@echo -e "\n====> $<: $@ <===="
+	$(DMCP_AS) $(DMCP_CFLAGS) $(CFLAGS) -c -o $@ $<
+
+$(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf: $(BUILD_DIR)/dmcp/forcecrc32 $(GMPLIB) $(OBJ_DMCP)
+	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
+	$(DMCP_CC) $(OBJ_DMCP) $(DMCP_LDFLAGS) -o $@
+	$(DMCP_SIZE) $@
+
+$(BUILD_DIR)/dmcp/$(WP43S_DMCP)_flash.bin: $(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf
+	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
+	$(DMCP_OBJCOPY) --remove-section .qspi -O binary  $<  $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_flash.bin
+
+$(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin: $(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf
+	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
+	$(DMCP_OBJCOPY) --only-section .qspi -O binary  $<  $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin
+	$(BIN_DIR)/modify_crc $(WP43S_DMCP)
+	$(BIN_DIR)/check_qspi_crc $(WP43S_DMCP) src/wp43s-dmcp/qspi_crc.h || ( $(MAKE) clean_dmcp && false )
+
+$(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm: $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_flash.bin
+	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
+	$(BIN_DIR)/add_pgm_chsum $< $@

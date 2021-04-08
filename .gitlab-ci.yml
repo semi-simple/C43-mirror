@@ -45,6 +45,8 @@ windows:
 dm42:
   stage: build
   script:
+    - make mrproper
+    - make -j8 dmcp
     - make dist_dm42
   artifacts:
     expire_in: 1 day

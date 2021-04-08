@@ -2,7 +2,7 @@
 
 pgm=$1
 
-q=../build/dmcp/${pgm}_qspi.bin
+q=build/dmcp/${pgm}_qspi.bin
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
         # Host is Mac: use gstat for GNU version

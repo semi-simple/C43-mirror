@@ -507,19 +507,19 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
 void fnDRG(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    setRegisterAngularMode(REGISTER_X,currentAngularMode);
+    setRegisterAngularMode(REGISTER_X,amNone);  //is probably none already
   }
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
     uint16_t dest = getRegisterAngularMode(REGISTER_X);
-    if (dest == amNone) dest = currentAngularMode;
     switch(dest) {
+      case amNone   : dest = currentAngularMode; break; //converts from to the same, i.e. get to current angle mode
       case amRadian : dest = amGrad; break;
       case amMultPi : dest = amDMS;  break;
       case amGrad   : dest = amMultPi;break;
       case amDegree : dest = amRadian;break;
       case amDMS    : dest = amDegree;break;
       default:break;
-    }
+      }
   fnCvtFromCurrentAngularMode(dest);
   }
 }

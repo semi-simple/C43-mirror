@@ -245,7 +245,7 @@ bool_t lastshiftG = false;
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
             addItemToNimBuffer(item);
           }
-          else if((calcMode == CM_NIM) && (item==ITM_DRG || item==ITM_DRGto) && !catalog) {   //JM
+          else if((calcMode == CM_NIM) && (item==ITM_DRG) && !catalog) {   //JM
             addItemToNimBuffer(item);
           }                                                                                   //JM
 

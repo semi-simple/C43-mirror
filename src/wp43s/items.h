@@ -20,7 +20,6 @@
 
 
 
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1949,7 +1948,7 @@
 #define ITM_toTIME                    1882
 #define ITM_TIMEto                    1883
 #define ITM_DRG                       1884
-#define ITM_DRGto                     1885
+#define ITM_1885                      1885
 #define ITM_CLA                       1886
 #define ITM_CLN                       1887
 #define ITM_DENANY                    1888
@@ -2295,7 +2294,7 @@
 #define ITM_PRN                       2226
 #define ITM_PLOT_J                    2227
 #define ITM_USER_DRG                  2228
-#define ITM_USER_2DRG                 2229
+#define ITM_2229                      2229
 
 #define LAST_ITEM                     2230   //JM
 

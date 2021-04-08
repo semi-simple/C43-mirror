@@ -24,7 +24,8 @@
 //*********************************
 
 #ifdef PC_BUILD
-  //Key layout options
+  #undef SAVE_SPACE_DM42
+  //Key layout option
   #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
   #undef  SWAP_TO_L42_ON_SIM
      #define BLUES_WHEN_SWAPPED        //JM Only applicable if SWAPLAYOUTS is defined. Otherwise ignored
@@ -33,6 +34,7 @@
 
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
+  #define SAVE_SPACE_DM42
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
   //#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
@@ -140,7 +142,7 @@
 #endif // __linux__ == 1
 
 
-#define DEBUG_STAT                       1 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
+#define DEBUG_STAT                       0 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
 #if (DEBUG_STAT == 0)
   #undef STATDEBUG
   #undef STATDEBUG_VERBOSE

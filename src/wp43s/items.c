@@ -679,14 +679,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnToTime                   (uint16_t unusedButMandatoryParameter) {}
   void fnTimeTo                   (uint16_t unusedButMandatoryParameter) {}
   void fnDRG                      (uint16_t unusedButMandatoryParameter) {}
-  void fnDRGto                    (uint16_t unusedButMandatoryParameter) {}
                                                                               //JM ^^
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
 
 //            function                     parameter                    item in catalog                                item in softmenu                               TAM min                 max  CATALOG    stackLift       UNDO status
-
 
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED}, // ITM_NULL
 
@@ -2174,7 +2172,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1448 */  { fnDenMax,                    NOPARAM,                     "DENMAX",                                      "DENMAX",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1449 */  { fnDot,                       NOPARAM,                     "DOT",                                         "dot",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1450 */  { fnDisplayStack,              TM_VALUE,                    "DSTACK",                                      "DSTACK",                                      (1 << TAM_MAX_BITS) |     4, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1451 */  { fnAngularMode,               amDMS,                       "D.MS",                                        "d.ms",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1451 */  { fnAngularMode,               amDMS /*#JM#*/,              "D.MS",                                        "D.MS",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1452 */  { fnCvtToCurrentAngularMode,   amDMS,                       "D.MS" STD_RIGHT_ARROW,                        "D.MS" STD_RIGHT_ARROW,                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1453 */  { fnSetDateFormat,             ITM_DMY,                     "D.MY",                                        "D.MY",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1454 */  { fnDateToJulian,              NOPARAM,                     "D" STD_RIGHT_ARROW "J",                       "D" STD_RIGHT_ARROW "J",                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2616,7 +2614,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1882 */  { fnToTime,                    NOPARAM,                     STD_RIGHT_ARROW "TIME",                        STD_RIGHT_ARROW "TIME",                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1883 */  { fnTimeTo,                    NOPARAM,                     "TIME" STD_RIGHT_ARROW,                        "TIME" STD_RIGHT_ARROW,                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1884 */  { fnDRG,                       NOPARAM,                     "DRG",                                         "DRG",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1885 */  { fnDRGto,                     NOPARAM,                     "DRG" STD_RIGHT_ARROW STD_RIGHT_ARROW,         "DRG" STD_RIGHT_ARROW STD_RIGHT_ARROW,         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1885 */  { itemToBeCoded,               NOPARAM,                     "1885",                                        "1885",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
 /* 1886 */  { fnCla,                       NOPARAM,                     "CLA",                                         "CLA",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_DISABLED  | US_UNCHANGED},//GRAPH
 /* 1887 */  { fnCln,                       NOPARAM,                     "CLN",                                         "CLN",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_DISABLED  | US_UNCHANGED},//GRAPH
 /* 1888 */  { fnSetSetJM,                  DM_ANY,                      "DENANY",                                      "DENANY",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},//JM DEN
@@ -2709,7 +2707,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1973 */  { fnXEQMEDIT,                  NOPARAM,                     "X.EDIT",                                      "X.EDIT",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 /* 1974 */  { fnTo_ms,                     NOPARAM,                     ".ms",                                         ".ms",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },//JM DMS HMS
 /* 1975 */  { fnAngularModeJM,             amDegree,                    STD_RIGHT_DOUBLE_ANGLE "DEG",                  STD_RIGHT_DOUBLE_ANGLE "DEG",                  (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1976 */  { fnAngularModeJM,             amDMS,                       STD_RIGHT_DOUBLE_ANGLE "D.MS",                 STD_RIGHT_DOUBLE_ANGLE "d.ms",                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1976 */  { fnAngularModeJM,             amDMS /*#JM#*/,              STD_RIGHT_DOUBLE_ANGLE "D.MS",                 STD_RIGHT_DOUBLE_ANGLE "D.MS",                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1977 */  { fnAngularModeJM,             amGrad,                      STD_RIGHT_DOUBLE_ANGLE "GRAD",                 STD_RIGHT_DOUBLE_ANGLE "GRAD",                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1978 */  { fnAngularModeJM,             amMultPi,                    STD_RIGHT_DOUBLE_ANGLE "MUL" STD_pi,           STD_RIGHT_DOUBLE_ANGLE "MUL" STD_pi,           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1979 */  { fnAngularModeJM,             amRadian,                    STD_RIGHT_DOUBLE_ANGLE "RAD",                  STD_RIGHT_DOUBLE_ANGLE "RAD",                  (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2962,7 +2960,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 2226 */  { fnP_All_Regs,                1,                           "PRN",                                         "PRN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2227 */  { fnPlot,                      NOPARAM,                     "PLOT_J",                                      "PLOT_J",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 2228 */  { fnUserJM,                    USER_DRG,                    "U" STD_SIGMA STD_DOT "DRG",                   "U" STD_SIGMA STD_DOT "DRG",                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
-/* 2229 */  { fnUserJM,                    USER_2DRG,                   "U" STD_SIGMA STD_DOT ">DRG",                  "U" STD_SIGMA STD_DOT ">DRG",                  (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
+/* 2229 */  { itemToBeCoded,               NOPARAM,                     "2229",                                        "2229",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
 
 /* 2230 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

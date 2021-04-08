@@ -20,8 +20,6 @@
 
 #include "wp43s.h"
 
-#undef DEMO_REGISTERS
-
 
 /********************************************//**
  * \brief Sets the calc to meet Chinese standards
@@ -1000,7 +998,7 @@ void fnReset(uint16_t confirmation) {
 //    fnDrop(0);
 //    fnStrtoX("C43 LARGE TEXT");
 
-#ifdef DEMO_REGISTERS
+#ifndef SAVE_SPACE_DM42
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
@@ -1059,7 +1057,7 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("225251798594466661409915431774713195745814267044878909733007331390393510002687");
     fnStore(27);
     fnDrop(0);
-#endif //NOT_NEEDED
+#endif //SAVE_SPACE_DM42
 
     doRefreshSoftMenu = true;     //jm dr
     last_CM = 253;

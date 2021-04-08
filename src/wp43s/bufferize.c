@@ -995,10 +995,13 @@ void kill_ASB_icon(void) {
             }
             return;
           }
+        } else {                      //JM
+          done = true;                //JM
+          closeNim();                 //JM
         }
         break;
 
-      case ITM_ms :
+      case ITM_ms :                        //JM
       case ITM_toHMS :
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           done = true;
@@ -1022,8 +1025,7 @@ void kill_ASB_icon(void) {
         break;
 
 
-      case ITM_DRG :
-      case ITM_DRGto :
+      case ITM_DRG :                        //JM
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           done = true;
 
@@ -1034,10 +1036,8 @@ void kill_ASB_icon(void) {
               convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
             }
             if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) == amNone) {
+              if(currentAngularMode == amDMS) fnCvtFromCurrentAngularMode(amDMS); else
               setRegisterAngularMode(REGISTER_X, currentAngularMode);
-            } else {
-//              if(item == ITM_DRG) fnDRG(0); else
-//              if(item == ITM_DRG) fnDRGto(0);
             }
 
             if(lastErrorCode == 0) {

@@ -30,7 +30,7 @@
 #endif //TESTSUITE_BUILD
 
 
-#ifndef PC_BUILD
+#ifndef SAVE_SPACE_DM42
   #undef DEMO0
   #undef DEMO1
   #undef DEMO2

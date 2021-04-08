@@ -37,10 +37,26 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 
   longInteger_t tmp_lgInt;
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_X, tmp_lgInt);
+  if(((getRegisterDataType(REGISTER_X) != dtLongInteger) && (getRegisterDataType(REGISTER_X) != dtReal34)) ||
+    ((getRegisterDataType(REGISTER_Y) != dtLongInteger) && (getRegisterDataType(REGISTER_Y) != dtReal34))) {
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "invalid data type %s and %s", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, tmp_lgInt);
+  else // dtReal34
+    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), tmp_lgInt, DEC_ROUND_DOWN);
   longIntegerToUInt(tmp_lgInt, cols);
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_Y, tmp_lgInt);
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+    convertLongIntegerRegisterToLongInteger(REGISTER_Y, tmp_lgInt);
+  else // dtReal34
+    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_Y), tmp_lgInt, DEC_ROUND_DOWN);
   longIntegerToUInt(tmp_lgInt, rows);
 
   longIntegerFree(tmp_lgInt);

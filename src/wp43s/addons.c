@@ -493,9 +493,12 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
       fnCvtFromCurrentAngularMode(AMODE);
       fnAngularMode(AMODE);
     }
-    fnKeyDotD(0);
-    fnCvtFromCurrentAngularMode(AMODE);
+
+//    fnKeyDotD(0);
+//    fnCvtFromCurrentAngularMode(AMODE);
     fnAngularMode(AMODE);
+    fnCvtToCurrentAngularMode(getRegisterAngularMode(REGISTER_X));
+
   }
   #ifndef TESTSUITE_BUILD
     fnRefreshState();

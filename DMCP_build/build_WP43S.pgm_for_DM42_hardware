@@ -1,5 +1,0 @@
-#!/bin/bash
-PATH=$PATH:./bin:/arm-eabi/bin
-
-make clean
-make

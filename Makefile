@@ -44,7 +44,7 @@ endif
 
 RASPBERRY = $(shell ./onARaspberry)
 
-INC = -Idep/decNumberICU -Isrc/wp43s -Isrc/testSuite
+C_INCLUDES = -Idep/decNumberICU -Isrc/wp43s -Isrc/testSuite
 
 ifeq ($(DEST), gitlab)
 	CFLAGS += -march=x86-64
@@ -245,7 +245,7 @@ $(GENERATECONSTANTS_APP): $(OBJ_GENERATECONSTANTS)
 
 $(BUILD_DIR)/generateConstants/%.o: %.c | $(BUILD_DIR)/generateConstants
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-constantPointers: $(GENERATECONSTANTS_APP)
 	@echo -e "\n====> running $(GENERATECONSTANTS_APP) <===="
@@ -268,7 +268,7 @@ $(GENERATECATALOGS_APP): $(OBJ_GENERATECATALOGS)
 
 $(BUILD_DIR)/generateCatalogs/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers | $(BUILD_DIR)/generateCatalogs
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-softmenuCatalog: $(GENERATECATALOGS_APP)
 	@echo -e "\n====> running $(GENERATECATALOGS_APP) <===="
@@ -290,7 +290,7 @@ $(GENERATETESTPGMS_APP): $(OBJ_GENERATETESTPGMS)
 
 $(BUILD_DIR)/generateTestPgms/%.o: %.c | $(BUILD_DIR)/generateTestPgms
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-testPgms: $(GENERATETESTPGMS_APP)
 	@echo -e "\n====> running $(GENERATETESTPGMS_APP) <===="
@@ -312,7 +312,7 @@ $(TTF2RASTERFONTS_APP): $(OBJ_TTF2RASTERFONTS)
 
 $(BUILD_DIR)/ttf2RasterFonts/%.o: %.c | $(BUILD_DIR)/ttf2RasterFonts
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> running $(TTF2RASTERFONTS_APP) <===="
@@ -348,7 +348,7 @@ $(TESTSUITE_APP): $(OBJ_TESTSUITE)
 
 $(BUILD_DIR)/testSuite/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers | $(BUILD_DIR)/testSuite
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 
 
@@ -363,4 +363,4 @@ $(WP43S_APP): $(OBJ_SIMULATOR)
 
 $(BUILD_DIR)/simulator/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/simulator
 	@echo -e "\n====> $<: $@ <===="
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<

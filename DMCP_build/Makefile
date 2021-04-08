@@ -126,7 +126,7 @@ $(GMPLIB): ../dep/gmp-6.2.0
 		CFLAGS="-nostartfiles --specs=nosys.specs -mcpu=cortex-m4 -Os -s -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -no-canonical-prefixes -fno-strict-aliasing -fstack-protector -finline-limit=64 -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16"
 	cd ../dep/gmp-6.2.0 && make -j8 V=1
 
-$(BUILD_DIR)/dmcp/%.o: %.c | $(BUILD_DIR)/dmcp
+$(BUILD_DIR)/dmcp/%.o: %.c $(GMPLIB) | $(BUILD_DIR)/dmcp
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/dmcp/$(notdir $(<:.c=.lst)) -c -o $@ $<
 

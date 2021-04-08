@@ -511,6 +511,18 @@
 		<Unit filename="src/testSuite/hermite_p.txt">
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/testSuite/hypergeometric_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hypergeometric_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hypergeometric_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/hypergeometric_r.txt">
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/testSuite/idiv.txt">
 			<Option target="testSuite" />
 		</Unit>

@@ -17,6 +17,8 @@
 /********************************************//**
  * \file percentT.h
  ***********************************************/
+#ifndef DELTAPERCENT_H
+#define DELTAPERCENT_H
 
 void fnDeltaPercent(uint16_t unusedButMandatoryParameter);
 
@@ -24,3 +26,5 @@ void deltaPercentLonILonI(void);
 void deltaPercentLonIReal(void);
 void deltaPercentRealLonI(void);
 void deltaPercentRealReal(void);
+
+#endif // DELTAPERCENT_H

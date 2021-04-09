@@ -17,6 +17,8 @@
 /********************************************//**
  * \file binomial.h
  ***********************************************/
+#ifndef BINOMIAL_H
+#define BINOMIAL_H
 
 void fnBinomialP           (uint16_t unusedButMandatoryParameter);
 void fnBinomialL           (uint16_t unusedButMandatoryParameter);
@@ -28,3 +30,5 @@ void WP34S_Cdfu_Binomial(const real_t *x, const real_t *p0, const real_t *n, rea
 void WP34S_Cdf_Binomial (const real_t *x, const real_t *p0, const real_t *n, real_t *res, realContext_t *realContext);
 void WP34S_Cdf_Binomial2(const real_t *x, const real_t *p0, const real_t *n, real_t *res, realContext_t *realContext);
 void WP34S_Qf_Binomial  (const real_t *x, const real_t *p0, const real_t *n, real_t *res, realContext_t *realContext);
+
+#endif // BINOMIAL_H

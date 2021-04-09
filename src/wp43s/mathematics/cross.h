@@ -17,6 +17,8 @@
 /********************************************//**
  * \file cross.h
  ***********************************************/
+#ifndef CROSS_H
+#define CROSS_H
 
 void fnCross(uint16_t unusedButMandatoryParameter);
 
@@ -32,3 +34,5 @@ void crossRemaRema(void);
 void crossCpmaRema(void);
 void crossRemaCpma(void);
 void crossCpmaCpma(void);
+
+#endif // CROSS_H

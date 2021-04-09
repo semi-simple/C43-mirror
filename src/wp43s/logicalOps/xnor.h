@@ -17,6 +17,8 @@
 /********************************************//**
  * \file xnor.h
  ***********************************************/
+#ifndef XNOR_H
+#define XNOR_H
 
 void fnLogicalXnor(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void xnorLonIReal (void);
 void xnorRealLonI (void);
 void xnorRealReal (void);
 void xnorShoIShoI (void);
+
+#endif // XNOR_H

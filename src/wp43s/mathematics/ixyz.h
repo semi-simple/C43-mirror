@@ -17,5 +17,9 @@
 /********************************************//**
  * \file ixyz.h
  ***********************************************/
+#ifndef IXYZ_H
+#define IXYZ_H
 
 void fnIxyz(uint16_t unusedButMandatoryParameter);
+
+#endif // IXYZ_H

@@ -17,6 +17,8 @@
 /********************************************//**
  * \file error.h
  ***********************************************/
+#ifndef ERROR_H
+#define ERROR_H
 
 #ifndef TESTSUITE_BUILD
   void displayBugScreen     (const char *msg);
@@ -27,3 +29,5 @@ void moreInfoOnError        (const char *m1, const char *m2, const char *m3, con
 #if (EXTRA_INFO_ON_CALC_ERROR != 1)
 void typeError(void);
 #endif // (EXTRA_INFO_ON_CALC_ERROR != 1)
+
+#endif // ERROR_H

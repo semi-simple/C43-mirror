@@ -17,6 +17,8 @@
 /********************************************//**
  * \file modulo.h
  ***********************************************/
+#ifndef MODULO_H
+#define MODULO_H
 
 void fnMod(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -39,3 +41,5 @@ void modShoIReal(void);
 void modRealLonI(void);
 void modRealShoI(void);
 void modRealReal(void);
+
+#endif // MODULO_H

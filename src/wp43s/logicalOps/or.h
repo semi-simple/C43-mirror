@@ -17,6 +17,8 @@
 /********************************************//**
  * \file or.h
  ***********************************************/
+#ifndef OR_H
+#define OR_H
 
 void fnLogicalOr(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void orLonIReal (void);
 void orRealLonI (void);
 void orRealReal (void);
 void orShoIShoI (void);
+
+#endif // OR_H

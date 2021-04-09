@@ -17,6 +17,8 @@
 /********************************************//**
  * \file lnbeta.h
  ***********************************************/
+#ifndef LNBETA_H
+#define LNBETA_H
 
 void fnLnBeta      (uint16_t unusedButMandatoryParameter);
 
@@ -39,3 +41,5 @@ void lnbetaRealCplx(void);
 void lnbetaCplxCplx(void);
 
 void LnBeta(const real_t *x, const real_t *y, real_t *res, realContext_t *realContext);
+
+#endif // LNBETA_H

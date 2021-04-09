@@ -17,6 +17,8 @@
 /********************************************//**
  * \file floor.h
  ***********************************************/
+#ifndef FLOOR_H
+#define FLOOR_H
 
 void fnFloor   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -27,3 +29,5 @@ void floorError(void);
 void floorLonI (void);
 void floorRema (void);
 void floorReal (void);
+
+#endif // FLOOR_H

@@ -17,6 +17,8 @@
 /********************************************//**
  * \file arccosh.h
  ***********************************************/
+#ifndef ARCCOSH_H
+#define ARCCOSH_H
 
 void fnArccosh   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void arccoshCxma (void);
 void arccoshReal (void);
 void arccoshCplx (void);
 void realArcosh  (const real_t *x, real_t *res, realContext_t *realContext);
+
+#endif // ARCCOSH_H

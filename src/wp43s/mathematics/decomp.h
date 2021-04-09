@@ -17,6 +17,8 @@
 /********************************************//**
  * \file decomp.h
  ***********************************************/
+#ifndef DECOMP_H
+#define DECOMP_H
 
 void fnDecomp(uint16_t unusedButMandatoryParameter);
 
@@ -26,3 +28,5 @@ void decompError(void);
 #define decompError typeError
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void decompReal(void);
+
+#endif // DECOMP_H

@@ -17,6 +17,8 @@
 /********************************************//**
  * \file arccos.h
  ***********************************************/
+#ifndef ARCCOS_H
+#define ARCCOS_H
 
 void fnArccos   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -29,3 +31,5 @@ void arccosRema (void);
 void arccosCxma (void);
 void arccosReal (void);
 void arccosCplx (void);
+
+#endif // ARCCOS_H

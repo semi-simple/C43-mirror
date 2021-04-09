@@ -17,6 +17,8 @@
 /********************************************//**
  * \file 2pow.h
  ***********************************************/
+#ifndef FILE_2POW_H
+#define FILE_2POW_H
 
 void fn2Pow     (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void twoPowCxma (void);
 void twoPowShoI (void);
 void twoPowReal (void);
 void twoPowCplx (void);
+
+#endif // FILE_2POW_H

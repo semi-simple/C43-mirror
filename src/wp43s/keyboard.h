@@ -17,6 +17,8 @@
 /********************************************//**
  * \file keyboard.h
  ***********************************************/
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
 
 void leavePem        (void);
 void showShiftState  (void);
@@ -45,3 +47,5 @@ void fnKeyDotD       (uint16_t unusedButMandatoryParameter);
   void btnPressed   (void *data);
   void btnReleased  (void *data);
 #endif // DMCP_BUILD
+
+#endif // KEYBOARD_H

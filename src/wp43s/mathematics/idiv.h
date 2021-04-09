@@ -17,6 +17,8 @@
 /********************************************//**
  * \file idiv.h
  ***********************************************/
+#ifndef IDIV_H
+#define IDIV_H
 
 void fnIDiv(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -39,3 +41,5 @@ void idivShoIReal(void);
 void idivRealLonI(void);
 void idivRealShoI(void);
 void idivRealReal(void);
+
+#endif // IDIV_H

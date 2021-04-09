@@ -17,6 +17,8 @@
 /********************************************//**
  * \file multiplication.h
  ***********************************************/
+#ifndef MULTIPLICATION_H
+#define MULTIPLICATION_H
 
 void fnMultiply (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -82,3 +84,5 @@ void mulCplxCxma(void);
 void mulCplxShoI(void);
 void mulCplxReal(void);
 void mulCplxCplx(void);
+
+#endif // MULTIPLICATION_H

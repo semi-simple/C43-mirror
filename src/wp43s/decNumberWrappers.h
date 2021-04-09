@@ -17,6 +17,8 @@
 /********************************************//**
  * \file decNumberWrappers.h
  ***********************************************/
+#ifndef DECNUMBERWRAPPERS_H
+#define DECNUMBERWRAPPERS_H
 
 typedef struct {
   int32_t digits;      // Count of digits in the coefficient; >0
@@ -205,3 +207,5 @@ typedef struct {
 #define realZero(destination)                                  decNumberZero            (destination)
 #define stringToReal(source, destination, ctxt)                decNumberFromString      (destination, source, ctxt)
 #define uInt32ToReal(source, destination)                      decNumberFromUInt32      (destination, source)
+
+#endif // DECNUMBERWRAPPERS_H

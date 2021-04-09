@@ -17,6 +17,8 @@
 /********************************************//**
  * \file and.h
  ***********************************************/
+#ifndef AND_H
+#define AND_H
 
 void fnLogicalAnd(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void andLonIReal (void);
 void andRealLonI (void);
 void andRealReal (void);
 void andShoIShoI (void);
+
+#endif // AND_H

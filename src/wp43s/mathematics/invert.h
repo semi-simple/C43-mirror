@@ -17,6 +17,8 @@
 /********************************************//**
  * \file invert.h
  ***********************************************/
+#ifndef INVERT_H
+#define INVERT_H
 
 void fnInvert   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -29,3 +31,5 @@ void invertRema (void);
 void invertCxma (void);
 void invertReal (void);
 void invertCplx (void);
+
+#endif // INVERT_H

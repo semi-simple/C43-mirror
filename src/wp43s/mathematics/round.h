@@ -17,6 +17,8 @@
 /********************************************//**
  * \file round.h
  ***********************************************/
+#ifndef ROUND_H
+#define ROUND_H
 
 void fnRound   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -31,3 +33,5 @@ void roundRema (void);
 void roundCxma (void);
 void roundReal (void);
 void roundCplx (void);
+
+#endif // ROUND_H

@@ -17,5 +17,9 @@
 /********************************************//**
  * \file min.h
  ***********************************************/
+#ifndef MIN_H
+#define MIN_H
 
 void fnMin(uint16_t unusedButMandatoryParameter);
+
+#endif // MIN_H

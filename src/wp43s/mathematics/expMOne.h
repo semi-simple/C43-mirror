@@ -17,6 +17,8 @@
 /********************************************//**
  * \file expMOne.h
  ***********************************************/
+#ifndef EXPMONE_H
+#define EXPMONE_H
 // Coded by JM, based on exp.h
 
 void fnExpM1   (uint16_t unusedButMandatoryParameter);
@@ -32,3 +34,5 @@ void expM1ShoI (void);
 void expM1Real (void);
 void expM1Cplx (void);
 void expM1Complex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+#endif // EXPMONE_H

@@ -17,5 +17,9 @@
 /********************************************//**
  * \file slvq.h
  ***********************************************/
+#ifndef SLVQ_H
+#define SLVQ_H
 
 void fnSlvq(uint16_t unusedButMandatoryParameter);
+
+#endif // SLVQ_H

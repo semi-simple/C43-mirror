@@ -18,8 +18,8 @@
  * \file wp43s.h
  ***********************************************/
 
-#ifndef wp43s_H_INCLUDED
-  #define wp43s_H_INCLUDED
+#ifndef WP43S_H
+#define WP43S_H
 
   #include "defines.h"
 
@@ -384,4 +384,5 @@
   #endif // DMCP_BUILD
 
   #include "constantPointers.h"
-#endif // wp43s_H_INCLUDED
+
+#endif // WP43S_H

@@ -17,6 +17,8 @@
 /********************************************//**
  * \file cosh.h
  ***********************************************/
+#ifndef COSH_H
+#define COSH_H
 
 void fnCosh   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -29,3 +31,5 @@ void coshRema (void);
 void coshCxma (void);
 void coshReal (void);
 void coshCplx (void);
+
+#endif // COSH_H

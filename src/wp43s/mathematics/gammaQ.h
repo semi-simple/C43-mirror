@@ -17,6 +17,8 @@
 /********************************************//**
  * \file gammaQ.h
  ***********************************************/
+#ifndef GAMMAQ_H
+#define GAMMAQ_H
 
 void fnGammaQ      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -28,3 +30,5 @@ void gammaQLonILonI(void);
 void gammaQLonIReal(void);
 void gammaQRealLonI(void);
 void gammaQRealReal(void);
+
+#endif // GAMMAQ_H

@@ -17,6 +17,8 @@
 /********************************************//**
  * \file rdp.h
  ***********************************************/
+#ifndef RDP_H
+#define RDP_H
 
 void roundToDecimalPlace(real_t *source, real_t *destination, uint16_t digits, realContext_t *realContext);
 void fnRdp              (uint16_t digits);
@@ -26,3 +28,5 @@ void rdpRema            (uint16_t digits);
 void rdpCxma            (uint16_t digits);
 void rdpReal            (uint16_t digits);
 void rdpCplx            (uint16_t digits);
+
+#endif // RDP_H

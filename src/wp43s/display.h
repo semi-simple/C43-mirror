@@ -13,6 +13,8 @@
  * You should have received a copy of the GNU General Public License
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
 void fnDisplayFormatFix                (uint16_t displayFormatN);
 void fnDisplayFormatSci                (uint16_t displayFormatN);
@@ -36,3 +38,5 @@ void exponentToDisplayString           (int32_t exponent, char *displayString, c
 void supNumberToDisplayString          (int32_t supNumber, char *displayString, char *displayValueString, bool_t insertGap, const char *separator);
 void subNumberToDisplayString          (int32_t subNumber, char *displayString, char *displayValueString);
 void longIntegerToAllocatedString      (const longInteger_t lgInt, char *str, int32_t strLen);
+
+#endif // DISPLAY_H

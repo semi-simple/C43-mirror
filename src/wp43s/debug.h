@@ -13,6 +13,8 @@
  * You should have received a copy of the GNU General Public License
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef DEBUG_H
+#define DEBUG_H
 
 #if (DEBUG_PANEL == 1)
   extern GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
@@ -78,3 +80,5 @@ char *getAngularModeName                  (angularMode_t angularMode);
   void initStackCheck   (unsigned char *begin, unsigned char *end, int size);
   void stackSmashingTest(void);
 #endif // PC_BUILD || TESTSUITE_BUILD
+
+#endif // DEBUG_H

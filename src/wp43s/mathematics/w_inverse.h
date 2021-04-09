@@ -17,6 +17,8 @@
 /********************************************//**
  * \file w_inverse.h
  ***********************************************/
+#ifndef W_INVERSE_H
+#define W_INVERSE_H
 
 void fnWinverse(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -27,3 +29,5 @@ void wInvError  (void);
 void wInvLonI   (void);
 void wInvReal   (void);
 void wInvCplx   (void);
+
+#endif // W_INVERSE_H

@@ -17,9 +17,13 @@
 /********************************************//**
  * \file mean.h
  ***********************************************/
+#ifndef MEAN_H
+#define MEAN_H
 
 void fnMeanXY             (uint16_t unusedButMandatoryParameter);
 void fnGeometricMeanXY    (uint16_t unusedButMandatoryParameter);
 void fnWeightedMeanX      (uint16_t unusedButMandatoryParameter);
 void fnHarmonicMeanXY     (uint16_t unusedButMandatoryParameter);
 void fnRMSMeanXY          (uint16_t unusedButMandatoryParameter);
+
+#endif // MEAN_H

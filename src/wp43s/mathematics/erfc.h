@@ -17,6 +17,8 @@
 /********************************************//**
  * \file erfc.h
  ***********************************************/
+#ifndef ERFC_H
+#define ERFC_H
 
 void fnErfc   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -26,3 +28,5 @@ void erfcError(void);
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void erfcLonI (void);
 void erfcReal (void);
+
+#endif // ERFC_H

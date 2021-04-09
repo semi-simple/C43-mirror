@@ -17,6 +17,8 @@
 /********************************************//**
  * \file ln.h
  ***********************************************/
+#ifndef LN_H
+#define LN_H
 
 void fnLn   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -31,3 +33,5 @@ void lnShoI (void);
 void lnReal (void);
 void lnCplx (void);
 void lnComplex(const real_t *real, const real_t *imag, real_t *lnReal, real_t *lnImag, realContext_t *realContext);
+
+#endif // LN_H

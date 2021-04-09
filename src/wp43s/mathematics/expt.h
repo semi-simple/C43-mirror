@@ -17,6 +17,8 @@
 /********************************************//**
  * \file expt.h
  ***********************************************/
+#ifndef EXPT_H
+#define EXPT_H
 
 void fnExpt   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -26,3 +28,5 @@ void exptError(void);
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void exptLonI (void);
 void exptReal (void);
+
+#endif // EXPT_H

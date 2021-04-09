@@ -17,6 +17,8 @@
 /********************************************//**
  * \file conversionUnits.h
  ***********************************************/
+#ifndef CONVERSIONUNITS_H
+#define CONVERSIONUNITS_H
 
 // Temperature
 void fnCvtCToF      (uint16_t unusedButMandatoryParameter);
@@ -96,3 +98,5 @@ void fnCvtMuM2      (uint16_t multiplyDivide);
 void fnCvtRatioDb   (uint16_t tenOrTwenty);
 void fnCvtDbRatio   (uint16_t tenOrTwenty);
 void fnCvtLbfftNm   (uint16_t multiplyDivide);
+
+#endif // CONVERSIONUNITS_H

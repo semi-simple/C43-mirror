@@ -17,6 +17,8 @@
 /********************************************//**
  * \file minusOnePow.h
  ***********************************************/
+#ifndef MINUSONEPOW_H
+#define MINUSONEPOW_H
 
 void fnM1Pow   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void m1PowCxma (void);
 void m1PowShoI (void);
 void m1PowReal (void);
 void m1PowCplx (void);
+
+#endif // MINUSONEPOW_H

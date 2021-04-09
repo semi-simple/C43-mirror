@@ -17,6 +17,8 @@
 /********************************************//**
  * \file arctanh.h
  ***********************************************/
+#ifndef ARCTANH_H
+#define ARCTANH_H
 
 void fnArctanh   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -29,3 +31,5 @@ void arctanhRema (void);
 void arctanhCxma (void);
 void arctanhReal (void);
 void arctanhCplx (void);
+
+#endif // ARCTANH_H

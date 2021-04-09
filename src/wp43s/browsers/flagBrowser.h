@@ -13,7 +13,11 @@
  * You should have received a copy of the GNU General Public License
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef FLAGBROWSER_H
+#define FLAGBROWSER_H
 
 #ifndef TESTSUITE_BUILD
   void flagBrowser(uint16_t unusedButMandatoryParameter);
 #endif // TESTSUITE_BUILD
+
+#endif // FLAGBROWSER_H

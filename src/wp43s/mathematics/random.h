@@ -17,6 +17,8 @@
 /********************************************//**
  * \file random.h
  ***********************************************/
+#ifndef RANDOM_H
+#define RANDOM_H
 
 #include "pcg_basic.h"
 
@@ -24,3 +26,5 @@ uint32_t boundedRand(uint32_t s);
 void     fnRandom   (uint16_t unusedButMandatoryParameter);
 void     fnRandomI  (uint16_t unusedButMandatoryParameter);
 void     fnSeed     (uint16_t unusedButMandatoryParameter);
+
+#endif // RANDOM_H

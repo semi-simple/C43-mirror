@@ -17,6 +17,10 @@
 /********************************************//**
  * \file mask.h
  ***********************************************/
+#ifndef MASK_H
+#define MASK_H
 
 void fnMaskl(uint16_t numberOfBits);
 void fnMaskr(uint16_t numberOfBits);
+
+#endif // MASK_H

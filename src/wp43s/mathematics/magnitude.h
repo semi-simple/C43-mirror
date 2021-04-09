@@ -17,6 +17,8 @@
 /********************************************//**
  * \file magnitude.h
  ***********************************************/
+#ifndef MAGNITUDE_H
+#define MAGNITUDE_H
 
 void fnMagnitude   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void magnitudeCxma (void);
 void magnitudeShoI (void);
 void magnitudeReal (void);
 void magnitudeCplx (void);
+
+#endif // MAGNITUDE_H

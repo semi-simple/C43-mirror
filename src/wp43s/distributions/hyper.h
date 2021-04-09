@@ -17,6 +17,8 @@
 /********************************************//**
  * \file hyper.h
  ***********************************************/
+#ifndef HYPER_H
+#define HYPER_H
 
 void fnHypergeometricP  (uint16_t unusedButMandatoryParameter);
 void fnHypergeometricL  (uint16_t unusedButMandatoryParameter);
@@ -28,3 +30,5 @@ void cdfu_Hypergeometric(const real_t *x, const real_t *p0, const real_t *n, con
 void cdf_Hypergeometric (const real_t *x, const real_t *p0, const real_t *n, const real_t *n0, real_t *res, realContext_t *realContext);
 void cdf_Hypergeometric2(const real_t *x, const real_t *p0, const real_t *n, const real_t *n0, real_t *res, realContext_t *realContext);
 void qf_Hypergeometric  (const real_t *x, const real_t *p0, const real_t *n, const real_t *n0, real_t *res, realContext_t *realContext);
+
+#endif // HYPER_H

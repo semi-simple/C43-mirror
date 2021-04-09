@@ -17,6 +17,8 @@
 /********************************************//**
  * \file cos.h
  ***********************************************/
+#ifndef COS_H
+#define COS_H
 
 void fnCos   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void cosCxma (void);
 void cosReal (void);
 void cosCplx (void);
 void cosComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+#endif // COS_H

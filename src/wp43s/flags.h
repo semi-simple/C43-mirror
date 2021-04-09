@@ -17,6 +17,8 @@
 /********************************************//**
  * \file flags.h
  ***********************************************/
+#ifndef FLAGS_H
+#define FLAGS_H
 
 
 void   systemFlagAction        (uint16_t systemFlag, uint16_t action);
@@ -36,3 +38,5 @@ void   fnIsFlagSetSet          (uint16_t flag);
 void   fnIsFlagClearFlip       (uint16_t flag);
 void   fnIsFlagSetFlip         (uint16_t flag);
 void   fnIsFlagSetFlip         (uint16_t flag);
+
+#endif // FLAGS_H

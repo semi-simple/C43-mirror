@@ -17,6 +17,8 @@
 /********************************************//**
  * \file sinc.h
  ***********************************************/
+#ifndef SINC_H
+#define SINC_H
 // Coded by JM, based on sin.h
 
 void fnSinc  (uint16_t unusedButMandatoryParameter);
@@ -31,3 +33,5 @@ void sincCxma (void);
 void sincReal (void);
 void sincCplx (void);
 void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+#endif // SINC_H

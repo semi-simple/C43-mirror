@@ -17,6 +17,8 @@
 /********************************************//**
  * \file screen.h
  ***********************************************/
+#ifndef SCREEN_H
+#define SCREEN_H
 
 void       fnScreenDump                       (uint16_t unusedButMandatoryParameter);
 
@@ -52,3 +54,5 @@ void       fnScreenDump                       (uint16_t unusedButMandatoryParame
   void     clearRegisterLine                  (calcRegister_t regist, bool_t clearTop, bool_t clearBottom);
   void     refreshRegisterLine                (calcRegister_t regist);
 #endif // TESTSUITE_BUILD
+
+#endif // SCREEN_H

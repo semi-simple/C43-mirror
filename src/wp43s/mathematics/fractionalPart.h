@@ -17,6 +17,8 @@
 /********************************************//**
  * \file fractionalPart.h
  ***********************************************/
+#ifndef FRACTIONALPART_H
+#define FRACTIONALPART_H
 
 void fnFp   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -28,3 +30,5 @@ void fpLonI (void);
 void fpRema (void);
 void fpShoI (void);
 void fpReal (void);
+
+#endif // FRACTIONALPART_H

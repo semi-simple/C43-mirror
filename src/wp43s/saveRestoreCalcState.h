@@ -17,6 +17,8 @@
 /********************************************//**
  * \file saveRestoreCalcState.h
  ***********************************************/
+#ifndef SAVERESTORECALCSTATE_H
+#define SAVERESTORECALCSTATE_H
 
 #if defined(PC_BUILD) || defined(DMCP_BUILD)
   void   saveCalc      (void);
@@ -31,3 +33,5 @@ uint32_t stringToUint32(const char *str);
 uint64_t stringToUint64(const char *str);
 int16_t  stringToInt16 (const char *str);
 int32_t  stringToInt32 (const char *str);
+
+#endif // SAVERESTORECALCSTATE_H

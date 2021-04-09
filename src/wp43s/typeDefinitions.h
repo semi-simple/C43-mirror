@@ -17,6 +17,8 @@
 /********************************************//**
  * \file typeDefinitions.h
  ***********************************************/
+#ifndef TYPEDEFINITIONS_H
+#define TYPEDEFINITIONS_H
 
 
 /********************************************//**
@@ -365,3 +367,5 @@ typedef struct {
   int16_t    min;
   int16_t    max;
 } tamState_t;
+
+#endif // TYPEDEFINITIONS_H

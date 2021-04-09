@@ -17,5 +17,9 @@
 /********************************************//**
  * \file cxToRe.h
  ***********************************************/
+#ifndef CXTORE_H
+#define CXTORE_H
 
 void fnCxToRe(uint16_t unusedButMandatoryParameter);
+
+#endif // CXTORE_H

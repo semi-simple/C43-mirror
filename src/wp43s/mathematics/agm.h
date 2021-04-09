@@ -17,5 +17,9 @@
 /********************************************//**
  * \file agm.h
  ***********************************************/
+#ifndef AGM_H
+#define AGM_H
 
 void fnAgm(uint16_t unusedButMandatoryParameter);
+
+#endif // AGM_H

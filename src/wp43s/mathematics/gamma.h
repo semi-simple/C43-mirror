@@ -17,6 +17,8 @@
 /********************************************//**
  * \file gamma.h
  ***********************************************/
+#ifndef GAMMA_H
+#define GAMMA_H
 
 void fnGamma     (uint16_t unusedButMandatoryParameter);
 void fnLnGamma   (uint16_t unusedButMandatoryParameter);
@@ -35,3 +37,5 @@ void gammaCplx   (void);
 void lnGammaLonI (void);
 void lnGammaReal (void);
 void lnGammaCplx (void);
+
+#endif // GAMMA_H

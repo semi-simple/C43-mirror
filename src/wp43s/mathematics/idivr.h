@@ -17,6 +17,8 @@
 /********************************************//**
  * \file idivr.h
  ***********************************************/
+#ifndef IDIVR_H
+#define IDIVR_H
 
 void fnIDivR(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -39,3 +41,5 @@ void idivrShoIReal(void);
 void idivrRealLonI(void);
 void idivrRealShoI(void);
 void idivrRealReal(void);
+
+#endif // IDIVR_H

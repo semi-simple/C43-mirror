@@ -17,7 +17,11 @@
 /********************************************//**
  * \file countBits.h
  ***********************************************/
+#ifndef COUNTBITS_H
+#define COUNTBITS_H
 
 void fnCountBits(uint16_t unusedButMandatoryParameter);
 void countBitsError    (void);
 void countBitsShoI     (void);
+
+#endif // COUNTBITS_H

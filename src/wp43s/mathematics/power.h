@@ -17,6 +17,8 @@
 /********************************************//**
  * \file power.h
  ***********************************************/
+#ifndef POWER_H
+#define POWER_H
 
 void fnPower    (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -64,3 +66,5 @@ void powCplxLonI(void);
 void powCplxShoI(void);
 void powCplxReal(void);
 void powCplxCplx(void);
+
+#endif // POWER_H

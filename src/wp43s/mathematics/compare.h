@@ -17,6 +17,8 @@
 /********************************************//**
  * \file compare.h
  ***********************************************/
+#ifndef COMPARE_H
+#define COMPARE_H
 
 
 
@@ -46,3 +48,5 @@ void  fnXNotEqual        (uint16_t regist);
 void  fnXAlmostEqual     (uint16_t regist);
 
 void  fnIsConverged      (uint16_t mode);
+
+#endif // COMPARE_H

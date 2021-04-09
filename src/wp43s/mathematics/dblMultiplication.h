@@ -17,7 +17,11 @@
 /********************************************//**
  * \file dblMultiplication.h
  ***********************************************/
+#ifndef DBLMULTIPLICATION_H
+#define DBLMULTIPLICATION_H
 
 #include "wp43s.h"
 
 void fnDblMultiply(uint16_t unusedButMandatoryParameter);
+
+#endif // DBLMULTIPLICATION_H

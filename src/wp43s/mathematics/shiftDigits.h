@@ -17,6 +17,10 @@
 /********************************************//**
  * \file shiftDigits.h
  ***********************************************/
+#ifndef SHIFTDIGITS_H
+#define SHIFTDIGITS_H
 
 void fnSdr(uint16_t numberOfShifts);
 void fnSdl(uint16_t numberOfShifts);
+
+#endif // SHIFTDIGITS_H

@@ -17,6 +17,8 @@
 /********************************************//**
  * \file integers.h
  ***********************************************/
+#ifndef INTEGERS_H
+#define INTEGERS_H
 
 void     fnChangeBase                (uint16_t base);
 void     longIntegerMultiply         (longInteger_t opY, longInteger_t opX, longInteger_t result);
@@ -54,3 +56,5 @@ uint64_t WP34S_extract_value        (const uint64_t val, int32_t *const sign);
 int64_t  WP34S_intFib               (int64_t x);
 uint64_t WP34S_mulmod               (const uint64_t a, uint64_t b, const uint64_t c);
 uint64_t WP34S_expmod               (const uint64_t a, uint64_t b, const uint64_t c);
+
+#endif // INTEGERS_H

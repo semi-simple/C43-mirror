@@ -17,6 +17,8 @@
 /********************************************//**
  * \file log10.h
  ***********************************************/
+#ifndef LOG10_H
+#define LOG10_H
 
 void   fnLog10   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void   log10Cxma (void);
 void   log10ShoI (void);
 void   log10Real (void);
 void   log10Cplx (void);
+
+#endif // LOG10_H

@@ -17,8 +17,12 @@
 /********************************************//**
  * \file constants.h functions for constant management
  ***********************************************/
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 
 
 void fnConstant(const uint16_t constant);
 void fnPi      (uint16_t unusedButMandatoryParameter);
+
+#endif // CONSTANTS_H

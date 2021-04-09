@@ -17,6 +17,8 @@
 /********************************************//**
  * \file changeSign.h
  ***********************************************/
+#ifndef CHANGESIGN_H
+#define CHANGESIGN_H
 
 void fnChangeSign(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -32,3 +34,5 @@ void chsCxma     (void);
 void chsShoI     (void);
 void chsReal     (void);
 void chsCplx     (void);
+
+#endif // CHANGESIGN_H

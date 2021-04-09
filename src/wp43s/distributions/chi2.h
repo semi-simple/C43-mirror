@@ -17,6 +17,8 @@
 /********************************************//**
  * \file chi2.h
  ***********************************************/
+#ifndef CHI2_H
+#define CHI2_H
 
 bool_t checkRegisterNoFP(calcRegister_t reg);
 
@@ -29,3 +31,5 @@ void WP34S_Pdf_Chi2 (const real_t *x, const real_t *k, real_t *res, realContext_
 void WP34S_Cdfu_Chi2(const real_t *x, const real_t *k, real_t *res, realContext_t *realContext);
 void WP34S_Cdf_Chi2 (const real_t *x, const real_t *k, real_t *res, realContext_t *realContext);
 void WP34S_Qf_Chi2  (const real_t *x, const real_t *k, real_t *res, realContext_t *realContext);
+
+#endif // CHI2_H

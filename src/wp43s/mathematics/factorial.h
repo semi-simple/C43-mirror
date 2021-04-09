@@ -17,6 +17,8 @@
 /********************************************//**
  * \file factorial.h
  ***********************************************/
+#ifndef FACTORIAL_H
+#define FACTORIAL_H
 
 void fnFactorial(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void factReal   (void);
 void factCplx   (void);
 
 uint64_t fact_uint64(uint64_t value);
+
+#endif // FACTORIAL_H

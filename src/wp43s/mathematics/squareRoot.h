@@ -17,6 +17,8 @@
 /********************************************//**
  * \file sqrt.h
  ***********************************************/
+#ifndef SQUAREROOT_H
+#define SQUAREROOT_H
 
 void fnSquareRoot(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void sqrtCxma    (void);
 void sqrtShoI    (void);
 void sqrtReal    (void);
 void sqrtCplx    (void);
+
+#endif // SQUAREROOT_H

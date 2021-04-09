@@ -17,6 +17,8 @@
 /********************************************//**
  * \file lcm.h
  ***********************************************/
+#ifndef LCM_H
+#define LCM_H
 
 void fnLcm      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void lcmLonILonI(void);
 void lcmLonIShoI(void);
 void lcmShoILonI(void);
 void lcmShoIShoI(void);
+
+#endif // LCM_H

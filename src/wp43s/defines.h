@@ -17,6 +17,8 @@
 /********************************************//**
  * \file defines.h
  ***********************************************/
+#ifndef DEFINES_H
+#define DEFINES_H
 
 
 //*********************************
@@ -770,3 +772,5 @@
                                      printf("%lulimbs", *REGISTER_DATA_MAX_LEN(reg) / LIMB_SIZE); \
                                      printf("\n"); \
                                     }
+
+#endif // DEFINES_H

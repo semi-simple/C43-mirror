@@ -17,5 +17,9 @@
 /********************************************//**
  * \file sort.h
  ***********************************************/
+#ifndef SORT_H
+#define SORT_H
 
 int32_t compareString(const char *stra, const char *strb, int32_t comparisonType);
+
+#endif // SORT_H

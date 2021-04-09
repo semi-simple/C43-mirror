@@ -17,6 +17,8 @@
 /********************************************//**
  * \file nand.h
  ***********************************************/
+#ifndef NAND_H
+#define NAND_H
 
 void fnLogicalNand(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +32,5 @@ void nandLonIReal (void);
 void nandRealLonI (void);
 void nandRealReal (void);
 void nandShoIShoI (void);
+
+#endif // NAND_H

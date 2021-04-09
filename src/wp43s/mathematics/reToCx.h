@@ -17,5 +17,9 @@
 /********************************************//**
  * \file reToCx.h
  ***********************************************/
+#ifndef RETOCX_H
+#define RETOCX_H
 
 void fnReToCx(uint16_t unusedButMandatoryParameter);
+
+#endif // RETOCX_H

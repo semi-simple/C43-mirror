@@ -17,6 +17,8 @@
 /********************************************//**
  * \file lnPOne.h
  ***********************************************/
+#ifndef LNPONE_H
+#define LNPONE_H
 // Coded by JM, based on ln.h
 
 void fnLnP1   (uint16_t unusedButMandatoryParameter);
@@ -32,3 +34,5 @@ void lnP1ShoI (void);
 void lnP1Real (void);
 void lnP1Cplx (void);
 void lnP1Complex(const real_t *real, const real_t *imag, real_t *lnReal, real_t *lnImag, realContext_t *realContext);
+
+#endif // LNPONE_H

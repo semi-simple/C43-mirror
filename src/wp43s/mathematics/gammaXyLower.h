@@ -17,6 +17,8 @@
 /********************************************//**
  * \file gammaXyLower.h
  ***********************************************/
+#ifndef GAMMAXYLOWER_H
+#define GAMMAXYLOWER_H
 
 void fnGammaXyLower      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -28,3 +30,5 @@ void gammaXyLowerLonILonI(void);
 void gammaXyLowerLonIReal(void);
 void gammaXyLowerRealLonI(void);
 void gammaXyLowerRealReal(void);
+
+#endif // GAMMAXYLOWER_H

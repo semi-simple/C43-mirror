@@ -17,6 +17,8 @@
 /********************************************//**
  * \file parallel.h
  ***********************************************/
+#ifndef PARALLEL_H
+#define PARALLEL_H
 
 void fnParallel      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -39,3 +41,5 @@ void parallelRealCplx(void);
 void parallelCplxLonI(void);
 void parallelCplxReal(void);
 void parallelCplxCplx(void);
+
+#endif // PARALLEL_H

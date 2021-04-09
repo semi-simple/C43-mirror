@@ -17,6 +17,8 @@
 /********************************************//**
  * \file mant.h
  ***********************************************/
+#ifndef MANT_H
+#define MANT_H
 
 void fnMant   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -26,3 +28,5 @@ void mantError(void);
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void mantLonI (void);
 void mantReal (void);
+
+#endif // MANT_H

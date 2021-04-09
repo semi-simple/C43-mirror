@@ -17,6 +17,8 @@
 /********************************************//**
  * \file w_negative.h
  ***********************************************/
+#ifndef W_NEGATIVE_H
+#define W_NEGATIVE_H
 
 void fnWnegative(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -27,3 +29,5 @@ void wNegError  (void);
 void wNegLonI   (void);
 void wNegReal   (void);
 void wNegCplx   (void);
+
+#endif // W_NEGATIVE_H

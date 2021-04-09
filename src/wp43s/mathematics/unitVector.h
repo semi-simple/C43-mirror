@@ -17,6 +17,8 @@
 /********************************************//**
  * \file unitVector.h
  ***********************************************/
+#ifndef UNITVECTOR_H
+#define UNITVECTOR_H
 
 void fnUnitVector   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -25,3 +27,5 @@ void unitVectorError(void);
 #define unitVectorError typeError
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void unitVectorCplx (void);
+
+#endif // UNITVECTOR_H

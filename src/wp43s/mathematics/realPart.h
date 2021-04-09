@@ -17,6 +17,8 @@
 /********************************************//**
  * \file realPart.h
  ***********************************************/
+#ifndef REALPART_H
+#define REALPART_H
 
 void fnRealPart   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -27,3 +29,5 @@ void realPartError(void);
 void realPartCxma (void);
 void realPartCplx (void);
 void realPartReal (void);
+
+#endif // REALPART_H

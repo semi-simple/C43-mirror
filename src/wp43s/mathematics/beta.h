@@ -17,6 +17,8 @@
 /********************************************//**
  * \file beta.h
  ***********************************************/
+#ifndef BETA_H
+#define BETA_H
 
 void fnBeta      (uint16_t unusedButMandatoryParameter);
 
@@ -37,3 +39,5 @@ void betaCplxReal(void);
 void betaLonICplx(void);
 void betaRealCplx(void);
 void betaCplxCplx(void);
+
+#endif // BETA_H

@@ -17,5 +17,9 @@
 /********************************************//**
  * \file ulp.h
  ***********************************************/
+#ifndef ULP_H
+#define ULP_H
 
 void fnUlp(uint16_t unusedButMandatoryParameter);
+
+#endif // ULP_H

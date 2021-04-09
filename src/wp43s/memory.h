@@ -17,6 +17,8 @@
 /********************************************//**
  * \file memory.h
  ***********************************************/
+#ifndef MEMORY_H
+#define MEMORY_H
 
 void    *wp43sAllocate     (size_t sizeInBlocks);
 void    *wp43sReallocate   (void *pcMemPtr, size_t oldSizeInBlocks, size_t newSizeInBlocks);
@@ -41,3 +43,5 @@ void    resizeProgramMemory(uint16_t newSizeInBlocks);
 #ifdef PC_BUILD
   void ramDump(void);
 #endif // PC_BUILD
+
+#endif // MEMORY_H

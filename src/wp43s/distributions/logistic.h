@@ -17,6 +17,8 @@
 /********************************************//**
  * \file logistic.h
  ***********************************************/
+#ifndef LOGISTIC_H
+#define LOGISTIC_H
 
 void fnLogisticP     (uint16_t unusedButMandatoryParameter);
 void fnLogisticL     (uint16_t unusedButMandatoryParameter);
@@ -27,3 +29,5 @@ void WP34S_Pdf_Logit (const real_t *x, const real_t *mu, const real_t *s, real_t
 void WP34S_Cdfu_Logit(const real_t *x, const real_t *mu, const real_t *s, real_t *res, realContext_t *realContext);
 void WP34S_Cdf_Logit (const real_t *x, const real_t *mu, const real_t *s, real_t *res, realContext_t *realContext);
 void WP34S_Qf_Logit  (const real_t *x, const real_t *mu, const real_t *s, real_t *res, realContext_t *realContext);
+
+#endif // LOGISTIC_H

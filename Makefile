@@ -111,7 +111,7 @@ SRC_WP43S                = \
 	$(addprefix src/wp43s/logicalOps/, \
 		and.c countBits.c mask.c nand.c nor.c not.c or.c rotateBits.c setClearFlipBits.c xnor.c xor.c) \
 	$(addprefix src/wp43s/distributions/, \
-		chi2.c f.c normal.c t.c) \
+		binomial.c cauchy.c chi2.c exponential.c f.c geometric.c hyper.c logistic.c negBinom.c normal.c poisson.c t.c weibull.c) \
 	$(addprefix src/wp43s/browsers/, \
 		flagBrowser.c fontBrowser.c registerBrowser.c) \
 	$(addprefix src/wp43s/ui/, \

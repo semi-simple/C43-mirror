@@ -21,6 +21,8 @@
 void fnCyx(uint16_t unusedButMandatoryParameter);
 void fnPyx(uint16_t unusedButMandatoryParameter);
 
+void logCyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realContext);
+
 /*
  * When combOrPerm == CP_COMBINATION => Cyx
  *      combOrPerm == CP_PERMUTATION => Pyx

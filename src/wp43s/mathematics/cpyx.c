@@ -20,6 +20,10 @@
 
 #include "mathematics/cpyx.h"
 
+#include "flags.h"
+#include "integers.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 static void cpyxDataTypeError(uint16_t);

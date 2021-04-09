@@ -20,6 +20,9 @@
 
 #include "mathematics/toPolar.h"
 
+#include "conversionAngles.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

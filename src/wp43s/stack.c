@@ -20,6 +20,10 @@
 
 #include "stack.h"
 
+#include "flags.h"
+#include "memory.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 /********************************************//**

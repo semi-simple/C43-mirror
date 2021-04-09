@@ -20,6 +20,11 @@
 
 #include "registerValueConversions.h"
 
+#include "dateTime.h"
+#include "display.h"
+#include "integers.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

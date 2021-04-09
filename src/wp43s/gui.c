@@ -21,8 +21,12 @@
 #include "gui.h"
 
 #include "bufferize.h"
+#include "flags.h"
 #include "keyboard.h"
+#include "registers.h"
 #include "screen.h"
+#include "stack.h"
+#include <string.h>
 
 #include "wp43s.h"
 

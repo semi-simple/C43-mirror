@@ -20,6 +20,9 @@
 
 #include "mathematics/percentMRR.h"
 
+#include "registers.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 static bool_t convertRegisterToReal(calcRegister_t regist, real_t *r) {

@@ -20,6 +20,7 @@
 
 #include "mathematics/prime.h"
 
+#include "registers.h"
 #include "screen.h"
 #include "statusBar.h"
 

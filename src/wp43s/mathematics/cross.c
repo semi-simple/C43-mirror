@@ -20,6 +20,8 @@
 
 #include "mathematics/cross.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 static void crossDataTypeError(void);

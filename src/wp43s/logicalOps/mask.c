@@ -20,6 +20,9 @@
 
 #include "logicalOps/mask.h"
 
+#include "registers.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

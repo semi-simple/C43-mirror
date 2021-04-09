@@ -20,6 +20,12 @@
 
 #include "recall.h"
 
+#include "flags.h"
+#include "memory.h"
+#include "registers.h"
+#include "stack.h"
+#include "store.h"
+
 #include "wp43s.h"
 
 

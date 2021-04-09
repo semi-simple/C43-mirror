@@ -20,6 +20,10 @@
 
 #include "mathematics/subtraction.h"
 
+#include "conversionAngles.h"
+#include "integers.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

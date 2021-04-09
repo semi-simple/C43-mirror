@@ -20,6 +20,9 @@
 
 #include "mathematics/ortho_polynom.h"
 
+#include "registers.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

@@ -21,7 +21,9 @@
 
 #include "mathematics/sincpi.h"
 
+#include "conversionAngles.h"
 #include "fonts.h"
+#include "registers.h"
 
 #include "wp43s.h"
 

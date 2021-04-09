@@ -20,6 +20,9 @@
 
 #include "mathematics/logxy.h"
 
+#include "flags.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

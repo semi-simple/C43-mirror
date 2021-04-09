@@ -21,6 +21,8 @@
 #include "mathematics/cubeRoot.h"
 
 #include "fonts.h"
+#include "integers.h"
+#include "registers.h"
 
 #include "wp43s.h"
 

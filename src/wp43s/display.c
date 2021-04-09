@@ -20,7 +20,12 @@
 
 #include "display.h"
 
+#include "conversionAngles.h"
+#include "dateTime.h"
+#include "flags.h"
 #include "fonts.h"
+#include "fractions.h"
+#include "registers.h"
 #include <string.h>
 
 #include "wp43s.h"

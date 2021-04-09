@@ -20,6 +20,9 @@
 
 #include "mathematics/bessel.h"
 
+#include "memory.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

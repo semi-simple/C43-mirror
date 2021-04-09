@@ -20,6 +20,7 @@
 
 #include "mathematics/round.h"
 
+#include "registers.h"
 #include "screen.h"
 
 #include "wp43s.h"

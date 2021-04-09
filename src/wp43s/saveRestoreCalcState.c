@@ -20,8 +20,13 @@
 
 #include "saveRestoreCalcState.h"
 
+#include "display.h"
+#include "flags.h"
 #include "gui.h"
+#include "memory.h"
+#include "registers.h"
 #include "screen.h"
+#include "stats.h"
 #include <string.h>
 
 #include "wp43s.h"

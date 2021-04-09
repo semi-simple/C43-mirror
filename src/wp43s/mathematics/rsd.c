@@ -20,6 +20,8 @@
 
 #include "mathematics/rsd.h"
 
+#include "conversionAngles.h"
+#include "registers.h"
 #include "screen.h"
 
 #include "wp43s.h"

@@ -20,7 +20,10 @@
 
 #include "browsers/registerBrowser.h"
 
+#include "display.h"
+#include "flags.h"
 #include "fonts.h"
+#include "registers.h"
 #include "screen.h"
 #include <string.h>
 

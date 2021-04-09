@@ -20,6 +20,8 @@
 
 #include "mathematics/mant.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 

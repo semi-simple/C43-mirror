@@ -20,6 +20,8 @@
 
 #include "mathematics/min.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 void fnMin(uint16_t unusedButMandatoryParameter) {

@@ -728,6 +728,22 @@
 #define currentPtrToNextLevel                (currentSubroutineLevelData[2].ptrToNextLevel)
 #define currentPtrToPreviousLevel            (currentSubroutineLevelData[2].ptrToPreviousLevel)
 
+#if !defined(PC_BUILD) && !defined(DMCP_BUILD)
+  #error One of PC_BUILD and DMCP_BUILD must be defined
+#endif // !defined(PC_BUILD) && !defined(DMCP_BUILD)
+
+#if defined(PC_BUILD) && defined(DMCP_BUILD)
+  #error Only one of PC_BUILD and DMCP_BUILD must be defined
+#endif // defined(PC_BUILD) && defined(DMCP_BUILD)
+
+#if !defined(OS32BIT) && !defined(OS64BIT)
+  #error One of OS32BIT and OS64BIT must be defined
+#endif // !defined(OS32BIT) && !defined(OS64BIT)
+
+#if defined(OS32BIT) && defined(OS64BIT)
+  #error Only one of OS32BIT and OS64BIT must be defined
+#endif // defined(OS32BIT) && defined(OS64BIT)
+
 #ifdef PC_BUILD
   #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
     #undef  DEBUG_PANEL
@@ -776,7 +792,7 @@
 #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 /* Turn off -Wunused-result for a specific function call */
-#define ignore_result(M) if(1==((int)M)){;}
+#define ignore_result(M) if(1==((uint64_t)M)){;}
 
 #ifdef DMCP_BUILD
   #define TMP_STR_LENGTH       AUX_BUF_SIZE

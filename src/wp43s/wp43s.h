@@ -24,11 +24,6 @@
   #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 
-//  #include <stdlib.h>
-//  #include <stdio.h>
-//  #include <string.h>
-//  #include <time.h>
-//  #include <stdint.h>
   #if (__linux__ == 1)
     #include <math.h>
   #endif // (__linux__ == 1)
@@ -55,55 +50,20 @@
 
   #include "defines.h"
 
-  #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
-    #error One of PC_BUILD and DMCP_BUILD must be defined
-  #endif // !defined(PC_BUILD) && !defined(DMCP_BUILD)
-
-  #if defined(PC_BUILD) && defined(DMCP_BUILD)
-    #error Only one of PC_BUILD and DMCP_BUILD must be defined
-  #endif // defined(PC_BUILD) && defined(DMCP_BUILD)
-
-  #if !defined(OS32BIT) && !defined(OS64BIT)
-    #error One of OS32BIT and OS64BIT must be defined
-  #endif // !defined(OS32BIT) && !defined(OS64BIT)
-
-  #if defined(OS32BIT) && defined(OS64BIT)
-    #error Only one of OS32BIT and OS64BIT must be defined
-  #endif // defined(OS32BIT) && defined(OS64BIT)
-
-  #include "typeDefinitions.h"
-  #include "decNumberWrappers.h"
-  #include "gmpWrappers.h"
   #include "browsers/browsers.h"
   #include "config.h"
-  #include "conversionAngles.h"
-  #include "conversionUnits.h"
-  #include "curveFitting.h"
-  #include "dateTime.h"
   #include "constants.h"
   #include "debug.h"
   #include "error.h"
-  #include "flags.h"
-  #include "fractions.h"
   #include "charString.h" // must be after font.h
-  #include "display.h"    // must be after font.h
   #include "distributions/distributions.h"
-  #include "integers.h"
   #include "items.h"
   #include "logicalOps/logicalOps.h"
   #include "mathematics/mathematics.h"
-  #include "memory.h"
   #include "programming/programming.h"
-  #include "recall.h"
-  #include "registers.h"
   #include "registerValueConversions.h"
   #include "saveRestoreCalcState.h"
-  #include "sort.h"
-  #include "stack.h"
-  #include "stats.h"
-  #include "store.h"
   #include "stringFuncs.h"
-  #include "timer.h"
 
   // Variables for the simulator
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)

@@ -20,6 +20,7 @@
 
 #include "mathematics/zeta.h"
 
+#include "registers.h"
 #include "statusBar.h"
 
 #include "wp43s.h"

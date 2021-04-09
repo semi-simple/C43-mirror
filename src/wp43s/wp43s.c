@@ -21,6 +21,7 @@
 #include "wp43s.h"
 
 #include "keyboard.h"
+#include "memory.h"
 #include "screen.h"
 
 #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)

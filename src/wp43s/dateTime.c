@@ -20,7 +20,11 @@
 
 #include "dateTime.h"
 
+#include "flags.h"
+#include "registers.h"
+#include "stack.h"
 #include <string.h>
+#include <time.h>
 
 #include "wp43s.h"
 

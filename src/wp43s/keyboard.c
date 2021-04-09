@@ -21,9 +21,14 @@
 #include "keyboard.h"
 
 #include "bufferize.h"
+#include "flags.h"
 #include "gui.h"
+#include "memory.h"
+#include "recall.h"
+#include "registers.h"
 #include "screen.h"
 #include "softmenus.h"
+#include "stack.h"
 #include "ui/tam.h"
 
 #include "wp43s.h"

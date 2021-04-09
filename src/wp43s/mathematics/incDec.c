@@ -20,6 +20,8 @@
 
 #include "mathematics/incDec.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 

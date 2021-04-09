@@ -21,6 +21,7 @@
 #include "mathematics/gammaXyLower.h"
 
 #include "fonts.h"
+#include "registers.h"
 
 #include "wp43s.h"
 

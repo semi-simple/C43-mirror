@@ -20,6 +20,8 @@
 
 #include "mathematics/percentPlusMG.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 static void dataTypeError(void);

@@ -20,7 +20,9 @@
 
 #include "programming/decode.h"
 
+#include "display.h"
 #include "fonts.h"
+#include "registers.h"
 #include <string.h>
 
 #include "wp43s.h"

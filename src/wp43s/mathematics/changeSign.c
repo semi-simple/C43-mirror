@@ -20,6 +20,9 @@
 
 #include "mathematics/changeSign.h"
 
+#include "integers.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

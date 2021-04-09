@@ -20,6 +20,13 @@
 
 #include "mathematics/random.h"
 
+#include "flags.h"
+#include "integers.h"
+#include "memory.h"
+#include "registers.h"
+#include "stack.h"
+#include "timer.h"
+
 #include "wp43s.h"
 
 //////////////////////////////////////////////////////////

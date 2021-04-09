@@ -18,8 +18,24 @@
  * \file testSuite.c
  ***********************************************/
 
-#include "wp43s.h"
 #include "testSuite.h"
+
+#include "conversionAngles.h"
+#include "conversionUnits.h"
+#include "dateTime.h"
+#include "display.h"
+#include "flags.h"
+#include "fractions.h"
+#include "gui.h"
+#include "recall.h"
+#include "registers.h"
+#include "sort.h"
+#include "stack.h"
+#include "stats.h"
+#include "store.h"
+#include <string.h>
+
+#include "wp43s.h"
 
 #define NUMBER_OF_CORRECT_SIGNIFICANT_DIGITS_EXPECTED 34
 
@@ -2239,20 +2255,20 @@ void processOneFile(void) {
   funcNoParam = fnNop;
   funcType = FUNC_NOPARAM;
 
-  fgets(line, 9999, testSuite);
+  ignore_result(fgets(line, 9999, testSuite));
   lineNumber = 1;
   while(!feof(testSuite)) {
     standardizeLine();
     while(strlen(line) >= 4 && strncmp(line + strlen(line) - 4, " ...", 4) == 0) {
       line[strlen(line) - 3] = 0;
       if(!feof(testSuite)) {
-        fgets(line + strlen(line), 9999, testSuite);
+        ignore_result(fgets(line + strlen(line), 9999, testSuite));
         lineNumber++;
         standardizeLine();
       }
     }
     processLine();
-    fgets(line, 9999, testSuite);
+    ignore_result(fgets(line, 9999, testSuite));
     lineNumber++;
   }
 
@@ -2321,13 +2337,13 @@ void processTests(void) {
     exit(-1);
   }
 
-  fgets(line, 9999, fileList);
+  ignore_result(fgets(line, 9999, fileList));
   while(!feof(fileList)) {
     standardizeLine();
     if(line[0] != 0) {
       processOneFile();
     }
-    fgets(line, 9999, fileList);
+    ignore_result(fgets(line, 9999, fileList));
   }
 
   fclose(fileList);

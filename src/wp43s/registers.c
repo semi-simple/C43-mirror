@@ -20,6 +20,12 @@
 
 #include "registers.h"
 
+#include "dateTime.h"
+#include "display.h"
+#include "flags.h"
+#include "memory.h"
+#include "sort.h"
+#include "stack.h"
 #include <string.h>
 
 #include "wp43s.h"

@@ -19,6 +19,7 @@
  ***********************************************/
 
 #include "gui.h"
+#include "memory.h"
 #include "screen.h"
 
 #include "wp43s.h"

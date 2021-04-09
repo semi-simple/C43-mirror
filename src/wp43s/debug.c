@@ -20,7 +20,11 @@
 
 #include "debug.h"
 
+#include "display.h"
+#include "flags.h"
 #include "fonts.h"
+#include "registers.h"
+#include <string.h>
 
 #include "wp43s.h"
 

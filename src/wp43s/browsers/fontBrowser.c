@@ -20,6 +20,7 @@
 
 #include "browsers/fontBrowser.h"
 
+#include "flags.h"
 #include "fonts.h"
 #include "screen.h"
 

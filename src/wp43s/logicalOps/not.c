@@ -20,6 +20,8 @@
 
 #include "logicalOps/not.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 

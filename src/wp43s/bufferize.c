@@ -20,10 +20,18 @@
 
 #include "bufferize.h"
 
+#include "conversionAngles.h"
+#include "dateTime.h"
+#include "display.h"
+#include "flags.h"
 #include "fonts.h"
 #include "gui.h"
+#include "registers.h"
 #include "screen.h"
 #include "softmenus.h"
+#include "sort.h"
+#include "stack.h"
+#include "timer.h"
 #include "ui/tam.h"
 #include <string.h>
 

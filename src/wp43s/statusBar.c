@@ -20,6 +20,8 @@
 
 #include "statusBar.h"
 
+#include "dateTime.h"
+#include "flags.h"
 #include "fonts.h"
 #include "screen.h"
 

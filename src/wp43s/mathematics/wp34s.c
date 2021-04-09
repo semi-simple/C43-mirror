@@ -20,6 +20,7 @@
 
 #include "mathematics/wp34s.h"
 
+#include "conversionAngles.h"
 #include "statusBar.h"
 
 #include "wp43s.h"

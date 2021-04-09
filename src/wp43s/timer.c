@@ -20,6 +20,8 @@
 
 #include "timer.h"
 
+#include "stack.h"
+
 #include "wp43s.h"
 
 uint32_t getUptimeMs(void) {

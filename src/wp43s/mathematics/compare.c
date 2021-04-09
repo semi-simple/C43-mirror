@@ -20,6 +20,10 @@
 
 #include "mathematics/compare.h"
 
+#include "registers.h"
+#include "sort.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

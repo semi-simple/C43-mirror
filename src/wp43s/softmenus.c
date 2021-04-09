@@ -27,7 +27,9 @@
 #include "softmenus.h"
 
 #include "gui.h"
+#include "registers.h"
 #include "screen.h"
+#include "sort.h"
 #include <string.h>
 #include <stdlib.h>
 

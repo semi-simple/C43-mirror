@@ -20,6 +20,8 @@
 
 #include "memory.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 int32_t getFreeRamMemory(void) {

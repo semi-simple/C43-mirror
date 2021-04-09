@@ -20,6 +20,8 @@
 
 #include "mathematics/parallel.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 

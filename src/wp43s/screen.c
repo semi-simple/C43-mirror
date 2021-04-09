@@ -21,10 +21,16 @@
 #include "screen.h"
 
 #include "bufferize.h"
+#include "dateTime.h"
+#include "display.h"
+#include "flags.h"
 #include "fonts.h"
 #include "keyboard.h"
+#include "memory.h"
+#include "registers.h"
 #include "softmenus.h"
 #include "statusBar.h"
+#include "timer.h"
 #include <string.h>
 
 #include "wp43s.h"

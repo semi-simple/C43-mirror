@@ -20,6 +20,9 @@
 
 #include "mathematics/neighb.h"
 
+#include "integers.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

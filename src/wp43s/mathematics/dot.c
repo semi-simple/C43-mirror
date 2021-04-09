@@ -20,6 +20,8 @@
 
 #include "mathematics/dot.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 static void dotDataTypeError(void);

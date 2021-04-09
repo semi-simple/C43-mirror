@@ -20,6 +20,11 @@
 
 #include "mathematics/variance.h"
 
+#include "flags.h"
+#include "registers.h"
+#include "stack.h"
+#include "stats.h"
+
 #include "wp43s.h"
 
 /* Standard deviations and standard errors.

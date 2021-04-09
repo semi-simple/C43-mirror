@@ -17,9 +17,11 @@
 #include "ui/tam.h"
 
 #include "bufferize.h"
+#include "flags.h"
 #include "fonts.h"
 #include "gui.h"
 #include "items.h"
+#include "registers.h"
 #include "softmenus.h"
 #include <string.h>
 

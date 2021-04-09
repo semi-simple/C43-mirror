@@ -20,6 +20,10 @@
 
 #include "logicalOps/rotateBits.h"
 
+#include "flags.h"
+#include "registers.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

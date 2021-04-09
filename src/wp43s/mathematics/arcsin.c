@@ -20,6 +20,10 @@
 
 #include "mathematics/arcsin.h"
 
+#include "conversionAngles.h"
+#include "flags.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

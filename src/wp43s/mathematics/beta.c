@@ -20,6 +20,8 @@
 
 #include "mathematics/beta.h"
 
+#include "registers.h"
+
 #include "wp43s.h"
 
 TO_QSPI void (* const beta[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {

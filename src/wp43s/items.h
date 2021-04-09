@@ -2297,7 +2297,7 @@
 #define ITM_USER_DRG                  2226
 #define ITM_2227                      2227
 
-#define LAST_ITEM                     2238   //JM
+#define LAST_ITEM                     2228   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

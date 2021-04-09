@@ -18,6 +18,10 @@
  * \file fib.c
  ***********************************************/
 
+#include "mathematics/fib.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

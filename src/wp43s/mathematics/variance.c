@@ -18,6 +18,8 @@
  * \file variance.c
  ***********************************************/
 
+#include "mathematics/variance.h"
+
 #include "wp43s.h"
 
 /* Standard deviations and standard errors.

@@ -20,6 +20,9 @@
 #ifndef ROUNDI_H
 #define ROUNDI_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnRoundi   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void roundiError(void);

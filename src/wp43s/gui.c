@@ -18,6 +18,12 @@
  * \file gui.c
  ***********************************************/
 
+#include "gui.h"
+
+#include "bufferize.h"
+#include "keyboard.h"
+#include "screen.h"
+
 #include "wp43s.h"
 
 #ifdef PC_BUILD

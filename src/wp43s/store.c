@@ -18,6 +18,8 @@
  * \file store.c
  ***********************************************/
 
+#include "store.h"
+
 #include "wp43s.h"
 
 

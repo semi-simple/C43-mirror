@@ -20,6 +20,9 @@
 #ifndef GEOMETRIC_H
 #define GEOMETRIC_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnGeometricP           (uint16_t unusedButMandatoryParameter);
 void fnGeometricL           (uint16_t unusedButMandatoryParameter);
 void fnGeometricR           (uint16_t unusedButMandatoryParameter);

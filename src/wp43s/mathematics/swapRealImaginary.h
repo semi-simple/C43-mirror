@@ -20,6 +20,9 @@
 #ifndef SWAPREALIMAGINARY_H
 #define SWAPREALIMAGINARY_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnSwapRealImaginary(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void swapReImError      (void);

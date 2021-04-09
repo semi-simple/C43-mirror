@@ -20,6 +20,9 @@
 #ifndef FONTS_H
 #define FONTS_H
 
+#include "typeDefinitions.h"
+#include <stdint.h>
+
 int16_t findGlyph            (const font_t *font, uint16_t charCode);
 void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
 

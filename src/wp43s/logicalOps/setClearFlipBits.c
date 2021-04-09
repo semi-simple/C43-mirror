@@ -18,6 +18,8 @@
  * \file setClearFlipBits.c
  ***********************************************/
 
+#include "logicalOps/setClearFlipBits.h"
+
 #include "wp43s.h"
 
 

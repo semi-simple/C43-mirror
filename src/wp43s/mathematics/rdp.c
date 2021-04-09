@@ -18,6 +18,10 @@
  * \file rdp.c
  ***********************************************/
 
+#include "mathematics/rdp.h"
+
+#include "screen.h"
+
 #include "wp43s.h"
 
 

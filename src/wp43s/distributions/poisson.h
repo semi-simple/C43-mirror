@@ -20,6 +20,9 @@
 #ifndef POISSON_H
 #define POISSON_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnPoissonP                (uint16_t unusedButMandatoryParameter);
 void fnPoissonL                (uint16_t unusedButMandatoryParameter);
 void fnPoissonR                (uint16_t unusedButMandatoryParameter);

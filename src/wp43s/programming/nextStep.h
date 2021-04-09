@@ -20,6 +20,8 @@
 #ifndef NEXTSTEP_H
 #define NEXTSTEP_H
 
+#include <stdint.h>
+
 uint8_t *findNextStep    (uint8_t *step);
 uint8_t *findPreviousStep(uint8_t *step);
 void     fnBst(uint16_t unusedButMandatoryParameter);

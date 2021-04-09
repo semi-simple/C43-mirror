@@ -18,6 +18,8 @@
  * \file checkValue.c
  *******************************************************/
 
+#include "mathematics/checkValue.h"
+
 #include "wp43s.h"
 
 

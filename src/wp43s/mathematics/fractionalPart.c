@@ -18,6 +18,8 @@
  * \file fractionalPart.c
  ***********************************************/
 
+#include "mathematics/fractionalPart.h"
+
 #include "wp43s.h"
 
 

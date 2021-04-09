@@ -18,6 +18,8 @@
  * \file deltaPercent.c
  ***********************************************/
 
+#include "mathematics/deltaPercent.h"
+
 #include "wp43s.h"
 
 static void dataTypeError(void);

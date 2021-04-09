@@ -18,6 +18,10 @@
  * \file lblGtoXeq.c
  ***********************************************/
 
+#include "programming/lblGtoXeq.h"
+
+#include "softmenus.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,9 @@
  * \file wp43s-gtk.c
  ***********************************************/
 
+#include "gui.h"
+#include "screen.h"
+
 #include "wp43s.h"
 
 #ifdef PC_BUILD

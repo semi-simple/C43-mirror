@@ -19,6 +19,10 @@
  ***********************************************/
 // Coded by JM, based on sin.c
 
+#include "mathematics/sincpi.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,8 @@
  * \file sin.c
  ***********************************************/
 
+#include "mathematics/sin.h"
+
 #include "wp43s.h"
 
 

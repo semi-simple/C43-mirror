@@ -20,6 +20,9 @@
 #ifndef LCM_H
 #define LCM_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnLcm      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void lcmError   (void);

@@ -18,6 +18,8 @@
  * \file w_positive.c
  ***********************************************/
 
+#include "mathematics/w_positive.h"
+
 #include "wp43s.h"
 
 

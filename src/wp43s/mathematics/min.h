@@ -20,6 +20,8 @@
 #ifndef MIN_H
 #define MIN_H
 
+#include <stdint.h>
+
 void fnMin(uint16_t unusedButMandatoryParameter);
 
 #endif // MIN_H

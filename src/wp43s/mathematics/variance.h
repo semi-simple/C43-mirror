@@ -20,6 +20,8 @@
 #ifndef VARIANCE_H
 #define VARIANCE_H
 
+#include <stdint.h>
+
 void fnWeightedSampleStdDev(uint16_t unusedButMandatoryParameter);
 void fnWeightedPopulationStdDev(uint16_t unusedButMandatoryParameter);
 void fnWeightedStandardError(uint16_t unusedButMandatoryParameter);

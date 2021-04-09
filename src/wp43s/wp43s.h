@@ -21,16 +21,14 @@
 #ifndef WP43S_H
 #define WP43S_H
 
-  #include "defines.h"
-
   #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 
-  #include <stdlib.h>
-  #include <stdio.h>
-  #include <string.h>
-  #include <time.h>
-  #include <stdint.h>
+//  #include <stdlib.h>
+//  #include <stdio.h>
+//  #include <string.h>
+//  #include <time.h>
+//  #include <stdint.h>
   #if (__linux__ == 1)
     #include <math.h>
   #endif // (__linux__ == 1)
@@ -53,34 +51,9 @@
   #ifdef DMCP_BUILD
     #include <main.h>
     #include <dmcp.h>
-    #define TMP_STR_LENGTH       AUX_BUF_SIZE
-  #else // !DMCP_BUILD
-    #define TMP_STR_LENGTH       2560
   #endif // DMCP_BUILD
-  #define WRITE_BUFFER_LEN       4096
-  #define ERROR_MESSAGE_LENGTH    512
-  #define DISPLAY_VALUE_LEN        80
 
-  #include "typeDefinitions.h"
-
-  #if (IBM_DECIMAL == 1)
-    #include "decimal128.h"
-    #include "decimal64.h"
-    #include "decDouble.h"
-    #include "decQuad.h"
-    #include "decNumberWrappers.h"
-    extern int decGetInt(const decNumber *x); // Because decNumberToInt32 seems buggy! Needs more investigation
-  #endif // (IBM_DECIMAL == 1)
-
-  #if (LIBGMP == 1)
-    #include <gmp.h>
-    #include "gmpWrappers.h"
-  #endif // (LIBGMP == 1)
-
-  #ifndef RASPBERRY
-    #undef SCREEN_800X480
-    #define SCREEN_800x480 0
-  #endif // RASPBERRY
+  #include "defines.h"
 
   #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
     #error One of PC_BUILD and DMCP_BUILD must be defined
@@ -98,59 +71,9 @@
     #error Only one of OS32BIT and OS64BIT must be defined
   #endif // defined(OS32BIT) && defined(OS64BIT)
 
-  #ifdef PC_BUILD
-    #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
-      #undef  DEBUG_PANEL
-      #define DEBUG_PANEL 0
-    #endif // __MINGW64__
-    #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
-      #undef  DEBUG_PANEL
-      #define DEBUG_PANEL 0
-    #endif // RASPBERRY
-  #endif // PC_BUILD
-
-  #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-    #undef  DEBUG_PANEL
-    #define DEBUG_PANEL 0
-    #undef  DEBUG_REGISTER_L
-    #define DEBUG_REGISTER_L 0
-    #undef  SHOW_MEMORY_STATUS
-    #define SHOW_MEMORY_STATUS 0
-    #undef  EXTRA_INFO_ON_CALC_ERROR
-    #define EXTRA_INFO_ON_CALC_ERROR 0
-  #endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-
-  #if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
-    #undef  PC_BUILD
-    #undef  DMCP_BUILD
-    #undef  DEBUG_PANEL
-    #define DEBUG_PANEL 0
-    #undef  DEBUG_REGISTER_L
-    #define DEBUG_REGISTER_L 0
-    #undef  SHOW_MEMORY_STATUS
-    #define SHOW_MEMORY_STATUS 0
-    #undef  EXTRA_INFO_ON_CALC_ERROR
-    #define EXTRA_INFO_ON_CALC_ERROR 0
-    #define addItemToBuffer fnNop
-    #define fnOff           fnNop
-    #define fnAim           fnNop
-    #define registerBrowser fnNop
-    #define flagBrowser     fnNop
-    #define fontBrowser     fnNop
-    #define refreshRegisterLine(a)  {}
-    #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
-    #define showHideHourGlass()     {}
-    #define refreshScreen()         {}
-    #define refreshLcd(a)           {}
-    #define initFontBrowser()       {}
-  #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
-
-  /* Turn off -Wunused-result for a specific function call */
-  #define ignore_result(M) if(1==((int)M)){;}
-
-  #include "assign.h"
-  #include "ui/tam.h"
-  #include "bufferize.h"
+  #include "typeDefinitions.h"
+  #include "decNumberWrappers.h"
+  #include "gmpWrappers.h"
   #include "browsers/browsers.h"
   #include "config.h"
   #include "conversionAngles.h"
@@ -162,14 +85,11 @@
   #include "error.h"
   #include "flags.h"
   #include "fractions.h"
-  #include "fonts.h"
   #include "charString.h" // must be after font.h
   #include "display.h"    // must be after font.h
   #include "distributions/distributions.h"
-  #include "gui.h"
   #include "integers.h"
   #include "items.h"
-  #include "keyboard.h"
   #include "logicalOps/logicalOps.h"
   #include "mathematics/mathematics.h"
   #include "memory.h"
@@ -178,12 +98,9 @@
   #include "registers.h"
   #include "registerValueConversions.h"
   #include "saveRestoreCalcState.h"
-  #include "screen.h"
-  #include "softmenus.h"
   #include "sort.h"
   #include "stack.h"
   #include "stats.h"
-  #include "statusBar.h"
   #include "store.h"
   #include "stringFuncs.h"
   #include "timer.h"

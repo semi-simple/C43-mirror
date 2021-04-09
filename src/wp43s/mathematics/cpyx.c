@@ -18,6 +18,8 @@
  * \file cpyx.c
  ***********************************************/
 
+#include "mathematics/cpyx.h"
+
 #include "wp43s.h"
 
 static void cpyxDataTypeError(uint16_t);

@@ -20,6 +20,9 @@
 #ifndef WEIBULL_H
 #define WEIBULL_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnWeibullP     (uint16_t unusedButMandatoryParameter);
 void fnWeibullL     (uint16_t unusedButMandatoryParameter);
 void fnWeibullR     (uint16_t unusedButMandatoryParameter);

@@ -18,6 +18,10 @@
  * \file rsd.c
  ***********************************************/
 
+#include "mathematics/rsd.h"
+
+#include "screen.h"
+
 #include "wp43s.h"
 
 

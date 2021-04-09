@@ -18,6 +18,8 @@
  * \file assign.c
  ***********************************************/
 
+#include "assign.h"
+
 #include "wp43s.h"
 
 //This variable is to store in flash memory

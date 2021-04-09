@@ -20,6 +20,8 @@
 #ifndef PERCENTPLUSMG_H
 #define PERCENTPLUSMG_H
 
+#include <stdint.h>
+
 void fnPercentPlusMG(uint16_t unusedButMandatoryParameter);
 
 void percentPlusMGLonILonI(void);

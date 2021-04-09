@@ -18,6 +18,8 @@
  * \file fractions.c
  ***********************************************/
 
+#include "fractions.h"
+
 #include "wp43s.h"
 
 

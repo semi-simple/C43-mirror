@@ -18,6 +18,11 @@
  * \file display.c
  ***********************************************/
 
+#include "display.h"
+
+#include "fonts.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

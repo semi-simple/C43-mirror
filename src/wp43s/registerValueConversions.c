@@ -18,6 +18,8 @@
  * \file registerValueConversions.c
  ***********************************************/
 
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

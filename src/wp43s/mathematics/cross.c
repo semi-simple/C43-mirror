@@ -18,6 +18,8 @@
  * \file cross.c
  ***********************************************/
 
+#include "mathematics/cross.h"
+
 #include "wp43s.h"
 
 static void crossDataTypeError(void);

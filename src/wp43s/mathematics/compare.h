@@ -20,7 +20,8 @@
 #ifndef COMPARE_H
 #define COMPARE_H
 
-
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 bool_t registerCmp       (calcRegister_t regist1, calcRegister_t regist2, int8_t *result);
 void  registerCmpError   (calcRegister_t regist1, calcRegister_t regist2);

@@ -20,6 +20,9 @@
 #ifndef LOGISTIC_H
 #define LOGISTIC_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnLogisticP     (uint16_t unusedButMandatoryParameter);
 void fnLogisticL     (uint16_t unusedButMandatoryParameter);
 void fnLogisticR     (uint16_t unusedButMandatoryParameter);

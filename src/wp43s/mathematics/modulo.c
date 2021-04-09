@@ -18,6 +18,8 @@
  * \file modulo.c
  ***********************************************/
 
+#include "mathematics/modulo.h"
+
 #include "wp43s.h"
 
 

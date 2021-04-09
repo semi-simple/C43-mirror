@@ -18,6 +18,10 @@
  * \file ixyz.c
  ***********************************************/
 
+#include "mathematics/ixyz.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

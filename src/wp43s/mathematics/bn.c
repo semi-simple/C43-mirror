@@ -18,6 +18,8 @@
  * \file bn.c
  ***********************************************/
 
+#include "mathematics/bn.h"
+
 #include "wp43s.h"
 
 

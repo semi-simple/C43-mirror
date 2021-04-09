@@ -18,6 +18,10 @@
  * \file cauchy.c
  ***********************************************/
 
+#include "distributions/cauchy.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

@@ -20,6 +20,10 @@
 #ifndef COMPARISONREALS_H
 #define COMPARISONREALS_H
 
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+
 bool_t  real34CompareAbsGreaterThan (const real34_t *number1, const real34_t *number2);
 bool_t  real34CompareAbsGreaterEqual(const real34_t *number1, const real34_t *number2);
 bool_t  real34CompareAbsLessThan    (const real34_t *number1, const real34_t *number2);

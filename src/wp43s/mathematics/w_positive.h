@@ -20,6 +20,9 @@
 #ifndef W_POSITIVE_H
 #define W_POSITIVE_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnWpositive(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void wPosError  (void);

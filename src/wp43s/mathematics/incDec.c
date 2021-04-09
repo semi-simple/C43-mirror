@@ -18,6 +18,8 @@
  * \file incDec.c
  ***********************************************/
 
+#include "mathematics/incDec.h"
+
 #include "wp43s.h"
 
 

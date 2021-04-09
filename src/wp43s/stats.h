@@ -20,7 +20,9 @@
 #ifndef STATS_H
 #define STATS_H
 
-
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 void   fnSigma               (uint16_t plusMinus);
 void   fnStatSum             (uint16_t sum);

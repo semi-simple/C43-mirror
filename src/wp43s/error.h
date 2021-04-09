@@ -20,6 +20,10 @@
 #ifndef ERROR_H
 #define ERROR_H
 
+#include "defines.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+
 #ifndef TESTSUITE_BUILD
   void displayBugScreen     (const char *msg);
 #endif // TESTSUITE_BUILD

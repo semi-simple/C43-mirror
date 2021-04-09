@@ -20,6 +20,10 @@
 #ifndef FIB_H
 #define FIB_H
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
+
 void fnFib   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void fibError(void);

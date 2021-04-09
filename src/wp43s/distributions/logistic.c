@@ -18,6 +18,10 @@
  * \file logistic.c
  ***********************************************/
 
+#include "distributions/logistic.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

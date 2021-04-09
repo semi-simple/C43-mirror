@@ -18,6 +18,8 @@
  * \file remainder.c
  ***********************************************/
 
+#include "mathematics/remainder.h"
+
 #include "wp43s.h"
 
 

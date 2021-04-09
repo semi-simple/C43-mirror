@@ -16,6 +16,8 @@
 #ifndef FONTBROWSER_H
 #define FONTBROWSER_H
 
+#include <stdint.h>
+
 #ifndef TESTSUITE_BUILD
   void initFontBrowser(void);
   void fontBrowser    (uint16_t unusedButMandatoryParameter);

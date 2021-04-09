@@ -18,6 +18,8 @@
  * \file arccosh.c
  ***********************************************/
 
+#include "mathematics/arccosh.h"
+
 #include "wp43s.h"
 
 

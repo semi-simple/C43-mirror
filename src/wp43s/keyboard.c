@@ -18,6 +18,14 @@
  * \file keyboard.c Keyboard management
  ***********************************************/
 
+#include "keyboard.h"
+
+#include "bufferize.h"
+#include "gui.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "ui/tam.h"
+
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD

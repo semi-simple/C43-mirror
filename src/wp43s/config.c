@@ -18,6 +18,13 @@
  * \file config.c
  ***********************************************/
 
+#include "config.h"
+
+#include "bufferize.h"
+#include "gui.h"
+#include "keyboard.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

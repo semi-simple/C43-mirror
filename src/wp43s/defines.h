@@ -39,6 +39,11 @@
 #define DECNUMDIGITS                    75 // Default number of digits used in the decNumber library
 
 #define SCREEN_800X480                   1 // Set to 0 if you want a keyboard in addition to the screen on Raspberry pi
+#ifndef RASPBERRY
+  #undef SCREEN_800X480
+  #define SCREEN_800x480 0
+#endif // RASPBERRY
+
 
 #if __linux__ == 1
   #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
@@ -722,6 +727,65 @@
 #define currentSubroutineLevel               (currentSubroutineLevelData[1].subroutineLevel)
 #define currentPtrToNextLevel                (currentSubroutineLevelData[2].ptrToNextLevel)
 #define currentPtrToPreviousLevel            (currentSubroutineLevelData[2].ptrToPreviousLevel)
+
+#ifdef PC_BUILD
+  #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
+    #undef  DEBUG_PANEL
+    #define DEBUG_PANEL 0
+  #endif // __MINGW64__
+  #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
+    #undef  DEBUG_PANEL
+    #define DEBUG_PANEL 0
+  #endif // RASPBERRY
+#endif // PC_BUILD
+
+#if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
+  #undef  DEBUG_PANEL
+  #define DEBUG_PANEL 0
+  #undef  DEBUG_REGISTER_L
+  #define DEBUG_REGISTER_L 0
+  #undef  SHOW_MEMORY_STATUS
+  #define SHOW_MEMORY_STATUS 0
+  #undef  EXTRA_INFO_ON_CALC_ERROR
+  #define EXTRA_INFO_ON_CALC_ERROR 0
+#endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
+
+#if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
+  #undef  PC_BUILD
+  #undef  DMCP_BUILD
+  #undef  DEBUG_PANEL
+  #define DEBUG_PANEL 0
+  #undef  DEBUG_REGISTER_L
+  #define DEBUG_REGISTER_L 0
+  #undef  SHOW_MEMORY_STATUS
+  #define SHOW_MEMORY_STATUS 0
+  #undef  EXTRA_INFO_ON_CALC_ERROR
+  #define EXTRA_INFO_ON_CALC_ERROR 0
+  #define addItemToBuffer fnNop
+  #define fnOff           fnNop
+  #define fnAim           fnNop
+  #define registerBrowser fnNop
+  #define flagBrowser     fnNop
+  #define fontBrowser     fnNop
+  #define refreshRegisterLine(a)  {}
+  #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
+  #define showHideHourGlass()     {}
+  #define refreshScreen()         {}
+  #define refreshLcd(a)           {}
+  #define initFontBrowser()       {}
+#endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
+
+/* Turn off -Wunused-result for a specific function call */
+#define ignore_result(M) if(1==((int)M)){;}
+
+#ifdef DMCP_BUILD
+  #define TMP_STR_LENGTH       AUX_BUF_SIZE
+#else // !DMCP_BUILD
+  #define TMP_STR_LENGTH       2560
+#endif // DMCP_BUILD
+#define WRITE_BUFFER_LEN       4096
+#define ERROR_MESSAGE_LENGTH    512
+#define DISPLAY_VALUE_LEN        80
 
 //************************
 //* Macros for debugging *

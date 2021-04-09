@@ -18,6 +18,8 @@
  * \file gd.c
  ***********************************************/
 
+#include "mathematics/gd.h"
+
 #include "wp43s.h"
 
 TO_QSPI void (* const gd[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {

@@ -20,6 +20,9 @@
 #ifndef MODULO_H
 #define MODULO_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnMod(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void modError(void);

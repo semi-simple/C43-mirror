@@ -20,6 +20,7 @@
 #ifndef TYPEDEFINITIONS_H
 #define TYPEDEFINITIONS_H
 
+#include <stdint.h>
 
 /********************************************//**
  * \union multiplyDivide_t

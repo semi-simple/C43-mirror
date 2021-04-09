@@ -18,6 +18,8 @@
  * \file agm.c
  ***********************************************/
 
+#include "mathematics/agm.h"
+
 #include "wp43s.h"
 
 

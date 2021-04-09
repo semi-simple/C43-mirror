@@ -18,6 +18,10 @@
  * \file dblMultiplication.c
  ***********************************************/
 
+#include "mathematics/dblMultiplication.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

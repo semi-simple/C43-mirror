@@ -18,6 +18,10 @@
  * \file swapRealImaginary.c
  ***********************************************/
 
+#include "mathematics/swapRealImaginary.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

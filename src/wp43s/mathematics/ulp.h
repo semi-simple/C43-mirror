@@ -20,6 +20,8 @@
 #ifndef ULP_H
 #define ULP_H
 
+#include <stdint.h>
+
 void fnUlp(uint16_t unusedButMandatoryParameter);
 
 #endif // ULP_H

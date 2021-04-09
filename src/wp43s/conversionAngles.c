@@ -18,6 +18,8 @@
  * \file conversionAngles.c
  ***********************************************/
 
+#include "conversionAngles.h"
+
 #include "wp43s.h"
 
 

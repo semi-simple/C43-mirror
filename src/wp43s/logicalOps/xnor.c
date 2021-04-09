@@ -18,6 +18,8 @@
  * \file xnor.c
  ***********************************************/
 
+#include "logicalOps/xnor.h"
+
 #include "wp43s.h"
 
 

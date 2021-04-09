@@ -18,6 +18,10 @@
  * \file ln.c
  ***********************************************/
 
+#include "mathematics/ln.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

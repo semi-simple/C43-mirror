@@ -18,6 +18,10 @@
  * \file log10.c
  ***********************************************/
 
+#include "mathematics/log10.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

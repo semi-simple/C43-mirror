@@ -18,6 +18,8 @@
  * \file w_negative.c
  ***********************************************/
 
+#include "mathematics/w_negative.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,8 @@
  * \file not.c
  ***********************************************/
 
+#include "logicalOps/not.h"
+
 #include "wp43s.h"
 
 

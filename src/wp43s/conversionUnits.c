@@ -18,6 +18,8 @@
  * \file conversionUnits.c
  ***********************************************/
 
+#include "conversionUnits.h"
+
 #include "wp43s.h"
 
 

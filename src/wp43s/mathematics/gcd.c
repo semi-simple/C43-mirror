@@ -18,6 +18,8 @@
  * \file gcd.c
  ***********************************************/
 
+#include "mathematics/gcd.h"
+
 #include "wp43s.h"
 
 

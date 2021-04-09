@@ -18,6 +18,8 @@
  * \file shiftDigits.c
  ***********************************************/
 
+#include "mathematics/shiftDigits.h"
+
 #include "wp43s.h"
 
 

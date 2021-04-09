@@ -18,6 +18,10 @@
  * \file w_inverse.c
  ***********************************************/
 
+#include "mathematics/w_inverse.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

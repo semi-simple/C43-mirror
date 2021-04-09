@@ -18,6 +18,8 @@
  * \file rotateBits.c
  ***********************************************/
 
+#include "logicalOps/rotateBits.h"
+
 #include "wp43s.h"
 
 

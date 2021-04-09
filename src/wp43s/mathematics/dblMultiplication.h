@@ -20,7 +20,7 @@
 #ifndef DBLMULTIPLICATION_H
 #define DBLMULTIPLICATION_H
 
-#include "wp43s.h"
+#include <stdint.h>
 
 void fnDblMultiply(uint16_t unusedButMandatoryParameter);
 

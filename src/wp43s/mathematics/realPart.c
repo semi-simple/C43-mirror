@@ -18,6 +18,10 @@
  * \file realPart.c
  ***********************************************/
 
+#include "mathematics/realPart.h"
+
+#include "error.h"
+
 #include "wp43s.h"
 
 

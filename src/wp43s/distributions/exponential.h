@@ -20,6 +20,9 @@
 #ifndef EXPONENTIAL_H
 #define EXPONENTIAL_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnExponentialP  (uint16_t unusedButMandatoryParameter);
 void fnExponentialL  (uint16_t unusedButMandatoryParameter);
 void fnExponentialR  (uint16_t unusedButMandatoryParameter);

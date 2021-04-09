@@ -18,6 +18,10 @@
  * \file addition.c
  ***********************************************/
 
+#include "mathematics/addition.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

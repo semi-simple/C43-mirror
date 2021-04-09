@@ -20,6 +20,9 @@
 #ifndef GCD_H
 #define GCD_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnGcd      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void gcdError   (void);

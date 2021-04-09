@@ -18,6 +18,8 @@
  * \file power.c
  ***********************************************/
 
+#include "mathematics/power.h"
+
 #include "wp43s.h"
 
 

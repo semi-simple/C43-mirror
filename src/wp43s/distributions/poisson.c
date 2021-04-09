@@ -18,6 +18,10 @@
  * \file poisson.c
  ***********************************************/
 
+#include "distributions/poisson.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

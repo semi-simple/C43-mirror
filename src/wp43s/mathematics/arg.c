@@ -19,6 +19,8 @@
  ***********************************************/
 // Coded by JM, based on arctan.c
 
+#include "mathematics/arg.h"
+
 #include "wp43s.h"
 
 

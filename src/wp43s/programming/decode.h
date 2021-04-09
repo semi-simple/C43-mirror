@@ -20,6 +20,8 @@
 #ifndef DECODE_H
 #define DECODE_H
 
+#include <stdint.h>
+
 void decodeOneStep          (uint8_t *step);
 #ifndef DMCP_BUILD
   void listPrograms         (void);

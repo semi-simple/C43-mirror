@@ -19,6 +19,10 @@
  ***********************************************/
 // Coded by JM, based on ln.c
 
+#include "mathematics/lnPOne.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

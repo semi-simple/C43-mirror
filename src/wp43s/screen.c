@@ -18,6 +18,15 @@
  * \file screen.c Screen related functions
  ***********************************************/
 
+#include "screen.h"
+
+#include "bufferize.h"
+#include "fonts.h"
+#include "keyboard.h"
+#include "softmenus.h"
+#include "statusBar.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

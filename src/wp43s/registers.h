@@ -20,6 +20,10 @@
 #ifndef REGISTERS_H
 #define REGISTERS_H
 
+#include "decNumberWrappers.h"
+#include "gmpWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 uint32_t       getRegisterDataType             (calcRegister_t regist);
 dataBlock_t *  getRegisterDataPointer          (calcRegister_t regist);

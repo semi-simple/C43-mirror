@@ -18,6 +18,8 @@
  * \file countBits.c
  ***********************************************/
 
+#include "logicalOps/countBits.h"
+
 #include "wp43s.h"
 
 

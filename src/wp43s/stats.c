@@ -18,6 +18,8 @@
  * \file stats.c Statistical functions
  ***********************************************/
 
+#include "stats.h"
+
 #include "wp43s.h"
 
 

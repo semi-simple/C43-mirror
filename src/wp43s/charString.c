@@ -18,6 +18,10 @@
  * \file charString.c
  ***********************************************/
 
+#include "charString.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

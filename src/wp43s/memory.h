@@ -20,6 +20,9 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
+#include <stdint.h>
+#include <stddef.h>
+
 void    *wp43sAllocate     (size_t sizeInBlocks);
 void    *wp43sReallocate   (void *pcMemPtr, size_t oldSizeInBlocks, size_t newSizeInBlocks);
 void    wp43sFree          (void *pcMemPtr, size_t sizeInBlocks);

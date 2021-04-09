@@ -20,6 +20,8 @@
 #ifndef SAVERESTORECALCSTATE_H
 #define SAVERESTORECALCSTATE_H
 
+#include <stdint.h>
+
 #if defined(PC_BUILD) || defined(DMCP_BUILD)
   void   saveCalc      (void);
   void   restoreCalc   (void);

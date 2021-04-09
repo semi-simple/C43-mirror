@@ -20,6 +20,9 @@
 #ifndef LOG2_H
 #define LOG2_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void  fnLog2   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void  log2Error(void);

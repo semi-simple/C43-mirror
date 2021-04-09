@@ -18,6 +18,8 @@
  * \file generateTestPgms.c
  ***********************************************/
 
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

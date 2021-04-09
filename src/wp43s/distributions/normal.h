@@ -20,6 +20,9 @@
 #ifndef NORMAL_H
 #define NORMAL_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnNormalP   (uint16_t unusedButMandatoryParameter);
 void fnNormalL   (uint16_t unusedButMandatoryParameter);
 void fnNormalR   (uint16_t unusedButMandatoryParameter);

@@ -18,6 +18,8 @@
  * \file arcsinh.c
  ***********************************************/
 
+#include "mathematics/arcsinh.h"
+
 #include "wp43s.h"
 
 

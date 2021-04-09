@@ -20,6 +20,8 @@
 #ifndef COUNTBITS_H
 #define COUNTBITS_H
 
+#include <stdint.h>
+
 void fnCountBits(uint16_t unusedButMandatoryParameter);
 void countBitsError    (void);
 void countBitsShoI     (void);

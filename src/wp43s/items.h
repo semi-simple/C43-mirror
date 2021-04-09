@@ -20,6 +20,8 @@
 #ifndef ITEMS_H
 #define ITEMS_H
 
+#include <stdint.h>
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes

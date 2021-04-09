@@ -18,6 +18,8 @@
  * \file logxy.c
  ***********************************************/
 
+#include "mathematics/logxy.h"
+
 #include "wp43s.h"
 
 

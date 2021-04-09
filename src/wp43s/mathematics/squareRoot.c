@@ -18,6 +18,10 @@
  * \file sqrt.c
  ***********************************************/
 
+#include "mathematics/squareRoot.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

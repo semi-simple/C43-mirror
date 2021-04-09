@@ -20,7 +20,7 @@
 #ifndef PRIME_H
 #define PRIME_H
 
-#include "wp43s.h"
+#include <stdint.h>
 
 void fnIsPrime  (uint16_t unusedButMandatoryParameter);
 void fnNextPrime(uint16_t unusedButMandatoryParameter);

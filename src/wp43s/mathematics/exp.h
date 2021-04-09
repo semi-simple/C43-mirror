@@ -20,6 +20,10 @@
 #ifndef EXP_H
 #define EXP_H
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
+
 void fnExp   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void expError(void);

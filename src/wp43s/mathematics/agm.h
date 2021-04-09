@@ -20,6 +20,8 @@
 #ifndef AGM_H
 #define AGM_H
 
+#include <stdint.h>
+
 void fnAgm(uint16_t unusedButMandatoryParameter);
 
 #endif // AGM_H

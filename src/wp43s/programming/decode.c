@@ -18,6 +18,11 @@
  * \file decode.c
  ***********************************************/
 
+#include "programming/decode.h"
+
+#include "fonts.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,10 @@
  * \file chi2.c
  ***********************************************/
 
+#include "distributions/chi2.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

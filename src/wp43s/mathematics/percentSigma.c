@@ -18,6 +18,8 @@
  * \file percentSigma.c
  ***********************************************/
 
+#include "mathematics/percentSigma.h"
+
 #include "wp43s.h"
 
 static void dataTypeError(void);

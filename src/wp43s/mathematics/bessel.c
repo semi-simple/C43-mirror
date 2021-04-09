@@ -18,6 +18,8 @@
  * \file bessel.c
  ***********************************************/
 
+#include "mathematics/bessel.h"
+
 #include "wp43s.h"
 
 

@@ -20,6 +20,9 @@
 #ifndef IDIV_H
 #define IDIV_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnIDiv(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void idivError(void);

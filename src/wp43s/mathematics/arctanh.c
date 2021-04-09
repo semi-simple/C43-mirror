@@ -18,6 +18,8 @@
  * \file arctanh.c
  ***********************************************/
 
+#include "mathematics/arctanh.h"
+
 #include "wp43s.h"
 
 

@@ -20,6 +20,9 @@
 #ifndef GD_H
 #define GD_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnGd   (uint16_t unusedButMandatoryParameter);
 void fnInvGd(uint16_t unusedButMandatoryParameter);
 

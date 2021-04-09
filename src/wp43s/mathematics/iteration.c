@@ -18,6 +18,8 @@
  * \file iteration.c
  ***********************************************/
 
+#include "mathematics/iteration.h"
+
 #include "wp43s.h"
 
 

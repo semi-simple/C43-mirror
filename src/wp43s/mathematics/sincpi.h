@@ -21,6 +21,10 @@
 #define SINCPI_H
 // Coded by JM, based on sinc.h
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
+
 void fnSincpi(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void sincpiError(void);

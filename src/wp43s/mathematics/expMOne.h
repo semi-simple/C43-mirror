@@ -21,6 +21,10 @@
 #define EXPMONE_H
 // Coded by JM, based on exp.h
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
+
 void fnExpM1   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void expM1Error(void);

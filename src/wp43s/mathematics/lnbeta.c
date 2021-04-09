@@ -18,6 +18,10 @@
  * \file lnbeta.c
  ***********************************************/
 
+#include "mathematics/lnbeta.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 TO_QSPI void (* const lnBeta[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])() = {

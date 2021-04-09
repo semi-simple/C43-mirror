@@ -20,7 +20,7 @@
 #ifndef DBLDIVISION_H
 #define DBLDIVISION_H
 
-#include "wp43s.h"
+#include <stdint.h>
 
 void fnDblDivide         (uint16_t unusedButMandatoryParameter);
 void fnDblDivideRemainder(uint16_t unusedButMandatoryParameter);

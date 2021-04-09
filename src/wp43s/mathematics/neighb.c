@@ -18,6 +18,8 @@
  * \file neighb.c
  ***********************************************/
 
+#include "mathematics/neighb.h"
+
 #include "wp43s.h"
 
 

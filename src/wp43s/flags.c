@@ -18,6 +18,10 @@
  * \file flags.c
  ***********************************************/
 
+#include "flags.h"
+
+#include <string.h>
+
 #include "wp43s.h"
 
 void systemFlagAction(uint16_t systemFlag, uint16_t action) {

@@ -18,6 +18,10 @@
  * \file zeta.c
  ***********************************************/
 
+#include "mathematics/zeta.h"
+
+#include "statusBar.h"
+
 #include "wp43s.h"
 
 

@@ -20,6 +20,9 @@
 #ifndef CHANGESIGN_H
 #define CHANGESIGN_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnChangeSign(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void chsError    (void);

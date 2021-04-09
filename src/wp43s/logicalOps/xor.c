@@ -18,6 +18,8 @@
  * \file xor.c
  ***********************************************/
 
+#include "logicalOps/xor.h"
+
 #include "wp43s.h"
 
 

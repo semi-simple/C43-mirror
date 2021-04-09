@@ -18,6 +18,10 @@
  * \file int.c
  ***********************************************/
 
+#include "mathematics/int.h"
+
+#include "screen.h"
+
 #include "wp43s.h"
 
 

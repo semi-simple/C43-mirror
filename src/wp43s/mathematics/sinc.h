@@ -21,6 +21,10 @@
 #define SINC_H
 // Coded by JM, based on sin.h
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
+
 void fnSinc  (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void sincError(void);

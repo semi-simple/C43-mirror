@@ -18,6 +18,10 @@
  * \file floor.c
  ***********************************************/
 
+#include "mathematics/floor.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

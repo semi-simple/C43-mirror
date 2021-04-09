@@ -18,6 +18,10 @@
  * \file minusOnePow.c
  ***********************************************/
 
+#include "mathematics/minusOnePow.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

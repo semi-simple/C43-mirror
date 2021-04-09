@@ -18,6 +18,8 @@
  * \file opmod.c
  ***********************************************/
 
+#include "mathematics/opmod.h"
+
 #include "wp43s.h"
 
 

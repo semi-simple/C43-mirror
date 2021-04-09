@@ -20,6 +20,8 @@
 #ifndef DOT_H
 #define DOT_H
 
+#include <stdint.h>
+
 void fnDot(uint16_t unusedButMandatoryParameter);
 
 void dotRealCplx(void);

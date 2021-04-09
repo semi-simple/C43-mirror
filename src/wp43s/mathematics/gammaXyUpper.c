@@ -18,6 +18,10 @@
  * \file gammaXyUpper.c
  ***********************************************/
 
+#include "mathematics/gammaXyUpper.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,10 @@
  * \file stringFuncs.c
  *******************************************************/
 
+#include "stringFuncs.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

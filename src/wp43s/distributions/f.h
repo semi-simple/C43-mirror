@@ -20,6 +20,9 @@
 #ifndef F_H
 #define F_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnF_P(uint16_t unusedButMandatoryParameter);
 void fnF_L(uint16_t unusedButMandatoryParameter);
 void fnF_R(uint16_t unusedButMandatoryParameter);

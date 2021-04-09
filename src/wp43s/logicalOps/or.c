@@ -18,6 +18,8 @@
  * \file or.c
  ***********************************************/
 
+#include "logicalOps/or.h"
+
 #include "wp43s.h"
 
 

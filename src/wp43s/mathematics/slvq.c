@@ -18,6 +18,8 @@
  * \file slvq.c
  ***********************************************/
 
+#include "mathematics/slvq.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,10 @@
  * \file exp.c
  ***********************************************/
 
+#include "mathematics/exp.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

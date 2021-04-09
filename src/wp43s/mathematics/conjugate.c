@@ -18,6 +18,8 @@
  * \file conjugate.c
  ***********************************************/
 
+#include "mathematics/conjugate.h"
+
 #include "wp43s.h"
 
 

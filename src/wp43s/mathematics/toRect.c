@@ -18,6 +18,8 @@
  * \file toRect.c
  ***********************************************/
 
+#include "mathematics/toRect.h"
+
 #include "wp43s.h"
 
 

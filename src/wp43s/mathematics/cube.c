@@ -18,6 +18,10 @@
  * \file cube.c
  ***********************************************/
 
+#include "mathematics/cube.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

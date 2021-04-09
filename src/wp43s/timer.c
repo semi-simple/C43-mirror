@@ -18,6 +18,8 @@
  * \file timer.c The timer application
  ***********************************************/
 
+#include "timer.h"
+
 #include "wp43s.h"
 
 uint32_t getUptimeMs(void) {

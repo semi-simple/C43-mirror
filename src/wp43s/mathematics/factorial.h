@@ -20,6 +20,9 @@
 #ifndef FACTORIAL_H
 #define FACTORIAL_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnFactorial(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void factError  (void);

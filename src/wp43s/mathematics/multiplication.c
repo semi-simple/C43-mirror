@@ -18,6 +18,8 @@
  * \file multiplication.c
  ***********************************************/
 
+#include "mathematics/multiplication.h"
+
 #include "wp43s.h"
 
 

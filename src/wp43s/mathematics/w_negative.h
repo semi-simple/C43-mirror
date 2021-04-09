@@ -20,6 +20,9 @@
 #ifndef W_NEGATIVE_H
 #define W_NEGATIVE_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnWnegative(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void wNegError  (void);

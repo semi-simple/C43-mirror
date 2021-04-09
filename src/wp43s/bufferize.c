@@ -18,9 +18,16 @@
  * \file bufferize.c
  ***********************************************/
 
+#include "bufferize.h"
+
+#include "fonts.h"
+#include "gui.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "ui/tam.h"
+#include <string.h>
+
 #include "wp43s.h"
-
-
 
 #ifndef TESTSUITE_BUILD
   void fnAim(uint16_t unusedButMandatoryParameter) {

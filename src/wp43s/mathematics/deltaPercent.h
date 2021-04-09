@@ -20,6 +20,8 @@
 #ifndef DELTAPERCENT_H
 #define DELTAPERCENT_H
 
+#include <stdint.h>
+
 void fnDeltaPercent(uint16_t unusedButMandatoryParameter);
 
 void deltaPercentLonILonI(void);

@@ -18,6 +18,8 @@
  * \file unitVector.c
  ***********************************************/
 
+#include "mathematics/unitVector.h"
+
 #include "wp43s.h"
 
 

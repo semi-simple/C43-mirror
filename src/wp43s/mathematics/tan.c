@@ -18,6 +18,10 @@
  * \file tan.c
  ***********************************************/
 
+#include "mathematics/tan.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

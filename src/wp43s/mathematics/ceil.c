@@ -18,6 +18,10 @@
  * \file ceil.c
  ***********************************************/
 
+#include "mathematics/ceil.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,8 @@
  * \file expt.c
  ***********************************************/
 
+#include "mathematics/expt.h"
+
 #include "wp43s.h"
 
 

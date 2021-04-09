@@ -18,6 +18,10 @@
  * \file invert.c
  ***********************************************/
 
+#include "mathematics/invert.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

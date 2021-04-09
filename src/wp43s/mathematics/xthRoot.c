@@ -19,6 +19,10 @@
  ***********************************************/
 // Coded by JM, based on power.c, with reference to cuberoot.c
 
+#include "mathematics/xthRoot.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

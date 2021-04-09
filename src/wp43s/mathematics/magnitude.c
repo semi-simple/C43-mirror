@@ -18,6 +18,8 @@
  * \file magnitude.c
  ***********************************************/
 
+#include "mathematics/magnitude.h"
+
 #include "wp43s.h"
 
 

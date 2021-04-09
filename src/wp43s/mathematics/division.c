@@ -18,6 +18,8 @@
  * \file division.c
  ***********************************************/
 
+#include "mathematics/division.h"
+
 #include "wp43s.h"
 
 

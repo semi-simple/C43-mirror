@@ -18,6 +18,10 @@
  * \file 10pow.c
  ***********************************************/
 
+#include "mathematics/10pow.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

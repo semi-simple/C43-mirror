@@ -20,6 +20,9 @@
 #ifndef TAM_H
 #define TAM_H
 
+#include "defines.h"
+#include <stdint.h>
+
 #ifndef TESTSUITE_BUILD
   /**
    * Enters TAM mode.

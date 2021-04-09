@@ -20,6 +20,9 @@
 #ifndef ARCCOS_H
 #define ARCCOS_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnArccos   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void arccosError(void);

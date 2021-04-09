@@ -18,6 +18,10 @@
  * \file factorial.c
  ***********************************************/
 
+#include "mathematics/factorial.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

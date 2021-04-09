@@ -18,6 +18,10 @@
  * \file gammaP.c
  ***********************************************/
 
+#include "mathematics/gammaP.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

@@ -20,6 +20,9 @@
 #ifndef BINOMIAL_H
 #define BINOMIAL_H
 
+#include "decNumberWrappers.h"
+#include <stdint.h>
+
 void fnBinomialP           (uint16_t unusedButMandatoryParameter);
 void fnBinomialL           (uint16_t unusedButMandatoryParameter);
 void fnBinomialR           (uint16_t unusedButMandatoryParameter);

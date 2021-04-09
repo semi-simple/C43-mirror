@@ -18,6 +18,11 @@
  * \file manage.c
  ***********************************************/
 
+#include "programming/manage.h"
+
+#include "fonts.h"
+#include "screen.h"
+
 #include "wp43s.h"
 
 // Structure of the program memory.

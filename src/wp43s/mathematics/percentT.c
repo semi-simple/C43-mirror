@@ -18,6 +18,8 @@
  * \file percentT.c
  ***********************************************/
 
+#include "mathematics/percentT.h"
+
 #include "wp43s.h"
 
 static void dataTypeError(void);

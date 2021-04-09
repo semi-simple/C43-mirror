@@ -19,6 +19,8 @@
  * see: https://physics.nist.gov/cuu/index.html
  ***********************************************/
 
+#include "constants.h"
+
 #include "wp43s.h"
 
 

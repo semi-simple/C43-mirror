@@ -18,6 +18,10 @@
  * \file square.c
  ***********************************************/
 
+#include "mathematics/square.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

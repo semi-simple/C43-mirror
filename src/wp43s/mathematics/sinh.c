@@ -18,6 +18,10 @@
  * \file sinh.c
  ***********************************************/
 
+#include "mathematics/sinh.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

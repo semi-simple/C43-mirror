@@ -18,6 +18,8 @@
  * \file nor.c
  ***********************************************/
 
+#include "logicalOps/nor.h"
+
 #include "wp43s.h"
 
 

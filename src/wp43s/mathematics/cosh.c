@@ -18,6 +18,10 @@
  * \file cosh.c
  ***********************************************/
 
+#include "mathematics/cosh.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

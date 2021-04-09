@@ -16,6 +16,8 @@
 #ifndef STACK_H
 #define STACK_H
 
+#include <stdint.h>
+
 void fnClX         (uint16_t unusedButMandatoryParameter);
 void fnDrop        (uint16_t unusedButMandatoryParameter);
 void liftStack     (void);

@@ -18,6 +18,8 @@
  * \file toPolar.c
  ***********************************************/
 
+#include "mathematics/toPolar.h"
+
 #include "wp43s.h"
 
 

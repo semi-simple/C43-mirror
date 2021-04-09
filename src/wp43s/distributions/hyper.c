@@ -18,6 +18,10 @@
  * \file hyper.c
  ***********************************************/
 
+#include "distributions/hyper.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

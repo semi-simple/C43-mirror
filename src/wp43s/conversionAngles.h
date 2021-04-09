@@ -20,7 +20,9 @@
 #ifndef CONVERSIONANGLES_H
 #define CONVERSIONANGLES_H
 
-
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 void     fnCvtToCurrentAngularMode   (uint16_t fromAngularMode);
 void     fnCvtFromCurrentAngularMode (uint16_t toAngularMode);

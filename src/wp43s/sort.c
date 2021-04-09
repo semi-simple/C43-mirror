@@ -18,6 +18,10 @@
  * \file sort.c Comparing 2 strings, sorting strings
  *******************************************************/
 
+#include "sort.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

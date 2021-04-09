@@ -18,6 +18,8 @@
  * \file nand.c
  ***********************************************/
 
+#include "logicalOps/nand.h"
+
 #include "wp43s.h"
 
 

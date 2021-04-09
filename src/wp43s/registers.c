@@ -18,6 +18,10 @@
  * \file registers.c
  ***********************************************/
 
+#include "registers.h"
+
+#include <string.h>
+
 #include "wp43s.h"
 
 const reservedVariableHeader_t allReservedVariables[] = { // MUST be in the same order as the reserved variables in item.c item 1165 and upwards

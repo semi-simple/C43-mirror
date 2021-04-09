@@ -18,6 +18,10 @@
  * \file cubeRoot.c
  ***********************************************/
 
+#include "mathematics/cubeRoot.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

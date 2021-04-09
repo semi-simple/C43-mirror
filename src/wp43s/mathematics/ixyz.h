@@ -20,6 +20,8 @@
 #ifndef IXYZ_H
 #define IXYZ_H
 
+#include <stdint.h>
+
 void fnIxyz(uint16_t unusedButMandatoryParameter);
 
 #endif // IXYZ_H

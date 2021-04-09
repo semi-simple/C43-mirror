@@ -20,6 +20,10 @@
 #ifndef POWER_H
 #define POWER_H
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
+
 void fnPower    (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void powError   (void);

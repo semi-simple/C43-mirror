@@ -18,6 +18,10 @@
  * \file tanh.c
  ***********************************************/
 
+#include "mathematics/tanh.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,8 @@
  * \file idivr.c
  ***********************************************/
 
+#include "mathematics/idivr.h"
+
 #include "wp43s.h"
 
 

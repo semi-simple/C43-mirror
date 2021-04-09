@@ -20,6 +20,9 @@
 #ifndef CHARSTRING_H
 #define CHARSTRING_H
 
+#include "typeDefinitions.h"
+#include <stdint.h>
+
 int16_t  stringLastGlyph  (const char *str);
 int16_t  stringNextGlyph  (const char *str, int16_t pos);
 int32_t  stringByteLength (const char *str);

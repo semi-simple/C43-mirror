@@ -18,6 +18,10 @@
  * \file normal.c
  ***********************************************/
 
+#include "distributions/normal.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,8 @@
  * \file idiv.c
  ***********************************************/
 
+#include "mathematics/idiv.h"
+
 #include "wp43s.h"
 
 

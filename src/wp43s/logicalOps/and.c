@@ -18,6 +18,8 @@
  * \file and.c
  ***********************************************/
 
+#include "logicalOps/and.h"
+
 #include "wp43s.h"
 
 

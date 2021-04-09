@@ -18,6 +18,10 @@
  * \file debug.c
  ***********************************************/
 
+#include "debug.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

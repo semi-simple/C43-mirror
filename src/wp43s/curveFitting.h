@@ -20,7 +20,8 @@
 #ifndef CURVEFITTING_H
 #define CURVEFITTING_H
 
-void fnCurveFitting(uint16_t curveFitting);
+#include <stdint.h>
 
+void fnCurveFitting(uint16_t curveFitting);
 
 #endif // CURVEFITTING_H

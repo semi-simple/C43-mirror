@@ -18,6 +18,12 @@
  * \file flagBrowser.c
  ***********************************************/
 
+#include "browsers/flagBrowser.h"
+
+#include "fonts.h"
+#include "screen.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

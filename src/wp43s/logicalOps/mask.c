@@ -18,6 +18,8 @@
  * \file mask.c
  ***********************************************/
 
+#include "logicalOps/mask.h"
+
 #include "wp43s.h"
 
 

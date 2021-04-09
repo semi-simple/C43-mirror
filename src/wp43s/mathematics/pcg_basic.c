@@ -28,8 +28,9 @@
  * your project.
  */
 
+#include "mathematics/pcg_basic.h"
+
 #include "wp43s.h" // This line was added by the WP43S team
-#include "pcg_basic.h"
 
 // state for global RNGs
 

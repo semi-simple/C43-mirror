@@ -18,6 +18,8 @@
  * \file lcm.c
  ***********************************************/
 
+#include "mathematics/lcm.h"
+
 #include "wp43s.h"
 
 

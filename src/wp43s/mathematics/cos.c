@@ -18,6 +18,8 @@
  * \file cos.c
  ***********************************************/
 
+#include "mathematics/cos.h"
+
 #include "wp43s.h"
 
 

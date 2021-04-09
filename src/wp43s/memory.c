@@ -18,6 +18,8 @@
  * \file memory.c
  ***********************************************/
 
+#include "memory.h"
+
 #include "wp43s.h"
 
 int32_t getFreeRamMemory(void) {

@@ -18,6 +18,10 @@
  * \file t.c
  ***********************************************/
 
+#include "distributions/t.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

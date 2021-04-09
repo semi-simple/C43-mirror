@@ -20,6 +20,7 @@
 #ifndef RECALL_H
 #define RECALL_H
 
+#include <stdint.h>
 
 void         fnRecall       (uint16_t r);
 void         fnLastX        (uint16_t unusedButMandatoryParameter);
@@ -33,6 +34,5 @@ void         fnRecallConfig (uint16_t r);
 void         fnRecallStack  (uint16_t r);
 void         fnRecallElement(uint16_t unusedButMandatoryParameter);
 void         fnRecallIJ     (uint16_t unusedButMandatoryParameter);
-
 
 #endif // RECALL_H

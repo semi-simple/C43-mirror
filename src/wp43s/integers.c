@@ -18,6 +18,10 @@
  * \file integers.c
  ***********************************************/
 
+#include "integers.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 void fnChangeBase(uint16_t base) {

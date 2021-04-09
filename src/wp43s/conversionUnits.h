@@ -20,6 +20,8 @@
 #ifndef CONVERSIONUNITS_H
 #define CONVERSIONUNITS_H
 
+#include <stdint.h>
+
 // Temperature
 void fnCvtCToF      (uint16_t unusedButMandatoryParameter);
 void fnCvtFToC      (uint16_t unusedButMandatoryParameter);

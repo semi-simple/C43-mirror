@@ -18,6 +18,8 @@
  * \file compare.c
  ***********************************************/
 
+#include "mathematics/compare.h"
+
 #include "wp43s.h"
 
 

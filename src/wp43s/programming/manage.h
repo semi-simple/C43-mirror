@@ -20,6 +20,8 @@
 #ifndef MANAGE_H
 #define MANAGE_H
 
+#include <stdint.h>
+
 void scanLabelsAndPrograms                   (void);
 void defineCurrentProgramFromGlobalStepNumber(uint16_t globalStepNumber);
 void defineCurrentProgramFromCurrentStep     (void);

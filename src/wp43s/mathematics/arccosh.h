@@ -20,6 +20,10 @@
 #ifndef ARCCOSH_H
 #define ARCCOSH_H
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
+
 void fnArccosh   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void arccoshError(void);

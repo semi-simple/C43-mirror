@@ -18,6 +18,10 @@
  * \file dblDivision.c
  ***********************************************/
 
+#include "mathematics/dblDivision.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

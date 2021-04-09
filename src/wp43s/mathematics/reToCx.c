@@ -18,6 +18,8 @@
  * \file reToCx.c
  ***********************************************/
 
+#include "mathematics/reToCx.h"
+
 #include "wp43s.h"
 
 

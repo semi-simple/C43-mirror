@@ -18,6 +18,8 @@
  * \file mant.c
  ***********************************************/
 
+#include "mathematics/mant.h"
+
 #include "wp43s.h"
 
 

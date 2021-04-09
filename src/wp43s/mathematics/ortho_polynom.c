@@ -18,6 +18,8 @@
  * \file ortho_polynom.c
  ***********************************************/
 
+#include "mathematics/ortho_polynom.h"
+
 #include "wp43s.h"
 
 

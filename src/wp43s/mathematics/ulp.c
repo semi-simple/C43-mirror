@@ -18,6 +18,8 @@
  * \file ulp.c
  ***********************************************/
 
+#include "mathematics/ulp.h"
+
 #include "wp43s.h"
 
 

@@ -19,6 +19,10 @@
  ***********************************************/
 // Coded by JM, based on exp.c
 
+#include "mathematics/expMOne.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

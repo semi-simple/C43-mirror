@@ -20,6 +20,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#include "decContext.h"
+#include <stdint.h>
+
 extern const enum rounding roundingModeTable[7];
 
 void     fnConfigChina         (uint16_t unusedButMandatoryParameter);

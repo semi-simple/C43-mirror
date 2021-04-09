@@ -20,6 +20,9 @@
 #ifndef W_INVERSE_H
 #define W_INVERSE_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnWinverse(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void wInvError  (void);

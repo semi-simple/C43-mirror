@@ -18,6 +18,10 @@
  * \file exponential.c
  ***********************************************/
 
+#include "distributions/exponential.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

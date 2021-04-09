@@ -20,6 +20,13 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#include "typeDefinitions.h"
+#include <stdint.h>
+#ifdef PC_BUILD
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
+#endif // PC_BUILD
+
 void       fnScreenDump                       (uint16_t unusedButMandatoryParameter);
 
 #ifdef PC_BUILD

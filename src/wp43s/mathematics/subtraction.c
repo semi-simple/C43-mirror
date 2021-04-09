@@ -18,6 +18,8 @@
  * \file subtraction.c
  ***********************************************/
 
+#include "mathematics/subtraction.h"
+
 #include "wp43s.h"
 
 

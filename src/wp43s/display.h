@@ -16,6 +16,11 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include "decNumberWrappers.h"
+#include "gmpWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+
 void fnDisplayFormatFix                (uint16_t displayFormatN);
 void fnDisplayFormatSci                (uint16_t displayFormatN);
 void fnDisplayFormatEng                (uint16_t displayFormatN);

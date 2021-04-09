@@ -18,6 +18,11 @@
  * \file fontBrowser.c
  ***********************************************/
 
+#include "browsers/fontBrowser.h"
+
+#include "fonts.h"
+#include "screen.h"
+
 #include "wp43s.h"
 
 

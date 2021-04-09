@@ -18,6 +18,10 @@
  * \file binomial.c
  ***********************************************/
 
+#include "distributions/binomial.h"
+
+#include "fonts.h"
+
 #include "wp43s.h"
 
 

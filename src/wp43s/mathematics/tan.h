@@ -20,6 +20,11 @@
 #ifndef TAN_H
 #define TAN_H
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+
 void fnTan                    (uint16_t unusedButMandatoryParameter);
 void longIntegerAngleReduction(calcRegister_t regist, angularMode_t angularMode, real_t *reducedAngle);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)

@@ -20,6 +20,8 @@
 #ifndef STORE_H
 #define STORE_H
 
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 bool_t       regInRange    (uint16_t r);
 void         fnStore       (uint16_t r);
@@ -33,6 +35,5 @@ void         fnStoreConfig (uint16_t r);
 void         fnStoreStack  (uint16_t r);
 void         fnStoreElement(uint16_t unusedButMandatoryParameter);
 void         fnStoreIJ     (uint16_t unusedButMandatoryParameter);
-
 
 #endif // STORE_H

@@ -20,6 +20,9 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include "defines.h"
+#include <stdint.h>
+
 #ifndef TESTSUITE_BUILD
   void fnOff                       (uint16_t unsuedParamButMandatory);
   void calcModeNormal              (void);

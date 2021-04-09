@@ -20,7 +20,7 @@
 #ifndef INT_H
 #define INT_H
 
-#include "wp43s.h"
+#include <stdint.h>
 
 void fnCheckInteger(uint16_t mode);
 

@@ -20,6 +20,8 @@
 #ifndef BUFFERIZE_H
 #define BUFFERIZE_H
 
+#include <stdint.h>
+
 #ifndef TESTSUITE_BUILD
   void    fnAim                    (uint16_t unusedButMandatoryParameter);
   void    resetAlphaSelectionBuffer(void);

@@ -18,6 +18,8 @@
  * \file sign.c
  ***********************************************/
 
+#include "mathematics/sign.h"
+
 #include "wp43s.h"
 
 

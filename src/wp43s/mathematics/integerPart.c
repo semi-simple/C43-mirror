@@ -18,6 +18,8 @@
  * \file integerPart.c
  ***********************************************/
 
+#include "mathematics/integerPart.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,8 @@
  * \file negBinom.c
  ***********************************************/
 
+#include "distributions/negBinom.h"
+
 #include "wp43s.h"
 
 

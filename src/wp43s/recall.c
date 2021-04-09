@@ -18,6 +18,8 @@
  * \file recall.c
  ***********************************************/
 
+#include "recall.h"
+
 #include "wp43s.h"
 
 

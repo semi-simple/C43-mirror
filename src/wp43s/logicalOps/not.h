@@ -20,6 +20,9 @@
 #ifndef NOT_H
 #define NOT_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnLogicalNot(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void notError    (void);

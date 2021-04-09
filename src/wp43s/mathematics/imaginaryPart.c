@@ -18,6 +18,8 @@
  * \file imaginaryPart.c
  ***********************************************/
 
+#include "mathematics/imaginaryPart.h"
+
 #include "wp43s.h"
 
 

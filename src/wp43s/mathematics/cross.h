@@ -20,6 +20,8 @@
 #ifndef CROSS_H
 #define CROSS_H
 
+#include <stdint.h>
+
 void fnCross(uint16_t unusedButMandatoryParameter);
 
 void crossRealCplx(void);

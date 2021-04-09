@@ -18,6 +18,12 @@
  * \file saveRestoreCalcState.c
  ***********************************************/
 
+#include "saveRestoreCalcState.h"
+
+#include "gui.h"
+#include "screen.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 #define BACKUP_VERSION         51  // Changed local register management

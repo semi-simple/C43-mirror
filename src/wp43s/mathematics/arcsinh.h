@@ -20,6 +20,10 @@
 #ifndef ARCSINH_H
 #define ARCSINH_H
 
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
+
 void fnArcsinh   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void arcsinhError(void);

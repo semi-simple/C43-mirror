@@ -18,6 +18,8 @@
  * \file roundi.c
  ***********************************************/
 
+#include "mathematics/roundi.h"
+
 #include "wp43s.h"
 
 

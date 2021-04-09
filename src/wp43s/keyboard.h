@@ -20,6 +20,12 @@
 #ifndef KEYBOARD_H
 #define KEYBOARD_H
 
+#include <stdint.h>
+#ifdef PC_BUILD
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
+#endif // PC_BUILD
+
 void leavePem        (void);
 void showShiftState  (void);
 void processKeyAction(int16_t item);

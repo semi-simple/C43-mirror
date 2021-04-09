@@ -18,6 +18,8 @@
  * \file parallel.c
  ***********************************************/
 
+#include "mathematics/parallel.h"
+
 #include "wp43s.h"
 
 

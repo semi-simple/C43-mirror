@@ -20,6 +20,9 @@
 #ifndef NAND_H
 #define NAND_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnLogicalNand(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void nandError24  (void);

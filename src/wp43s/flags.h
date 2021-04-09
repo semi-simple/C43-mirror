@@ -20,6 +20,8 @@
 #ifndef FLAGS_H
 #define FLAGS_H
 
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 void   systemFlagAction        (uint16_t systemFlag, uint16_t action);
 void   synchronizeLetteredFlags(void);

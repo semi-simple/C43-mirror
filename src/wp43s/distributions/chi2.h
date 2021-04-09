@@ -20,6 +20,10 @@
 #ifndef CHI2_H
 #define CHI2_H
 
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+
 bool_t checkRegisterNoFP(calcRegister_t reg);
 
 void fnChi2P(uint16_t unusedButMandatoryParameter);

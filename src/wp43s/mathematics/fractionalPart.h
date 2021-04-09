@@ -20,6 +20,9 @@
 #ifndef FRACTIONALPART_H
 #define FRACTIONALPART_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnFp   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void fpError(void);

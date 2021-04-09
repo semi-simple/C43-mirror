@@ -18,6 +18,8 @@
  * \file comparisonReals.c
  ***********************************************/
 
+#include "mathematics/comparisonReals.h"
+
 #include "wp43s.h"
 
 

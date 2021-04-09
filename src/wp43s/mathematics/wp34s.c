@@ -18,6 +18,10 @@
  * \file wp34s.c
  ***********************************************/
 
+#include "mathematics/wp34s.h"
+
+#include "statusBar.h"
+
 #include "wp43s.h"
 
 

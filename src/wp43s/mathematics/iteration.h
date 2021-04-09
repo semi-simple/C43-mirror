@@ -20,6 +20,8 @@
 #ifndef ITERATION_H
 #define ITERATION_H
 
+#include <stdint.h>
+
 void fnIse(uint16_t regist);
 void fnIsg(uint16_t regist);
 void fnIsz(uint16_t regist);

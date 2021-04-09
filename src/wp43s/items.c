@@ -18,6 +18,17 @@
  * \file items.c Item list and function to run them
  ***********************************************/
 
+#include "items.h"
+
+#include "bufferize.h"
+#include "error.h"
+#include "fonts.h"
+#include "gui.h"
+#include "keyboard.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "ui/tam.h"
+
 #include "wp43s.h"
 
 /********************************************//**

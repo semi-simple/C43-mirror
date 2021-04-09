@@ -20,6 +20,9 @@
 #ifndef GAMMAXYLOWER_H
 #define GAMMAXYLOWER_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnGammaXyLower      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void gammaXyLowerError   (void);

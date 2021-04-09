@@ -18,6 +18,8 @@
  * \file erfc.c
  ***********************************************/
 
+#include "mathematics/erfc.h"
+
 #include "wp43s.h"
 
 

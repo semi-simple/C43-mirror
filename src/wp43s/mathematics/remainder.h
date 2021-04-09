@@ -20,6 +20,9 @@
 #ifndef REMAINDER_H
 #define REMAINDER_H
 
+#include "defines.h"
+#include <stdint.h>
+
 void fnRmd(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
 void rmdError(void);

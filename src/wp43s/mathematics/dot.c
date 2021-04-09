@@ -18,6 +18,8 @@
  * \file dot.c
  ***********************************************/
 
+#include "mathematics/dot.h"
+
 #include "wp43s.h"
 
 static void dotDataTypeError(void);

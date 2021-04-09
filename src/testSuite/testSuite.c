@@ -2265,7 +2265,6 @@ void checkCatalogsSorting(void) {
   checkOneCatalogSorting(menu_SYSFL,      MNU_SYSFL,     "SYS.FL");
   checkOneCatalogSorting(menu_alpha_INTL, MNU_ALPHAINTL, "alphaINTL");
   checkOneCatalogSorting(menu_alpha_intl, MNU_ALPHAintl, "alphaIntl");
-  checkOneCatalogSorting(menu_REGIST,     MNU_REGIST,    "REGIST");
 }
 
 

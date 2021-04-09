@@ -160,7 +160,6 @@ int main(int argc, char* argv[]) {
   sortOneCatalog("SYSFL",      CAT_SYFL, GENERATION_FOR_BOTH);
   sortOneCatalog("alpha_INTL", CAT_AINT, GENERATION_FOR_BOTH);
   sortOneCatalog("alpha_intl", CAT_aint, GENERATION_FOR_BOTH);
-  sortOneCatalog("REGIST",     CAT_REGS, GENERATION_FOR_BOTH);
 
   fclose(catalogFile);
 

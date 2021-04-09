@@ -405,4 +405,37 @@ void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
 
   longIntegerFree(tmp_lgInt);
 }
+
+
+
+/* Addition and subtraction */
+static void addSubRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, bool_t subtraction, real34Matrix_t **res) {
+  uint16_t rows = y->header.matrixRows;
+  uint16_t cols = y->header.matrixColumns;
+  int32_t i;
+
+  if((y->header.matrixColumns != x->header.matrixColumns) || (y->header.matrixRows != x->header.matrixRows)) {
+    *res = NULL; // Matrix mismatch
+    return;
+  }
+
+  *res = realMatrixInit(rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    if(subtraction) {
+      real34Subtract(&y->matrixElements[i], &x->matrixElements[i], &(*res)->matrixElements[i]);
+    }
+    else {
+      real34Add(&y->matrixElements[i], &x->matrixElements[i], &(*res)->matrixElements[i]);
+    }
+  }
+}
+
+void addRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t **res) {
+  addSubRealMatrices(y, x, false, res);
+}
+
+void subtractRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t **res) {
+  addSubRealMatrices(y, x, true, res);
+}
+
 #endif

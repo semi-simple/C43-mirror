@@ -41,4 +41,7 @@
   void setIRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
   void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
   //real34Matrix_t * getMatrixFromRegister(calcRegister_t regist);
+
+  void addRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t **res);
+  void subtractRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t **res);
 #endif // TESTSUITE_BUILD

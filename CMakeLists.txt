@@ -42,7 +42,7 @@ pkg_check_modules(FREETYPE 	REQUIRED freetype2)
 # Include directories
 #------------------------------------------------------------------------------
 include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/decNumberICU
+	${CMAKE_CURRENT_SOURCE_DIR}/dep/decNumberICU
 	${CMAKE_CURRENT_SOURCE_DIR}/src/wp43s
 	${CMAKE_CURRENT_SOURCE_DIR}/src/wp43s/mathematics
 	${CMAKE_CURRENT_SOURCE_DIR}/src/wp43s/browsers
@@ -55,12 +55,12 @@ set(TTF2RASTERFONTS_SRC
         src/ttf2RasterFonts/ttf2RasterFonts.c)
 
 set(DECIMAL_SRC
-        decNumberICU/decContext.c 	decNumberICU/decContext.h
-        decNumberICU/decDouble.c 	decNumberICU/decDouble.h
-        decNumberICU/decimal128.c	decNumberICU/decimal128.h
-        decNumberICU/decimal64.c 	decNumberICU/decimal64.h
-        decNumberICU/decNumber.c 	decNumberICU/decNumber.h	decNumberICU/decNumberLocal.h
-        decNumberICU/decQuad.c 		decNumberICU/decQuad.h)
+        dep/decNumberICU/decContext.c 	dep/decNumberICU/decContext.h
+        dep/decNumberICU/decDouble.c 	dep/decNumberICU/decDouble.h
+        dep/decNumberICU/decimal128.c	dep/decNumberICU/decimal128.h
+        dep/decNumberICU/decimal64.c 	dep/decNumberICU/decimal64.h
+        dep/decNumberICU/decNumber.c 	dep/decNumberICU/decNumber.h	dep/decNumberICU/decNumberLocal.h
+        dep/decNumberICU/decQuad.c 		dep/decNumberICU/decQuad.h)
 
 set(GENCONST_SRC
         src/generateConstants/generateConstants.c)

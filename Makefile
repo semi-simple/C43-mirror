@@ -6,7 +6,7 @@
 # $* target without extension
 
 # Path to aux build scripts
-BIN_DIR = DMCP_build/bin
+TOOLS_DIR = tools
 BUILD_DIR = build
 GENERATECONSTANTS_APP = $(BUILD_DIR)/generateConstants/generateConstants$(EXE)
 GENERATECATALOGS_APP = $(BUILD_DIR)/generateCatalogs/generateCatalogs$(EXE)
@@ -54,7 +54,7 @@ else
   endif
 endif
 
-RASPBERRY = $(shell ./onARaspberry)
+RASPBERRY = $(shell $(TOOLS_DIR)/onARaspberry)
 
 ifeq ($(DEST), gitlab)
 	SIM_CFLAGS += -march=x86-64
@@ -480,9 +480,9 @@ $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_flash.bin: $(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf
 $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin: $(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf
 	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
 	$(DMCP_OBJCOPY) --only-section .qspi -O binary  $<  $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin
-	$(BIN_DIR)/modify_crc $(WP43S_DMCP)
-	$(BIN_DIR)/check_qspi_crc $(WP43S_DMCP) src/wp43s-dmcp/qspi_crc.h || ( $(MAKE) clean_dmcp && false )
+	$(TOOLS_DIR)/modify_crc $(WP43S_DMCP)
+	$(TOOLS_DIR)/check_qspi_crc $(WP43S_DMCP) src/wp43s-dmcp/qspi_crc.h || ( $(MAKE) clean_dmcp && false )
 
 $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm: $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_flash.bin
 	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
-	$(BIN_DIR)/add_pgm_chsum $< $@
+	$(TOOLS_DIR)/add_pgm_chsum $< $@

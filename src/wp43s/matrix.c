@@ -31,12 +31,11 @@ bool_t                matEditMode;
  * \return void
  ***********************************************/
 void fnNewMatrix(uint16_t unusedParamButMandatory) {
+  uint32_t rows, cols;
+  longInteger_t tmp_lgInt;
+  real34Matrix_t* matrix;
 
   //Get Size from REGISTER_X and REGISTER_Y
-  uint32_t rows, cols;
-
-  longInteger_t tmp_lgInt;
-
   if(((getRegisterDataType(REGISTER_X) != dtLongInteger) && (getRegisterDataType(REGISTER_X) != dtReal34)) ||
     ((getRegisterDataType(REGISTER_Y) != dtLongInteger) && (getRegisterDataType(REGISTER_Y) != dtReal34))) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -61,24 +60,15 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 
   longIntegerFree(tmp_lgInt);
 
-  //Allocate Memory for Matrix
-  uint32_t reg_size;
-  reg_size = (rows * cols) * sizeof(real34_t) + sizeof(dataBlock_t);
-  real34Matrix_t* matrix = allocWp43s(TO_BLOCKS(reg_size));
-
-  matrix->header.matrixColumns = cols;
-  matrix->header.matrixRows = rows;
-
-  //Initialize with 0.
-  for(uint32_t i = 0; i < rows * cols; i++) {
-    real34Copy(const34_0, &matrix->matrixElements[i]);
-  }
+  //Initialize Memory for Matrix
+  matrix = realMatrixInit(rows, cols);
 
   //Drop X_Register and Y_Register
-  fnDrop(0);
-  fnDrop(0);
+  fnDropY(NOPARAM);
+  convertReal34MatrixToReal34MatrixRegister(matrix, REGISTER_X);
+  setSystemFlag(FLAG_ASLIFT);
 
-  storeMatrixToXRegister(matrix);
+  realMatrixFree(matrix);
 }
 
 /********************************************//**
@@ -107,6 +97,45 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
     moreInfoOnError("In function fnEditMatrix:", errorMessage, "is not a matrix.", "");
     #endif
   }
+}
+
+
+/********************************************//**
+ * \brief Initialize a real matrix
+ *
+ * \param[in] rows uint16_t
+ * \param[in] cols uint16_t
+ * \return real34Matrix_t *
+ ***********************************************/
+real34Matrix_t *realMatrixInit(uint16_t rows, uint16_t cols) {
+  real34Matrix_t *matrix;
+
+  //Allocate Memory for Matrix
+  matrix = allocWp43s(TO_BLOCKS((rows * cols) * sizeof(real34_t) + sizeof(registerHeader_t)));
+
+  matrix->header.matrixColumns = cols;
+  matrix->header.matrixRows = rows;
+
+  //Initialize with 0.
+  for(uint32_t i = 0; i < rows * cols; i++) {
+    real34Copy(const34_0, &matrix->matrixElements[i]);
+  }
+
+  return matrix;
+}
+
+
+/********************************************//**
+ * \brief Free a real matrix
+ *
+ * \param[in] matrix real34Matrix_t *
+ * \return void
+ ***********************************************/
+void realMatrixFree(real34Matrix_t *matrix) {
+  uint16_t cols = matrix->header.matrixColumns;
+  uint16_t rows = matrix->header.matrixRows;
+
+  freeWp43s(matrix, TO_BLOCKS((rows * cols) * sizeof(real34_t) + sizeof(registerHeader_t)));
 }
 
 
@@ -193,8 +222,7 @@ void mimEnter(void) {
     hideCursor();
     cursorEnabled = false;
 
-    fnDrop(0);
-    storeMatrixToXRegister(openMatrixMIMPointer);
+    convertReal34MatrixToReal34MatrixRegister(openMatrixMIMPointer, REGISTER_X);
     setSystemFlag(FLAG_ASLIFT);
   }
 }
@@ -268,8 +296,7 @@ void mimAddNumber(int16_t item) {
 
         real34ChangeSign(&openMatrixMIMPointer->matrixElements[row * cols + col]);
 
-        fnDrop(0);
-        storeMatrixToXRegister(openMatrixMIMPointer);
+        convertReal34MatrixToReal34MatrixRegister(openMatrixMIMPointer, REGISTER_X);
         setSystemFlag(FLAG_ASLIFT);
         return;
       }
@@ -282,6 +309,14 @@ void mimAddNumber(int16_t item) {
   calcMode = CM_MIM;
 }
 
+void mimFinalize(void) {
+  if(openMatrixMIMPointer) {
+    realMatrixFree(openMatrixMIMPointer);
+    openMatrixMIMPointer = NULL;
+  }
+}
+
+/*
 void storeMatrixToXRegister(real34Matrix_t *matrix) {
 
   setSystemFlag(FLAG_ASLIFT);
@@ -292,15 +327,12 @@ void storeMatrixToXRegister(real34Matrix_t *matrix) {
   //openMatrixMIMPointer = matrix;
   // END WORKING//
 
-  reallocateRegister(REGISTER_X, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t)) + TO_BLOCKS(sizeof(dataBlock_t)), amNone);
-  xcopy(REGISTER_REAL34_MATRIX(REGISTER_X), matrix, sizeof(dataBlock_t));
-  xcopy(REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_X), matrix->matrixElements, (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t));
+  convertReal34MatrixToReal34MatrixRegister(matrix, REGISTER_X);
 }
+*/
 
-//real34Matrix_t * getMatrixFromRegister(calcRegister_t regist) {
 void getMatrixFromRegister(calcRegister_t regist) {
-  //uint32_t reg_size = (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t) + sizeof(registerHeader_t);
-  //real34Matrix_t* matrix = malloc(reg_size);
+  real34Matrix_t* matrix;
 
   if (getRegisterDataType(regist) != dtReal34Matrix) {
     #ifdef PC_BUILD
@@ -311,48 +343,13 @@ void getMatrixFromRegister(calcRegister_t regist) {
     return;
   }
 
-  dataBlock_t *dblock           = REGISTER_REAL34_MATRIX_DBLOCK(regist);
-  real34_t    *matrixElem     = REGISTER_REAL34_MATRIX_M_ELEMENTS(regist);
-  /*
-  dataBlock_t header;
-  xcopy(&header, REGISTER_REAL34_MATRIX_DBLOCK(regist), TO_BLOCKS(sizeof(dataBlock_t)));
-
-  real34_t* matixElements[dblock->matrixColumns * dblock->matrixRows];
-  xcopy(matixElements, REGISTER_REAL34_MATRIX_M_ELEMENTS(regist), TO_BLOCKS((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t)));
-  //xcopy(&matixElements, REGISTER_REAL34_MATRIX_DBLOCK(regist) + sizeof(dataBlock_t), (header.matrixColumns * header.matrixRows) * sizeof(real34_t));
-
-  real34Matrix_t* matrix = malloc((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerHeader_t));
-  matrix->header.matrixColumns = header.matrixColumns;
-  matrix->header.matrixRows = header.matrixRows;
-  int r = dblock->matrixRows;
-  int c = dblock->matrixColumns;
-  int hr = matrix->header.matrixRows;
-  int hc = matrix->header.matrixColumns;
-  for(int i = 0; i < dblock->matrixColumns * dblock->matrixRows; i++) {
-    matrix->matrixElements[i] = *matixElements[i];
-  }
-  */
-
-  real34Matrix_t* matrix = allocWp43s(TO_BLOCKS((dblock->matrixColumns * dblock->matrixRows) * sizeof(real34_t) + sizeof(registerHeader_t)));
-
-  matrix->header.matrixColumns = dblock->matrixColumns;
-  matrix->header.matrixRows = dblock->matrixRows;
-
-  int hr = matrix->header.matrixRows;
-  int hc = matrix->header.matrixColumns;
-
-  for(int i = 0; i < hc * hr; i++) {
-    //matrix->matrixElements[i] = matrixElem[i];
-    real34Copy(&matrixElem[i], &matrix->matrixElements[i]);
-  }
+  if(openMatrixMIMPointer) realMatrixFree(openMatrixMIMPointer);
+  convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
 
 
   //NOT WORKING//
   openMatrixMIMPointer = matrix;
   //END NOT WORKING//
-
-  //real34Matrix_t* matrix = getRegisterDataPointer(regist);
-  //return matrix;
 }
 
 //Row of Matric

@@ -857,6 +857,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       case CM_MIM:
         mimEnter();
+        mimFinalize();
         calcModeNormal();
         popSoftmenu(); // close softmenu dedicated for the MIM
         break;

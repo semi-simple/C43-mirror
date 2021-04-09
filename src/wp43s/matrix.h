@@ -24,11 +24,18 @@
   
   void              fnNewMatrix           (uint16_t unusedParamButMandatory);
   void              fnEditMatrix          (uint16_t unusedParamButMandatory);
+
+  real34Matrix_t *realMatrixInit(uint16_t rows, uint16_t cols);
+  void realMatrixFree(real34Matrix_t *matrix);
+
   void showMatrixEditor(void);
   void mimEnter(void);
   void mimAddNumber(int16_t item);
-  void storeMatrixToXRegister(real34Matrix_t *matrix);
+  void mimFinalize(void);
+
+  //void storeMatrixToXRegister(real34Matrix_t *matrix);
   void getMatrixFromRegister(calcRegister_t regist);
+
   int16_t getIRegisterAsInt(bool_t asArrayPointer);
   int16_t getJRegisterAsInt(bool_t asArrayPointer);
   void setIRegisterAsInt(bool_t asArrayPointer, int16_t toStore);

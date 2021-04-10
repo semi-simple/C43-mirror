@@ -414,6 +414,7 @@ void subDateReal(void) {
  * \return void
  ***********************************************/
 void subRemaRema(void) {
+#ifndef TESTSUITE_BUILD
   real34Matrix_t y, x, res;
 
   convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
@@ -436,6 +437,7 @@ void subRemaRema(void) {
 
   realMatrixFree(&x);
   realMatrixFree(&y);
+#endif // TESTSUITE_BUILD
 }
 
 

@@ -197,6 +197,7 @@ void mulTimeLonI(void) {
  * \return void
  ***********************************************/
 void mulLonIRema(void) {
+#ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
   real_t y, x;
   uint16_t rows, cols;
@@ -218,6 +219,7 @@ void mulLonIRema(void) {
   convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   realMatrixFree(&res);
   realMatrixFree(&matrix);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -229,6 +231,7 @@ void mulLonIRema(void) {
  * \return void
  ***********************************************/
 void mulRemaLonI(void) {
+#ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
   real_t y, x;
   uint16_t rows, cols;
@@ -250,6 +253,7 @@ void mulRemaLonI(void) {
   convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   realMatrixFree(&res);
   realMatrixFree(&matrix);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -535,6 +539,7 @@ void mulRealTime(void) {
  * \return void
  ***********************************************/
 void mulRemaRema(void) {
+#ifndef TESTSUITE_BUILD
   real34Matrix_t y, x, res;
 
   convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
@@ -557,6 +562,7 @@ void mulRemaRema(void) {
 
   realMatrixFree(&x);
   realMatrixFree(&y);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -592,6 +598,7 @@ void mulCxmaRema(void) {
  * \return void
  ***********************************************/
 void mulRemaShoI(void) {
+#ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
   real_t y, x;
   uint16_t rows, cols;
@@ -613,6 +620,7 @@ void mulRemaShoI(void) {
   convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   realMatrixFree(&res);
   realMatrixFree(&matrix);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -624,6 +632,7 @@ void mulRemaShoI(void) {
  * \return void
  ***********************************************/
 void mulShoIRema(void) {
+#ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
   real_t y, x;
   uint16_t rows, cols;
@@ -645,6 +654,7 @@ void mulShoIRema(void) {
   convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   realMatrixFree(&res);
   realMatrixFree(&matrix);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -656,6 +666,7 @@ void mulShoIRema(void) {
  * \return void
  ***********************************************/
 void mulRemaReal(void) {
+#ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
   if(getRegisterAngularMode(REGISTER_Y) == amNone) {
     convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &matrix);
@@ -667,6 +678,7 @@ void mulRemaReal(void) {
   else {
     mulError();
   }
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -678,6 +690,7 @@ void mulRemaReal(void) {
  * \return void
  ***********************************************/
 void mulRealRema(void) {
+#ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
   if(getRegisterAngularMode(REGISTER_X) == amNone) {
     convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &matrix);
@@ -689,6 +702,7 @@ void mulRealRema(void) {
   else {
     mulError();
   }
+#endif // TESTSUITE_BUILD
 }
 
 

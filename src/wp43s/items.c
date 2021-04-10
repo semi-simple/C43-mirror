@@ -599,6 +599,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnPoissonI                  (uint16_t unusedButMandatoryParameter) {}
   void fnNewMatrix                 (uint16_t unusedButMandatoryParameter) {}
   void fnEditMatrix                (uint16_t unusedButMandatoryParameter) {}
+  void fnTranspose                 (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2347,7 +2348,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1701 */  { fnExpMod,                     NOPARAM,                     "^MOD",                                        "^MOD",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1702 */  { itemToBeCoded,                NOPARAM,                     "|M|",                                         "|M|",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1703 */  { fnParallel,                   NOPARAM,                     "||",                                          "|" STD_SPACE_3_PER_EM "|",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1704 */  { itemToBeCoded,                NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1704 */  { fnTranspose,                  NOPARAM,                     "[M]" STD_SUP_T,                               "[M]" STD_SUP_T,                               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1705 */  { itemToBeCoded,                NOPARAM,                     "[M]" STD_SUP_MINUS_1,                         "[M]" STD_SUP_MINUS_1,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1706 */  { fnArg,                        NOPARAM,                     STD_MEASURED_ANGLE,                            STD_MEASURED_ANGLE,                            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1707 */  { fnCvtToCurrentAngularMode,    amMultPi,                    "MUL" STD_pi STD_RIGHT_ARROW,                  "MUL" STD_pi STD_RIGHT_ARROW,                  (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

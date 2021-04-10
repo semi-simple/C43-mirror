@@ -406,6 +406,22 @@ void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
 
 
 
+/* Transpose */
+void transposeRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i, j;
+
+  realMatrixInit(res, cols, rows);
+  for(i = 0; i < rows; ++i) {
+    for(j = 0; j < cols; ++j) {
+      real34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+    }
+  }
+}
+
+
+
 /* Addition and subtraction */
 static void addSubRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, bool_t subtraction, real34Matrix_t *res) {
   const uint16_t rows = y->header.matrixRows;

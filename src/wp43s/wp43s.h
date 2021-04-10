@@ -131,14 +131,15 @@
     #define SHOW_MEMORY_STATUS 0
     #undef  EXTRA_INFO_ON_CALC_ERROR
     #define EXTRA_INFO_ON_CALC_ERROR 0
-    #define addItemToBuffer fnNop
-    #define fnOff           fnNop
-    #define fnAim           fnNop
-    #define fnNewMatrix     fnNop
-    #define fnEditMatrix    fnNop
-    #define registerBrowser fnNop
-    #define flagBrowser     fnNop
-    #define fontBrowser     fnNop
+    #define addItemToBuffer   fnNop
+    #define fnOff             fnNop
+    #define fnAim             fnNop
+    #define fnNewMatrix       fnNop
+    #define fnEditMatrix      fnNop
+    #define fnLuDecomposition fnNop
+    #define registerBrowser   fnNop
+    #define flagBrowser       fnNop
+    #define fontBrowser       fnNop
     #define refreshRegisterLine(a)  {}
     #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
     #define showHideHourGlass()     {}

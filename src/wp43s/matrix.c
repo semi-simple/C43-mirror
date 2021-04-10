@@ -50,12 +50,32 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
     convertLongIntegerRegisterToLongInteger(REGISTER_X, tmp_lgInt);
   else // dtReal34
     convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), tmp_lgInt, DEC_ROUND_DOWN);
+  if(longIntegerIsNegativeOrZero(tmp_lgInt)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      char strbuf[32];
+      longIntegerToAllocatedString(tmp_lgInt, strbuf, 32);
+      sprintf(errorMessage, "invalid number of columns");
+      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
   longIntegerToUInt(tmp_lgInt, cols);
 
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+  if(getRegisterDataType(REGISTER_Y) == dtLongInteger)
     convertLongIntegerRegisterToLongInteger(REGISTER_Y, tmp_lgInt);
   else // dtReal34
     convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_Y), tmp_lgInt, DEC_ROUND_DOWN);
+  if(longIntegerIsNegativeOrZero(tmp_lgInt)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      char strbuf[32];
+      longIntegerToAllocatedString(tmp_lgInt, strbuf, 32);
+      sprintf(errorMessage, "invalid number of rows");
+      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
   longIntegerToUInt(tmp_lgInt, rows);
 
   longIntegerFree(tmp_lgInt);

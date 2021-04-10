@@ -422,7 +422,6 @@ void subRemaRema(void) {
   subtractRealMatrices(&y, &x, &res);
   if(res.matrixElements) {
     convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
-    fnDropY(NOPARAM);
     realMatrixFree(&res);
   }
   else {

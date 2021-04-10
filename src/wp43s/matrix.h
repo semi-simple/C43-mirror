@@ -42,6 +42,7 @@
   void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore);
   //real34Matrix_t * getMatrixFromRegister(calcRegister_t regist);
 
+  void copyRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res);
   void transposeRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res);
 
   void addRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
@@ -49,4 +50,8 @@
 
   void multiplyRealMatrix(const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res);
   void multiplyRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
+
+  uint16_t realVectorSize(const real34Matrix_t *matrix);
+  void dotRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34_t *res);
+  void crossRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
 #endif // TESTSUITE_BUILD

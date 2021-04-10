@@ -426,6 +426,20 @@ void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
 
 
 
+/* Duplicate */
+void copyRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+
+  realMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    real34Copy(&matrix->matrixElements[i], &res->matrixElements[i]);
+  }
+}
+
+
+
 /* Transpose */
 void transposeRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
   const uint16_t rows = matrix->header.matrixRows;
@@ -510,9 +524,70 @@ void multiplyRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real
         real34ToReal(&x->matrixElements[k * cols + j], &q);
         realMultiply(&p, &q, &prod, &ctxtReal39);
         realAdd(&sum, &prod, &sum, &ctxtReal39);
-        realToReal34(&sum, &res->matrixElements[i * cols + j]);
       }
+      realToReal34(&sum, &res->matrixElements[i * cols + j]);
     }
   }
+}
+
+
+
+/* Vectors */
+uint16_t realVectorSize(const real34Matrix_t *matrix) {
+  if((matrix->header.matrixColumns != 1) && (matrix->header.matrixRows != 1))
+    return 0;
+  else
+    return matrix->header.matrixColumns * matrix->header.matrixRows;
+}
+
+void dotRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34_t *res) {
+  const uint16_t elements = realVectorSize(y);
+  int32_t i;
+  real_t sum, prod, p, q;
+
+  if((realVectorSize(y) == 0) || (realVectorSize(x) == 0) || (realVectorSize(y) != realVectorSize(x))) {
+    realToReal34(const_NaN, res); // Not a vector or mismatched
+    return;
+  }
+
+  realCopy(const_0, &sum);
+  realCopy(const_0, &prod);
+  for(i = 0; i < elements; ++i) {
+    real34ToReal(&y->matrixElements[i], &p);
+    real34ToReal(&x->matrixElements[i], &q);
+    realMultiply(&p, &q, &prod, &ctxtReal39);
+    realAdd(&sum, &prod, &sum, &ctxtReal39);
+  }
+  realToReal34(&sum, res);
+}
+
+void crossRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
+  const uint16_t elementsY = realVectorSize(y);
+  const uint16_t elementsX = realVectorSize(x);
+  real_t a1, a2, a3, b1, b2, b3, p, q;
+
+  if((elementsY == 0) || (elementsX == 0) || (elementsY > 3) || (elementsX > 3)) {
+    realToReal34(const_NaN, res); // Not a vector or mismatched
+    return;
+  }
+
+  real34ToReal(                 &y->matrixElements[0]            , &a1);
+  real34ToReal(elementsY >= 2 ? &y->matrixElements[1] : const34_0, &a2);
+  real34ToReal(elementsY >= 3 ? &y->matrixElements[2] : const34_0, &a3);
+
+  real34ToReal(                 &x->matrixElements[0]            , &b1);
+  real34ToReal(elementsX >= 2 ? &x->matrixElements[1] : const34_0, &b2);
+  real34ToReal(elementsX >= 3 ? &x->matrixElements[2] : const34_0, &b3);
+
+  realMatrixInit(res, 1, 3);
+
+  realMultiply(&a2, &b3, &p, &ctxtReal39); realMultiply(&a3, &b2, &q, &ctxtReal39);
+  realSubtract(&p, &q, &p, &ctxtReal39); realToReal34(&p, &res->matrixElements[0]);
+
+  realMultiply(&a3, &b1, &p, &ctxtReal39); realMultiply(&a1, &b3, &q, &ctxtReal39);
+  realSubtract(&p, &q, &p, &ctxtReal39); realToReal34(&p, &res->matrixElements[1]);
+
+  realMultiply(&a1, &b2, &p, &ctxtReal39); realMultiply(&a2, &b1, &q, &ctxtReal39);
+  realSubtract(&p, &q, &p, &ctxtReal39); realToReal34(&p, &res->matrixElements[2]);
 }
 #endif

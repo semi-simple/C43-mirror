@@ -103,6 +103,8 @@ void    plotline           (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
 void    graphAxisDraw      (void);
 void    realToFloat        (const real_t *vv, graphtype *v);
 void    realToDouble       (const real_t *vv, double *v);
+void    graph_axis         (void);
+float   auto_tick          (float tick_int_f);	
 
 
 //graph functions

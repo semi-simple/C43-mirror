@@ -303,52 +303,9 @@ void fnListXY(uint16_t unusedButMandatoryParameter) {
 
 
 //###################################################################################
-float auto_tick(float tick_int_f) {
-  //Obtain scaling of ticks, to about 20 intervals left to right.
-  //graphtype tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
-  snprintf(tmpString, TMP_STR_LENGTH, "%.1e", tick_int_f);
-  char tx[4];
-  tx[0] = tmpString[0];
-  tx[1] = tmpString[1];
-  tx[2] = tmpString[2];
-  tx[3] = 0;
-  //printf("tick0 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
-  tick_int_f = strtof (tx, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
-  //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
-  if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpString[0] = '0'; tmpString[2]='2'; } else
-  if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpString[0] = '0'; tmpString[2]='5'; } else
-  if(tick_int_f > 0.6 && tick_int_f <=  1.3)  {tmpString[0] = '1'; tmpString[2]='0'; } else
-  if(tick_int_f > 1.3 && tick_int_f <=  1.7)  {tmpString[0] = '1'; tmpString[2]='5'; } else
-  if(tick_int_f > 1.7 && tick_int_f <=  3.0)  {tmpString[0] = '2'; tmpString[2]='0'; } else
-  if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpString[0] = '5'; tmpString[2]='0'; } else
-  if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpString[0] = '7'; tmpString[2]='5'; }
-  tick_int_f = strtof (tmpString, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
-  //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
-  return tick_int_f;
-}
 
 
-void graph_axis (void){
-  #ifndef TESTSUITE_BUILD
-    graph_dx = 0; //XXX override manual setting from GRAPH to auto, temporarily. Can program these to fixed values.
-    graph_dy = 0;
-
-    if(graph_dx == 0) {
-      tick_int_x = auto_tick((x_max-x_min)/20);
-    } else {
-      tick_int_x = graph_dx;
-    }
-
-    if(graph_dy == 0) {
-      tick_int_y = auto_tick((y_max-y_min)/20);
-    } else {
-      tick_int_y = graph_dy;
-    }
-  #endif //TESTSUITE_BUILD
-  graphAxisDraw();
-}
-
-
+    
 
   void convertDigits(uint16_t ii, uint16_t * oo, char * outstr) {
     switch (tmpString[ii]) {

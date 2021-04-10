@@ -1096,6 +1096,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
 
   void yIsFnx(uint8_t USEFLOAT, uint16_t selection, double x, double *y, double a0, double a1, double a2, real_t *XX, real_t *YY, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){
       *y = 0;
+      float yf;
       realCopy(const_0,YY);
       real_t SS,TT,UU;
       if(USEFLOAT == useREAL4) {
@@ -1112,7 +1113,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           } else {
             realMultiply(XX, aa1, &UU, realContextForecast);
             realAdd     (&UU, aa0, YY, realContextForecast);
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
           break;
         case CF_EXPONENTIAL_FITTING: 
@@ -1122,7 +1123,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
             realMultiply(XX, aa1, &UU, realContextForecast);
             realExp     (&UU, &UU,     realContextForecast);
             realMultiply(&UU, aa0, YY, realContextForecast);
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
           break;
         case CF_LOGARITHMIC_FITTING: 
@@ -1132,7 +1133,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
             WP34S_Ln    (XX, &SS,       realContextForecast);
             realMultiply(&SS, aa1, &UU, realContextForecast);
             realAdd     (&UU, aa0, YY,  realContextForecast);
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
           break;
         case CF_POWER_FITTING: 
@@ -1141,7 +1142,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           } else {
             realPower   (XX, aa1, &SS, realContextForecast);
             realMultiply(&SS, aa0, YY, realContextForecast);
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
           break;
         case CF_ROOT_FITTING: 
@@ -1151,7 +1152,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
             realDivide  (const_1, XX, &SS, realContextForecast);
             realPower   (aa1, &SS, &SS,    realContextForecast);    //very very slow with a1=0.9982, probably in the 0.4 < x < 1.0 area
             realMultiply(&SS, aa0, YY,     realContextForecast);
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
           break;
         case CF_HYPERBOLIC_FITTING: 
@@ -1161,7 +1162,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
             realMultiply(XX, aa1, &UU,     realContextForecast);
             realAdd     (&UU, aa0, &TT,    realContextForecast);
             realDivide  (const_1, &TT, YY, realContextForecast);
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
           break;
         case CF_PARABOLIC_FITTING: 
@@ -1173,7 +1174,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
             realMultiply(XX, aa1, &UU,   realContextForecast);
             realAdd     (&TT, &UU,  &TT, realContextForecast);
             realAdd     (&TT, aa0,  YY , realContextForecast);          
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
           break;
         case CF_GAUSS_FITTING:
@@ -1185,7 +1186,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
             realDivide  (&TT, aa2, &TT,  realContextForecast);
             realExp     (&TT, &TT ,      realContextForecast);
             realMultiply(&TT, aa0, YY,   realContextForecast);
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
           break;
         case CF_CAUCHY_FITTING:
@@ -1197,7 +1198,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
             realMultiply(&TT, aa0, &TT,  realContextForecast);
             realAdd     (&TT, aa2, &TT,  realContextForecast);
             realDivide  (const_1, &TT, YY, realContextForecast);
-            realToDouble(YY, y);
+            realToFloat/*Double*/(YY, &yf); *y = (double)yf;
           }
         default:break;
       }

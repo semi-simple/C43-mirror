@@ -23,6 +23,8 @@
 #include "constantPointers.h"
 #include "error.h"
 #include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/wp34s.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "stack.h"

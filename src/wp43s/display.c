@@ -29,6 +29,8 @@
 #include "flags.h"
 #include "fonts.h"
 #include "fractions.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/toPolar.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include <string.h>

@@ -29,6 +29,8 @@
 #include "gui.h"
 #include "items.h"
 #include "memory.h"
+#include "programming/manage.h"
+#include "programming/nextStep.h"
 #include "recall.h"
 #include "registers.h"
 #include "screen.h"

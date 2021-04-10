@@ -23,6 +23,12 @@
 #include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
+#include "mathematics/arctan.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/exp.h"
+#include "mathematics/ln.h"
+#include "mathematics/tan.h"
+#include "mathematics/wp34s.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

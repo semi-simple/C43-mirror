@@ -24,6 +24,7 @@
 #include "display.h"
 #include "fonts.h"
 #include "items.h"
+#include "programming/nextStep.h"
 #include "registers.h"
 #include <string.h>
 

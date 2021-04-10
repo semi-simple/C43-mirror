@@ -20,6 +20,7 @@
 
 #include "screen.h"
 
+#include "browsers/browsers.h"
 #include "bufferize.h"
 #include "charString.h"
 #include "constantPointers.h"
@@ -31,7 +32,9 @@
 #include "fonts.h"
 #include "items.h"
 #include "keyboard.h"
+#include "mathematics/comparisonReals.h"
 #include "memory.h"
+#include "programming/manage.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "softmenus.h"

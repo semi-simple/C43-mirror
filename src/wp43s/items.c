@@ -20,6 +20,7 @@
 
 #include "items.h"
 
+#include "browsers/browsers.h"
 #include "bufferize.h"
 #include "config.h"
 #include "constants.h"
@@ -28,6 +29,7 @@
 #include "curveFitting.h"
 #include "dateTime.h"
 #include "display.h"
+#include "distributions/distributions.h"
 #include "error.h"
 #include "flags.h"
 #include "fonts.h"
@@ -35,6 +37,9 @@
 #include "gui.h"
 #include "integers.h"
 #include "keyboard.h"
+#include "logicalOps/logicalOps.h"
+#include "mathematics/mathematics.h"
+#include "programming/programming.h"
 #include "recall.h"
 #include "registers.h"
 #include "saveRestoreCalcState.h"

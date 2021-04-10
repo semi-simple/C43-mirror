@@ -24,6 +24,9 @@
 #include "fonts.h"
 #include "gui.h"
 #include "items.h"
+#include "mathematics/fractionalPart.h"
+#include "mathematics/integerPart.h"
+#include "programming/lblGtoXeq.h"
 #include "registers.h"
 #include "softmenus.h"
 #include <string.h>

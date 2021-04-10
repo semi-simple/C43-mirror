@@ -25,6 +25,10 @@
 #include "error.h"
 #include "flags.h"
 #include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/division.h"
+#include "mathematics/ln.h"
+#include "mathematics/wp34s.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

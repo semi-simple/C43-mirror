@@ -24,6 +24,7 @@
 #include "error.h"
 #include "conversionAngles.h"
 #include "flags.h"
+#include "mathematics/toPolar.h"
 #include "registers.h"
 #include "stack.h"
 

@@ -24,6 +24,8 @@
 #include "debug.h"
 #include "error.h"
 #include "items.h"
+#include "mathematics/tan.h"
+#include "mathematics/wp34s.h"
 #include "registers.h"
 
 #include "wp43s.h"

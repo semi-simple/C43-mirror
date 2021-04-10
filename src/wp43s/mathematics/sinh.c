@@ -24,6 +24,7 @@
 #include "error.h"
 #include "fonts.h"
 #include "items.h"
+#include "mathematics/wp34s.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

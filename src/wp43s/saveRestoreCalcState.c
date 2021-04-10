@@ -28,6 +28,7 @@
 #include "gui.h"
 #include "items.h"
 #include "memory.h"
+#include "programming/manage.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"

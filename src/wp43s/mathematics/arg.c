@@ -25,6 +25,7 @@
 #include "debug.h"
 #include "error.h"
 #include "conversionAngles.h"
+#include "mathematics/toPolar.h"
 #include "registers.h"
 
 #include "wp43s.h"

@@ -22,6 +22,8 @@
 
 #include "debug.h"
 #include "error.h"
+#include "mathematics/division.h"
+#include "mathematics/multiplication.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

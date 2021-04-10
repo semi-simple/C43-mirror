@@ -23,6 +23,7 @@
 #include "constantPointers.h"
 #include "error.h"
 #include "flags.h"
+#include "mathematics/comparisonReals.h"
 #include "registers.h"
 #include "stack.h"
 #include "stats.h"

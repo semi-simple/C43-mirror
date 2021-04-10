@@ -48,13 +48,9 @@
     #include <dmcp.h>
   #endif // DMCP_BUILD
 
-  #include "defines.h"
-
-  #include "browsers/browsers.h"
-  #include "distributions/distributions.h"
-  #include "logicalOps/logicalOps.h"
-  #include "mathematics/mathematics.h"
-  #include "programming/programming.h"
+  #include "decNumberWrappers.h"
+  #include "mathematics/pcg_basic.h"
+  #include "typeDefinitions.h"
 
   // Variables for the simulator
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)

@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "browsers/fontBrowser.h"
 #include "bufferize.h"
 #include "charString.h"
 #include "constantPointers.h"
@@ -30,6 +31,7 @@
 #include "items.h"
 #include "keyboard.h"
 #include "memory.h"
+#include "programming/manage.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "stack.h"

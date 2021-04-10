@@ -24,6 +24,7 @@
 #include "error.h"
 #include "integers.h"
 #include "items.h"
+#include "mathematics/unitVector.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

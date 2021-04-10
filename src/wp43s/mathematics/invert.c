@@ -26,6 +26,7 @@
 #include "error.h"
 #include "fonts.h"
 #include "items.h"
+#include "mathematics/division.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

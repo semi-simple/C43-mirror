@@ -27,6 +27,8 @@
 #include "flags.h"
 #include "fonts.h"
 #include "items.h"
+#include "mathematics/toPolar.h"
+#include "mathematics/wp34s.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

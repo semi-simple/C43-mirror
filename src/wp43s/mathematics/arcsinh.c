@@ -24,6 +24,9 @@
 #include "debug.h"
 #include "error.h"
 #include "items.h"
+#include "mathematics/toRect.h"
+#include "mathematics/toPolar.h"
+#include "mathematics/wp34s.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

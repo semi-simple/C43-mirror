@@ -29,6 +29,7 @@
 #include "error.h"
 #include "flags.h"
 #include "items.h"
+#include "mathematics/comparisonReals.h"
 #include "memory.h"
 #include "registerValueConversions.h"
 #include "sort.h"

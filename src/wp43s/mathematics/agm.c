@@ -23,6 +23,10 @@
 #include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/multiplication.h"
+#include "mathematics/toRect.h"
+#include "mathematics/toPolar.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

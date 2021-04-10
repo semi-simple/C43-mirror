@@ -25,6 +25,9 @@
 #include "fonts.h"
 #include "items.h"
 #include "memory.h"
+#include "programming/decode.h"
+#include "programming/lblGtoXeq.h"
+#include "programming/nextStep.h"
 #include "screen.h"
 
 #include "wp43s.h"

@@ -190,6 +190,50 @@ char * getCurveFitModeName(uint16_t selection) {          //Can be only one bit.
  * \brief Remove trailing spaces from the curvefitting mode name
  *
  ***********************************************/
+char tmp_names[20];
+char * eatSpacesEnd(const char * ss) {
+  int8_t ix;
+  tmp_names[0]=0; 
+  strcpy(tmp_names,ss);
+  ix = stringByteLength(ss)-1;
+  while( ix >= 0 ){
+    if(ss[ix]==' ') {
+      tmp_names[ix]=0;
+      break;
+    }
+    ix++;
+  }
+printf("###> %s\n",ss);
+printf("###> %s\n",tmp_names);
+  return tmp_names;
+}
+
+
+char * eatSpacesMid(const char * ss) {
+  char tt[50];
+  strcpy(tt,ss);
+  int8_t ix=0,iy=0;
+  tmp_names[0]=0; 
+  while( tt[ix] != 0 && ix < 50){
+    if(tt[ix]!=' ') tmp_names[iy++]=tt[ix];
+    ix++;
+  }
+  tmp_names[iy]=0;
+  tmp_names[iy++]=0;
+
+  printf("###> %s\n",ss);
+printf("###> %s\n",tmp_names);
+
+  return tmp_names;
+}
+
+
+
+/********************************************//**
+ * \brief Remove all spaces from the curvefitting mode name
+ *
+ ***********************************************/
+/*
 char tmp_names[13];
 char * eatSpaces(const char * ss) {
   strcpy(tmp_names,ss);
@@ -198,7 +242,7 @@ char * eatSpaces(const char * ss) {
   }
   return tmp_names;
 }
-
+*/
 
 /********************************************//**
  * \brief Returns all selected names of the curve fit types
@@ -213,7 +257,7 @@ char * getCurveFitModeNames(uint16_t selection) {
   for(ix = 0; ix < 10; ix++) {
     if(selection & (1 << ix)) {
       strcat(errorMessage, errorMessage[0] == 0 ? "" : " ");
-      strcat(errorMessage, eatSpaces(getCurveFitModeName(1 << ix)));
+      strcat(errorMessage, eatSpacesEnd(getCurveFitModeName(1 << ix)));
     }
   }
   if(errorMessage[0]==0) return "???        ";

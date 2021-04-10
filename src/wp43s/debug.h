@@ -68,7 +68,8 @@ char *getAngularModeName                  (angularMode_t angularMode);
 char *getCurveFitModeName                 (uint16_t selection);
 char *getCurveFitModeNames                (uint16_t selection);
 char *getCurveFitModeFormula              (uint16_t selection);
-char *eatSpaces                           (const char * ss);
+char *eatSpacesEnd                        (const char * ss);
+char *eatSpacesMid                        (const char * ss);
 
 //void  debugNIM                            (void); Never used
 

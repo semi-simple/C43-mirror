@@ -1405,7 +1405,7 @@
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               } else
               if(regist == REGISTER_Z) {
-                strcpy(prefix, eatSpaces(getCurveFitModeName(lrChosen)));
+                strcpy(prefix, eatSpacesEnd(getCurveFitModeName(lrChosen)));
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,lrChosen == 0 ? "" : STD_SUP_ASTERISK);
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
@@ -1424,7 +1424,7 @@
               strcat(prefix,"a" STD_SUB_0 "=");
               prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
             } else if(regist == REGISTER_Y) {
-              strcpy(prefix, eatSpaces(getCurveFitModeName(lrChosen)));
+              strcpy(prefix, eatSpacesEnd(getCurveFitModeName(lrChosen)));
               if(lrCountOnes(lrSelection)>1) strcat(prefix,lrChosen == 0 ? "" : STD_SUP_ASTERISK);
               while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                 strcat(prefix,STD_SPACE_6_PER_EM);
@@ -1480,7 +1480,7 @@
               if(lrChosen == 0) {
                 strcpy(prefix, "r" STD_SPACE_FIGURE "=");
               } else {
-                strcpy(prefix,eatSpaces(getCurveFitModeName(lrChosen)));
+                strcpy(prefix,eatSpacesEnd(getCurveFitModeName(lrChosen)));
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
               }
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;

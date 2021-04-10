@@ -44,4 +44,7 @@
 
   void addRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
   void subtractRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
+
+  void multiplyRealMatrix(const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res);
+  void multiplyRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
 #endif // TESTSUITE_BUILD

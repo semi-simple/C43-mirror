@@ -408,8 +408,8 @@ void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
 
 /* Addition and subtraction */
 static void addSubRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, bool_t subtraction, real34Matrix_t *res) {
-  uint16_t rows = y->header.matrixRows;
-  uint16_t cols = y->header.matrixColumns;
+  const uint16_t rows = y->header.matrixRows;
+  const uint16_t cols = y->header.matrixColumns;
   int32_t i;
 
   if((y->header.matrixColumns != x->header.matrixColumns) || (y->header.matrixRows != x->header.matrixRows)) {
@@ -437,4 +437,46 @@ void subtractRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real
   addSubRealMatrices(y, x, true, res);
 }
 
+
+
+/* Multiplication */
+void multiplyRealMatrix(const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+
+  realMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    real34Multiply(&matrix->matrixElements[i], x, &res->matrixElements[i]);
+  }
+}
+
+void multiplyRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
+  const uint16_t rows = y->header.matrixRows;
+  const uint16_t iter = y->header.matrixColumns;
+  const uint16_t cols = x->header.matrixColumns;
+  int32_t i, j, k;
+  real_t sum, prod, p, q;
+
+  if(y->header.matrixColumns != x->header.matrixRows) {
+    res->matrixElements = NULL; // Matrix mismatch
+    res->header.matrixRows = res->header.matrixColumns = 0;
+    return;
+  }
+
+  realMatrixInit(res, rows, cols);
+  for(i = 0; i < rows; ++i) {
+    for(j = 0; j < cols; ++j) {
+      realCopy(const_0, &sum);
+      realCopy(const_0, &prod);
+      for(k = 0; k < iter; ++k) {
+        real34ToReal(&y->matrixElements[i * iter + k], &p);
+        real34ToReal(&x->matrixElements[k * cols + j], &q);
+        realMultiply(&p, &q, &prod, &ctxtReal39);
+        realAdd(&sum, &prod, &sum, &ctxtReal39);
+        realToReal34(&sum, &res->matrixElements[i * cols + j]);
+      }
+    }
+  }
+}
 #endif

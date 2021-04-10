@@ -251,6 +251,4 @@
     extern int16_t              previousItem;
   #endif // DMCP_BUILD
 
-  #include "constantPointers.h"
-
 #endif // WP43S_H

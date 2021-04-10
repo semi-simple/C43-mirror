@@ -20,6 +20,7 @@
 
 #include "mathematics/gammaXyUpper.h"
 
+#include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
 #include "fonts.h"

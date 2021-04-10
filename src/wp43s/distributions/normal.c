@@ -20,6 +20,7 @@
 
 #include "distributions/normal.h"
 
+#include "constantPointers.h"
 #include "error.h"
 #include "fonts.h"
 #include "registers.h"

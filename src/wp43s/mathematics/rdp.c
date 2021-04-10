@@ -21,6 +21,7 @@
 #include "mathematics/rdp.h"
 
 #include "config.h"
+#include "constantPointers.h"
 #include "conversionAngles.h"
 #include "debug.h"
 #include "error.h"

@@ -20,6 +20,7 @@
 
 #include "mathematics/log2.h"
 
+#include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
 #include "flags.h"

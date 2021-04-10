@@ -21,6 +21,7 @@
 #include "registerValueConversions.h"
 
 #include "charString.h"
+#include "constantPointers.h"
 #include "dateTime.h"
 #include "display.h"
 #include "error.h"

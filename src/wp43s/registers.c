@@ -22,6 +22,7 @@
 
 #include "charString.h"
 #include "config.h"
+#include "constantPointers.h"
 #include "dateTime.h"
 #include "debug.h"
 #include "display.h"

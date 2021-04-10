@@ -20,6 +20,7 @@
 
 #include "mathematics/variance.h"
 
+#include "constantPointers.h"
 #include "flags.h"
 #include "registers.h"
 #include "stack.h"

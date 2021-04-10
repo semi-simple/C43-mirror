@@ -18,6 +18,7 @@
 
 #include "bufferize.h"
 #include "charString.h"
+#include "constantPointers.h"
 #include "error.h"
 #include "flags.h"
 #include "fonts.h"

@@ -20,6 +20,7 @@
 
 #include "mathematics/cross.h"
 
+#include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
 #include "items.h"

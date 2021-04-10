@@ -20,6 +20,7 @@
 
 #include "distributions/negBinom.h"
 
+#include "constantPointers.h"
 #include "error.h"
 #include "registers.h"
 #include "registerValueConversions.h"

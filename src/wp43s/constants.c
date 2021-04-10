@@ -21,6 +21,7 @@
 
 #include "constants.h"
 
+#include "constantPointers.h"
 #include "registers.h"
 #include "stack.h"
 

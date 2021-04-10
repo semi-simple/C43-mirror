@@ -20,6 +20,7 @@
 
 #include "mathematics/arccos.h"
 
+#include "constantPointers.h"
 #include "conversionAngles.h"
 #include "debug.h"
 #include "error.h"

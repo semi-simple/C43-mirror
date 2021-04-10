@@ -20,6 +20,7 @@
 
 #include "mathematics/comparisonReals.h"
 
+#include "constantPointers.h"
 #include "registerValueConversions.h"
 
 #include "wp43s.h"

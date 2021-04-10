@@ -21,6 +21,7 @@
 
 #include "mathematics/arg.h"
 
+#include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
 #include "conversionAngles.h"

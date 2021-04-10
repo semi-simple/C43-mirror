@@ -20,6 +20,7 @@
 
 #include "mathematics/ortho_polynom.h"
 
+#include "constantPointers.h"
 #include "error.h"
 #include "items.h"
 #include "registers.h"

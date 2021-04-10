@@ -21,6 +21,7 @@
 #include "bufferize.h"
 
 #include "charString.h"
+#include "constantPointers.h"
 #include "constants.h"
 #include "conversionAngles.h"
 #include "dateTime.h"

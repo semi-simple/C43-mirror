@@ -20,6 +20,7 @@
 
 #include "mathematics/iteration.h"
 
+#include "constantPointers.h"
 #include "error.h"
 #include "registers.h"
 

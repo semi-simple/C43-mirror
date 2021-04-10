@@ -20,6 +20,7 @@
 
 #include "mathematics/bessel.h"
 
+#include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
 #include "memory.h"

@@ -20,6 +20,7 @@
 
 #include "mathematics/wp34s.h"
 
+#include "constantPointers.h"
 #include "conversionAngles.h"
 #include "statusBar.h"
 

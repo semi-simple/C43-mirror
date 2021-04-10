@@ -21,6 +21,7 @@
 
 #include "mathematics/xthRoot.h"
 
+#include "constantPointers.h"
 #include "debug.h"
 #include "display.h"
 #include "error.h"

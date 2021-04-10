@@ -414,29 +414,29 @@ void subDateReal(void) {
  * \return void
  ***********************************************/
 void subRemaRema(void) {
-  real34Matrix_t *y, *x, *res;
+  real34Matrix_t y, x, res;
 
   convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
   convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
 
-  subtractRealMatrices(y, x, &res);
-  if(res) {
-    convertReal34MatrixToReal34MatrixRegister(res, REGISTER_X);
+  subtractRealMatrices(&y, &x, &res);
+  if(res.matrixElements) {
+    convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
     fnDropY(NOPARAM);
-    realMatrixFree(res);
+    realMatrixFree(&res);
   }
   else {
     displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "cannot subtract %d" STD_CROSS "%d-matrix from %d" STD_CROSS "%d-matrix",
-              x->header.matrixRows, x->header.matrixColumns,
-              y->header.matrixRows, y->header.matrixColumns);
+              x.header.matrixRows, x.header.matrixColumns,
+              y.header.matrixRows, y.header.matrixColumns);
       moreInfoOnError("In function subRemaRema:", errorMessage, NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 
-  realMatrixFree(x);
-  realMatrixFree(y);
+  realMatrixFree(&x);
+  realMatrixFree(&y);
 }
 
 

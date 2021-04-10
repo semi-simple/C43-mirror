@@ -477,18 +477,20 @@ void convertReal34RegisterToDateRegister(calcRegister_t source, calcRegister_t d
 
 
 #ifndef TESTSUITE_BUILD
-void convertReal34MatrixRegisterToReal34Matrix(calcRegister_t regist, real34Matrix_t **matrix) {
+void convertReal34MatrixRegisterToReal34Matrix(calcRegister_t regist, real34Matrix_t *matrix) {
+
   dataBlock_t *dblock           = REGISTER_REAL34_MATRIX_DBLOCK(regist);
   real34_t    *matrixElem     = REGISTER_REAL34_MATRIX_M_ELEMENTS(regist);
 
-  *matrix = realMatrixInit(dblock->matrixRows, dblock->matrixColumns);
+  realMatrixInit(matrix, dblock->matrixRows, dblock->matrixColumns);
+  xcopy(matrix->matrixElements, REGISTER_REAL34_MATRIX_M_ELEMENTS(regist), (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t));
 
-  for(int i = 0; i < (*matrix)->header.matrixColumns * (*matrix)->header.matrixRows; i++) {
-    real34Copy(&matrixElem[i], &(*matrix)->matrixElements[i]);
+  for(int i = 0; i < matrix->header.matrixColumns * matrix->header.matrixRows; i++) {
+    real34Copy(&matrixElem[i], &matrix->matrixElements[i]);
   }
 }
 
-void convertReal34MatrixToReal34MatrixRegister(real34Matrix_t *matrix, calcRegister_t regist) {
+void convertReal34MatrixToReal34MatrixRegister(const real34Matrix_t *matrix, calcRegister_t regist) {
   reallocateRegister(regist, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t)) + TO_BLOCKS(sizeof(dataBlock_t)), amNone);
   xcopy(REGISTER_REAL34_MATRIX(regist), matrix, sizeof(dataBlock_t));
   xcopy(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist), matrix->matrixElements, (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t));

@@ -299,7 +299,7 @@ typedef int16_t calcRegister_t;
  ***********************************************/
 typedef struct {
    dataBlock_t header;
-   real34_t    matrixElements[];
+   real34_t    *matrixElements;
 } real34Matrix_t;
 
 /********************************************//**

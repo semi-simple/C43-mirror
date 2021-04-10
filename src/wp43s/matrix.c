@@ -21,7 +21,7 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-real34Matrix_t       *openMatrixMIMPointer;
+real34Matrix_t        openMatrixMIMPointer;
 bool_t                matEditMode;
 
 /********************************************//**
@@ -33,7 +33,7 @@ bool_t                matEditMode;
 void fnNewMatrix(uint16_t unusedParamButMandatory) {
   uint32_t rows, cols;
   longInteger_t tmp_lgInt;
-  real34Matrix_t* matrix;
+  real34Matrix_t matrix;
 
   //Get Size from REGISTER_X and REGISTER_Y
   if(((getRegisterDataType(REGISTER_X) != dtLongInteger) && (getRegisterDataType(REGISTER_X) != dtReal34)) ||
@@ -61,14 +61,14 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
   longIntegerFree(tmp_lgInt);
 
   //Initialize Memory for Matrix
-  matrix = realMatrixInit(rows, cols);
+  realMatrixInit(&matrix, rows, cols);
 
   //Drop X_Register and Y_Register
   fnDropY(NOPARAM);
-  convertReal34MatrixToReal34MatrixRegister(matrix, REGISTER_X);
+  convertReal34MatrixToReal34MatrixRegister(&matrix, REGISTER_X);
   setSystemFlag(FLAG_ASLIFT);
 
-  realMatrixFree(matrix);
+  realMatrixFree(&matrix);
 }
 
 /********************************************//**
@@ -103,15 +103,14 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Initialize a real matrix
  *
+ * \param[out] matrix real34Matrix_t*
  * \param[in] rows uint16_t
  * \param[in] cols uint16_t
- * \return real34Matrix_t *
+ * \return void
  ***********************************************/
-real34Matrix_t *realMatrixInit(uint16_t rows, uint16_t cols) {
-  real34Matrix_t *matrix;
-
+void realMatrixInit(real34Matrix_t *matrix , uint16_t rows, uint16_t cols) {
   //Allocate Memory for Matrix
-  matrix = allocWp43s(TO_BLOCKS((rows * cols) * sizeof(real34_t) + sizeof(registerHeader_t)));
+  matrix->matrixElements = allocWp43s(TO_BLOCKS((rows * cols) * sizeof(real34_t)));
 
   matrix->header.matrixColumns = cols;
   matrix->header.matrixRows = rows;
@@ -120,8 +119,6 @@ real34Matrix_t *realMatrixInit(uint16_t rows, uint16_t cols) {
   for(uint32_t i = 0; i < rows * cols; i++) {
     real34Copy(const34_0, &matrix->matrixElements[i]);
   }
-
-  return matrix;
 }
 
 
@@ -135,7 +132,9 @@ void realMatrixFree(real34Matrix_t *matrix) {
   uint16_t cols = matrix->header.matrixColumns;
   uint16_t rows = matrix->header.matrixRows;
 
-  freeWp43s(matrix, TO_BLOCKS((rows * cols) * sizeof(real34_t) + sizeof(registerHeader_t)));
+  freeWp43s(matrix->matrixElements, TO_BLOCKS((rows * cols) * sizeof(real34_t)));
+  matrix->matrixElements = NULL;
+  matrix->header.matrixRows = matrix->header.matrixColumns = 0;
 }
 
 
@@ -146,8 +145,8 @@ void realMatrixFree(real34Matrix_t *matrix) {
  ***********************************************/
 void showMatrixEditor() {
 
-  int rows = openMatrixMIMPointer->header.matrixRows;
-  int cols = openMatrixMIMPointer->header.matrixColumns;
+  int rows = openMatrixMIMPointer.header.matrixRows;
+  int cols = openMatrixMIMPointer.header.matrixColumns;
   int16_t Y_POS = Y_POSITION_OF_REGISTER_X_LINE;
 
   Y_POS = Y_POSITION_OF_REGISTER_X_LINE - NUMERIC_FONT_HEIGHT;
@@ -188,7 +187,7 @@ void showMatrixEditor() {
   for(int i = 0; i < rows; i++) {
     showString("[", &numericFont, 1, Y_POS - (rows -1 - i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
     for(int j = 0; j< cols; j++) {
-      real34ToDisplayString(&openMatrixMIMPointer->matrixElements[i*cols+j], amNone, tmpString, &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
+      real34ToDisplayString(&openMatrixMIMPointer.matrixElements[i*cols+j], amNone, tmpString, &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
       if (matSelRow == i && matSelCol == j) {
         vm = vmReverse;
       } else {
@@ -204,25 +203,25 @@ void showMatrixEditor() {
 
   sprintf(tmpString, "%" PRIi16";%" PRIi16"= %s", matSelRow+1, matSelCol+1, nimBufferDisplay);
   if(aimBuffer[0] == 0)
-    real34ToDisplayString(&openMatrixMIMPointer->matrixElements[matSelRow*cols+matSelCol], amNone, &tmpString[strlen(tmpString)], &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
+    real34ToDisplayString(&openMatrixMIMPointer.matrixElements[matSelRow*cols+matSelCol], amNone, &tmpString[strlen(tmpString)], &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
   xCursor = showString(tmpString, &numericFont, 1, Y_POS + NUMERIC_FONT_HEIGHT, vmNormal, true, false) + 3;
   yCursor = Y_POSITION_OF_NIM_LINE;
 }
 
 void mimEnter(void) {
-  int cols = openMatrixMIMPointer->header.matrixColumns;
+  int cols = openMatrixMIMPointer.header.matrixColumns;
   int16_t row = getIRegisterAsInt(true);
   int16_t col = getJRegisterAsInt(true);
 
   if(aimBuffer[0] != 0) {
-    stringToReal34(aimBuffer, &openMatrixMIMPointer->matrixElements[row * cols + col]);
+    stringToReal34(aimBuffer, &openMatrixMIMPointer.matrixElements[row * cols + col]);
 
     aimBuffer[0] = 0;
     nimBufferDisplay[0] = 0;
     hideCursor();
     cursorEnabled = false;
 
-    convertReal34MatrixToReal34MatrixRegister(openMatrixMIMPointer, REGISTER_X);
+    convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, REGISTER_X);
     setSystemFlag(FLAG_ASLIFT);
   }
 }
@@ -290,13 +289,13 @@ void mimAddNumber(int16_t item) {
 
     case ITM_CHS :
       if(aimBuffer[0] == 0) {
-        int cols = openMatrixMIMPointer->header.matrixColumns;
+        int cols = openMatrixMIMPointer.header.matrixColumns;
         int16_t row = getIRegisterAsInt(true);
         int16_t col = getJRegisterAsInt(true);
 
-        real34ChangeSign(&openMatrixMIMPointer->matrixElements[row * cols + col]);
+        real34ChangeSign(&openMatrixMIMPointer.matrixElements[row * cols + col]);
 
-        convertReal34MatrixToReal34MatrixRegister(openMatrixMIMPointer, REGISTER_X);
+        convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, REGISTER_X);
         setSystemFlag(FLAG_ASLIFT);
         return;
       }
@@ -310,9 +309,8 @@ void mimAddNumber(int16_t item) {
 }
 
 void mimFinalize(void) {
-  if(openMatrixMIMPointer) {
-    realMatrixFree(openMatrixMIMPointer);
-    openMatrixMIMPointer = NULL;
+  if(openMatrixMIMPointer.matrixElements) {
+    realMatrixFree(&openMatrixMIMPointer);
   }
 }
 
@@ -332,7 +330,7 @@ void storeMatrixToXRegister(real34Matrix_t *matrix) {
 */
 
 void getMatrixFromRegister(calcRegister_t regist) {
-  real34Matrix_t* matrix;
+  real34Matrix_t matrix;
 
   if (getRegisterDataType(regist) != dtReal34Matrix) {
     #ifdef PC_BUILD
@@ -343,7 +341,7 @@ void getMatrixFromRegister(calcRegister_t regist) {
     return;
   }
 
-  if(openMatrixMIMPointer) realMatrixFree(openMatrixMIMPointer);
+  if(openMatrixMIMPointer.matrixElements) realMatrixFree(&openMatrixMIMPointer);
   convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
 
 
@@ -409,32 +407,33 @@ void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
 
 
 /* Addition and subtraction */
-static void addSubRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, bool_t subtraction, real34Matrix_t **res) {
+static void addSubRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, bool_t subtraction, real34Matrix_t *res) {
   uint16_t rows = y->header.matrixRows;
   uint16_t cols = y->header.matrixColumns;
   int32_t i;
 
   if((y->header.matrixColumns != x->header.matrixColumns) || (y->header.matrixRows != x->header.matrixRows)) {
-    *res = NULL; // Matrix mismatch
+    res->matrixElements = NULL; // Matrix mismatch
+	res->header.matrixRows = res->header.matrixColumns = 0;
     return;
   }
 
-  *res = realMatrixInit(rows, cols);
+  realMatrixInit(res, rows, cols);
   for(i = 0; i < cols * rows; ++i) {
     if(subtraction) {
-      real34Subtract(&y->matrixElements[i], &x->matrixElements[i], &(*res)->matrixElements[i]);
+      real34Subtract(&y->matrixElements[i], &x->matrixElements[i], &res->matrixElements[i]);
     }
     else {
-      real34Add(&y->matrixElements[i], &x->matrixElements[i], &(*res)->matrixElements[i]);
+      real34Add(&y->matrixElements[i], &x->matrixElements[i], &res->matrixElements[i]);
     }
   }
 }
 
-void addRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t **res) {
+void addRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
   addSubRealMatrices(y, x, false, res);
 }
 
-void subtractRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t **res) {
+void subtractRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
   addSubRealMatrices(y, x, true, res);
 }
 

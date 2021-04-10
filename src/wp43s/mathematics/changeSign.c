@@ -20,7 +20,10 @@
 
 #include "mathematics/changeSign.h"
 
+#include "debug.h"
+#include "error.h"
 #include "integers.h"
+#include "items.h"
 #include "registers.h"
 
 #include "wp43s.h"

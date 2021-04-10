@@ -19,6 +19,7 @@
  ***********************************************/
 
 #include "fonts.h"
+#include "items.h"
 
 #include "wp43s.h"
 

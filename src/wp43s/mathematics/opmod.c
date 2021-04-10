@@ -20,8 +20,12 @@
 
 #include "mathematics/opmod.h"
 
+#include "debug.h"
+#include "error.h"
 #include "integers.h"
+#include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "stack.h"
 
 #include "wp43s.h"

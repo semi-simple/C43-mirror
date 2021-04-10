@@ -20,6 +20,8 @@
 
 #include "mathematics/comparisonReals.h"
 
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

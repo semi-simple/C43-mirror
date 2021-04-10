@@ -20,9 +20,12 @@
 
 #include "stack.h"
 
+#include "charString.h"
+#include "error.h"
 #include "flags.h"
 #include "memory.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 

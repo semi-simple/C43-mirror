@@ -20,6 +20,7 @@
 
 #include "mathematics/mean.h"
 
+#include "error.h"
 #include "flags.h"
 #include "registers.h"
 #include "stack.h"

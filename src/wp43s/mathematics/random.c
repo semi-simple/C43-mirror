@@ -20,10 +20,14 @@
 
 #include "mathematics/random.h"
 
+#include "config.h"
+#include "debug.h"
+#include "error.h"
 #include "flags.h"
 #include "integers.h"
 #include "memory.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "stack.h"
 #include "timer.h"
 

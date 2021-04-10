@@ -21,11 +21,16 @@
 #include "config.h"
 
 #include "bufferize.h"
+#include "charString.h"
+#include "debug.h"
+#include "error.h"
 #include "flags.h"
 #include "gui.h"
+#include "items.h"
 #include "keyboard.h"
 #include "memory.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "stack.h"
 #include "stats.h"
 #include <string.h>

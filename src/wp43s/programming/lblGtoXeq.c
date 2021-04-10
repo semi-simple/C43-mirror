@@ -20,6 +20,8 @@
 
 #include "programming/lblGtoXeq.h"
 
+#include "charString.h"
+#include "items.h"
 #include "softmenus.h"
 
 #include "wp43s.h"

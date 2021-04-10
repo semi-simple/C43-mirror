@@ -20,10 +20,16 @@
 
 #include "registers.h"
 
+#include "charString.h"
+#include "config.h"
 #include "dateTime.h"
+#include "debug.h"
 #include "display.h"
+#include "error.h"
 #include "flags.h"
+#include "items.h"
 #include "memory.h"
+#include "registerValueConversions.h"
 #include "sort.h"
 #include "stack.h"
 #include <string.h>

@@ -18,6 +18,7 @@
  * \file generateCatalogs.c
  ***********************************************/
 
+#include "items.h"
 #include "sort.h"
 #include <unistd.h>
 

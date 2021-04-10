@@ -20,7 +20,10 @@
 
 #include "mathematics/ortho_polynom.h"
 
+#include "error.h"
+#include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "stack.h"
 
 #include "wp43s.h"

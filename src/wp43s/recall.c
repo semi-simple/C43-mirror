@@ -20,6 +20,9 @@
 
 #include "recall.h"
 
+#include "charString.h"
+#include "debug.h"
+#include "error.h"
 #include "flags.h"
 #include "memory.h"
 #include "registers.h"

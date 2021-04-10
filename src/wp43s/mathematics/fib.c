@@ -20,9 +20,12 @@
 
 #include "mathematics/fib.h"
 
+#include "debug.h"
+#include "error.h"
 #include "display.h"
 #include "fonts.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 

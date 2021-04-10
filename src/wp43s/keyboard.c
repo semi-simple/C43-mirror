@@ -21,8 +21,13 @@
 #include "keyboard.h"
 
 #include "bufferize.h"
+#include "charString.h"
+#include "constants.h"
+#include "debug.h"
+#include "error.h"
 #include "flags.h"
 #include "gui.h"
+#include "items.h"
 #include "memory.h"
 #include "recall.h"
 #include "registers.h"

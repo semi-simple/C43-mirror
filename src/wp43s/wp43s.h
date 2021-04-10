@@ -51,19 +51,10 @@
   #include "defines.h"
 
   #include "browsers/browsers.h"
-  #include "config.h"
-  #include "constants.h"
-  #include "debug.h"
-  #include "error.h"
-  #include "charString.h" // must be after font.h
   #include "distributions/distributions.h"
-  #include "items.h"
   #include "logicalOps/logicalOps.h"
   #include "mathematics/mathematics.h"
   #include "programming/programming.h"
-  #include "registerValueConversions.h"
-  #include "saveRestoreCalcState.h"
-  #include "stringFuncs.h"
 
   // Variables for the simulator
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)

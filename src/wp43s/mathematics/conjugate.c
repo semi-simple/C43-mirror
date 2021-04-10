@@ -20,6 +20,9 @@
 
 #include "mathematics/conjugate.h"
 
+#include "debug.h"
+#include "error.h"
+#include "items.h"
 #include "registers.h"
 
 #include "wp43s.h"

@@ -20,6 +20,8 @@
 
 #include "wp43s.h"
 
+#include "config.h"
+#include "items.h"
 #include "keyboard.h"
 #include "memory.h"
 #include "screen.h"

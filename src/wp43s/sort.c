@@ -20,6 +20,7 @@
 
 #include "sort.h"
 
+#include "charString.h"
 #include "fonts.h"
 
 #include "wp43s.h"

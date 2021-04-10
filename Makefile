@@ -118,7 +118,7 @@ DMCP_CPUFLAGS += -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 --sp
 
 # compile gcc flags
 DMCP_ASFLAGS = $(DMCP_CPUFLAGS) -Wall -fdata-sections -ffunction-sections
-DMCP_CFLAGS += $(DMCP_CPUFLAGS) $(DMCP_INCLUDES) $(C_INCLUDES) -fdata-sections -ffunction-sections
+DMCP_CFLAGS += $(DMCP_CPUFLAGS) $(C_INCLUDES) $(DMCP_INCLUDES) -fdata-sections -ffunction-sections
 
 ifdef DEBUG_WP43S
 DMCP_CFLAGS += -O0 -DDEBUG
@@ -138,13 +138,13 @@ DMCP_LDFLAGS = $(DMCP_CPUFLAGS) -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/dmcp
 SRC_DECIMAL              = $(addprefix dep/decNumberICU/, decContext.c decDouble.c decimal128.c decimal64.c decNumber.c decQuad.c)
 
 SRC_WP43S                = $(SRC_DECIMAL) \
-                           $(wildcard src/wp43s/*.c) \
+                           $(sort $(wildcard src/wp43s/*.c) \
                            $(wildcard src/wp43s/mathematics/*.c) \
                            $(wildcard src/wp43s/browsers/*.c) \
                            $(wildcard src/wp43s/logicalOps/*.c) \
                            $(wildcard src/wp43s/programming/*.c) \
                            $(wildcard src/wp43s/distributions/*.c) \
-                           $(wildcard src/wp43s/ui/*.c)
+                           $(wildcard src/wp43s/ui/*.c) )
 
 SRC_SIMULATOR            = $(SRC_WP43S) \
                            $(wildcard src/wp43s-gtk/*.c)

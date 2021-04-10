@@ -20,7 +20,10 @@
 
 #include "programming/manage.h"
 
+#include "charString.h"
+#include "config.h"
 #include "fonts.h"
+#include "items.h"
 #include "memory.h"
 #include "screen.h"
 

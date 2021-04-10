@@ -20,7 +20,11 @@
 
 #include "mathematics/compare.h"
 
+#include "debug.h"
+#include "error.h"
+#include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "sort.h"
 #include "stack.h"
 

@@ -20,9 +20,13 @@
 
 #include "mathematics/10pow.h"
 
+#include "debug.h"
+#include "error.h"
 #include "fonts.h"
 #include "integers.h"
+#include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 

@@ -20,10 +20,14 @@
 
 #include "mathematics/dblDivision.h"
 
+#include "debug.h"
+#include "error.h"
 #include "flags.h"
 #include "fonts.h"
 #include "integers.h"
+#include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "stack.h"
 
 #include "wp43s.h"

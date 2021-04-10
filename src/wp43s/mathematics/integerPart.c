@@ -20,7 +20,11 @@
 
 #include "mathematics/integerPart.h"
 
+#include "debug.h"
+#include "error.h"
+#include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 

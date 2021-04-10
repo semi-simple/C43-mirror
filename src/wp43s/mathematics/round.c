@@ -20,7 +20,11 @@
 
 #include "mathematics/round.h"
 
+#include "debug.h"
+#include "error.h"
+#include "items.h"
 #include "registers.h"
+#include "saveRestoreCalcState.h"
 #include "screen.h"
 
 #include "wp43s.h"

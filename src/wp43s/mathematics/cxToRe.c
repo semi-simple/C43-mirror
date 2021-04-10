@@ -20,6 +20,8 @@
 
 #include "mathematics/cxToRe.h"
 
+#include "debug.h"
+#include "error.h"
 #include "conversionAngles.h"
 #include "flags.h"
 #include "registers.h"

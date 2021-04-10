@@ -20,11 +20,16 @@
 
 #include "saveRestoreCalcState.h"
 
+#include "charString.h"
+#include "config.h"
 #include "display.h"
+#include "error.h"
 #include "flags.h"
 #include "gui.h"
+#include "items.h"
 #include "memory.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "screen.h"
 #include "stats.h"
 #include <string.h>

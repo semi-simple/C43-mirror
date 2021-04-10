@@ -20,8 +20,10 @@
 
 #include "registerValueConversions.h"
 
+#include "charString.h"
 #include "dateTime.h"
 #include "display.h"
+#include "error.h"
 #include "integers.h"
 #include "registers.h"
 

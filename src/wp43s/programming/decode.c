@@ -20,8 +20,10 @@
 
 #include "programming/decode.h"
 
+#include "charString.h"
 #include "display.h"
 #include "fonts.h"
+#include "items.h"
 #include "registers.h"
 #include <string.h>
 

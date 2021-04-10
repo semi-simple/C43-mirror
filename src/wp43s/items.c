@@ -21,6 +21,8 @@
 #include "items.h"
 
 #include "bufferize.h"
+#include "config.h"
+#include "constants.h"
 #include "conversionAngles.h"
 #include "conversionUnits.h"
 #include "curveFitting.h"
@@ -35,11 +37,13 @@
 #include "keyboard.h"
 #include "recall.h"
 #include "registers.h"
+#include "saveRestoreCalcState.h"
 #include "screen.h"
 #include "softmenus.h"
 #include "stack.h"
 #include "stats.h"
 #include "store.h"
+#include "stringFuncs.h"
 #include "timer.h"
 #include "ui/tam.h"
 

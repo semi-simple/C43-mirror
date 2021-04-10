@@ -20,6 +20,7 @@
 
 #include "logicalOps/mask.h"
 
+#include "error.h"
 #include "registers.h"
 #include "stack.h"
 

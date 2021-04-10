@@ -19,7 +19,9 @@
  ***********************************************/
 
 #include "gui.h"
+#include "items.h"
 #include "memory.h"
+#include "saveRestoreCalcState.h"
 #include "screen.h"
 
 #include "wp43s.h"

@@ -17,6 +17,8 @@
 #include "ui/tam.h"
 
 #include "bufferize.h"
+#include "charString.h"
+#include "error.h"
 #include "flags.h"
 #include "fonts.h"
 #include "gui.h"

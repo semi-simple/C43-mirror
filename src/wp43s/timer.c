@@ -20,6 +20,7 @@
 
 #include "timer.h"
 
+#include "registerValueConversions.h"
 #include "stack.h"
 
 #include "wp43s.h"

@@ -20,9 +20,13 @@
 
 #include "mathematics/invert.h"
 
+#include "debug.h"
 #include "display.h"
+#include "error.h"
 #include "fonts.h"
+#include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 

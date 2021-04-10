@@ -26,7 +26,10 @@
 
 #include "softmenus.h"
 
+#include "charString.h"
+#include "error.h"
 #include "gui.h"
+#include "items.h"
 #include "registers.h"
 #include "screen.h"
 #include "sort.h"

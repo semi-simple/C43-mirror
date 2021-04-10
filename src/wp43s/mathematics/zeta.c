@@ -20,7 +20,10 @@
 
 #include "mathematics/zeta.h"
 
+#include "debug.h"
+#include "error.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "statusBar.h"
 
 #include "wp43s.h"

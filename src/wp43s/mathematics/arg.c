@@ -21,6 +21,8 @@
 
 #include "mathematics/arg.h"
 
+#include "debug.h"
+#include "error.h"
 #include "conversionAngles.h"
 #include "registers.h"
 

@@ -20,8 +20,11 @@
 
 #include "mathematics/gammaXyLower.h"
 
+#include "debug.h"
+#include "error.h"
 #include "fonts.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 

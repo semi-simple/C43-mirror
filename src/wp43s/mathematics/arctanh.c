@@ -20,8 +20,12 @@
 
 #include "mathematics/arctanh.h"
 
+#include "debug.h"
+#include "error.h"
 #include "flags.h"
+#include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 

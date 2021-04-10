@@ -29,6 +29,7 @@
 #include "programming/lblGtoXeq.h"
 #include "programming/nextStep.h"
 #include "screen.h"
+#include <stdlib.h>
 
 #include "wp43s.h"
 

@@ -17,6 +17,10 @@
 /********************************************//**
  * \file checkValue.h
  ***********************************************/
+#ifndef CHECKVALUE_H
+#define CHECKVALUE_H
+
+#include <stdint.h>
 
 void fnCheckValue   (uint16_t mode);
 void checkValueError(uint16_t unusedButMandatoryParameter);
@@ -26,3 +30,5 @@ void checkValueCxma (uint16_t mode);
 void checkValueShoI (uint16_t mode);
 void checkValueReal (uint16_t mode);
 void checkValueCplx (uint16_t mode);
+
+#endif // CHECKVALUE_H

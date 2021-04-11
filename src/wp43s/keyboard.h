@@ -17,6 +17,14 @@
 /********************************************//**
  * \file keyboard.h
  ***********************************************/
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
+
+#include <stdint.h>
+#ifdef PC_BUILD
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
+#endif // PC_BUILD
 
 void leavePem        (void);
 void showShiftState  (void);
@@ -45,3 +53,5 @@ void fnKeyDotD       (uint16_t unusedButMandatoryParameter);
   void btnPressed   (void *data);
   void btnReleased  (void *data);
 #endif // DMCP_BUILD
+
+#endif // KEYBOARD_H

@@ -17,6 +17,11 @@
 /********************************************//**
  * \file nor.h
  ***********************************************/
+#ifndef NOR_H
+#define NOR_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnLogicalNor(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +35,5 @@ void norLonIReal (void);
 void norRealLonI (void);
 void norRealReal (void);
 void norShoIShoI (void);
+
+#endif // NOR_H

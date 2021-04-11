@@ -17,6 +17,12 @@
 /********************************************//**
  * \file fib.h
  ***********************************************/
+#ifndef FIB_H
+#define FIB_H
+
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
 
 void fnFib   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +36,5 @@ void fibCplx (void);
 
 uint8_t FibonacciReal(const real_t *n, real_t *res, realContext_t *realContext);
 uint8_t FibonacciComplex(const real_t *nReal, const real_t *nImag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+#endif // FIB_H

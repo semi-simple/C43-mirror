@@ -17,6 +17,10 @@
 /********************************************//**
  * \file mean.h
  ***********************************************/
+#ifndef VARIANCE_H
+#define VARIANCE_H
+
+#include <stdint.h>
 
 void fnWeightedSampleStdDev(uint16_t unusedButMandatoryParameter);
 void fnWeightedPopulationStdDev(uint16_t unusedButMandatoryParameter);
@@ -27,3 +31,5 @@ void fnStandardError(uint16_t unusedButMandatoryParameter);
 void fnGeometricSampleStdDev(uint16_t unusedButMandatoryParameter);
 void fnGeometricPopulationStdDev(uint16_t unusedButMandatoryParameter);
 void fnGeometricStandardError(uint16_t unusedButMandatoryParameter);
+
+#endif // VARIANCE_H

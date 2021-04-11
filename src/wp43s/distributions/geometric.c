@@ -18,6 +18,20 @@
  * \file geometric.c
  ***********************************************/
 
+#include "distributions/geometric.h"
+
+#include "constantPointers.h"
+#include "distributions/binomial.h"
+#include "distributions/hyper.h"
+#include "distributions/negBinom.h"
+#include "distributions/poisson.h"
+#include "error.h"
+#include "fonts.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

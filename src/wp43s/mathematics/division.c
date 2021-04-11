@@ -18,6 +18,17 @@
  * \file division.c
  ***********************************************/
 
+#include "mathematics/division.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "conversionAngles.h"
+#include "integers.h"
+#include "items.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

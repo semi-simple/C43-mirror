@@ -17,6 +17,10 @@
 /********************************************//**
  * \file rotateBits.h
  ***********************************************/
+#ifndef ROTATEBITS_H
+#define ROTATEBITS_H
+
+#include <stdint.h>
 
 void fnAsr   (uint16_t numberOfShifts);
 void fnSl    (uint16_t numberOfShifts);
@@ -28,3 +32,5 @@ void fnRrc   (uint16_t numberOfShifts);
 void fnLj    (uint16_t numberOfShifts);
 void fnRj    (uint16_t numberOfShifts);
 void fnMirror(uint16_t unusedButMandatoryParameter);
+
+#endif // ROTATEBITS_H

@@ -14,6 +14,23 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "ui/tam.h"
+
+#include "bufferize.h"
+#include "charString.h"
+#include "constantPointers.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "gui.h"
+#include "items.h"
+#include "mathematics/fractionalPart.h"
+#include "mathematics/integerPart.h"
+#include "programming/lblGtoXeq.h"
+#include "registers.h"
+#include "softmenus.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD

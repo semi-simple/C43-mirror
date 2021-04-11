@@ -18,6 +18,14 @@
  * \file int.c
  ***********************************************/
 
+#include "mathematics/int.h"
+
+#include "debug.h"
+#include "error.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "screen.h"
+
 #include "wp43s.h"
 
 

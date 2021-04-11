@@ -17,6 +17,11 @@
 /********************************************//**
  * \file curveFitting.h
  ***********************************************/
+#ifndef CURVEFITTING_H
+#define CURVEFITTING_H
+
+#include <stdint.h>
 
 void fnCurveFitting(uint16_t curveFitting);
 
+#endif // CURVEFITTING_H

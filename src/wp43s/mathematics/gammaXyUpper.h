@@ -17,6 +17,11 @@
 /********************************************//**
  * \file gammaXyUpper.h
  ***********************************************/
+#ifndef GAMMAXYUPPER_H
+#define GAMMAXYUPPER_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnGammaXyUpper      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -28,3 +33,5 @@ void gammaXyUpperLonILonI(void);
 void gammaXyUpperLonIReal(void);
 void gammaXyUpperRealLonI(void);
 void gammaXyUpperRealReal(void);
+
+#endif // GAMMAXYUPPER_H

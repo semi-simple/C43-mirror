@@ -17,6 +17,11 @@
 /********************************************//**
  * \file opmod.h
  ***********************************************/
+#ifndef OPMOD_H
+#define OPMOD_H
+
+#include "gmpWrappers.h"
+#include <stdint.h>
 
 void fnMulMod          (uint16_t unusedButMandatoryParameter);
 void fnExpMod          (uint16_t unusedButMandatoryParameter);
@@ -55,3 +60,5 @@ void opModRealShoIReal (uint16_t mode);
 void opModRealRealLonI (uint16_t mode);
 void opModRealRealShoI (uint16_t mode);
 void opModRealRealReal (uint16_t mode);
+
+#endif // OPMOD_H

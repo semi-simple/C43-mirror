@@ -17,6 +17,12 @@
 /********************************************//**
  * \file tanh.h
  ***********************************************/
+#ifndef TANH_H
+#define TANH_H
+
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
 
 void fnTanh   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -31,3 +37,5 @@ void tanhReal (void);
 void tanhCplx (void);
 
 uint8_t TanhComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext);
+
+#endif // TANH_H

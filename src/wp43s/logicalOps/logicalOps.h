@@ -17,6 +17,8 @@
 /********************************************//**
  * \file logicalOps.h
  ***********************************************/
+#ifndef LOGICALOPS_H
+#define LOGICALOPS_H
 
 
 
@@ -31,3 +33,5 @@
 #include "setClearFlipBits.h"
 #include "xnor.h"
 #include "xor.h"
+
+#endif // LOGICALOPS_H

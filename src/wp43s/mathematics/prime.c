@@ -18,6 +18,15 @@
  * \file prime.c
  ***********************************************/
 
+#include "mathematics/prime.h"
+
+#include "debug.h"
+#include "error.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "screen.h"
+#include "statusBar.h"
+
 #include "wp43s.h"
 
 

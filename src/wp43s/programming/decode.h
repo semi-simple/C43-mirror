@@ -17,9 +17,15 @@
 /********************************************//**
  * \file decode.h
  ***********************************************/
+#ifndef DECODE_H
+#define DECODE_H
+
+#include <stdint.h>
 
 void decodeOneStep          (uint8_t *step);
 #ifndef DMCP_BUILD
   void listPrograms         (void);
   void listLabelsAndPrograms(void);
 #endif // !DMCP_BUILD
+
+#endif // DECODE_H

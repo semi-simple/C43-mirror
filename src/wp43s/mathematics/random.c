@@ -18,6 +18,20 @@
  * \file random.c
  ***********************************************/
 
+#include "mathematics/random.h"
+
+#include "config.h"
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "integers.h"
+#include "memory.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+#include "timer.h"
+
 #include "wp43s.h"
 
 //////////////////////////////////////////////////////////

@@ -20,6 +20,13 @@
 
 #include "wp43s.h"
 
+#include "config.h"
+#include "gmpWrappers.h"
+#include "items.h"
+#include "keyboard.h"
+#include "memory.h"
+#include "screen.h"
+
 #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)
   bool_t              debugMemAllocation;
 #endif // PC_BUILD || TESTSUITE_BUILD

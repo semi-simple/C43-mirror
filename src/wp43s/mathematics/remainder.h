@@ -17,6 +17,11 @@
 /********************************************//**
  * \file remainder.h
  ***********************************************/
+#ifndef REMAINDER_H
+#define REMAINDER_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnRmd(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -39,3 +44,5 @@ void rmdShoIReal(void);
 void rmdRealLonI(void);
 void rmdRealShoI(void);
 void rmdRealReal(void);
+
+#endif // REMAINDER_H

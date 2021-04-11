@@ -18,6 +18,18 @@
  * \file factorial.c
  ***********************************************/
 
+#include "mathematics/factorial.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "display.h"
+#include "flags.h"
+#include "fonts.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

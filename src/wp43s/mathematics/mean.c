@@ -18,6 +18,16 @@
  * \file mean.c
  ***********************************************/
 
+#include "mathematics/mean.h"
+
+#include "constantPointers.h"
+#include "error.h"
+#include "flags.h"
+#include "mathematics/comparisonReals.h"
+#include "registers.h"
+#include "stack.h"
+#include "stats.h"
+
 #include "wp43s.h"
 
 /********************************************//**

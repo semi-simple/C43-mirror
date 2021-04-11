@@ -37,6 +37,7 @@
   void     mimEnter                       (void);
   void     mimAddNumber                   (int16_t item);
   void     mimFinalize                    (void);
+  void     mimRestore                     (void);
 
   void     getMatrixFromRegister          (calcRegister_t regist);
 

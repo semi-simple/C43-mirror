@@ -818,6 +818,7 @@ void fnReset(uint16_t confirmation) {
     #ifdef TESTSUITE_BUILD
       calcMode = CM_NORMAL;
     #else // TESTSUITE_BUILD
+      if(calcMode == CM_MIM) mimFinalize();
       calcModeNormal();
     #endif // TESTSUITE_BUILD
 

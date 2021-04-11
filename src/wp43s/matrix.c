@@ -415,6 +415,11 @@ void mimFinalize(void) {
   }
 }
 
+void mimRestore(void) {
+  mimFinalize();
+  getMatrixFromRegister(REGISTER_X);
+}
+
 /*
 void storeMatrixToXRegister(real34Matrix_t *matrix) {
 

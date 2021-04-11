@@ -606,35 +606,63 @@
 #define LM_SYSTEM_STATE                            5
 
 // Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2×(7×60 - 4 - 6×16) = 640 bytes
+#define SUM_X                                      1
+#define SUM_Y                                      2
+#define SUM_X2                                     3
+#define SUM_X2Y                                    4
+#define SUM_Y2                                     5
+#define SUM_XY                                     6
+#define SUM_lnXlnY                                 7
+#define SUM_lnX                                    8
+#define SUM_ln2X                                   9
+#define SUM_YlnX                                  10
+#define SUM_lnY                                   11
+#define SUM_ln2Y                                  12
+#define SUM_XlnY                                  13
+#define SUM_X2lnY                                 14
+#define SUM_lnYonX                                15
+#define SUM_X2onY                                 16
+#define SUM_1onX                                  17
+#define SUM_1onX2                                 18
+#define SUM_XonY                                  19
+#define SUM_1onY                                  20
+#define SUM_1onY2                                 21
+#define SUM_X3                                    22
+#define SUM_X4                                    23
+#define SUM_XMIN                                  24
+#define SUM_XMAX                                  25
+#define SUM_YMIN                                  26
+#define SUM_YMAX                                  27
+
 #define NUMBER_OF_STATISTICAL_SUMS                28
 #define SIGMA_N      ((real_t *)(statisticalSumsPointer)) // could be a 32 bit unsigned integer
-#define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE)) // could be a real34
-#define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE *  2)) // could be a real34
-#define SIGMA_X2     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  3))
-#define SIGMA_X2Y    ((real_t *)(statisticalSumsPointer + REAL_SIZE *  4))
-#define SIGMA_Y2     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  5))
-#define SIGMA_XY     ((real_t *)(statisticalSumsPointer + REAL_SIZE *  6))
-#define SIGMA_lnXlnY ((real_t *)(statisticalSumsPointer + REAL_SIZE *  7))
-#define SIGMA_lnX    ((real_t *)(statisticalSumsPointer + REAL_SIZE *  8))
-#define SIGMA_ln2X   ((real_t *)(statisticalSumsPointer + REAL_SIZE *  9))
-#define SIGMA_YlnX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 10))
-#define SIGMA_lnY    ((real_t *)(statisticalSumsPointer + REAL_SIZE * 11))
-#define SIGMA_ln2Y   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 12))
-#define SIGMA_XlnY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 13))
-#define SIGMA_X2lnY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 14))
-#define SIGMA_lnYonX ((real_t *)(statisticalSumsPointer + REAL_SIZE * 15))
-#define SIGMA_X2onY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 16))
-#define SIGMA_1onX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 17))
-#define SIGMA_1onX2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 18))
-#define SIGMA_XonY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 19))
-#define SIGMA_1onY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 20))
-#define SIGMA_1onY2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * 21))
-#define SIGMA_X3     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 22))
-#define SIGMA_X4     ((real_t *)(statisticalSumsPointer + REAL_SIZE * 23))
-#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 24)) // could be a real34
-#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 25)) // could be a real34
-#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 26)) // could be a real34
-#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * 27)) // could be a real34
+#define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X     )) // could be a real34
+#define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_Y     )) // could be a real34
+#define SIGMA_X2     ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X2    ))
+#define SIGMA_X2Y    ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X2Y   ))
+#define SIGMA_Y2     ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_Y2    ))
+#define SIGMA_XY     ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_XY    ))
+#define SIGMA_lnXlnY ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_lnXlnY))
+#define SIGMA_lnX    ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_lnX   ))
+#define SIGMA_ln2X   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_ln2X  ))
+#define SIGMA_YlnX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_YlnX  ))
+#define SIGMA_lnY    ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_lnY   ))
+#define SIGMA_ln2Y   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_ln2Y  ))
+#define SIGMA_XlnY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_XlnY  ))
+#define SIGMA_X2lnY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X2lnY ))
+#define SIGMA_lnYonX ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_lnYonX))
+#define SIGMA_X2onY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X2onY ))
+#define SIGMA_1onX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_1onX  ))
+#define SIGMA_1onX2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_1onX2 ))
+#define SIGMA_XonY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_XonY  ))
+#define SIGMA_1onY   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_1onY  ))
+#define SIGMA_1onY2  ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_1onY2 ))
+#define SIGMA_X3     ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X3    ))
+#define SIGMA_X4     ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X4    ))
+#define SIGMA_XMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_XMIN  )) // could be a real34
+#define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_XMAX  )) // could be a real34
+#define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_YMIN  )) // could be a real34
+#define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_YMAX  )) // could be a real34
 
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
 #define NUMBER_OF_GLYPH_ROWS                     100 // Used in the font browser application

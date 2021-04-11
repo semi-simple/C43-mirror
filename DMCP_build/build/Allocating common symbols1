@@ -1,0 +1,298 @@
+Allocating common symbols
+Common symbol       size              file
+
+ctxtReal75          0x1c              build/wp43s.o
+shortIntegerMode    0x1               build/wp43s.o
+jm_HOME_MIR         0x1               build/wp43s.o
+gr_x                0x4               build/addons.o
+tmp                 0xc               build/radioButtonCatalog.o
+numberOfFreeMemoryRegions
+                    0x4               build/wp43s.o
+y_min               0x4               build/graphs.o
+fontForShortInteger
+                    0x4               build/wp43s.o
+longpressDelayedkey2
+                    0x2               build/wp43s.o
+JM_ASN_MODE         0x2               build/addons.o
+shortIntegerMask    0x8               build/wp43s.o
+shortIntegerWordSize
+                    0x1               build/wp43s.o
+calcMode            0x1               build/wp43s.o
+freeProgramBytes    0x2               build/wp43s.o
+xzero               0x4               build/graphs.o
+__lock___atexit_recursive_mutex
+                    0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+showFunctionNameItem
+                    0x2               build/wp43s.o
+lastProgramListEnd  0x1               build/wp43s.o
+angle180            0x4               build/wp43s.o
+denMax              0x4               build/wp43s.o
+nextChar            0x1               build/wp43s.o
+displayFormat       0x1               build/wp43s.o
+mem__32             0x4               build/addons.o
+jm_VECT             0x1               build/wp43s.o
+reg                 0x1c0             build/wp43s.o
+__lock___arc4random_mutex
+                    0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+testEnabled         0x1               build/wp43s.o
+Norm_Key_00_VAR     0x2               build/wp43s.o
+errorMessage        0x4               build/wp43s.o
+firstDisplayedStep  0x4               build/wp43s.o
+timer               0x80              build/keyboardTweak.o
+errorMessageRegisterLine
+                    0x2               build/wp43s.o
+lastFcnsMenuPos     0x2               build/wp43s.o
+x_min               0x4               build/graphs.o
+FN_timed_out_to_RELEASE_EXEC
+                    0x1               build/addons.o
+cursorEnabled       0x1               build/wp43s.o
+rbr1stDigit         0x1               build/wp43s.o
+errno               0x4               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-reent.o)
+swStop              0x10              build/inlineTest.o
+lineTWidth          0x2               build/wp43s.o
+AlphaSelectionBufferTimerRunning
+                    0x1               build/wp43s.o
+telltale            0x4               build/addons.o
+yCursor             0x4               build/wp43s.o
+imaginaryExponentSignLocation
+                    0x2               build/wp43s.o
+rbrRegister         0x2               build/wp43s.o
+tamOperation        0x2               build/wp43s.o
+shiftG              0x1               build/wp43s.o
+backToDMCP          0x1               build/wp43s.o
+timerLastCalled     0x4               build/keyboardTweak.o
+tamNumberMax        0x2               build/wp43s.o
+systemFlags         0x8               build/wp43s.o
+yzero               0x4               build/graphs.o
+tamMode             0x2               build/wp43s.o
+xCursor             0x4               build/wp43s.o
+currentRegisterBrowserScreen
+                    0x2               build/wp43s.o
+verbose_jm          0x1               build/addons.o
+previousCalcMode    0x1               build/wp43s.o
+FN_key_pressed      0x2               build/addons.o
+ListXYposition      0x2               build/wp43s.o
+extentx             0x1               build/wp43s.o
+numberOfLocalFlags  0x2               build/wp43s.o
+allLocalRegisterPointer
+                    0x4               build/wp43s.o
+lastMenuMenuPos     0x2               build/wp43s.o
+tick_int_x          0x4               build/graphs.o
+tamNumberMin        0x2               build/wp43s.o
+displayStackSHOIDISP
+                    0x1               build/wp43s.o
+graph_dx            0x4               build/wp43s.o
+temporaryInformation
+                    0x1               build/wp43s.o
+angle90             0x4               build/wp43s.o
+currentFlgScr       0x1               build/wp43s.o
+tamCurrentOperation
+                    0x2               build/wp43s.o
+tamBuffer           0x4               build/wp43s.o
+Shft_timeouts       0x1               build/addons.o
+plotmode            0x1               build/addons.o
+displayAIMbufferoffset
+                    0x2               build/addons.o
+funcOK              0x1               build/wp43s.o
+watchIconEnabled    0x1               build/wp43s.o
+softmenuStackPointerBeforeAIM
+                    0x1               build/wp43s.o
+lgCatalogSelection  0x4               build/wp43s.o
+__lock___env_recursive_mutex
+                    0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+SH_BASE_AHOME       0x1               build/wp43s.o
+__lock___sinit_recursive_mutex
+                    0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+showContent         0x1               build/wp43s.o
+alphaCase           0x1               build/wp43s.o
+updateDisplayValueX
+                    0x1               build/wp43s.o
+ctxtReal39          0x1c              build/wp43s.o
+mm_MNU_ALPHA        0x2               build/wp43s.o
+endOfCurrentProgram
+                    0x4               build/wp43s.o
+statisticalSumsPointer
+                    0x4               build/wp43s.o
+jm_FG_DOTS          0x1               build/wp43s.o
+freeMemoryRegions   0xc8              build/wp43s.o
+extenty             0x1               build/wp43s.o
+nextScreenRefresh   0x4               build/wp43s.o
+cursorBlinkCounter  0x1               build/screen.o
+jm_HOME_SUM         0x1               build/wp43s.o
+globalFlags         0xe               build/wp43s.o
+__lock___malloc_recursive_mutex
+                    0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+y_max               0x4               build/graphs.o
+longpressDelayedkey3
+                    0x2               build/wp43s.o
+exponentSignLocation
+                    0x2               build/wp43s.o
+serialIOIconEnabled
+                    0x1               build/wp43s.o
+JM_auto_longpress_enabled
+                    0x2               build/addons.o
+ULGL                0x1               build/addons.o
+SHOWregis           0x2               build/wp43s.o
+HOME3               0x1               build/wp43s.o
+beginOfCurrentProgram
+                    0x4               build/wp43s.o
+angle45             0x4               build/wp43s.o
+dynamicMenuItem     0x2               build/wp43s.o
+FN_state            0x1               build/addons.o
+numLinesStandardFont
+                    0x1               build/wp43s.o
+tamOverPemYPos      0x4               build/wp43s.o
+confirmedFunction   0x4               build/wp43s.o
+currentLocalStepNumber
+                    0x2               build/wp43s.o
+glyphRow            0xd4              build/wp43s.o
+firstDisplayedLocalStepNumber
+                    0x2               build/wp43s.o
+allNamedVariablePointer
+                    0x4               build/wp43s.o
+alphaSelectionMenu  0x2               build/wp43s.o
+showFunctionNameCounter
+                    0x2               build/wp43s.o
+keyActionProcessed  0x1               build/wp43s.o
+denominatorLocation
+                    0x2               build/wp43s.o
+imaginaryMantissaSignLocation
+                    0x2               build/wp43s.o
+filename_csv        0x28              build/addons.o
+PLOT_BOX            0x1               build/wp43s.o
+gmpMemInBytes       0x4               build/wp43s.o
+ix_count            0x2               build/addons.o
+JM_SHIFT_HOME_TIMER1
+                    0x1               build/addons.o
+tamDigit            0x2               build/wp43s.o
+ctxtReal1071        0x1c              build/wp43s.o
+UNITDisplay         0x1               build/wp43s.o
+ctxtReal34          0x1c              build/wp43s.o
+graph_xmin          0x4               build/wp43s.o
+mm_MNU_HOME         0x2               build/wp43s.o
+SH_BASE_HOME        0x1               build/wp43s.o
+line_x              0x2               build/graphText.o
+PLOT_SHADE          0x1               build/wp43s.o
+cursorFont          0x4               build/wp43s.o
+savedStatisticalSumsPointer
+                    0x4               build/wp43s.o
+displayStack        0x1               build/wp43s.o
+nimNumberPart       0x1               build/wp43s.o
+Aspect_Square       0x1               build/wp43s.o
+lastErrorCode       0x1               build/wp43s.o
+T_cursorPos         0x2               build/wp43s.o
+asmBuffer           0x5               build/wp43s.o
+FN_key_pressed_last
+                    0x2               build/addons.o
+printerIconEnabled  0x1               build/wp43s.o
+shiftF              0x1               build/wp43s.o
+numberOfPrograms    0x2               build/wp43s.o
+ul                  0x4               build/screen.o
+tamLetteredRegister
+                    0x2               build/wp43s.o
+hexDigits           0x1               build/wp43s.o
+graph_ymax          0x4               build/wp43s.o
+lastIntegerBase     0x4               build/wp43s.o
+PLOT_CROSS          0x1               build/wp43s.o
+graph_ymin          0x4               build/wp43s.o
+programListEnd      0x1               build/wp43s.o
+exponentLimit       0x2               build/wp43s.o
+firstFreeProgramByte
+                    0x4               build/wp43s.o
+ctxtReal51          0x1c              build/wp43s.o
+menu_RAM            0x4               build/wp43s.o
+tamNumber           0x2               build/wp43s.o
+eRPN                0x1               build/wp43s.o
+lastProgMenuPos     0x2               build/wp43s.o
+jm_LARGELI          0x1               build/wp43s.o
+fnXEQMENUpos        0x2               build/wp43s.o
+oldTime             0x8               build/wp43s.o
+rbrMode             0x1               build/wp43s.o
+savedStackRegister  0x28              build/wp43s.o
+wp43sMemInBytes     0x4               build/wp43s.o
+numScreensNumericFont
+                    0x1               build/wp43s.o
+displayFormatDigits
+                    0x1               build/wp43s.o
+ULFL                0x1               build/addons.o
+dateTimeString      0xc               build/wp43s.o
+jm_G_DOUBLETAP      0x1               build/wp43s.o
+swStart             0x10              build/inlineTest.o
+gammaLanczosCoefficients
+                    0x4               build/wp43s.o
+doRefreshSoftMenu   0x1               build/wp43s.o
+testBitset          0x2               build/wp43s.o
+currentAngularMode  0x1               build/wp43s.o
+PLOT_LINE           0x1               build/wp43s.o
+displayValueX       0x50              build/wp43s.o
+aimBuffer           0x4               build/wp43s.o
+Input_Default       0x1               build/wp43s.o
+graph_dy            0x4               build/wp43s.o
+currentFntScr       0x1               build/wp43s.o
+numScreensStandardFont
+                    0x1               build/wp43s.o
+hourGlassIconEnabled
+                    0x1               build/wp43s.o
+thereIsSomethingToUndo
+                    0x1               build/wp43s.o
+PLOT_INTG           0x1               build/wp43s.o
+transitionSystemState
+                    0x1               build/wp43s.o
+lastSyFlMenuPos     0x2               build/wp43s.o
+jm_FG_LINE          0x1               build/wp43s.o
+x_max               0x4               build/graphs.o
+JM_auto_doublepress_enabled
+                    0x2               build/addons.o
+ShiftTimoutMode     0x1               build/wp43s.o
+PLOT_RMS            0x1               build/wp43s.o
+lastAIntMenuPos     0x2               build/wp43s.o
+__lock___at_quick_exit_mutex
+                    0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+savedSystemFlags    0x8               build/wp43s.o
+jm_SCALE            0x1               build/wp43s.o
+shortIntegerSignBit
+                    0x8               build/wp43s.o
+tick_int_y          0x4               build/graphs.o
+significantDigits   0x1               build/wp43s.o
+FN_handle_timed_out_to_EXEC
+                    0x1               build/addons.o
+jm_NVECT            0x1               build/wp43s.o
+roundingMode        0x1               build/wp43s.o
+jm_HOME_FIX         0x1               build/wp43s.o
+line_y              0x2               build/graphText.o
+__lock___dd_hash_mutex
+                    0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+__lock___tz_mutex   0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+numLinesNumericFont
+                    0x1               build/wp43s.o
+groupingGap         0x1               build/wp43s.o
+indexOfItemsXEQM    0x90              build/addons.o
+FN_timeouts_in_progress
+                    0x1               build/addons.o
+PLOT_DIFF           0x1               build/wp43s.o
+beginOfProgramMemory
+                    0x4               build/wp43s.o
+firstGregorianDay   0x4               build/wp43s.o
+numberOfLabels      0x2               build/wp43s.o
+softmenuStackPointer
+                    0x1               build/wp43s.o
+graph_xmax          0x4               build/wp43s.o
+nextTimerRefresh    0x4               build/wp43s.o
+softmenuStack       0x1c              build/wp43s.o
+Home3TimerMode      0x1               build/wp43s.o
+alphaSelectionTimer
+                    0x4               build/wp43s.o
+SigFigMode          0x1               build/wp43s.o
+neverUsed           0x1               build/wp43s.o
+gr_y                0x4               build/addons.o
+nimBufferDisplay    0x4               build/wp43s.o
+kbd_usr             0x29a             build/wp43s.o
+FN_timed_out_to_NOP
+                    0x1               build/addons.o
+currentProgramNumber
+                    0x2               build/wp43s.o
+tamFunction         0x2               build/wp43s.o
+lastCnstMenuPos     0x2               build/wp43s.o
+__lock___sfp_recursive_mutex
+                    0x1               /Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin/../lib/gcc/arm-none-eabi/8.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard/libc.a(lib_a-lock.o)
+currentStep         0x4               build/wp43s.o

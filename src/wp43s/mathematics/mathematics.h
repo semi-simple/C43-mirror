@@ -128,7 +128,6 @@
 #include "tanh.h"
 #include "toPolar.h"
 #include "toRect.h"
-#include "transpose.h"
 #include "ulp.h"
 #include "unitVector.h"
 #include "xthRoot.h"

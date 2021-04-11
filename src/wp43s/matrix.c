@@ -122,6 +122,41 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
+ * \brief Transpose matrix
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnTranspose(uint16_t unusedButMandatoryParameter) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    real34Matrix_t x, res;
+
+    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+    transposeRealMatrix(&x, &res);
+    convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
+    realMatrixFree(&res);
+    realMatrixFree(&x);
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnTranspose:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
+
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+}
+
+
+
+
+/********************************************//**
  * \brief LU decomposition
  *
  * \param[in] unusedParamButMandatory uint16_t

@@ -25,6 +25,7 @@
   void     fnNewMatrix                    (uint16_t unusedParamButMandatory);
   void     fnEditMatrix                   (uint16_t unusedParamButMandatory);
 
+  void     fnTranspose                    (uint16_t unusedParamButMandatory);
   void     fnLuDecomposition              (uint16_t unusedParamButMandatory);
   void     fnDeterminant                  (uint16_t unusedParamButMandatory);
   void     fnInvertMatrix                 (uint16_t unusedParamButMandatory);

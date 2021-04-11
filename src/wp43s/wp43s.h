@@ -136,6 +136,7 @@
     #define fnAim             fnNop
     #define fnNewMatrix       fnNop
     #define fnEditMatrix      fnNop
+    #define fnTranspose       fnNop
     #define fnLuDecomposition fnNop
     #define registerBrowser   fnNop
     #define flagBrowser       fnNop

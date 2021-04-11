@@ -589,7 +589,7 @@ static void addSubRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x,
     return;
   }
 
-  realMatrixInit(res, rows, cols);
+  if((y != res) && (x != res)) realMatrixInit(res, rows, cols);
   for(i = 0; i < cols * rows; ++i) {
     if(subtraction) {
       real34Subtract(&y->matrixElements[i], &x->matrixElements[i], &res->matrixElements[i]);
@@ -616,7 +616,7 @@ void multiplyRealMatrix(const real34Matrix_t *matrix, const real34_t *x, real34M
   const uint16_t cols = matrix->header.matrixColumns;
   int32_t i;
 
-  realMatrixInit(res, rows, cols);
+  if(matrix != res) realMatrixInit(res, rows, cols);
   for(i = 0; i < cols * rows; ++i) {
     real34Multiply(&matrix->matrixElements[i], x, &res->matrixElements[i]);
   }

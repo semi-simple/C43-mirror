@@ -667,12 +667,11 @@ void mulShoIRema(void) {
  ***********************************************/
 void mulRemaReal(void) {
 #ifndef TESTSUITE_BUILD
-  real34Matrix_t matrix, res;
+  real34Matrix_t matrix;
   if(getRegisterAngularMode(REGISTER_Y) == amNone) {
     convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &matrix);
-    multiplyRealMatrix(&matrix, REGISTER_REAL34_DATA(REGISTER_X), &res);
-    convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
-    realMatrixFree(&res);
+    multiplyRealMatrix(&matrix, REGISTER_REAL34_DATA(REGISTER_X), &matrix);
+    convertReal34MatrixToReal34MatrixRegister(&matrix, REGISTER_X);
     realMatrixFree(&matrix);
   }
   else {
@@ -691,12 +690,11 @@ void mulRemaReal(void) {
  ***********************************************/
 void mulRealRema(void) {
 #ifndef TESTSUITE_BUILD
-  real34Matrix_t matrix, res;
+  real34Matrix_t matrix;
   if(getRegisterAngularMode(REGISTER_X) == amNone) {
     convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &matrix);
-    multiplyRealMatrix(&matrix, REGISTER_REAL34_DATA(REGISTER_Y), &res);
-    convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
-    realMatrixFree(&res);
+    multiplyRealMatrix(&matrix, REGISTER_REAL34_DATA(REGISTER_Y), &matrix);
+    convertReal34MatrixToReal34MatrixRegister(&matrix, REGISTER_X);
     realMatrixFree(&matrix);
   }
   else {

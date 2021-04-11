@@ -694,15 +694,14 @@ void addStriCplx(void) {
  ***********************************************/
 void addRemaRema(void) {
 #ifndef TESTSUITE_BUILD
-  real34Matrix_t y, x, res;
+  real34Matrix_t y, x;
 
   convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
   convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
 
-  addRealMatrices(&y, &x, &res);
-  if(res.matrixElements) {
-    convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
-    realMatrixFree(&res);
+  addRealMatrices(&y, &x, &x);
+  if(x.matrixElements) {
+    convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);

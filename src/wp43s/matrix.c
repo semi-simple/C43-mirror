@@ -223,6 +223,53 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
+ * \brief Determinant
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnDeterminant(uint16_t unusedParamButMandatory) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    real34Matrix_t x;
+    real34_t res;
+
+    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+    if(x.header.matrixRows != x.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+                x.header.matrixRows, x.header.matrixColumns);
+        moreInfoOnError("In function fnDeterminant:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      detRealMatrix(&x, &res);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      real34Copy(&res, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+
+    realMatrixFree(&x);
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnLuDecomposition:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
+
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+}
+
+
+
+/********************************************//**
  * \brief Initialize a real matrix
  *
  * \param[out] matrix real34Matrix_t*
@@ -797,5 +844,38 @@ void realMatrixSwapRows(const real34Matrix_t *matrix, real34Matrix_t *res, uint1
       real34Copy(&t,                                 &res->matrixElements[b * cols + i]);
     }
   }
+}
+
+
+
+/* Determinant */
+void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
+  const uint16_t n = matrix->header.matrixColumns;
+  uint16_t *p;
+  real34Matrix_t lu;
+  real_t t, u;
+
+  if(matrix->header.matrixRows != n) {
+    realToReal34(const_NaN, res);
+    return;
+  }
+
+  p = allocWp43s(matrix->header.matrixRows * sizeof(uint16_t));
+
+  WP34S_LU_decomposition(matrix, &lu, p);
+  realCopy(const_1, &t);
+  if(lu.matrixElements) {
+    for(uint16_t i = 0; i < n; ++i) {
+      real34ToReal(&lu.matrixElements[i * n + i], &u);
+      if(p[i] != i) realChangeSign(&u);
+      realMultiply(&t, &u, &t, &ctxtReal39);
+    }
+    realToReal34(&t, res);
+  }
+  else { // singular
+    real34Copy(const34_0, res);
+  }
+
+  freeWp43s(p, matrix->header.matrixRows * sizeof(uint16_t));
 }
 #endif

@@ -46,6 +46,7 @@
   #define DEMO109
 #endif
 
+#define roundedTicks false    //todo make variable
 
 graphtype *gr_x;
 graphtype *gr_y;
@@ -172,10 +173,9 @@ void graph_end(void) {
 #if DECDPUN != 3
 #error DECDPUN must be 3
 #endif
-float fnRealToFloat(const real_t *r)
-{
-    float s = 0;
-    int j, limbs, n, inc, e;
+float fnRealToFloat(const real_t *r){
+    int s = 0;
+    int j, n, e;
     static const float exps[] = {
         1.e-45, 1.e-44, 1.e-43, 1.e-42, 1.e-41, 1.e-40, 1.e-39, 1.e-38,
         1.e-37, 1.e-36, 1.e-35, 1.e-34, 1.e-33, 1.e-32, 1.e-31, 1.e-30,
@@ -193,30 +193,31 @@ float fnRealToFloat(const real_t *r)
     if (realIsSpecial(r)) {
         if (realIsNaN(r))
             return 0. / 0.;
-        if (realIsPositive(r))
-            return 1. / 0.;
-        return -1. / 0.;
+        goto infinite;
     }
     if (realIsZero(r))
-        return realIsPositive(r) ? 0. : -0.;
+        goto zero;
 
-    limbs = (r->digits + DECDPUN-1) / DECDPUN;
-    for (n = inc = 0, j = limbs; j-->0 && n < 4; n += inc) {
-        s = (s * 1000.) + r->lsu[j];    /* This should be a multiply/add */
-        if (r->lsu[j] != 0)
-            inc = 1;
-    }
+    j = (r->digits + DECDPUN-1) / DECDPUN;
+    while (j > 0)
+        if ((s = r->lsu[--j]) != 0)
+            break;
+    for (n = 0; --j >= 0 && n < 2; n++)
+        s = (s * 1000) + r->lsu[j];
     if (realIsNegative(r))
         s = -s;
     e = r->exponent + (j + 1) * DECDPUN;
-    if (e < -45)
+    if (e < -45) {
+zero:
         return realIsPositive(r) ? 0. : -0.;
+    }
     if (e > 38) {
+infinite:
         if (realIsPositive(r))
             return 1. / 0.;
         return -1. / 0.;
     }
-    return s * exps[e + 45];
+    return (float)s * exps[e + 45];
 }
 
 //#define realToReal39(source, destination) decQuadFromNumber ((real39_t *)(destination), source, &ctxtReal39)
@@ -226,16 +227,16 @@ void realToFloat(const real_t *vv, graphtype *v) {
   #ifdef PC_BUILD
     char tmpString1[100];                      //allow for 75 digits
     realToString(vv, tmpString1);
-    printf("Convert vv REAL %s --> Float %f\n",tmpString1,*v);
+    //printf("Convert vv REAL %s --> Float %f\n",tmpString1,*v);
   #endif
 }
 
-void realToDouble(const real_t *vv, double *v) {
+void realToDouble1(const real_t *vv, double *v) {
   *v = fnRealToFloat(vv);
   #ifdef PC_BUILD
     char tmpString1[100];                      //allow for 75 digits
     realToString(vv, tmpString1);
-    printf("Convert vv REAL %s --> Double %lf\n",tmpString1,*v);
+    //printf("Convert vv REAL %s --> Double %lf\n",tmpString1,*v);
   #endif
 }
 
@@ -524,6 +525,11 @@ void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {               
    pixelline(xo,yo,xn,yn,1);
  }
 
+void plotline2(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {                   // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+   pixelline(xo,yo,xn,yn,1);
+   pixelline((uint16_t)((float)(xo)),(uint16_t)((float)(yo-0.5f)),(uint16_t)((float)(xn)),(uint16_t)((float)(yn+0.5f)),1);
+   pixelline((uint16_t)((float)(xo)),(uint16_t)((float)(yo+0.5f)),(uint16_t)((float)(xn)),(uint16_t)((float)(yn-0.5f)),1);
+ }
 
 void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) { // Plots line from xo,yo to xn,yn; uses temporary x1,y1
     uint16_t x1;  //range 0-399
@@ -765,16 +771,18 @@ void graphAxisDraw (void){
 
 
 float auto_tick(float tick_int_f) {
+  return tick_int_f;
   //Obtain scaling of ticks, to about 20 intervals left to right.
   //graphtype tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
   snprintf(tmpString, TMP_STR_LENGTH, "%.1e", tick_int_f);
   char tx[4];
-  tx[0] = tmpString[0];
-  tx[1] = tmpString[1];
-  tx[2] = tmpString[2];
+  tx[0] = tmpString[0]; //expecting the form 6.5e+01
+  tx[1] = tmpString[1]; //the decimal radix is copied over, so region setting should not affect it
+  tx[2] = tmpString[2]; //the exponent is stripped
   tx[3] = 0;
   //printf("tick0 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
-  tick_int_f = strtof (tx, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
+  tick_int_f = strtof (tx, NULL);
+  //tick_int_f = (float)(tx[0]-48) + (float)(tx[2]-48)/10.0f;
   //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
   if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpString[0] = '0'; tmpString[2]='2'; } else
   if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpString[0] = '0'; tmpString[2]='5'; } else
@@ -783,7 +791,9 @@ float auto_tick(float tick_int_f) {
   if(tick_int_f > 1.7 && tick_int_f <=  3.0)  {tmpString[0] = '2'; tmpString[2]='0'; } else
   if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpString[0] = '5'; tmpString[2]='0'; } else
   if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpString[0] = '7'; tmpString[2]='5'; }
-  tick_int_f = strtof (tmpString, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
+
+  if (roundedTicks) tick_int_f = strtof (tmpString, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
+
   //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
   return tick_int_f;
 }
@@ -844,11 +854,41 @@ void eformat_fix3 (char* s02, char* s01, double inreal) {
 }
 
 
-//http://jkorpela.fi/c/eng.html
-//David Hoerl 
+/********************************************//**
+ * \brief Remove trailing zeroes from float strings
+ *
+ ***********************************************/
+  static char tmp_names1[20];
+char * eatZeroesEnd(const char * ss) {
+  int8_t ix;
+  strcpy(tmp_names1,ss);
+  ix = stringByteLength(tmp_names1)-1;
+  while( ix > 0 ){
+    if(tmp_names1[ix]=='0' || tmp_names1[ix]==' ') {
+      tmp_names1[ix]=0;
+    } 
+    else {
+      break;
+    }
+    ix--;
+  }
+  if(tmp_names1[ix]=='.' || tmp_names1[ix]==',') {
+    tmp_names1[ix]=0;
+  } 
+
+printf("###>A §%s§\n",ss);
+printf("###>B §%s§\n",tmp_names1);
+
+  return tmp_names1;
+}
+
+
+//parts taken from:
+//  http://jkorpela.fi/c/eng.html
+//  David Hoerl 
 static char *eng(double value, int digits, int numeric)
 {
-     double display, fract;
+     double display, fract, old;
      int expof10;
      static char result[30], *sign;
 
@@ -860,6 +900,8 @@ static char *eng(double value, int digits, int numeric)
      } else {
          sign = " ";
      }
+
+     old = value;
 
      // correctly round to desired precision
      expof10 = lrint( floor( log10(value) ) );
@@ -886,9 +928,14 @@ static char *eng(double value, int digits, int numeric)
      else if(value >= 10.0)
          digits -= 1;
 
-     if(expof10==0) sprintf(result, "%s%6.*f   ", sign, digits-1, value);
-     else sprintf(result, "%s%6.*fe%d", sign, digits-1, value, expof10);
-     eatSpacesMid(result);
+     if(isnan(old) || isinf(old)) sprintf(result,"%s%f",sign,old); else
+     if(old>99.9999f     && old<1000.0f) sprintf(result,"%s%.i",  sign,(int)old); else
+     if(old>9.99999f     && old<100.0f ) sprintf(result,"%s%.*f", sign, 1+digits+1-3, old); else
+     if(old>0.999999f    && old<10.0f  ) sprintf(result,"%s%.*f", sign, digits+2-3  , old); else
+     if(old>0.0999999f   && old<1.0f   ) sprintf(result,"%s%.*f", sign, 2+digits+3-3, old); else
+     if(old>0.00999999f  && old<0.1f   ) sprintf(result,"%s%.*f", sign, 1+digits+4-3, old); else
+     sprintf(result, "%s%.*fe%d", sign, digits-1, value, expof10);
+     //strcpy(result,eatZeroesEnd(result));
      return result;
 }
 
@@ -896,9 +943,10 @@ static char *eng(double value, int digits, int numeric)
 void eformat_eng2 (char* s02, const char* s01, double inreal, int8_t digits, const char* s05) {
   char s03[100];
   strcpy(s03,eng(inreal, digits,-99));
-  strcpy(s02,eatSpacesMid(s01));
-  strcat(s02,eatSpacesMid(s03));
-  strcat(s02,eatSpacesMid(s05));
+  strcpy(s02,s01);
+  strcat(s02,s03);
+  strcat(s02,s05);
+  strcpy(s02,eatSpacesMid(s02));
 }
 
 
@@ -1014,7 +1062,8 @@ graph_axis();
       printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
   
-    graphAxisDraw();
+    //graphAxisDraw();
+    graph_axis();
     yn = screen_window_y(y_min,grf_y(0),y_max);
     xn = screen_window_x(x_min,grf_x(0),x_max);
     xN = xn;
@@ -1201,7 +1250,7 @@ graph_axis();
             #if defined STATDEBUG_VERBOSE && defined PC_BUILD
               printf("Plotting line to x=%d y=%d\n",xn,yn);
             #endif
-            plotline(xo, yo, xn, yn);
+            plotline2(xo, yo, xn, yn);
           }
         } 
         else {
@@ -1225,6 +1274,7 @@ graph_axis();
 
     #define autoinc 19 //text line spacing
     #define autoshift -5 //text line spacing
+    #define horOffset 3 //labels from the left
     int16_t index = -1;
     if(selection!=0) {
       strcpy(ss,eatSpacesEnd(getCurveFitModeName(selection)));
@@ -1233,37 +1283,38 @@ graph_axis();
 
       strcpy(ss,"y="); strcat(ss,getCurveFitModeFormula(selection)); showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, false, false);
       if(selection != CF_ORTHOGONAL_FITTING) {
-        sprintf(ss,"n=%d",(int)nn);            showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
-      }
-      strcpy(ss,"a" STD_SUB_0 "=");            showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -4 +autoshift, vmNormal, false, false);
-      eformat_fix3(ss,"",a0);                  showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -4 +autoshift, vmNormal, false, false);
-      strcpy(ss,"a" STD_SUB_1 "=");            showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -1 +autoshift, vmNormal, false, false);
-      eformat_fix3(ss,"",a1);                  showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -1 +autoshift, vmNormal, false, false);
+        sprintf(ss,"n=%d",(int)nn);            showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
+        strcpy(ss,"a" STD_SUB_0 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -4 +autoshift, vmNormal, false, false);
+        eformat_eng2(ss,"",a0,3,"");           showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -4 +autoshift, vmNormal, false, false);
+        strcpy(ss,"a" STD_SUB_1 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -1 +autoshift, vmNormal, false, false);
+        eformat_eng2(ss,"",a1,3,"");           showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -1 +autoshift, vmNormal, false, false);
+        if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING) { 
+          strcpy(ss,"a" STD_SUB_2 "=");        showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -1 +autoshift, vmNormal, false, false);
+          eformat_eng2(ss,"",a2,3,"");         showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -1 +autoshift, vmNormal, false, false);      
+        }
 
-      if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING) { 
-        strcpy(ss,"a" STD_SUB_2 "=");          showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -1 +autoshift, vmNormal, false, false);
-        eformat_fix3(ss,"",a2);                showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -1 +autoshift, vmNormal, false, false);      
-      }
-      if(selection != CF_ORTHOGONAL_FITTING) {
-        strcpy(ss,"r" STD_SUP_2 "=");          showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   +2 +autoshift, vmNormal, false, false);
+        strcpy(ss,"r" STD_SUP_2 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   +2 +autoshift, vmNormal, false, false);
         eformat(ss,"",rr,4,"");                showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  +2  +autoshift, vmNormal, false, false);      
 
         eformat_eng2(ss,"(",x_max,2,""); 
         eformat_eng2(tt,",",y_max,2,")");
-        strcat(tt,ss);                         nn = showString(ss, &standardFont,160-2 - stringWidth(tt, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index        +autoshift, vmNormal, false, false);      
-        eformat_eng2(ss,",",y_max,2,")");                showString(ss, &standardFont,nn+3, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++      +autoshift, vmNormal, false, false);      
-        eformat_eng2(ss,"(",x_min,2,"");            nn = showString(ss, &standardFont,   0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index    -2  +autoshift, vmNormal, false, false);      
-        eformat_eng2(ss,",",y_min,2,")");                showString(ss, &standardFont,nn+3, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -2  +autoshift, vmNormal, false, false);      
+        strcat(tt,ss);                    nn = showString(ss, &standardFont,160-2 - stringWidth(tt, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index        +autoshift, vmNormal, false, false);      
+        eformat_eng2(ss,",",y_max,2,")");      showString(ss, &standardFont,nn+3, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++      +autoshift, vmNormal, false, false);      
+        eformat_eng2(ss,"(",x_min,2,"");  nn = showString(ss, &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index    -2  +autoshift, vmNormal, false, false);      
+        eformat_eng2(ss,",",y_min,2,")");      showString(ss, &standardFont,nn+3, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -2  +autoshift, vmNormal, false, false);      
         
+      }
+      else {
+        strcpy(ss,"a" STD_SUB_0 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -4 +autoshift, vmNormal, false, false);
+        eformat_fix3(ss,"",a0);                showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -4 +autoshift, vmNormal, false, false);
+        strcpy(ss,"a" STD_SUB_1 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -1 +autoshift, vmNormal, false, false);
+        eformat_fix3(ss,"",a1);                showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -1 +autoshift, vmNormal, false, false);
+        strcpy(ss,"s" STD_SUB_m STD_SUB_i "=");showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   +1 +autoshift, vmNormal, false, false);
+        eformat_eng2(ss,"",smi,3,"");          showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  +1 +autoshift, vmNormal, false, false);
         //eformat(ss,"x,y" STD_SUB_m STD_SUB_i STD_SUB_n "=", x_min,5);
         //showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
         //eformat(ss,"x,y" STD_SUB_m STD_SUB_a STD_SUB_x "=", x_max,5);
         //showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
-
-      }
-      else {
-        strcpy(ss,"s" STD_SUB_m STD_SUB_i "=");showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   +1 +autoshift, vmNormal, false, false);
-        eformat_eng2(ss,"",smi,3,"");          showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  +1 +autoshift, vmNormal, false, false);
       }
     }
   }

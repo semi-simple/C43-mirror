@@ -1401,10 +1401,13 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       calcMode = previousCalcMode;
       break;
 
-    case CM_PLOT_STAT:
-      calcMode = CM_NORMAL;
-      popSoftmenu();
-      break;
+      case CM_PLOT_STAT:
+        lastPlotMode = PLOT_NOTHING;
+        plotSelection = 0;
+        calcMode = CM_NORMAL;
+        fnUndo(0);
+        popSoftmenu();
+        break;
 
     case CM_GRAPH:                      //JM vv
       calcMode = previousCalcMode;

@@ -138,6 +138,7 @@
     #define fnEditMatrix      fnNop
     #define fnTranspose       fnNop
     #define fnLuDecomposition fnNop
+    #define fnDeterminant     fnNop
     #define registerBrowser   fnNop
     #define flagBrowser       fnNop
     #define fontBrowser       fnNop

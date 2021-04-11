@@ -24,11 +24,13 @@
 #include "debug.h"
 #include "error.h"
 #include "flags.h"
+#include "fonts.h"
 #include "items.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/division.h"
 #include "mathematics/ln.h"
 #include "mathematics/wp34s.h"
+#include "matrix.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 
@@ -135,7 +137,52 @@ void arctanhLonI(void) {
 
 
 void arctanhRema(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t x;
+  real_t el;
+  bool_t fail = false;
+  uint16_t rows, cols;
+
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+  rows = x.header.matrixRows;
+  cols = x.header.matrixColumns;
+
+  for(int i = 0; i < cols * rows; ++i) {
+    real34ToReal(&x.matrixElements[i], &el);
+    if(realIsZero(&el)) {
+      real34Zero(&x.matrixElements[i]);
+    }
+    if(realCompareEqual(&el, const_1)) {
+      if(!getSystemFlag(FLAG_SPCRES)) fail = true;
+      realToReal34(const_plusInfinity, &x.matrixElements[i]);
+    }
+    else if(realCompareEqual(&el, const__1)) {
+      if(!getSystemFlag(FLAG_SPCRES)) fail = true;
+      realToReal34(const_minusInfinity, &x.matrixElements[i]);
+    }
+    if(realCompareAbsGreaterThan(&el, const_1)) {
+      if(!getSystemFlag(FLAG_SPCRES)) fail = true;
+      realToReal34(const_NaN, &x.matrixElements[i]);
+    }
+    else {
+      WP34S_ArcTanh(&el, &el, &ctxtReal39);
+      realToReal34(&el, &x.matrixElements[i]);
+    }
+  }
+
+  if(fail) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function arctanhRema:", "|X| " STD_GREATER_EQUAL " 1", "and SPCRES flag is not set!", NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else {
+    convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
+  }
+
+  realMatrixFree(&x);
+#endif // TESTSUITE_BUILD
 }
 
 

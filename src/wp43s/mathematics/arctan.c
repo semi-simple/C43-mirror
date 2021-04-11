@@ -28,6 +28,7 @@
 #include "items.h"
 #include "mathematics/toPolar.h"
 #include "mathematics/wp34s.h"
+#include "matrix.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 
@@ -89,7 +90,46 @@ void arctanLonI(void) {
 
 
 void arctanRema(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t x;
+  real_t el;
+  bool_t fail = false;
+  uint16_t rows, cols;
+
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+  rows = x.header.matrixRows;
+  cols = x.header.matrixColumns;
+
+  for(int i = 0; i < cols * rows; ++i) {
+    real34ToReal(&x.matrixElements[i], &el);
+    if(realIsInfinite(&el)) {
+      if(!getSystemFlag(FLAG_SPCRES)) fail = true;
+      realToReal34(const_1on2, &x.matrixElements[i]);
+      if(real34IsNegative(&x.matrixElements[i])) {
+        real34SetNegativeSign(&x.matrixElements[i]);
+      }
+      convertAngle34FromTo(&x.matrixElements[i], amMultPi, currentAngularMode);
+    }
+    else {
+      WP34S_Atan(&el, &el, &ctxtReal39);
+      convertAngleFromTo(&el, amRadian, currentAngularMode, &ctxtReal39);
+      realToReal34(&el, &x.matrixElements[i]);
+    }
+  }
+
+  if(fail) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function arctanRema:", "X = " STD_PLUS_MINUS STD_INFINITY, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else {
+    convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
+  }
+
+  realMatrixFree(&x);
+#endif // TESTSUITE_BUILD
 }
 
 

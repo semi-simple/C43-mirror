@@ -29,6 +29,7 @@
 #include "items.h"
 #include "mathematics/division.h"
 #include "mathematics/wp34s.h"
+#include "matrix.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 
@@ -128,7 +129,47 @@ void sincpiLonI(void) {
 
 
 void sincpiRema(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t x;
+  real_t el;
+  bool_t fail = false;
+  uint16_t rows, cols;
+
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+  rows = x.header.matrixRows;
+  cols = x.header.matrixColumns;
+
+  for(int i = 0; i < cols * rows; ++i) {
+    real34ToReal(&x.matrixElements[i], &el);
+    if(real34IsInfinite(&el)) {
+      if(!getSystemFlag(FLAG_SPCRES)) fail = true;
+      real34Copy(const34_0, &x.matrixElements[i]);
+    }
+    else if(realIsZero(&el)) {
+      real34Copy(const34_1, &x.matrixElements[i]);
+    }
+    else {
+      real_t sine;
+      convertAngleFromTo(&el, amMultPi, amRadian, &ctxtReal39);
+      WP34S_Cvt2RadSinCosTan(&el, amRadian, &sine, NULL, NULL, &ctxtReal39);
+      realDivide(&sine, &el, &el, &ctxtReal39);
+      realToReal34(&el, &x.matrixElements[i]);
+    }
+  }
+
+  if(fail) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function sincRema:", "cannot divide a real34 by " STD_PLUS_MINUS STD_INFINITY " when flag SPCRES is not set", NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else {
+    convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
+  }
+
+  realMatrixFree(&x);
+#endif // TESTSUITE_BUILD
 }
 
 

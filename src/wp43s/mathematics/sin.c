@@ -26,7 +26,9 @@
 #include "items.h"
 #include "mathematics/tan.h"
 #include "mathematics/wp34s.h"
+#include "matrix.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 
@@ -99,7 +101,31 @@ void sinLonI(void) {
 
 
 void sinRema(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t x;
+  real_t el;
+  uint16_t rows, cols;
+
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+  rows = x.header.matrixRows;
+  cols = x.header.matrixColumns;
+
+  for(int i = 0; i < cols * rows; ++i) {
+    real34ToReal(&x.matrixElements[i], &el);
+    if(realIsInfinite(&el)) {
+      realToReal34(const_NaN, &x.matrixElements[i]);
+    }
+    else {
+      WP34S_Cvt2RadSinCosTan(&el, currentAngularMode, &el, NULL, NULL, &ctxtReal39);
+      realToReal34(&el, &x.matrixElements[i]);
+    }
+  }
+
+  convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
+
+  realMatrixFree(&x);
+#endif // TESTSUITE_BUILD
 }
 
 

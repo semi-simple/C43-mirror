@@ -356,40 +356,6 @@ void fnShowJM(uint16_t jmConfig) {                               //DONE
 }
 
 
-
-
-
-/** integer to string
- * C++ version 0.4 char* style "itoa":
- * Written by Lukás Chmela
- * Released under GPLv3.
- */
-char* itoa(int value, char* result, int base) {      //DONE
-    // check that the base if valid
-    if (base < 2 || base > 16) { *result = '\0'; return result; }
-
-    char* ptr = result, *ptr1 = result, tmp_char;
-    int tmp_value;
-
-    do {
-        tmp_value = value;
-        value /= base;
-        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
-    } while ( value );
-
-    // Apply negative sign
-    if (tmp_value < 0) *ptr++ = '-';
-    *ptr-- = '\0';
-    while(ptr1 < ptr) {
-        tmp_char = *ptr;
-        *ptr--= *ptr1;
-        *ptr1++ = tmp_char;
-    }
-    return result;
-}
-
-
-
 /********************************************//**
  * \brief Get item-value of assigned key to X
  *
@@ -397,13 +363,11 @@ char* itoa(int value, char* result, int base) {      //DONE
  * \return void
  ***********************************************/
 void fnGetSigmaAssignToX(uint16_t unusedButMandatoryParameter) {       //DONE
-  char snum[10];
   longInteger_t mem;
   longIntegerInit(mem);
   liftStack();
 
-  itoa(Norm_Key_00_VAR, snum, 10);
-  stringToLongInteger(snum,10,mem);
+  uIntToLongInteger(Norm_Key_00_VAR, mem);
 
   convertLongIntegerToLongIntegerRegister(mem, REGISTER_X);
   longIntegerFree(mem);
@@ -912,6 +876,7 @@ void fnUserJM(uint16_t jmUser) {
 
 
   case USER_V43LT:
+#ifndef SAVE_SPACE_DM42 
 
     fnUserJM(USER_V43);
 
@@ -947,11 +912,12 @@ void fnUserJM(uint16_t jmUser) {
     Norm_Key_00_VAR        = ITM_USERMODE;
     fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
+#endif //SAVE_SPACE_DM42 
     break;
 
 
   case USER_V43:          //USER
-
+#ifndef SAVE_SPACE_DM42 
     fnUserJM(USER_RESET);
 
     kbd_usr[0].primary      = ITM_1ONX;
@@ -1075,12 +1041,13 @@ void fnUserJM(uint16_t jmUser) {
     Norm_Key_00_VAR         = ITM_1ONX;
     fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
+#endif //SAVE_SPACE_DM42 
     break;
-
 
 
   case USER_C43:          //USER
     fnUserJM(USER_RESET);
+#ifndef SAVE_SPACE_DM42 
     kbd_usr[0].primary=ITM_SIGMAPLUS;                 kbd_usr[0].fShifted=ITM_RI;                       kbd_usr[0].gShifted=ITM_TGLFRT;                   kbd_usr[0].keyLblAim=ITM_NULL;                    kbd_usr[0].primaryAim=ITM_A;                      kbd_usr[0].fShiftedAim=ITM_a;                     kbd_usr[0].gShiftedAim=ITM_ALPHA;                 kbd_usr[0].primaryTam=ITM_REG_A;                  
     kbd_usr[1].primary=ITM_1ONX;                      kbd_usr[1].fShifted=ITM_YX;                       kbd_usr[1].gShifted=ITM_HASH_JM;                  kbd_usr[1].keyLblAim=ITM_NUMBER_SIGN;             kbd_usr[1].primaryAim=ITM_B;                      kbd_usr[1].fShiftedAim=ITM_b;                     kbd_usr[1].gShiftedAim=ITM_BETA;                  kbd_usr[1].primaryTam=ITM_REG_B;                  
     kbd_usr[2].primary=ITM_SQUAREROOTX;               kbd_usr[2].fShifted=ITM_SQUARE;                   kbd_usr[2].gShifted=ITM_ms;                       kbd_usr[2].keyLblAim=ITM_CHECK_MARK;              kbd_usr[2].primaryAim=ITM_C;                      kbd_usr[2].fShiftedAim=ITM_c;                     kbd_usr[2].gShiftedAim=ITM_CHI;                   kbd_usr[2].primaryTam=ITM_REG_C;                  
@@ -1118,6 +1085,7 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[34].primary=ITM_PERIOD;                   kbd_usr[34].fShifted=ITM_SHOW;                    kbd_usr[34].gShifted=-MNU_INFO;                   kbd_usr[34].keyLblAim=ITM_PERIOD;                 kbd_usr[34].primaryAim=ITM_COMMA;                 kbd_usr[34].fShiftedAim=ITM_PERIOD;               kbd_usr[34].gShiftedAim=-MNU_ALPHADOT;            kbd_usr[34].primaryTam=ITM_PERIOD;                
     kbd_usr[35].primary=ITM_RS;                       kbd_usr[35].fShifted=ITM_PR;                      kbd_usr[35].gShifted=-MNU_PFN;                    kbd_usr[35].keyLblAim=ITM_NULL;                   kbd_usr[35].primaryAim=ITM_QUESTION_MARK;         kbd_usr[35].fShiftedAim=ITM_SLASH;                kbd_usr[35].gShiftedAim=-MNU_ALPHAMATH;           kbd_usr[35].primaryTam=ITM_NULL;                  
     kbd_usr[36].primary=ITM_ADD;                      kbd_usr[36].fShifted=-MNU_CATALOG;                kbd_usr[36].gShifted=-MNU_IO;                     kbd_usr[36].keyLblAim=ITM_PLUS;                   kbd_usr[36].primaryAim=ITM_SPACE;                 kbd_usr[36].fShiftedAim=ITM_PLUS;                 kbd_usr[36].gShiftedAim=-MNU_ALPHAINTL;           kbd_usr[36].primaryTam=ITM_ADD;                   
+#endif //SAVE_SPACE_DM42 
     fnSetFlag(FLAG_USER);
     break;
 

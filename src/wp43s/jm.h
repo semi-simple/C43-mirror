@@ -172,7 +172,6 @@ void fnStrInputLongint(char inp1[]);
 void fnRCL          (int16_t inp);
 void fnKEYSELECT    (void);
 void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
-char* itoa(int value, char* result, int base);
 
 #define TI_ABC                  96    //JM EE
 #define TI_ABBCCA               97    //JM EE

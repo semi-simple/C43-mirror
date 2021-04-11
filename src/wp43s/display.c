@@ -1970,6 +1970,7 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
 
 
 void fnShow(uint16_t unusedButMandatoryParameter) {
+#ifndef SAVE_SPACE_DM42
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
   uint8_t savedSigFigMode = SigFigMode;           //JM
   bool_t savedUNITDisplay = UNITDisplay;          //JM
@@ -2112,6 +2113,7 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
   SigFigMode = savedSigFigMode;                            //JM SIGFIG
   UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
 
+#endif //SAVE_SPACE_DM42
 }
 
 

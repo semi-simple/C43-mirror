@@ -34,7 +34,7 @@ else
 fi
 
 nsz=`filesize $q`
-ncrc=0x`DMCP_build/bin/crc32 $q`
+ncrc=0x`tools/crc32 $q`
 
 # Don't 'fix' the CRC because a particular fixed CRC is needed by DMCP
 #if [ $sz != $nsz -o $crc != $ncrc ]; then
@@ -50,7 +50,7 @@ OI
 	cat << OI > $h
 
 #define QSPI_DATA_SIZE $nsz
-//#define QSPI_DATA_CRC  $ncrc
+// Real QSPI_DATA_CRC: $ncrc
 #define QSPI_DATA_CRC 0x000CFED6
 
 OI

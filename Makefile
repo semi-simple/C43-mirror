@@ -6,7 +6,7 @@
 # $* target without extension
 
 # Path to aux build scripts
-BIN_DIR = DMCP_build/bin
+TOOLS_DIR = tools
 BUILD_DIR = build
 GENERATECONSTANTS_APP = $(BUILD_DIR)/generateConstants/generateConstants$(EXE)
 GENERATECATALOGS_APP = $(BUILD_DIR)/generateCatalogs/generateCatalogs$(EXE)
@@ -54,7 +54,7 @@ else
   endif
 endif
 
-RASPBERRY = $(shell ./onARaspberry)
+RASPBERRY = $(shell $(TOOLS_DIR)/onARaspberry)
 
 ifeq ($(DEST), gitlab)
 	SIM_CFLAGS += -march=x86-64
@@ -203,9 +203,6 @@ vpath %.s dep/DMCP_SDK/dmcp
 
 
 all: 	wp43s
-ifeq '$(detected_OS)' 'Darwin'
-	rsync -u wp43s binaries/macOS
-endif
 
 rebuild:
 	$(MAKE) mrproper
@@ -224,25 +221,25 @@ endif
 dmcp: $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm
 
 dist_windows:	wp43s.exe
-	mkdir -p $(WIN_DIST_DIR)/artwork $(WIN_DIST_DIR)/binaries/dmcp
+	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/binaries/dmcp
 	cp wp43s.exe $(WIN_DIST_DIR)/
-	cp artwork/*.png $(WIN_DIST_DIR)/artwork/
+	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
 	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
-	cp wp43s_pre.css $(WIN_DIST_DIR)/
+	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
 #	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
-	mkdir -p $(MAC_DIST_DIR)/artwork $(MAC_DIST_DIR)/binaries/dmcp
+	mkdir -p $(MAC_DIST_DIR)/res/artwork $(MAC_DIST_DIR)/binaries/dmcp
 	cp wp43s $(MAC_DIST_DIR)/
-	cp artwork/*.png $(MAC_DIST_DIR)/artwork/
+	cp res/artwork/*.png $(MAC_DIST_DIR)/res/artwork/
 	cp binaries/dmcp/testPgms.bin $(MAC_DIST_DIR)/binaries/dmcp/
-	cp wp43s_pre.css $(MAC_DIST_DIR)/
+	cp res/wp43s_pre.css $(MAC_DIST_DIR)/res/
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
 dist_dm42:	dmcp
 	mkdir -p $(DM_DIST_DIR)
 	cp build/dmcp/WP43S.pgm build/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
-	cp -r offimg $(DM_DIST_DIR)
+	cp -r res/offimg $(DM_DIST_DIR)
 	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
@@ -380,7 +377,7 @@ $(BUILD_DIR)/ttf2RasterFonts/%.o: %.c | $(BUILD_DIR)/ttf2RasterFonts
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
-$(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) fonts/WP43S_NumericFont.ttf fonts/WP43S_StandardFont.ttf
+$(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) res/fonts/WP43S_NumericFont.ttf res/fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> running $(TTF2RASTERFONTS_APP) <===="
 	./$(TTF2RASTERFONTS_APP) > /dev/null
 	touch $@
@@ -480,9 +477,9 @@ $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_flash.bin: $(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf
 $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin: $(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf
 	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
 	$(DMCP_OBJCOPY) --only-section .qspi -O binary  $<  $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin
-	$(BIN_DIR)/modify_crc $(WP43S_DMCP)
-	$(BIN_DIR)/check_qspi_crc $(WP43S_DMCP) src/wp43s-dmcp/qspi_crc.h || ( $(MAKE) clean_dmcp && false )
+	$(TOOLS_DIR)/modify_crc $(WP43S_DMCP)
+	$(TOOLS_DIR)/check_qspi_crc $(WP43S_DMCP) src/wp43s-dmcp/qspi_crc.h || ( $(MAKE) clean_dmcp && false )
 
 $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm: $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_flash.bin
 	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
-	$(BIN_DIR)/add_pgm_chsum $< $@
+	$(TOOLS_DIR)/add_pgm_chsum $< $@

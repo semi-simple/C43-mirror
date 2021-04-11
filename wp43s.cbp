@@ -121,8 +121,7 @@
 			<Add option="-DPC_BUILD" />
 			<Add option="-DOS64BIT" />
 			<Add option="-DCODEBLOCKS_OVER_SCORE" />
-			<Add directory="decNumberICU" />
-			<Add directory="DMCP" />
+			<Add directory="dep/decNumberICU" />
 			<Add directory="src/wp43s" />
 		</Compiler>
 		<Linker>
@@ -132,84 +131,91 @@
 		<Unit filename="COPYING">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
-		<Unit filename="decNumberICU/decContext.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decDouble.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decDouble.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decNumber.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decNumber.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decNumberLocal.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decQuad.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decQuad.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decimal128.c">
+		<Unit filename="dep/decNumberICU/decContext.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="decNumberICU/decimal128.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
 			<Option target="generateConstants" />
-			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="decNumberICU/decimal64.c">
+		<Unit filename="dep/decNumberICU/decDouble.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
+			<Option target="generateConstants" />
 		</Unit>
-		<Unit filename="decNumberICU/decimal64.h">
+		<Unit filename="dep/decNumberICU/decDouble.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
-			<Option target="generateConstants" />
 			<Option target="testSuite" />
+			<Option target="generateConstants" />
 		</Unit>
-		<Unit filename="fonts/Font changes.txt">
+		<Unit filename="dep/decNumberICU/decNumber.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="dep/decNumberICU/decNumber.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="dep/decNumberICU/decNumberLocal.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="dep/decNumberICU/decQuad.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="dep/decNumberICU/decQuad.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="dep/decNumberICU/decimal128.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="dep/decNumberICU/decimal128.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="dep/decNumberICU/decimal64.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="dep/decNumberICU/decimal64.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+			<Option target="generateConstants" />
+		</Unit>
+		<Unit filename="res/fonts/Font changes.txt">
 			<Option target="ttf2RasterFonts" />
+		</Unit>
+		<Unit filename="res/wp43s_pre.css">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/generateCatalogs/generateCatalogs.c">
 			<Option compilerVar="CC" />
@@ -577,18 +583,6 @@
 		<Unit filename="src/testSuite/log2.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/logistic_i.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/logistic_l.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/logistic_p.txt">
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/testSuite/logistic_r.txt">
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/testSuite/logNormal_i.txt">
 			<Option target="testSuite" />
 		</Unit>
@@ -599,6 +593,18 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/logNormal_r.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logistic_i.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logistic_l.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logistic_p.txt">
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/testSuite/logistic_r.txt">
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/testSuite/logxy.txt">
@@ -946,6 +952,11 @@
 			<Option compilerVar="CC" />
 			<Option target="ttf2RasterFonts" />
 		</Unit>
+		<Unit filename="src/wp43s-gtk/wp43s-gtk.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+		</Unit>
 		<Unit filename="src/wp43s/assign.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1002,17 +1013,6 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/bufferize.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/wp43s/ui/tam.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/wp43s/ui/tam.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -1635,17 +1635,6 @@
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/wp43s/mathematics/beta.c">
-			<Option compilerVar="CC" />
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="src/wp43s/mathematics/beta.h">
-			<Option target="wp43s" />
-			<Option target="wp43s_debug" />
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/wp43s/mathematics/bessel.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -1653,6 +1642,17 @@
 			<Option target="testSuite" />
 		</Unit>
 		<Unit filename="src/wp43s/mathematics/bessel.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/beta.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/mathematics/beta.h">
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
@@ -3036,6 +3036,17 @@
 			<Option target="generateCatalogs" />
 			<Option target="testSuite" />
 		</Unit>
+		<Unit filename="src/wp43s/ui/tam.c">
+			<Option compilerVar="CC" />
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
+		<Unit filename="src/wp43s/ui/tam.h">
+			<Option target="wp43s" />
+			<Option target="wp43s_debug" />
+			<Option target="testSuite" />
+		</Unit>
 		<Unit filename="src/wp43s/wp43s.c">
 			<Option compilerVar="CC" />
 			<Option target="wp43s" />
@@ -3046,11 +3057,6 @@
 			<Option target="wp43s" />
 			<Option target="wp43s_debug" />
 			<Option target="testSuite" />
-		</Unit>
-		<Unit filename="wp43s_pre.css">
-			<Option target="wp43s" />
-			<Option target="testSuite" />
-			<Option target="wp43s_debug" />
 		</Unit>
 		<Extensions>
 			<DoxyBlocks>

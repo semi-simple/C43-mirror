@@ -1,20 +1,18 @@
-*.o
-*.d
+/build/
+/dep/gmp-6.2.0/
+/bin
+/obj
+
 *.bin
 *.exe
 *.layout
 *.depend
 202*bmp
-.stamp-constantPointers
-.stamp-rasterFontsData
-.stamp-softmenuCatalog
-.stamp-testPgms
 callgrind.out*
 gmon.out
 wp43s.sav
-build/
 wp43s.dSYM
-/dep/gmp-6.2.0/
+.DS_Store
 
 # used by cLion
 .idea/
@@ -23,14 +21,9 @@ wp43s.dSYM
 !binaries/dmcp/keymap.bin
 !binaries/dmcp/testPgms.bin
 !binaries/dmcp/WP43S_qspi.bin
-!DMCP_build/bin
 
 # / before the executable files else directories under src/ are ignored
-/generateConstants
-/generateCatalogs
-/generateTestPgms
 /testSuite
-/ttf2RasterFonts
 /testTtf2RasterFonts
 /wp43s
 /.vscode

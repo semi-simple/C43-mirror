@@ -517,51 +517,51 @@
       labelCaptionNormal(keys++, btn84);
       labelCaptionNormal(keys++, btn85);
 
-      gtk_image_set_from_file((GtkImage *)bezelImage, "artwork/bezel_Normal.png");
+      gtk_image_set_from_file((GtkImage *)bezelImage, "res/artwork/bezel_Normal.png");
 
-      gtk_button_set_image(GTK_BUTTON(btn21), gtk_image_new_from_file("artwork/key_21_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn22), gtk_image_new_from_file("artwork/key_22_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn23), gtk_image_new_from_file("artwork/key_23_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn24), gtk_image_new_from_file("artwork/key_24_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn25), gtk_image_new_from_file("artwork/key_25_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn26), gtk_image_new_from_file("artwork/key_26_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn21), gtk_image_new_from_file("res/artwork/key_21_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn22), gtk_image_new_from_file("res/artwork/key_22_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn23), gtk_image_new_from_file("res/artwork/key_23_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn24), gtk_image_new_from_file("res/artwork/key_24_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn25), gtk_image_new_from_file("res/artwork/key_25_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn26), gtk_image_new_from_file("res/artwork/key_26_normal.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn31), gtk_image_new_from_file("artwork/key_31_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn32), gtk_image_new_from_file("artwork/key_32_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn33), gtk_image_new_from_file("artwork/key_33_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn34), gtk_image_new_from_file("artwork/key_34_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn35), gtk_image_new_from_file("artwork/key_35_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn36), gtk_image_new_from_file("artwork/key_36_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn31), gtk_image_new_from_file("res/artwork/key_31_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn32), gtk_image_new_from_file("res/artwork/key_32_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn33), gtk_image_new_from_file("res/artwork/key_33_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn34), gtk_image_new_from_file("res/artwork/key_34_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn35), gtk_image_new_from_file("res/artwork/key_35_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn36), gtk_image_new_from_file("res/artwork/key_36_normal.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn41), gtk_image_new_from_file("artwork/key_41_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn42), gtk_image_new_from_file("artwork/key_42_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn43), gtk_image_new_from_file("artwork/key_43_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn44), gtk_image_new_from_file("artwork/key_44_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn45), gtk_image_new_from_file("artwork/key_45_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn41), gtk_image_new_from_file("res/artwork/key_41_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn42), gtk_image_new_from_file("res/artwork/key_42_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn43), gtk_image_new_from_file("res/artwork/key_43_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn44), gtk_image_new_from_file("res/artwork/key_44_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn45), gtk_image_new_from_file("res/artwork/key_45_normal.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn51), gtk_image_new_from_file("artwork/key_51_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn52), gtk_image_new_from_file("artwork/key_52_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn53), gtk_image_new_from_file("artwork/key_53_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn54), gtk_image_new_from_file("artwork/key_54_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn55), gtk_image_new_from_file("artwork/key_55_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn51), gtk_image_new_from_file("res/artwork/key_51_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn52), gtk_image_new_from_file("res/artwork/key_52_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn53), gtk_image_new_from_file("res/artwork/key_53_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn54), gtk_image_new_from_file("res/artwork/key_54_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn55), gtk_image_new_from_file("res/artwork/key_55_normal.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn61), gtk_image_new_from_file("artwork/key_61_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn62), gtk_image_new_from_file("artwork/key_62_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn63), gtk_image_new_from_file("artwork/key_63_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn64), gtk_image_new_from_file("artwork/key_64_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn65), gtk_image_new_from_file("artwork/key_65_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn61), gtk_image_new_from_file("res/artwork/key_61_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn62), gtk_image_new_from_file("res/artwork/key_62_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn63), gtk_image_new_from_file("res/artwork/key_63_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn64), gtk_image_new_from_file("res/artwork/key_64_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn65), gtk_image_new_from_file("res/artwork/key_65_normal.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn71), gtk_image_new_from_file("artwork/key_71_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn72), gtk_image_new_from_file("artwork/key_72_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn73), gtk_image_new_from_file("artwork/key_73_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn74), gtk_image_new_from_file("artwork/key_74_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn75), gtk_image_new_from_file("artwork/key_75_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn71), gtk_image_new_from_file("res/artwork/key_71_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn72), gtk_image_new_from_file("res/artwork/key_72_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn73), gtk_image_new_from_file("res/artwork/key_73_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn74), gtk_image_new_from_file("res/artwork/key_74_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn75), gtk_image_new_from_file("res/artwork/key_75_normal.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn81), gtk_image_new_from_file("artwork/key_81_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn82), gtk_image_new_from_file("artwork/key_82_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn83), gtk_image_new_from_file("artwork/key_83_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn84), gtk_image_new_from_file("artwork/key_84_normal.png"));
-      gtk_button_set_image(GTK_BUTTON(btn85), gtk_image_new_from_file("artwork/key_85_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn81), gtk_image_new_from_file("res/artwork/key_81_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn82), gtk_image_new_from_file("res/artwork/key_82_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn83), gtk_image_new_from_file("res/artwork/key_83_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn84), gtk_image_new_from_file("res/artwork/key_84_normal.png"));
+      gtk_button_set_image(GTK_BUTTON(btn85), gtk_image_new_from_file("res/artwork/key_85_normal.png"));
     }
 
 
@@ -615,27 +615,27 @@
       labelCaptionAim(keys++, btn84);
       labelCaptionAim(keys++, btn85);
 
-      gtk_image_set_from_file((GtkImage *)bezelImage, "artwork/bezel_AIM.png");
+      gtk_image_set_from_file((GtkImage *)bezelImage, "res/artwork/bezel_AIM.png");
 
-      gtk_button_set_image(GTK_BUTTON(btn21), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn22), gtk_image_new_from_file("artwork/key_22_AIM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn23), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn24), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn25), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn26), gtk_image_new_from_file("artwork/key_26_AIM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn21), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn22), gtk_image_new_from_file("res/artwork/key_22_AIM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn23), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn24), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn25), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn26), gtk_image_new_from_file("res/artwork/key_26_AIM.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn31), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn32), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn33), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn34), gtk_image_new_from_file("artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn31), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn32), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn33), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn34), gtk_image_new_from_file("res/artwork/key_empty.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn42), gtk_image_new_from_file("artwork/key_42_AIM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn43), gtk_image_new_from_file("artwork/key_43_AIM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn44), gtk_image_new_from_file("artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn42), gtk_image_new_from_file("res/artwork/key_42_AIM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn43), gtk_image_new_from_file("res/artwork/key_43_AIM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn44), gtk_image_new_from_file("res/artwork/key_empty.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn55), gtk_image_new_from_file("artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn55), gtk_image_new_from_file("res/artwork/key_empty.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn84), gtk_image_new_from_file("artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn84), gtk_image_new_from_file("res/artwork/key_empty.png"));
     }
 
 
@@ -689,27 +689,27 @@
       labelCaptionNormal(keys++, btn84);
       labelCaptionNormal(keys++, btn85);
 
-      gtk_image_set_from_file((GtkImage *)bezelImage, "artwork/bezel_TAM.png");
+      gtk_image_set_from_file((GtkImage *)bezelImage, "res/artwork/bezel_TAM.png");
 
-      gtk_button_set_image(GTK_BUTTON(btn21), gtk_image_new_from_file("artwork/key_21_TAM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn22), gtk_image_new_from_file("artwork/key_22_TAM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn23), gtk_image_new_from_file("artwork/key_23_TAM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn24), gtk_image_new_from_file("artwork/key_24_TAM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn25), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn26), gtk_image_new_from_file("artwork/key_26_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn21), gtk_image_new_from_file("res/artwork/key_21_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn22), gtk_image_new_from_file("res/artwork/key_22_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn23), gtk_image_new_from_file("res/artwork/key_23_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn24), gtk_image_new_from_file("res/artwork/key_24_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn25), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn26), gtk_image_new_from_file("res/artwork/key_26_TAM.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn31), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn32), gtk_image_new_from_file("artwork/key_empty.png"));
-      gtk_button_set_image(GTK_BUTTON(btn33), gtk_image_new_from_file("artwork/key_33_TAM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn34), gtk_image_new_from_file("artwork/key_34_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn31), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn32), gtk_image_new_from_file("res/artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn33), gtk_image_new_from_file("res/artwork/key_33_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn34), gtk_image_new_from_file("res/artwork/key_34_TAM.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn42), gtk_image_new_from_file("artwork/key_42_TAM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn43), gtk_image_new_from_file("artwork/key_43_TAM.png"));
-      gtk_button_set_image(GTK_BUTTON(btn44), gtk_image_new_from_file("artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn42), gtk_image_new_from_file("res/artwork/key_42_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn43), gtk_image_new_from_file("res/artwork/key_43_TAM.png"));
+      gtk_button_set_image(GTK_BUTTON(btn44), gtk_image_new_from_file("res/artwork/key_empty.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn55), gtk_image_new_from_file("artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn55), gtk_image_new_from_file("res/artwork/key_empty.png"));
 
-      gtk_button_set_image(GTK_BUTTON(btn84), gtk_image_new_from_file("artwork/key_empty.png"));
+      gtk_button_set_image(GTK_BUTTON(btn84), gtk_image_new_from_file("res/artwork/key_empty.png"));
     }
   #endif // (SCREEN_800X480 == 0)
 
@@ -788,15 +788,15 @@
 
       // Backround image
       if(calcLandscape) {
-        backgroundImage = gtk_image_new_from_file("artwork/dm42lshort.png");
+        backgroundImage = gtk_image_new_from_file("res/artwork/dm42lshort.png");
       }
       else {
-        backgroundImage = gtk_image_new_from_file("artwork/dm42l.png");
+        backgroundImage = gtk_image_new_from_file("res/artwork/dm42l.png");
       }
 
       gtk_fixed_put(GTK_FIXED(grid), backgroundImage, 0, 0);
 
-      bezelImage = gtk_image_new_from_file("artwork/normal.png");
+      bezelImage = gtk_image_new_from_file("res/artwork/normal.png");
       gtk_fixed_put(GTK_FIXED(grid), bezelImage, (calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT) - 15, calcLandscape ? 4 : 424);
 
       // Areas for the g shifted softkeys

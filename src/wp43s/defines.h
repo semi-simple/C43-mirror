@@ -189,7 +189,7 @@
 
 
 // PC GUI
-#define CSSFILE                      "wp43s_pre.css"
+#define CSSFILE                      "res/wp43s_pre.css"
 
 #define DELTA_KEYS_X                              78 // Horizontal key step in pixel (row of 6 keys)
 #define DELTA_KEYS_Y                              74 // Vertical key step in pixel

@@ -17,6 +17,11 @@
 /********************************************//**
  * \file typeDefinitions.h
  ***********************************************/
+#ifndef TYPEDEFINITIONS_H
+#define TYPEDEFINITIONS_H
+
+#include <stdint.h>
+#include "decNumberWrappers.h"
 
 /********************************************//**
  * \union multiplyDivide_t
@@ -372,3 +377,5 @@ typedef struct {
   int16_t    min;
   int16_t    max;
 } tamState_t;
+
+#endif // TYPEDEFINITIONS_H

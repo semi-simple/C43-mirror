@@ -18,6 +18,22 @@
  * \file rdp.c
  ***********************************************/
 
+#include "mathematics/rdp.h"
+
+#include "config.h"
+#include "constantPointers.h"
+#include "conversionAngles.h"
+#include "debug.h"
+#include "error.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/rsd.h"
+#include "mathematics/toPolar.h"
+#include "mathematics/toRect.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "screen.h"
+
 #include "wp43s.h"
 
 

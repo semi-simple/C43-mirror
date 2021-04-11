@@ -17,6 +17,12 @@
 /********************************************//**
  * \file lblGtoXeq.h
  ***********************************************/
+#ifndef LBLGTOXEQ_H
+#define LBLGTOXEQ_H
+
+#include <stdint.h>
 
 void fnGoto   (uint16_t label);
 void fnGotoDot(uint16_t globalStepNumber);
+
+#endif // LBLGTOXEQ_H

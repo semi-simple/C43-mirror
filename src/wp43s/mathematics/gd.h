@@ -17,6 +17,11 @@
 /********************************************//**
  * \file fib.h
  ***********************************************/
+#ifndef GD_H
+#define GD_H
+
+#include "decNumberWrappers.h"
+#include <stdint.h>
 
 void fnGd   (uint16_t unusedButMandatoryParameter);
 void fnInvGd(uint16_t unusedButMandatoryParameter);
@@ -31,3 +36,5 @@ uint8_t GudermannianComplex(const real_t *xReal, const real_t *xImag, real_t *re
 
 uint8_t InverseGudermannianReal(const real_t *x, real_t *res, realContext_t *realContext);
 uint8_t InverseGudermannianComplex(const real_t *xReal, const real_t *xImag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+#endif // GD_H

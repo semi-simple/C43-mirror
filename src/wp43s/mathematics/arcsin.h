@@ -17,6 +17,12 @@
 /********************************************//**
  * \file arcsin.h
  ***********************************************/
+#ifndef ARCSIN_H
+#define ARCSIN_H
+
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
 
 void fnArcsin   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -31,3 +37,5 @@ void arcsinReal (void);
 void arcsinCplx (void);
 
 uint8_t ArcsinComplex(const real_t *xReal, const real_t *xImag, real_t *rReal, real_t *rImag, realContext_t *realContext);
+
+#endif // ARCSIN_H

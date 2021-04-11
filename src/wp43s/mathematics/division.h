@@ -17,6 +17,12 @@
 /********************************************//**
  * \file division.h
  ***********************************************/
+#ifndef DIVISION_H
+#define DIVISION_H
+
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
 
 void fnDivide(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -69,3 +75,5 @@ void divCplxLonI(void);
 void divCplxShoI(void);
 void divCplxReal(void);
 void divCplxCplx(void);
+
+#endif // DIVISION_H

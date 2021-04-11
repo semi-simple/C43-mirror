@@ -18,6 +18,15 @@
  * \file conversionAngles.c
  ***********************************************/
 
+#include "conversionAngles.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "mathematics/comparisonReals.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,27 @@
  * \file config.c
  ***********************************************/
 
+#include "config.h"
+
+#include "browsers/fontBrowser.h"
+#include "bufferize.h"
+#include "charString.h"
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "gui.h"
+#include "items.h"
+#include "keyboard.h"
+#include "matrix.h"
+#include "memory.h"
+#include "programming/manage.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+#include "stats.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

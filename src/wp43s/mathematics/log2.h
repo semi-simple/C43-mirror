@@ -17,6 +17,11 @@
 /********************************************//**
  * \file log2.h
  ***********************************************/
+#ifndef LOG2_H
+#define LOG2_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void  fnLog2   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +35,5 @@ void  log2Cxma (void);
 void  log2ShoI (void);
 void  log2Real (void);
 void  log2Cplx (void);
+
+#endif // LOG2_H

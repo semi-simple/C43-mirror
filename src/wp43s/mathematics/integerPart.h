@@ -17,6 +17,11 @@
 /********************************************//**
  * \file integerPart.h
  ***********************************************/
+#ifndef INTEGERPART_H
+#define INTEGERPART_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnIp   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -28,3 +33,5 @@ void ipLonI (void);
 void ipRema (void);
 void ipShoI (void);
 void ipReal (void);
+
+#endif // INTEGERPART_H

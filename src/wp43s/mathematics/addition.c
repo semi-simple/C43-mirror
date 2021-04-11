@@ -18,6 +18,20 @@
  * \file addition.c
  ***********************************************/
 
+#include "mathematics/addition.h"
+
+#include "charString.h"
+#include "conversionAngles.h"
+#include "debug.h"
+#include "display.h"
+#include "error.h"
+#include "fonts.h"
+#include "integers.h"
+#include "items.h"
+#include "matrix.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

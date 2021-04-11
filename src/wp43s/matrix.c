@@ -18,11 +18,34 @@
  * \file matrix.c
  ***********************************************/
 
+#include "matrix.h"
+
+#include <string.h>
+#include "bufferize.h"
+#include "constantPointers.h"
+#include "debug.h"
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include "display.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "gmpWrappers.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "memory.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
 real34Matrix_t        openMatrixMIMPointer;
 bool_t                matEditMode;
+#endif // TESTSUITE_BUILD
 
 /********************************************//**
  * \brief creates new Matrix of size y->m x x ->n
@@ -31,6 +54,7 @@ bool_t                matEditMode;
  * \return void
  ***********************************************/
 void fnNewMatrix(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
   uint32_t rows, cols;
   longInteger_t tmp_lgInt;
   real34Matrix_t matrix;
@@ -89,6 +113,7 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
   setSystemFlag(FLAG_ASLIFT);
 
   realMatrixFree(&matrix);
+#endif // TESTSUITE_BUILD
 }
 
 /********************************************//**
@@ -98,6 +123,7 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnEditMatrix(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
   if((getRegisterDataType(REGISTER_X) == dtReal34Matrix) || (getRegisterDataType(REGISTER_X) == dtComplex34Matrix)) {
     calcMode = CM_MIM;
 
@@ -117,6 +143,7 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
     moreInfoOnError("In function fnEditMatrix:", errorMessage, "is not a matrix.", "");
     #endif
   }
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -128,6 +155,7 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnTranspose(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
@@ -151,6 +179,7 @@ void fnTranspose(uint16_t unusedButMandatoryParameter) {
   }
 
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -163,6 +192,7 @@ void fnTranspose(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnLuDecomposition(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
@@ -218,6 +248,7 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
   }
 
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -229,6 +260,7 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
  * \return void
  ***********************************************/
 void fnDeterminant(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
@@ -265,10 +297,12 @@ void fnDeterminant(uint16_t unusedParamButMandatory) {
   }
 
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
 }
 
 
 
+#ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Initialize a real matrix
  *

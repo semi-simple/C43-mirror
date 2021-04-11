@@ -17,6 +17,11 @@
 /********************************************//**
  * \file charString.h
  ***********************************************/
+#ifndef CHARSTRING_H
+#define CHARSTRING_H
+
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 int16_t  stringLastGlyph  (const char *str);
 int16_t  stringNextGlyph  (const char *str, int16_t pos);
@@ -31,3 +36,5 @@ void    *xcopy            (void *dest, const void *source, int n);
 #ifdef WIN32
 char    *stpcpy           (char *dest, const char *source);
 #endif //WIN32
+
+#endif // CHARSTRING_H

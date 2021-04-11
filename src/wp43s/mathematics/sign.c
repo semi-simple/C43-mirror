@@ -18,6 +18,16 @@
  * \file sign.c
  ***********************************************/
 
+#include "mathematics/sign.h"
+
+#include "debug.h"
+#include "error.h"
+#include "integers.h"
+#include "items.h"
+#include "mathematics/unitVector.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

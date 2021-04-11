@@ -18,6 +18,13 @@
  * \file expt.c
  ***********************************************/
 
+#include "mathematics/expt.h"
+
+#include "debug.h"
+#include "error.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

@@ -18,6 +18,19 @@
  * \file multiplication.c
  ***********************************************/
 
+#include "mathematics/multiplication.h"
+
+#include "constantPointers.h"
+#include "conversionAngles.h"
+#include "debug.h"
+#include "error.h"
+#include "fonts.h"
+#include "integers.h"
+#include "items.h"
+#include "matrix.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

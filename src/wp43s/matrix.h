@@ -18,18 +18,25 @@
  * \file matrix.h
  ***********************************************/
 
+#ifndef MATRIX_H
+#define MATRIX_H
+
+#include "typeDefinitions.h"
+
 #ifndef TESTSUITE_BUILD
   #define MATRIX_LINE_WIDTH_LARGE      40
   //#define MATRIX_CHAR_LEN              30
-  
-  void     fnNewMatrix                    (uint16_t unusedParamButMandatory);
-  void     fnEditMatrix                   (uint16_t unusedParamButMandatory);
+#endif // TESTSUITE_BUILD
 
-  void     fnTranspose                    (uint16_t unusedParamButMandatory);
-  void     fnLuDecomposition              (uint16_t unusedParamButMandatory);
-  void     fnDeterminant                  (uint16_t unusedParamButMandatory);
-  void     fnInvertMatrix                 (uint16_t unusedParamButMandatory);
+void       fnNewMatrix                    (uint16_t unusedParamButMandatory);
+void       fnEditMatrix                   (uint16_t unusedParamButMandatory);
 
+void       fnTranspose                    (uint16_t unusedParamButMandatory);
+void       fnLuDecomposition              (uint16_t unusedParamButMandatory);
+void       fnDeterminant                  (uint16_t unusedParamButMandatory);
+void       fnInvertMatrix                 (uint16_t unusedParamButMandatory);
+
+#ifndef TESTSUITE_BUILD
   void     realMatrixInit                 (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);
   void     realMatrixFree                 (real34Matrix_t *matrix);
   void     realMatrixIdentity             (real34Matrix_t *matrix, uint16_t size);
@@ -67,3 +74,5 @@
   void     divideRealMatrix               (const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res);
   void     divideRealMatrices             (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
 #endif // TESTSUITE_BUILD
+
+#endif // MATRIX_H

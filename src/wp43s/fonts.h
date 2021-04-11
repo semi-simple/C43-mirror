@@ -17,6 +17,11 @@
 /********************************************//**
  * \file fonts.h
  ***********************************************/
+#ifndef FONTS_H
+#define FONTS_H
+
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 int16_t findGlyph            (const font_t *font, uint16_t charCode);
 void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
@@ -606,3 +611,5 @@ void    generateNotFoundGlyph(const int16_t font, uint16_t charCode);
 #define STD_SUB_Y                     "\xa4\xce"
 #define STD_SUB_Z                     "\xa4\xcf"
 #define STD_CHECK_MARK                "\xa7\x13"
+
+#endif // FONTS_H

@@ -18,6 +18,17 @@
  * \file dot.c
  ***********************************************/
 
+#include "mathematics/dot.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "fonts.h"
+#include "items.h"
+#include "matrix.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 static void dotDataTypeError(void);

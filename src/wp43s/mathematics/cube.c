@@ -18,6 +18,17 @@
  * \file cube.c
  ***********************************************/
 
+#include "mathematics/cube.h"
+
+#include "debug.h"
+#include "error.h"
+#include "fonts.h"
+#include "integers.h"
+#include "items.h"
+#include "mathematics/multiplication.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

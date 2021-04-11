@@ -18,6 +18,17 @@
  * \file gammaP.c
  ***********************************************/
 
+#include "mathematics/gammaP.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "fonts.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

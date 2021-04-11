@@ -18,6 +18,21 @@
  * \file fib.c
  ***********************************************/
 
+#include "mathematics/fib.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "display.h"
+#include "fonts.h"
+#include "mathematics/cos.h"
+#include "mathematics/division.h"
+#include "mathematics/multiplication.h"
+#include "mathematics/power.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

@@ -17,6 +17,10 @@
 /********************************************//**
  * \file dot.h
  ***********************************************/
+#ifndef DOT_H
+#define DOT_H
+
+#include <stdint.h>
 
 void fnDot(uint16_t unusedButMandatoryParameter);
 
@@ -32,3 +36,5 @@ void dotRemaRema(void);
 void dotCpmaRema(void);
 void dotRemaCpma(void);
 void dotCpmaCpma(void);
+
+#endif // DOT_H

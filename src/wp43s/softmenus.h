@@ -17,6 +17,11 @@
 /********************************************//**
  * \file softmenu.h
  ***********************************************/
+#ifndef SOFTMENUS_H
+#define SOFTMENUS_H
+
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 uint8_t *getNthString           (uint8_t *ptr, int16_t n); // Starting with string 0 (the 1st string is returned for n=0)
 void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
@@ -30,3 +35,5 @@ void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
   bool_t isAlphabeticSoftmenu   (void);
 #endif // !TESTSUITE_BUILD
 char    *dynmenuGetLabel        (int16_t menuitem);
+
+#endif // SOFTMENUS_H

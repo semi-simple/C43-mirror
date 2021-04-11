@@ -18,6 +18,12 @@
  * \file mask.c
  ***********************************************/
 
+#include "logicalOps/mask.h"
+
+#include "error.h"
+#include "registers.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

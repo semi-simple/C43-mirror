@@ -18,6 +18,35 @@
  * \file bufferize.c
  ***********************************************/
 
+#include "bufferize.h"
+
+#include "charString.h"
+#include "constantPointers.h"
+#include "constants.h"
+#include "conversionAngles.h"
+#include "dateTime.h"
+#include "debug.h"
+#include "display.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "gui.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/toRect.h"
+#include "mathematics/wp34s.h"
+#include "matrix.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "saveRestoreCalcState.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "sort.h"
+#include "stack.h"
+#include "timer.h"
+#include "ui/tam.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD

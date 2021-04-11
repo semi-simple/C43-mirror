@@ -18,6 +18,10 @@
  * \file curveFitting.c
  ***********************************************/
 
+#include "curveFitting.h"
+
+#include "items.h"
+
 #include "wp43s.h"
 
 /********************************************//**

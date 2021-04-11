@@ -17,6 +17,11 @@
 /********************************************//**
  * \file erf.h
  ***********************************************/
+#ifndef ERF_H
+#define ERF_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnErf   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -26,3 +31,5 @@ void erfError(void);
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void erfLonI (void);
 void erfReal (void);
+
+#endif // ERF_H

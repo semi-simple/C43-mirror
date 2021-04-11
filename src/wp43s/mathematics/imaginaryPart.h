@@ -17,6 +17,11 @@
 /********************************************//**
  * \file imaginaryPart.h
  ***********************************************/
+#ifndef IMAGINARYPART_H
+#define IMAGINARYPART_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnImaginaryPart(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -27,3 +32,5 @@ void imagPartError  (void);
 void imagPartCxma   (void);
 void imagPartCplx   (void);
 void imagPartReal   (void);
+
+#endif // IMAGINARYPART_H

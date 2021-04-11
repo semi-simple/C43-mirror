@@ -18,6 +18,17 @@
  * \file ortho_polynom.c
  ***********************************************/
 
+#include "mathematics/ortho_polynom.h"
+
+#include "constantPointers.h"
+#include "error.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

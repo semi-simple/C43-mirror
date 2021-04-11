@@ -18,6 +18,14 @@
  * \file lblGtoXeq.c
  ***********************************************/
 
+#include "programming/lblGtoXeq.h"
+
+#include "charString.h"
+#include "items.h"
+#include "programming/manage.h"
+#include "programming/nextStep.h"
+#include "softmenus.h"
+
 #include "wp43s.h"
 
 

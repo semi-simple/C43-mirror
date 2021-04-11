@@ -18,6 +18,16 @@
  * \file cxToRe.c
  ***********************************************/
 
+#include "mathematics/cxToRe.h"
+
+#include "debug.h"
+#include "error.h"
+#include "conversionAngles.h"
+#include "flags.h"
+#include "mathematics/toPolar.h"
+#include "registers.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

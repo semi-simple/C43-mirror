@@ -18,7 +18,9 @@
  * \file testSuite.h
  ***********************************************/
 
-
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 #define FUNC_NOPARAM  0
 #define FUNC_CVT      1

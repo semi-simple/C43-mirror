@@ -18,6 +18,24 @@
  * \file registers.c
  ***********************************************/
 
+#include "registers.h"
+
+#include "charString.h"
+#include "config.h"
+#include "constantPointers.h"
+#include "dateTime.h"
+#include "debug.h"
+#include "display.h"
+#include "error.h"
+#include "flags.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "memory.h"
+#include "registerValueConversions.h"
+#include "sort.h"
+#include "stack.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 const reservedVariableHeader_t allReservedVariables[] = { // MUST be in the same order as the reserved variables in item.c item 1165 and upwards

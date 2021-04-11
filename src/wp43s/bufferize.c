@@ -256,6 +256,9 @@
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
     else {
+      if(calcMode == CM_NORMAL && fnKeyInCatalog && isAlphabeticSoftmenu()) {
+        fnAim(NOPARAM);
+      }
       if((fnKeyInCatalog || !catalog) && (calcMode == CM_AIM || tam.alpha)) {
         item = convertItemToSubOrSup(item, nextChar);
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
@@ -301,6 +304,12 @@
       }
 
       else if(calcMode == CM_NIM) {
+        addItemToNimBuffer(item);
+      }
+
+      else if(calcMode != CM_AIM && (item >= ITM_A && item <= ITM_F)) {
+        // We are not in NIM, but should enter NIM - this should be handled here
+        // unlike digits 0 to 9 which are handled by processKeyAction
         addItemToNimBuffer(item);
       }
 

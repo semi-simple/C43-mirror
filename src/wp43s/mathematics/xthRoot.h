@@ -17,7 +17,12 @@
 /********************************************//**
  * \file xthRoot.h
  ***********************************************/
+#ifndef XTHROOT_H
+#define XTHROOT_H
 // Coded by JM, based on power.h
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnXthRoot      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -61,3 +66,5 @@ void xthRootCplxLonI(void);
 void xthRootCplxShoI(void);
 void xthRootCplxReal(void);
 void xthRootCplxCplx(void);
+
+#endif // XTHROOT_H

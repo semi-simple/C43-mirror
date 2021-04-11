@@ -17,6 +17,8 @@
 /********************************************//**
  * \file statusBar.h
  ***********************************************/
+#ifndef STATUSBAR_H
+#define STATUSBAR_H
 
 #ifndef TESTSUITE_BUILD
   void refreshStatusBar       (void);
@@ -40,3 +42,5 @@
     void showHideStackLift    (void);
   #endif // DMCP_BUILD
 #endif // !TESTSUITE_BUILD
+
+#endif // STATUSBAR_H

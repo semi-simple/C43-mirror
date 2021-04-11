@@ -17,6 +17,11 @@
 /********************************************//**
  * \file logxy.h
  ***********************************************/
+#ifndef LOGXY_H
+#define LOGXY_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnLogXY   (uint16_t unusedButMandatoryParameter);
 
@@ -54,3 +59,5 @@ void logxyRemaShoI(void);
 void logxyCxmaShoI(void);
 void logxyShoIShoI(void);
 
+
+#endif // LOGXY_H

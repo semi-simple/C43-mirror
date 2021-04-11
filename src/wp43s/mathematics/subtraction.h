@@ -17,6 +17,11 @@
 /********************************************//**
  * \file subtraction.h
  ***********************************************/
+#ifndef SUBTRACTION_H
+#define SUBTRACTION_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnSubtract (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -69,3 +74,5 @@ void subCplxLonI(void);
 void subCplxShoI(void);
 void subCplxReal(void);
 void subCplxCplx(void);
+
+#endif // SUBTRACTION_H

@@ -18,6 +18,18 @@
  * \file tanh.c
  ***********************************************/
 
+#include "mathematics/tanh.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "fonts.h"
+#include "items.h"
+#include "mathematics/division.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

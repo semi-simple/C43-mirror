@@ -17,6 +17,11 @@
 /********************************************//**
  * \file gui.h
  ***********************************************/
+#ifndef GUI_H
+#define GUI_H
+
+#include "defines.h"
+#include <stdint.h>
 
 #ifndef TESTSUITE_BUILD
   void fnOff                       (uint16_t unsuedParamButMandatory);
@@ -39,3 +44,5 @@
 #ifndef DMCP_BUILD
   void strReplace                  (char *haystack, const char *needle, const char *newNeedle);
 #endif // DMCP_BUILD
+
+#endif // GUI_H

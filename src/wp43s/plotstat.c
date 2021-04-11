@@ -18,8 +18,27 @@
  * \file plotstat.c
  ***********************************************/
 
+#include "plotstat.h"
+
+#include "charString.h"
+#include "constantPointers.h"
+#include "curveFitting.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "items.h"
+#include "keyboard.h"
+#include "mathematics/variance.h"
+#include "registers.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "stack.h"
+#include "stats.h"
+#include "statusBar.h"
+#include <math.h>
+
 #include "wp43s.h"
-#include "math.h"
 
 
 // This module originates and is part of the C43 fork, and is copied here. 

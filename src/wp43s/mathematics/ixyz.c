@@ -18,6 +18,19 @@
  * \file ixyz.c
  ***********************************************/
 
+#include "mathematics/ixyz.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "fonts.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

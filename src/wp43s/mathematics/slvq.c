@@ -18,6 +18,18 @@
  * \file slvq.c
  ***********************************************/
 
+#include "mathematics/slvq.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "mathematics/division.h"
+#include "mathematics/multiplication.h"
+#include "mathematics/toPolar.h"
+#include "mathematics/toRect.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

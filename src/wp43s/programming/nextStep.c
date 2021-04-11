@@ -18,6 +18,10 @@
  * \file nextStep.c
  ***********************************************/
 
+#include "programming/nextStep.h"
+
+#include "items.h"
+
 #include "wp43s.h"
 
 

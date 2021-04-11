@@ -18,6 +18,16 @@
  * \file debug.c
  ***********************************************/
 
+#include "debug.h"
+
+#include "charString.h"
+#include "display.h"
+#include "flags.h"
+#include "fonts.h"
+#include "items.h"
+#include "registers.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

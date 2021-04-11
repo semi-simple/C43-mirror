@@ -17,6 +17,12 @@
 /********************************************//**
  * \file wp34s.h
  ***********************************************/
+#ifndef WP34S_H
+#define WP34S_H
+
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 /******************************************************
  * This functions are borrowed from the WP34S project
@@ -60,3 +66,5 @@ void   WP34S_ComplexLambertW (const real_t *xReal, const real_t *xImag, real_t *
 void   WP34S_InverseW        (const real_t *x, real_t *res, realContext_t *realContext);
 void   WP34S_InverseComplexW (const real_t *xReal, const real_t *xImag, real_t *resReal, real_t *resImag, realContext_t *realContext);
 void   WP34S_OrthoPoly       (uint16_t kind, const real_t *x, const real_t *n, const real_t *param, real_t *res, realContext_t *realContext);
+
+#endif // WP34S_H

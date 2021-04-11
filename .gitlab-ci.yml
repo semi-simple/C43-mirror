@@ -8,11 +8,12 @@ variables:
   OM_PACKAGE: "Owner_wp_43s_0_18s.pdf"
   RM_PACKAGE: "Reference_wp_43s_0_18s.pdf"
   PACKAGE_REGISTRY_URL: "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/wp43s/${CI_COMMIT_TAG}"
+  GIT_SUBMODULE_STRATEGY: recursive
 
 macOS:
   stage: build
   script:
-    - make rebuild
+    - make -j8 rebuild DEST=gitlab
     - make dist_macos
   artifacts:
     expire_in: 1 day
@@ -26,14 +27,14 @@ linux:
   script:
     - apt-get update -qq
     - apt-get install -qq -y libgtk-3-dev 
-    - make rebuild
+    - make -j8 rebuild DEST=gitlab
   tags:
     - linux
 
 windows:
   stage: build
   script:
-    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make rebuild; make dist_windows"
+    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make -j8 rebuild DEST=gitlab; make dist_windows"
 #  artifacts:
 #    expire_in: 1 day
 #    paths:
@@ -44,6 +45,8 @@ windows:
 dm42:
   stage: build
   script:
+    - make mrproper
+    - make -j8 dmcp
     - make dist_dm42
   artifacts:
     expire_in: 1 day
@@ -58,7 +61,7 @@ testSuite:
     - apt-get update -qq
     - apt-get install -qq -y libgtk-3-dev 
     - make mrproper
-    - make testSuite
+    - make -j8 testSuite
     - ./testSuite
   tags:
     - linux
@@ -71,14 +74,14 @@ upload:
   script:
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-dm42.zip ${PACKAGE_REGISTRY_URL}/wp43s-dm42-${CI_COMMIT_TAG}.zip
-#    - |
-#      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-macos.zip ${PACKAGE_REGISTRY_URL}/wp43s-macos-${CI_COMMIT_TAG}.zip
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-macos.zip ${PACKAGE_REGISTRY_URL}/wp43s-macos-${CI_COMMIT_TAG}.zip
 #    - |
 #      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-windows.zip ${PACKAGE_REGISTRY_URL}/wp43s-windows-${CI_COMMIT_TAG}.zip
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file draft\ documentation/${RM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file docs/${RM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file draft\ documentation/${OM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file docs/${OM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}
   tags:
     - linux
 

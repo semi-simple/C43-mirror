@@ -17,7 +17,12 @@
 /********************************************//**
  * \file plot.h
  ***********************************************/
+#ifndef PLOTSTAT_H
+#define PLOTSTAT_H
 
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 //****************************************************************************************************************************
 //#define graphtype float/*double*/      //Define the type of floating point used in the STATS memory. float uses 4 bytes per number
@@ -133,4 +138,4 @@ void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
 void    fnPlotRegressionLine(uint16_t plotMode);
 void    fnPlotZoom         (uint16_t unusedButMandatoryParameter);
 
- 
+#endif // PLOTSTAT_H 

@@ -18,6 +18,15 @@
  * \file iteration.c
  ***********************************************/
 
+#include "mathematics/iteration.h"
+
+#include "constantPointers.h"
+#include "error.h"
+#include "mathematics/compare.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/incDec.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

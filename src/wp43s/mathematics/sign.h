@@ -17,6 +17,11 @@
 /********************************************//**
  * \file sign.h
  ***********************************************/
+#ifndef SIGN_H
+#define SIGN_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnSign   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -28,3 +33,5 @@ void signLonI (void);
 void signRema (void);
 void signShoI (void);
 void signReal (void);
+
+#endif // SIGN_H

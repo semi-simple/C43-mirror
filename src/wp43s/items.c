@@ -18,6 +18,41 @@
  * \file items.c Item list and function to run them
  ***********************************************/
 
+#include "items.h"
+
+#include "browsers/browsers.h"
+#include "bufferize.h"
+#include "config.h"
+#include "constants.h"
+#include "conversionAngles.h"
+#include "conversionUnits.h"
+#include "curveFitting.h"
+#include "dateTime.h"
+#include "display.h"
+#include "distributions/distributions.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "fractions.h"
+#include "gui.h"
+#include "integers.h"
+#include "keyboard.h"
+#include "logicalOps/logicalOps.h"
+#include "mathematics/mathematics.h"
+#include "plotstat.h"
+#include "programming/programming.h"
+#include "recall.h"
+#include "registers.h"
+#include "saveRestoreCalcState.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "stack.h"
+#include "stats.h"
+#include "store.h"
+#include "stringFuncs.h"
+#include "timer.h"
+#include "ui/tam.h"
+
 #include "wp43s.h"
 
 /********************************************//**

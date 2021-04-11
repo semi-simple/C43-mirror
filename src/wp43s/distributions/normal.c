@@ -18,6 +18,17 @@
  * \file normal.c
  ***********************************************/
 
+#include "distributions/normal.h"
+
+#include "constantPointers.h"
+#include "error.h"
+#include "fonts.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/rsd.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

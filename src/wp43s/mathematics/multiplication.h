@@ -17,6 +17,12 @@
 /********************************************//**
  * \file multiplication.h
  ***********************************************/
+#ifndef MULTIPLICATION_H
+#define MULTIPLICATION_H
+
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
 
 void fnMultiply (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -82,3 +88,5 @@ void mulCplxCxma(void);
 void mulCplxShoI(void);
 void mulCplxReal(void);
 void mulCplxCplx(void);
+
+#endif // MULTIPLICATION_H

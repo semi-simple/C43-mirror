@@ -18,6 +18,18 @@
  * \file registerBrowser.c The register browser application
  ***********************************************/
 
+#include "browsers/registerBrowser.h"
+
+#include "charString.h"
+#include "debug.h"
+#include "display.h"
+#include "flags.h"
+#include "fonts.h"
+#include "items.h"
+#include "registers.h"
+#include "screen.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

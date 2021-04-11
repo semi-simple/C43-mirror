@@ -18,6 +18,27 @@
  * \file keyboard.c Keyboard management
  ***********************************************/
 
+#include "keyboard.h"
+
+#include "bufferize.h"
+#include "charString.h"
+#include "constants.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "gui.h"
+#include "items.h"
+#include "memory.h"
+#include "plotstat.h"
+#include "programming/manage.h"
+#include "programming/nextStep.h"
+#include "recall.h"
+#include "registers.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "stack.h"
+#include "ui/tam.h"
+
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
@@ -186,14 +207,14 @@
           if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
             addItemToBuffer(item);
           }
-          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
-            addItemToNimBuffer(item);
-          }
           else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
             if(calcMode == CM_NORMAL) {
               fnAim(NOPARAM);
             }
             addItemToBuffer(item);
+          }
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
+            addItemToNimBuffer(item);
           }
           else if(item > 0) { // function
             if(calcMode == CM_NIM && item != ITM_CC) {
@@ -776,7 +797,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_NIM:
         closeNim();
 
-        if(lastErrorCode == 0) {
+        if(calcMode != CM_NIM && lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
           saveForUndo();
           liftStack();

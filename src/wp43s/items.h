@@ -17,6 +17,10 @@
 /********************************************//**
  * \file items.h
  ***********************************************/
+#ifndef ITEMS_H
+#define ITEMS_H
+
+#include <stdint.h>
 
 #define ITM_NULL                         0
 
@@ -1836,3 +1840,5 @@ void runFunction      (int16_t func);
 void fnToBeCoded      (void);
 void itemToBeCoded    (uint16_t unusedButMandatoryParameter);
 void fnNop            (uint16_t unusedButMandatoryParameter);
+
+#endif // ITEMS_H

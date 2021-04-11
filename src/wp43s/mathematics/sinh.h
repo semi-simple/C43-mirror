@@ -17,6 +17,11 @@
 /********************************************//**
  * \file sinh.h
  ***********************************************/
+#ifndef SINH_H
+#define SINH_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnSinh   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -29,3 +34,5 @@ void sinhRema (void);
 void sinhCxma (void);
 void sinhReal (void);
 void sinhCplx (void);
+
+#endif // SINH_H

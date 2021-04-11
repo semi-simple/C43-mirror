@@ -17,6 +17,19 @@
 /********************************************//**
  * \file decNumberWrappers.h
  ***********************************************/
+#ifndef DECNUMBERWRAPPERS_H
+#define DECNUMBERWRAPPERS_H
+
+#include "defines.h"
+
+#if (IBM_DECIMAL == 1)
+
+#include "decimal128.h"
+#include "decimal64.h"
+#include "decDouble.h"
+#include "decQuad.h"
+#include "decNumberWrappers.h"
+extern int decGetInt(const decNumber *x); // Because decNumberToInt32 seems buggy! Needs more investigation
 
 typedef struct {
   int32_t digits;      // Count of digits in the coefficient; >0
@@ -205,3 +218,7 @@ typedef struct {
 #define realZero(destination)                                  decNumberZero            (destination)
 #define stringToReal(source, destination, ctxt)                decNumberFromString      (destination, source, ctxt)
 #define uInt32ToReal(source, destination)                      decNumberFromUInt32      (destination, source)
+
+#endif // (IBM_DECIMAL == 1)
+
+#endif // DECNUMBERWRAPPERS_H

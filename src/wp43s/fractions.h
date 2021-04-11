@@ -17,6 +17,13 @@
 /********************************************//**
  * \file fractions.h
  ***********************************************/
+#ifndef FRACTIONS_H
+#define FRACTIONS_H
+
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 void fnDenMax            (uint16_t unusedButMandatoryParameter);
 void fraction            (calcRegister_t regist, int16_t *sign, uint64_t *intPart, uint64_t *numer, uint64_t *denom, int16_t *lessEqualGreater);
+
+#endif // FRACTIONS_H

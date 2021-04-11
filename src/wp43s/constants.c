@@ -19,6 +19,12 @@
  * see: https://physics.nist.gov/cuu/index.html
  ***********************************************/
 
+#include "constants.h"
+
+#include "constantPointers.h"
+#include "registers.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

@@ -17,8 +17,12 @@
 /********************************************//**
  * \file stats.h Statistical functions
  ***********************************************/
+#ifndef STATS_H
+#define STATS_H
 
-
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 void   fnSigma               (uint16_t plusMinus);
 void   fnStatSum             (uint16_t sum);
@@ -28,3 +32,5 @@ void   fnXmax                (uint16_t unusedButMandatoryParameter);
 void   fnClSigma             (uint16_t unusedButMandatoryParameter);
 bool_t checkMinimumDataPoints(const real_t *n);
 void   initStatisticalSums   (void);
+
+#endif // STATS_H

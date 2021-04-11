@@ -18,6 +18,20 @@
  * \file compare.c
  ***********************************************/
 
+#include "mathematics/compare.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/round.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "sort.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

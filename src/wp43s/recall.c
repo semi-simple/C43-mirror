@@ -18,6 +18,18 @@
  * \file recall.c
  ***********************************************/
 
+#include "recall.h"
+
+#include "charString.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "mathematics/compare.h"
+#include "memory.h"
+#include "registers.h"
+#include "stack.h"
+#include "store.h"
+
 #include "wp43s.h"
 
 

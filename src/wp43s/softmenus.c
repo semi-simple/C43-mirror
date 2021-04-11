@@ -24,6 +24,18 @@
  * * 30000 < item < 39999  ==>  item without top and bottom line
  ***********************************************/
 
+#include "softmenus.h"
+
+#include "charString.h"
+#include "error.h"
+#include "gui.h"
+#include "items.h"
+#include "registers.h"
+#include "screen.h"
+#include "sort.h"
+#include <string.h>
+#include <stdlib.h>
+
 #include "wp43s.h"
 
 /*      Menu name                           <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */

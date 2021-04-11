@@ -19,6 +19,23 @@
  ***********************************************/
 // Coded by JM, based on power.c, with reference to cuberoot.c
 
+#include "mathematics/xthRoot.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "display.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/division.h"
+#include "mathematics/toPolar.h"
+#include "mathematics/toRect.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

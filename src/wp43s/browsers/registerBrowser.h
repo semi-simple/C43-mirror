@@ -17,7 +17,13 @@
 /********************************************//**
  * \file registerBrowser.h
  ***********************************************/
+#ifndef REGISTERBROWSER_H
+#define REGISTERBROWSER_H
+
+#include <stdint.h>
 
 #ifndef TESTSUITE_BUILD
   void registerBrowser(uint16_t unusedButMandatoryParameter);
 #endif // TESTSUITE_BUILD
+
+#endif // REGISTERBROWSER_H

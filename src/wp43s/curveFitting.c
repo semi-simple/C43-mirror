@@ -18,8 +18,25 @@
  * \file curveFitting.c
  ***********************************************/
 
+#include "curveFitting.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "gmpWrappers.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/variance.h"
+#include "mathematics/wp34s.h"
+#include "plotstat.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+#include "stats.h"
+#include <math.h>
+
 #include "wp43s.h"
-#include "math.h"
 
 
 #undef STAT_CROSSCHECK

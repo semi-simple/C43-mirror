@@ -206,14 +206,14 @@
           if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
             addItemToBuffer(item);
           }
-          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
-            addItemToNimBuffer(item);
-          }
           else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
             if(calcMode == CM_NORMAL) {
               fnAim(NOPARAM);
             }
             addItemToBuffer(item);
+          }
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
+            addItemToNimBuffer(item);
           }
           else if(item > 0) { // function
             if(calcMode == CM_NIM && item != ITM_CC) {
@@ -790,7 +790,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_NIM:
         closeNim();
 
-        if(lastErrorCode == 0) {
+        if(calcMode != CM_NIM && lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
           saveForUndo();
           liftStack();

@@ -1,7 +1,3 @@
-#!/bin/bash
-
-mkdir -p build
-cat >build/version.h <<EOF
 /* This file is part of 43S.
  *
  * 43S is free software: you can redistribute it and/or modify
@@ -29,29 +25,7 @@ cat >build/version.h <<EOF
 #ifndef VERSION_H
 #define VERSION_H
 
-EOF
+#define VERSION_STRING "custom" STD_SPACE_3_PER_EM "build" STD_SPACE_3_PER_EM "unknown"
+#define VERSION_SHORT  "unknown"
 
-if [[ -z "$CI_COMMIT_TAG" ]]; then
-  GIT=`git rev-parse --short=8 HEAD`
-  if [[ -z $GIT ]]; then
-    GIT="unknown"
-  elif ! git diff-index --quiet HEAD --; then
-    GIT="$GIT-mod"
-  fi
-  echo "#define VERSION_STRING \"custom\" STD_SPACE_3_PER_EM \"build\" STD_SPACE_3_PER_EM \"$GIT\"" >> build/version.h
-  echo "#define VERSION_SHORT  \"$GIT\"" >> build/version.h
-else
-  echo "#define VERSION_STRING \"v$CI_COMMIT_TAG\" STD_SPACE_3_PER_EM \"(`date +%Y.%m.%d`)\"" >> build/version.h
-  echo "#define VERSION_SHORT  \"$CI_COMMIT_TAG\"" >> build/version.h
-fi
-
-echo "" >> build/version.h
-echo "#endif // VERSION_H" >> build/version.h
-
-if cmp -s "build/version.h" "src/wp43s/version.h"; then
-  printf "====> Version file unchanged <====\n"
-else
-  printf "====> Version file changed <====\n"
-  printf "Updating version file\n"
-  cp build/version.h src/wp43s/version.h
-fi
+#endif // VERSION_H

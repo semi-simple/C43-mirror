@@ -34,7 +34,7 @@ linux:
 windows:
   stage: build
   script:
-    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make -j8 rebuild DEST=gitlab; make dist_windows"
+    - C:\msys64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make -j8 rebuild DEST=gitlab; make dist_windows"
 #  artifacts:
 #    expire_in: 1 day
 #    paths:

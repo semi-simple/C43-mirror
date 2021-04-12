@@ -226,7 +226,7 @@ dist_windows:	wp43s.exe
 	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
 	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
 	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
-#	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
+	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
 	mkdir -p $(MAC_DIST_DIR)/res/artwork $(MAC_DIST_DIR)/binaries/dmcp

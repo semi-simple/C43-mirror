@@ -156,6 +156,8 @@ void fnUserJM(uint16_t jmUser);
 #define USER_43S         44
 #define USER_DM42        45
 #define USER_C43         46
+#define USER_DRG         47
+
  //last number
 
 
@@ -170,7 +172,6 @@ void fnStrInputLongint(char inp1[]);
 void fnRCL          (int16_t inp);
 void fnKEYSELECT    (void);
 void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
-char* itoa(int value, char* result, int base);
 
 #define TI_ABC                  96    //JM EE
 #define TI_ABBCCA               97    //JM EE
@@ -178,6 +179,7 @@ char* itoa(int value, char* result, int base);
 #define TI_SHOW_REGISTER_BIG    99    //JM_SHOW
 #define TI_SHOW_REGISTER_SMALL 100
 #define TI_ms                  101    //JMms
+#define TI_FROM_DMS            102
 
 #define ID_43S                  0    //JM Input Default
 #define ID_DP                   2    //JM Input Default

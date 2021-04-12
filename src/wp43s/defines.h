@@ -24,7 +24,8 @@
 //*********************************
 
 #ifdef PC_BUILD
-  //Key layout options
+  #undef SAVE_SPACE_DM42
+  //Key layout option
   #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
   #undef  SWAP_TO_L42_ON_SIM
      #define BLUES_WHEN_SWAPPED        //JM Only applicable if SWAPLAYOUTS is defined. Otherwise ignored
@@ -33,9 +34,12 @@
 
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
+  #define SAVE_SPACE_DM42
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
   //#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
+  #define TWO_FILE_PGM
+  #undef  TWO_FILE_PGM
 #endif
 
 
@@ -138,7 +142,21 @@
 #endif // __linux__ == 1
 
 
+#define DEBUG_STAT                       0 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
+#if (DEBUG_STAT == 0)
+  #undef STATDEBUG
+  #undef STATDEBUG_VERBOSE
+#endif
+#if (DEBUG_STAT == 1)
+  #define STATDEBUG
+  #undef STATDEBUG_VERBOSE
+#endif
+#if (DEBUG_STAT == 2)
+  #define STATDEBUG
+  #define STATDEBUG_VERBOSE
+#endif
 
+	
 
 //*************************
 //* Other defines         *
@@ -169,8 +187,6 @@
 
 
 #define DEBUG_LINES                               68 // Used in for the debug panel
-
-#define USEFLOAT                                     // Plot: Use standard double floats instead of short REAL for graphic calculation, as it is a lot faster than the custom short decnumber type. Leaving in for possible future optimisation.
 
 
 // List of errors
@@ -557,15 +573,25 @@
 #define CF_CAUCHY_FITTING                        128
 #define CF_GAUSS_FITTING                         256
 #define CF_ORTHOGONAL_FITTING                    512
-#define CF_ORTHOGONAL_FITTING_                  1024 // Minus option
+
+// Curve fitting excluding all other curve fitting bits, 10 bits
+#define CF_LINEAR_FITTING_EX                     (~CF_LINEAR_FITTING) & 0x01FF
+#define CF_EXPONENTIAL_FITTING_EX                (~CF_EXPONENTIAL_FITTING) & 0x01FF     
+#define CF_LOGARITHMIC_FITTING_EX                (~CF_LOGARITHMIC_FITTING) & 0x01FF
+#define CF_POWER_FITTING_EX                      (~CF_POWER_FITTING) & 0x03FF 
+#define CF_ROOT_FITTING_EX                       (~CF_ROOT_FITTING) & 0x01FF      
+#define CF_HYPERBOLIC_FITTING_EX                 (~CF_HYPERBOLIC_FITTING) & 0x01FF      
+#define CF_PARABOLIC_FITTING_EX                  (~CF_PARABOLIC_FITTING) & 0x01FF     
+#define CF_CAUCHY_FITTING_EX                     (~CF_CAUCHY_FITTING) & 0x01FF  
+#define CF_GAUSS_FITTING_EX                      (~CF_GAUSS_FITTING) & 0x01FF 
+#define CF_ORTHOGONAL_FITTING_EX                 (~CF_ORTHOGONAL_FITTING) & 0x01FF       
 
 // Plot curve fitting 3 bits
 #define PLOT_ORTHOF                                0
 #define PLOT_FIT                                   1
 #define PLOT_LR                                    2
-#define PLOT_CYCLEALL                              3
-#define PLOT_START                                 4
-#define PLOT_NOTHING                               5
+#define PLOT_START                                 3
+#define PLOT_NOTHING                               4
 
 // Rounding mode 3 bits
 #define RM_HALF_EVEN                               0
@@ -664,7 +690,10 @@
 #define TI_CORR                                   36
 #define TI_SMI                                    37
 #define TI_LR                                     38
-
+#define TI_CALCX                                  39
+#define TI_CALCY                                  40
+#define TI_CALCX2                                 41
+#define TI_STATISTIC_LR                           42
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -827,6 +856,14 @@
 #define QF_NEWTON_POISSON                          1
 #define QF_NEWTON_BINOMIAL                         2
 #define QF_NEWTON_GEOMETRIC                        3
+#define QF_NEWTON_NEGBINOM                         4
+#define QF_NEWTON_HYPERGEOMETRIC                   5
+
+#define QF_DISCRETE_CDF_POISSON                    0
+#define QF_DISCRETE_CDF_BINOMIAL                   1
+#define QF_DISCRETE_CDF_GEOMETRIC                  2
+#define QF_DISCRETE_CDF_NEGBINOM                   3
+#define QF_DISCRETE_CDF_HYPERGEOMETRIC             4
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel
@@ -837,7 +874,11 @@
   #define setWhitePixel(x, y)                bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE)
   #define invert_Pixel(x, y)                 bitblt24(x, 1, y, 1, BLT_XOR,  BLT_NONE)
   #define beep(frequence, length)            {while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(frequence * 1000); sys_delay(length); stop_buzzer();}
-  #define TO_QSPI                            __attribute__ ((section(".qspi")))
+    #ifdef TWO_FILE_PGM
+      #define TO_QSPI                            __attribute__ ((section(".qspi")))
+    #else //TWO_FILE_PGM
+      #define TO_QSPI
+    #endif //TWO_FILE_PGM
   //#define TO_QSPI
 #endif // !DMCP_BUILD
 

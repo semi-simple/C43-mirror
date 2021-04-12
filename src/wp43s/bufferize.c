@@ -46,62 +46,62 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
         case ITM_s        : return ITM_SUB_s;
         case ITM_PLUS     : return ITM_SUB_PLUS;
         case ITM_MINUS    : return ITM_SUB_MINUS;
-        case ITM_0        : return ITM_SUB_0;
-        case ITM_1        : return ITM_SUB_1;
-        case ITM_2        : return ITM_SUB_2;
-        case ITM_3        : return ITM_SUB_3;
-        case ITM_4        : return ITM_SUB_4;
-        case ITM_5        : return ITM_SUB_5;
-        case ITM_6        : return ITM_SUB_6;
-        case ITM_7        : return ITM_SUB_7;
-        case ITM_8        : return ITM_SUB_8;
-        case ITM_9        : return ITM_SUB_9;
-        case ITM_a        : return ITM_SUB_a;
-        case ITM_b        : return ITM_SUB_b;
-        case ITM_c        : return ITM_SUB_c;
-        case ITM_d        : return ITM_SUB_d;
-        case ITM_e        : return ITM_SUB_e;
-        case ITM_i        : return ITM_SUB_i;
-        case ITM_j        : return ITM_SUB_j;
-        case ITM_k        : return ITM_SUB_k;
-        case ITM_l        : return ITM_SUB_l;
-        case ITM_m        : return ITM_SUB_m;
-        case ITM_n        : return ITM_SUB_n;
-        case ITM_o        : return ITM_SUB_o;
-        case ITM_p        : return ITM_SUB_p;
-        case ITM_q        : return ITM_SUB_q;
-        case ITM_u        : return ITM_SUB_u;
-        case ITM_v        : return ITM_SUB_v;
-        case ITM_w        : return ITM_SUB_w;
-        case ITM_x        : return ITM_SUB_x;
-        case ITM_y        : return ITM_SUB_y;
-        case ITM_z        : return ITM_SUB_z;
-        case ITM_A        : return ITM_SUB_A;
-        case ITM_B        : return ITM_SUB_B;
-        case ITM_C        : return ITM_SUB_C;
-        case ITM_D        : return ITM_SUB_D;
-        case ITM_E        : return ITM_SUB_E;
-        case ITM_F        : return ITM_SUB_F;
-        case ITM_G        : return ITM_SUB_G;
-        case ITM_H        : return ITM_SUB_H;
-        case ITM_I        : return ITM_SUB_I;
-        case ITM_J        : return ITM_SUB_J;
-        case ITM_K        : return ITM_SUB_K;
-        case ITM_L        : return ITM_SUB_L;
-        case ITM_M        : return ITM_SUB_M;
-        case ITM_N        : return ITM_SUB_N;
-        case ITM_O        : return ITM_SUB_O;
-        case ITM_P        : return ITM_SUB_P;
-        case ITM_Q        : return ITM_SUB_Q;
-        case ITM_R        : return ITM_SUB_R;
-        case ITM_S        : return ITM_SUB_S;
-        case ITM_T        : return ITM_SUB_T;
-        case ITM_U        : return ITM_SUB_U;
-        case ITM_V        : return ITM_SUB_V;
-        case ITM_W        : return ITM_SUB_W;
-        case ITM_X        : return ITM_SUB_X;
-        case ITM_Y        : return ITM_SUB_Y;
-        case ITM_Z        : return ITM_SUB_Z;
+        case ITM_0        :
+        case ITM_1        :
+        case ITM_2        :
+        case ITM_3        :
+        case ITM_4        :
+        case ITM_5        :
+        case ITM_6        :
+        case ITM_7        :
+        case ITM_8        :
+        case ITM_9        : return item + (ITM_SUB_9 - ITM_9);
+        case ITM_a        :
+        case ITM_b        :
+        case ITM_c        :
+        case ITM_d        :
+        case ITM_e        :
+        case ITM_i        :
+        case ITM_j        :
+        case ITM_k        :
+        case ITM_l        :
+        case ITM_m        :
+        case ITM_n        :
+        case ITM_o        :
+        case ITM_p        :
+        case ITM_q        :
+        case ITM_u        :
+        case ITM_v        :
+        case ITM_w        :
+        case ITM_x        :
+        case ITM_y        :
+        case ITM_z        : return item + (ITM_SUB_z - ITM_z);
+        case ITM_A        :
+        case ITM_B        :
+        case ITM_C        :
+        case ITM_D        :
+        case ITM_E        :
+        case ITM_F        :
+        case ITM_G        :
+        case ITM_H        :
+        case ITM_I        :
+        case ITM_J        :
+        case ITM_K        :
+        case ITM_L        :
+        case ITM_M        :
+        case ITM_N        :
+        case ITM_O        :
+        case ITM_P        :
+        case ITM_Q        :
+        case ITM_R        :
+        case ITM_S        :
+        case ITM_T        :
+        case ITM_U        :
+        case ITM_V        :
+        case ITM_W        :
+        case ITM_X        :
+        case ITM_Y        :
+        case ITM_Z        : return item + (ITM_SUB_Z - ITM_Z);
         default           : return item;
       }
     }
@@ -112,16 +112,16 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
         case ITM_INFINITY : return ITM_SUP_INFINITY;
         case ITM_PLUS     : return ITM_SUP_PLUS;
         case ITM_MINUS    : return ITM_SUP_MINUS;
-        case ITM_0        : return ITM_SUP_0;
-        case ITM_1        : return ITM_SUP_1;
-        case ITM_2        : return ITM_SUP_2;
-        case ITM_3        : return ITM_SUP_3;
-        case ITM_4        : return ITM_SUP_4;
-        case ITM_5        : return ITM_SUP_5;
-        case ITM_6        : return ITM_SUP_6;
-        case ITM_7        : return ITM_SUP_7;
-        case ITM_8        : return ITM_SUP_8;
-        case ITM_9        : return ITM_SUP_9;
+        case ITM_0        : 
+        case ITM_1        : 
+        case ITM_2        : 
+        case ITM_3        : 
+        case ITM_4        : 
+        case ITM_5        : 
+        case ITM_6        : 
+        case ITM_7        : 
+        case ITM_8        : 
+        case ITM_9        : return item + (ITM_SUP_9 - ITM_9);
         case ITM_f        : return ITM_SUP_f;
         case ITM_g        : return ITM_SUP_g;
         case ITM_h        : return ITM_SUP_h;
@@ -995,10 +995,13 @@ void kill_ASB_icon(void) {
             }
             return;
           }
+        } else {                      //JM
+          done = true;                //JM
+          closeNim();                 //JM
         }
         break;
 
-      case ITM_ms :
+      case ITM_ms :                        //JM
       case ITM_toHMS :
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           done = true;
@@ -1022,8 +1025,7 @@ void kill_ASB_icon(void) {
         break;
 
 
-      case ITM_DRG :
-      case ITM_DRGto :
+      case ITM_DRG :                        //JM
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           done = true;
 
@@ -1034,10 +1036,8 @@ void kill_ASB_icon(void) {
               convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
             }
             if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterAngularMode(REGISTER_X) == amNone) {
+              if(currentAngularMode == amDMS) fnCvtFromCurrentAngularMode(amDMS); else
               setRegisterAngularMode(REGISTER_X, currentAngularMode);
-            } else {
-//              if(item == ITM_DRG) fnDRG(0); else
-//              if(item == ITM_DRG) fnDRGto(0);
             }
 
             if(lastErrorCode == 0) {

@@ -47,6 +47,19 @@ void capture_sequence(char *origin, uint16_t item) {
       case  ITM_XexY: strcpy(ll,"X<>Y"); break;
       case  ITM_YX:   strcpy(ll,"Y^X" ); break;
       case  ITM_DIV:  strcpy(ll,"/"   ); break;
+
+      case  ITM_0:
+      case  ITM_1:
+      case  ITM_2:
+      case  ITM_3:
+      case  ITM_4:
+      case  ITM_5:
+      case  ITM_6:
+      case  ITM_7:
+      case  ITM_8:
+      case  ITM_9:
+              ll[0]=item - ITM_0 + 48; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+/*       
       case  ITM_0:        ll[0]=48; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
       case  ITM_1:        ll[0]=49; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
       case  ITM_2:        ll[0]=50; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
@@ -57,6 +70,7 @@ void capture_sequence(char *origin, uint16_t item) {
       case  ITM_7:        ll[0]=55; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
       case  ITM_8:        ll[0]=56; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
       case  ITM_9:        ll[0]=57; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break;
+*/
       case  ITM_PERIOD:   ll[0]=46; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break; //.
       case  ITM_EXPONENT: ll[0]=69; strcpy(line1,"   \""); strcat(line1,ll); strcat(line1,"\" "); break; //E
       default: { strcpy(ll,indexOfItems[item].itemSoftmenuName);

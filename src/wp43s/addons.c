@@ -222,7 +222,7 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
       if(getRegisterDataType(REGISTER_X) == dtReal34) {
         if(getRegisterAngularMode(REGISTER_X) == amDMS || getRegisterAngularMode(REGISTER_X) == amDegree) {
           fnKeyDotD(0);
-          fnKeyDotD(0);  //2nd time to make sure it goes to REAL, not DEGREES as per           fnToReal(0); mod.
+//          fnKeyDotD(0);  //2nd time to make sure it goes to REAL, not DEGREES as per           fnToReal(0); mod.
         } 
         if(getRegisterAngularMode(REGISTER_X) == amNone) {
           fnToHms(0);                   
@@ -257,9 +257,13 @@ void fnTo_ms(uint16_t unusedButMandatoryParameter) {
   }
 
 
-
-
-
+void addzeroes(char * st, uint8_t ix){
+  uint8_t iy;
+  strcpy(st,"1");
+  for(iy = 0; iy < ix; iy++) {
+    strcat(st,"0");
+  }
+}
 
 void fnMultiplySI(uint16_t multiplier) {
     copySourceRegisterToDestRegister(REGISTER_L, TEMP_REGISTER_1);   // STO TMP
@@ -268,19 +272,19 @@ void fnMultiplySI(uint16_t multiplier) {
 	mult[0]=0;
 	divi[0]=0;
 	switch (multiplier) {
-		case 100 +  0: strcpy(mult,"1");                     break; //unity
-		case 100 +  3: strcpy(mult, "1000");                 break; //kilo
-		case 100 +  6: strcpy(mult, "1000000");              break; //mega
-		case 100 +  9: strcpy(mult, "1000000000");           break; //giga
-		case 100 + 12: strcpy(mult, "1000000000000");        break; //tera
-		case 100 + 15: strcpy(mult, "1000000000000000");     break; //peta
-		case 100 + 18: strcpy(mult, "1000000000000000000");  break; //exa
-		case 100 -  3: strcpy(divi, "1000");                 break; //milli
-		case 100 -  6: strcpy(divi, "1000000");              break; //micro
-		case 100 -  9: strcpy(divi, "1000000000");           break; //nano
-		case 100 - 12: strcpy(divi, "1000000000000");        break; //pico
-		case 100 - 15: strcpy(divi, "1000000000000000");     break; //femto
-		case 100 - 18: strcpy(divi, "1000000000000000000");  break; //atto
+		case 100 +  0: strcpy(mult,"1");       break; //unity
+		case 100 +  3: addzeroes(mult,   3);   break; //kilo
+		case 100 +  6: addzeroes(mult,   6);   break; //mega
+		case 100 +  9: addzeroes(mult,   9);   break; //giga
+		case 100 + 12: addzeroes(mult,   12);  break; //tera
+		case 100 + 15: addzeroes(mult,   15);  break; //peta
+		case 100 + 18: addzeroes(mult,   18);  break; //exa
+		case 100 -  3: addzeroes(divi,   3);   break; //milli
+		case 100 -  6: addzeroes(divi,   6);   break; //micro
+		case 100 -  9: addzeroes(divi,   9);   break; //nano
+		case 100 - 12: addzeroes(divi,   12);  break; //pico
+		case 100 - 15: addzeroes(divi,   15);  break; //femto
+		case 100 - 18: addzeroes(divi,   18);  break; //atto
 		default: break;
 	}
 
@@ -489,9 +493,12 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
       fnCvtFromCurrentAngularMode(AMODE);
       fnAngularMode(AMODE);
     }
-    fnKeyDotD(0);
-    fnCvtFromCurrentAngularMode(AMODE);
+
+//    fnKeyDotD(0);
+//    fnCvtFromCurrentAngularMode(AMODE);
     fnAngularMode(AMODE);
+    fnCvtToCurrentAngularMode(getRegisterAngularMode(REGISTER_X));
+
   }
   #ifndef TESTSUITE_BUILD
     fnRefreshState();
@@ -503,19 +510,19 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
 void fnDRG(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
     convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-    setRegisterAngularMode(REGISTER_X,currentAngularMode);
+    setRegisterAngularMode(REGISTER_X,amNone);  //is probably none already
   }
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
     uint16_t dest = getRegisterAngularMode(REGISTER_X);
-    if (dest == amNone) dest = currentAngularMode;
     switch(dest) {
+      case amNone   : dest = currentAngularMode; break; //converts from to the same, i.e. get to current angle mode
       case amRadian : dest = amGrad; break;
       case amMultPi : dest = amDMS;  break;
       case amGrad   : dest = amMultPi;break;
       case amDegree : dest = amRadian;break;
       case amDMS    : dest = amDegree;break;
       default:break;
-    }
+      }
   fnCvtFromCurrentAngularMode(dest);
   }
 }

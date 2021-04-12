@@ -303,80 +303,35 @@ void fnListXY(uint16_t unusedButMandatoryParameter) {
 
 
 //###################################################################################
-float auto_tick(float tick_int_f) {
-  //Obtain scaling of ticks, to about 20 intervals left to right.
-  //graphtype tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
-  snprintf(tmpString, TMP_STR_LENGTH, "%.1e", tick_int_f);
-  char tx[4];
-  tx[0] = tmpString[0];
-  tx[1] = tmpString[1];
-  tx[2] = tmpString[2];
-  tx[3] = 0;
-  //printf("tick0 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
-  tick_int_f = strtof (tx, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
-  //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
-  if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpString[0] = '0'; tmpString[2]='2'; } else
-  if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpString[0] = '0'; tmpString[2]='5'; } else
-  if(tick_int_f > 0.6 && tick_int_f <=  1.3)  {tmpString[0] = '1'; tmpString[2]='0'; } else
-  if(tick_int_f > 1.3 && tick_int_f <=  1.7)  {tmpString[0] = '1'; tmpString[2]='5'; } else
-  if(tick_int_f > 1.7 && tick_int_f <=  3.0)  {tmpString[0] = '2'; tmpString[2]='0'; } else
-  if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpString[0] = '5'; tmpString[2]='0'; } else
-  if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpString[0] = '7'; tmpString[2]='5'; }
-  tick_int_f = strtof (tmpString, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
-  //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
-  return tick_int_f;
-}
 
 
-void graph_axis (void){
-  #ifndef TESTSUITE_BUILD
-    graph_dx = 0; //XXX override manual setting from GRAPH to auto, temporarily. Can program these to fixed values.
-    graph_dy = 0;
-
-    if(graph_dx == 0) {
-      tick_int_x = auto_tick((x_max-x_min)/20);
-    } else {
-      tick_int_x = graph_dx;
-    }
-
-    if(graph_dy == 0) {
-      tick_int_y = auto_tick((y_max-y_min)/20);
-    } else {
-      tick_int_y = graph_dy;
-    }
-  #endif //TESTSUITE_BUILD
-  graphAxisDraw();
-}
-
-
-
-  void convertDigits(uint16_t ii, uint16_t * oo, char * outstr) {
-    switch (tmpString[ii]) {
-      case  48: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x80; break; //.
-      case  49: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x81; break; //.
-      case  50: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x82; break; //.
-      case  51: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x83; break; //.
-      case  52: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x84; break; //.
-      case  53: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x85; break; //.
-      case  54: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x86; break; //.
-      case  55: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x87; break; //.
-      case  56: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x88; break; //.
-      case  57: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x89; break; //.
-
-      case 120: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xb3; break; //x
-      case 121: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xb4; break; //y
-      case 'a': outstr[*oo++] = 0xa4; outstr[*oo++] = 0x9c; break; //a
-      case 's': outstr[*oo++] = 0xa4; outstr[*oo++] = 0xae; break; //s
-      case  58: outstr[*oo++] = 0xa2; outstr[*oo++] = 0x36; break; //:
-      case  43: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x8a; break; //+
-      case  45: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x8b; break; //-
-      case  46: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x1a; break; //.
-      case  47: outstr[*oo++] = 0xa4; outstr[*oo++] = 0x25; break; ///
-      case 116: outstr[*oo++] = 0xa0; outstr[*oo++] = 0x9c; break; //t
-      case 105: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xa4; break; //i
-      case 99 : outstr[*oo++] = 0xa4; outstr[*oo++] = 0x9e; break; //c
-      case 107: outstr[*oo++] = 0xa4; outstr[*oo++] = 0xa6; break; //k
-      default : outstr[*oo++] = tmpString[ii];
+    
+  void convertDigits(char * refstr, uint16_t ii, uint16_t * oo, char * outstr) {
+    switch (refstr[ii]) {
+      case  48: 
+      case  49: 
+      case  50: 
+      case  51: 
+      case  52: 
+      case  53: 
+      case  54: 
+      case  55: 
+      case  56: 
+      case  57: outstr[(*oo)++] = 0xa0; outstr[(*oo)++] = refstr[ii] + (0x80 - 48); break; //.
+      case 120: outstr[(*oo)++] = 0xa4; outstr[(*oo)++] = 0xb3; break; //x
+      case 121: outstr[(*oo)++] = 0xa4; outstr[(*oo)++] = 0xb4; break; //y
+      case 'a': outstr[(*oo)++] = 0xa4; outstr[(*oo)++] = 0x9c; break; //a
+      case 's': outstr[(*oo)++] = 0xa4; outstr[(*oo)++] = 0xae; break; //s
+      case  58: outstr[(*oo)++] = 0xa2; outstr[(*oo)++] = 0x36; break; //:
+      case  43: outstr[(*oo)++] = 0xa0; outstr[(*oo)++] = 0x8a; break; //+
+      case  45: outstr[(*oo)++] = 0xa0; outstr[(*oo)++] = 0x8b; break; //-
+      case  46: outstr[(*oo)++] = 0xa0; outstr[(*oo)++] = 0x1a; break; //.
+      case  47: outstr[(*oo)++] = 0xa4; outstr[(*oo)++] = 0x25; break; ///
+      case 116: outstr[(*oo)++] = 0xa0; outstr[(*oo)++] = 0x9c; break; //t
+      case 105: outstr[(*oo)++] = 0xa4; outstr[(*oo)++] = 0xa4; break; //i
+      case 99 : outstr[(*oo)++] = 0xa4; outstr[(*oo)++] = 0x9e; break; //c
+      case 107: outstr[(*oo)++] = 0xa4; outstr[(*oo)++] = 0xa6; break; //k
+      default : outstr[(*oo)++] = refstr[ii];
     }
   }
 
@@ -384,15 +339,15 @@ void graph_text(void){
   #ifndef TESTSUITE_BUILD
   uint32_t ypos = Y_POSITION_OF_REGISTER_T_LINE -11 + 12 * 5;
   uint16_t ii;
-  uint16_t oo;
-  char outstr[300];
+  static uint16_t oo;
+  static char outstr[300];
 
   snprintf(tmpString, TMP_STR_LENGTH, "y %.3f/tick  ",tick_int_y);
   ii = 0;
   oo = 0;
   outstr[0]=0;
   while (tmpString[ii] != 0) {
-    convertDigits(ii,&oo,outstr);
+    convertDigits(tmpString, ii,&oo,outstr);
     ii++;
   }
   outstr[oo]=0;
@@ -405,7 +360,7 @@ void graph_text(void){
   oo = 0;
   outstr[0]=0;
   while (tmpString[ii] != 0) {
-    convertDigits(ii,&oo,outstr);
+    convertDigits(tmpString, ii,&oo,outstr);
     ii++;
   }
   outstr[oo]=0;
@@ -421,7 +376,6 @@ void graph_text(void){
     minny = 0;
     minnx = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
   }
-
   tmpString[0]=0;                                  //If the axis is on the edge supress it, and label accordingly
   uint8_t axisdisp = 
            (!( yzero == SCREEN_HEIGHT_GRAPH-1  || yzero == minny) ? 2:0) + 
@@ -440,7 +394,7 @@ void graph_text(void){
     oo = 0;
     outstr[0]=0;
     while (tmpString[ii] != 0) {
-      convertDigits(ii,&oo,outstr);
+      convertDigits(tmpString, ii,&oo,outstr);
       ii++;
     }
   outstr[oo]=0;
@@ -495,6 +449,18 @@ void graph_text(void){
 //####################################################
 
 void graph_plotmem(void) {
+
+#if defined STATDEBUG && defined PC_BUILD
+  uint16_t i;
+  int16_t cnt1;
+  realToInt32(SIGMA_N, cnt1);
+  printf("Stored values\n");
+  for (i = 0; i < LIM && i < cnt1; ++i) { 
+    printf("i = %3u x = %9f; y = %9f\n",i,gr_x[i],gr_y[i]);
+  }
+#endif //STATDEBUG
+
+
   #ifndef TESTSUITE_BUILD
 
   uint16_t cnt, ix, statnum;
@@ -539,7 +505,6 @@ void graph_plotmem(void) {
     printf("statnum n=%d\n",statnum);
     #endif 
   }
-
     runFunction(ITM_XRMS);                                       //Determine the RMS of the y for an arbitrary integral offset
     runFunction(ITM_DROP);
     real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpString);

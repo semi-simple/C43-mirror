@@ -30,21 +30,14 @@
 //****************************************************************************************************************************
 
 #define   LIM              100     //Number of points; MUST be multiple of 4
-#define   graphtypeno        1     //1=float & 2=double
-#define   zoomfactor      0.05     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
+#define   zoomfactor      0.05f    // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line
+#define   USEFLOATING useFLOAT     // useFLOAT is faster then useREAL4 and used for graph reproduction
 
-
-#if (graphtypeno == 1)
-  #define graphtype   float  
-  #define FLoatingMax 1e38     //convenient round figures used for maxima and minima determination
-  #define FLoatingMin -1e38
-#elif (graphtypeno == 2)
-  #define graphtype   double
-  #define FLoatingMax 1e308
-  #define FLoatingMin -1e308
-#endif
+#define   graphtype      float  
+#define   FLoatingMax    1e38f     //convenient round figures used for maxima and minima determination
+#define   FLoatingMin    -1e38f
 
 
 //Memory structure
@@ -108,6 +101,10 @@ void    plotbox            (uint16_t xn, uint8_t yn);                // Plots li
 void    pixelline          (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    plotline           (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
 void    graphAxisDraw      (void);
+void    realToFloat        (const real_t *vv, graphtype *v);
+void    realToDouble1       (const real_t *vv, double *v);
+void    graph_axis         (void);
+float   auto_tick          (float tick_int_f);	
 
 
 //graph functions
@@ -129,7 +126,7 @@ void    fnStatDemo105      (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo107      (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo109      (uint16_t unusedButMandatoryParameter);
 void    graphPlotstat      (uint16_t selection);
-void    drawline           (uint16_t selection, double rr, double smi, real_t *aa0, real_t *aa1, real_t *aa2);
+void    drawline           (uint16_t selection, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2);
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
 void    fnPlotCloseSmi     (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);

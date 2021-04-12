@@ -177,6 +177,7 @@ uint8_t *countLiteralBytes(uint8_t *step) {
 
 
 uint8_t *findNextStep(uint8_t *step) {
+#ifndef SAVE_SPACE_DM42
   uint8_t item8 = *(step++);
   uint16_t item16;
 
@@ -1013,6 +1014,9 @@ uint8_t *findNextStep(uint8_t *step) {
           return NULL;
       }
   }
+#else //SAVE_SPACE_DM42
+  return 0; //SAVE_SPACE_DM42
+#endif //SAVE_SPACE_DM42
 }
 
 

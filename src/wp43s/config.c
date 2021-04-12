@@ -21,7 +21,6 @@
 #include "wp43s.h"
 
 
-
 /********************************************//**
  * \brief Sets the calc to meet Chinese standards
  *
@@ -751,11 +750,9 @@ void fnReset(uint16_t confirmation) {
 
     decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
 
-    #ifndef USEFLOAT
-      decContextDefault(&ctxtRealShort, DEC_INIT_DECSINGLE);
-      ctxtRealShort.digits = 6;
-      ctxtRealShort.traps  = 0;
-    #endif //USEFLOAT
+    decContextDefault(&ctxtRealShort, DEC_INIT_DECSINGLE);
+    ctxtRealShort.digits = 6;
+    ctxtRealShort.traps  = 0;
 
     decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
     ctxtReal39.digits = 39;
@@ -973,7 +970,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_103b"
+#define VERSION1 "_103d_609"
 
     #ifdef JM_LAYOUT_1A
       #define L1L2    "L1"
@@ -991,7 +988,7 @@ void fnReset(uint16_t confirmation) {
     fnDrop(0);
   
     #ifdef JM_LAYOUT_1A
-    fnStrtoX("C43 L1: main C43 template");
+    fnStrtoX("C43 L1: C43 template");
     #endif
     #ifdef JM_LAYOUT_2_DM42_STRICT
     fnStrtoX("C43 L42: unmodified DM42");
@@ -1001,7 +998,7 @@ void fnReset(uint16_t confirmation) {
 //    fnDrop(0);
 //    fnStrtoX("C43 LARGE TEXT");
 
-#ifdef NOT_NEEDED
+#ifndef SAVE_SPACE_DM42
     //JM                                                       //JM TEMPORARY TEST DATA IN REGISTERS
     fnStrtoX("Reg 11,12 & 13 have: The 3 cubes = 3.");
     fnStore(10);
@@ -1060,7 +1057,7 @@ void fnReset(uint16_t confirmation) {
     fnStrInputLongint("225251798594466661409915431774713195745814267044878909733007331390393510002687");
     fnStore(27);
     fnDrop(0);
-#endif //NOT_NEEDED
+#endif //SAVE_SPACE_DM42
 
     doRefreshSoftMenu = true;     //jm dr
     last_CM = 253;

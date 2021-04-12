@@ -159,7 +159,7 @@ bool_t lastshiftG = false;
         if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
           lastErrorCode = 0;
 
-          if(indexOfItems[item].func == addItemToBuffer) {
+          if(indexOfItems[item].func == addItemToBuffer && !((item>=ITM_0 && item <=ITM_9) || item == ITM_EXPONENT) ) { //JM added conditions, toherwise digits in menus do not work
             // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two
@@ -245,7 +245,7 @@ bool_t lastshiftG = false;
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
             addItemToNimBuffer(item);
           }
-          else if((calcMode == CM_NIM) && (item==ITM_DRG || item==ITM_DRGto) && !catalog) {   //JM
+          else if((calcMode == CM_NIM) && (item==ITM_DRG) && !catalog) {   //JM
             addItemToNimBuffer(item);
           }                                                                                   //JM
 
@@ -1401,10 +1401,13 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       calcMode = previousCalcMode;
       break;
 
-    case CM_PLOT_STAT:
-      calcMode = CM_NORMAL;
-      popSoftmenu();
-      break;
+      case CM_PLOT_STAT:
+        lastPlotMode = PLOT_NOTHING;
+        plotSelection = 0;
+        calcMode = CM_NORMAL;
+        fnUndo(0);
+        popSoftmenu();
+        break;
 
     case CM_GRAPH:                      //JM vv
       calcMode = previousCalcMode;

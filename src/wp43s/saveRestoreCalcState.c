@@ -20,7 +20,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         54  // Added PLOT_ZOOM
+#define BACKUP_VERSION         55  // Added x_min
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -214,6 +214,15 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&PLOT_ZMX,                           sizeof(PLOT_ZMX),                           BACKUP);
     save(&PLOT_ZMY,                           sizeof(PLOT_ZMY),                           BACKUP);
     save(&PLOT_ZOOM,                          sizeof(PLOT_ZOOM),                          BACKUP);
+    save(&plotmode,                           sizeof(plotmode),                           BACKUP);
+    save(&tick_int_x,                         sizeof(tick_int_x),                         BACKUP);
+    save(&tick_int_y,                         sizeof(tick_int_y),                         BACKUP);
+    save(&x_min,                              sizeof(x_min),                              BACKUP);
+    save(&x_max,                              sizeof(x_max),                              BACKUP);
+    save(&y_min,                              sizeof(y_min),                              BACKUP);
+    save(&y_max,                              sizeof(y_max),                              BACKUP);
+    save(&xzero,                              sizeof(xzero),                              BACKUP);
+    save(&yzero,                              sizeof(yzero),                              BACKUP);
     save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
@@ -434,6 +443,15 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&PLOT_ZMX,                           sizeof(PLOT_ZMX),                           BACKUP);
       restore(&PLOT_ZMY,                           sizeof(PLOT_ZMY),                           BACKUP);
       restore(&PLOT_ZOOM,                          sizeof(PLOT_ZOOM),                          BACKUP);
+      restore(&plotmode,                           sizeof(plotmode),                           BACKUP);
+      restore(&tick_int_x,                         sizeof(tick_int_x),                         BACKUP);
+      restore(&tick_int_y,                         sizeof(tick_int_y),                         BACKUP);
+      restore(&x_min,                              sizeof(x_min),                              BACKUP);
+      restore(&x_max,                              sizeof(x_max),                              BACKUP);
+      restore(&y_min,                              sizeof(y_min),                              BACKUP);
+      restore(&y_max,                              sizeof(y_max),                              BACKUP);
+      restore(&xzero,                              sizeof(xzero),                              BACKUP);
+      restore(&yzero,                              sizeof(yzero),                              BACKUP);
       restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);

@@ -62,9 +62,7 @@ static void cpyxDataTypeError(uint16_t unused) {
 // Cyx/Pyx calculation function
 //-----------------------------------------------------------------------------
 
-static void cyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realContext) {
-  bool_t inputAreIntegers = (realIsAnInteger(x) && realIsAnInteger(y));
-
+void logCyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realContext) {
   realSubtract(y, x, result, realContext);
   realAdd(result, const_1, result, realContext);
   WP34S_LnGamma(result, result, realContext);       // r = ln((y-x)!)
@@ -77,6 +75,12 @@ static void cyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realCon
 
   realSubtract(y, result, result, realContext);
   realSubtract(result, x, result, realContext);     // r = ln(y!) - ln((y-x)!) - ln(x!)
+}
+
+static void cyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realContext) {
+  bool_t inputAreIntegers = (realIsAnInteger(x) && realIsAnInteger(y));
+
+  logCyxReal(y, x, result, realContext);
 
   realExp(result, result, realContext);             // r = y! / ((y-x)! × x!)
 
@@ -86,7 +90,10 @@ static void cyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realCon
 }
 
 static void cyxLong(longInteger_t y, longInteger_t x, longInteger_t result) {
-  if(longIntegerCompareInt(x, 400) <= 0) {
+  if(longIntegerCompareInt(x, 0) == 0) {
+    intToLongInteger(1, result);
+  }
+  else if(longIntegerCompareInt(x, 400) <= 0) {
     uint32_t loops, counter;
 
     longIntegerToUInt(x, loops);
@@ -167,7 +174,10 @@ static void pyxReal(real_t *y, real_t *x, real_t *result, realContext_t *realCon
 }
 
 static void pyxLong(longInteger_t y, longInteger_t x, longInteger_t result) {
-  if(longIntegerCompareInt(x, 400) <= 0) {
+  if(longIntegerCompareInt(x, 0) == 0) {
+    intToLongInteger(1, result);
+  }
+  else if(longIntegerCompareInt(x, 400) <= 0) {
     uint32_t loops;
 
     longIntegerToUInt(x, loops);

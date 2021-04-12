@@ -39,6 +39,7 @@
 #include "wp43s.h"
 
 
+#define STAT_DISPLAY_ABCDEFG                      //to display helper functions A-H
 #undef STAT_CROSSCHECK
 #undef GAUSSF_MAX_OVERRIDE                      // Test setting
 
@@ -48,9 +49,12 @@ realContext_t *realContext;
 realContext_t *realContextForecast;
 
 //vv Temporary, used as cross check of the math; can be removed later
+
+#if defined STAT_DISPLAY_ABCDEFG || defined STAT_CROSSCHECK
+  double A, B, C, D, E, F, G, H;
+#endif
 #ifdef STAT_CROSSCHECK
   int32_t nn;
-  double A, B, C, D, E, F, G, H;
   double sumx,sumy,sumx2,sumx2y,sumy2,sumxy,sumlnxlny,sumx2lny,sumlnx,sumln2x,sumylnx,sumlny,sumln2y,sumxlny,sumlnyonx,sumx2ony,sum1onx,sum1onx2,sumxony,sum1ony,sum1ony2,sumx3,sumx4,maxy;
 #endif
 //^^
@@ -245,8 +249,12 @@ real_t SS,TT;
   realMultiply(SIGMA_X2, SIGMA_Y, &TT, realContext);
   realSubtract(&SS, &TT, BB, realContext);
   #ifdef STAT_CROSSCHECK
-    realToDouble(BB,&B);
+    realToDouble1(BB,&B);
     printf("§ B: %f %f\n",B,nn * sumx2y - sumx2 * sumy);
+  #endif //STAT_CROSSCHECK
+  #ifdef STAT_DISPLAY_ABCDEFG
+    realToDouble1(BB,&B);
+    printf("§ B: %f\n",B);
   #endif //STAT_CROSSCHECK
 
   //        C = nn * sumx3 - sumx2 * sumx;
@@ -254,8 +262,12 @@ real_t SS,TT;
   realMultiply(SIGMA_X2, SIGMA_X, &TT, realContext);
   realSubtract(&SS, &TT, CC, realContext);
   #ifdef STAT_CROSSCHECK
-    realToDouble(CC,&C);
+    realToDouble1(CC,&C);
     printf("§ C: %f %f\n",C,nn * sumx3 - sumx2 * sumx);
+  #endif //STAT_CROSSCHECK
+  #ifdef STAT_DISPLAY_ABCDEFG
+    realToDouble1(CC,&C);
+    printf("§ C: %f\n",C);
   #endif //STAT_CROSSCHECK
 
   //        D = nn * sumxy - sumx * sumy;
@@ -263,8 +275,12 @@ real_t SS,TT;
   realMultiply(SIGMA_X, SIGMA_Y, &TT, realContext);
   realSubtract(&SS, &TT, DD, realContext);
   #ifdef STAT_CROSSCHECK
-    realToDouble(DD,&D);
+    realToDouble1(DD,&D);
     printf("§ D: %f %f\n",D,nn * sumxy - sumx * sumy);
+  #endif //STAT_CROSSCHECK
+  #ifdef STAT_DISPLAY_ABCDEFG
+    realToDouble1(DD,&D);
+    printf("§ D: %f\n",D);
   #endif //STAT_CROSSCHECK
 }
 
@@ -278,8 +294,12 @@ real_t SS,TT,UU;
   realMultiply(SIGMA_X, SIGMA_X, &TT, realContext);
   realSubtract(&SS, &TT, AA, realContext);
   #ifdef STAT_CROSSCHECK
-    realToDouble(AA,&A);
+    realToDouble1(AA,&A);
     printf("§ A: %f %f\n",A,nn * sumx2 - sumx * sumx);
+  #endif //STAT_CROSSCHECK
+  #ifdef STAT_DISPLAY_ABCDEFG
+    realToDouble1(AA,&A);
+    printf("§ A: %f\n",A);
   #endif //STAT_CROSSCHECK
 
   //        E = nn * sumx4 - sumx2 * sumx2;
@@ -287,8 +307,12 @@ real_t SS,TT,UU;
   realMultiply(SIGMA_X2, SIGMA_X2, &TT, realContext);
   realSubtract(&SS, &TT, EE, realContext);
   #ifdef STAT_CROSSCHECK
-    realToDouble(EE,&E);
+    realToDouble1(EE,&E);
     printf("§ E: %f %f\n",E,nn * sumx4 - sumx2 * sumx2);
+  #endif //STAT_CROSSCHECK
+  #ifdef STAT_DISPLAY_ABCDEFG
+    realToDouble1(EE,&E);
+    printf("§ E: %f\n",E);
   #endif //STAT_CROSSCHECK
 
   //USING COMPONENTS OF BCD
@@ -301,8 +325,12 @@ real_t SS,TT,UU;
   realSubtract(&SS, &TT, &SS, realContext);
   realDivide  (&UU,&SS,FF,realContext);
   #ifdef STAT_CROSSCHECK
-    realToDouble(FF,&F);
+    realToDouble1(FF,&F);
     printf("§ F: %f %f\n",F,(A*B - C*D) / (A*E - C*C));
+  #endif //STAT_CROSSCHECK
+  #ifdef STAT_DISPLAY_ABCDEFG
+    realToDouble1(FF,&F);
+    printf("§ F: %f\n",F);
   #endif //STAT_CROSSCHECK
 
   //        G = (D - F * C) / A;
@@ -310,8 +338,12 @@ real_t SS,TT,UU;
   realSubtract(DD, &SS, &SS, realContext);
   realDivide  (&SS,AA,GG,realContext);
   #ifdef STAT_CROSSCHECK
-    realToDouble(GG,&G);
+    realToDouble1(GG,&G);
     printf("§ G: %f %f\n",G,(D - F * C) / A);
+  #endif //STAT_CROSSCHECK
+  #ifdef STAT_DISPLAY_ABCDEFG
+    realToDouble1(GG,&G);
+    printf("§ G: %f\n",G);
   #endif //STAT_CROSSCHECK
 }
 
@@ -349,30 +381,30 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
       smi = 0;  //smi = sqrt(sx*sx*sy*sy*(1-r*r)/(sx*sx+r*r*sy*sy)); 
 
     realToInt32 (SIGMA_N, nn);
-    realToDouble(SIGMA_X ,     &sumx     );
-    realToDouble(SIGMA_Y ,     &sumy     );
-    realToDouble(SIGMA_X2,     &sumx2    );
-    realToDouble(SIGMA_X2Y,    &sumx2y   );
-    realToDouble(SIGMA_Y2,     &sumy2    );
-    realToDouble(SIGMA_XY,     &sumxy    );
-    realToDouble(SIGMA_lnXlnY, &sumlnxlny);
-    realToDouble(SIGMA_lnX ,   &sumlnx   );
-    realToDouble(SIGMA_ln2X,   &sumln2x  );
-    realToDouble(SIGMA_YlnX,   &sumylnx  );
-    realToDouble(SIGMA_lnY ,   &sumlny   );
-    realToDouble(SIGMA_ln2Y,   &sumln2y  );
-    realToDouble(SIGMA_XlnY,   &sumxlny  );
-    realToDouble(SIGMA_X2lnY,  &sumx2lny );
-    realToDouble(SIGMA_lnYonX, &sumlnyonx);
-    realToDouble(SIGMA_X2onY,  &sumx2ony );
-    realToDouble(SIGMA_1onX,   &sum1onx  );
-    realToDouble(SIGMA_1onX2,  &sum1onx2 );
-    realToDouble(SIGMA_XonY,   &sumxony  );
-    realToDouble(SIGMA_1onY,   &sum1ony  );
-    realToDouble(SIGMA_1onY2,  &sum1ony2 );
-    realToDouble(SIGMA_X3,     &sumx3    );
-    realToDouble(SIGMA_X4,     &sumx4    );
-    realToDouble(SIGMA_YMAX,   &maxy     );   // ^^
+    realToDouble1(SIGMA_X ,     &sumx     );
+    realToDouble1(SIGMA_Y ,     &sumy     );
+    realToDouble1(SIGMA_X2,     &sumx2    );
+    realToDouble1(SIGMA_X2Y,    &sumx2y   );
+    realToDouble1(SIGMA_Y2,     &sumy2    );
+    realToDouble1(SIGMA_XY,     &sumxy    );
+    realToDouble1(SIGMA_lnXlnY, &sumlnxlny);
+    realToDouble1(SIGMA_lnX ,   &sumlnx   );
+    realToDouble1(SIGMA_ln2X,   &sumln2x  );
+    realToDouble1(SIGMA_YlnX,   &sumylnx  );
+    realToDouble1(SIGMA_lnY ,   &sumlny   );
+    realToDouble1(SIGMA_ln2Y,   &sumln2y  );
+    realToDouble1(SIGMA_XlnY,   &sumxlny  );
+    realToDouble1(SIGMA_X2lnY,  &sumx2lny );
+    realToDouble1(SIGMA_lnYonX, &sumlnyonx);
+    realToDouble1(SIGMA_X2onY,  &sumx2ony );
+    realToDouble1(SIGMA_1onX,   &sum1onx  );
+    realToDouble1(SIGMA_1onX2,  &sum1onx2 );
+    realToDouble1(SIGMA_XonY,   &sumxony  );
+    realToDouble1(SIGMA_1onY,   &sum1ony  );
+    realToDouble1(SIGMA_1onY2,  &sum1ony2 );
+    realToDouble1(SIGMA_X3,     &sumx3    );
+    realToDouble1(SIGMA_X4,     &sumx4    );
+    realToDouble1(SIGMA_YMAX,   &maxy     );   // ^^
 
     #endif
 
@@ -382,14 +414,14 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
     fnStatSMI (SMI_);
 
     #ifdef STAT_CROSSCHECK
-      realToDouble(SMI_   &smi);   // sx*sx*sy*sy*(1.0-r*r)/(sx*sx+r*r*sy*sy); 
+      realToDouble1(SMI_   &smi);   // sx*sx*sy*sy*(1.0-r*r)/(sx*sx+r*r*sy*sy); 
       double x_,y_,sx,sy,sxy;
-      realToDouble(&M_X,  &x_ );
-      realToDouble(&M_Y,  &y_ );
-      realToDouble(RR_ ,  &r  );    // sxy / (sx * sy);
-      realToDouble(&S_X,  &sx );
-      realToDouble(&S_Y,  &sy );
-      realToDouble(&S_XY, &sxy);    // (1.0/(nn*(nn-1.0))) * ((nn*sumxy-sumx*sumy));
+      realToDouble1(&M_X,  &x_ );
+      realToDouble1(&M_Y,  &y_ );
+      realToDouble1(RR_ ,  &r  );    // sxy / (sx * sy);
+      realToDouble1(&S_X,  &sx );
+      realToDouble1(&S_Y,  &sy );
+      realToDouble1(&S_XY, &sxy);    // (1.0/(nn*(nn-1.0))) * ((nn*sumxy-sumx*sumy));
       printf("\nSelection:%i\n",selection);
       printf("Converted from 75 digit Real's to double float for display in the curveFitting module:\n");
       printf(">>> x_=%f\n",x_);
@@ -413,7 +445,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(&SS,&TT,aa0,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0,(sumx2 * sumy  - sumx * sumxy) / (nn * sumx2 - sumx * sumx));
         #endif //STAT_CROSSCHECK
 
@@ -427,7 +459,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(&SS,&TT,aa1,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,(nn  * sumxy - sumx * sumy ) / (nn * sumx2 - sumx * sumx));
         #endif //STAT_CROSSCHECK
 
@@ -450,7 +482,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r, (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) ));
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -475,7 +507,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realExp(aa0,aa0,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0,exp( (sumx2 * sumlny  - sumx * sumxlny) / (nn * sumx2 - sumx * sumx) ));
         #endif //STAT_CROSSCHECK
 
@@ -489,7 +521,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(&SS,&TT,aa1,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,(nn  * sumxlny - sumx * sumlny ) / (nn * sumx2 - sumx * sumx));
         #endif //STAT_CROSSCHECK
 
@@ -513,7 +545,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r, (nn * sumxlny - sumx*sumlny) / (sqrt(nn*sumx2-sumx*sumx) * sqrt(nn*sumln2y-sumlny*sumlny))); //(rEXP));
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -537,7 +569,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(&SS,&TT,aa0,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0,(sumln2x * sumy  - sumlnx * sumylnx) / (nn * sumln2x - sumlnx * sumlnx));
         #endif //STAT_CROSSCHECK
 
@@ -551,7 +583,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(&SS,&TT,aa1,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,(nn  * sumylnx - sumlnx * sumy ) / (nn * sumln2x - sumlnx * sumlnx));
         #endif //STAT_CROSSCHECK
 
@@ -575,7 +607,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r, (nn * sumylnx - sumlnx*sumy) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumy2-sumy*sumy))); //(rLOG));
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -600,7 +632,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realExp(aa0,aa0,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0,exp( (sumln2x * sumlny  - sumlnx * sumlnxlny) / (nn * sumln2x - sumlnx * sumlnx) ));
         #endif //STAT_CROSSCHECK
 
@@ -614,7 +646,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(&SS,&TT,aa1,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1, (nn  * sumlnxlny - sumlnx * sumlny ) / (nn * sumln2x - sumlnx * sumlnx));
         #endif //STAT_CROSSCHECK
 
@@ -638,7 +670,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r, (nn * sumlnxlny - sumlnx*sumlny) / (sqrt(nn*sumln2x-sumlnx*sumlnx) * sqrt(nn*sumln2y-sumlny*sumlny))); //(rEXP));
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -676,7 +708,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realExp(&BB,aa0,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0, exp (B) );
         #endif //STAT_CROSSCHECK
 
@@ -684,7 +716,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realExp(&CC,aa1,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,  exp (C) );
         #endif //STAT_CROSSCHECK
 
@@ -700,7 +732,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&SS,&TT,RR_,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r, sqrt ( (B * sumlny + C * sumlnyonx - 1.0/nn * sumlny * sumlny) / (sumln2y - 1.0/nn * sumlny * sumlny) )); //(rEXP));
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -725,7 +757,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&SS,&TT,aa0,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0,(sumx2 * sum1ony - sumx * sumxony) / (nn*sumx2 - sumx * sumx));
         #endif //STAT_CROSSCHECK
 
@@ -739,7 +771,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&SS,&TT,aa1,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,(nn * sumxony - sumx * sum1ony) / (nn * sumx2 - sumx * sumx));
         #endif //STAT_CROSSCHECK
 
@@ -756,7 +788,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realSquareRoot(&SS,RR_,realContext);
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r,sqrt ( (a0 * sum1ony + a1 * sumxony - 1.0/nn * sum1ony * sum1ony) / (sum1ony2 - 1.0/nn * sum1ony * sum1ony ))  );
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -777,14 +809,14 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         //      a2 = F; //a2 = (A*B - C*D) / (A*E - C*C) = F. Not in ReM, but the formula is correct and prevents duplicate code.
         realCopy (&FF,aa2);
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa2, &a2);
+          realToDouble1(aa2, &a2);
           printf("§ a2: %f %f\n",a2,F);
         #endif //STAT_CROSSCHECK
 
         //      a1 = G; //a1 = (D - a2 * C) / A = G; Not in ReM, but the formula is correct and prevents duplicate code.
         realCopy (&GG,aa1);
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,(D - a2 * C) / A);
         #endif //STAT_CROSSCHECK
 
@@ -795,7 +827,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realSubtract(&HH, &TT, &HH, realContext);
         realDivide  (&HH,SIGMA_N,aa0,realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0,1.0/nn * (sumy - a2 * sumx2 - a1 * sumx));
         #endif //STAT_CROSSCHECK
 
@@ -812,7 +844,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&SS, &TT,&SS,realContext); //R^2
         realSquareRoot(&SS, RR_, realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r,sqrt( (a0 * sumy + a1 * sumxy + a2 * sumx2y - 1.0/nn * sumy * sumy) / (sumy2 - 1.0/nn * sumy * sumy) ) );
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -845,14 +877,14 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realSubtract(&HH, &TT, &HH, realContext);
         realDivide  (&HH,SIGMA_N,&HH,realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(&HH, &H);
+          realToDouble1(&HH, &H);
           printf("§ H: %f %f\n",H,(1.0)/nn * (sumlny - F * sumx2 - G * sumx));
         #endif //STAT_CROSSCHECK
 
         //        a2 = (1.0)/F;
         realDivide  (const_1,&FF,aa2,realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa2, &a2);
+          realToDouble1(aa2, &a2);
           printf("§ a2: %f %f\n",a2,(1.0)/F);
         #endif //STAT_CROSSCHECK
 
@@ -861,7 +893,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&TT,const_2 ,&TT,realContext);
         realMultiply(&TT, aa2, aa1, realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,-G/(2.0) * a2);
         #endif //STAT_CROSSCHECK
 
@@ -871,14 +903,14 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realSubtract(&HH,&SS,aa0,realContext);
         realExp(aa0,aa0,realContext);           
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0, exp (H - F * a1 * a1));
         #endif //STAT_CROSSCHECK
 
         #ifdef GAUSSF_MAX_OVERRIDE
                 //        a0 = maxy;  // exp (H - F * a1 * a1); //maxy;
                 realCopy    (SIGMA_YMAX,aa0);
-                realToDouble(aa0, &a0);
+                realToDouble1(aa0, &a0);
                 printf("§ a0: %f %f\n",a0,maxy);
         #endif //GAUSSF_MAX_OVERRIDE
 
@@ -896,7 +928,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&SS, &TT,&SS,realContext); //R^2
         realSquareRoot(&SS, RR_, realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n", r,sqrt ( ( H * sumlny + G * sumxlny + F * sumx2lny - 1.0/nn * sumlny * sumlny ) / (sumln2y - 1.0/nn * sumlny * sumlny) ));
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -927,7 +959,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realMultiply(SIGMA_X2, SIGMA_1onY, &TT, realContext);
         realSubtract(&SS, &TT, &BB, realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(&BB, &B);
+          realToDouble1(&BB, &B);
           printf("§ B: %f %f\n",B,nn * sumx2ony - sumx2 * sum1ony);
         #endif //STAT_CROSSCHECK
 
@@ -936,7 +968,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realMultiply(SIGMA_X2, SIGMA_X, &TT, realContext);
         realSubtract(&SS, &TT, &CC, realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(&CC, &C);
+          realToDouble1(&CC, &C);
           printf("§ C: %f %f\n",C,nn * sumx3 - sumx * sumx2);
         #endif //STAT_CROSSCHECK
 
@@ -945,7 +977,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realMultiply(SIGMA_X, SIGMA_1onY, &TT, realContext);
         realSubtract(&SS, &TT, &DD, realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(&DD, &D);
+          realToDouble1(&DD, &D);
           printf("§ D: %f %f\n",D,nn * sumxony - sumx * sum1ony);
         #endif //STAT_CROSSCHECK
 
@@ -959,14 +991,14 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realSubtract(&HH, &TT, &HH, realContext);
         realDivide  (&HH,SIGMA_N,&HH,realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(&HH, &H);
+          realToDouble1(&HH, &H);
           printf("§ H: %f %f\n",H,(1.0)/nn * (sumlny - F * sumx2 - G * sumx));
         #endif //STAT_CROSSCHECK
 
         //        a0 = F;
         realCopy    (&FF,aa0);
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
+          realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0,F);
         #endif //STAT_CROSSCHECK
 
@@ -974,7 +1006,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&GG,const_2,&TT,realContext);
         realMultiply(&TT, aa0, aa1, realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa1, &a1);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,G/2.0 * a0);
         #endif //STAT_CROSSCHECK
 
@@ -983,7 +1015,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realMultiply(&SS,&FF,&SS,realContext);
         realSubtract(&HH,&SS,aa2,realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa2, &a2);
+          realToDouble1(aa2, &a2);
           printf("§ a2: %f %f\n",a2, H - F * a1 * a1);
         #endif //STAT_CROSSCHECK
 
@@ -1001,7 +1033,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide  (&SS, &TT,&SS,realContext); //R^2
         realSquareRoot(&SS, RR_, realContext);
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r, sqrt ( (H * sum1ony + G * sumxony + F * sumx2ony - 1.0/nn * sum1ony * sum1ony) / (sum1ony2 - 1.0/nn * sum1ony * sum1ony) ));
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK
@@ -1050,8 +1082,8 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realMultiply(aa1,&M_X,&SS,realContext);
         realSubtract(&M_Y,&SS,aa0,realContext);  //a0
         #ifdef STAT_CROSSCHECK
-          realToDouble(aa0, &a0);
-          realToDouble(aa1, &a1);
+          realToDouble1(aa0, &a0);
+          realToDouble1(aa1, &a1);
           printf("§ a1: %f %f\n",a1,1.0 / (2.0 * sxy) * ( sy * sy - sx * sx + sqrt( (sy * sy - sx * sx) * (sy * sy - sx * sx) + 4 * sxy * sxy) ));
           printf("§ a0: %f %f\n",a0,y_ - a1 * x_);
         #endif //STAT_CROSSCHECK
@@ -1076,7 +1108,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realDivide(RR_,&UU,RR_,realContext);            //r
 
         #ifdef STAT_CROSSCHECK
-          realToDouble(RR_, &r);
+          realToDouble1(RR_, &r);
           printf("§ r: %f %f\n",r, (nn * sumxy - sumx * sumy) / (sqrt (nn * sumx2 - sumx * sumx) * sqrt(nn * sumy2 - sumy * sumy) ));
           printf("§ r^2: %f \n",r*r);
         #endif //STAT_CROSSCHECK

@@ -410,7 +410,7 @@ clean_testSuite:
 -include $(DEPS_TESTSUITE)
 
 $(TESTSUITE_APP): CFLAGS += -DTESTSUITE_BUILD
-$(TESTSUITE_APP): $(OBJ_TESTSUITE)
+$(TESTSUITE_APP): version $(OBJ_TESTSUITE)
 	@echo -e "\n====> $(TESTSUITE_APP): binary/exe $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) $(SIM_LDFLAGS)
 

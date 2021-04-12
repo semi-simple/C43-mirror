@@ -297,6 +297,11 @@ $(BUILD_DIR)/dmcp:
 
 
 
+version:
+	tools/versionUpdate
+
+
+
 clean_generateConstants:
 	rm -rf $(BUILD_DIR)/generateConstants
 
@@ -420,7 +425,7 @@ clean_wp43s:
 
 -include $(DEPS_SIMULATOR)
 
-$(WP43S_APP): $(OBJ_SIMULATOR)
+$(WP43S_APP): version $(OBJ_SIMULATOR)
 	@echo -e "\n====> $(WP43S_APP): binary/exe $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_SIMULATOR) -o $(WP43S_APP) $(SIM_LDFLAGS)
 
@@ -465,7 +470,7 @@ $(BUILD_DIR)/dmcp/%.o: %.s | $(BUILD_DIR)/dmcp
 	@echo -e "\n====> $<: $@ <===="
 	$(DMCP_AS) $(DMCP_CFLAGS) $(CFLAGS) -c -o $@ $<
 
-$(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf: $(BUILD_DIR)/dmcp/forcecrc32 $(GMPLIB) $(OBJ_DMCP)
+$(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf: version $(BUILD_DIR)/dmcp/forcecrc32 $(GMPLIB) $(OBJ_DMCP)
 	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
 	$(DMCP_CC) $(OBJ_DMCP) $(DMCP_LDFLAGS) -o $@
 	$(DMCP_SIZE) $@

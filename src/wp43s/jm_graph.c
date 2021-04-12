@@ -328,7 +328,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 //###################################################################################
 //SOLVER
 void graph_solver(uint8_t nbr, float x_min, float x_max) {
-#ifndef SAVE_SPACE_DM42
+//#ifndef SAVE_SPACE_DM42
   #ifndef TESTSUITE_BUILD
   int16_t ix;
   int16_t oscillations = 0; 
@@ -874,7 +874,7 @@ EndIteration:
   running_program_jm =  running_temp;
   #endif
 
-#endif //SAVE_SPACE_DM42
+//#endif //SAVE_SPACE_DM42
 }
 
 
@@ -972,7 +972,7 @@ void fnGraph (uint16_t func){
               break;
 
     case 22:
-    #ifndef SAVE_SPACE_DM42
+//    #ifndef SAVE_SPACE_DM42
               fnStrtoX("DEMO: Rnn Xo X.SOLV:     ");
               fnStrtoX("DEMO: Rnn X0 X1 X.PLOT:  ");
               fnStrtoX("(R=10,12,14,16,18) (X0=0 & X1=0 default range)");
@@ -1013,7 +1013,7 @@ void fnGraph (uint16_t func){
               fnDrop(0);
 
               break;
-    #endif
+//    #endif //SAVE_SPACE_DM42
   	  default:;
      }
 

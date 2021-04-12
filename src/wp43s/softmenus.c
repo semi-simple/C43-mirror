@@ -428,8 +428,18 @@ TO_QSPI const int16_t menu_ASN_U[]       = { ITM_USER_ALPHA,                ITM_
                                              ITM_USER_PRGM,                 ITM_USER_USER,              ITM_USER_HOME,            ITM_USER_SIGMAPLUS,    ITM_NULL,                    ITM_NULL                     };
 
 
-TO_QSPI const int16_t menu_ASN[]         = { ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           ITM_USER_C43,             ITM_USER_V43,          ITM_USER_DM42,              ITM_USER_RESET,         /*ITM_JM_ASN*/
-                                             ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          ITM_USER_V43MIN,       ITM_USER_WP43S,             ITM_JM_SEEK,
+#ifdef SAVE_SPACE_DM42
+  #define CC_C43 ITM_NULL
+  #define CC_V43 ITM_NULL
+  #define CC_V43M ITM_NULL
+#else
+  #define CC_C43 ITM_USER_C43
+  #define CC_V43 ITM_USER_V43
+  #define CC_V43M ITM_USER_V43MIN
+#endif                                             
+
+TO_QSPI const int16_t menu_ASN[]         = { ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           CC_C43,                   CC_V43,                ITM_USER_DM42,              ITM_USER_RESET,         /*ITM_JM_ASN*/
+                                             ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          CC_V43M,               ITM_USER_WP43S,             ITM_JM_SEEK,
                                              -MNU_ASN_U,                    ITM_ASSIGN,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                   -MNU_ASN_N,
                                                                           
                                              USER_PRIM00U,                         USER_PRIM01U,                      USER_PRIM02U,                    USER_PRIM03U,                 USER_PRIM04U,                       USER_PRIM05U,  //JM USER

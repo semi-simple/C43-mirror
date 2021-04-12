@@ -322,18 +322,11 @@ void Setup_MultiPresses(int16_t result){
   int16_t tmp = 0;
   if(calcMode == CM_NORMAL) {
     switch(result) {
-      case ITM_EXIT1: tmp = ITM_CLAIM; break;           //Set up exit double click to EXITCLEAR
       case ITM_BACKSPACE: tmp = ITM_DROP; break;        //Set up backspace double click to DROP
       //case ITM_XEQ      : tmp = -MNU_XXEQ; break;     //XEQ XEQMENU, removed as it does not properly work on double clieck. It still accesses XEQ
       //case ITM_CHS      : tmp = ITM_XexY; break;      //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
-  } else {
-    switch(result) {
-      case ITM_EXIT1: tmp = ITM_CLAIM; break;           //Set up exit double click to EXITCLEAR
-      default:;
-    }
-
   }
 
 
@@ -395,20 +388,20 @@ void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up long
 	    switch(*result) {
 	      case ITM_XEQ      : longpressDelayedkey2=longpressDelayedkey1; longpressDelayedkey1 = -MNU_XXEQ; break;    //XEQ longpress to XEQMENU 
 	      case ITM_BACKSPACE:                                            longpressDelayedkey1 = ITM_CLN;   break;    //BACKSPACE longpress clears input buffer
-          case ITM_EXIT1    :                                            longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+          case ITM_EXIT1    :                                          longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
 	      default:;
 	    }
 	  } else
 		  if(calcMode == CM_AIM) {
 		    switch(*result) {
-              case ITM_BACKSPACE:                                          longpressDelayedkey1 = ITM_CLA;   break;     //BACKSPACE longpress clears input buffer
-              case ITM_EXIT1    :                                          longpressDelayedkey1 = ITM_CLAIM; break;     //EXIT longpress DOES CLAIM
-              case ITM_ENTER    :                                          longpressDelayedkey1 = ITM_XEDIT; break;
+              case ITM_BACKSPACE:                                      longpressDelayedkey1 = ITM_CLA;   break;     //BACKSPACE longpress clears input buffer
+              case ITM_EXIT1    :                                      longpressDelayedkey1 = ITM_CLAIM; break;     //EXIT longpress DOES CLAIM
+              case ITM_ENTER    :                                      longpressDelayedkey1 = ITM_XEDIT; break;
 		      default:;
 		    }
 		  } else {
 		      switch(*result) {
-                case ITM_EXIT1    :                                          longpressDelayedkey1 = ITM_CLAIM; break;     //EXIT longpress DOES CLAIM
+                case ITM_EXIT1    :                                    longpressDelayedkey1 = ITM_CLAIM; break;     //EXIT longpress DOES CLAIM
                 default:;
               }
 		    }

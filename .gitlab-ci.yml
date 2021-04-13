@@ -34,11 +34,11 @@ linux:
 windows:
   stage: build
   script:
-    - C:\git-sdk-64\msys2_shell.cmd -defterm -mingw64 -no-start -c "make -j8 rebuild DEST=gitlab; make dist_windows"
-#  artifacts:
-#    expire_in: 1 day
-#    paths:
-#      - wp43s-windows.zip
+    - C:\msys64\msys2_shell.cmd -defterm -mingw64 -no-start -here -c "make -j8 rebuild DEST=gitlab; make dist_windows"
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - wp43s-windows.zip
   tags:
     - wp43s_windows
 
@@ -76,8 +76,8 @@ upload:
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-dm42.zip ${PACKAGE_REGISTRY_URL}/wp43s-dm42-${CI_COMMIT_TAG}.zip
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-macos.zip ${PACKAGE_REGISTRY_URL}/wp43s-macos-${CI_COMMIT_TAG}.zip
-#    - |
-#      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-windows.zip ${PACKAGE_REGISTRY_URL}/wp43s-windows-${CI_COMMIT_TAG}.zip
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file wp43s-windows.zip ${PACKAGE_REGISTRY_URL}/wp43s-windows-${CI_COMMIT_TAG}.zip
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file docs/${RM_PACKAGE} ${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}
     - |
@@ -93,6 +93,7 @@ release:
   script:
     - |
       release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
+        --assets-link "{\"name\":\"Windows simulator\",\"url\":\"${PACKAGE_REGISTRY_URL}/wp43s-windows-${CI_COMMIT_TAG}\"}" \
         --assets-link "{\"name\":\"DM42 Firmware\",\"url\":\"${PACKAGE_REGISTRY_URL}/wp43s-dm42-${CI_COMMIT_TAG}\"}" \
         --assets-link "{\"name\":\"Reference Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}\"}" \
         --assets-link "{\"name\":\"Owner's Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}\"}"

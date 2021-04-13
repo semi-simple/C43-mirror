@@ -51,17 +51,9 @@
 
 
 
-
 //*************************
 //* Other defines         *
 //*************************
-#define YEARMONTH                                 "2021.03"
-#define VERSION                                   "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM YEARMONTH
-#define COPYRIGHT                                 "The WP43S team"
-#define WHO                                       "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v0.1" STD_SPACE_3_PER_EM YEARMONTH STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin"
-#define PROGRAM_NAME                              "WP43S"
-#define PROGRAM_VERSION                           "0.1"
-
 #define CHARS_PER_LINE                            80 // Used in the flag browser application
 
 #define NUMERIC_FONT_HEIGHT                       36 // In pixel. Used in the font browser application

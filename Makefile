@@ -226,7 +226,7 @@ dist_windows:	wp43s.exe
 	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
 	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
 	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
-#	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
+	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
 	mkdir -p $(MAC_DIST_DIR)/res/artwork $(MAC_DIST_DIR)/binaries/dmcp
@@ -294,6 +294,11 @@ $(BUILD_DIR)/ttf2RasterFonts:
 
 $(BUILD_DIR)/dmcp:
 	mkdir -p $@
+
+
+
+version:
+	tools/versionUpdate
 
 
 
@@ -405,7 +410,7 @@ clean_testSuite:
 -include $(DEPS_TESTSUITE)
 
 $(TESTSUITE_APP): CFLAGS += -DTESTSUITE_BUILD
-$(TESTSUITE_APP): $(OBJ_TESTSUITE)
+$(TESTSUITE_APP): version $(OBJ_TESTSUITE)
 	@echo -e "\n====> $(TESTSUITE_APP): binary/exe $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) $(SIM_LDFLAGS)
 
@@ -420,7 +425,7 @@ clean_wp43s:
 
 -include $(DEPS_SIMULATOR)
 
-$(WP43S_APP): $(OBJ_SIMULATOR)
+$(WP43S_APP): version $(OBJ_SIMULATOR)
 	@echo -e "\n====> $(WP43S_APP): binary/exe $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_SIMULATOR) -o $(WP43S_APP) $(SIM_LDFLAGS)
 
@@ -465,7 +470,7 @@ $(BUILD_DIR)/dmcp/%.o: %.s | $(BUILD_DIR)/dmcp
 	@echo -e "\n====> $<: $@ <===="
 	$(DMCP_AS) $(DMCP_CFLAGS) $(CFLAGS) -c -o $@ $<
 
-$(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf: $(BUILD_DIR)/dmcp/forcecrc32 $(GMPLIB) $(OBJ_DMCP)
+$(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf: version $(BUILD_DIR)/dmcp/forcecrc32 $(GMPLIB) $(OBJ_DMCP)
 	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
 	$(DMCP_CC) $(OBJ_DMCP) $(DMCP_LDFLAGS) -o $@
 	$(DMCP_SIZE) $@

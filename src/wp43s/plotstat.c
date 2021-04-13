@@ -38,6 +38,7 @@
 #include "statusBar.h"
 #include <math.h>
 #include <string.h>
+#include <time.h>
 
 #include "wp43s.h"
 

@@ -881,7 +881,9 @@ void WP34S_LU_decomposition(const real34Matrix_t *matrix, real34Matrix_t *lu, ui
   int i, j, k;
   int pvt;
   real_t max, t, u;
+  real_t *tmpMat;
 
+  const uint16_t m = matrix->header.matrixRows;
   const uint16_t n = matrix->header.matrixColumns;
 
   if(matrix->header.matrixRows != matrix->header.matrixColumns) {
@@ -894,13 +896,20 @@ void WP34S_LU_decomposition(const real34Matrix_t *matrix, real34Matrix_t *lu, ui
 
   if(matrix != lu) copyRealMatrix(matrix, lu);
 
+  tmpMat = allocWp43s(m * n * REAL_SIZE);
+  for(i = 0; i < n; i++) {
+    for(j = 0; j < n; j++) {
+      real34ToReal(&lu->matrixElements[i * n + j], &tmpMat[i * n + j]);
+    }
+  }
+
   for(k = 0; k < n; k++) {
     /* Find the pivot row */
     pvt = k;
-    real34ToReal(&lu->matrixElements[k * n + k], &u);
+    realCopy(&tmpMat[k * n + k], &u);
     realCopyAbs(&u, &max);
     for(j = k + 1; j < n; j++) {
-      real34ToReal(&lu->matrixElements[j * n + k], &t);
+      realCopy(&tmpMat[j * n + k], &t);
       realCopyAbs(&t, &u);
       if (realCompareGreaterThan(&u, &max)) {
         realCopy(&u, &max);
@@ -915,7 +924,7 @@ void WP34S_LU_decomposition(const real34Matrix_t *matrix, real34Matrix_t *lu, ui
       realMatrixSwapRows(lu, lu, k, pvt);
 
     /* Check for singular */
-    real34ToReal(&lu->matrixElements[k * n + k], &t);
+    realCopy(&tmpMat[k * n + k], &t);
     if(realIsZero(&t)) {
       realMatrixFree(lu);
       return;
@@ -923,23 +932,31 @@ void WP34S_LU_decomposition(const real34Matrix_t *matrix, real34Matrix_t *lu, ui
 
     /* Find the lower triangular elements for column k */
     for(i = k + 1; i < n; i++) {
-      real34ToReal(&lu->matrixElements[k * n + k], &t);
-      real34ToReal(&lu->matrixElements[i * n + k], &u);
+      realCopy(&tmpMat[k * n + k], &t);
+      realCopy(&tmpMat[i * n + k], &u);
       realDivide(&u, &t, &max, &ctxtReal39);
-      realToReal34(&max, &lu->matrixElements[i * n + k]);
+      realCopy(&max, &tmpMat[i * n + k]);
     }
     /* Update the upper triangular elements */
     for(i = k + 1; i < n; i++) {
       for(j = k + 1; j < n; j++) {
-        real34ToReal(&lu->matrixElements[i * n + k], &t);
-        real34ToReal(&lu->matrixElements[k * n + j], &u);
+        realCopy(&tmpMat[i * n + k], &t);
+        realCopy(&tmpMat[k * n + j], &u);
         realMultiply(&t, &u, &max, &ctxtReal39);
-        real34ToReal(&lu->matrixElements[i * n + j], &t);
+        realCopy(&tmpMat[i * n + j], &t);
         realSubtract(&t, &max, &u, &ctxtReal39);
-        realToReal34(&u, &lu->matrixElements[i * n + j]);
+        realCopy(&u, &tmpMat[i * n + j]);
       }
     }
   }
+
+  for(i = 0; i < n; i++) {
+    for(j = 0; j < n; j++) {
+      realToReal34(&tmpMat[i * n + j], &lu->matrixElements[i * n + j]);
+    }
+  }
+
+  freeWp43s(tmpMat, m * n * REAL_SIZE);
 }
 
 
@@ -983,7 +1000,7 @@ void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
     for(uint16_t i = 0; i < n; ++i) {
       real34ToReal(&lu.matrixElements[i * n + i], &u);
       if(p[i] != i) realChangeSign(&u);
-      realMultiply(&t, &u, &t, &ctxtReal39);
+      realMultiply(&t, &u, &t, &ctxtReal51);
     }
     realToReal34(&t, res);
   }

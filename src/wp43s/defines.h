@@ -874,12 +874,12 @@
   #define setWhitePixel(x, y)                bitblt24(x, 1, y, 1, BLT_ANDN, BLT_NONE)
   #define invert_Pixel(x, y)                 bitblt24(x, 1, y, 1, BLT_XOR,  BLT_NONE)
   #define beep(frequence, length)            {while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(frequence * 1000); sys_delay(length); stop_buzzer();}
-    #ifdef TWO_FILE_PGM
-      #define TO_QSPI                            __attribute__ ((section(".qspi")))
-    #else //TWO_FILE_PGM
-      #undef TO_QSPI
-      #define TO_QSPI
-    #endif //TWO_FILE_PGM
+  #undef TO_QSPI
+  #ifdef TWO_FILE_PGM
+    #define TO_QSPI                            __attribute__ ((section(".qspi")))
+  #else //TWO_FILE_PGM
+    #define TO_QSPI
+  #endif //TWO_FILE_PGM
 #endif // !DMCP_BUILD
 
 

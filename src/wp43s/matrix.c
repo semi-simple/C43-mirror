@@ -445,7 +445,7 @@ void showMatrixEditor() {
   if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
 
   font = &numericFont;
-  if((rows >= 4) || (cols >= 3) || (displayFormat != DF_ALL && displayFormatDigits > 3)) {
+  if((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3)) {
     font = &standardFont;
     fontHeight = STANDARD_FONT_HEIGHT;
     Y_POS = Y_POSITION_OF_REGISTER_X_LINE - STANDARD_FONT_HEIGHT;

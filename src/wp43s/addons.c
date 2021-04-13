@@ -493,12 +493,17 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
       fnCvtFromCurrentAngularMode(AMODE);
       fnAngularMode(AMODE);
     }
+  
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      fnKeyDotD(0);
+    }
 
-//    fnKeyDotD(0);
-//    fnCvtFromCurrentAngularMode(AMODE);
     fnAngularMode(AMODE);
-    fnCvtToCurrentAngularMode(getRegisterAngularMode(REGISTER_X));
-
+    if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      if(getRegisterAngularMode(REGISTER_X) == amNone)
+        setRegisterAngularMode(REGISTER_X, AMODE);
+      fnCvtToCurrentAngularMode(getRegisterAngularMode(REGISTER_X));
+    }
   }
   #ifndef TESTSUITE_BUILD
     fnRefreshState();

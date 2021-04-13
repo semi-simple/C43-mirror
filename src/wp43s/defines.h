@@ -877,9 +877,9 @@
     #ifdef TWO_FILE_PGM
       #define TO_QSPI                            __attribute__ ((section(".qspi")))
     #else //TWO_FILE_PGM
+      #undef TO_QSPI
       #define TO_QSPI
     #endif //TWO_FILE_PGM
-  //#define TO_QSPI
 #endif // !DMCP_BUILD
 
 

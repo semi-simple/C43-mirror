@@ -22,6 +22,7 @@
 
 #include <string.h>
 #include "bufferize.h"
+#include "charString.h"
 #include "constantPointers.h"
 #include "debug.h"
 #include "decNumberWrappers.h"
@@ -45,6 +46,8 @@
 #ifndef TESTSUITE_BUILD
 real34Matrix_t        openMatrixMIMPointer;
 bool_t                matEditMode;
+uint16_t              scrollRow;
+uint16_t              scrollColumn;
 #endif // TESTSUITE_BUILD
 
 /********************************************//**
@@ -134,6 +137,7 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
     setJRegisterAsInt(true, 0);
     aimBuffer[0] = 0;
     nimBufferDisplay[0] = 0;
+    scrollRow = scrollColumn = 0;
     showMatrixEditor();
   }
   else {
@@ -365,6 +369,10 @@ void showMatrixEditor() {
   int rows = openMatrixMIMPointer.header.matrixRows;
   int cols = openMatrixMIMPointer.header.matrixColumns;
   int16_t Y_POS = Y_POSITION_OF_REGISTER_X_LINE;
+  int16_t elementWidth = 0, width = 0;
+  const font_t *font;
+  int16_t fontHeight = NUMERIC_FONT_HEIGHT;
+  int16_t maxWidth = MATRIX_LINE_WIDTH_LARGE - 20;
 
   Y_POS = Y_POSITION_OF_REGISTER_X_LINE - NUMERIC_FONT_HEIGHT;
 
@@ -374,6 +382,9 @@ void showMatrixEditor() {
     cols = rows;
     rows = 1;
   }
+
+  int maxCols = cols;
+  int maxRows = rows;
 
   //tbd: Implement right behavior (add row, add col on change)
   if (!getSystemFlag(FLAG_GROW)) {
@@ -401,28 +412,98 @@ void showMatrixEditor() {
   int16_t matSelCol = getJRegisterAsInt(true);
 
   videoMode_t vm = vmNormal;
-  for(int i = 0; i < rows; i++) {
-    showString("[", &numericFont, 1, Y_POS - (rows -1 - i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
-    for(int j = 0; j< cols; j++) {
-      real34ToDisplayString(&openMatrixMIMPointer.matrixElements[i*cols+j], amNone, tmpString, &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
-      if (matSelRow == i && matSelCol == j) {
-        vm = vmReverse;
-      } else {
+
+  if(matSelCol == 0 || cols <= 4) {
+    scrollColumn = 0;
+  }
+  else if(matSelCol == cols - 1) {
+    scrollColumn = matSelCol - 3;
+  }
+  else if(matSelCol < scrollColumn + 1) {
+    scrollColumn = matSelCol - 1;
+  }
+  else if(matSelCol > scrollColumn + 2) {
+    scrollColumn = matSelCol - 2;
+  }
+
+  if(matSelRow == 0 || rows <= 5) {
+    scrollRow = 0;
+  }
+  else if(matSelRow == rows - 1) {
+    scrollRow = matSelRow - 4;
+  }
+  else if(matSelRow < scrollRow + 1) {
+    scrollRow = matSelRow - 1;
+  }
+  else if(matSelRow > scrollRow + 3) {
+    scrollRow = matSelRow - 3;
+  }
+
+  clearRegisterLine(REGISTER_X, true, true);
+  clearRegisterLine(REGISTER_Y, true, true);
+  if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
+  if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
+
+  font = &numericFont;
+  if((rows >= 4) || (cols >= 3) || (displayFormat != DF_ALL && displayFormatDigits > 3)) {
+    font = &standardFont;
+    fontHeight = STANDARD_FONT_HEIGHT;
+    Y_POS = Y_POSITION_OF_REGISTER_X_LINE - STANDARD_FONT_HEIGHT;
+    maxWidth = MATRIX_LINE_WIDTH_SMALL - 20;
+  }
+  if(rows > 5) maxRows = 5;
+  if(cols > 4) maxCols = 4;
+
+  for(int i = 0; i < maxRows; i++) {
+    for(int j = 0; j< maxCols; j++) {
+      bool_t neg = real34IsNegative(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
+      tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
+      real34SetPositiveSign(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
+      real34ToDisplayString(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn], amNone, tmpString, font, maxWidth, 5, true, STD_SPACE_4_PER_EM);
+      if(neg) real34SetNegativeSign(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
+      width = stringWidth(tmpString, font, true, true) + 1;
+      if(elementWidth < width) elementWidth = width;
+    }
+  }
+  if(elementWidth > maxWidth) elementWidth = maxWidth;
+
+  for(int i = 0; i < maxRows; i++) {
+    showString((maxRows == 1) ? "[" : (i == 0) ? STD_MAT_TL : (i + 1 == maxRows) ? STD_MAT_BL : STD_MAT_ML, font, 1, Y_POS - (maxRows -1 - i) * fontHeight, vmNormal, true, false);
+    for(int j = 0; j< maxCols; j++) {
+      if(((i == maxRows - 1) && (rows > maxRows + scrollRow)) || ((j == maxCols - 1) && (cols > maxCols + scrollColumn)) || ((i == 0) && (scrollRow > 0)) || ((j == 0) && (scrollColumn > 0))) {
+        strcpy(tmpString, STD_ELLIPSIS);
         vm = vmNormal;
       }
-      showString(tmpString, &numericFont, 5 + j * MATRIX_LINE_WIDTH_LARGE, Y_POS - (rows -1 -i) * NUMERIC_FONT_HEIGHT, vm, true, false);
+      else {
+        bool_t neg = real34IsNegative(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
+        tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
+        real34SetPositiveSign(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
+        real34ToDisplayString(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn], amNone, &tmpString[1], font, maxWidth, (font == &standardFont) ? 7 : 4, true, STD_SPACE_4_PER_EM);
+        if(neg) real34SetNegativeSign(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
+        if (matSelRow == (i + scrollRow) && matSelCol == (j + scrollColumn)) {
+          vm = vmReverse;
+        } else {
+          vm = vmNormal;
+        }
+      }
+      width = stringWidth(tmpString, font, true, true) + 1;
+      showString(tmpString, font, 5 + (j + 1) * (elementWidth + 20) - width, Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
     }
-    showString("]", &numericFont, 10 + cols * MATRIX_LINE_WIDTH_LARGE, Y_POS - (rows -1 -i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
+    showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, 10 + maxCols * (elementWidth + 20), Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
     if (colVector == true) {
-        showString("T", &numericFont, 20 + cols * MATRIX_LINE_WIDTH_LARGE, Y_POS - (rows -1 -i) * NUMERIC_FONT_HEIGHT, vmNormal, true, false);
+      showString(STD_SUP_T, font, 20 + maxCols * (elementWidth + 20), Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
     }
   }
 
   sprintf(tmpString, "%" PRIi16";%" PRIi16"= %s", matSelRow+1, matSelCol+1, nimBufferDisplay);
-  if(aimBuffer[0] == 0)
-    real34ToDisplayString(&openMatrixMIMPointer.matrixElements[matSelRow*cols+matSelCol], amNone, &tmpString[strlen(tmpString)], &numericFont, 5, 10, true, STD_SPACE_4_PER_EM);
-  xCursor = showString(tmpString, &numericFont, 1, Y_POS + NUMERIC_FONT_HEIGHT, vmNormal, true, false) + 3;
-  yCursor = Y_POSITION_OF_NIM_LINE;
+  width = stringWidth(tmpString, &numericFont, true, true) + 1;
+  if(aimBuffer[0] == 0) {
+    real34ToDisplayString(&openMatrixMIMPointer.matrixElements[matSelRow*cols+matSelCol], amNone, &tmpString[strlen(tmpString)], &numericFont, SCREEN_WIDTH - width, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_4_PER_EM);
+    showString(tmpString, &numericFont, 0, Y_POSITION_OF_NIM_LINE, vmNormal, true, false);
+  }
+  else {
+    displayNim(tmpString, "", 0, 0);
+  }
 }
 
 void mimEnter(void) {

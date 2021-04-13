@@ -24,7 +24,8 @@
 #include "typeDefinitions.h"
 
 #ifndef TESTSUITE_BUILD
-  #define MATRIX_LINE_WIDTH_LARGE      40
+  #define MATRIX_LINE_WIDTH_LARGE      120
+  #define MATRIX_LINE_WIDTH_SMALL      90
   //#define MATRIX_CHAR_LEN              30
 #endif // TESTSUITE_BUILD
 

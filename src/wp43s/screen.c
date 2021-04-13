@@ -1121,48 +1121,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
             wLastBaseStandard = 0;
           }
 
-          if(stringWidth(nimBufferDisplay, &numericFont, true, true) + wLastBaseNumeric <= SCREEN_WIDTH - 16) { // 16 is the numeric font cursor width
-            xCursor = showString(nimBufferDisplay, &numericFont, 0, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
-            yCursor = Y_POSITION_OF_NIM_LINE;
-            cursorFont = &numericFont;
-
-            if(lastIntegerBase != 0) {
-              showString(lastBase, &numericFont, xCursor + 16, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
-            }
-          }
-          else if(stringWidth(nimBufferDisplay, &standardFont, true, true) + wLastBaseStandard <= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-            xCursor = showString(nimBufferDisplay, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-            yCursor = Y_POSITION_OF_NIM_LINE + 6;
-            cursorFont = &standardFont;
-
-            if(lastIntegerBase != 0) {
-              showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-            }
-          }
-          else {
-            w = stringByteLength(nimBufferDisplay) + 1;
-            xcopy(tmpString,        nimBufferDisplay, w);
-            xcopy(tmpString + 1500, nimBufferDisplay, w);
-            while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH) {
-              w = stringLastGlyph(tmpString);
-              tmpString[w] = 0;
-            }
-
-            if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) + wLastBaseStandard > SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-              btnClicked(NULL, "16"); // back space
-            }
-            else {
-              showString(tmpString, &standardFont, 0, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
-
-              xCursor = showString(tmpString + 1500 + w, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
-              yCursor = Y_POSITION_OF_NIM_LINE + 18;
-              cursorFont = &standardFont;
-
-              if(lastIntegerBase != 0) {
-                showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
-              }
-            }
-          }
+          displayNim(nimBufferDisplay, lastBase, wLastBaseNumeric, wLastBaseStandard);
         }
 
         else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tam.mode) {
@@ -1583,6 +1542,54 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
 
       if(regist == REGISTER_T) {
         lineTWidth = lineWidth;
+      }
+    }
+  }
+
+
+
+  void displayNim(const char *nim, const char *lastBase, int16_t wLastBaseNumeric, int16_t wLastBaseStandard) {
+    int16_t w;
+    if(stringWidth(nim, &numericFont, true, true) + wLastBaseNumeric <= SCREEN_WIDTH - 16) { // 16 is the numeric font cursor width
+      xCursor = showString(nim, &numericFont, 0, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
+      yCursor = Y_POSITION_OF_NIM_LINE;
+      cursorFont = &numericFont;
+
+      if(lastIntegerBase != 0) {
+        showString(lastBase, &numericFont, xCursor + 16, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
+      }
+    }
+    else if(stringWidth(nim, &standardFont, true, true) + wLastBaseStandard <= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+      xCursor = showString(nim, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
+      yCursor = Y_POSITION_OF_NIM_LINE + 6;
+      cursorFont = &standardFont;
+
+      if(lastIntegerBase != 0) {
+        showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
+      }
+    }
+    else {
+      w = stringByteLength(nim) + 1;
+      xcopy(tmpString,        nim, w);
+      xcopy(tmpString + 1500, nim, w);
+      while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH) {
+        w = stringLastGlyph(tmpString);
+        tmpString[w] = 0;
+      }
+
+      if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) + wLastBaseStandard > SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+        btnClicked(NULL, "16"); // back space
+      }
+      else {
+        showString(tmpString, &standardFont, 0, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
+
+        xCursor = showString(tmpString + 1500 + w, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+        yCursor = Y_POSITION_OF_NIM_LINE + 18;
+        cursorFont = &standardFont;
+
+        if(lastIntegerBase != 0) {
+          showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+        }
       }
     }
   }

@@ -93,8 +93,8 @@ release:
   script:
     - |
       release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
-        --assets-link "{\"name\":\"Windows simulator\",\"url\":\"${PACKAGE_REGISTRY_URL}/wp43s-windows-${CI_COMMIT_TAG}\"}" \
-        --assets-link "{\"name\":\"DM42 Firmware\",\"url\":\"${PACKAGE_REGISTRY_URL}/wp43s-dm42-${CI_COMMIT_TAG}\"}" \
+        --assets-link "{\"name\":\"Windows simulator\",\"url\":\"${PACKAGE_REGISTRY_URL}/wp43s-windows-${CI_COMMIT_TAG}.zip\"}" \
+        --assets-link "{\"name\":\"DM42 Firmware\",\"url\":\"${PACKAGE_REGISTRY_URL}/wp43s-dm42-${CI_COMMIT_TAG}.zip\"}" \
         --assets-link "{\"name\":\"Reference Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${RM_PACKAGE}\"}" \
         --assets-link "{\"name\":\"Owner's Manual\",\"url\":\"${PACKAGE_REGISTRY_URL}/${OM_PACKAGE}\"}"
   tags:

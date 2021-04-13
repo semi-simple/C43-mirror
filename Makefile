@@ -218,7 +218,7 @@ else
   DM_DIST_DIR = wp43s-dm42-$(CI_COMMIT_TAG)
 endif
 
-dmcp: $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm
+dmcp: version $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm
 
 dist_windows:	wp43s.exe
 	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/binaries/dmcp
@@ -236,11 +236,12 @@ dist_macos:	wp43s
 	cp res/wp43s_pre.css $(MAC_DIST_DIR)/res/
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
-dist_dm42:	dmcp
+dist_dm42:	dmcp $(BUILD_DIR)/wiki
 	mkdir -p $(DM_DIST_DIR)
-	cp build/dmcp/WP43S.pgm build/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
+	cp $(BUILD_DIR)/dmcp/WP43S.pgm $(BUILD_DIR)/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r res/offimg $(DM_DIST_DIR)
 	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
+	cp $(BUILD_DIR)/wiki/DM42-conversion.md $(DM_DIST_DIR)/readme.txt
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
 .PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite clean_dmcp all clean_all mrproper sources rebuild dmcp dist_macos dist_windows dist_dm42
@@ -299,6 +300,12 @@ $(BUILD_DIR)/dmcp:
 
 version:
 	tools/versionUpdate
+
+docs:
+	cd docs/code && make html
+
+$(BUILD_DIR)/wiki:
+	git clone https://gitlab.com/Over_score/wp43s.wiki.git $(BUILD_DIR)/wiki
 
 
 
@@ -470,7 +477,7 @@ $(BUILD_DIR)/dmcp/%.o: %.s | $(BUILD_DIR)/dmcp
 	@echo -e "\n====> $<: $@ <===="
 	$(DMCP_AS) $(DMCP_CFLAGS) $(CFLAGS) -c -o $@ $<
 
-$(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf: version $(BUILD_DIR)/dmcp/forcecrc32 $(GMPLIB) $(OBJ_DMCP)
+$(BUILD_DIR)/dmcp/$(WP43S_DMCP).elf: $(BUILD_DIR)/dmcp/forcecrc32 $(GMPLIB) $(OBJ_DMCP)
 	@echo -e "\n====> $(WP43S_DMCP): binary/exe $@ <===="
 	$(DMCP_CC) $(OBJ_DMCP) $(DMCP_LDFLAGS) -o $@
 	$(DMCP_SIZE) $@

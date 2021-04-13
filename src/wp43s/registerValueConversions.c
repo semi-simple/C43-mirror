@@ -502,7 +502,7 @@ void convertReal34MatrixRegisterToReal34Matrix(calcRegister_t regist, real34Matr
 }
 
 void convertReal34MatrixToReal34MatrixRegister(const real34Matrix_t *matrix, calcRegister_t regist) {
-  reallocateRegister(regist, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t)) + TO_BLOCKS(sizeof(dataBlock_t)), amNone);
+  reallocateRegister(regist, dtReal34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t)), amNone);
   xcopy(REGISTER_REAL34_MATRIX(regist), matrix, sizeof(dataBlock_t));
   xcopy(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist), matrix->matrixElements, (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t));
 }

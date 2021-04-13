@@ -220,12 +220,14 @@ endif
 
 dmcp: version $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm
 
-dist_windows:	wp43s.exe
+dist_windows:	wp43s.exe $(BUILD_DIR)/wiki
 	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/binaries/dmcp
 	cp wp43s.exe $(WIN_DIST_DIR)/
 	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
 	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
 	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
+	cp res/fonts/WP43S_StandardFont.ttf $(WIN_DIST_DIR)/
+	cp $(BUILD_DIR)/wiki/Windows-installation.md $(WIN_DIST_DIR)/readme.txt
 	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s

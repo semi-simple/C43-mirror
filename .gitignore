@@ -14,6 +14,8 @@ wp43s.sav
 wp43s.dSYM
 .DS_Store
 
+/src/wp43s/version.h
+
 # used by cLion
 .idea/
 

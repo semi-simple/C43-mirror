@@ -13,16 +13,14 @@ gmon.out
 wp43s.sav
 wp43s.dSYM
 .DS_Store
-
 /src/wp43s/version.h
 
 # used by cLion
 .idea/
 
-!binaries/windows/wp43s.exe
 !binaries/dmcp/keymap.bin
-!binaries/dmcp/testPgms.bin
 !binaries/dmcp/WP43S_qspi.bin
+!res/dmcp/testPgms.bin
 
 # / before the executable files else directories under src/ are ignored
 /testSuite

@@ -189,7 +189,7 @@ DEPS_TESTTTF2RASTERFONTS = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(
 GEN_SRC_CONSTANTPOINTERS = $(addprefix src/wp43s/, constantPointers.c constantPointers.h)
 GEN_SRC_RASTERFONTSDATA  = $(addprefix src/wp43s/, rasterFontsData.c)
 GEN_SRC_SOFTMENUCATALOGS = $(addprefix src/wp43s/, softmenuCatalogs.h)
-GEN_BIN_TESTPGMS         = $(addprefix binaries/dmcp/, testPgms.bin)
+GEN_BIN_TESTPGMS         = $(addprefix res/dmcp/, testPgms.bin)
 
 GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
 
@@ -221,28 +221,29 @@ endif
 dmcp: version $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm
 
 dist_windows:	wp43s.exe $(BUILD_DIR)/wiki
-	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/binaries/dmcp
+	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/res/dmcp
 	cp wp43s.exe $(WIN_DIST_DIR)/
 	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
-	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
+	cp res/dmcp/testPgms.bin $(WIN_DIST_DIR)/res/dmcp/
 	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
 	cp res/fonts/WP43S_StandardFont.ttf $(WIN_DIST_DIR)/
 	cp $(BUILD_DIR)/wiki/Windows-installation.md $(WIN_DIST_DIR)/readme.txt
 	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
-	mkdir -p $(MAC_DIST_DIR)/res/artwork $(MAC_DIST_DIR)/binaries/dmcp
+	mkdir -p $(MAC_DIST_DIR)/res/artwork $(MAC_DIST_DIR)/res/dmcp
 	cp wp43s $(MAC_DIST_DIR)/
 	cp res/artwork/*.png $(MAC_DIST_DIR)/res/artwork/
-	cp binaries/dmcp/testPgms.bin $(MAC_DIST_DIR)/binaries/dmcp/
+	cp res/dmcp/testPgms.bin $(MAC_DIST_DIR)/res/dmcp/
 	cp res/wp43s_pre.css $(MAC_DIST_DIR)/res/
+	cp res/fonts/WP43S_StandardFont.ttf $(MAC_DIST_DIR)/
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
 dist_dm42:	dmcp $(BUILD_DIR)/wiki
 	mkdir -p $(DM_DIST_DIR)
 	cp $(BUILD_DIR)/dmcp/WP43S.pgm $(BUILD_DIR)/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r res/offimg $(DM_DIST_DIR)
-	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
+	cp res/dmcp/keymap.bin res/dmcp/original_DM42_keymap.bin res/dmcp/testPgms.bin $(DM_DIST_DIR)
 	cp $(BUILD_DIR)/wiki/DM42-installation.md $(DM_DIST_DIR)/readme.txt
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 

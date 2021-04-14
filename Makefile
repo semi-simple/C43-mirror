@@ -243,7 +243,7 @@ dist_dm42:	dmcp $(BUILD_DIR)/wiki
 	cp $(BUILD_DIR)/dmcp/WP43S.pgm $(BUILD_DIR)/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r res/offimg $(DM_DIST_DIR)
 	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
-	cp $(BUILD_DIR)/wiki/DM42-conversion.md $(DM_DIST_DIR)/readme.txt
+	cp $(BUILD_DIR)/wiki/DM42-installation.md $(DM_DIST_DIR)/readme.txt
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
 .PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite clean_dmcp all clean_all mrproper sources rebuild dmcp dist_macos dist_windows dist_dm42

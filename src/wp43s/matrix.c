@@ -992,14 +992,14 @@ void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
     return;
   }
 
-  p = allocWp43s(matrix->header.matrixRows * sizeof(uint16_t));
+  p = allocWp43s(TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
 
   WP34S_LU_decomposition(matrix, &lu, p);
   realCopy(const_1, &t);
   if(lu.matrixElements) {
     for(uint16_t i = 0; i < n; ++i) {
       real34ToReal(&lu.matrixElements[i * n + i], &u);
-      if(p[i] != i) realChangeSign(&u);
+      //if(p[i] != i) realChangeSign(&u);
       realMultiply(&t, &u, &t, &ctxtReal51);
     }
     realToReal34(&t, res);
@@ -1008,7 +1008,8 @@ void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
     real34Copy(const34_0, res);
   }
 
-  freeWp43s(p, matrix->header.matrixRows * sizeof(uint16_t));
+  freeWp43s(p, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+}
 }
 #endif
 

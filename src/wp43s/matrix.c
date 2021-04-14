@@ -1118,12 +1118,10 @@ static void WP34S_matrix_pivoting_solve(const real34Matrix_t *LU, real_t *b, uin
  */
 void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
   const uint16_t n = matrix->header.matrixColumns;
-	//decimal128 mat[MAX_SQUARE*MAX_SQUARE];
   real_t *x;
   real34Matrix_t lu;
   uint16_t *pivots;
   uint16_t i, j;
-	//decimal64 *base;
   real_t *b;
 
   if(matrix->header.matrixRows != matrix->header.matrixColumns) {
@@ -1161,6 +1159,40 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
   freeWp43s(x, res->header.matrixRows * REAL_SIZE);
   freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
   realMatrixFree(&lu);
+}
+
+
+
+/* Division */
+void divideRealMatrix(const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+
+  if(matrix != res) realMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    real34Divide(&matrix->matrixElements[i], x, &res->matrixElements[i]);
+  }
+}
+
+void divideRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
+  real34Matrix_t invX;
+
+  if(y->header.matrixColumns != x->header.matrixRows || x->header.matrixRows != x->header.matrixColumns) {
+    res->matrixElements = NULL; // Matrix mismatch
+    res->header.matrixRows = res->header.matrixColumns = 0;
+    return;
+  }
+
+  WP34S_matrix_inverse(x, &invX);
+  if(invX.matrixElements == NULL) {
+    if(y != res && x != res) {
+      res->matrixElements = NULL; // Singular matrix
+      res->header.matrixRows = res->header.matrixColumns = 0;
+    }
+    return;
+  }
+  multiplyRealMatrices(y, &invX, res);
 }
 #endif
 

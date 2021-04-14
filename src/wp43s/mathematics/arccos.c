@@ -123,42 +123,7 @@ void arccosLonI(void) {
 
 
 void arccosRema(void) {
-#ifndef TESTSUITE_BUILD
-  real34Matrix_t x;
-  real_t el;
-  bool_t fail = false;
-  uint16_t rows, cols;
-
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
-
-  rows = x.header.matrixRows;
-  cols = x.header.matrixColumns;
-
-  for(int i = 0; i < cols * rows; ++i) {
-    real34ToReal(&x.matrixElements[i], &el);
-    WP34S_Acos(&el, &el, &ctxtReal39);
-    convertAngleFromTo(&el, amRadian, currentAngularMode, &ctxtReal39);
-    if(realCompareAbsGreaterThan(&el, const_1)) {
-      if(!getSystemFlag(FLAG_SPCRES)) fail = true;
-      realToReal34(const_NaN, &x.matrixElements[i]);
-    }
-    else {
-      realToReal34(&el, &x.matrixElements[i]);
-    }
-  }
-
-  if(fail) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function arccosRema:", "|X| > 1", NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-  }
-  else {
-    convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
-  }
-
-  realMatrixFree(&x);
-#endif // TESTSUITE_BUILD
+  elementwiseRema(arccosReal);
 }
 
 

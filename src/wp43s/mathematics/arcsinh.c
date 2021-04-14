@@ -95,26 +95,7 @@ void arcsinhLonI(void) {
 
 
 void arcsinhRema(void) {
-#ifndef TESTSUITE_BUILD
-  real34Matrix_t x;
-  real_t el;
-  uint16_t rows, cols;
-
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
-
-  rows = x.header.matrixRows;
-  cols = x.header.matrixColumns;
-
-  for(int i = 0; i < cols * rows; ++i) {
-    real34ToReal(&x.matrixElements[i], &el);
-    ArcsinhReal(&el, &el, &ctxtReal51);
-    realToReal34(&el, &x.matrixElements[i]);
-  }
-
-  convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
-
-  realMatrixFree(&x);
-#endif // TESTSUITE_BUILD
+  elementwiseRema(arcsinhReal);
 }
 
 

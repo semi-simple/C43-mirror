@@ -89,41 +89,7 @@ void tanhLonI(void) {
 
 
 void tanhRema(void) {
-#ifndef TESTSUITE_BUILD
-  real34Matrix_t x;
-  real_t el;
-  bool_t fail = false;
-  uint16_t rows, cols;
-
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
-
-  rows = x.header.matrixRows;
-  cols = x.header.matrixColumns;
-
-  for(int i = 0; i < cols * rows; ++i) {
-    real34ToReal(&x.matrixElements[i], &el);
-    if(realIsInfinite(&el)) {
-      if(!getSystemFlag(FLAG_SPCRES)) fail = true;
-      realToReal34(const_NaN, &x.matrixElements[i]);
-    }
-    else {
-      WP34S_Tanh(&el, &el, &ctxtReal39);
-      realToReal34(&el, &x.matrixElements[i]);
-    }
-  }
-
-  if(fail) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function tanhRema:", "cannot use " STD_PLUS_MINUS STD_INFINITY " as element input of sinh when flag SPCRES is not set", NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-  }
-  else {
-    convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
-  }
-
-  realMatrixFree(&x);
-#endif // TESTSUITE_BUILD
+  elementwiseRema(tanhReal);
 }
 
 

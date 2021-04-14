@@ -127,42 +127,7 @@ void tanLonI(void) {
 
 
 void tanRema(void) {
-#ifndef TESTSUITE_BUILD
-  real34Matrix_t x;
-  real_t el;
-  bool_t fail = false;
-  uint16_t rows, cols;
-
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
-
-  rows = x.header.matrixRows;
-  cols = x.header.matrixColumns;
-
-  for(int i = 0; i < cols * rows; ++i) {
-    real_t sin, cos;
-    real34ToReal(&x.matrixElements[i], &el);
-    WP34S_Cvt2RadSinCosTan(&el, currentAngularMode, &sin, &cos, &el, &ctxtReal39);
-    if(realIsZero(&cos)) {
-      if(!getSystemFlag(FLAG_SPCRES)) fail = true;
-      realToReal34(const_NaN, &x.matrixElements[i]);
-    }
-    else {
-      realToReal34(&el, &x.matrixElements[i]);
-    }
-  }
-
-  if(fail) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function tanRema:", "At least one element is " STD_PLUS_MINUS "90" STD_DEGREE, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-  }
-  else {
-    convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
-  }
-
-  realMatrixFree(&x);
-#endif // TESTSUITE_BUILD
+  elementwiseRema(tanReal);
 }
 
 

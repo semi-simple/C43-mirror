@@ -197,6 +197,18 @@ TO_QSPI const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_
                                              ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,                  ITM_MVAR,
                                              ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
+
+#if defined SAVE_SPACE_DM42
+  #define ITM_D0 ITM_NULL
+  #define ITM_D1 ITM_NULL
+  #define ITM_D2 ITM_NULL
+#else
+  #define ITM_D0 ITM_STATDEMO0
+  #define ITM_D1 ITM_STATDEMO1
+  #define ITM_D2 ITM_STATDEMO2
+#endif
+
+
 TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_STDDEVWEIGHTED,       ITM_STDDEV,            ITM_SM,                      ITM_SUM,
                                              ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_STDDEVPOP,         ITM_SMW,                     ITM_NSIGMA,                         //JM added ITM_NSIGMA
                                              ITM_CLSIGMA,                   ITM_XG,                     ITM_SCATTFACT,            ITM_SCATTFACTp,        ITM_SCATTFACTm,              ITM_PLOT,
@@ -205,7 +217,7 @@ TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_
                                              ITM_SA,                        ITM_XRMS,                   ITM_XMAX,                 ITM_XMIN,              ITM_NULL,                    ITM_ORTHOF,
                                              ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                    ITM_BESTF,
                                              ITM_GAUSSF,                    ITM_CAUCHF,                 ITM_PARABF,               ITM_HYPF,              ITM_ROOTF,                   ITM_NULL,
-                                             ITM_STATDEMO0,                 ITM_STATDEMO1,              ITM_STATDEMO2,            ITM_STATDEM105,        ITM_STATDEM107,              ITM_STATDEM109                      };
+                                             ITM_D0,                        ITM_D1,                     ITM_D2,                   ITM_STATDEM105,        ITM_STATDEM107,              ITM_STATDEM109                      };
 
 TO_QSPI const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,           ITM_SIGMAy2,                 ITM_SIGMAy,
                                              ITM_NULL,                      ITM_SIGMAlnx,               ITM_SIGMAln2x,            ITM_SIGMAlnxy,         ITM_SIGMAln2y,               ITM_SIGMAlny,
@@ -381,23 +393,8 @@ TO_QSPI const int16_t menu_BASE[]        = { ITM_IP,                        ITM_
                                              ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
 
                                              ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+ 3, ITM_FB00+ 2, ITM_FB00+ 1, ITM_FB00+0,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+ 7, ITM_FB00+ 6, ITM_FB00+ 5, ITM_FB00+4,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+11, ITM_FB00+10, ITM_FB00+ 9, ITM_FB00+8,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+15, ITM_FB00+14, ITM_FB00+13, ITM_FB00+12,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+19, ITM_FB00+18, ITM_FB00+17, ITM_FB00+16,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+23, ITM_FB00+22, ITM_FB00+21, ITM_FB00+20,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+27, ITM_FB00+26, ITM_FB00+25, ITM_FB00+24,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+31, ITM_FB00+30, ITM_FB00+29, ITM_FB00+28,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+35, ITM_FB00+34, ITM_FB00+33, ITM_FB00+32,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+39, ITM_FB00+38, ITM_FB00+37, ITM_FB00+36,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+43, ITM_FB00+42, ITM_FB00+41, ITM_FB00+40,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+47, ITM_FB00+46, ITM_FB00+45, ITM_FB00+44,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+51, ITM_FB00+50, ITM_FB00+49, ITM_FB00+48,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+55, ITM_FB00+54, ITM_FB00+53, ITM_FB00+52,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+59, ITM_FB00+58, ITM_FB00+57, ITM_FB00+56,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+63, ITM_FB00+62, ITM_FB00+61, ITM_FB00+60,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_NULL   , ITM_NULL   ,ITM_NULL    , ITM_NULL  ,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_NULL   , ITM_NULL   ,ITM_NULL    , ITM_NULL  ,
+                                             ITM_1COMPL                , ITM_2COMPL, ITM_NULL,    ITM_NULL,    ITM_NULL,    ITM_NULL,    
+                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_NULL,    ITM_NULL,    ITM_NULL,    ITM_NULL,    
                                              
                                              ITM_SL1,     ITM_SR1,     ITM_RL1,      ITM_RR1,      ITM_RL,     ITM_RR,                 //JM POC BASE2 vv
                                              ITM_S06,     ITM_S08,     ITM_S16,      ITM_S32,      ITM_S64,    ITM_FWORD,     
@@ -442,29 +439,29 @@ TO_QSPI const int16_t menu_ASN[]         = { ITM_USER_DEFAULTS,             ITM_
                                              ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          CC_V43M,               ITM_USER_WP43S,             ITM_JM_SEEK,
                                              -MNU_ASN_U,                    ITM_ASSIGN,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                   -MNU_ASN_N,
                                                                           
-                                             USER_PRIM00U,                         USER_PRIM01U,                      USER_PRIM02U,                    USER_PRIM03U,                 USER_PRIM04U,                       USER_PRIM05U,  //JM USER
-                                             USER_SFTf00U,                         USER_SFTf01U,                      USER_SFTf02U,                    USER_SFTf03U,                 USER_SFTf04U,                       USER_SFTf05U,  //JM USER
-                                             USER_SFTg00U,                         USER_SFTg01U,                      USER_SFTg02U,                    USER_SFTg03U,                 USER_SFTg04U,                       USER_SFTg05U,  //JM USER
-                                                                                                                                   
-                                             USER_PRIM06U,                         USER_PRIM07U,                      USER_PRIM08U,                    USER_PRIM09U,                 USER_PRIM10U,                       USER_PRIM11U,  //JM USER
-                                             USER_SFTf06U,                         USER_SFTf07U,                      USER_SFTf08U,                    USER_SFTf09U,                 USER_SFTf10U,                       USER_SFTf11U,  //JM USER
-                                             USER_SFTg06U,                         USER_SFTg07U,                      USER_SFTg08U,                    USER_SFTg09U,                 USER_SFTg10U,                       USER_SFTg11U,  //JM USER
-                                                                                                                                   
-                                             USER_PRIM12U,                         USER_PRIM13U,                      USER_PRIM14U,                    USER_PRIM15U,                 USER_PRIM16U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf12U,                         USER_SFTf13U,                      USER_SFTf14U,                    USER_SFTf15U,                 USER_SFTf16U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg12U,                         USER_SFTg13U,                      USER_SFTg14U,                    USER_SFTg15U,                 USER_SFTg16U,                       ITM_NULL,  //JM USER
-/*                                           USER_PRIM17U,                         USER_PRIM18U,                      USER_PRIM19U,                    USER_PRIM20U,                 USER_PRIM21U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf17U,                         USER_SFTf18U,                      USER_SFTf19U,                    USER_SFTf20U,                 USER_SFTf21U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg17U,                         USER_SFTg18U,                      USER_SFTg19U,                    USER_SFTg20U,                 USER_SFTg21U,                       ITM_NULL,  //JM USER
-                                             USER_PRIM22U,                         USER_PRIM23U,                      USER_PRIM24U,                    USER_PRIM25U,                 USER_PRIM26U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf22U,                         USER_SFTf23U,                      USER_SFTf24U,                    USER_SFTf25U,                 USER_SFTf26U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg22U,                         USER_SFTg23U,                      USER_SFTg24U,                    USER_SFTg25U,                 USER_SFTg26U,                       ITM_NULL,  //JM USER
-                                             USER_PRIM27U,                         USER_PRIM28U,                      USER_PRIM29U,                    USER_PRIM30U,                 USER_PRIM31U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf27U,                         USER_SFTf28U,                      USER_SFTf29U,                    USER_SFTf30U,                 USER_SFTf31U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg27U,                         USER_SFTg28U,                      USER_SFTg29U,                    USER_SFTg30U,                 USER_SFTg31U,                       ITM_NULL,  //JM USER
-                                             USER_PRIM32U,                         USER_PRIM33U,                      USER_PRIM34U,                    USER_PRIM35U,                 USER_PRIM36U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf32U,                         USER_SFTf33U,                      USER_SFTf34U,                    USER_SFTf35U,                 USER_SFTf36U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg32U,                         USER_SFTg33U,                      USER_SFTg34U,                    USER_SFTg35U,                 USER_SFTg36U,                       ITM_NULL   //JM USER
+                                             USER_PRIM00U,                  USER_PRIM01U,               USER_PRIM02U,             USER_PRIM03U,          USER_PRIM04U,               USER_PRIM05U,  //JM USER
+                                             USER_SFTf00U,                  USER_SFTf01U,               USER_SFTf02U,             USER_SFTf03U,          USER_SFTf04U,               USER_SFTf05U,  //JM USER
+                                             USER_SFTg00U,                  USER_SFTg01U,               USER_SFTg02U,             USER_SFTg03U,          USER_SFTg04U,               USER_SFTg05U,  //JM USER
+/*                                                                                                                                                                                                                    
+                                             USER_PRIM06U,                  USER_PRIM07U,               USER_PRIM08U,             USER_PRIM09U,          USER_PRIM10U,               USER_PRIM11U,  //JM USER
+                                             USER_SFTf06U,                  USER_SFTf07U,               USER_SFTf08U,             USER_SFTf09U,          USER_SFTf10U,               USER_SFTf11U,  //JM USER
+                                             USER_SFTg06U,                  USER_SFTg07U,               USER_SFTg08U,             USER_SFTg09U,          USER_SFTg10U,               USER_SFTg11U,  //JM USER
+                                                                                                                                                                                                                    
+                                             USER_PRIM12U,                  USER_PRIM13U,               USER_PRIM14U,             USER_PRIM15U,          USER_PRIM16U,               ITM_NULL,  //JM USER
+                                             USER_SFTf12U,                  USER_SFTf13U,               USER_SFTf14U,             USER_SFTf15U,          USER_SFTf16U,               ITM_NULL,  //JM USER
+                                             USER_SFTg12U,                  USER_SFTg13U,               USER_SFTg14U,             USER_SFTg15U,          USER_SFTg16U,               ITM_NULL,  //JM USER
+                                             USER_PRIM17U,                  USER_PRIM18U,               USER_PRIM19U,             USER_PRIM20U,          USER_PRIM21U,               ITM_NULL,  //JM USER
+                                             USER_SFTf17U,                  USER_SFTf18U,               USER_SFTf19U,             USER_SFTf20U,          USER_SFTf21U,               ITM_NULL,  //JM USER
+                                             USER_SFTg17U,                  USER_SFTg18U,               USER_SFTg19U,             USER_SFTg20U,          USER_SFTg21U,               ITM_NULL,  //JM USER
+                                             USER_PRIM22U,                  USER_PRIM23U,               USER_PRIM24U,             USER_PRIM25U,          USER_PRIM26U,               ITM_NULL,  //JM USER
+                                             USER_SFTf22U,                  USER_SFTf23U,               USER_SFTf24U,             USER_SFTf25U,          USER_SFTf26U,               ITM_NULL,  //JM USER
+                                             USER_SFTg22U,                  USER_SFTg23U,               USER_SFTg24U,             USER_SFTg25U,          USER_SFTg26U,               ITM_NULL,  //JM USER
+                                             USER_PRIM27U,                  USER_PRIM28U,               USER_PRIM29U,             USER_PRIM30U,          USER_PRIM31U,               ITM_NULL,  //JM USER
+                                             USER_SFTf27U,                  USER_SFTf28U,               USER_SFTf29U,             USER_SFTf30U,          USER_SFTf31U,               ITM_NULL,  //JM USER
+                                             USER_SFTg27U,                  USER_SFTg28U,               USER_SFTg29U,             USER_SFTg30U,          USER_SFTg31U,               ITM_NULL,  //JM USER
+                                             USER_PRIM32U,                  USER_PRIM33U,               USER_PRIM34U,             USER_PRIM35U,          USER_PRIM36U,               ITM_NULL,  //JM USER
+                                             USER_SFTf32U,                  USER_SFTf33U,               USER_SFTf34U,             USER_SFTf35U,          USER_SFTf36U,               ITM_NULL,  //JM USER
+                                             USER_SFTg32U,                  USER_SFTg33U,               USER_SFTg34U,             USER_SFTg35U,          USER_SFTg36U,               ITM_NULL   //JM USER
  */
       };
 

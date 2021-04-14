@@ -71,7 +71,7 @@ void       fnInvertMatrix                 (uint16_t unusedParamButMandatory);
   void     WP34S_LU_decomposition         (const real34Matrix_t *matrix, real34Matrix_t *lu, uint16_t *p);
   void     realMatrixSwapRows             (const real34Matrix_t *matrix, real34Matrix_t *res, uint16_t a, uint16_t b);
   void     detRealMatrix                  (const real34Matrix_t *matrix, real34_t *res);
-  void     invertRealMatrix               (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
+  void     WP34S_matrix_inverse           (const real34Matrix_t *matrix, real34Matrix_t *res);
   void     divideRealMatrix               (const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res);
   void     divideRealMatrices             (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
 #endif // TESTSUITE_BUILD

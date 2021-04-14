@@ -306,6 +306,64 @@ void fnDeterminant(uint16_t unusedParamButMandatory) {
 
 
 
+/********************************************//**
+ * \brief Invert a square matrix
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnInvertMatrix(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    real34Matrix_t x, res;
+
+    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+    if(x.header.matrixRows != x.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+                x.header.matrixRows, x.header.matrixColumns);
+        moreInfoOnError("In function fnInvertMatrix:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      WP34S_matrix_inverse(&x, &res);
+      if(res.matrixElements) {
+        convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
+        realMatrixFree(&res);
+        setSystemFlag(FLAG_ASLIFT);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "attempt to invert a singular matrix");
+          moreInfoOnError("In function fnInvertMatrix:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+    }
+
+    realMatrixFree(&x);
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnInvertMatrix:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
+
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
+}
+
+
+
 #ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Initialize a real matrix
@@ -1010,6 +1068,99 @@ void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
 
   freeWp43s(p, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
 }
+
+
+
+/* Solve the linear equation Ax = b.
+ * We do this by utilising the LU decomposition passed in in A and solving
+ * the linear equation Ly = b for y, where L is the lower diagonal triangular
+ * matrix with unity along the diagonal.  Then we solve the linear system
+ * Ux = y, where U is the upper triangular matrix.
+ */
+static void WP34S_matrix_pivoting_solve(const real34Matrix_t *LU, real_t *b, uint16_t *pivot, real_t *x, realContext_t *realContext) {
+  const uint16_t n = LU->header.matrixColumns;
+  uint16_t i, k;
+  real_t r, t;
+
+  /* Solve the first linear equation Ly = b */
+  for(k = 0; k < n; k++) {
+    if(k != pivot[k]) {
+      real_t swap;
+      realCopy(&b[k], &swap);
+      realCopy(&b[pivot[k]], &b[k]);
+      realCopy(&swap, &b[pivot[k]]);
+    }
+    realCopy(&b[k], x + k);
+    for(i = 0; i < k; i++) {
+      real34ToReal(&LU->matrixElements[k * n + i], &r);
+      realMultiply(&r, x + i, &t, realContext);
+      realSubtract(x + k, &t, x + k, realContext);
+    }
+  }
+
+  /* Solve the second linear equation Ux = y */
+  for(k = n; k > 0; k--) {
+    --k;
+    for(i = k + 1; i < n; i++) {
+      real34ToReal(&LU->matrixElements[k * n + i], &r);
+      realMultiply(&r, x + i, &t, realContext);
+      realSubtract(x + k, &t, x + k, realContext);
+    }
+    real34ToReal(&LU->matrixElements[k * n + k], &r);
+    realDivide(x + k, &r, x + k, realContext);
+    ++k;
+  }
+}
+
+/* Invert a matrix
+ * Do this by calculating the LU decomposition and solving lots of systems
+ * of linear equations.
+ */
+void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
+  const uint16_t n = matrix->header.matrixColumns;
+	//decimal128 mat[MAX_SQUARE*MAX_SQUARE];
+  real_t *x;
+  real34Matrix_t lu;
+  uint16_t *pivots;
+  uint16_t i, j;
+	//decimal64 *base;
+  real_t *b;
+
+  if(matrix->header.matrixRows != matrix->header.matrixColumns) {
+    if(matrix != res) {
+      res->matrixElements = NULL; // Matrix is not square
+      res->header.matrixRows = res->header.matrixColumns = 0;
+    }
+    return;
+  }
+
+  pivots = allocWp43s(TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  WP34S_LU_decomposition(matrix, &lu, pivots);
+  if(lu.matrixElements == NULL) {
+    freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+    if(matrix != res) {
+      res->matrixElements = NULL; // Singular matrix
+      res->header.matrixRows = res->header.matrixColumns = 0;
+    }
+    return;
+  }
+
+  if(matrix != res) copyRealMatrix(matrix, res);
+
+  x = allocWp43s(res->header.matrixRows * REAL_SIZE);
+  b = allocWp43s(res->header.matrixRows * REAL_SIZE);
+  for(i = 0; i < n; i++) {
+    for(j = 0; j < n; j++)
+      realCopy((i == j) ? const_1 : const_0, &b[j]);
+    WP34S_matrix_pivoting_solve(&lu, b, pivots, x, &ctxtReal39);
+    for(j = 0; j < n; j++)
+      realToReal34(x + j, &res->matrixElements[j * n + i]);
+  }
+
+  freeWp43s(b, res->header.matrixRows * REAL_SIZE);
+  freeWp43s(x, res->header.matrixRows * REAL_SIZE);
+  freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  realMatrixFree(&lu);
 }
 #endif
 

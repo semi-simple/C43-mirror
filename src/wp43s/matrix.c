@@ -1011,3 +1011,106 @@ void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
   freeWp43s(p, matrix->header.matrixRows * sizeof(uint16_t));
 }
 #endif
+
+
+
+/* Elementwise function call */
+void elementwiseRema(void (*f)(void)) {
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t x;
+  const bool_t cpxres = getSystemFlag(FLAG_CPXRES);
+
+  clearSystemFlag(FLAG_CPXRES);
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+  for(int i = 0; i < x.header.matrixRows * x.header.matrixColumns; ++i) {
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    real34Copy(&x.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_X));
+    f();
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &x.matrixElements[i]);
+  }
+
+  convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
+  if(cpxres) setSystemFlag(FLAG_CPXRES);
+
+  realMatrixFree(&x);
+#endif // TESTSUITE_BUILD
+}
+
+void elementwiseRemaLonI(void (*f)(void)) {
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t y;
+  longInteger_t x;
+  const bool_t cpxres = getSystemFlag(FLAG_CPXRES);
+
+  clearSystemFlag(FLAG_CPXRES);
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
+  convertLongIntegerRegisterToLongInteger(REGISTER_X, x);
+
+  for(int i = 0; i < y.header.matrixRows * y.header.matrixColumns; ++i) {
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
+    real34Copy(&y.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_Y));
+    convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
+    f();
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &y.matrixElements[i]);
+  }
+
+  convertReal34MatrixToReal34MatrixRegister(&y, REGISTER_X);
+  if(cpxres) setSystemFlag(FLAG_CPXRES);
+
+  longIntegerFree(x);
+  realMatrixFree(&y);
+#endif // TESTSUITE_BUILD
+}
+
+void elementwiseRemaReal(void (*f)(void)) {
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t y;
+  real34_t x;
+  const bool_t cpxres = getSystemFlag(FLAG_CPXRES);
+
+  clearSystemFlag(FLAG_CPXRES);
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
+  real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &x);
+
+  for(int i = 0; i < y.header.matrixRows * y.header.matrixColumns; ++i) {
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    real34Copy(&y.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_Y));
+    real34Copy(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    f();
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &y.matrixElements[i]);
+  }
+
+  convertReal34MatrixToReal34MatrixRegister(&y, REGISTER_X);
+  if(cpxres) setSystemFlag(FLAG_CPXRES);
+
+  realMatrixFree(&y);
+#endif // TESTSUITE_BUILD
+}
+
+void elementwiseRemaShoI(void (*f)(void)) {
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t y;
+  uint64_t x; uint32_t base; int16_t sign;
+  const bool_t cpxres = getSystemFlag(FLAG_CPXRES);
+
+  clearSystemFlag(FLAG_CPXRES);
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
+  convertShortIntegerRegisterToUInt64(REGISTER_X, &sign, &x);
+  base = getRegisterShortIntegerBase(REGISTER_X);
+
+  for(int i = 0; i < y.header.matrixRows * y.header.matrixColumns; ++i) {
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
+    real34Copy(&y.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_Y));
+    convertUInt64ToShortIntegerRegister(sign, x, base, REGISTER_X);
+    f();
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &y.matrixElements[i]);
+  }
+
+  convertReal34MatrixToReal34MatrixRegister(&y, REGISTER_X);
+  if(cpxres) setSystemFlag(FLAG_CPXRES);
+
+  realMatrixFree(&y);
+#endif // TESTSUITE_BUILD
+}

@@ -76,4 +76,9 @@ void       fnInvertMatrix                 (uint16_t unusedParamButMandatory);
   void     divideRealMatrices             (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
 #endif // TESTSUITE_BUILD
 
+void       elementwiseRema                (void (*f)(void));
+void       elementwiseRemaLonI            (void (*f)(void));
+void       elementwiseRemaReal            (void (*f)(void));
+void       elementwiseRemaShoI            (void (*f)(void));
+
 #endif // MATRIX_H

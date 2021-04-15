@@ -2914,6 +2914,10 @@ void setupUI(void) {
   g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
   g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
   g_signal_connect(frmCalc, "key_release_event", G_CALLBACK(keyReleased), NULL);  //JM CTRL
+      #ifdef RASPBERRY
+        gtk_window_set_decorated(GTK_WINDOW(frmCalc), FALSE);
+        gtk_window_set_position(GTK_WINDOW(frmCalc), GTK_WIN_POS_CENTER);
+      #endif // RASPBERRY
 
       gtk_widget_add_events(GTK_WIDGET(frmCalc), GDK_CONFIGURE);
 
@@ -4158,11 +4162,11 @@ void setupUI(void) {
       // The main window
       frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);
       gtk_window_set_default_size(GTK_WINDOW(frmCalc), 800, 480);
-      gtk_window_fullscreen(GTK_WINDOW(frmCalc));
-      gtk_window_set_decorated (GTK_WINDOW (frmCalc), FALSE);
+      gtk_window_set_decorated(GTK_WINDOW(frmCalc), FALSE);
+      gtk_window_set_position(GTK_WINDOW(frmCalc), GTK_WIN_POS_CENTER);
 
       gtk_widget_set_name(frmCalc, "mainWindow");
-      gtk_window_set_resizable (GTK_WINDOW(frmCalc), FALSE);
+      gtk_window_set_resizable(GTK_WINDOW(frmCalc), FALSE);
       g_signal_connect(frmCalc, "destroy", G_CALLBACK(destroyCalc), NULL);
       g_signal_connect(frmCalc, "key_press_event", G_CALLBACK(keyPressed), NULL);
 

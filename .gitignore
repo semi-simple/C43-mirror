@@ -66,6 +66,7 @@ gmp-6.2.1.tar.bz2
 !*/compil*
 !*Make*
 !*make*
+!*forcecrc32
 
 *iCloud*
 

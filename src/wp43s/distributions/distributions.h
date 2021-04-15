@@ -17,6 +17,8 @@
 /********************************************//**
  * \file distributions.h
  ***********************************************/
+#ifndef DISTRIBUTIONS_H
+#define DISTRIBUTIONS_H
 
 
 
@@ -33,3 +35,5 @@
 #include "poisson.h"
 #include "t.h"
 #include "weibull.h"
+
+#endif // DISTRIBUTIONS_H

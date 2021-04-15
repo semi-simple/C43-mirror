@@ -18,19 +18,12 @@
  * \file wp43s.h
  ***********************************************/
 
-#ifndef wp43s_H_INCLUDED
-  #define wp43s_H_INCLUDED
-
-  #include "defines.h"
+#ifndef WP43S_H
+#define WP43S_H
 
   #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 
-  #include <stdlib.h>
-  #include <stdio.h>
-  #include <string.h>
-  #include <time.h>
-  #include <stdint.h>
   #if (__linux__ == 1)
     #include <math.h>
   #endif // (__linux__ == 1)
@@ -61,6 +54,8 @@
   #define ERROR_MESSAGE_LENGTH    512 //JMMAX(325) 512          //JMMAX Temporarily reduced - ORG:512.
   #define DISPLAY_VALUE_LEN        80
 
+  #include "decNumberWrappers.h"
+  #include "mathematics/pcg_basic.h"
   #include "typeDefinitions.h"
 
   #if (IBM_DECIMAL == 1)
@@ -452,5 +447,4 @@
   //extern int16_t             previousItem;                    // Removed the autorepeat stuff
   #endif // DMCP_BUILD
 
-  #include "constantPointers.h"
-#endif // wp43s_H_INCLUDED
+#endif // WP43S_H

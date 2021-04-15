@@ -13,6 +13,10 @@
  * You should have received a copy of the GNU General Public License
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef STACK_H
+#define STACK_H
+
+#include <stdint.h>
 
 void fnClX         (uint16_t unusedButMandatoryParameter);
 void fnDrop        (uint16_t unusedButMandatoryParameter);
@@ -34,3 +38,5 @@ void fnClearStack  (uint16_t unusedButMandatoryParameter);
 void fnUndo        (uint16_t unusedButMandatoryParameter);
 void saveForUndo   (void);
 void undo          (void);
+
+#endif // STACK_H

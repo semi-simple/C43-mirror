@@ -18,6 +18,20 @@
  * \file log10.c
  ***********************************************/
 
+#include "mathematics/log10.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "integers.h"
+#include "items.h"
+#include "mathematics/toPolar.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

@@ -17,6 +17,10 @@
 /********************************************//**
  * \file items.h
  ***********************************************/
+#ifndef ITEMS_H
+#define ITEMS_H
+
+#include <stdint.h>
 
 
 #define ITM_NULL                         0
@@ -483,20 +487,20 @@
 #define ITM_SIGMAlny                   446
 #define ITM_SIGMAln2y                  447
 #define ITM_SIGMAxlny                  448
-#define ITM_SIGMAlnyonx                449
-#define ITM_SIGMAx2ony                 450
-#define ITM_SIGMA1onx                  451
-#define ITM_SIGMA1onx2                 452
-#define ITM_SIGMAxony                  453
-#define ITM_SIGMA1ony                  454
-#define ITM_SIGMA1ony2                 455
-#define ITM_SIGMAx3                    456
-#define ITM_SIGMAx4                    457
-#define ITM_0458                       458
-#define ITM_0459                       459
-#define ITM_0460                       460
-#define ITM_0461                       461
-#define ITM_0462                       462
+#define ITM_SIGMAx2lny                 449
+#define ITM_SIGMAlnyonx                450
+#define ITM_SIGMAx2ony                 451
+#define ITM_SIGMA1onx                  452
+#define ITM_SIGMA1onx2                 453
+#define ITM_SIGMAxony                  454
+#define ITM_SIGMA1ony                  455
+#define ITM_SIGMA1ony2                 456
+#define ITM_SIGMAx3                    457
+#define ITM_SIGMAx4                    458
+#define ITM_0458                       459
+#define ITM_0459                       460
+#define ITM_0460                       461
+#define ITM_0461                       462
 
 
 
@@ -2117,3 +2121,5 @@ void runFunction      (int16_t func);
 void fnToBeCoded      (void);
 void itemToBeCoded    (uint16_t unusedButMandatoryParameter);
 void fnNop            (uint16_t unusedButMandatoryParameter);
+
+#endif // ITEMS_H

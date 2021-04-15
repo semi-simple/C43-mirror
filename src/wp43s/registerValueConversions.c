@@ -18,6 +18,16 @@
  * \file registerValueConversions.c
  ***********************************************/
 
+#include "registerValueConversions.h"
+
+#include "charString.h"
+#include "constantPointers.h"
+#include "dateTime.h"
+#include "display.h"
+#include "error.h"
+#include "integers.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

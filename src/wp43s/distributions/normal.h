@@ -17,6 +17,11 @@
 /********************************************//**
  * \file normal.h
  ***********************************************/
+#ifndef NORMAL_H
+#define NORMAL_H
+
+#include "decNumberWrappers.h"
+#include <stdint.h>
 
 void fnNormalP   (uint16_t unusedButMandatoryParameter);
 void fnNormalL   (uint16_t unusedButMandatoryParameter);
@@ -33,3 +38,5 @@ void WP34S_Cdfu_Q  (const real_t *x, real_t *res, realContext_t *realContext);
 void WP34S_Cdf_Q   (const real_t *x, real_t *res, realContext_t *realContext);
 void WP34S_qf_q_est(const real_t *x, real_t *res, real_t* resY, realContext_t *realContext);
 void WP34S_Qf_Q    (const real_t *x, real_t *res, realContext_t *realContext);
+
+#endif // NORMAL_H

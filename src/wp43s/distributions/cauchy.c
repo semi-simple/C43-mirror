@@ -18,6 +18,16 @@
  * \file cauchy.c
  ***********************************************/
 
+#include "distributions/cauchy.h"
+
+#include "constantPointers.h"
+#include "error.h"
+#include "fonts.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

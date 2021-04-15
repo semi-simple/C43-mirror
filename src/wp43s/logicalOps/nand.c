@@ -18,6 +18,15 @@
  * \file nand.c
  ***********************************************/
 
+#include "logicalOps/nand.h"
+
+#include "debug.h"
+#include "error.h"
+#include "items.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

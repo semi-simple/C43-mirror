@@ -17,6 +17,13 @@
 /********************************************//**
  * \file bessel.h
  ***********************************************/
+#ifndef BESSEL_H
+#define BESSEL_H
+
+#include "decNumberWrappers.h"
+#include <stdint.h>
 
 void fnBessel            (uint16_t unusedButMandatoryParameter);
 void WP34S_BesselJ       (const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext);
+
+#endif // BESSEL_H

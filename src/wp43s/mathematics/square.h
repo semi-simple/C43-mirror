@@ -17,6 +17,11 @@
 /********************************************//**
  * \file square.h
  ***********************************************/
+#ifndef SQUARE_H
+#define SQUARE_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnSquare   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +35,5 @@ void squareCxma (void);
 void squareShoI (void);
 void squareReal (void);
 void squareCplx (void);
+
+#endif // SQUARE_H

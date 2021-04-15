@@ -18,6 +18,11 @@
  * \file max.c
  ***********************************************/
 
+#include "mathematics/max.h"
+
+#include "mathematics/compare.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 void fnMax(uint16_t unusedButMandatoryParameter) {

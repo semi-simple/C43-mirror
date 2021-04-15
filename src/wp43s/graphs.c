@@ -21,8 +21,10 @@
 /* C43 functions and routines written by JM, adapted from C43 to WP43S by JM */
 
 
-#include "wp43s.h"
+#include "constantPointers.h"
 #include "math.h"
+
+#include "wp43s.h"
 
 //#define STATDEBUG
 

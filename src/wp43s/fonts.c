@@ -18,6 +18,8 @@
  * \file fonts.c
  ***********************************************/
 
+#include "fonts.h"
+
 #include "wp43s.h"
 
 // Little hexadecimal font for generating a not found glyph

@@ -18,6 +18,15 @@
  * \file swapRealImaginary.c
  ***********************************************/
 
+#include "mathematics/swapRealImaginary.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "fonts.h"
+#include "items.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

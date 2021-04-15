@@ -18,6 +18,15 @@
  * \file neighb.c
  ***********************************************/
 
+#include "mathematics/neighb.h"
+
+#include "debug.h"
+#include "error.h"
+#include "integers.h"
+#include "mathematics/comparisonReals.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

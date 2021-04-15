@@ -43,8 +43,10 @@
 #ifndef __PGM_MAIN_H__
 #define __PGM_MAIN_H__
 
+#include "version.h"
+
 #define PROGRAM_NAME    "WP43C"
-#define PROGRAM_VERSION "0.1"
+#define PROGRAM_VERSION VERSION_SHORT
 
 #define DBG_PRINT
 

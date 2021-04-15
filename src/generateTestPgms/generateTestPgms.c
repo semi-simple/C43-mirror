@@ -18,6 +18,9 @@
  * \file generateTestPgms.c
  ***********************************************/
 
+#include "fonts.h"
+#include "items.h"
+
 #include "wp43s.h"
 
 
@@ -29,22 +32,6 @@ int main(int argc, char* argv[]) {
     (*strstr(argv[0], "/bin/")) = 0;
     chdir(argv[0]);
   #endif // CODEBLOCKS_OVER_SCORE
-
-  #ifdef __APPLE__
-    // we take the directory where the application is as the root for this application.
-    // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-    if(argc>=1) {
-      char *curdir = malloc(1000);
-      // find last /:
-      char *s = strrchr(argv[0], '/');
-      if(s != 0) {
-        // take the directory before the appname:
-        strncpy(curdir, argv[0], s-argv[0]);
-        chdir(curdir);
-        free(curdir);
-      }
-    }
-  #endif // __APPLE__
 
   uint8_t memory[65536], *currentStep;
   FILE *testPgms;
@@ -11368,9 +11355,9 @@ int main(int argc, char* argv[]) {
   *(currentStep++) = 255; // .END.
   *(currentStep++) = 255; // .END.
 
-  testPgms = fopen("DM42 binary/testPgms.bin", "wb");
+  testPgms = fopen("binaries/dmcp/testPgms.bin", "wb");
   if(testPgms == NULL) {
-    fprintf(stderr, "Cannot create file DM42 binary/testPgms.bin\n");
+    fprintf(stderr, "Cannot create file binaries/dmcp/testPgms.bin\n");
     exit(1);
   }
 
@@ -11379,7 +11366,7 @@ int main(int argc, char* argv[]) {
   fwrite(memory,      1, sizeOfPgms,         testPgms);
   fclose(testPgms);
 
-  printf("Test programs generated in\ndirectory: DM42 binary\nfile:      testPgms.bin\n");
+  printf("Test programs generated in\ndirectory: binaries/dmcp\nfile:      testPgms.bin\n");
 
   return 0;
 }

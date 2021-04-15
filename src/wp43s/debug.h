@@ -13,6 +13,17 @@
  * You should have received a copy of the GNU General Public License
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef DEBUG_H
+#define DEBUG_H
+
+#include "defines.h"
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+#ifdef PC_BUILD
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
+#endif // PC_BUILD
 
 #if (DEBUG_PANEL == 1)
   extern GtkWidget *lbl1[DEBUG_LINES], *lbl2[DEBUG_LINES];
@@ -84,3 +95,5 @@ char *eatSpacesMid                        (const char * ss);
   void initStackCheck   (unsigned char *begin, unsigned char *end, int size);
   void stackSmashingTest(void);
 #endif // PC_BUILD || TESTSUITE_BUILD
+
+#endif // DEBUG_H

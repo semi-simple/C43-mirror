@@ -18,6 +18,27 @@
  * \file config.c
  ***********************************************/
 
+#include "config.h"
+
+#include "browsers/fontBrowser.h"
+#include "bufferize.h"
+#include "charString.h"
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "gui.h"
+#include "items.h"
+#include "keyboard.h"
+#include "memory.h"
+#include "plotstat.h"
+#include "programming/manage.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+#include "stats.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 
@@ -566,9 +587,9 @@ void addTestPrograms(void) {
   #else // !DMCP_BUILD
     FILE *testPgms;
 
-    testPgms = fopen("DM42 binary/testPgms.bin", "rb");
+    testPgms = fopen("binaries/dmcp/testPgms.bin", "rb");
     if(testPgms == NULL) {
-      printf("Cannot open file DM42 binary/testPgms.bin\n");
+      printf("Cannot open file binaries/dmcp/testPgms.bin\n");
       *(beginOfProgramMemory)     = 255; // .END.
       *(beginOfProgramMemory + 1) = 255; // .END.
       firstFreeProgramByte = beginOfProgramMemory;

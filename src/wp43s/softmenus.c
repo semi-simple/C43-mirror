@@ -24,6 +24,18 @@
  * * 30000 < item < 39999  ==>  item without top and bottom line
  ***********************************************/
 
+#include "softmenus.h"
+
+#include "charString.h"
+#include "error.h"
+#include "gui.h"
+#include "items.h"
+#include "registers.h"
+#include "screen.h"
+#include "sort.h"
+#include <string.h>
+#include <stdlib.h>
+
 #include "wp43s.h"
 
 /*      Menu name                           <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
@@ -221,7 +233,7 @@ TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_
 
 TO_QSPI const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,           ITM_SIGMAy2,                 ITM_SIGMAy,
                                              ITM_NULL,                      ITM_SIGMAlnx,               ITM_SIGMAln2x,            ITM_SIGMAlnxy,         ITM_SIGMAln2y,               ITM_SIGMAlny,
-                                             ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_NULL,                 ITM_SIGMAlnyonx,       ITM_NULL,                    ITM_SIGMAylnx,
+                                             ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_SIGMAx2lny,           ITM_SIGMAlnyonx,       ITM_NULL,                    ITM_SIGMAylnx,
                                              ITM_SIGMAx2ony,                ITM_SIGMA1onx,              ITM_SIGMA1onx2,           ITM_SIGMAxony,         ITM_SIGMA1ony2,              ITM_SIGMA1ony,
                                              ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 

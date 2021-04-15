@@ -66,7 +66,29 @@ All the below: because both Last x and savestack does not work due to multiple s
 
 
 
+//#include "keyboard.h"
 
+//#include "bufferize.h"
+//#include "charString.h"
+//#include "constants.h"
+#include "constantPointers.h"
+//#include "debug.h"
+//#include "error.h"
+//#include "flags.h"
+//#include "gui.h"
+//#include "items.h"
+//#include "memory.h"
+//#include "plotstat.h"
+//#include "programming/manage.h"
+//#include "programming/nextStep.h"
+//#include "recall.h"
+//#include "registers.h"
+//#include "screen.h"
+//#include "softmenus.h"
+//#include "stack.h"
+#include <string.h>
+#include "typeDefinitions.h"
+//#include "ui/tam.h"
 
 #include "wp43s.h"
 

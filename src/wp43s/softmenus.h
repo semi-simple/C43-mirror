@@ -17,6 +17,12 @@
 /********************************************//**
  * \file softmenu.h
  ***********************************************/
+#ifndef SOFTMENUS_H
+#define SOFTMENUS_H
+
+#include "defines.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 uint8_t *getNthString           (uint8_t *ptr, int16_t n); // Starting with string 0 (the 1st string is returned for n=0)
 void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
@@ -37,3 +43,5 @@ void     fnDynamicMenu          (uint16_t unusedButMandatoryParameter);
 char    *dynmenuGetLabel        (int16_t menuitem);
 void     setCatalogLastPos      (void);
 void     fnDumpMenus            (uint16_t unusedButMandatoryParameter);  //JM
+
+#endif // SOFTMENUS_H

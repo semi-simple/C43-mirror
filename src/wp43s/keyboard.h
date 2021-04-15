@@ -17,6 +17,14 @@
 /********************************************//**
  * \file keyboard.h
  ***********************************************/
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
+
+#include <stdint.h>
+#ifdef PC_BUILD
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
+#endif // PC_BUILD
 
 void resetShiftState (void);  //JM
 void leavePem        (void);
@@ -60,3 +68,5 @@ void executeFunction(const char *data, int16_t item_);
   void btnPressed   (void *data);
   void btnReleased  (void *data);
 #endif // DMCP_BUILD
+
+#endif // KEYBOARD_H

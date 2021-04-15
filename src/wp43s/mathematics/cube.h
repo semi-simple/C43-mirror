@@ -17,6 +17,11 @@
 /********************************************//**
  * \file cube.h
  ***********************************************/
+#ifndef CUBE_H
+#define CUBE_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnCube   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +35,5 @@ void cubeCxma (void);
 void cubeShoI (void);
 void cubeReal (void);
 void cubeCplx (void);
+
+#endif // CUBE_H

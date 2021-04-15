@@ -17,6 +17,12 @@
 /********************************************//**
  * \file sin.h
  ***********************************************/
+#ifndef SIN_H
+#define SIN_H
+
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
 
 void fnSin   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +36,5 @@ void sinCxma (void);
 void sinReal (void);
 void sinCplx (void);
 void sinComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+#endif // SIN_H

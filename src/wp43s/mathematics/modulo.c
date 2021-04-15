@@ -18,6 +18,15 @@
  * \file modulo.c
  ***********************************************/
 
+#include "mathematics/modulo.h"
+
+#include "debug.h"
+#include "error.h"
+#include "integers.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

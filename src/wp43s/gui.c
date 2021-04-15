@@ -18,6 +18,21 @@
  * \file gui.c
  ***********************************************/
 
+#include "gui.h"
+
+#include "bufferize.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "items.h"
+#include "keyboard.h"
+#include "registers.h"
+#include "saveRestoreCalcState.h"
+#include "screen.h"
+#include "stack.h"
+#include <string.h>
+#include "typeDefinitions.h"
+
 #include "wp43s.h"
 
 #ifdef PC_BUILD

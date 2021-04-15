@@ -18,6 +18,13 @@
  * \file store.c
  ***********************************************/
 
+#include "store.h"
+
+#include "charString.h"
+#include "error.h"
+#include "mathematics/compare.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 

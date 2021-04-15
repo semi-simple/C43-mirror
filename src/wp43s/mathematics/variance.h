@@ -17,6 +17,11 @@
 /********************************************//**
  * \file mean.h
  ***********************************************/
+#ifndef VARIANCE_H
+#define VARIANCE_H
+
+#include "decNumberWrappers.h"
+#include <stdint.h>
 
 void fnWeightedSampleStdDev(uint16_t unusedButMandatoryParameter);
 void fnWeightedPopulationStdDev(uint16_t unusedButMandatoryParameter);
@@ -35,3 +40,5 @@ void fnStatSMI(real_t *SMI);
 void fnStatR(real_t *RR, real_t *SXY, real_t *SX, real_t *SY);
 void fnStatSXY(real_t *SXY);
 void fnStatSX_SY(real_t *SX, real_t *SY);
+
+#endif // VARIANCE_H

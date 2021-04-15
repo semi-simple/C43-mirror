@@ -18,6 +18,14 @@
  * \file error.c
  ***********************************************/
 
+#include "error.h"
+
+#include "charString.h"
+#include "flags.h"
+#include "fonts.h"
+#include "screen.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 TO_QSPI const char *errorMessages[NUMBER_OF_ERROR_CODES] = {

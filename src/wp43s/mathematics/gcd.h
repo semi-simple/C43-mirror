@@ -17,6 +17,11 @@
 /********************************************//**
  * \file gcd.h
  ***********************************************/
+#ifndef GCD_H
+#define GCD_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnGcd      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +35,5 @@ void gcdLonILonI(void);
 void gcdLonIShoI(void);
 void gcdShoILonI(void);
 void gcdShoIShoI(void);
+
+#endif // GCD_H

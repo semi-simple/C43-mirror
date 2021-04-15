@@ -18,6 +18,15 @@
  * \file parallel.c
  ***********************************************/
 
+#include "mathematics/parallel.h"
+
+#include "debug.h"
+#include "error.h"
+#include "mathematics/division.h"
+#include "mathematics/multiplication.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

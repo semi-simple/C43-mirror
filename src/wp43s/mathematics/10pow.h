@@ -17,6 +17,11 @@
 /********************************************//**
  * \file 10pow.h
  ***********************************************/
+#ifndef FILE_10POW_H
+#define FILE_10POW_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fn10Pow    (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +35,5 @@ void tenPowCxma (void);
 void tenPowShoI (void);
 void tenPowReal (void);
 void tenPowCplx (void);
+
+#endif // FILE_10POW_H

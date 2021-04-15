@@ -17,6 +17,12 @@
 /********************************************//**
  * \file dateTime.h
  ***********************************************/
+#ifndef DATETIME_H
+#define DATETIME_H
+
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 void fnSetDateFormat         (uint16_t dateFormat);
 void internalDateToJulianDay (const real34_t *source, real34_t *destination);
@@ -54,3 +60,5 @@ void fnSetTime               (uint16_t unusedButMandatoryParameter);
 void getDateString           (char *dateString);
 void getTimeString           (char *timeString);
 void _gettimeofday           (void);
+
+#endif // DATETIME_H

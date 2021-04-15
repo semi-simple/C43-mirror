@@ -17,6 +17,12 @@
 /********************************************//**
  * \file bn.h
  ***********************************************/
+#ifndef BN_H
+#define BN_H
 
- void fnBn    (uint16_t unusedButMandatoryParameter);
- void fnBnStar(uint16_t unusedButMandatoryParameter);
+#include <stdint.h>
+
+void fnBn    (uint16_t unusedButMandatoryParameter);
+void fnBnStar(uint16_t unusedButMandatoryParameter);
+
+#endif // BN_H

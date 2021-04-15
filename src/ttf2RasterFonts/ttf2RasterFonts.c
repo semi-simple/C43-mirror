@@ -133,7 +133,7 @@ void exportCStructure(char const *ttfName) {
   /////////////////////
   // Open the face 0 //
   /////////////////////
-  sprintf(path, "fonts/%s", ttfName);
+  sprintf(path, "res/fonts/%s", ttfName);
   if((error = FT_New_Face(library, path, 0, &face)) != FT_Err_Ok) {
     fprintf(stderr, "Error during face creation from file %s\n", path);
     fprintf(stderr, "Error %d : %s\n", error, getErrorMessage(error));
@@ -237,7 +237,7 @@ void exportCStructure(char const *ttfName) {
         }
 
         if(i >= nbGlyphRanks) {
-          fprintf(stderr, "Code point U+%04x is not in file fonts/sortingOrder.csv\n", (unsigned int)charCodes[cc]);
+          fprintf(stderr, "Code point U+%04x is not in file res/fonts/sortingOrder.csv\n", (unsigned int)charCodes[cc]);
           exit(1);
         }
 
@@ -323,20 +323,20 @@ int main(int argc, char* argv[]) {
   // Open files //
   ////////////////
   #if (__linux__ == 1)
-    sortingOrder = fopen("fonts/sortingOrder.csv", "rb");
+    sortingOrder = fopen("res/fonts/sortingOrder.csv", "rb");
     cFile        = fopen("src/wp43s/rasterFontsData.c", "wb");
   #elif defined(__MINGW64__)
-    sortingOrder = fopen("fonts\\sortingOrder.csv", "rb");
+    sortingOrder = fopen("res/fonts\\sortingOrder.csv", "rb");
     cFile        = fopen("src\\wp43s\\rasterFontsData.c", "wb");
   #elif defined(__APPLE__)
-    sortingOrder = fopen("fonts/sortingOrder.csv", "rb");
+    sortingOrder = fopen("res/fonts/sortingOrder.csv", "rb");
     cFile        = fopen("src/wp43s/rasterFontsData.c", "wb");
   #else // Unsupported OS
     #error Only Linux, MacOS and Windows MINGW64 are supported for now
   #endif // OS
 
   if(sortingOrder == NULL) {
-    fprintf(stderr, "Cannot open file fonts/sortingOrder.csv\n");
+    fprintf(stderr, "Cannot open file res/fonts/sortingOrder.csv\n");
     exit(1);
   }
 

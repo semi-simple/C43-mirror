@@ -18,9 +18,35 @@
  * \file bufferize.c
  ***********************************************/
 
+#include "bufferize.h"
+
+#include "charString.h"
+#include "constantPointers.h"
+#include "constants.h"
+#include "conversionAngles.h"
+#include "dateTime.h"
+#include "debug.h"
+#include "display.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "gui.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/toRect.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "saveRestoreCalcState.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "sort.h"
+#include "stack.h"
+#include "timer.h"
+#include "ui/tam.h"
+#include <string.h>
+
 #include "wp43s.h"
-
-
 
 #ifndef TESTSUITE_BUILD
   void fnAim(uint16_t unusedButMandatoryParameter) {
@@ -275,6 +301,9 @@ void kill_ASB_icon(void) {
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
     else {
+      if(calcMode == CM_NORMAL && fnKeyInCatalog && isAlphabeticSoftmenu()) {
+        fnAim(NOPARAM);
+      }
       if((fnKeyInCatalog || !catalog) && (calcMode == CM_AIM || tam.alpha)) {
         item = convertItemToSubOrSup(item, nextChar);
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
@@ -337,6 +366,12 @@ void kill_ASB_icon(void) {
       }
 
       else if(calcMode == CM_NIM) {
+        addItemToNimBuffer(item);
+      }
+
+      else if(calcMode != CM_AIM && (item >= ITM_A && item <= ITM_F)) {
+        // We are not in NIM, but should enter NIM - this should be handled here
+        // unlike digits 0 to 9 which are handled by processKeyAction
         addItemToNimBuffer(item);
       }
 
@@ -1034,7 +1069,7 @@ void kill_ASB_icon(void) {
           fnDRG(0);
         }
         break;
-#endif DMS2EXPERIMENT
+#endif //DMS2EXPERIMENT
 
       case ITM_DRG :                        //JM
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {

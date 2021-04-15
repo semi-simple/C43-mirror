@@ -18,6 +18,21 @@
  * \file zeta.c
  ***********************************************/
 
+#include "mathematics/zeta.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/division.h"
+#include "mathematics/multiplication.h"
+#include "mathematics/power.h"
+#include "mathematics/toRect.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "statusBar.h"
+
 #include "wp43s.h"
 
 

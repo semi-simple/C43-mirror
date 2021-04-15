@@ -18,6 +18,21 @@
  * \file reToCx.c
  ***********************************************/
 
+#include "mathematics/reToCx.h"
+
+#include "constantPointers.h"
+#include "conversionAngles.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/toRect.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+
 #include "wp43s.h"
 
 

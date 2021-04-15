@@ -1,0 +1,3 @@
+[submodule "dep/DMCP_SDK"]
+	path = dep/DMCP_SDK
+	url = https://github.com/swissmicros/DMCP_SDK.git

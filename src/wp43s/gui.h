@@ -17,6 +17,12 @@
 /********************************************//**
  * \file gui.h
  ***********************************************/
+#ifndef GUI_H
+#define GUI_H
+
+#include "defines.h"
+#include <stdint.h>
+#include "typeDefinitions.h"
 
 #ifndef TESTSUITE_BUILD
   void btn_Clicked_Gen(bool_t shF, bool_t shG, char *st);
@@ -42,3 +48,5 @@
 #ifndef DMCP_BUILD
   void strReplace         (char *haystack, const char *needle, const char *newNeedle);
 #endif // DMCP_BUILD
+
+#endif // GUI_H

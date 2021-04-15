@@ -17,6 +17,11 @@
 /********************************************//**
  * \file conjugate.h
  ***********************************************/
+#ifndef CONJUGATE_H
+#define CONJUGATE_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnConjugate(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -26,3 +31,5 @@ void conjError  (void);
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 void conjCxma   (void);
 void conjCplx   (void);
+
+#endif // CONJUGATE_H

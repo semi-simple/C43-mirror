@@ -22,15 +22,18 @@ gmon.out
 wp43s.sav
 bin/
 obj/
-*build*/
+#*build*/
+build*/
+
 wp43s.dSYM
 gmp-6.2.0/
 gmp-6.2.0.tar.bz2
 gmp-6.2.1/
 gmp-6.2.1.tar.bz2
-DMCP_build/src
-DMCP_build/decNumberICU
-DMCP_build/build
+#DMCP_build/src
+#DMCP_build/decNumberICU
+#DMCP_build/build
+#!DMCP_build/bin
 
 # used by cLion
 .idea/
@@ -43,7 +46,6 @@ DMCP_build/build
 !DM42\ binary/WP43S_qspi.bin
 !DM42\ binary/WP43S_qspi609E.bin
 !DM42\ binary/WP43S609E.pgm
-!DMCP_build/bin
 
 # / before the executable files else directories under src/ are ignored
 /generateConstants

@@ -20,11 +20,11 @@
  * \file xeqm.c
  ***********************************************/
 
-
+#include <string.h>
+#include "wp43s.h"
 
 #define commandnumberl NIM_BUFFER_LENGTH
 
-#include "wp43s.h"
 
 void press_key(void) {
     #ifdef DMCP_BUILD

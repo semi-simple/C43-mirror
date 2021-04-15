@@ -37,6 +37,7 @@
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
   #define SAVE_SPACE_DM42
+  #undef  SAVE_SPACE_DM42          //switch off memoery saving options
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
   //#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available

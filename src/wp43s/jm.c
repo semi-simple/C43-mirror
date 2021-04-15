@@ -21,6 +21,7 @@
 /* ADDITIONAL C43 functions and routines */
 
 
+#include <string.h>
 #include "wp43s.h"
 
 

@@ -25,6 +25,7 @@
 
 //#define DISPLOADING
 
+#include <string.h>
 #include "wp43s.h"
 
   uint8_t reg_Name(uint16_t no) {

@@ -123,7 +123,7 @@ DMCP_CFLAGS += $(DMCP_CPUFLAGS) $(C_INCLUDES) $(DMCP_INCLUDES) -fdata-sections -
 ifdef DEBUG_WP43S
 DMCP_CFLAGS += -O0 -DDEBUG
 else
-DMCP_CFLAGS += -O2 -s -fomit-frame-pointer
+DMCP_CFLAGS += -Os -s -fomit-frame-pointer
 endif
 
 #######################################

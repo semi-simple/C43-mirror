@@ -25,6 +25,7 @@
 
 //#define DISPLOADING
 
+#include <string.h>
 #include "wp43s.h"
 
 char                 filename_csv[40]; //JMMAX                //JM_CSV Changed from 60 to 40 to save 20 bytes.
@@ -205,7 +206,7 @@ bool_t               cancelFilename = false;
 int16_t export_append_string_to_file(const char line1[TMP_STR_LENGTH], uint8_t mode, const char filedir[40]) { //DMCP_BUILD 
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
-    FRESULT fr;                   /* FatFs return code */
+    int fr;                   /* FatFs return code */
 
 
     /* Prepare to write */
@@ -240,7 +241,7 @@ char line[100];               /* Line buffer */
 
     /* Create string and output */
     fr = f_puts(line1, &fil);
-    if (fr == -1) {
+    if (fr == EOF) {
       sprintf(line,"Write error ID004--> %d    \n",fr);            print_linestr(line,false);
       f_close(&fil);
       sys_disk_write_enable(0);
@@ -297,7 +298,7 @@ int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename
     char dirfile[200];
     dirfile[0]=0;
     FIL fil;                      /* File object */
-    FRESULT fr;                   /* FatFs return code */
+    int fr;                   /* FatFs return code */
 
     //Create dir name
     check_create_dir(dirname);  
@@ -424,7 +425,7 @@ int16_t export_xy_to_file(graphtype x, graphtype y){
 int16_t export_append_line(char *inputstring){ //DMCP_BUILD 
 char line[100];               /* Line buffer */
     FIL fil;                      /* File object */
-    FRESULT fr;                   /* FatFs return code */
+    int fr;                   /* FatFs return code */
 
     /* Prepare to write */
     sys_disk_write_enable(1);

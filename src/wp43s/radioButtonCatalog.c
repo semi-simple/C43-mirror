@@ -21,6 +21,7 @@
  * \file radioButtonCatalog.c
  ***********************************************/
 
+#include <string.h>
 #include "wp43s.h"
 
 

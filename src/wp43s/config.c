@@ -754,6 +754,11 @@ void fnReset(uint16_t confirmation) {
     ((dataBlock_t *)memPtr)->matrixColumns = 1;
     real34Zero(memPtr + 4);
 
+    #ifndef TESTSUITE_BUILD
+      matrixIndex = INVALID_VARIABLE; // Unset matrix index
+    #endif // TESTSUITE_BUILD
+
+
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;
     #endif // PC_BUILD

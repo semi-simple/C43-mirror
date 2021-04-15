@@ -48,6 +48,7 @@ real34Matrix_t        openMatrixMIMPointer;
 bool_t                matEditMode;
 uint16_t              scrollRow;
 uint16_t              scrollColumn;
+uint16_t              matrixIndex = INVALID_VARIABLE;
 #endif // TESTSUITE_BUILD
 
 /********************************************//**
@@ -122,17 +123,24 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 /********************************************//**
  * \brief Opens the Matrix Editor
  *
- * \param[in] unusedParamButMandatory uint16_t
+ * \param[in] regist uint16_t
  * \return void
  ***********************************************/
-void fnEditMatrix(uint16_t unusedParamButMandatory) {
+void fnEditMatrix(uint16_t regist) {
 #ifndef TESTSUITE_BUILD
-  if((getRegisterDataType(REGISTER_X) == dtReal34Matrix) || (getRegisterDataType(REGISTER_X) == dtComplex34Matrix)) {
+  const uint16_t reg = (regist == NOPARAM) ? REGISTER_X : regist;
+  if((getRegisterDataType(reg) == dtReal34Matrix) || (getRegisterDataType(reg) == dtComplex34Matrix)) {
     calcMode = CM_MIM;
+    matrixIndex = reg;
 
-    getMatrixFromRegister(REGISTER_X);
+    getMatrixFromRegister(reg);
 
     showSoftmenu(-MNU_M_EDIT);
+    if(regist != NOPARAM) {
+      showSoftmenu(-MNU_TAM);
+      showSoftmenu(-MNU_VAR);
+      numberOfTamMenusToPop = 2;
+    }
     setIRegisterAsInt(true, 0);
     setJRegisterAsInt(true, 0);
     aimBuffer[0] = 0;
@@ -143,7 +151,7 @@ void fnEditMatrix(uint16_t unusedParamButMandatory) {
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #ifdef PC_BUILD
-    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(reg));
     moreInfoOnError("In function fnEditMatrix:", errorMessage, "is not a matrix.", "");
     #endif
   }
@@ -359,6 +367,29 @@ void fnInvertMatrix(uint16_t unusedParamButMandatory) {
   }
 
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Index a named matrix
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnIndexMatrix(uint16_t regist) {
+#ifndef TESTSUITE_BUILD
+  if((getRegisterDataType(regist) == dtReal34Matrix) || (getRegisterDataType(regist) == dtComplex34Matrix)) {
+    matrixIndex = regist;
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(regist));
+    moreInfoOnError("In function fnIndexMatrix:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
 #endif // TESTSUITE_BUILD
 }
 
@@ -668,11 +699,16 @@ void mimFinalize(void) {
   if(openMatrixMIMPointer.matrixElements) {
     realMatrixFree(&openMatrixMIMPointer);
   }
+  matrixIndex = INVALID_VARIABLE;
 }
 
 void mimRestore(void) {
+  uint16_t idx = matrixIndex;
   mimFinalize();
-  getMatrixFromRegister(REGISTER_X);
+  if(idx != INVALID_VARIABLE) {
+    getMatrixFromRegister(idx);
+    matrixIndex = idx;
+  }
 }
 
 /*

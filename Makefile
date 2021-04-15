@@ -220,12 +220,14 @@ endif
 
 dmcp: version $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm
 
-dist_windows:	wp43s.exe
+dist_windows:	wp43s.exe $(BUILD_DIR)/wiki
 	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/binaries/dmcp
 	cp wp43s.exe $(WIN_DIST_DIR)/
 	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
 	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
 	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
+	cp res/fonts/WP43S_StandardFont.ttf $(WIN_DIST_DIR)/
+	cp $(BUILD_DIR)/wiki/Windows-installation.md $(WIN_DIST_DIR)/readme.txt
 	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
@@ -241,7 +243,7 @@ dist_dm42:	dmcp $(BUILD_DIR)/wiki
 	cp $(BUILD_DIR)/dmcp/WP43S.pgm $(BUILD_DIR)/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r res/offimg $(DM_DIST_DIR)
 	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
-	cp $(BUILD_DIR)/wiki/DM42-conversion.md $(DM_DIST_DIR)/readme.txt
+	cp $(BUILD_DIR)/wiki/DM42-installation.md $(DM_DIST_DIR)/readme.txt
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
 .PHONY: clean_wp43s clean_generateConstants clean_generateCatalogs clean_generateTestPgms clean_ttf2RasterFonts clean_testTtf2RasterFonts clean_testSuite clean_dmcp all clean_all mrproper sources rebuild dmcp dist_macos dist_windows dist_dm42

@@ -67,6 +67,7 @@ gmp-6.2.1.tar.bz2
 !*Make*
 !*make*
 !*forcecrc32
+!DMCP_build/bin/forcecrc32
 
 *iCloud*
 

@@ -321,11 +321,11 @@
 
 // PC GUI
 #if   defined(JM_LAYOUT_2_DM42_STRICT) && !defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
-  #define CSSFILE "res/c43_pre_L2.css"              //JM L
+  #define CSSFILE "c43_pre_L2.css"              //JM L
 #elif defined(JM_LAYOUT_2_DM42_STRICT) && defined(JM_LAYOUT_SHOW_BLUES)                    //JM LAYOUT 2
-  #define CSSFILE "res/c43_pre_L2B.css"              //JM L
+  #define CSSFILE "c43_pre_L2B.css"              //JM L
 #elif defined(JM_LAYOUT_1A) || defined(JM_LAYOUT_SHOW_BLUES)                                //JM LAYOUT 1
-  #define CSSFILE "res/c43_pre.css"
+  #define CSSFILE "c43_pre.css"
 #endif //JM L
 
 #define GAP                                        6 //JM original GUI legacy

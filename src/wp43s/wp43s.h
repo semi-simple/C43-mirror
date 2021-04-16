@@ -44,7 +44,14 @@
   #endif // __MINGW64__
 
   #ifdef DMCP_BUILD
-    #include <main.h>
+    #define DBG_PRINT
+
+    #ifdef DBG_PRINT
+      #include <stdio.h>
+    #else
+      #define printf(...)
+    #endif
+
     #include <dmcp.h>
   #endif // DMCP_BUILD
 

@@ -588,7 +588,7 @@ void addStriRema(void) {
                                                            stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
                                                                  stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
                                                                         stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
-      moreInfoOnError("In function addStriDate:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function addStriRema:", errorMessage, NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else {

@@ -21,8 +21,11 @@
 #include "store.h"
 
 #include "charString.h"
+#include "debug.h"
 #include "error.h"
 #include "mathematics/compare.h"
+#include "matrix.h"
+#include "registerValueConversions.h"
 #include "registers.h"
 
 #include "wp43s.h"
@@ -47,6 +50,29 @@ bool_t regInRange(uint16_t regist) {
   }
 #endif
   return inRange;
+}
+
+
+
+static bool_t storeElementReal(real34Matrix_t *matrix) {
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal34(REGISTER_X, &matrix->matrixElements[i * matrix->header.matrixColumns + j]);
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &matrix->matrixElements[i * matrix->header.matrixColumns + j]);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Cannot store %s in a matrix", getRegisterDataTypeName(REGISTER_X, true, false));
+      moreInfoOnError("In function storeElementReal:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+  return true;
 }
 
 
@@ -255,14 +281,7 @@ void fnStoreStack(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreElement(uint16_t unusedButMandatoryParameter) {
-  #ifdef PC_BUILD
-    printf("fnStoreElement\n");
-  #endif // PC_BUILD
-
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    moreInfoOnError("In function fnStoreElement:", "To be coded", NULL, NULL);
-  #endif // PC_BUILD
+  callByIndexedMatrix(storeElementReal, NULL);
 }
 
 

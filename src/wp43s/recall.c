@@ -25,12 +25,25 @@
 #include "error.h"
 #include "flags.h"
 #include "mathematics/compare.h"
+#include "matrix.h"
 #include "memory.h"
 #include "registers.h"
 #include "stack.h"
 #include "store.h"
 
 #include "wp43s.h"
+
+
+
+static bool_t recallElementReal(real34Matrix_t *matrix) {
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  liftStack();
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+  real34Copy(&matrix->matrixElements[i * matrix->header.matrixColumns + j], REGISTER_REAL34_DATA(REGISTER_X));
+  return false;
+}
 
 
 
@@ -277,14 +290,7 @@ void fnRecallStack(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallElement(uint16_t unusedButMandatoryParameter) {
-  #ifdef PC_BUILD
-    printf("fnRecallElement\n");
-  #endif // PC_BUILD
-
-  displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    moreInfoOnError("In function fnRecallElement:", "To be coded", NULL, NULL);
-  #endif // PC_BUILD
+  callByIndexedMatrix(recallElementReal, NULL);
 }
 
 

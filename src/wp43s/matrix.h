@@ -31,6 +31,7 @@
 
 void       fnNewMatrix                    (uint16_t unusedParamButMandatory);
 void       fnEditMatrix                   (uint16_t regist);
+void       fnOldMatrix                    (uint16_t unusedParamButMandatory);
 
 void       fnTranspose                    (uint16_t unusedParamButMandatory);
 void       fnLuDecomposition              (uint16_t unusedParamButMandatory);
@@ -45,7 +46,7 @@ void       fnIndexMatrix                  (uint16_t regist);
   void     realMatrixIdentity             (real34Matrix_t *matrix, uint16_t size);
 
   void     showMatrixEditor               (void);
-  void     mimEnter                       (void);
+  void     mimEnter                       (bool_t commit);
   void     mimAddNumber                   (int16_t item);
   void     mimFinalize                    (void);
   void     mimRestore                     (void);
@@ -82,5 +83,9 @@ void       elementwiseRema                (void (*f)(void));
 void       elementwiseRemaLonI            (void (*f)(void));
 void       elementwiseRemaReal            (void (*f)(void));
 void       elementwiseRemaShoI            (void (*f)(void));
+
+#ifndef TESTSUITE_BUILD
+  void     callByIndexedMatrix            (bool_t (*real_f)(real34Matrix_t *), void *reserved);
+#endif // TESTSUITE_BUILD
 
 #endif // MATRIX_H

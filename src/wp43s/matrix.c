@@ -40,6 +40,7 @@
 #include "screen.h"
 #include "softmenus.h"
 #include "stack.h"
+#include "store.h"
 
 #include "wp43s.h"
 
@@ -153,6 +154,35 @@ void fnEditMatrix(uint16_t regist) {
     #ifdef PC_BUILD
     sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(reg));
     moreInfoOnError("In function fnEditMatrix:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Opens the Matrix Editor
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnOldMatrix(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  if(calcMode == CM_MIM) {
+    aimBuffer[0] = 0;
+    nimBufferDisplay[0] = 0;
+    hideCursor();
+    cursorEnabled = false;
+
+    if(openMatrixMIMPointer.matrixElements) realMatrixFree(&openMatrixMIMPointer);
+    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &openMatrixMIMPointer);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "works in MIM only");
+    moreInfoOnError("In function fnOldMatrix:", errorMessage, NULL, NULL);
     #endif
   }
 #endif // TESTSUITE_BUILD
@@ -595,7 +625,7 @@ void showMatrixEditor() {
   }
 }
 
-void mimEnter(void) {
+void mimEnter(bool_t commit) {
   int cols = openMatrixMIMPointer.header.matrixColumns;
   int16_t row = getIRegisterAsInt(true);
   int16_t col = getJRegisterAsInt(true);
@@ -608,9 +638,9 @@ void mimEnter(void) {
     hideCursor();
     cursorEnabled = false;
 
-    convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, REGISTER_X);
     setSystemFlag(FLAG_ASLIFT);
   }
+  if(commit) convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, REGISTER_X);
 }
 
 void mimAddNumber(int16_t item) {
@@ -1334,3 +1364,48 @@ void elementwiseRemaShoI(void (*f)(void)) {
   realMatrixFree(&y);
 #endif // TESTSUITE_BUILD
 }
+
+
+
+#ifndef TESTSUITE_BUILD
+void callByIndexedMatrix(bool_t (*real_f)(real34Matrix_t *), void *reserved) {
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  if(matrixIndex == INVALID_VARIABLE || !regInRange(matrixIndex)) {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Cannot execute, destination register is out of range: %d", matrixIndex);
+      moreInfoOnError("In function callByIndexedMatrix:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+    real34Matrix_t mat;
+    convertReal34MatrixRegisterToReal34Matrix(matrixIndex, &mat);
+    if(i < 0 || i >= mat.header.matrixRows || j < 0 || j >= mat.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Cannot execute: element (%" PRId16 ", %" PRId16 ") out of range", i + 1, j + 1);
+        moreInfoOnError("In function callByIndexedMatrix:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      if(real_f(&mat)) convertReal34MatrixToReal34MatrixRegister(&mat, matrixIndex);
+    }
+    realMatrixFree(&mat);
+  }
+  else if(getRegisterDataType(matrixIndex) == dtComplex34Matrix) {
+    displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
+    #ifdef PC_BUILD
+      moreInfoOnError("In function callByIndexedMatrix:", "To be coded", NULL, NULL);
+    #endif // PC_BUILD
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Cannot execute: something other than a matrix is indexed %s", getRegisterDataTypeName(REGISTER_X, true, false));
+      moreInfoOnError("In function callByIndexedMatrix:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+}
+#endif // TESTSUITE_BUILD

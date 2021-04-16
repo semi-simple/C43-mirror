@@ -793,7 +793,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_MIM:
-        mimEnter();
+        mimEnter(false);
         break;
 
       case CM_NIM:
@@ -877,7 +877,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_MIM:
-        mimEnter();
+        mimEnter(true);
         mimFinalize();
         calcModeNormal();
         popSoftmenu(); // close softmenu dedicated for the MIM

@@ -1059,17 +1059,13 @@ void kill_ASB_icon(void) {
         }
         break;
 
-#ifdef DMS2EXPERIMENT
       case ITM_DMS2:                        //JM
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           done = true;
-
           closeNim();
-
-          fnDRG(0);
+          fnAngularModeJM(amDMS);
         }
         break;
-#endif //DMS2EXPERIMENT
 
       case ITM_DRG :                        //JM
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {

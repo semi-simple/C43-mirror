@@ -510,22 +510,20 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
     fnToHms(0); //covers longint & real
   } else {
     if(getRegisterDataType(REGISTER_X) == dtTime) {
-      fnToHr(0);
+      fnToHr(0);  //covers time
       setRegisterAngularMode(REGISTER_X, amDegree);
       fnCvtFromCurrentAngularMode(AMODE);
       fnAngularMode(AMODE);
     }
-  
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-      fnKeyDotD(0);
+
+    if((getRegisterDataType(REGISTER_X) != dtReal34) || ((getRegisterDataType(REGISTER_X) == dtReal34) && getRegisterAngularMode(REGISTER_X) == amNone)) {
+      fnKeyDotD(0);  //convert longint, and strip all angles to real.
+      fnAngularMode(AMODE);
+      fnCvtFromCurrentAngularMode(currentAngularMode);
+    } else {
+      fnCvtFromCurrentAngularMode(AMODE);
     }
 
-    fnAngularMode(AMODE);
-    if(getRegisterDataType(REGISTER_X) == dtReal34) {
-      if(getRegisterAngularMode(REGISTER_X) == amNone)
-        setRegisterAngularMode(REGISTER_X, AMODE);
-      fnCvtToCurrentAngularMode(getRegisterAngularMode(REGISTER_X));
-    }
   }
   #ifndef TESTSUITE_BUILD
     fnRefreshState();

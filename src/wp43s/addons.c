@@ -520,8 +520,9 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
       fnKeyDotD(0);  //convert longint, and strip all angles to real.
       fnAngularMode(AMODE);
       fnCvtFromCurrentAngularMode(currentAngularMode);
-    } else {
+    } else {         //convert existing tagged angle, and set the ADM
       fnCvtFromCurrentAngularMode(AMODE);
+      fnAngularMode(AMODE);
     }
 
   }

@@ -1062,8 +1062,8 @@ void kill_ASB_icon(void) {
       case ITM_DMS2:                        //JM
         if(nimNumberPart == NP_INT_10 || nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_EXPONENT) {
           done = true;
-          closeNim();
-          fnAngularModeJM(amDMS);
+          closeNim(); 
+          fnAngularModeJM(amDMS); //it cannot be an angle at this point. If closed input, it is only real or longint
         }
         break;
 

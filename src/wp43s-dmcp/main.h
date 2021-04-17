@@ -48,12 +48,4 @@
 #define PROGRAM_NAME    "WP43S"
 #define PROGRAM_VERSION VERSION_SHORT
 
-#define DBG_PRINT
-
-#ifdef DBG_PRINT
-#include <stdio.h>
-#else
-#define printf(...)
-#endif
-
 #endif

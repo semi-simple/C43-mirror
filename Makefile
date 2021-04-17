@@ -123,7 +123,7 @@ DMCP_CFLAGS += $(DMCP_CPUFLAGS) $(C_INCLUDES) $(DMCP_INCLUDES) -fdata-sections -
 ifdef DEBUG_WP43S
 DMCP_CFLAGS += -O0 -DDEBUG
 else
-DMCP_CFLAGS += -O2 -s -fomit-frame-pointer
+DMCP_CFLAGS += -Os -fmerge-all-constants -s -fomit-frame-pointer
 endif
 
 #######################################
@@ -444,8 +444,12 @@ $(BUILD_DIR)/simulator/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 # Check-out submodule when trying to build pgm_syscalls.c - we may need additional triggers for the submodule init
-dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c:
+dmcp_sdk:
 	git submodule update --init --recursive dep/DMCP_SDK
+
+dep/DMCP_SDK/dmcp/dmcp.h: dmcp_sdk
+dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c: dmcp_sdk
+dep/DMCP_SDK/dmcp/startup_pgm.s: dmcp_sdk
 
 # forcecrc32 needed because QSPI update process in DMCP requires a specific CRC
 $(BUILD_DIR)/dmcp/forcecrc32: dep/forcecrc32.c | $(BUILD_DIR)/dmcp
@@ -472,7 +476,7 @@ clean_dmcp:
 
 -include $(DEPS_DMCP)
 
-$(BUILD_DIR)/dmcp/%.o: %.c $(GMPLIB) $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/dmcp
+$(BUILD_DIR)/dmcp/%.o: %.c dep/DMCP_SDK/dmcp/dmcp.h $(GMPLIB) $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/dmcp
 	@echo -e "\n====> $<: $@ <===="
 	$(DMCP_CC) $(DMCP_CFLAGS) $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/dmcp/$(notdir $(<:.c=.lst)) -c -o $@ $<
 

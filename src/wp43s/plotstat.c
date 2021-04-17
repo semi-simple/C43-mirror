@@ -1652,12 +1652,12 @@ void fnStatDemo1(uint16_t unusedButMandatoryParameter){
 
       setSystemFlag(FLAG_ASLIFT);
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-      int32ToReal34(mv+rand()%4,REGISTER_REAL34_DATA(REGISTER_X)); // reading has additional +0 to +3 varince to the said random number
+      int32ToReal34(mv+rand()%4,REGISTER_REAL34_DATA(REGISTER_X)); // reading 1 has additional +0 to +3 variance to the said random number
 
       setSystemFlag(FLAG_ASLIFT);
       liftStack();
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-      int32ToReal34(mv+rand()%4,REGISTER_REAL34_DATA(REGISTER_X)); // reading has additional +0 to +3 varince to the said random number
+      int32ToReal34(mv+rand()%4,REGISTER_REAL34_DATA(REGISTER_X)); // reading 2 has additional +0 to +3 variance to the said random number
 
       runFunction(ITM_SIGMAPLUS);
       }

@@ -39,6 +39,8 @@ void       fnDeterminant                  (uint16_t unusedParamButMandatory);
 void       fnInvertMatrix                 (uint16_t unusedParamButMandatory);
 
 void       fnIndexMatrix                  (uint16_t regist);
+void       fnGetMatrix                    (uint16_t unusedParamButMandatory);
+void       fnPutMatrix                    (uint16_t unusedParamButMandatory);
 void       fnSwapRows                     (uint16_t unusedParamButMandatory);
 
 #ifndef TESTSUITE_BUILD

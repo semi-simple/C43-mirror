@@ -53,43 +53,34 @@ uint16_t              matrixIndex = INVALID_VARIABLE;
 
 
 
+static bool_t getArg(calcRegister_t regist, real_t *arg) {
+  if(getRegisterDataType(regist) == dtLongInteger) {
+    convertLongIntegerRegisterToReal(regist, arg, &ctxtReal39);
+  }
+  else if(getRegisterDataType(regist) == dtReal34) {
+    real34ToReal(REGISTER_REAL34_DATA(regist), arg);
+    realToIntegralValue(arg, arg, DEC_ROUND_DOWN, &ctxtReal39);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot accept %s as the argument", getRegisterDataTypeName(regist, true, false));
+      moreInfoOnError("In function getArg:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+  return true;
+}
+
+
+
 static bool_t swapRowsReal(real34Matrix_t *matrix) {
   real_t ry, rx, rrows;
   uint16_t a, b;
 
   int32ToReal(matrix->header.matrixRows, &rrows);
 
-  if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
-    convertLongIntegerRegisterToReal(REGISTER_Y, &ry, &ctxtReal39);
-  }
-  else if(getRegisterDataType(REGISTER_Y) == dtReal34) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &ry);
-    realToIntegralValue(&ry, &ry, DEC_ROUND_DOWN, &ctxtReal39);
-  }
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot accept %s as the argument", getRegisterDataTypeName(REGISTER_X, true, false));
-      moreInfoOnError("In function swapRowsReal:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return false;
-  }
-
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal(REGISTER_X, &rx, &ctxtReal39);
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
-    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &rx);
-    realToIntegralValue(&rx, &rx, DEC_ROUND_DOWN, &ctxtReal39);
-  }
-  else {
-    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      sprintf(errorMessage, "cannot accept %s as the argument", getRegisterDataTypeName(REGISTER_X, true, false));
-      moreInfoOnError("In function swapRowsReal:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return false;
-  }
+  if((!getArg(REGISTER_Y, &ry)) || (!getArg(REGISTER_X, &rx))) return false;
 
   realToInt32(&ry, a);
   realToInt32(&rx, b);
@@ -102,6 +93,76 @@ static bool_t swapRowsReal(real34Matrix_t *matrix) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "rows %" PRIu16 " and/or %" PRIu16 " out of range", a, b);
       moreInfoOnError("In function swapRowsReal:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+
+  return true;
+}
+
+
+
+static bool_t getMatrixReal(real34Matrix_t *matrix) {
+  real_t ry, rx, rrows, rcols;
+  uint16_t a, b, r, c;
+
+  int32ToReal(matrix->header.matrixRows, &rrows);
+  int32ToReal(matrix->header.matrixColumns, &rcols);
+
+  if((!getArg(REGISTER_Y, &ry)) || (!getArg(REGISTER_X, &rx))) return false;
+
+  realToInt32(&ry, a);
+  realToInt32(&rx, b);
+  if(realIsPositive(&rx) && realIsPositive(&ry) && realCompareLessEqual(&rx, &rcols) && realCompareLessEqual(&ry, &rrows)) {
+    real34Matrix_t mat;
+    fnDropY(NOPARAM);
+    realMatrixInit(&mat, a, b);
+    for(r = 0; r < a; ++r)
+      for(c = 0; c < b; ++c)
+        real34Copy(&matrix->matrixElements[r * matrix->header.matrixColumns + c], &mat.matrixElements[r * b + c]);
+    convertReal34MatrixToReal34MatrixRegister(&mat, REGISTER_X);
+    realMatrixFree(&mat);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "%" PRIu16 " " STD_CROSS " %" PRIu16 " out of range", a, b);
+      moreInfoOnError("In function getMatrixReal:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+
+  return false;
+}
+
+
+
+static bool_t putMatrixReal(real34Matrix_t *matrix) {
+  uint16_t r, c;
+  real34Matrix_t mat;
+
+  if(getRegisterDataType(REGISTER_X) != dtReal34Matrix) {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "%s is not a real matrix", getRegisterDataTypeName(REGISTER_X, true, false));
+      moreInfoOnError("In function putMatrixReal:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &mat);
+  if(mat.header.matrixRows <= matrix->header.matrixRows && mat.header.matrixColumns <= matrix->header.matrixColumns) {
+    for(r = 0; r < mat.header.matrixRows; ++r)
+      for(c = 0; c < mat.header.matrixColumns; ++c)
+        real34Copy(&mat.matrixElements[r * mat.header.matrixColumns + c], &matrix->matrixElements[r * matrix->header.matrixColumns + c]);
+    realMatrixFree(&mat);
+  }
+  else {
+    realMatrixFree(&mat);
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "%" PRIu16 " " STD_CROSS " %" PRIu16 " out of range", mat.header.matrixRows, mat.header.matrixColumns);
+      moreInfoOnError("In function putMatrixReal:", errorMessage, NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
@@ -486,7 +547,35 @@ void fnIndexMatrix(uint16_t regist) {
 
 
 /********************************************//**
- * \brief Index a named matrix
+ * \brief Get submatrix of the indexed matrix
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnGetMatrix(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  callByIndexedMatrix(getMatrixReal, NULL);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Put submatrix to the indexed matrix
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnPutMatrix(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  callByIndexedMatrix(putMatrixReal, NULL);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Swap rows of the indexed matrix
  *
  * \param[in] unusedParamButMandatory uint16_t
  * \return void

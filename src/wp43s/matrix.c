@@ -297,7 +297,7 @@ void fnOldMatrix(uint16_t unusedParamButMandatory) {
     cursorEnabled = false;
 
     if(openMatrixMIMPointer.matrixElements) realMatrixFree(&openMatrixMIMPointer);
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &openMatrixMIMPointer);
+    convertReal34MatrixRegisterToReal34Matrix(matrixIndex, &openMatrixMIMPointer);
   }
   else {
     displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -803,7 +803,7 @@ void mimEnter(bool_t commit) {
 
     setSystemFlag(FLAG_ASLIFT);
   }
-  if(commit) convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, REGISTER_X);
+  if(commit) convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
 }
 
 void mimAddNumber(int16_t item) {
@@ -875,7 +875,7 @@ void mimAddNumber(int16_t item) {
 
         real34ChangeSign(&openMatrixMIMPointer.matrixElements[row * cols + col]);
 
-        convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, REGISTER_X);
+        convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
         setSystemFlag(FLAG_ASLIFT);
         return;
       }

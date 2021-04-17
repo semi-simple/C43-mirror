@@ -8,6 +8,11 @@ rm ./wp43c
 
 make -j8 V=1 mrproper
 
+
+find build/ -type f -name "*.o" -exec rm {} \;
+find build/ -type f -name "*.d" -exec rm {} \;
+
+
 find . -type f -name "* 2.css" -exec rm {} \;
 find . -type f -name "* 3.css" -exec rm {} \;
 find . -type f -name "* 4.css" -exec rm {} \;
@@ -184,6 +189,7 @@ rm "wp43s 2.d" "wp43s 3.d" "wp43s 4.d" "wp43s 5.d" "wp43s 6.d" "wp43s 7.d" "wp43
 rm *.d
 rm *.o
 
+
 cd ./mathematics
 rm *.d
 rm *.o
@@ -194,6 +200,8 @@ cd ../browsers
 rm *.d
 rm *.o
 cd ..
+
+
 
 
 

@@ -1083,6 +1083,9 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         if(currentSoftmenuScrolls()) {
           menuUp();
         }
+        if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_PLOT_LR){
+          fnPlotStat(PLOT_NXT);
+        }
         else {
           alphaCase = AC_UPPER;
         }
@@ -1166,6 +1169,9 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         resetAlphaSelectionBuffer();
         if(currentSoftmenuScrolls()) {
           menuDown();
+        }
+        if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_PLOT_LR){
+          fnPlotStat(PLOT_REV); //REVERSE
         }
         else {
           alphaCase = AC_LOWER;

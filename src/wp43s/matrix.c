@@ -108,8 +108,11 @@ static bool_t getMatrixReal(real34Matrix_t *matrix) {
   real_t ry, rx, rrows, rcols;
   uint16_t a, b, r, c;
 
-  int32ToReal(matrix->header.matrixRows, &rrows);
-  int32ToReal(matrix->header.matrixColumns, &rcols);
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  int32ToReal(matrix->header.matrixRows    - i, &rrows);
+  int32ToReal(matrix->header.matrixColumns - j, &rcols);
 
   if((!getArg(REGISTER_Y, &ry)) || (!getArg(REGISTER_X, &rx))) return false;
 
@@ -121,7 +124,7 @@ static bool_t getMatrixReal(real34Matrix_t *matrix) {
     realMatrixInit(&mat, a, b);
     for(r = 0; r < a; ++r)
       for(c = 0; c < b; ++c)
-        real34Copy(&matrix->matrixElements[r * matrix->header.matrixColumns + c], &mat.matrixElements[r * b + c]);
+        real34Copy(&matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j], &mat.matrixElements[r * b + c]);
     convertReal34MatrixToReal34MatrixRegister(&mat, REGISTER_X);
     realMatrixFree(&mat);
   }
@@ -143,6 +146,9 @@ static bool_t putMatrixReal(real34Matrix_t *matrix) {
   uint16_t r, c;
   real34Matrix_t mat;
 
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
   if(getRegisterDataType(REGISTER_X) != dtReal34Matrix) {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -153,10 +159,10 @@ static bool_t putMatrixReal(real34Matrix_t *matrix) {
   }
 
   convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &mat);
-  if(mat.header.matrixRows <= matrix->header.matrixRows && mat.header.matrixColumns <= matrix->header.matrixColumns) {
+  if((mat.header.matrixRows + i) <= matrix->header.matrixRows && (mat.header.matrixColumns + j) <= matrix->header.matrixColumns) {
     for(r = 0; r < mat.header.matrixRows; ++r)
       for(c = 0; c < mat.header.matrixColumns; ++c)
-        real34Copy(&mat.matrixElements[r * mat.header.matrixColumns + c], &matrix->matrixElements[r * matrix->header.matrixColumns + c]);
+        real34Copy(&mat.matrixElements[r * mat.header.matrixColumns + c], &matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j]);
     realMatrixFree(&mat);
   }
   else {

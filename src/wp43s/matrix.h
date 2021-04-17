@@ -39,6 +39,7 @@ void       fnDeterminant                  (uint16_t unusedParamButMandatory);
 void       fnInvertMatrix                 (uint16_t unusedParamButMandatory);
 
 void       fnIndexMatrix                  (uint16_t regist);
+void       fnSwapRows                     (uint16_t unusedParamButMandatory);
 
 #ifndef TESTSUITE_BUILD
   void     realMatrixInit                 (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);

@@ -43,6 +43,10 @@
 #include "wp43s.h"
 
 
+static char tmp_names1[30];
+char * padEquals(const char * ss);
+
+
 // This module originates and is part of the C43 fork, and is copied here. 
 // Do not change the shared functions otherwise the C43 fork will break. JM 2021-03-20
 
@@ -68,7 +72,6 @@
 #endif
 
 #define roundedTicks false    //todo make variable
-
 graphtype *gr_x;
 graphtype *gr_y;
 graphtype telltale;
@@ -190,7 +193,7 @@ void graph_end(void) {
 
 
 
-//Pauli volunteered this fuction
+//Pauli volunteered this fuction, rev 1 2021-10-10
 #if DECDPUN != 3
 #error DECDPUN must be 3
 #endif
@@ -261,66 +264,6 @@ void realToDouble1(const real_t *vv, double *v) {
   #endif
 }
 
-
-/*
-
-
-bool_t replaceRadix(char *instr) {
-  char tmpString1[50];
-  uint16_t ix;
-  uint8_t  radix;
-
-  sprintf(tmpString1, "%f",1.1f);
-  ix = 0;
-  while(tmpString1[ix] != 0 && tmpString1[ix] != ',' && tmpString1[ix] != '.') {
-    ix++;
-  }
-  if(tmpString1[ix] == 0) {
-    return false;
-  } else {
-    radix = tmpString1[ix];
-    #ifdef PC_BUILD
-      strcpy(tmpString1,radix == '.' ? "." : radix == ',' ? "," : "X");
-      printf("Found radix = %s %u ", tmpString1,radix);
-    #endif
-  }
-
-  ix = 0;
-  while(instr[ix] != 0 && instr[ix] != ',' && instr[ix] != '.') {
-    ix++;
-  }
-  
-  if(instr[ix] == 0) {
-    return false;
-  } else {
-    #ifdef PC_BUILD
-      if(instr[ix] != radix) printf(" Replaced radix ");
-    #endif
-    instr[ix] = radix;
-    return true;
-  }
-}
-
-void realToFloat(const real_t *vv, graphtype *v) {
-  char tmpString1[100];                      //allow for 75 digits
-  realToString(vv, tmpString1);
-  replaceRadix(tmpString1);
-  *v = strtof (tmpString1, NULL);    
-  #ifdef PC_BUILD
-    printf(" %s:%f\n",tmpString1,*v);
-  #endif
-}
-
-void realToDouble(const real_t *vv, double *v) {
-  char tmpString1[100];                      //allow for 75 digits
-  realToString(vv, tmpString1);
-  replaceRadix(tmpString1);
-  *v = strtof (tmpString1, NULL);    
-  #ifdef PC_BUILD
-    printf(" %s:%f\n",tmpString1,*v);
-  #endif
-}
-*/
 
 
 void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
@@ -805,6 +748,7 @@ float auto_tick(float tick_int_f) {
   tick_int_f = strtof (tx, NULL);
   //tick_int_f = (float)(tx[0]-48) + (float)(tx[2]-48)/10.0f;
   //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
+
   if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpString[0] = '0'; tmpString[2]='2'; } else
   if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpString[0] = '0'; tmpString[2]='5'; } else
   if(tick_int_f > 0.6 && tick_int_f <=  1.3)  {tmpString[0] = '1'; tmpString[2]='0'; } else
@@ -840,22 +784,44 @@ void graph_axis (void){
 }
 
 
+char * radixProcess(const char * ss) {  //  .  HIERDIE WERK GLAD NIE
+  int8_t ix = 0, iy = 0;
+  tmp_names1[0]=0;
+  while( ss[ix] != 0 ){
+    if(ss[ix]==',' || ss[ix]=='.') {
+      tmp_names1[iy++] = getSystemFlag(FLAG_DECIMP) ? '.' : ',';
+      tmp_names1[iy] = 0;
+    }
+    else
+    if(ss[ix]=='#') {
+      tmp_names1[iy++] = getSystemFlag(FLAG_DECIMP) ? ',' : ';';
+      tmp_names1[iy] = 0;
+    } 
+    else {
+      tmp_names1[iy++] = ss[ix];
+      tmp_names1[iy] = 0;      
+    }
+    ix++;
+  }
+  return tmp_names1;
+}
+
 
 void eformat (char* s02, const char* s01, double inreal, uint8_t prec, const char* s05) {
   char s03[100];
-  if(((fabs(inreal) > 1000000.0f || fabs(inreal) < 0.001f)) && (inreal != 0.0f)) {
+  if(((fabs(inreal) > 1000000.0 || fabs(inreal) < 0.001)) && (inreal != 0.0)) {
     sprintf(s03,"%.*e",prec,inreal);
   } else {
     sprintf(s03,"%.*f",prec,inreal);
   }
   strcpy(s02,s01);
   if(inreal > 0) strcat(s02,"");  //in place of negative sign
-  strcat(s02,s03);
+  strcat(s02,eatSpacesMid(radixProcess(s03)));
   strcat(s02,s05);
 }
 
 
-void eformat_fix3 (char* s02, char* s01, double inreal) {
+void eformat_fix3 (char* s02, const char* s01, double inreal) {
   char *sign;
   char s03[100]; char s04[100];
   if(inreal<0.0) {
@@ -868,18 +834,20 @@ void eformat_fix3 (char* s02, char* s01, double inreal) {
   } else {
     sprintf(s03,"%s%.3f",sign,inreal);
   }
-  strcpy(s04,s01);
-  if(inreal > 0) strcat(s04," ");  //in place of negative sign
+  strcpy(s02,s01);
+
+  if(inreal > 0) strcpy(s04," ");  //in place of negative sign
   strcat(s04,s03);
-  strcpy(s02,s04);
+  strcat(s02,eatSpacesMid(radixProcess(s04)));
 }
+
 
 
 /********************************************//**
  * \brief Remove trailing zeroes from float strings
  *
  ***********************************************/
-  static char tmp_names1[20];
+
 char * eatZeroesEnd(const char * ss) {
   int8_t ix;
   strcpy(tmp_names1,ss);
@@ -896,10 +864,28 @@ char * eatZeroesEnd(const char * ss) {
   if(tmp_names1[ix]=='.' || tmp_names1[ix]==',') {
     tmp_names1[ix]=0;
   } 
+  return tmp_names1;
+}
 
-printf("###>A §%s§\n",ss);
-printf("###>B §%s§\n",tmp_names1);
 
+char * padEquals(const char * ss) {
+  int8_t ix = 0, iy = 0;
+  tmp_names1[0]=0;
+  while( ss[ix] != 0 ){
+    if(ss[ix]=='=') {
+      tmp_names1[iy++] = STD_SPACE_PUNCTUATION[0];
+      tmp_names1[iy++] = STD_SPACE_PUNCTUATION[1];
+      tmp_names1[iy++] = '=';
+      tmp_names1[iy++] = STD_SPACE_PUNCTUATION[0];
+      tmp_names1[iy++] = STD_SPACE_PUNCTUATION[1];
+      tmp_names1[iy] = 0;
+    } 
+    else {
+      tmp_names1[iy++] = ss[ix];
+      tmp_names1[iy] = 0;      
+    }
+    ix++;
+  }
   return tmp_names1;
 }
 
@@ -907,7 +893,7 @@ printf("###>B §%s§\n",tmp_names1);
 //parts taken from:
 //  http://jkorpela.fi/c/eng.html
 //  David Hoerl 
-static char *eng(double value, int digits, int numeric)
+static char *eng(double value, int digits)
 {
      double display, fract, old;
      int expof10;
@@ -948,26 +934,24 @@ static char *eng(double value, int digits, int numeric)
          digits -= 2;
      else if(value >= 10.0)
          digits -= 1;
-
      if(isnan(old) || isinf(old)) sprintf(result,"%s%f",sign,old); else
-     if(old>99.9999f     && old<1000.0f) sprintf(result,"%s%.i",  sign,(int)old); else
-     if(old>9.99999f     && old<100.0f ) sprintf(result,"%s%.*f", sign, 1+digits+1-3, old); else
-     if(old>0.999999f    && old<10.0f  ) sprintf(result,"%s%.*f", sign, digits+2-3  , old); else
-     if(old>0.0999999f   && old<1.0f   ) sprintf(result,"%s%.*f", sign, 2+digits+3-3, old); else
-     if(old>0.00999999f  && old<0.1f   ) sprintf(result,"%s%.*f", sign, 1+digits+4-3, old); else
-     sprintf(result, "%s%.*fe%d", sign, digits-1, value, expof10);
-     //strcpy(result,eatZeroesEnd(result));
+     if(old>99.9999     && old<1000.0) sprintf(result,"%s%.i",  sign,(int)old); else
+     if(old>9.99999     && old<100.0 ) sprintf(result,"%s%.*f", sign, 1+digits+1-3, old); else
+     if(old>0.999999    && old<10.0  ) sprintf(result,"%s%.*f", sign, digits+2-3  , old); else
+     if(old>0.0999999   && old<1.0   ) sprintf(result,"%s%.*f", sign, 2+digits+3-3, old); else
+     if(old>0.00999999  && old<0.1   ) sprintf(result,"%s%.*f", sign, 1+digits+4-3, old); else
+     if(old == 0.0)                    sprintf(result,"%s%.*f", " ",  digits-1    , old); else
+                                       sprintf(result,"%s%.*fe%d", sign, digits-1, value, expof10);
      return result;
 }
 
 
 void eformat_eng2 (char* s02, const char* s01, double inreal, int8_t digits, const char* s05) {
   char s03[100];
-  strcpy(s03,eng(inreal, digits,-99));
+  strcpy(s03,eng(inreal, digits));
   strcpy(s02,s01);
-  strcat(s02,s03);
+  strcat(s02,eatSpacesMid(radixProcess(s03)));
   strcat(s02,s05);
-  strcpy(s02,eatSpacesMid(s02));
 }
 
 
@@ -1293,45 +1277,60 @@ graph_axis();
       printf("#####>>> Labels selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
     #endif //STATDEBUG
 
+    #define horOffsetR 107 //digit righ side aliognment
     #define autoinc 19 //text line spacing
     #define autoshift -5 //text line spacing
-    #define horOffset 3 //labels from the left
+    #define horOffset 1 //labels from the left
     int16_t index = -1;
     if(selection!=0) {
       strcpy(ss,eatSpacesEnd(getCurveFitModeName(selection)));
       if(lrCountOnes(lrSelection)>1 && selection == lrChosen) strcat(ss,lrChosen == 0 ? "" : STD_SUP_ASTERISK);
-        showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, false, false);
+        showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, false, false);
 
-      strcpy(ss,"y="); strcat(ss,getCurveFitModeFormula(selection)); showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, false, false);
+      if(selection != CF_GAUSS_FITTING && selection != CF_CAUCHY_FITTING) {
+        strcpy(ss,"y="); strcat(ss,getCurveFitModeFormula(selection)); showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, false, false);
+      } else {
+        strcpy(ss,"y="); strcat(ss,getCurveFitModeFormula(selection)); showString(          ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, false, false);        
+      }
+
       if(selection != CF_ORTHOGONAL_FITTING) {
-        sprintf(ss,"n=%d",(int)nn);            showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
-        strcpy(ss,"a" STD_SUB_0 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -4 +autoshift, vmNormal, false, false);
-        eformat_eng2(ss,"",a0,3,"");           showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -4 +autoshift, vmNormal, false, false);
-        strcpy(ss,"a" STD_SUB_1 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -1 +autoshift, vmNormal, false, false);
-        eformat_eng2(ss,"",a1,3,"");           showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -1 +autoshift, vmNormal, false, false);
+        sprintf(ss,"n=%d",(int)nn);            showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
+
+        eformat_eng2(ss,"",a0,3,"");           showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  -4 +autoshift, vmNormal, false, false);
+        strcpy(ss,"a" STD_SUB_0 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   -4 +autoshift, vmNormal, false, false);
+
+        eformat_eng2(ss,"",a1,3,"");           showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  -1 +autoshift, vmNormal, false, false);
+        strcpy(ss,"a" STD_SUB_1 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   -1 +autoshift, vmNormal, false, false);
+
         if(selection == CF_PARABOLIC_FITTING || selection == CF_GAUSS_FITTING || selection == CF_CAUCHY_FITTING) { 
-          strcpy(ss,"a" STD_SUB_2 "=");        showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -1 +autoshift, vmNormal, false, false);
-          eformat_eng2(ss,"",a2,3,"");         showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -1 +autoshift, vmNormal, false, false);      
+          eformat_eng2(ss,"",a2,3,"");         showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  -1 +autoshift, vmNormal, false, false);      
+          strcpy(ss,"a" STD_SUB_2 "=");        showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   -1 +autoshift, vmNormal, false, false);
         }
 
-        strcpy(ss,"r" STD_SUP_2 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   +2 +autoshift, vmNormal, false, false);
-        eformat(ss,"",rr,4,"");                showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  +2  +autoshift, vmNormal, false, false);      
+        eformat(ss,"",rr,4,"");                showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  +2  +autoshift, vmNormal, false, false);      
+        strcpy(ss,"r" STD_SUP_2 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   +2 +autoshift, vmNormal, false, false);
 
         eformat_eng2(ss,"(",x_max,2,""); 
-        eformat_eng2(tt,",",y_max,2,")");
-        strcat(tt,ss);                    nn = showString(ss, &standardFont,160-2 - stringWidth(tt, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index        +autoshift, vmNormal, false, false);      
-        eformat_eng2(ss,",",y_max,2,")");      showString(ss, &standardFont,nn+3, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++      +autoshift, vmNormal, false, false);      
-        eformat_eng2(ss,"(",x_min,2,"");  nn = showString(ss, &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index    -2  +autoshift, vmNormal, false, false);      
-        eformat_eng2(ss,",",y_min,2,")");      showString(ss, &standardFont,nn+3, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -2  +autoshift, vmNormal, false, false);      
+        eformat_eng2(tt,radixProcess("#"),y_max,2,")");
+        strcat(tt,ss);                    nn = showString(padEquals(ss), &standardFont,160-2 - stringWidth(tt, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index        +autoshift, vmNormal, false, false);      
+        eformat_eng2(ss,radixProcess("#"),y_max,2,")");      showString(padEquals(ss), &standardFont,nn+3, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++      +autoshift, vmNormal, false, false);      
+        eformat_eng2(ss,"(",x_min,2,"");  nn = showString(padEquals(ss), &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index    -2  +autoshift, vmNormal, false, false);      
+        eformat_eng2(ss,radixProcess("#"),y_min,2,")");      showString(padEquals(ss), &standardFont,nn+3, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -2  +autoshift, vmNormal, false, false);      
         
       }
       else {
-        strcpy(ss,"a" STD_SUB_0 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -4 +autoshift, vmNormal, false, false);
-        eformat_fix3(ss,"",a0);                showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -4 +autoshift, vmNormal, false, false);
-        strcpy(ss,"a" STD_SUB_1 "=");          showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   -1 +autoshift, vmNormal, false, false);
-        eformat_fix3(ss,"",a1);                showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -1 +autoshift, vmNormal, false, false);
-        strcpy(ss,"s" STD_SUB_m STD_SUB_i "=");showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index   +1 +autoshift, vmNormal, false, false);
-        eformat_eng2(ss,"",smi,3,"");          showString(ss, &standardFont, 120 - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  +1 +autoshift, vmNormal, false, false);
+        eformat_fix3(ss,"",a0);                showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  -4 +autoshift, vmNormal, false, false);
+        strcpy(ss,"a" STD_SUB_0 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   -4 +autoshift, vmNormal, false, false);
+        eformat_fix3(ss,"",a1);                showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  -1 +autoshift, vmNormal, false, false);
+        strcpy(ss,"a" STD_SUB_1 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   -1 +autoshift, vmNormal, false, false);
+        if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_PLOT_STAT) {
+          eformat_eng2(ss,"",smi,3,"");          showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  +1 +autoshift, vmNormal, false, false);
+          strcpy(ss,"s" STD_SUB_m STD_SUB_i "=");showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   +1 +autoshift, vmNormal, false, false);
+        } else {
+          eformat(ss,"",rr,4,"");                showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  +2  +autoshift, vmNormal, false, false);      
+          strcpy(ss,"r" STD_SUP_2 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   +2 +autoshift, vmNormal, false, false);
+        }
+
         //eformat(ss,"x,y" STD_SUB_m STD_SUB_i STD_SUB_n "=", x_min,5);
         //showString(ss, &standardFont, 0, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
         //eformat(ss,"x,y" STD_SUB_m STD_SUB_a STD_SUB_x "=", x_max,5);
@@ -1371,7 +1370,7 @@ void fnPlotStat(uint16_t plotMode){
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
 #endif //STATDEBUG
 
-#if defined STATDEBUG && defined PC_BUILD
+//#if defined STATDEBUG && defined PC_BUILD
   uint16_t i;
   int16_t cnt;
   realToInt32(SIGMA_N, cnt);
@@ -1379,7 +1378,7 @@ void fnPlotStat(uint16_t plotMode){
   for (i = 0; i < LIM && i < cnt; ++i) { 
     printf("i = %3u x = %9f; y = %9f\n",i,gr_x[i],gr_y[i]);
   }
-#endif //STATDEBUG
+//#endif //STATDEBUG
 
 
 jm_SCALE = false;
@@ -1388,7 +1387,12 @@ jm_SCALE = false;
   if (!(lastPlotMode == PLOT_NOTHING || lastPlotMode == PLOT_START)) plotMode = lastPlotMode;
   calcMode = CM_PLOT_STAT;
   statGraphReset(); 
-  if(plotMode == PLOT_START) plotSelection = 0;
+  if(plotMode == PLOT_START){
+    plotSelection = 0;
+  }
+  if(plotMode == PLOT_LR && lrSelection != 0) {
+    plotSelection = lrSelection;
+  }
 
   hourGlassIconEnabled = true;
   showHideHourGlass();
@@ -1401,9 +1405,10 @@ jm_SCALE = false;
 
   switch(plotMode) {
     case PLOT_LR:
-    case PLOT_FIT:
+    case PLOT_NXT:
+    case PLOT_REV:
          #if defined STATDEBUG && defined PC_BUILD
-           printf("################# PLOT_FIT: Push PLOT_LR menu; plotSelection = %u\n",plotSelection);
+           printf("################# PLOT_NXT/REV: Push PLOT_LR menu; plotSelection = %u\n",plotSelection);
          #endif //STATDEBUG
          if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) showSoftmenu(-MNU_PLOT_LR);
          break;
@@ -1437,16 +1442,30 @@ void fnPlotRegressionLine(uint16_t plotMode){
       lrChosen = CF_ORTHOGONAL_FITTING;
       break;
 
-    case PLOT_FIT:
       //Show data and one curve fit selected: Scans lrSelection from LSB and stop after the first one is found. If a chosen curve is there, override.
       //printf("#####X %u %u \n",plotSelection, lrSelection);
+    case PLOT_NXT:
       plotSelection = plotSelection << 1;
-      if(plotSelection == 0) plotSelection = 1;
-      while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024)){
-        //printf("#####Z %u %u \n",plotSelection, lrSelection);
-        plotSelection = plotSelection << 1;
+      if(plotSelection == 0){
+        plotSelection = 1;
       }
-      if(plotSelection >= 1024) plotSelection = 0;  //purposely change to zero graph display
+
+//      while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024)){ //fast forward to selected LR
+  //      plotSelection = plotSelection << 1;
+    //  }
+      if(plotSelection >= 1024) {
+        plotSelection = 0;  //purposely change to zero graph display to give a no-line view
+      }
+      break;
+
+    case PLOT_REV:
+      if(plotSelection == 0){
+        plotSelection = 1024; //wraparound, will still shift right 1
+      }
+      plotSelection = plotSelection >> 1;
+      if(plotSelection >= 1024){
+        plotSelection = 0;  //purposely change to zero graph display to give a no line view
+      }
       break;
 
     case PLOT_LR:
@@ -1586,12 +1605,15 @@ void fnStatDemo0(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.7",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2.54938188039201E-10",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.8",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("9.85950557599169E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34( "4.9",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("3.73757132794435E-11",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    fnCurveFitting(0);
+    runFunction(ITM_LR);
+    runFunction(ITM_PLOT_LR);
    #endif //TESTSUITE_BUILD
   #endif //DEMO0
   }
 
 //DEMO: Randomized linear
-void fnStatDemo1(uint16_t unusedButMandatoryParameter){
+void fnStatDemo10(uint16_t unusedButMandatoryParameter){
 #ifdef DEMO1
   #ifndef TESTSUITE_BUILD
     int8_t ix;
@@ -1613,6 +1635,9 @@ void fnStatDemo1(uint16_t unusedButMandatoryParameter){
       runFunction(ITM_ADD);
       runFunction(ITM_SIGMAPLUS);
       }
+    fnCurveFitting(0);
+    runFunction(ITM_LR);
+    runFunction(ITM_PLOT_LR);
   #endif //TESTSUITE_BUILD
 #endif //DEMO1
 }
@@ -1626,9 +1651,45 @@ void fnStatDemo2(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0000",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1.0000",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("+0.1",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.0905",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("0.01",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("0.8",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    fnCurveFitting(0);
+    runFunction(ITM_LR);
+    runFunction(ITM_PLOT_LR);
   #endif //TESTSUITE_BUILD
 #endif //DEMO2
 }
+
+
+//DEMO: Randomized linear
+void fnStatDemo1(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
+    int8_t ix;
+    time_t t;
+    srand((unsigned) time(&t));
+    runFunction(ITM_CLSIGMA);
+    plotSelection = 0;
+    srand((unsigned int)time(NULL));
+    for(ix=0; ix!=100; ix++) {
+
+      int mv = 11000 + rand() % 22;  //instrument measuring RMS voltage of an 11 kV installation, with +- 0.1% variance, offset to the + for convenience
+
+      setSystemFlag(FLAG_ASLIFT);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      int32ToReal34(mv+rand()%4,REGISTER_REAL34_DATA(REGISTER_X)); // reading 1 has additional +0 to +3 variance to the said random number
+
+      setSystemFlag(FLAG_ASLIFT);
+      liftStack();
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      int32ToReal34(mv+rand()%4,REGISTER_REAL34_DATA(REGISTER_X)); // reading 2 has additional +0 to +3 variance to the said random number
+
+      runFunction(ITM_SIGMAPLUS);
+      }
+    runFunction(ITM_PLOT);
+    runFunction(ITM_PLOT_CENTRL);
+  #endif //TESTSUITE_BUILD
+}
+
+
+
 
 //DEMO: 4 points to simulate a distribution, from p105 of OM
 void fnStatDemo105(uint16_t unusedButMandatoryParameter){
@@ -1641,6 +1702,9 @@ void fnStatDemo105(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("3.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("90",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("130",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("4.5",REGISTER_REAL34_DATA(REGISTER_X));stringToReal34("150",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    fnCurveFitting(0);
+    runFunction(ITM_LR);
+    runFunction(ITM_PLOT_LR);
   #endif //TESTSUITE_BUILD
 #endif //DEMO105
 }
@@ -1660,6 +1724,9 @@ void fnStatDemo107(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1960",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("1512",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1970",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2162",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("1972",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("2382",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    fnCurveFitting(0);
+    runFunction(ITM_LR);
+    runFunction(ITM_PLOT_LR);
   #endif //TESTSUITE_BUILD
 #endif //DEMO107
 }
@@ -1675,6 +1742,9 @@ void fnStatDemo109(uint16_t unusedButMandatoryParameter){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("40",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("6.61",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("60",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.21",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone); reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);stringToReal34("80",REGISTER_REAL34_DATA(REGISTER_X)); stringToReal34("7.78",REGISTER_REAL34_DATA(REGISTER_Y));runFunction(ITM_SIGMAPLUS);
+    fnCurveFitting(0);
+    runFunction(ITM_LR);
+    runFunction(ITM_PLOT_LR);
   #endif //TESTSUITE_BUILD
 #endif //DEMO109
 }

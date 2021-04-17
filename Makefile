@@ -123,7 +123,7 @@ DMCP_CFLAGS += $(DMCP_CPUFLAGS) $(C_INCLUDES) $(DMCP_INCLUDES) -fdata-sections -
 ifdef DEBUG_WP43S
 DMCP_CFLAGS += -O0 -DDEBUG
 else
-DMCP_CFLAGS += -Os -s -fomit-frame-pointer
+DMCP_CFLAGS += -Os -fmerge-all-constants -s -fomit-frame-pointer
 endif
 
 #######################################
@@ -189,7 +189,7 @@ DEPS_TESTTTF2RASTERFONTS = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(
 GEN_SRC_CONSTANTPOINTERS = $(addprefix src/wp43s/, constantPointers.c constantPointers.h)
 GEN_SRC_RASTERFONTSDATA  = $(addprefix src/wp43s/, rasterFontsData.c)
 GEN_SRC_SOFTMENUCATALOGS = $(addprefix src/wp43s/, softmenuCatalogs.h)
-GEN_BIN_TESTPGMS         = $(addprefix binaries/dmcp/, testPgms.bin)
+GEN_BIN_TESTPGMS         = $(addprefix res/dmcp/, testPgms.bin)
 
 GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
 
@@ -226,28 +226,29 @@ endif
 dmcp: version $(BUILD_DIR)/dmcp/$(WP43S_DMCP)_qspi.bin $(BUILD_DIR)/dmcp/$(WP43S_DMCP).pgm
 
 dist_windows:	wp43s.exe $(BUILD_DIR)/wiki
-	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/binaries/dmcp
+	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/res/dmcp
 	cp wp43s.exe $(WIN_DIST_DIR)/
 	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
-	cp binaries/dmcp/testPgms.bin $(WIN_DIST_DIR)/binaries/dmcp/
+	cp res/dmcp/testPgms.bin $(WIN_DIST_DIR)/res/dmcp/
 	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
 	cp res/fonts/WP43S_StandardFont.ttf $(WIN_DIST_DIR)/
 	cp $(BUILD_DIR)/wiki/Windows-installation.md $(WIN_DIST_DIR)/readme.txt
 	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
 dist_macos:	wp43s
-	mkdir -p $(MAC_DIST_DIR)/res/artwork $(MAC_DIST_DIR)/binaries/dmcp
+	mkdir -p $(MAC_DIST_DIR)/res/artwork $(MAC_DIST_DIR)/res/dmcp
 	cp wp43s $(MAC_DIST_DIR)/
 	cp res/artwork/*.png $(MAC_DIST_DIR)/res/artwork/
-	cp binaries/dmcp/testPgms.bin $(MAC_DIST_DIR)/binaries/dmcp/
+	cp res/dmcp/testPgms.bin $(MAC_DIST_DIR)/res/dmcp/
 	cp res/wp43s_pre.css $(MAC_DIST_DIR)/res/
+	cp res/fonts/*Font.ttf $(MAC_DIST_DIR)/
 	zip -r wp43s-macos.zip $(MAC_DIST_DIR)
 
 dist_dm42:	dmcp $(BUILD_DIR)/wiki
 	mkdir -p $(DM_DIST_DIR)
 	cp $(BUILD_DIR)/dmcp/WP43S.pgm $(BUILD_DIR)/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r res/offimg $(DM_DIST_DIR)
-	cp binaries/dmcp/keymap.bin binaries/dmcp/original_DM42_keymap.bin binaries/dmcp/testPgms.bin $(DM_DIST_DIR)
+	cp res/dmcp/keymap.bin res/dmcp/original_DM42_keymap.bin res/dmcp/testPgms.bin $(DM_DIST_DIR)
 	cp $(BUILD_DIR)/wiki/DM42-installation.md $(DM_DIST_DIR)/readme.txt
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
@@ -397,7 +398,7 @@ $(BUILD_DIR)/ttf2RasterFonts/%.o: %.c | $(BUILD_DIR)/ttf2RasterFonts
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) res/fonts/C43___NumericFont.ttf res/fonts/C43___StandardFont.ttf
-$(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) res/fonts/WP43S_NumericFont.ttf res/fonts/WP43S_StandardFont.ttf
+#$(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) res/fonts/WP43S_NumericFont.ttf res/fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> running $(TTF2RASTERFONTS_APP) <===="
 	./$(TTF2RASTERFONTS_APP) > /dev/null
 	touch $@
@@ -449,8 +450,12 @@ $(BUILD_DIR)/simulator/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 # Check-out submodule when trying to build pgm_syscalls.c - we may need additional triggers for the submodule init
-dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c:
+dmcp_sdk:
 	git submodule update --init --recursive dep/DMCP_SDK
+
+dep/DMCP_SDK/dmcp/dmcp.h: dmcp_sdk
+dep/DMCP_SDK/dmcp/sys/pgm_syscalls.c: dmcp_sdk
+dep/DMCP_SDK/dmcp/startup_pgm.s: dmcp_sdk
 
 # forcecrc32 needed because QSPI update process in DMCP requires a specific CRC
 $(BUILD_DIR)/dmcp/forcecrc32: dep/forcecrc32.c | $(BUILD_DIR)/dmcp
@@ -477,7 +482,7 @@ clean_dmcp:
 
 -include $(DEPS_DMCP)
 
-$(BUILD_DIR)/dmcp/%.o: %.c $(GMPLIB) $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/dmcp
+$(BUILD_DIR)/dmcp/%.o: %.c dep/DMCP_SDK/dmcp/dmcp.h $(GMPLIB) $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/dmcp
 	@echo -e "\n====> $<: $@ <===="
 	$(DMCP_CC) $(DMCP_CFLAGS) $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/dmcp/$(notdir $(<:.c=.lst)) -c -o $@ $<
 

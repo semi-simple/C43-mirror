@@ -334,7 +334,6 @@ real_t SS,TT,UU;
 void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, real_t *aa0, real_t *aa1, real_t *aa2){
     real_t AA,BB,CC,DD,EE,FF,GG,HH,RR2;   // Curve aux fitting variables
     real_t SS,TT,UU;                  // Temporary curve fitting variables
-    double v;
     uint16_t ix,jx;               //only a single graph can be displayed at once, so retain the single lowest bit, and clear the higher order bits if ever control comes here with multpile graph selections
     jx = 0;
     for(ix=0; ix!=10; ix++) {     //up to 2^9 inclusive of 512 which is ORTHOF. The ReM is respectedby usage of 0 only, not by manual selection.
@@ -407,6 +406,10 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
       printf(">>> sxy=%f\n",sxy);
       printf(">>> rr = %f\n",r*r);
       printf(">>> smi=%f\n",smi);
+    #endif
+
+    #if defined STAT_DISPLAY_ABCDEFG && defined PC_BUILD
+      double v;
     #endif
 
     switch(selection) {

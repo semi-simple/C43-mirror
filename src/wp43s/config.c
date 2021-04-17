@@ -37,6 +37,7 @@
 #include "registerValueConversions.h"
 #include "stack.h"
 #include "stats.h"
+#include <stdlib.h>
 #include <string.h>
 
 #include "wp43s.h"

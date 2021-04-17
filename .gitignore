@@ -27,6 +27,9 @@
 !binaries/dmcp/WP43S*
 !binaries/dmcp/C43*
 !binaries/dmcp/WP43C*
+!binaries/dmcp/WP43S.pgm
+!binaries/dmcp/
+
 
 ############################
 
@@ -49,7 +52,6 @@ wp43s.dSYM
 .idea/
 
 
-
 !binaries/dmcp/keymap.bin
 !binaries/dmcp/WP43S_qspi.bin
 !res/dmcp/testPgms.bin
@@ -60,3 +62,5 @@ wp43s.dSYM
 /testTtf2RasterFonts
 /wp43s
 /.vscode
+
+

@@ -606,6 +606,8 @@ void fnIndexMatrix(uint16_t regist) {
 #ifndef TESTSUITE_BUILD
   if((getRegisterDataType(regist) == dtReal34Matrix) || (getRegisterDataType(regist) == dtComplex34Matrix)) {
     matrixIndex = regist;
+    setIRegisterAsInt(false, 1);
+    setJRegisterAsInt(false, 1);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -1013,13 +1015,19 @@ void getMatrixFromRegister(calcRegister_t regist) {
   //END NOT WORKING//
 }
 
-//Row of Matric
+//Row of Matrix
 int16_t getIRegisterAsInt(bool_t asArrayPointer) {
   int16_t ret;
   longInteger_t tmp_lgInt;
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_I, tmp_lgInt);
+  if(getRegisterDataType(REGISTER_I) == dtLongInteger)
+    convertLongIntegerRegisterToLongInteger(REGISTER_I, tmp_lgInt);
+  else if(getRegisterDataType(REGISTER_I) == dtReal34)
+    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_I), tmp_lgInt, DEC_ROUND_DOWN);
+  else
+    longIntegerInit(tmp_lgInt);
   longIntegerToInt(tmp_lgInt, ret);
+  if(ret == 0) ret = 1;
 
   longIntegerFree(tmp_lgInt);
 
@@ -1033,8 +1041,14 @@ int16_t getJRegisterAsInt(bool_t asArrayPointer) {
   int16_t ret;
   longInteger_t tmp_lgInt;
 
-  convertLongIntegerRegisterToLongInteger(REGISTER_J, tmp_lgInt);
+  if(getRegisterDataType(REGISTER_J) == dtLongInteger)
+    convertLongIntegerRegisterToLongInteger(REGISTER_J, tmp_lgInt);
+  else if(getRegisterDataType(REGISTER_J) == dtReal34)
+    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_J), tmp_lgInt, DEC_ROUND_DOWN);
+  else
+    longIntegerInit(tmp_lgInt);
   longIntegerToInt(tmp_lgInt, ret);
+  if(ret == 0) ret = 1;
 
   longIntegerFree(tmp_lgInt);
 

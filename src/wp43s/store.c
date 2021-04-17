@@ -77,6 +77,40 @@ static bool_t storeElementReal(real34Matrix_t *matrix) {
 
 
 
+static bool_t storeIjReal(real34Matrix_t *matrix) {
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger && getRegisterDataType(REGISTER_Y) == dtLongInteger) {
+    longInteger_t i, j;
+    convertLongIntegerRegisterToLongInteger(REGISTER_Y, i);
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, j);
+    if(longIntegerCompareInt(i, 0) > 0 && longIntegerCompareUInt(i, matrix->header.matrixRows) <= 0 && longIntegerCompareInt(j, 0) > 0 && longIntegerCompareUInt(j, matrix->header.matrixColumns) <= 0) {
+      copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_I);
+      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_J);
+    }
+    else {
+      uint16_t row, col;
+      longIntegerToUInt(i, row);
+      longIntegerToUInt(j, col);
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "(%" PRIu16 ", %" PRIu16 ") out of range", row, col);
+        moreInfoOnError("In function storeIJReal:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    longIntegerFree(i);
+    longIntegerFree(j);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Cannot store %s in a matrix", getRegisterDataTypeName(REGISTER_X, true, false));
+      moreInfoOnError("In function storeIJReal:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  return false;
+}
+
+
+
 /********************************************//**
  * \brief Stores X in an other register
  *
@@ -293,6 +327,5 @@ void fnStoreElement(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnStoreIJ(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_I);
-  copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_J);
+  callByIndexedMatrix(storeIjReal, NULL);
 }

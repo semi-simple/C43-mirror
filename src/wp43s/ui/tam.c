@@ -418,7 +418,13 @@
         else if(run) {
           reallyRunFunction(_tamOperation(), value);
         }
-        tamLeaveMode();
+        if(_tamOperation() == ITM_M_GOTO_ROW) {
+          tamLeaveMode();
+          tamEnterMode(ITM_M_GOTO_COLUMN);
+        }
+        else {
+          tamLeaveMode();
+        }
       }
     }
     else {
@@ -448,7 +454,13 @@
       if(value != INVALID_VARIABLE) {
         reallyRunFunction(_tamOperation(), value);
       }
-      tamLeaveMode();
+      if(_tamOperation() == ITM_M_GOTO_ROW) {
+        tamLeaveMode();
+        tamEnterMode(ITM_M_GOTO_COLUMN);
+      }
+      else {
+        tamLeaveMode();
+      }
     }
   }
 

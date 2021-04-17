@@ -41,6 +41,7 @@
 #include "softmenus.h"
 #include "stack.h"
 #include "store.h"
+#include "ui/tam.h"
 
 #include "wp43s.h"
 
@@ -49,6 +50,7 @@ real34Matrix_t        openMatrixMIMPointer;
 bool_t                matEditMode;
 uint16_t              scrollRow;
 uint16_t              scrollColumn;
+uint16_t              tmpRow;
 uint16_t              matrixIndex = INVALID_VARIABLE;
 
 
@@ -283,9 +285,9 @@ void fnEditMatrix(uint16_t regist) {
 
 
 /********************************************//**
- * \brief Opens the Matrix Editor
+ * \brief Recalls old element in the Matrix Editor
  *
- * \param[in] regist uint16_t
+ * \param[in] unusedParamButMandatory uint16_t
  * \return void
  ***********************************************/
 void fnOldMatrix(uint16_t unusedParamButMandatory) {
@@ -304,6 +306,71 @@ void fnOldMatrix(uint16_t unusedParamButMandatory) {
     #ifdef PC_BUILD
     sprintf(errorMessage, "works in MIM only");
     moreInfoOnError("In function fnOldMatrix:", errorMessage, NULL, NULL);
+    #endif
+  }
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Go to an element in the Matrix Editor
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnGoToElement(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  if(calcMode == CM_MIM) {
+    mimEnter(false);
+    runFunction(ITM_M_GOTO_ROW);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "works in MIM only");
+      moreInfoOnError("In function fnGoToElement:", errorMessage, NULL, NULL);
+    #endif
+  }
+#endif // TESTSUITE_BUILD
+}
+
+void fnGoToRow(uint16_t row) {
+#ifndef TESTSUITE_BUILD
+  if(calcMode == CM_MIM) {
+    tmpRow = row;
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "works in MIM only");
+      moreInfoOnError("In function fnGoToRow:", errorMessage, NULL, NULL);
+    #endif
+  }
+#endif // TESTSUITE_BUILD
+}
+
+void fnGoToColumn(uint16_t col) {
+#ifndef TESTSUITE_BUILD
+  if(calcMode == CM_MIM) {
+    if(tmpRow == 0 || tmpRow > openMatrixMIMPointer.header.matrixRows || col == 0 || col > openMatrixMIMPointer.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "(%" PRIu16 ", %" PRIu16 ") out of range", tmpRow, col);
+        moreInfoOnError("In function putMatrixReal:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
+      setIRegisterAsInt(false, tmpRow);
+      setJRegisterAsInt(false, col);
+    }
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "works in MIM only");
+      moreInfoOnError("In function fnGoToColumn:", errorMessage, NULL, NULL);
     #endif
   }
 #endif // TESTSUITE_BUILD

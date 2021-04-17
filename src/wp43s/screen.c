@@ -1666,11 +1666,11 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         refreshRegisterLine(REGISTER_Z);
         refreshRegisterLine(REGISTER_Y);
         refreshRegisterLine(REGISTER_X);
-        displayShiftAndTamBuffer();
-
         if(calcMode == CM_MIM) {
           showMatrixEditor();
         }
+
+        displayShiftAndTamBuffer();
 
         showSoftmenuCurrentPart();
         hourGlassIconEnabled = false;

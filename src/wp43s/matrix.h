@@ -32,6 +32,9 @@
 void       fnNewMatrix                    (uint16_t unusedParamButMandatory);
 void       fnEditMatrix                   (uint16_t regist);
 void       fnOldMatrix                    (uint16_t unusedParamButMandatory);
+void       fnGoToElement                  (uint16_t unusedParamButMandatory);
+void       fnGoToRow                      (uint16_t row);
+void       fnGoToColumn                   (uint16_t col);
 
 void       fnTranspose                    (uint16_t unusedParamButMandatory);
 void       fnLuDecomposition              (uint16_t unusedParamButMandatory);

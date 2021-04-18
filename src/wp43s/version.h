@@ -25,7 +25,7 @@
 #ifndef VERSION_H
 #define VERSION_H
 
-#define VERSION_STRING "custom" STD_SPACE_3_PER_EM "build" STD_SPACE_3_PER_EM "edb7eda2-mod"
-#define VERSION_SHORT  "edb7eda2-mod"
+#define VERSION_STRING "custom" STD_SPACE_3_PER_EM "build" STD_SPACE_3_PER_EM "a057b341-mod"
+#define VERSION_SHORT  "a057b341-mod"
 
 #endif // VERSION_H

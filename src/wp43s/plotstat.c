@@ -172,10 +172,6 @@ void graph_end(void) {
 
 
 
-// ALSO CHECK FOR stringToReal and stringToReal34
-
-
-
 //Pauli volunteered this fuction, rev 1 2021-10-10
 #if DECDPUN != 3
 #error DECDPUN must be 3
@@ -1266,7 +1262,7 @@ graph_axis();
 
       x = (double)x_min + (double)(x_max-x_min)/(double)Intervals * (double)ix;
       if(USEFLOATING != 0) {
-        //TODO create REAL from ix if REALS will be used
+        //TODO create REAL from x (double) if REALS will be used
         sprintf(ss,"%f",x); stringToReal(ss,&XX,&ctxtReal39);
       }
       yIsFnx( USEFLOATING, selection, x, &y, a0, a1, a2, &XX, &YY, RR, SMI, aa0, aa1, aa2);

@@ -39,9 +39,8 @@
 #include "wp43s.h"
 
 
-#define STAT_DISPLAY_ABCDEFG                      //to display helper functions A-H
+#undef STAT_DISPLAY_ABCDEFG                      //to display helper functions A-H
 #undef STAT_CROSSCHECK
-#undef GAUSSF_MAX_OVERRIDE                      // Test setting
 
 
 static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables
@@ -882,13 +881,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           realToDouble1(aa0, &a0);
           printf("§ a0: %f %f\n",a0, exp (H - F * a1 * a1));
         #endif //STAT_CROSSCHECK
-
-        #ifdef GAUSSF_MAX_OVERRIDE
-                //        a0 = maxy;  // exp (H - F * a1 * a1); //maxy;
-                realCopy    (SIGMA_YMAX,aa0);
-                realToDouble1(aa0, &a0);
-                printf("§ a0: %f %f\n",a0,maxy);
-        #endif //GAUSSF_MAX_OVERRIDE
 
         //        r  = sqrt ( ( H * sumlny + G * sumxlny + F * sumx2lny - 1.0/nn * sumlny * sumlny ) / (sumln2y - 1.0/nn * sumlny * sumlny) );
         realMultiply(&HH, SIGMA_lnY, &SS, realContext);

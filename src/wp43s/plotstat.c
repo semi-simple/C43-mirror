@@ -92,7 +92,6 @@ uint32_t  xzero;
 uint32_t  yzero;
 
 
-
 void statGraphReset(void){
   graph_dx      = 0;
   graph_dy      = 0;
@@ -247,7 +246,6 @@ void realToDouble1(const real_t *vv, double *v) {
     //printf("Convert vv REAL %s --> Double %lf\n",tmpString1,*v);
   #endif
 }
-
 
 
 void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
@@ -475,9 +473,15 @@ void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {               
 
 void plotline2(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {                   // Plots line from xo,yo to xn,yn; uses temporary x1,y1
    pixelline(xo,yo,xn,yn,1);
-   pixelline((uint16_t)((float)(xo)),(uint16_t)((float)(yo-0.5f)),(uint16_t)((float)(xn)),(uint16_t)((float)(yn+0.5f)),1);
-   pixelline((uint16_t)((float)(xo)),(uint16_t)((float)(yo+0.5f)),(uint16_t)((float)(xn)),(uint16_t)((float)(yn-0.5f)),1);
+   pixelline((uint16_t)(round((float)(xo))),(uint16_t)(round((float)(yo-0.5f))),(uint16_t)(round((float)(xn))),(uint16_t)(round((float)(yn+0.5f))),1);
+   pixelline((uint16_t)(round((float)(xo))),(uint16_t)(round((float)(yo+0.5f))),(uint16_t)(round((float)(xn))),(uint16_t)(round((float)(yn-0.5f))),1);
  }
+
+
+
+
+
+
 
 void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) { // Plots line from xo,yo to xn,yn; uses temporary x1,y1
     uint16_t x1;  //range 0-399
@@ -516,6 +520,57 @@ void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal
       }
     }
   }
+
+
+
+
+//Exhange the name of this routine with pixelline() above to try Bresenham
+void pixelline_bresenham(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) { // Plots line from xo,yo to xn,yn; uses temporary x1,y1
+    #if defined STATDEBUG_VERBOSE && defined PC_BUILD
+      printf("pixelline: xo,yo,xn,yn: %d %d   %d %d \n",xo,yo,xn,yn);
+    #endif
+
+   //Bresenham line drawing: Pauli's link. Also here: http://forum.6502.org/viewtopic.php?f=10&t=2247&start=555
+   int dx =  abs(xn-xo), sx = xo<xn ? 1 : -1;
+   int dy = -abs(yn-yo), sy = yo<yn ? 1 : -1;
+   int err = dx+dy, e2; /* error value e_xy */
+ 
+   for(;;){  /* loop */
+      if(vmNormal) placePixel(xo,yo); else removePixel(xo,yo);
+      if (xo==xn && yo==yn) break;
+      e2 = 2*err;
+      if (e2 >= dy) { err += dy; xo += sx; } /* e_xy+e_x > 0 */
+      if (e2 <= dx) { err += dx; yo += sy; } /* e_xy+e_y < 0 */
+   }
+
+
+/* Annother Bresenham example
+    //Bresenham line draw algo. https://stackoverflow.com/questions/62651042/how-to-implement-bresenhams-line-algorithm-in-c-when-trying-to-draw-a-line-in-b
+    int dx = abs((int)(xn - xo)), sx = xo < xn ? 1 : -1;
+    int dy = abs((int)(yn - yo)), sy = yo < yn ? 1 : -1;
+    int err = (dx > dy ? dx : -dy) / 2, e2;
+    for (;;) {
+      // setPixel(xo,yo,Matrix);
+      if(vmNormal) placePixel(xo,yo); else removePixel(xo,yo);
+      if (xo == xn && yo == yn)
+        break;
+      e2 = err;
+      if (e2 > -dx) {
+        err -= dy;
+        xo += sx;
+      }
+      if (e2 < dy) {
+        err += dx;
+        yo += sy;
+      }
+    }
+*/
+
+
+}
+
+
+
 
 
 void force_refresh1(void) {
@@ -918,13 +973,16 @@ static char *eng(double value, int digits)
          digits -= 2;
      else if(value >= 10.0)
          digits -= 1;
+
      if(isnan(old) || isinf(old)) sprintf(result,"%s%f",sign,old); else
+     if(old>999.9       && old<100000.0) sprintf(result,"%s%.i",  sign,(int)old); else
      if(old>99.9999     && old<1000.0) sprintf(result,"%s%.i",  sign,(int)old); else
      if(old>9.99999     && old<100.0 ) sprintf(result,"%s%.*f", sign, 1+digits+1-3, old); else
      if(old>0.999999    && old<10.0  ) sprintf(result,"%s%.*f", sign, digits+2-3  , old); else
      if(old>0.0999999   && old<1.0   ) sprintf(result,"%s%.*f", sign, 2+digits+3-3, old); else
      if(old>0.00999999  && old<0.1   ) sprintf(result,"%s%.*f", sign, 1+digits+4-3, old); else
      if(old == 0.0)                    sprintf(result,"%s%.*f", " ",  digits-1    , old); else
+     if(digits-1 <= 0)                   sprintf(result,"%s%.0fe%d", sign, value, expof10); else
                                        sprintf(result,"%s%.*fe%d", sign, digits-1, value, expof10);
      return result;
 }
@@ -1162,13 +1220,13 @@ graph_axis();
     realToFloat(aa2, &a2 );
     realToInt32(SIGMA_N, nn);  
 
-    #ifdef PC_BUILD
+    #if defined STATDEBUG && defined PC_BUILD
       printf("plotting line: a2 %f a1 %f a0 %f\n",a2,a1,a0);
-    #endif
+    #endif //STATDEBUG
     if((selection==0 && a2 == 0 && a1 == 0 && a0 == 0)) {
       #if defined STATDEBUG && defined PC_BUILD
         printf("return, nothing selected, zero parameters, nothing to draw\n");
-      #endif
+      #endif //STATDEBUG
       return;
     }
     uint16_t  ix;
@@ -1256,12 +1314,7 @@ graph_axis();
       }
     }
 
-
-    #if defined STATDEBUG && defined PC_BUILD
-      printf("#####>>> Labels selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
-    #endif //STATDEBUG
-
-    #define horOffsetR 107 //digit righ side aliognment
+    #define horOffsetR 109 //digit righ side aliognment
     #define autoinc 19 //text line spacing
     #define autoshift -5 //text line spacing
     #define horOffset 1 //labels from the left
@@ -1278,7 +1331,8 @@ graph_axis();
       }
 
       if(selection != CF_ORTHOGONAL_FITTING) {
-        sprintf(ss,"n=%d",(int)nn);            showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
+        sprintf(ss,"%d",(int)nn);              showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  -2 +autoshift, vmNormal, false, false);
+        sprintf(ss, STD_SPACE_PUNCTUATION STD_SPACE_PUNCTUATION "n=");                     showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ -2 +autoshift, vmNormal, false, false);
 
         eformat_eng2(ss,"",a0,3,"");           showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  -4 +autoshift, vmNormal, false, false);
         strcpy(ss,"a" STD_SUB_0 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   -4 +autoshift, vmNormal, false, false);
@@ -1308,11 +1362,11 @@ graph_axis();
         eformat_fix3(ss,"",a1);                showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  -1 +autoshift, vmNormal, false, false);
         strcpy(ss,"a" STD_SUB_1 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   -1 +autoshift, vmNormal, false, false);
         if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_PLOT_STAT) {
-          eformat_eng2(ss,"",smi,3,"");          showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  +1 +autoshift, vmNormal, false, false);
+          eformat_eng2(ss,"",smi,3,"");        showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  +1 +autoshift, vmNormal, false, false);
           strcpy(ss,"s" STD_SUB_m STD_SUB_i "=");showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   +1 +autoshift, vmNormal, false, false);
         } else {
-          eformat(ss,"",rr,4,"");                showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  +2  +autoshift, vmNormal, false, false);      
-          strcpy(ss,"r" STD_SUP_2 "=");          showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   +2 +autoshift, vmNormal, false, false);
+          eformat(ss,"",rr,4,"");              showString(padEquals(ss), &standardFont, horOffsetR - stringWidth(ss, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index  +2  +autoshift, vmNormal, false, false);      
+          strcpy(ss,"r" STD_SUP_2 "=");        showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++   +2 +autoshift, vmNormal, false, false);
         }
 
         //eformat(ss,"x,y" STD_SUB_m STD_SUB_i STD_SUB_n "=", x_min,5);
@@ -1354,7 +1408,7 @@ void fnPlotStat(uint16_t plotMode){
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
 #endif //STATDEBUG
 
-//#if defined STATDEBUG && defined PC_BUILD
+#if defined STATDEBUG && defined PC_BUILD
   uint16_t i;
   int16_t cnt;
   realToInt32(SIGMA_N, cnt);
@@ -1362,7 +1416,7 @@ void fnPlotStat(uint16_t plotMode){
   for (i = 0; i < LIM && i < cnt; ++i) { 
     printf("i = %3u x = %9f; y = %9f\n",i,gr_x[i],gr_y[i]);
   }
-//#endif //STATDEBUG
+#endif //STATDEBUG
 
 
 jm_SCALE = false;
@@ -1391,26 +1445,28 @@ jm_SCALE = false;
     case PLOT_LR:
     case PLOT_NXT:
     case PLOT_REV:
-         #if defined STATDEBUG && defined PC_BUILD
-           printf("################# PLOT_NXT/REV: Push PLOT_LR menu; plotSelection = %u\n",plotSelection);
-         #endif //STATDEBUG
-         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) showSoftmenu(-MNU_PLOT_LR);
+         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) {
+           showSoftmenu(-MNU_PLOT_LR);
+         }
          break;
     case PLOT_ORTHOF:
     case PLOT_START:
          jm_SCALE = true;
-         #if defined STATDEBUG && defined PC_BUILD
-           printf("################# PLOT_START, PLOT_ORTHOF): Push PLOT_STAT menu; plotSelection = %u\n",plotSelection);
-         #endif //STATDEBUG
-         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) showSoftmenu(-MNU_PLOT_STAT);
+         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) {
+           showSoftmenu(-MNU_PLOT_STAT);
+         }
          break;
     case PLOT_NOTHING:
          break;
     default: break;
   }
 
-  if(plotMode != PLOT_START) fnPlotRegressionLine(plotMode);
-  else lastPlotMode = plotMode;
+  if(plotMode != PLOT_START) {
+    fnPlotRegressionLine(plotMode);
+  }
+  else {
+    lastPlotMode = plotMode;
+  }
 #endif //TESTSUITE_BUILD
 }
 
@@ -1434,8 +1490,8 @@ void fnPlotRegressionLine(uint16_t plotMode){
         plotSelection = 1;
       }
 
-//      while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024)){ //fast forward to selected LR
-  //      plotSelection = plotSelection << 1;
+    //  while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024)){ //fast forward to selected LR
+    //    plotSelection = plotSelection << 1;
     //  }
       if(plotSelection >= 1024) {
         plotSelection = 0;  //purposely change to zero graph display to give a no-line view
@@ -1481,8 +1537,7 @@ void fnPlotZoom(uint16_t unusedButMandatoryParameter){
    #endif //TESTSUITE_BUILD
 }
 
-
-
+/*
 //DEMO: Arbitrary distribution to test. Close to a Normal.
 void fnStatDemo0(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
@@ -1720,3 +1775,5 @@ void fnStatDemo109(uint16_t unusedButMandatoryParameter){
     runFunction(ITM_PLOT_LR);
   #endif //TESTSUITE_BUILD
 }
+
+*/

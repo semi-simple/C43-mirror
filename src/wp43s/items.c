@@ -599,12 +599,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnF_R                      (uint16_t unusedButMandatoryParameter) {}
   void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
   void fnProcessLR                (uint16_t unusedButMandatoryParameter) {}
-  void fnStatDemo0                (uint16_t unusedButMandatoryParameter) {} //Temporary
-  void fnStatDemo1                (uint16_t unusedButMandatoryParameter) {} //Temporary
-  void fnStatDemo2                (uint16_t unusedButMandatoryParameter) {} //Temporary
-  void fnStatDemo105              (uint16_t unusedButMandatoryParameter) {} //Temporary
-  void fnStatDemo107              (uint16_t unusedButMandatoryParameter) {} //Temporary
-  void fnStatDemo109              (uint16_t unusedButMandatoryParameter) {} //Temporary
   void fnPlotZoom                 (uint16_t unusedButMandatoryParameter) {} //Temporary
   void fnYIsFnx                   (uint16_t unusedButMandatoryParameter) {}
   void fnXIsFny                   (uint16_t unusedButMandatoryParameter) {}
@@ -2453,17 +2447,11 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1755 */  { itemToBeCoded,               NOPARAM,                     "xOUT",                                        "xOUT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1756 */  { fnPlotStat,                  PLOT_ORTHOF,                 "",                                            "CENTRL",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /* 1757 */  { itemToBeCoded,               NOPARAM,                     "1757",                                        "1757",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_ENABLED  },
-/* 1758 */  { fnStatDemo0,                 NOPARAM,                     "",                                            "DEMO0",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1759 */  { fnStatDemo1,                 NOPARAM,                     "",                                            "DEMO1",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1760 */  { fnStatDemo2,                 NOPARAM,                     "",                                            "DEMO2",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1761 */  { fnPlotCloseSmi,              NOPARAM,                     "s" STD_SUB_m STD_SUB_i,                       "s" STD_SUB_m STD_SUB_i,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_ENABLED  },
-/* 1762 */  { fnPlotStat,                  PLOT_LR,                     "ASSESS",                                      "ASSESS",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1763 */  { fnPlotStat,                  PLOT_NXT,                    "",                                            "NXTFIT",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1764 */  { fnPlotStat,                  PLOT_REV,                    "",                                            "",                                            (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1765 */  { fnStatDemo105,               NOPARAM,                     "",                                            "DEM105",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1766 */  { fnStatDemo107,               NOPARAM,                     "",                                            "DEM107",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1767 */  { fnStatDemo109,               NOPARAM,                     "",                                            "DEM109",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
-/* 1768 */  { fnPlotZoom,                  NOPARAM,                     "",                                            "ZOOM",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1758 */  { fnPlotCloseSmi,              NOPARAM,                     "s" STD_SUB_m STD_SUB_i,                       "s" STD_SUB_m STD_SUB_i,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_ENABLED  },
+/* 1759 */  { fnPlotStat,                  PLOT_LR,                     "ASSESS",                                      "ASSESS",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1760 */  { fnPlotStat,                  PLOT_NXT,                    "",                                            "NXTFIT",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1761 */  { fnPlotStat,                  PLOT_REV,                    "",                                            "",                                            (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1762 */  { fnPlotZoom,                  NOPARAM,                     "",                                            "ZOOM",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 
-/* 1769 */  { itemToBeCoded,                NOPARAM,                    "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 1763 */  { itemToBeCoded,                NOPARAM,                    "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

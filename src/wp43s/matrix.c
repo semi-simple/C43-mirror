@@ -177,6 +177,37 @@ static bool_t putMatrixReal(real34Matrix_t *matrix) {
 
   return true;
 }
+
+
+
+static bool_t incIReal(real34Matrix_t *matrix) {
+  setIRegisterAsInt(true, getIRegisterAsInt(true) + 1);
+  wrapIJ(matrix->header.matrixRows, matrix->header.matrixColumns);
+  return false;
+}
+
+static bool_t decIReal(real34Matrix_t *matrix) {
+  setIRegisterAsInt(true, getIRegisterAsInt(true) - 1);
+  wrapIJ(matrix->header.matrixRows, matrix->header.matrixColumns);
+  return false;
+}
+
+static bool_t incJReal(real34Matrix_t *matrix) {
+  setJRegisterAsInt(true, getJRegisterAsInt(true) + 1);
+  if(wrapIJ(matrix->header.matrixRows, matrix->header.matrixColumns)) {
+    insRowRealMatrix(matrix, matrix->header.matrixRows);
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+static bool_t decJReal(real34Matrix_t *matrix) {
+  setJRegisterAsInt(true, getJRegisterAsInt(true) - 1);
+  wrapIJ(matrix->header.matrixRows, matrix->header.matrixColumns);
+  return false;
+}
 #endif // TESTSUITE_BUILD
 
 
@@ -397,6 +428,34 @@ void fnSetGrowMode(uint16_t growFlag) {
   else {
     clearSystemFlag(FLAG_GROW);
   }
+}
+
+
+
+/********************************************//**
+ * \brief Increment or decrement of register I as row pointer
+ *
+ * \param[in] mode uint16_t
+ * \return void
+ ***********************************************/
+void fnIncDecI(uint16_t mode) {
+#ifndef TESTSUITE_BUILD
+  callByIndexedMatrix((mode == DEC_FLAG) ? decIReal : incIReal, NULL);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Increment or decrement of register J as column pointer
+ *
+ * \param[in] mode uint16_t
+ * \return void
+ ***********************************************/
+void fnIncDecJ(uint16_t mode) {
+#ifndef TESTSUITE_BUILD
+  callByIndexedMatrix((mode == DEC_FLAG) ? decJReal : incJReal, NULL);
+#endif // TESTSUITE_BUILD
 }
 
 

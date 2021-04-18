@@ -36,6 +36,8 @@ void       fnGoToElement                  (uint16_t unusedParamButMandatory);
 void       fnGoToRow                      (uint16_t row);
 void       fnGoToColumn                   (uint16_t col);
 void       fnSetGrowMode                  (uint16_t growFlag);
+void       fnIncDecI                      (uint16_t mode);
+void       fnIncDecJ                      (uint16_t mode);
 
 void       fnTranspose                    (uint16_t unusedParamButMandatory);
 void       fnLuDecomposition              (uint16_t unusedParamButMandatory);

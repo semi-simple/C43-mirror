@@ -43,6 +43,7 @@ void       fnTranspose                    (uint16_t unusedParamButMandatory);
 void       fnLuDecomposition              (uint16_t unusedParamButMandatory);
 void       fnDeterminant                  (uint16_t unusedParamButMandatory);
 void       fnInvertMatrix                 (uint16_t unusedParamButMandatory);
+void       fnEuclideanNorm                (uint16_t unusedParamButMandatory);
 
 void       fnIndexMatrix                  (uint16_t regist);
 void       fnGetMatrix                    (uint16_t unusedParamButMandatory);

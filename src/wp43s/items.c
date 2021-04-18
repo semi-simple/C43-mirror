@@ -645,6 +645,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnLuDecomposition           (uint16_t unusedButMandatoryParameter) {}
   void fnDeterminant               (uint16_t unusedButMandatoryParameter) {}
   void fnInvertMatrix              (uint16_t unusedButMandatoryParameter) {}
+  void fnEuclideanNorm             (uint16_t unusedButMandatoryParameter) {}
   void fnIndexMatrix               (uint16_t unusedButMandatoryParameter) {}
   void fnGetMatrix                 (uint16_t unusedButMandatoryParameter) {}
   void fnPutMatrix                 (uint16_t unusedButMandatoryParameter) {}
@@ -2154,7 +2155,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1458 */  { itemToBeCoded,                NOPARAM,                     "END",                                         "END",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1459 */  { itemToBeCoded,                NOPARAM,                     "ENDP",                                        "End",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1460 */  { fnDisplayFormatEng,           TM_VALUE,                    "ENG",                                         "ENG",                                         (0 << TAM_MAX_BITS) |    15, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1461 */  { itemToBeCoded,                NOPARAM,                     "ENORM",                                       "ENORM",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1461 */  { fnEuclideanNorm,              NOPARAM,                     "ENORM",                                       "ENORM",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1462 */  { fnRecallMin,                  NOPARAM,                     "RCL" STD_DOWN_ARROW,                          "Min",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1463 */  { itemToBeCoded,                NOPARAM,                     "EQ.DEL",                                      "DELETE",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1464 */  { itemToBeCoded,                NOPARAM,                     "EQ.EDI",                                      "EDIT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

@@ -106,23 +106,24 @@
     setupUI();
 
     restoreCalc();
-    //ramDump();
-    refreshScreen();
-
-    gdk_threads_add_timeout(SCREEN_REFRESH_PERIOD, refreshLcd, NULL); // refreshLcd is called every SCREEN_REFRESH_PERIOD ms
 
     // Without the following 8 lines of code
-      // the f- and g-shifted labels are
-      // miss aligned! I dont know why!
-      calcModeAimGui();
-      while(gtk_events_pending()) {
-        gtk_main_iteration();
-      }
-      calcModeNormalGui();
-      while(gtk_events_pending()) {
-        gtk_main_iteration();
-      }
+    // the f- and g-shifted labels are
+    // miss aligned! I dont know why!
+    calcModeAimGui();
+    while(gtk_events_pending()) {
+      gtk_main_iteration();
+    }
+    calcModeNormalGui();
+    while(gtk_events_pending()) {
+      gtk_main_iteration();
+    }
+   
+    //#ifdef INIT_RAMDUMP
+    //ramDump();
+    //#endif
 
+    refreshScreen();
 
     gdk_threads_add_timeout(SCREEN_REFRESH_PERIOD, refreshLcd, NULL); // refreshLcd is called every SCREEN_REFRESH_PERIOD ms
     fnTimerReset();                                                    //dr timeouts for kb handling

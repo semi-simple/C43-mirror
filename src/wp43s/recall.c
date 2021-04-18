@@ -36,6 +36,7 @@
 
 
 
+#ifndef TESTSUITE_BUILD
 static bool_t recallElementReal(real34Matrix_t *matrix) {
   const int16_t i = getIRegisterAsInt(true);
   const int16_t j = getJRegisterAsInt(true);
@@ -45,6 +46,7 @@ static bool_t recallElementReal(real34Matrix_t *matrix) {
   real34Copy(&matrix->matrixElements[i * matrix->header.matrixColumns + j], REGISTER_REAL34_DATA(REGISTER_X));
   return false;
 }
+#endif // TESTSUITE_BUILD
 
 
 
@@ -291,7 +293,9 @@ void fnRecallStack(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnRecallElement(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
   callByIndexedMatrix(recallElementReal, NULL);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -303,6 +307,7 @@ void fnRecallElement(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnRecallIJ(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
   longInteger_t zero;
   longIntegerInit(zero);
 
@@ -334,4 +339,5 @@ void fnRecallIJ(uint16_t unusedButMandatoryParameter) {
   adjustResult(REGISTER_Y, false, true, REGISTER_Y, -1, -1);
 
   longIntegerFree(zero);
+#endif // TESTSUITE_BUILD
 }

@@ -54,6 +54,7 @@ bool_t regInRange(uint16_t regist) {
 
 
 
+#ifndef TESTSUITE_BUILD
 static bool_t storeElementReal(real34Matrix_t *matrix) {
   const int16_t i = getIRegisterAsInt(true);
   const int16_t j = getJRegisterAsInt(true);
@@ -108,6 +109,7 @@ static bool_t storeIjReal(real34Matrix_t *matrix) {
   }
   return false;
 }
+#endif // TESTSUITE_BUILD
 
 
 
@@ -315,7 +317,9 @@ void fnStoreStack(uint16_t regist) {
  * \return void
  ***********************************************/
 void fnStoreElement(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
   callByIndexedMatrix(storeElementReal, NULL);
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -327,5 +331,7 @@ void fnStoreElement(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnStoreIJ(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
   callByIndexedMatrix(storeIjReal, NULL);
+#endif // TESTSUITE_BUILD
 }

@@ -385,6 +385,23 @@ void fnGoToColumn(uint16_t col) {
 
 
 /********************************************//**
+ * \brief Set grow mode
+ *
+ * \param[in] growFlag uint16_t
+ * \return void
+ ***********************************************/
+void fnSetGrowMode(uint16_t growFlag) {
+  if(growFlag) {
+    setSystemFlag(FLAG_GROW);
+  }
+  else {
+    clearSystemFlag(FLAG_GROW);
+  }
+}
+
+
+
+/********************************************//**
  * \brief Transpose matrix
  *
  * \param[in] unusedParamButMandatory uint16_t
@@ -743,26 +760,9 @@ void showMatrixEditor() {
   int maxCols = cols;
   int maxRows = rows;
 
-  //tbd: Implement right behavior (add row, add col on change)
-  if (!getSystemFlag(FLAG_GROW)) {
-    if (getIRegisterAsInt(true) < 0) {
-      setIRegisterAsInt(true, rows - 1);
-      setJRegisterAsInt(true, (getJRegisterAsInt(true) == 0) ? cols - 1 : getJRegisterAsInt(true) - 1);
-    } else if (getIRegisterAsInt(true) == rows) {
-      setIRegisterAsInt(true, 0);
-      setJRegisterAsInt(true, (getJRegisterAsInt(true) == cols - 1) ? 0 : getJRegisterAsInt(true) + 1);
-    }
-
-    if (getJRegisterAsInt(true) < 0) {
-      setJRegisterAsInt(true, cols - 1);
-      setIRegisterAsInt(true, (getIRegisterAsInt(true) == 0) ? rows - 1 : getIRegisterAsInt(true) - 1);
-    } else if (getJRegisterAsInt(true) == cols) {
-      setJRegisterAsInt(true, 0);
-      setIRegisterAsInt(true, (getIRegisterAsInt(true) == rows - 1) ? 0 : getIRegisterAsInt(true) + 1);
-    }
-  }
-  else {
-    //GROW tbd
+  if(wrapIJ(rows, cols)) {
+    insRowRealMatrix(&openMatrixMIMPointer, rows);
+    convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
   }
 
   int16_t matSelRow = getIRegisterAsInt(true);
@@ -1027,7 +1027,6 @@ int16_t getIRegisterAsInt(bool_t asArrayPointer) {
   else
     longIntegerInit(tmp_lgInt);
   longIntegerToInt(tmp_lgInt, ret);
-  if(ret == 0) ret = 1;
 
   longIntegerFree(tmp_lgInt);
 
@@ -1048,7 +1047,6 @@ int16_t getJRegisterAsInt(bool_t asArrayPointer) {
   else
     longIntegerInit(tmp_lgInt);
   longIntegerToInt(tmp_lgInt, ret);
-  if(ret == 0) ret = 1;
 
   longIntegerFree(tmp_lgInt);
 
@@ -1081,6 +1079,26 @@ void setJRegisterAsInt(bool_t asArrayPointer, int16_t toStore) {
   longIntegerFree(tmp_lgInt);
 }
 
+bool_t wrapIJ(uint16_t rows, uint16_t cols) {
+  if(getIRegisterAsInt(true) < 0) {
+    setIRegisterAsInt(true, rows - 1);
+    setJRegisterAsInt(true, (getJRegisterAsInt(true) == 0) ? cols - 1 : getJRegisterAsInt(true) - 1);
+  } else if(getIRegisterAsInt(true) == rows) {
+    setIRegisterAsInt(true, 0);
+    setJRegisterAsInt(true, (getJRegisterAsInt(true) == cols - 1) ? 0 : getJRegisterAsInt(true) + 1);
+  }
+
+  if(getJRegisterAsInt(true) < 0) {
+    setJRegisterAsInt(true, cols - 1);
+    setIRegisterAsInt(true, (getIRegisterAsInt(true) == 0) ? rows - 1 : getIRegisterAsInt(true) - 1);
+  } else if(getJRegisterAsInt(true) == cols) {
+    setJRegisterAsInt(true, 0);
+    setIRegisterAsInt(true, ((!getSystemFlag(FLAG_GROW)) && (getIRegisterAsInt(true) == rows - 1)) ? 0 : getIRegisterAsInt(true) + 1);
+  }
+
+  return getIRegisterAsInt(true) == rows;
+}
+
 
 
 /* Duplicate */
@@ -1093,6 +1111,32 @@ void copyRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
   for(i = 0; i < cols * rows; ++i) {
     real34Copy(&matrix->matrixElements[i], &res->matrixElements[i]);
   }
+}
+
+
+
+/* Insert a row */
+void insRowRealMatrix(real34Matrix_t *matrix, uint16_t beforeRowNo) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+  real34Matrix_t newMat;
+
+  realMatrixInit(&newMat, rows + 1, cols);
+  for(i = 0; i < beforeRowNo * cols; ++i) {
+    real34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i]);
+  }
+  for(i = 0; i < cols; ++i) {
+    real34Copy(const34_0, &newMat.matrixElements[beforeRowNo * cols + i]);
+  }
+  for(i = beforeRowNo * rows; i < cols * rows; ++i) {
+    real34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i + cols]);
+  }
+
+  realMatrixFree(matrix);
+  matrix->header.matrixRows    = newMat.header.matrixRows;
+  matrix->header.matrixColumns = newMat.header.matrixColumns;
+  matrix->matrixElements       = newMat.matrixElements;
 }
 
 

@@ -35,6 +35,7 @@ void       fnOldMatrix                    (uint16_t unusedParamButMandatory);
 void       fnGoToElement                  (uint16_t unusedParamButMandatory);
 void       fnGoToRow                      (uint16_t row);
 void       fnGoToColumn                   (uint16_t col);
+void       fnSetGrowMode                  (uint16_t growFlag);
 
 void       fnTranspose                    (uint16_t unusedParamButMandatory);
 void       fnLuDecomposition              (uint16_t unusedParamButMandatory);
@@ -64,7 +65,10 @@ void       fnSwapRows                     (uint16_t unusedParamButMandatory);
   void     setIRegisterAsInt              (bool_t asArrayPointer, int16_t toStore);
   void     setJRegisterAsInt              (bool_t asArrayPointer, int16_t toStore);
 
+  bool_t   wrapIJ                         (uint16_t rows, uint16_t cols);
+
   void     copyRealMatrix                 (const real34Matrix_t *matrix, real34Matrix_t *res);
+  void     insRowRealMatrix               (real34Matrix_t *matrix, uint16_t beforeRowNo);
   void     transposeRealMatrix            (const real34Matrix_t *matrix, real34Matrix_t *res);
 
   void     addRealMatrices                (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);

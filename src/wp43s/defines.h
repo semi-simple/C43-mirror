@@ -503,7 +503,7 @@
 #define X_BATTERY                                389
 
 #define TIMER_IDX_SCREEN_REFRESH                   0 // use timer 0 to wake up for screen refresh
-#define TIMER_IDX_AUTO_REPEAT                      1 // use timer 1 to wake up for key auto-repeat
+//#define TIMER_IDX_AUTO_REPEAT                      1 // use timer 1 to wake up for key auto-repeat
 
 // timer nr for FG and FN use                                       //dr vv
 #define TO_FG_LONG                                 0

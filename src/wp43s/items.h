@@ -23,6 +23,7 @@
 #include <stdint.h>
 
 
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -497,10 +498,10 @@
 #define ITM_SIGMA1ony2                 456
 #define ITM_SIGMAx3                    457
 #define ITM_SIGMAx4                    458
-#define ITM_0458                       459
-#define ITM_0459                       460
-#define ITM_0460                       461
-#define ITM_0461                       462
+#define ITM_0459                       459
+#define ITM_0460                       460
+#define ITM_0461                       461
+#define ITM_0462                       462
 
 
 
@@ -1816,19 +1817,19 @@
 #define ITM_TRANS                     1751
 #define ITM_XIN                       1752
 #define ITM_XOUT                      1753
-#define ITM_PLOT_REGLINE              1754
+#define ITM_PLOT_CENTRL               1754
 #define ITM_1755                      1755
 #define ITM_STATDEMO0                 1756
 #define ITM_STATDEMO1                 1757
 #define ITM_STATDEMO2                 1758
 #define ITM_SMI                       1759
 #define ITM_PLOT_LR                   1760
-#define ITM_PLOT_SELLINE              1761
-#define ITM_STATDEM105                1762
-#define ITM_STATDEM107                1763
-#define ITM_STATDEM109                1764
-#define ITM_PLOTZOOM                  1765
-#define ITM_1766                      1766
+#define ITM_PLOT_NXT                  1761
+#define ITM_PLOT_REV                  1762
+#define ITM_STATDEM105                1763
+#define ITM_STATDEM107                1764
+#define ITM_STATDEM109                1765
+#define ITM_PLOTZOOM                  1766
 #define ITM_1767                      1767
 #define ITM_1768                      1768
 #define ITM_1769                      1769

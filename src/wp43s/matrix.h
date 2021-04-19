@@ -38,6 +38,8 @@ void       fnGoToColumn                   (uint16_t col);
 void       fnSetGrowMode                  (uint16_t growFlag);
 void       fnIncDecI                      (uint16_t mode);
 void       fnIncDecJ                      (uint16_t mode);
+void       fnInsRow                       (uint16_t unusedParamButMandatory);
+void       fnDelRow                       (uint16_t unusedParamButMandatory);
 
 void       fnTranspose                    (uint16_t unusedParamButMandatory);
 void       fnLuDecomposition              (uint16_t unusedParamButMandatory);
@@ -72,6 +74,7 @@ void       fnSwapRows                     (uint16_t unusedParamButMandatory);
 
   void     copyRealMatrix                 (const real34Matrix_t *matrix, real34Matrix_t *res);
   void     insRowRealMatrix               (real34Matrix_t *matrix, uint16_t beforeRowNo);
+  void     delRowRealMatrix               (real34Matrix_t *matrix, uint16_t beforeRowNo);
   void     transposeRealMatrix            (const real34Matrix_t *matrix, real34Matrix_t *res);
 
   void     addRealMatrices                (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);

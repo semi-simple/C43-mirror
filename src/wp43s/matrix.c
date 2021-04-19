@@ -461,6 +461,57 @@ void fnIncDecJ(uint16_t mode) {
 
 
 /********************************************//**
+ * \brief Insert a row
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnInsRow(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  if(calcMode == CM_MIM) {
+    mimEnter(false);
+    insRowRealMatrix(&openMatrixMIMPointer, getIRegisterAsInt(true));
+    mimEnter(true);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "works in MIM only");
+      moreInfoOnError("In function fnGoToElement:", errorMessage, NULL, NULL);
+    #endif
+  }
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Delete a row
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnDelRow(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  if(calcMode == CM_MIM) {
+    mimEnter(false);
+    if(openMatrixMIMPointer.header.matrixRows > 1)
+      delRowRealMatrix(&openMatrixMIMPointer, getIRegisterAsInt(true));
+    mimEnter(true);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "works in MIM only");
+      moreInfoOnError("In function fnGoToElement:", errorMessage, NULL, NULL);
+    #endif
+  }
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
  * \brief Transpose matrix
  *
  * \param[in] unusedParamButMandatory uint16_t
@@ -1234,8 +1285,31 @@ void insRowRealMatrix(real34Matrix_t *matrix, uint16_t beforeRowNo) {
   for(i = 0; i < cols; ++i) {
     real34Copy(const34_0, &newMat.matrixElements[beforeRowNo * cols + i]);
   }
-  for(i = beforeRowNo * rows; i < cols * rows; ++i) {
+  for(i = beforeRowNo * cols; i < cols * rows; ++i) {
     real34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i + cols]);
+  }
+
+  realMatrixFree(matrix);
+  matrix->header.matrixRows    = newMat.header.matrixRows;
+  matrix->header.matrixColumns = newMat.header.matrixColumns;
+  matrix->matrixElements       = newMat.matrixElements;
+}
+
+
+
+/* Delete a row */
+void delRowRealMatrix(real34Matrix_t *matrix, uint16_t beforeRowNo) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+  real34Matrix_t newMat;
+
+  realMatrixInit(&newMat, rows - 1, cols);
+  for(i = 0; i < beforeRowNo * cols; ++i) {
+    real34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i]);
+  }
+  for(i = (beforeRowNo + 1) * cols; i < cols * rows; ++i) {
+    real34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i - cols]);
   }
 
   realMatrixFree(matrix);

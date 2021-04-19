@@ -25,6 +25,7 @@
 #include "fonts.h"
 
 #include "wp43s.h"
+#include <string.h>
 
 
 

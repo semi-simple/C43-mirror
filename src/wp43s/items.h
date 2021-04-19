@@ -486,20 +486,20 @@
 #define ITM_SIGMAlny                   446
 #define ITM_SIGMAln2y                  447
 #define ITM_SIGMAxlny                  448
-#define ITM_SIGMAlnyonx                449
-#define ITM_SIGMAx2ony                 450
-#define ITM_SIGMA1onx                  451
-#define ITM_SIGMA1onx2                 452
-#define ITM_SIGMAxony                  453
-#define ITM_SIGMA1ony                  454
-#define ITM_SIGMA1ony2                 455
-#define ITM_SIGMAx3                    456
-#define ITM_SIGMAx4                    457
-#define ITM_0458                       458
-#define ITM_0459                       459
-#define ITM_0460                       460
-#define ITM_0461                       461
-#define ITM_0462                       462
+#define ITM_SIGMAx2lny                 449
+#define ITM_SIGMAlnyonx                450
+#define ITM_SIGMAx2ony                 451
+#define ITM_SIGMA1onx                  452
+#define ITM_SIGMA1onx2                 453
+#define ITM_SIGMAxony                  454
+#define ITM_SIGMA1ony                  455
+#define ITM_SIGMA1ony2                 456
+#define ITM_SIGMAx3                    457
+#define ITM_SIGMAx4                    458
+#define ITM_0458                       459
+#define ITM_0459                       460
+#define ITM_0460                       461
+#define ITM_0461                       462
 
 
 // System flags
@@ -1450,8 +1450,8 @@
 #define MNU_PROG                      1392
 #define MNU_TAMLABEL                  1393
 #define MNU_DYNAMIC                   1394
-#define MNU_1395                      1395
-#define MNU_1396                      1396
+#define MNU_PLOT_STAT                 1395
+#define MNU_PLOT_LR                   1396
 #define MNU_1397                      1397
 #define MNU_1398                      1398
 #define MNU_1399                      1399
@@ -1815,8 +1815,15 @@
 #define ITM_TRANS                     1753
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
+#define ITM_PLOT_CENTRL               1756
+#define ITM_1757                      1757
+#define ITM_SMI                       1758
+#define ITM_PLOT_LR                   1759
+#define ITM_PLOT_NXT                  1760
+#define ITM_PLOT_REV                  1761
+#define ITM_PLOTZOOM                  1762
 
-#define LAST_ITEM                     1756
+#define LAST_ITEM                     1763
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

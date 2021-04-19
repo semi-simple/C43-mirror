@@ -23,6 +23,7 @@
 #include "items.h"
 
 #include "wp43s.h"
+#include <stdlib.h>
 
 
 #pragma GCC diagnostic push
@@ -11356,9 +11357,9 @@ int main(int argc, char* argv[]) {
   *(currentStep++) = 255; // .END.
   *(currentStep++) = 255; // .END.
 
-  testPgms = fopen("binaries/dmcp/testPgms.bin", "wb");
+  testPgms = fopen("res/dmcp/testPgms.bin", "wb");
   if(testPgms == NULL) {
-    fprintf(stderr, "Cannot create file binaries/dmcp/testPgms.bin\n");
+    fprintf(stderr, "Cannot create file res/dmcp/testPgms.bin\n");
     exit(1);
   }
 
@@ -11367,7 +11368,7 @@ int main(int argc, char* argv[]) {
   fwrite(memory,      1, sizeOfPgms,         testPgms);
   fclose(testPgms);
 
-  printf("Test programs generated in\ndirectory: binaries/dmcp\nfile:      testPgms.bin\n");
+  printf("Test programs generated in\ndirectory: res/dmcp\nfile:      testPgms.bin\n");
 
   return 0;
 }

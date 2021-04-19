@@ -32,11 +32,13 @@
 #include "keyboard.h"
 #include "matrix.h"
 #include "memory.h"
+#include "plotstat.h"
 #include "programming/manage.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "stack.h"
 #include "stats.h"
+#include <stdlib.h>
 #include <string.h>
 
 #include "wp43s.h"
@@ -578,9 +580,9 @@ void addTestPrograms(void) {
   #else // !DMCP_BUILD
     FILE *testPgms;
 
-    testPgms = fopen("binaries/dmcp/testPgms.bin", "rb");
+    testPgms = fopen("res/dmcp/testPgms.bin", "rb");
     if(testPgms == NULL) {
-      printf("Cannot open file binaries/dmcp/testPgms.bin\n");
+      printf("Cannot open file res/dmcp/testPgms.bin\n");
       *(beginOfProgramMemory)     = 255; // .END.
       *(beginOfProgramMemory + 1) = 255; // .END.
       firstFreeProgramByte = beginOfProgramMemory;
@@ -650,6 +652,8 @@ void fnReset(uint16_t confirmation) {
     memset(aimBuffer,        0, AIM_BUFFER_LENGTH);
     memset(nimBufferDisplay, 0, NIM_BUFFER_LENGTH);
     memset(tamBuffer,        0, TAM_BUFFER_LENGTH);
+
+    graph_setupmemory();
 
     // Empty program initialization
     beginOfProgramMemory          = (uint8_t *)(ram + freeMemoryRegions[0].sizeInBlocks);
@@ -765,6 +769,10 @@ void fnReset(uint16_t confirmation) {
 
     decContextDefault(&ctxtReal34, DEC_INIT_DECQUAD);
 
+    decContextDefault(&ctxtRealShort, DEC_INIT_DECSINGLE);
+    ctxtRealShort.digits = 6;
+    ctxtRealShort.traps  = 0;
+
     decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
     ctxtReal39.digits = 39;
     ctxtReal39.traps  = 0;
@@ -787,6 +795,10 @@ void fnReset(uint16_t confirmation) {
 
     statisticalSumsPointer = NULL;
     savedStatisticalSumsPointer = NULL;
+    lrSelection = CF_LINEAR_FITTING;
+    lrChosen    = 0;
+    lastPlotMode = PLOT_NOTHING;
+    plotSelection = 0;
 
     shortIntegerMode = SIM_2COMPL;
     fnSetWordSize(64);

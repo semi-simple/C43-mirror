@@ -62,6 +62,9 @@
 #define VERBOSE_SCREEN               //JM Used at new SHOW. Needs PC_BUILD.
 #undef  VERBOSE_SCREEN
 
+#define INLINE_TEST                     //vv dr
+#undef INLINE_TEST                    //^^
+
 
 
 //Allow longpress CHS and EEX
@@ -144,6 +147,8 @@
   #define SCREEN_800x480 0
 #endif // RASPBERRY
 
+
+ 
 
 #if __linux__ == 1
   #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
@@ -984,50 +989,67 @@
   #endif // RASPBERRY
 #endif // PC_BUILD
 
-#if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-  #undef  DEBUG_PANEL
-  #define DEBUG_PANEL 0
-  #undef  DEBUG_REGISTER_L
-  #define DEBUG_REGISTER_L 0
-  #undef  SHOW_MEMORY_STATUS
-  #define SHOW_MEMORY_STATUS 0
-  #undef  EXTRA_INFO_ON_CALC_ERROR
-  #define EXTRA_INFO_ON_CALC_ERROR 0
-#endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
+  #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
+    #undef  DEBUG_PANEL
+    #define DEBUG_PANEL 0
+    #undef  DEBUG_REGISTER_L
+    #define DEBUG_REGISTER_L 0
+    #undef  SHOW_MEMORY_STATUS
+    #define SHOW_MEMORY_STATUS 0
+    #undef  EXTRA_INFO_ON_CALC_ERROR
+    #define EXTRA_INFO_ON_CALC_ERROR 0
+  #ifndef SWAP_TO_L1_ON_DM42
+    #undef  JM_LAYOUT_1A
+    #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
+  #else
+    #define JM_LAYOUT_1A
+    #undef  JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
+  #endif
+ #endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
 
 #if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
-  #undef  PC_BUILD
-  #undef  DMCP_BUILD
-  #undef  DEBUG_PANEL
-  #define DEBUG_PANEL 0
-  #undef  DEBUG_REGISTER_L
-  #define DEBUG_REGISTER_L 0
-  #undef  SHOW_MEMORY_STATUS
-  #define SHOW_MEMORY_STATUS 0
-  #undef  EXTRA_INFO_ON_CALC_ERROR
-  #define EXTRA_INFO_ON_CALC_ERROR 0
-  #define addItemToBuffer fnNop
-  #define fnOff           fnNop
-  #define fnAim           fnNop
-  #define registerBrowser fnNop
-  #define flagBrowser     fnNop
-  #define fontBrowser     fnNop
-  #define refreshRegisterLine(a)  {}
-  #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
-  #define showHideHourGlass()     {}
-  #define refreshScreen()         {}
-  #define refreshLcd(a)           {}
-  #define initFontBrowser()       {}
-#endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
+  #undef  JM_LAYOUT_1A
+  #undef  JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
+
+    #undef  PC_BUILD
+    #undef  DMCP_BUILD
+    #undef  DEBUG_PANEL
+    #define DEBUG_PANEL 0
+    #undef  DEBUG_REGISTER_L
+    #define DEBUG_REGISTER_L 0
+    #undef  SHOW_MEMORY_STATUS
+    #define SHOW_MEMORY_STATUS 0
+    #undef  EXTRA_INFO_ON_CALC_ERROR
+    #define EXTRA_INFO_ON_CALC_ERROR 0
+    #define addItemToBuffer fnNop
+    #define fnOff           fnNop
+    #define fnAim           fnNop
+    #define registerBrowser fnNop
+    #define flagBrowser     fnNop
+    #define fontBrowser     fnNop
+    #define flagBrowser_old fnNop      //JM
+    #define refreshRegisterLine(a)  {}
+    #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
+    #define showHideHourGlass()     {}
+    #define refreshScreen()         {}
+    #define refreshLcd(a)           {}
+    #define initFontBrowser()       {}
+
+  #define JM_LAYOUT_1A               //JM Preferred layout
+  #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
+
+/* Turn off -Wunused-result for a specific function call */
+#define ignore_result(M) if(1==((int)M)){;}
 
 #ifdef DMCP_BUILD
   #define TMP_STR_LENGTH       AUX_BUF_SIZE
 #else // !DMCP_BUILD
-  #define TMP_STR_LENGTH       2560
+  #define TMP_STR_LENGTH     2560 //JMMAX ORG:2560
 #endif // DMCP_BUILD
-#define WRITE_BUFFER_LEN       4096
-#define ERROR_MESSAGE_LENGTH    512
-#define DISPLAY_VALUE_LEN        80
+  #define WRITE_BUFFER_LEN       4096
+  #define ERROR_MESSAGE_LENGTH    512 //JMMAX(325) 512          //JMMAX Temporarily reduced - ORG:512.
+  #define DISPLAY_VALUE_LEN        80
+
 
 //************************
 //* Macros for debugging *

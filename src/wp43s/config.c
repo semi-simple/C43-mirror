@@ -20,6 +20,7 @@
 
 #include "config.h"
 
+#include "defines.h"
 #include "browsers/fontBrowser.h"
 #include "bufferize.h"
 #include "charString.h"
@@ -995,9 +996,11 @@ void fnReset(uint16_t confirmation) {
 #define VERSION1 "_105_609"
 
     #ifdef JM_LAYOUT_1A
+      #undef L1L2
       #define L1L2    "L1"
     #endif
     #ifdef JM_LAYOUT_2_DM42_STRICT
+      #undef L1L2
       #define L1L2    "L42"
     #endif
 

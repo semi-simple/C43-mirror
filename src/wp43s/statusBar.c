@@ -46,11 +46,13 @@
       showComplexMode();
       showAngularMode();
       showFracMode();
-      if(calcMode == CM_MIM)
+      if(calcMode == CM_MIM) {
         showMatrixMode();
-      else
+      }
+      else {
         showIntegerMode();
-      showOverflowCarry();
+        showOverflowCarry();
+      }
       showHideAlphaMode();
       showHideHourGlass();
       showHidePgmBegin();
@@ -219,7 +221,7 @@
       sprintf(errorMessage, "wrap");
     }
 
-    showString(errorMessage, &standardFont, X_INTEGER_MODE - 8, 0, vmNormal, true, true);
+    showString(errorMessage, &standardFont, X_INTEGER_MODE - 2, 0, vmNormal, true, true);
   }
 
 

@@ -46,7 +46,10 @@
       showComplexMode();
       showAngularMode();
       showFracMode();
-      showIntegerMode();
+      if(calcMode == CM_MIM)
+        showMatrixMode();
+      else
+        showIntegerMode();
       showOverflowCarry();
       showHideAlphaMode();
       showHideHourGlass();
@@ -198,6 +201,25 @@
     }
 
     showString(errorMessage, &standardFont, X_INTEGER_MODE, 0, vmNormal, true, true);
+  }
+
+
+
+  /********************************************//**
+   * \brief Displays the matrix mode icon in the status bar
+   *
+   * \param void
+   * \return void
+   ***********************************************/
+  void showMatrixMode(void) {
+    if(getSystemFlag(FLAG_GROW)) {
+      sprintf(errorMessage, "grow");
+    }
+    else {
+      sprintf(errorMessage, "wrap");
+    }
+
+    showString(errorMessage, &standardFont, X_INTEGER_MODE - 8, 0, vmNormal, true, true);
   }
 
 

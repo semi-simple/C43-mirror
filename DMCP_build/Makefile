@@ -165,7 +165,8 @@ $(BUILD_DIR)/$(TARGET).elf: bin/forcecrc32 $(OBJECTS) Makefile
 	$(OBJCOPY) --only-section   .qspi -O ihex    $@  $(BUILD_DIR)/$(TARGET)_qspi.hex
 	$(OBJCOPY) --only-section   .qspi -O binary  $@  $(BUILD_DIR)/$(TARGET)_qspi.bin
 	$(BIN_DIR)modify_crc $(TARGET)
-	$(BIN_DIR)check_qspi_crc $(TARGET) DMCP/qspi_crc.h || ( $(MAKE) clean && false )
+# THIS LINE TO BE PUT BACK FOR QSPI USAGE. ALSO THEN DMCP_build/DMCP/qspi_crc.h will be auto replaced 
+#	$(BIN_DIR)check_qspi_crc $(TARGET) DMCP/qspi_crc.h || ( $(MAKE) clean && false )
 	$(BIN_DIR)add_pgm_chsum build/$(TARGET)_flash.bin build/$(TARGET).pgm
 	$(SIZE) $@
 

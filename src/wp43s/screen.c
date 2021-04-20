@@ -18,8 +18,39 @@
  * \file screen.c Screen related functions
  ***********************************************/
 
+#include "screen.h"
+
+#include "browsers/browsers.h"
+#include "bufferize.h"
+#include "charString.h"
+#include "constantPointers.h"
+#include "curveFitting.h"
+#include "dateTime.h"
+#include "debug.h"
+#include "display.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "items.h"
+#include "keyboard.h"
+#include "mathematics/comparisonReals.h"
+#include "memory.h"
+#include "plotstat.h"
+#include "programming/manage.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "softmenus.h"
+#include "statusBar.h"
+#include "timer.h"
+#include "version.h"
+#include <string.h>
+
 #include "wp43s.h"
 
+//static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v" VERSION_SHORT STD_SPACE_3_PER_EM VERSION_DATE STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin";
+//static const char *versionStr = "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM VERSION_DATE;
+static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin";
+static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM VERSION_STRING;
 
 #ifndef TESTSUITE_BUILD
   /* Names of day of week */
@@ -1570,7 +1601,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
       else if(temporaryInformation == TI_WHO)
         if (regist == REGISTER_X) {
-          showString(WHO, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+          showString(whoStr, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
         } else {
         if (regist == REGISTER_Y) {
           showString(WHO2, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);          
@@ -1578,7 +1609,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       }
 
       else if(temporaryInformation == TI_VERSION && regist == REGISTER_X) {
-        showString(VERSION, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+        showString(versionStr, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
       }
 
       else if(temporaryInformation == TI_FALSE && regist == TRUE_FALSE_REGISTER_LINE) {
@@ -1608,14 +1639,14 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 //Original SHOW
 
-      else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_T) { // L1
-      w = stringWidth(tmpString, &standardFont, true, true);
-      showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
+      else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_T) { // L1
+        w = stringWidth(tmpString, &standardFont, true, true);
+        showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);
       }
 
-      else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_Z && tmpString[300] != 0) { // L2 & L3
-      w = stringWidth(tmpString + 300, &standardFont, true, true);
-      showString(tmpString + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
+      else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_Z && tmpString[300] != 0) { // L2 & L3
+        w = stringWidth(tmpString + 300, &standardFont, true, true);
+        showString(tmpString + 300, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*1, vmNormal, true, true);
 
         if(tmpString[600]) {
           w = stringWidth(tmpString + 600, &standardFont, true, true);
@@ -1623,9 +1654,9 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
       }
 
-      else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_Y && tmpString[900] != 0) { // L4 & L5
-      w = stringWidth(tmpString + 900, &standardFont, true, true);
-      showString(tmpString + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
+      else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_Y && tmpString[900] != 0) { // L4 & L5
+        w = stringWidth(tmpString + 900, &standardFont, true, true);
+        showString(tmpString + 900, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*3, vmNormal, true, true);
 
         if(tmpString[1200]) {
           w = stringWidth(tmpString + 1200, &standardFont, true, true);
@@ -1633,9 +1664,9 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
       }
 
-      else if((temporaryInformation == TI_SHOW_REGISTER) && regist == REGISTER_X && tmpString[1500] != 0) { // L6 & L7
-      w = stringWidth(tmpString + 1500, &standardFont, true, true);
-      showString(tmpString + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
+      else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_X && tmpString[1500] != 0) { // L6 & L7
+        w = stringWidth(tmpString + 1500, &standardFont, true, true);
+        showString(tmpString + 1500, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*5, vmNormal, true, true);
 
         if(tmpString[1800]) {
           w = stringWidth(tmpString + 1800, &standardFont, true, true);

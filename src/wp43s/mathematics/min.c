@@ -18,6 +18,11 @@
  * \file min.c
  ***********************************************/
 
+#include "mathematics/min.h"
+
+#include "mathematics/compare.h"
+#include "registers.h"
+
 #include "wp43s.h"
 
 void fnMin(uint16_t unusedButMandatoryParameter) {

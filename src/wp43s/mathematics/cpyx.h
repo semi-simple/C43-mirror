@@ -17,6 +17,11 @@
 /********************************************//**
  * \file cpyx.h
  ***********************************************/
+#ifndef CPYX_H
+#define CPYX_H
+
+#include "decNumberWrappers.h"
+#include <stdint.h>
 
 void fnCyx(uint16_t unusedButMandatoryParameter);
 void fnPyx(uint16_t unusedButMandatoryParameter);
@@ -46,3 +51,5 @@ void cpyxShoILonI(uint16_t combOrPerm);
 void cpyxShoIReal(uint16_t combOrPerm);
 void cpyxShoICplx(uint16_t combOrPerm);
 void cpyxShoIShoI(uint16_t combOrPerm);
+
+#endif // CPYX_H

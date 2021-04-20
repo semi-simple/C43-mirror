@@ -17,6 +17,11 @@
 /********************************************//**
  * \file bufferize.h
  ***********************************************/
+#ifndef BUFFERIZE_H
+#define BUFFERIZE_H
+
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 #ifndef TESTSUITE_BUILD
   void    fnAim                    (uint16_t unusedButMandatoryParameter);
@@ -32,3 +37,5 @@
   void    closeAim                 (void);
   void    nimBufferToDisplayBuffer (const char *buffer, char *displayBuffer);
 #endif // TESTSUITE_BUILD
+
+#endif // BUFFERIZE_H

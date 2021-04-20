@@ -17,9 +17,13 @@
 /********************************************//**
  * \file browsers.h
  ***********************************************/
+#ifndef BROWSERS_H
+#define BROWSERS_H
 
 
 
 #include "flagBrowser.h"
 #include "fontBrowser.h"
 #include "registerBrowser.h"
+
+#endif // BROWSERS_H

@@ -17,6 +17,8 @@
 /********************************************//**
  * \file mathematics.h
  ***********************************************/
+#ifndef MATHEMATICS_H
+#define MATHEMATICS_H
 
 
 
@@ -137,3 +139,5 @@
 #include "w_positive.h"
 #include "wp34s.h"
 #include "zeta.h"
+
+#endif // MATHEMATICS_H

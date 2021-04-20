@@ -17,7 +17,12 @@
 /********************************************//**
  * \file plot.h
  ***********************************************/
+#ifndef PLOTSTAT_H
+#define PLOTSTAT_H
 
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 //****************************************************************************************************************************
 //#define graphtype float/*double*/      //Define the type of floating point used in the STATS memory. float uses 4 bytes per number
@@ -30,11 +35,12 @@
 //****************************************************************************************************************************
 
 #define   LIM              100     //Number of points; MUST be multiple of 4
-#define   zoomfactor      0.05f    // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
+#define   zoomfactor     0.05f     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line
-#define   USEFLOATING useFLOAT     // useFLOAT is faster then useREAL4 and used for graph reproduction
-
+#define   USEFLOATING useFLOAT     // useFLOAT is faster than 
+                                   // useREAL4 for graph reproduction
+                                   // Note: if useREAL4, then see plotstat.c TODO create REAL from x (double) if REALS will be used
 #define   graphtype      float  
 #define   FLoatingMax    1e38f     //convenient round figures used for maxima and minima determination
 #define   FLoatingMin    -1e38f
@@ -133,4 +139,4 @@ void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
 void    fnPlotRegressionLine(uint16_t plotMode);
 void    fnPlotZoom         (uint16_t unusedButMandatoryParameter);
 
- 
+#endif // PLOTSTAT_H 

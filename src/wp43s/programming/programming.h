@@ -17,9 +17,13 @@
 /********************************************//**
  * \file programming.h
  ***********************************************/
+#ifndef PROGRAMMING_H
+#define PROGRAMMING_H
 
 
 #include "decode.h"
 #include "lblGtoXeq.h"
 #include "manage.h"
 #include "nextStep.h"
+
+#endif // PROGRAMMING_H

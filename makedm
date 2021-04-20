@@ -1,0 +1,17 @@
+#!/bin/bash
+
+PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin
+
+
+#rm ~/.Xauthority
+#killall Xquartz
+#open -a /Applications/Utilities/XQuartz.app/Contents/MacOS/X11
+
+#make mrproper
+
+make -j8 dmcp
+
+mv build/dmcp/WP43S.pgm build/dmcp/WP43C.pgm
+cp build/dmcp/WP43C.pgm binaries/dmcp/C43.pgm
+mv build/dmcp/WP43S_qspi.bin build/dmcp/WP43C_qspi.bin
+cp build/dmcp/WP43C_qspi.bin binaries/dmcp/C43_qspi.bin

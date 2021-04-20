@@ -66,9 +66,42 @@ All the below: because both Last x and savestack does not work due to multiple s
 
 
 
+//#include "keyboard.h"
 
+//#include "bufferize.h"
+//#include "charString.h"
+//#include "constants.h"
+#include "constantPointers.h"
+#include "curveFitting.h"
+//#include "debug.h"
+//#include "error.h"
+//#include "flags.h"
+//#include "gui.h"
+//#include "items.h"
+//#include "memory.h"
+//#include "plotstat.h"
+//#include "programming/manage.h"
+//#include "programming/nextStep.h"
+//#include "recall.h"
+//#include "registers.h"
+//#include "screen.h"
+//#include "softmenus.h"
+//#include "stack.h"
+#include <string.h>
+#include "typeDefinitions.h"
+//#include "ui/tam.h"
 
 #include "wp43s.h"
+
+
+
+
+void fnPlotStatJM(uint16_t mode) {
+   fnCurveFitting(0);
+   fnPlotStat(mode);
+}
+
+
 
 
 void fneRPN(uint16_t state) {
@@ -488,16 +521,20 @@ void fnAngularModeJM(uint16_t AMODE) {    //Setting to HMS does not change AM
     fnToHms(0); //covers longint & real
   } else {
     if(getRegisterDataType(REGISTER_X) == dtTime) {
-      fnToHr(0);
+      fnToHr(0);  //covers time
       setRegisterAngularMode(REGISTER_X, amDegree);
       fnCvtFromCurrentAngularMode(AMODE);
       fnAngularMode(AMODE);
     }
 
-//    fnKeyDotD(0);
-//    fnCvtFromCurrentAngularMode(AMODE);
-    fnAngularMode(AMODE);
-    fnCvtToCurrentAngularMode(getRegisterAngularMode(REGISTER_X));
+    if((getRegisterDataType(REGISTER_X) != dtReal34) || ((getRegisterDataType(REGISTER_X) == dtReal34) && getRegisterAngularMode(REGISTER_X) == amNone)) {
+      fnKeyDotD(0);  //convert longint, and strip all angles to real.
+      fnAngularMode(AMODE);
+      fnCvtFromCurrentAngularMode(currentAngularMode);
+    } else {         //convert existing tagged angle, and set the ADM
+      fnCvtFromCurrentAngularMode(AMODE);
+      fnAngularMode(AMODE);
+    }
 
   }
   #ifndef TESTSUITE_BUILD

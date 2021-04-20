@@ -18,6 +18,24 @@
  * \file display.c
  ***********************************************/
 
+#include "display.h"
+
+#include "addons.h"
+#include "charString.h"
+#include "constantPointers.h"
+#include "conversionAngles.h"
+#include "dateTime.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "fonts.h"
+#include "fractions.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/toPolar.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include <string.h>
+
 #include "wp43s.h"
 
 

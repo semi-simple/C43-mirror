@@ -13,6 +13,13 @@
  * You should have received a copy of the GNU General Public License
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef DISPLAY_H
+#define DISPLAY_H
+
+#include "decNumberWrappers.h"
+#include "gmpWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 void fnDisplayFormatFix                (uint16_t displayFormatN);
 void fnDisplayFormatSci                (uint16_t displayFormatN);
@@ -37,3 +44,5 @@ void supNumberToDisplayString          (int32_t supNumber, char *displayString, 
 void subNumberToDisplayString          (int32_t subNumber, char *displayString, char *displayValueString);
 void longIntegerToAllocatedString      (const longInteger_t lgInt, char *str, int32_t strLen);
 void fnShow_SCROLL                     (uint16_t fnShow_param);    //JMSHOW
+
+#endif // DISPLAY_H

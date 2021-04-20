@@ -18,19 +18,12 @@
  * \file wp43s.h
  ***********************************************/
 
-#ifndef wp43s_H_INCLUDED
-  #define wp43s_H_INCLUDED
-
-  #include "defines.h"
+#ifndef WP43S_H
+#define WP43S_H
 
   #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 
-  #include <stdlib.h>
-  #include <stdio.h>
-  #include <string.h>
-  #include <time.h>
-  #include <stdint.h>
   #if (__linux__ == 1)
     #include <math.h>
   #endif // (__linux__ == 1)
@@ -51,118 +44,21 @@
   #endif // __MINGW64__
 
   #ifdef DMCP_BUILD
-    #include <main.h>
-    #include <dmcp.h>
-    #define TMP_STR_LENGTH       AUX_BUF_SIZE
-  #else // !DMCP_BUILD
-      #define TMP_STR_LENGTH     2560 //JMMAX ORG:2560
-  #endif // DMCP_BUILD
-  #define WRITE_BUFFER_LEN       4096
-  #define ERROR_MESSAGE_LENGTH    512 //JMMAX(325) 512          //JMMAX Temporarily reduced - ORG:512.
-  #define DISPLAY_VALUE_LEN        80
+    #define DBG_PRINT
 
+    #ifdef DBG_PRINT
+      #include <stdio.h>
+    #else
+      #define printf(...)
+    #endif
+
+    #include <dmcp.h>
+  #endif //DMCP_BUILD
+
+  #include "decNumberWrappers.h"
+  #include "mathematics/pcg_basic.h"
   #include "typeDefinitions.h"
 
-  #if (IBM_DECIMAL == 1)
-    #include "decimal128.h"
-    #include "decimal64.h"
-    #include "decDouble.h"
-    #include "decQuad.h"
-    #include "decNumberWrappers.h"
-    extern int decGetInt(const decNumber *x); // Because decNumberToInt32 seems buggy! Needs more investigation
-  #endif // (IBM_DECIMAL == 1)
-
-  #if (LIBGMP == 1)
-    #include <gmp.h>
-    #include "gmpWrappers.h"
-  #endif // (LIBGMP == 1)
-
-  #ifndef RASPBERRY
-    #undef SCREEN_800X480
-    #define SCREEN_800x480 0
-  #endif // RASPBERRY
-
-  #if !defined(PC_BUILD) && !defined(DMCP_BUILD)
-    #error One of PC_BUILD and DMCP_BUILD must be defined
-  #endif // !defined(PC_BUILD) && !defined(DMCP_BUILD)
-
-  #if defined(PC_BUILD) && defined(DMCP_BUILD)
-    #error Only one of PC_BUILD and DMCP_BUILD must be defined
-  #endif // defined(PC_BUILD) && defined(DMCP_BUILD)
-
-  #if !defined(OS32BIT) && !defined(OS64BIT)
-    #error One of OS32BIT and OS64BIT must be defined
-  #endif // !defined(OS32BIT) && !defined(OS64BIT)
-
-  #if defined(OS32BIT) && defined(OS64BIT)
-    #error Only one of OS32BIT and OS64BIT must be defined
-  #endif // defined(OS32BIT) && defined(OS64BIT)
-
-  #ifdef PC_BUILD
-    #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
-      #undef  DEBUG_PANEL
-      #define DEBUG_PANEL 0
-    #endif // __MINGW64__
-    #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
-      #undef  DEBUG_PANEL
-      #define DEBUG_PANEL 0
-    #endif // RASPBERRY
-  #endif // PC_BUILD
-
-  #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-    #undef  DEBUG_PANEL
-    #define DEBUG_PANEL 0
-    #undef  DEBUG_REGISTER_L
-    #define DEBUG_REGISTER_L 0
-    #undef  SHOW_MEMORY_STATUS
-    #define SHOW_MEMORY_STATUS 0
-    #undef  EXTRA_INFO_ON_CALC_ERROR
-    #define EXTRA_INFO_ON_CALC_ERROR 0
-  #ifndef SWAP_TO_L1_ON_DM42
-    #undef  JM_LAYOUT_1A
-    #define JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
-  #else
-    #define JM_LAYOUT_1A
-    #undef  JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
-  #endif
- #endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-
-#if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
-  #undef  JM_LAYOUT_1A
-  #undef  JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
-
-    #undef  PC_BUILD
-    #undef  DMCP_BUILD
-    #undef  DEBUG_PANEL
-    #define DEBUG_PANEL 0
-    #undef  DEBUG_REGISTER_L
-    #define DEBUG_REGISTER_L 0
-    #undef  SHOW_MEMORY_STATUS
-    #define SHOW_MEMORY_STATUS 0
-    #undef  EXTRA_INFO_ON_CALC_ERROR
-    #define EXTRA_INFO_ON_CALC_ERROR 0
-    #define addItemToBuffer fnNop
-    #define fnOff           fnNop
-    #define fnAim           fnNop
-    #define registerBrowser fnNop
-    #define flagBrowser     fnNop
-    #define fontBrowser     fnNop
-    #define flagBrowser_old fnNop      //JM
-    #define refreshRegisterLine(a)  {}
-    #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
-    #define showHideHourGlass()     {}
-    #define refreshScreen()         {}
-    #define refreshLcd(a)           {}
-    #define initFontBrowser()       {}
-
-  #define JM_LAYOUT_1A               //JM Preferred layout
-  #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
-
-#define INLINE_TEST                     //vv dr
-#undef INLINE_TEST                    //^^
-
-  /* Turn off -Wunused-result for a specific function call */
-  #define ignore_result(M) if(1==((int)M)){;}
 
   #include "assign.h"
   #include "ui/tam.h"
@@ -452,5 +348,4 @@
   //extern int16_t             previousItem;                    // Removed the autorepeat stuff
   #endif // DMCP_BUILD
 
-  #include "constantPointers.h"
-#endif // wp43s_H_INCLUDED
+#endif // WP43S_H

@@ -18,6 +18,20 @@
  * \file binomial.c
  ***********************************************/
 
+#include "distributions/binomial.h"
+
+#include "constantPointers.h"
+#include "distributions/chi2.h"
+#include "distributions/f.h"
+#include "distributions/poisson.h"
+#include "error.h"
+#include "fonts.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/cpyx.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

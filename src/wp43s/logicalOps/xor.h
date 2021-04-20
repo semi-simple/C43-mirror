@@ -17,6 +17,11 @@
 /********************************************//**
  * \file xor.h
  ***********************************************/
+#ifndef XOR_H
+#define XOR_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnLogicalXor(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +35,5 @@ void xorLonIReal (void);
 void xorRealLonI (void);
 void xorRealReal (void);
 void xorShoIShoI (void);
+
+#endif // XOR_H

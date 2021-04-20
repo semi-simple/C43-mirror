@@ -18,6 +18,14 @@
  * \file percentSigma.c
  ***********************************************/
 
+#include "mathematics/percentSigma.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 static void dataTypeError(void);

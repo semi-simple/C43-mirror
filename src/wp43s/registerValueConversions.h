@@ -14,13 +14,15 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-
-
-
 /********************************************//**
  * \file registerValueConversions.h
  ***********************************************/
+#ifndef REGISTERVALUECONVERSIONS_H
+#define REGISTERVALUECONVERSIONS_H
+
+#include "decNumberWrappers.h"
+#include "gmpWrappers.h"
+#include "typeDefinitions.h"
 
 void convertLongIntegerRegisterToReal34Register      (calcRegister_t source, calcRegister_t destination);
 void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, calcRegister_t destination);
@@ -53,3 +55,5 @@ void convertLongIntegerRegisterToTimeRegister        (calcRegister_t source, cal
 
 void convertDateRegisterToReal34Register             (calcRegister_t source, calcRegister_t destination);
 void convertReal34RegisterToDateRegister             (calcRegister_t source, calcRegister_t destination);
+
+#endif // REGISTERVALUECONVERSIONS_H

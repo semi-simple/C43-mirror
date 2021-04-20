@@ -17,6 +17,8 @@
 /********************************************//**
  * \file statusBar.h
  ***********************************************/
+#ifndef STATUSBAR_H
+#define STATUSBAR_H
 
 #ifndef TESTSUITE_BUILD
   void refreshStatusBar       (void);
@@ -36,8 +38,10 @@
   void showHideUserMode       (void);
   #ifdef DMCP_BUILD
     void showHideUsbLowBattery(void);
-  #else
+  #else // !DMCP_BUILD
     void showHideStackLift    (void);
   #endif // DMCP_BUILD
   void showHideASB            (void);       //JM
 #endif // not TESTSUITE_BUILD
+
+#endif // STATUSBAR_H

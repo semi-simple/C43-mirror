@@ -17,6 +17,15 @@
 /********************************************//**
  * \file screen.h
  ***********************************************/
+#ifndef SCREEN_H
+#define SCREEN_H
+
+#include "typeDefinitions.h"
+#include <stdint.h>
+#ifdef PC_BUILD
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
+#endif // PC_BUILD
 
 //#define displayStackSHOIDISP 2                  //JMSHOIDISP  displayStackSHOIDISP=1: 3 lines of X-repeats
                                                   //JMSHOIDISP  displayStackSHOIDISP=2: 2 lines of X-repeats
@@ -108,3 +117,5 @@
   void     clearRegisterLine                  (calcRegister_t regist, bool_t clearTop, bool_t clearBottom);
   void     refreshRegisterLine                (calcRegister_t regist);
 #endif // TESTSUITE_BUILD
+
+#endif // SCREEN_H

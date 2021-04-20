@@ -17,7 +17,13 @@
 /********************************************//**
  * \file sinc.h
  ***********************************************/
+#ifndef SINC_H
+#define SINC_H
 // Coded by JM, based on sin.h
+
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
 
 void fnSinc  (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -31,3 +37,5 @@ void sincCxma (void);
 void sincReal (void);
 void sincCplx (void);
 void sincComplex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+#endif // SINC_H

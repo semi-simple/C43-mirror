@@ -18,6 +18,10 @@
  * \file nextStep.c
  ***********************************************/
 
+#include "programming/nextStep.h"
+
+#include "items.h"
+
 #include "wp43s.h"
 
 
@@ -177,7 +181,6 @@ uint8_t *countLiteralBytes(uint8_t *step) {
 
 
 uint8_t *findNextStep(uint8_t *step) {
-#ifndef SAVE_SPACE_DM42
   uint8_t item8 = *(step++);
   uint16_t item16;
 
@@ -698,15 +701,16 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_SIGMAlny:       //   446
         case ITM_SIGMAln2y:      //   447
         case ITM_SIGMAxlny:      //   448
-        case ITM_SIGMAlnyonx:    //   449
-        case ITM_SIGMAx2ony:     //   450
-        case ITM_SIGMA1onx:      //   451
-        case ITM_SIGMA1onx2:     //   452
-        case ITM_SIGMAxony:      //   453
-        case ITM_SIGMA1ony:      //   454
-        case ITM_SIGMA1ony2:     //   455
-        case ITM_SIGMAx3:        //   456
-        case ITM_SIGMAx4:        //   457
+        case ITM_SIGMAx2lny:     //   449
+        case ITM_SIGMAlnyonx:    //   450
+        case ITM_SIGMAx2ony:     //   451
+        case ITM_SIGMA1onx:      //   452
+        case ITM_SIGMA1onx2:     //   453
+        case ITM_SIGMAxony:      //   454
+        case ITM_SIGMA1ony:      //   455
+        case ITM_SIGMA1ony2:     //   456
+        case ITM_SIGMAx3:        //   457
+        case ITM_SIGMAx4:        //   458
         case ITM_BINOMP:         //  1208
         case ITM_BINOM:          //  1209
         case ITM_BINOMU:         //  1210
@@ -1014,9 +1018,6 @@ uint8_t *findNextStep(uint8_t *step) {
           return NULL;
       }
   }
-#else //SAVE_SPACE_DM42
-  return 0; //SAVE_SPACE_DM42
-#endif //SAVE_SPACE_DM42
 }
 
 

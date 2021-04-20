@@ -17,6 +17,11 @@
 /**
  * \file ui/tam.h
  */
+#ifndef TAM_H
+#define TAM_H
+
+#include "defines.h"
+#include <stdint.h>
 
 #ifndef TESTSUITE_BUILD
   /**
@@ -58,3 +63,5 @@
    */
   void tamProcessInput (uint16_t item);
 #endif // TESTSUITE_BUILD
+
+#endif // TAM_H

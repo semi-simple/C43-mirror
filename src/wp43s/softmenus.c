@@ -24,6 +24,18 @@
  * * 30000 < item < 39999  ==>  item without top and bottom line
  ***********************************************/
 
+#include "softmenus.h"
+
+#include "charString.h"
+#include "error.h"
+#include "gui.h"
+#include "items.h"
+#include "registers.h"
+#include "screen.h"
+#include "sort.h"
+#include <string.h>
+#include <stdlib.h>
+
 #include "wp43s.h"
 
 /*      Menu name                           <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
@@ -197,30 +209,45 @@ TO_QSPI const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_
                                              ITM_SDL,                       ITM_SDR,                    ITM_MSG,                  ITM_NOP,               ITM_VARMNU,                  ITM_MVAR,
                                              ITM_BACK,                      ITM_CASE,                   ITM_SKIP,                 ITM_AGRAPH,            ITM_PIXEL,                   ITM_POINT                     };
 
+
+#if defined SAVE_SPACE_DM42
+  #define ITM_D0 ITM_NULL
+  #define ITM_D1 ITM_NULL
+  #define ITM_D2 ITM_NULL
+#else
+  #define ITM_D0 ITM_STATDEMO0
+  #define ITM_D1 ITM_STATDEMO1
+  #define ITM_D2 ITM_STATDEMO2
+#endif
+
+
 TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_STDDEVWEIGHTED,       ITM_STDDEV,            ITM_SM,                      ITM_SUM,
                                              ITM_SIGMAMINUS,                ITM_XW,                     ITM_SW,                   ITM_STDDEVPOP,         ITM_SMW,                     ITM_NSIGMA,                         //JM added ITM_NSIGMA
-                                             ITM_CLSIGMA,                   ITM_XG,                     ITM_SCATTFACT,            ITM_SCATTFACTp,        ITM_SCATTFACTm,              ITM_PLOT,
+                                             ITM_CLSIGMA,                   ITM_XG,                     ITM_SCATTFACT,            ITM_SCATTFACTp,        ITM_SCATTFACTm,              ITM_NULL,
                                              ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_COV,               ITM_XCIRC,                   ITM_YCIRC,
-                                             ITM_PLOT_LR,                   ITM_XH,                     ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_SA,                        ITM_XRMS,                   ITM_XMAX,                 ITM_XMIN,              ITM_NULL,                    ITM_ORTHOF,
-                                             ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                    ITM_BESTF,
-                                             ITM_GAUSSF,                    ITM_CAUCHF,                 ITM_PARABF,               ITM_HYPF,              ITM_ROOTF,                   ITM_NULL,
-                                             ITM_STATDEMO0,                 ITM_STATDEMO1,              ITM_STATDEMO2,            ITM_STATDEM105,        ITM_STATDEM107,              ITM_STATDEM109                      };
+                                             ITM_SA,                        ITM_XH,                     ITM_XRMS,                 ITM_XMAX,              ITM_XMIN,                    ITM_NULL,
+                                             ITM_PLOT_LRALL,                ITM_NULL,                   ITM_LISTXY,               ITM_PLOT_XY,           ITM_PLOTRST,                  ITM_PLOT,
+
+                                             ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                    ITM_ORTHOF,
+                                             ITM_PARABF,                    ITM_HYPF,                   ITM_ROOTF,                ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_GAUSSF,                    ITM_CAUCHF,                 ITM_NULL,                 ITM_BESTF,             ITM_PLOT_LR,                 ITM_LR,
+                
+                                             ITM_D0,                        ITM_D1,                     ITM_D2,                   ITM_STATDEM105,        ITM_STATDEM107,              ITM_STATDEM109                };
 
 TO_QSPI const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,           ITM_SIGMAy2,                 ITM_SIGMAy,
                                              ITM_NULL,                      ITM_SIGMAlnx,               ITM_SIGMAln2x,            ITM_SIGMAlnxy,         ITM_SIGMAln2y,               ITM_SIGMAlny,
-                                             ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_NULL,                 ITM_SIGMAlnyonx,       ITM_NULL,                    ITM_SIGMAylnx,
+                                             ITM_SIGMAx2y,                  ITM_SIGMAxlny,              ITM_SIGMAx2lny,           ITM_SIGMAlnyonx,       ITM_NULL,                    ITM_SIGMAylnx,
                                              ITM_SIGMAx2ony,                ITM_SIGMA1onx,              ITM_SIGMA1onx2,           ITM_SIGMAxony,         ITM_SIGMA1ony2,              ITM_SIGMA1ony,
                                              ITM_SIGMAx3,                   ITM_SIGMAx4,                ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 TO_QSPI const int16_t menu_PLOT_STAT[]   = {
-                                             ITM_PLOT_REGLINE,              ITM_SMI,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_PLOT_CENTRL,               ITM_SMI,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 TO_QSPI const int16_t menu_PLOT_LR[]   = {
-                                             ITM_PLOT_SELLINE,              ITM_PLOTZOOM,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_PLOT_NXT,                  ITM_PLOTZOOM,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_PLOT_REV,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 
@@ -242,7 +269,7 @@ TO_QSPI const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_
                                              ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                              ITM_WM,                        ITM_WP,                     ITM_WM1,                  ITM_BETAXY,            ITM_gammaXY,                 ITM_GAMMAXY,
                                              ITM_zetaX,                     ITM_M1X,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_PARALLEL,
-                                             ITM_NULL,                      ITM_DMPMNU,                 ITM_PGMTST,               -MNU_XXEQ,             ITM_PLOT_J,                  -MNU_EE                       };    //JM Added
+                                             ITM_NULL,                      ITM_DMPMNU,                 ITM_PGMTST,               -MNU_XXEQ,             ITM_NULL,                   -MNU_EE                       };    //JM Added
 
 TO_QSPI const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Lm,                     ITM_LmALPHA,              ITM_Pn,                ITM_Tn,                      ITM_Un,
                                              ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -278,9 +305,9 @@ TO_QSPI const int16_t menu_alpha_omega[] = { ITM_alpha,                     ITM_
                                              ITM_alpha_TONOS,               ITM_epsilon_TONOS,          ITM_eta_TONOS,            ITM_iotaTON,           ITM_iota_DIALYTIKA_TONOS,    ITM_NULL,                           //JM modified greek sequence
                                              ITM_iota_DIALYTIKA,            ITM_omicron_TONOS,          ITM_upsilon_TONOS,        ITM_upsilon_DIALYTIKA, ITM_upsilon_DIALYTIKA_TONOS, ITM_omega_TONOS               };
 
-TO_QSPI const int16_t menu_AngleConv[]   = { ITM_DtoR,                      ITM_RtoD,                   ITM_DtoDMS,               ITM_DMStoD,            ITM_toDMS,                  ITM_toHMS,
-                                             ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_toMULpi,           ITM_dotD,                   ITM_ms,                      //JM mod
-                                             ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                   ITM_NULL                 };    //JM removed and Added H.MS
+TO_QSPI const int16_t menu_AngleConv[]   = { ITM_DtoR,                      ITM_RtoD,                   ITM_DtoDMS,               ITM_DMStoD,            ITM_ms,                      ITM_dotD,
+                                             ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_toMULpi,           ITM_toDMS,                   ITM_toHMS                   };   //JM mod
+
 
 /*      Menu name                           <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                          <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
@@ -381,23 +408,8 @@ TO_QSPI const int16_t menu_BASE[]        = { ITM_IP,                        ITM_
                                              ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
 
                                              ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+ 3, ITM_FB00+ 2, ITM_FB00+ 1, ITM_FB00+0,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+ 7, ITM_FB00+ 6, ITM_FB00+ 5, ITM_FB00+4,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+11, ITM_FB00+10, ITM_FB00+ 9, ITM_FB00+8,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+15, ITM_FB00+14, ITM_FB00+13, ITM_FB00+12,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+19, ITM_FB00+18, ITM_FB00+17, ITM_FB00+16,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+23, ITM_FB00+22, ITM_FB00+21, ITM_FB00+20,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+27, ITM_FB00+26, ITM_FB00+25, ITM_FB00+24,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+31, ITM_FB00+30, ITM_FB00+29, ITM_FB00+28,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+35, ITM_FB00+34, ITM_FB00+33, ITM_FB00+32,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+39, ITM_FB00+38, ITM_FB00+37, ITM_FB00+36,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+43, ITM_FB00+42, ITM_FB00+41, ITM_FB00+40,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+47, ITM_FB00+46, ITM_FB00+45, ITM_FB00+44,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+51, ITM_FB00+50, ITM_FB00+49, ITM_FB00+48,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_FB00+55, ITM_FB00+54, ITM_FB00+53, ITM_FB00+52,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_FB00+59, ITM_FB00+58, ITM_FB00+57, ITM_FB00+56,
-                                             ITM_LOGICALNOT            , ITM_UNSIGN, ITM_FB00+63, ITM_FB00+62, ITM_FB00+61, ITM_FB00+60,
-                                             ITM_1COMPL                , ITM_2COMPL, ITM_NULL   , ITM_NULL   ,ITM_NULL    , ITM_NULL  ,
-                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_NULL   , ITM_NULL   ,ITM_NULL    , ITM_NULL  ,
+                                             ITM_1COMPL                , ITM_2COMPL, ITM_NULL,    ITM_NULL,    ITM_NULL,    ITM_NULL,    
+                                             ITM_CB_LEADING_ZERO       , ITM_SIGNMT, ITM_NULL,    ITM_NULL,    ITM_NULL,    ITM_NULL,    
                                              
                                              ITM_SL1,     ITM_SR1,     ITM_RL1,      ITM_RR1,      ITM_RL,     ITM_RR,                 //JM POC BASE2 vv
                                              ITM_S06,     ITM_S08,     ITM_S16,      ITM_S32,      ITM_S64,    ITM_FWORD,     
@@ -442,29 +454,29 @@ TO_QSPI const int16_t menu_ASN[]         = { ITM_USER_DEFAULTS,             ITM_
                                              ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          CC_V43M,               ITM_USER_WP43S,             ITM_JM_SEEK,
                                              -MNU_ASN_U,                    ITM_ASSIGN,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                   -MNU_ASN_N,
                                                                           
-                                             USER_PRIM00U,                         USER_PRIM01U,                      USER_PRIM02U,                    USER_PRIM03U,                 USER_PRIM04U,                       USER_PRIM05U,  //JM USER
-                                             USER_SFTf00U,                         USER_SFTf01U,                      USER_SFTf02U,                    USER_SFTf03U,                 USER_SFTf04U,                       USER_SFTf05U,  //JM USER
-                                             USER_SFTg00U,                         USER_SFTg01U,                      USER_SFTg02U,                    USER_SFTg03U,                 USER_SFTg04U,                       USER_SFTg05U,  //JM USER
-                                                                                                                                   
-                                             USER_PRIM06U,                         USER_PRIM07U,                      USER_PRIM08U,                    USER_PRIM09U,                 USER_PRIM10U,                       USER_PRIM11U,  //JM USER
-                                             USER_SFTf06U,                         USER_SFTf07U,                      USER_SFTf08U,                    USER_SFTf09U,                 USER_SFTf10U,                       USER_SFTf11U,  //JM USER
-                                             USER_SFTg06U,                         USER_SFTg07U,                      USER_SFTg08U,                    USER_SFTg09U,                 USER_SFTg10U,                       USER_SFTg11U,  //JM USER
-                                                                                                                                   
-                                             USER_PRIM12U,                         USER_PRIM13U,                      USER_PRIM14U,                    USER_PRIM15U,                 USER_PRIM16U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf12U,                         USER_SFTf13U,                      USER_SFTf14U,                    USER_SFTf15U,                 USER_SFTf16U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg12U,                         USER_SFTg13U,                      USER_SFTg14U,                    USER_SFTg15U,                 USER_SFTg16U,                       ITM_NULL,  //JM USER
-/*                                           USER_PRIM17U,                         USER_PRIM18U,                      USER_PRIM19U,                    USER_PRIM20U,                 USER_PRIM21U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf17U,                         USER_SFTf18U,                      USER_SFTf19U,                    USER_SFTf20U,                 USER_SFTf21U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg17U,                         USER_SFTg18U,                      USER_SFTg19U,                    USER_SFTg20U,                 USER_SFTg21U,                       ITM_NULL,  //JM USER
-                                             USER_PRIM22U,                         USER_PRIM23U,                      USER_PRIM24U,                    USER_PRIM25U,                 USER_PRIM26U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf22U,                         USER_SFTf23U,                      USER_SFTf24U,                    USER_SFTf25U,                 USER_SFTf26U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg22U,                         USER_SFTg23U,                      USER_SFTg24U,                    USER_SFTg25U,                 USER_SFTg26U,                       ITM_NULL,  //JM USER
-                                             USER_PRIM27U,                         USER_PRIM28U,                      USER_PRIM29U,                    USER_PRIM30U,                 USER_PRIM31U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf27U,                         USER_SFTf28U,                      USER_SFTf29U,                    USER_SFTf30U,                 USER_SFTf31U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg27U,                         USER_SFTg28U,                      USER_SFTg29U,                    USER_SFTg30U,                 USER_SFTg31U,                       ITM_NULL,  //JM USER
-                                             USER_PRIM32U,                         USER_PRIM33U,                      USER_PRIM34U,                    USER_PRIM35U,                 USER_PRIM36U,                       ITM_NULL,  //JM USER
-                                             USER_SFTf32U,                         USER_SFTf33U,                      USER_SFTf34U,                    USER_SFTf35U,                 USER_SFTf36U,                       ITM_NULL,  //JM USER
-                                             USER_SFTg32U,                         USER_SFTg33U,                      USER_SFTg34U,                    USER_SFTg35U,                 USER_SFTg36U,                       ITM_NULL   //JM USER
+                                             USER_PRIM00U,                  USER_PRIM01U,               USER_PRIM02U,             USER_PRIM03U,          USER_PRIM04U,               USER_PRIM05U,  //JM USER
+                                             USER_SFTf00U,                  USER_SFTf01U,               USER_SFTf02U,             USER_SFTf03U,          USER_SFTf04U,               USER_SFTf05U,  //JM USER
+                                             USER_SFTg00U,                  USER_SFTg01U,               USER_SFTg02U,             USER_SFTg03U,          USER_SFTg04U,               USER_SFTg05U,  //JM USER
+/*                                                                                                                                                                                                                    
+                                             USER_PRIM06U,                  USER_PRIM07U,               USER_PRIM08U,             USER_PRIM09U,          USER_PRIM10U,               USER_PRIM11U,  //JM USER
+                                             USER_SFTf06U,                  USER_SFTf07U,               USER_SFTf08U,             USER_SFTf09U,          USER_SFTf10U,               USER_SFTf11U,  //JM USER
+                                             USER_SFTg06U,                  USER_SFTg07U,               USER_SFTg08U,             USER_SFTg09U,          USER_SFTg10U,               USER_SFTg11U,  //JM USER
+                                                                                                                                                                                                                    
+                                             USER_PRIM12U,                  USER_PRIM13U,               USER_PRIM14U,             USER_PRIM15U,          USER_PRIM16U,               ITM_NULL,  //JM USER
+                                             USER_SFTf12U,                  USER_SFTf13U,               USER_SFTf14U,             USER_SFTf15U,          USER_SFTf16U,               ITM_NULL,  //JM USER
+                                             USER_SFTg12U,                  USER_SFTg13U,               USER_SFTg14U,             USER_SFTg15U,          USER_SFTg16U,               ITM_NULL,  //JM USER
+                                             USER_PRIM17U,                  USER_PRIM18U,               USER_PRIM19U,             USER_PRIM20U,          USER_PRIM21U,               ITM_NULL,  //JM USER
+                                             USER_SFTf17U,                  USER_SFTf18U,               USER_SFTf19U,             USER_SFTf20U,          USER_SFTf21U,               ITM_NULL,  //JM USER
+                                             USER_SFTg17U,                  USER_SFTg18U,               USER_SFTg19U,             USER_SFTg20U,          USER_SFTg21U,               ITM_NULL,  //JM USER
+                                             USER_PRIM22U,                  USER_PRIM23U,               USER_PRIM24U,             USER_PRIM25U,          USER_PRIM26U,               ITM_NULL,  //JM USER
+                                             USER_SFTf22U,                  USER_SFTf23U,               USER_SFTf24U,             USER_SFTf25U,          USER_SFTf26U,               ITM_NULL,  //JM USER
+                                             USER_SFTg22U,                  USER_SFTg23U,               USER_SFTg24U,             USER_SFTg25U,          USER_SFTg26U,               ITM_NULL,  //JM USER
+                                             USER_PRIM27U,                  USER_PRIM28U,               USER_PRIM29U,             USER_PRIM30U,          USER_PRIM31U,               ITM_NULL,  //JM USER
+                                             USER_SFTf27U,                  USER_SFTf28U,               USER_SFTf29U,             USER_SFTf30U,          USER_SFTf31U,               ITM_NULL,  //JM USER
+                                             USER_SFTg27U,                  USER_SFTg28U,               USER_SFTg29U,             USER_SFTg30U,          USER_SFTg31U,               ITM_NULL,  //JM USER
+                                             USER_PRIM32U,                  USER_PRIM33U,               USER_PRIM34U,             USER_PRIM35U,          USER_PRIM36U,               ITM_NULL,  //JM USER
+                                             USER_SFTf32U,                  USER_SFTf33U,               USER_SFTf34U,             USER_SFTf35U,          USER_SFTf36U,               ITM_NULL,  //JM USER
+                                             USER_SFTg32U,                  USER_SFTg33U,               USER_SFTg34U,             USER_SFTg35U,          USER_SFTg36U,               ITM_NULL   //JM USER
  */
       };
 
@@ -675,7 +687,7 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
 
                                      };                                                                                                                                                                                   //JM HOME
 
-TO_QSPI const int16_t menu_PLOT[]        = { ITM_PLOT_J,                    ITM_PLOTLS,                 ITM_SCALE,                ITM_PLINE,             ITM_SIGMAPLUS,               ITM_SNAP,                           //JM GRAPH
+TO_QSPI const int16_t menu_PLOT[]        = { ITM_PLOT_XY,                   ITM_PLOTLS,                 ITM_SCALE,                ITM_PLINE,             ITM_SIGMAPLUS,               ITM_SNAP,                           //JM GRAPH
                                              ITM_NVECT,                     ITM_VECT,                   ITM_EXTX,                 ITM_PCROS,             ITM_LISTXY,                  ITM_RMS,                            //JM GRAPH
                                              ITM_DIFF,                      ITM_INTG,                   ITM_EXTY,                 ITM_PBOX,              ITM_CLSIGMA,                 ITM_SHADE,                          //JM GRAPH
 
@@ -687,11 +699,11 @@ TO_QSPI const int16_t menu_PLOT[]        = { ITM_PLOT_J,                    ITM_
                                              ITM_LISTXY,                    ITM_RMS,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                              ITM_CLSIGMA,                   ITM_SHADE,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
-                                             ITM_PLOT_J,                    ITM_PLOTLS,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                             ITM_PLOT_XY,                   ITM_PLOTLS,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                              ITM_DEMO4,                     ITM_DEMO5,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                              ITM_DEMO6,                     ITM_P_ALLREGS,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
-                                             ITM_PLOT_J,                    ITM_PLOTLS,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
+                                             ITM_PLOT_XY,                    ITM_PLOTLS,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                              ITM_DEMO1,                     ITM_DEMO2,                  ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                              ITM_DEMO3,                     ITM_P_ALLREGS,              ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
 
@@ -1621,7 +1633,7 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
               else if(item%10000 == ITM_op_j && !getSystemFlag(FLAG_CPXj)) {
                 showSoftkey(STD_i, x, y-currentFirstItem/6, vmNormal, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
               }                                                                                //JM ^^
-              else if((item == ITM_CFG) || (item ==ITM_PLOT_LR) || (item == ITM_PLOT_J) || (item == ITM_PLOT) || (item == ITM_PLOTLS)) {       //JMvv colour PLOT in reverse font to appear to be menus
+              else if((item == ITM_CFG) || (item ==ITM_PLOT_LR) || (item == ITM_PLOT_XY) || (item == ITM_PLOT) || (item == ITM_PLOTLS) || (item == ITM_PLOT_LRALL)) {       //JMvv colour PLOT in reverse font to appear to be menus
                 showSoftkey(indexOfItems[item%10000].itemSoftmenuName, x, y-currentFirstItem/6, vmReverse, (item/10000)==0 || (item/10000)==2, (item/10000)==0 || (item/10000)==1, showCb, showValue);
               }                                                                                //JM^^
 

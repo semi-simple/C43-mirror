@@ -2,11 +2,6 @@
 
 PATH=$PATH:/Users/jacomostert/Documents/WP43S/DM42/gcc-arm-none-eabi-8-2019-q3-update/bin
 
-
-cd ./DMCP_build
-make clean
-cd ..
-
 make -j8 V=1 clean_all
 rm ./backup.bin
 rm ./wp43c
@@ -56,6 +51,8 @@ rm PROGRAMS/*\ [0-9]\.TXT
 rm .//*\ [0-9]
 rm .//*\ [0-9]\.png
 
+find build/ -type f -name "*.o" -exec rm {} \;
+find build/ -type f -name "*.d" -exec rm {} \;
 
 
 
@@ -333,6 +330,7 @@ rm "wp43s 2.d" "wp43s 3.d" "wp43s 4.d" "wp43s 5.d" "wp43s 6.d" "wp43s 7.d" "wp43
 rm *.d
 rm *.o
 
+
 cd ./mathematics
 rm *.d
 rm *.o
@@ -345,6 +343,8 @@ rm *.o
 cd ..
 
 rm "rasterFontsData.c"
+
+
 
 cd ..
 cd ..

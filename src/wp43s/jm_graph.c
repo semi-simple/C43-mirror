@@ -32,7 +32,7 @@
 // runFunction(ITM_RAN)
 // runFunction(ITM_CLSIGMA): fnClSigma (0)
 // runFunction(ITM_SIGMAx)
-// runFunction(ITM_PLOT_J)
+// runFunction(ITM_PLOT_XY)
 // runFunction(ITM_TICKS)
 // runFunction(ITM_NSIGMA)
 // runFunction(ITM_ sin): fnSin (0)
@@ -49,7 +49,7 @@
 //ITM_STO
 //ITM_RCL
 
-
+#include "constantPointers.h"
 
 #include "wp43s.h"
 
@@ -313,7 +313,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   }
   runFunction(ITM_CLSTK);
   runFunction(ITM_SIGMAx);
-  runFunction(ITM_PLOT_J);
+  runFunction(ITM_PLOT_XY);
   #endif
 }
 
@@ -870,7 +870,7 @@ EndIteration:
   
   fnRCL(SREG_X2);
   
-  if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_Z), const34_2pi )) runFunction(ITM_PLOT_J);
+  if( real34CompareAbsGreaterThan(REGISTER_REAL34_DATA(REGISTER_Z), const34_2pi )) runFunction(ITM_PLOT_XY);
   running_program_jm =  running_temp;
   #endif
 

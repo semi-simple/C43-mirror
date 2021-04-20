@@ -1,5 +1,44 @@
+.stamp-constantPointers
+.stamp-rasterFontsData
+.stamp-softmenuCatalog
+.stamp-testPgms
+*gmp-6.2.0/
+*gmp-6.2.0.tar.bz2
+*gmp-6.2.1/
+*gmp-6.2.1.tar.bz2
+# *DMCP_build/*
 *.o
 *.d
+*.lst
+*build*/
+# /build/
+# /dep/gmp-6.2.0/
+# !DM42\ binary/keymap.bin
+# !DM42\ binary/testPgms.bin
+# !DM42\ binary/WP43S_qspi.bin
+# #!DMCP_build/bin
+# !binaries/windows/wp43s.exe
+# !binaries/dmcp/testPgms.bin
+# /generateConstants
+# /generateCatalogs
+# /generateTestPgms
+# 
+# 
+!binaries/dmcp/WP43S*
+!binaries/dmcp/C43*
+!binaries/dmcp/WP43C*
+!binaries/dmcp/WP43S.pgm
+!binaries/dmcp/
+
+
+############################
+
+/bin
+/obj
+
+*.o
+*.d
+*.lst
 *.bin
 *.exe
 wp*.exe
@@ -10,175 +49,24 @@ wp*.exe
 202*.csv
 202*.TSV
 202*.tsv
-.stamp-constantPointers
-.stamp-rasterFontsData
-.stamp-softmenuCatalog
-.stamp-testPgms
 callgrind.out*
 gmon.out
 wp43s.sav
-bin/
-obj/
-*build*/
 wp43s.dSYM
-gmp-6.2.0/
-gmp-6.2.0.tar.bz2
-gmp-6.2.1/
-gmp-6.2.1.tar.bz2
-DMCP_build/src
-DMCP_build/decNumberICU
-DMCP_build/build
+.DS_Store
+/src/wp43s/version.h
 
 # used by cLion
 .idea/
 
-!windows\ binaries/wp43s609.exe
-!windows\ binaries/wp43s609E.exe
-!windows\ binaries/wp43s.exe
-!DM42\ binary/keymap.bin
-!DM42\ binary/testPgms.bin
-!DM42\ binary/WP43S_qspi.bin
-!DM42\ binary/WP43S_qspi609E.bin
-!DM42\ binary/WP43S609E.pgm
-!DMCP_build/bin
+
+!binaries/dmcp/keymap.bin
+!binaries/dmcp/WP43S_qspi.bin
+!res/dmcp/testPgms.bin
 
 # / before the executable files else directories under src/ are ignored
-/generateConstants
-/generateCatalogs
-/generateTestPgms
 /testSuite
 /ttf2RasterFonts
 /testTtf2RasterFonts
 /wp43s
 /.vscode
-/wp43c
-
-# User-specific files
-.DS_Store
-*.vcxproj.user
-*.vcxproj.filters
-*.vcxproj
-*.sln
-
-# Visual Studio 2019 cache/options directory
-.vs/
-
-!*/compil*
-!*Make*
-!*make*
-
-*iCloud*
-
-# Created by https://www.gitignore.io/api/osx,linux,windows
-# Edit at https://www.gitignore.io/?templates=osx,linux,windows
-
-### Linux ###
-*~
-
-# temporary files which can be created if a process still has a handle open of a deleted file
-.fuse_hidden*
-
-# KDE directory preferences
-.directory
-
-# Linux trash folder which might appear on any partition or disk
-.Trash-*
-
-# .nfs files are created when an open file is removed but is still being accessed
-.nfs*
-
-### OSX ###
-# General
-.DS_Store
-.AppleDouble
-.LSOverride
-*.dSYM
-*\ 2.c
-*\ 3.c
-*\ 4.c
-*\ 5.c
-*\ 6.c
-*\ 7.c
-*\ 8.c
-*\ 9.c
-*\ 10.c
-*\ 11.c
-*\ 12.c
-*\ 13.c
-
-
-
-
-.DS_Store
-*.dSYM
-*\ 2.c
-*\ 3.c
-*\ 4.c
-*\ 5.c
-*\ 6.c
-*\ 7.c
-*\ 8.c
-*\ 9.c
-c_s\ *
-generateCatalogs\ *
-generateConstants\ *
-ttf2Rasterfonts\ *
-.stamp-constantPointers\ *
-.stamp-rasterFontsData\ *
-.stamp-softmenuCatalog\ *
-
-
-
-
-# Icon must end with two \r
-Icon\r\r
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-### Windows ###
-# Windows thumbnail cache files
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
-
-# Dump file
-*.stackdump
-
-# Folder config file
-[Dd]esktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msix
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# End of https://www.gitignore.io/api/osx,linux,windows
-DM42 binary/Key_stickers.xcf
-DM42 binary/WP43S_overlay.xcf
-#Makefile -f

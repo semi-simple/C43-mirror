@@ -17,6 +17,11 @@
 /********************************************//**
  * \file addition.h
  ***********************************************/
+#ifndef ADDITION_H
+#define ADDITION_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnAdd      (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -81,3 +86,5 @@ void addCplxLonI(void);
 void addCplxShoI(void);
 void addCplxReal(void);
 void addCplxCplx(void);
+
+#endif // ADDITION_H

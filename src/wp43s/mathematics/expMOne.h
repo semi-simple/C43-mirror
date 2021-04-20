@@ -17,7 +17,13 @@
 /********************************************//**
  * \file expMOne.h
  ***********************************************/
+#ifndef EXPMONE_H
+#define EXPMONE_H
 // Coded by JM, based on exp.h
+
+#include "decNumberWrappers.h"
+#include "defines.h"
+#include <stdint.h>
 
 void fnExpM1   (uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -32,3 +38,5 @@ void expM1ShoI (void);
 void expM1Real (void);
 void expM1Cplx (void);
 void expM1Complex(const real_t *real, const real_t *imag, real_t *resReal, real_t *resImag, realContext_t *realContext);
+
+#endif // EXPMONE_H

@@ -17,8 +17,10 @@
 /********************************************//**
  * \file incDec.h
  ***********************************************/
+#ifndef INCDEC_H
+#define INCDEC_H
 
-
+#include <stdint.h>
 
 void incDecError(uint16_t regist, uint8_t flag);
 void fnDec      (uint16_t regist);
@@ -27,3 +29,5 @@ void incDecLonI (uint16_t regist, uint8_t flag);
 void incDecReal (uint16_t regist, uint8_t flag);
 void incDecCplx (uint16_t regist, uint8_t flag);
 void incDecShoI (uint16_t regist, uint8_t flag);
+
+#endif // INCDEC_H

@@ -18,6 +18,15 @@
  * \file statusbar.c Status bar management
  ***********************************************/
 
+#include "statusBar.h"
+
+#include "dateTime.h"
+#include "flags.h"
+#include "fonts.h"
+#include "screen.h"
+#include <string.h>
+
+
 #include "wp43s.h"
 
 

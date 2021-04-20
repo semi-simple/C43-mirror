@@ -17,6 +17,15 @@
 /********************************************//**
  * \file gmpWrappers.h
  ***********************************************/
+#ifndef GMPWRAPPERS_H
+#define GMPWRAPPERS_H
+
+#include "defines.h"
+
+#if (LIBGMP == 1)
+#include <gmp.h>
+#include <stdlib.h>
+
 
 #define longInteger_t                                                     mpz_t
 #define REGISTER_LONG_INTEGER_DATA(a)                                     ((void *)(getRegisterDataPointer(a) + 1)) // Memory pointer to the long integer of a register
@@ -152,3 +161,7 @@
 //#define longIntegerLcm(op1, op2, result)                                  mpz_lcm     (result, op1, op2)
 //
 //#define longIntegerFactorial(op, result)                                  mpz_fac_ui(result, op)
+
+#endif // (LIBGMP == 1)
+
+#endif // GMPWRAPPERS_H

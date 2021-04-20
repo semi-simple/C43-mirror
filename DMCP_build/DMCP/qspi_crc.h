@@ -1,5 +1,0 @@
-
-#define QSPI_DATA_SIZE 4
-//#define QSPI_DATA_CRC  0x000CFED6
-#define QSPI_DATA_CRC 0x000CFED6
-

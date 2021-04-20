@@ -18,6 +18,13 @@
  * \file incDec.c
  ***********************************************/
 
+#include "mathematics/incDec.h"
+
+#include "constantPointers.h"
+#include "error.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

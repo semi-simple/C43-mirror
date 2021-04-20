@@ -18,6 +18,19 @@
  * \file dateTime.c
  ***********************************************/
 
+#include "dateTime.h"
+
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "stack.h"
+#include <string.h>
+#include <time.h>
+
 #include "wp43s.h"
 
 void fnSetDateFormat(uint16_t dateFormat) {

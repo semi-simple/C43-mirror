@@ -17,6 +17,10 @@
 /********************************************//**
  * \file curveFitting.h
  ***********************************************/
+#ifndef CURVEFITTING_H
+#define CURVEFITTING_H
+
+#include <stdint.h>
 
 #include "wp43s.h"
 
@@ -34,3 +38,5 @@ void     yIsFnx                  (uint8_t  USEFLOAT, uint16_t selection, double 
 void     fnYIsFnx                (uint16_t unusedButMandatoryParameter);
 void     fnXIsFny                (uint16_t unusedButMandatoryParameter);
 void     fnCurveFittingLR        (uint16_t unusedButMandatoryParameter);
+
+#endif // CURVEFITTING_H

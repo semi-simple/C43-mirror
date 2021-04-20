@@ -17,6 +17,11 @@
 /********************************************//**
  * \file cubeRoot.h
  ***********************************************/
+#ifndef CUBEROOT_H
+#define CUBEROOT_H
+
+#include "defines.h"
+#include <stdint.h>
 
 void fnCubeRoot(uint16_t unusedButMandatoryParameter);
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -30,3 +35,5 @@ void curtCxma   (void);
 void curtShoI   (void);
 void curtReal   (void);
 void curtCplx   (void);
+
+#endif // CUBEROOT_H

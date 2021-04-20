@@ -18,6 +18,20 @@
  * \file arctanh.c
  ***********************************************/
 
+#include "mathematics/arctanh.h"
+
+#include "constantPointers.h"
+#include "debug.h"
+#include "error.h"
+#include "flags.h"
+#include "items.h"
+#include "mathematics/comparisonReals.h"
+#include "mathematics/division.h"
+#include "mathematics/ln.h"
+#include "mathematics/wp34s.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+
 #include "wp43s.h"
 
 

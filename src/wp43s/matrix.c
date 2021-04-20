@@ -512,6 +512,51 @@ void fnDelRow(uint16_t unusedParamButMandatory) {
 
 
 /********************************************//**
+ * \brief Get dimensions of matrix X
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnGetMatrixDimensions(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    real34Matrix_t x;
+    const uint16_t rows = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixRows;
+    const uint16_t cols = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixColumns;
+    longInteger_t li;
+
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    liftStack();
+    reallocateRegister(REGISTER_Y, dtReal34, REAL34_SIZE, amNone);
+
+    longIntegerInit(li);
+    uIntToLongInteger(rows, li);
+    convertLongIntegerToLongIntegerRegister(li, REGISTER_Y);
+    uIntToLongInteger(cols, li);
+    convertLongIntegerToLongIntegerRegister(li, REGISTER_X);
+    longIntegerFree(li);
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnGetMatrixDimensions:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
+
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+
+/********************************************//**
  * \brief Transpose matrix
  *
  * \param[in] unusedParamButMandatory uint16_t
@@ -1294,6 +1339,7 @@ void insRowRealMatrix(real34Matrix_t *matrix, uint16_t beforeRowNo) {
   matrix->header.matrixColumns = newMat.header.matrixColumns;
   matrix->matrixElements       = newMat.matrixElements;
 }
+
 
 
 

@@ -661,6 +661,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnDeterminant               (uint16_t unusedButMandatoryParameter) {}
   void fnInvertMatrix              (uint16_t unusedButMandatoryParameter) {}
   void fnEuclideanNorm             (uint16_t unusedButMandatoryParameter) {}
+  void fnRowSum                    (uint16_t unusedButMandatoryParameter) {}
+  void fnRowNorm                   (uint16_t unusedButMandatoryParameter) {}
   void fnIndexMatrix               (uint16_t unusedButMandatoryParameter) {}
   void fnGetMatrix                 (uint16_t unusedButMandatoryParameter) {}
   void fnPutMatrix                 (uint16_t unusedButMandatoryParameter) {}
@@ -2283,11 +2285,11 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1571 */  { fnSetRoundingMode,            TM_VALUE,                    "RM",                                          "RM",                                          (0 << TAM_MAX_BITS) |     6, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1572 */  { fnGetRoundingMode,            NOPARAM,                     "RM?",                                         "RM?",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1573 */  { itemToBeCoded,                NOPARAM,                     "1573",                                        "1573",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
-/* 1574 */  { itemToBeCoded,                NOPARAM,                     "RNORM",                                       "RNORM",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1574 */  { fnRowNorm,                    NOPARAM,                     "RNORM",                                       "RNORM",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1575 */  { fnExpM1,                      NOPARAM,                     "e" STD_SUP_x "-1",                            "e" STD_SUP_x "-1",                            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1576 */  { fnRoundi,                     NOPARAM,                     "ROUNDI",                                      "ROUNDI",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1577 */  { fnRsd,                        TM_VALUE,                    "RSD",                                         "RSD",                                         (1 << TAM_MAX_BITS) |    34, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1578 */  { itemToBeCoded,                NOPARAM,                     "RSUM",                                        "RSUM",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1578 */  { fnRowSum,                     NOPARAM,                     "RSUM",                                        "RSUM",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1579 */  { itemToBeCoded,                NOPARAM,                     "RTN+1",                                       "RTN+1",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1580 */  { itemToBeCoded,                NOPARAM,                     "R-CLR",                                       "R-CLR",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1581 */  { itemToBeCoded,                NOPARAM,                     "R-COPY",                                      "R-COPY",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

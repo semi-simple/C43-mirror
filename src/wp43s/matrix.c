@@ -522,7 +522,6 @@ void fnGetMatrixDimensions(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
-    real34Matrix_t x;
     const uint16_t rows = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixRows;
     const uint16_t cols = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixColumns;
     longInteger_t li;
@@ -796,6 +795,100 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
     realToReal34(&sum, REGISTER_REAL34_DATA(REGISTER_X));
 
     realMatrixFree(&matrix);
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnInvertMatrix:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
+
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Row sum of matrix X
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnRowSum(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    real34Matrix_t x, res;
+    real_t sum, elem;
+    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+    realMatrixInit(&res, x.header.matrixRows, 1);
+    for(uint16_t i = 0; i < x.header.matrixRows; ++i) {
+      realZero(&sum);
+      for(uint16_t j = 0; j < x.header.matrixColumns; ++j) {
+        real34ToReal(&x.matrixElements[i * x.header.matrixColumns + j], &elem);
+        realAdd(&sum, &elem, &sum, &ctxtReal39);
+      }
+      realToReal34(&sum, &res.matrixElements[i]);
+    }
+
+    convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
+    realMatrixFree(&res);
+    realMatrixFree(&x);
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnInvertMatrix:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
+
+  adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+/********************************************//**
+ * \brief Row norm of matrix X
+ *
+ * \param[in] unusedParamButMandatory uint16_t
+ * \return void
+ ***********************************************/
+void fnRowNorm(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    real34Matrix_t x;
+    real_t norm, sum, elem;
+    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+    realZero(&norm);
+    for(uint16_t i = 0; i < x.header.matrixRows; ++i) {
+      realZero(&sum);
+      for(uint16_t j = 0; j < x.header.matrixColumns; ++j) {
+        real34ToReal(&x.matrixElements[i * x.header.matrixColumns + j], &elem);
+        realSetPositiveSign(&elem);
+        realAdd(&sum, &elem, &sum, &ctxtReal39);
+      }
+      if(realCompareGreaterThan(&sum, &norm))
+        realCopy(&sum, &norm);
+    }
+
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    realToReal34(&norm, REGISTER_REAL34_DATA(REGISTER_X));
+    realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     fnToBeCoded();

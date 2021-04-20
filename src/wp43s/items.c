@@ -20,6 +20,7 @@
 
 #include "items.h"
 
+#include "addons.h"
 #include "browsers/browsers.h"
 #include "bufferize.h"
 #include "config.h"
@@ -755,12 +756,15 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnToTime                   (uint16_t unusedButMandatoryParameter) {}
   void fnTimeTo                   (uint16_t unusedButMandatoryParameter) {}
   void fnDRG                      (uint16_t unusedButMandatoryParameter) {}
+  void fnPlotStatJM               (uint16_t unusedButMandatoryParameter) {}
+  void fnPlotReset                (uint16_t unusedButMandatoryParameter) {}
                                                                               //JM ^^
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
 
 //            function                      parameter                    item in catalog                                item in softmenu                               TAM min                 max  CATALOG    stackLift       UNDO status
+
 
 /*    0 */  { itemToBeCoded,               NOPARAM,                     "",                                            "0000",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED}, // ITM_NULL
 
@@ -2580,7 +2584,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1771 */  { fnSetSetJM,                  JC_FG_LINE,                  "fg" STD_SPACE_3_PER_EM "LINE",                "fg" STD_SPACE_3_PER_EM "LINE",                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},//JM UNDERLINING
 /* 1772 */  { fnSetSetJM,                  JC_NO_BASE_SCREEN,           "No" STD_SPACE_6_PER_EM "MyM",                 "No" STD_SPACE_6_PER_EM "MyM",                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},//JM NOBASE MENU SETTING
 /* 1773 */  { fnSetSetJM,                  JC_G_DOUBLETAP,              "G" STD_SPACE_3_PER_EM "2TAP",                 "G" STD_SPACE_3_PER_EM "2TAP",                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},//JM KEY TAP DOUBLE SETTING
-/* 1774 */  { itemToBeCoded,               NOPARAM,                     "1749",                                        "1749",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
+/* 1774 */  { fnPlotStatJM,                PLOT_LR,                     "ASS.ALL",                                     "ASS.ALL",                                     (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1775 */  { fnP_All_Regs,                0,                           STD_PRINTER "ALLr",                            STD_PRINTER "ALLr",                            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 1776 */  { fnMultiplySI,                85,                          "",                                            STD_DOT "f",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },//JM PRE UNIT
 /* 1777 */  { fnMultiplySI,                88,                          "",                                            STD_DOT "p",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },//JM PRE UNIT
@@ -2844,9 +2848,10 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 2035 */  { fnGraph,                     21,                          "X.PLOT",                                      "X.PLOT",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2036 */  { fnGraph,                     22,                          "X.DEMO",                                      "X.DEMO",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2037 */  { fnP_All_Regs,                1,                           "PRN",                                         "PRN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
-/* 2038 */  { fnPlot,                      NOPARAM,                     "PLOT_J",                                      "PLOT_J",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 2038 */  { fnPlot,                      NOPARAM,                     "PLOTXY",                                      "PLOTXY",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 2039 */  { fnUserJM,                    USER_DRG,                    "",                                            "U" STD_SIGMA STD_DOT "DRG",                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 2040 */  { itemToBeCoded,               NOPARAM,                     "2040",                                        "2040",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
+/* 2041 */  { fnPlotReset,                 NOPARAM,                     "PLTRST",                                      "PLTRST",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 
-/* 2041 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 2042 */  { itemToBeCoded,               NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

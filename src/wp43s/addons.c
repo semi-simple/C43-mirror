@@ -72,6 +72,7 @@ All the below: because both Last x and savestack does not work due to multiple s
 //#include "charString.h"
 //#include "constants.h"
 #include "constantPointers.h"
+#include "curveFitting.h"
 //#include "debug.h"
 //#include "error.h"
 //#include "flags.h"
@@ -91,6 +92,16 @@ All the below: because both Last x and savestack does not work due to multiple s
 //#include "ui/tam.h"
 
 #include "wp43s.h"
+
+
+
+
+void fnPlotStatJM(uint16_t mode) {
+   fnCurveFitting(0);
+   fnPlotStat(mode);
+}
+
+
 
 
 void fneRPN(uint16_t state) {

@@ -1842,7 +1842,7 @@
 #define ITM_FG_LINE                   1771
 #define ITM_NO_BASE_SCREEN            1772
 #define ITM_G_DOUBLETAP               1773
-#define ITM_1749                      1774
+#define ITM_PLOT_LRALL                1774
 #define ITM_P_ALLREGS                 1775
 #define ITM_SI_f                      1776
 #define ITM_SI_p                      1777
@@ -2106,11 +2106,12 @@
 #define ITM_XPLOT                     2035
 #define ITM_XDEMO                     2036
 #define ITM_PRN                       2037
-#define ITM_PLOT_J                    2038
+#define ITM_PLOT_XY                   2038
 #define ITM_USER_DRG                  2039
 #define ITM_2040                      2040
+#define ITM_PLOTRST                   2041
 
-#define LAST_ITEM                     2041   //JM
+#define LAST_ITEM                     2042   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

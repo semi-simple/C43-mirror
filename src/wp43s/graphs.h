@@ -22,6 +22,8 @@
 
 //graphs.h
 
+#ifndef GRAPHS_H
+#define GRAPHS_H
 
 //Graph functions
 void    graph_reset        (void);
@@ -44,4 +46,6 @@ void    fnStatList         (void);
 void    graph_plotmem      (void);
 void    fnPlot             (uint16_t unusedButMandatoryParameter);
 void    fnPlotLS           (uint16_t unusedButMandatoryParameter);
+void    fnPlotReset        (uint16_t unusedButMandatoryParameter);
 
+#endif //GRAPHS_H

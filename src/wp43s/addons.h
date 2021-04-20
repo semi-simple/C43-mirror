@@ -17,8 +17,16 @@
 /* ADDITIONAL C43 functions and routines */
 
 /********************************************//**
- * \file arctan.h
+ * \file addons.h
  ***********************************************/
+
+#ifndef ADDONS_H
+#define ADDONS_H
+
+#include "typeDefinitions.h"
+
+
+void fnPlotStatJM   (uint16_t mode);
 
 void fneRPN         (uint16_t unusedButMandatoryParameter);
 void fnCFGsettings  (uint16_t unusedButMandatoryParameter);
@@ -73,3 +81,5 @@ void   fnStrInputReal34         (char inp1[]);  // CONVERT STRING to REAL IN X  
 void   fnStrInputLongint        (char inp1[]);  // CONVERT STRING to Longint X      //DONE
 void   fnRCL                    (int16_t inp);      //DONE
 
+
+#endif //ADDONS_H

@@ -22,7 +22,8 @@ TICKS                 //GET CLOCK STATUS
 RCL 01 -              //GET STORED CLOCK STATUS. SUBTRACT TO GET EXPIRED TIME
 10 /                  //DIVIDE BY 10 TO GET SECONDS
 
-PLOT                  //PLOTS THE STATS DATA
+PLTRST
+PLOTXY                //PLOTS THE STATS DATA
 
 RETURN                //STOPS PROCESSING
 

@@ -156,6 +156,37 @@ void fnPy (uint16_t unusedButMandatoryParameter) {
   fnPlot(0);
 }
 
+
+void fnPlotReset(uint16_t unusedButMandatoryParameter) {
+  graph_dx      = 0;
+  graph_dy      = 0;
+  extentx       = true;
+  extenty       = true;
+  jm_VECT       = false;
+  jm_NVECT      = false;
+  jm_SCALE      = false;
+  //Aspect_Square = true;
+  PLOT_LINE     = true;
+  PLOT_CROSS    = true;
+  PLOT_BOX      = false;
+  PLOT_INTG     = false;
+  PLOT_DIFF     = false;
+  PLOT_RMS      = false;
+  PLOT_SHADE    = false;
+  PLOT_AXIS     = true;
+  PLOT_ZMX      = 0;
+  PLOT_ZMY      = 0;
+  PLOT_ZOOM     = 0;
+
+  plotmode      = _SCAT;      //VECTOR or SCATTER
+  tick_int_x    = 0;          //to show axis: tick_in_x & y = 10, PLOT_AXIS = true
+  tick_int_y    = 0;
+
+  fnPlot(0);
+
+}
+
+
 void fnPlot(uint16_t unusedButMandatoryParameter) {
   #ifdef DMCP_BUILD
     lcd_refresh();

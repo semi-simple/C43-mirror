@@ -20,6 +20,7 @@
 
 #include "bufferize.h"
 
+#include "addons.h"
 #include "charString.h"
 #include "constantPointers.h"
 #include "constants.h"

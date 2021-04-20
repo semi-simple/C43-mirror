@@ -20,6 +20,7 @@
 
 #include "display.h"
 
+#include "addons.h"
 #include "charString.h"
 #include "constantPointers.h"
 #include "conversionAngles.h"

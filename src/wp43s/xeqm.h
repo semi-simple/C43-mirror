@@ -17,8 +17,10 @@
 /* ADDITIONAL C43 functions and routines */
 
 /********************************************//**
- * \file arctan.h
+ * \file xeqm.h
  ***********************************************/
+#ifndef XEQM_H
+#define XEQM_H
 
 bool_t strcompare            ( char *in1, char *in2);
 void fnXEQMENU               (uint16_t unusedButMandatoryParameter);
@@ -34,3 +36,4 @@ void runkey                  (int16_t item);
 void fnCla                   (uint16_t unusedButMandatoryParameter);
 void fnCln                   (uint16_t unusedButMandatoryParameter);
 
+#endif //XEQM_H

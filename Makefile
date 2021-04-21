@@ -244,6 +244,7 @@ dist_dm42:	dmcp $(BUILD_DIR)/wiki
 	cp $(BUILD_DIR)/dmcp/WP43S.pgm $(BUILD_DIR)/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r res/offimg $(DM_DIST_DIR)
 	cp res/dmcp/keymap.bin res/dmcp/original_DM42_keymap.bin res/dmcp/testPgms.bin $(DM_DIST_DIR)
+	cp res/artwork/WP43S_layout.svg $(DM_DIST_DIR)/WP43S_layout.svg
 	cp $(BUILD_DIR)/wiki/DM42-installation.md $(DM_DIST_DIR)/readme.txt
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 

@@ -1199,18 +1199,16 @@ void execute_string(const char *inputstring, bool_t exec1) {
     gotlabels = true;                              //allow to run only once, unless
     if(!exec) exec = exec1; else exec = false;     //exec must run, and ensure it runs only once.
   }
-  #endif
-     exec_exit:
-			                        exec = false;     //exec must run, and ensure it runs only once.
-			                        running_program_jm = false;
-				                      #ifdef PC_BUILD_VERBOSE0
-				                        #ifdef PC_BUILD
-			                           	printf("##++ END Exiting\n");
-				                        #endif
-				                      #endif
-			                      	return;                              
-
-
+  exec_exit:
+  exec = false;     //exec must run, and ensure it runs only once.
+#endif //TESTSUITE_BUILD
+	running_program_jm = false;
+	#ifdef PC_BUILD_VERBOSE0
+	  #ifdef PC_BUILD
+		   	printf("##++ END Exiting\n");
+	  #endif
+	#endif
+	return;                              
 }
 
 

@@ -466,6 +466,7 @@ void debugNIM(void) {
     if(tmm == TM_REGISTER)  return "Register";
     if(tmm == TM_CMP)       return "Compare ";
     if(tmm == TM_STORCL)    return "STORCL  ";
+    if(tmm == TM_M_DIM)     return "M_DIM   ";
 
     return "???     ";
   }

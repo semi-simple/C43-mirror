@@ -74,6 +74,56 @@ static bool_t getArg(calcRegister_t regist, real_t *arg) {
   return true;
 }
 
+static bool_t getDimensionArg(uint32_t *rows, uint32_t *cols) {
+  longInteger_t tmp_lgInt;
+
+  //Get Size from REGISTER_X and REGISTER_Y
+  if(((getRegisterDataType(REGISTER_X) != dtLongInteger) && (getRegisterDataType(REGISTER_X) != dtReal34)) ||
+    ((getRegisterDataType(REGISTER_Y) != dtLongInteger) && (getRegisterDataType(REGISTER_Y) != dtReal34))) {
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "invalid data type %s and %s", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return false;
+  }
+
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, tmp_lgInt);
+  else // dtReal34
+    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), tmp_lgInt, DEC_ROUND_DOWN);
+  if(longIntegerIsNegativeOrZero(tmp_lgInt)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      char strbuf[32];
+      longIntegerToAllocatedString(tmp_lgInt, strbuf, 32);
+      sprintf(errorMessage, "invalid number of columns");
+      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+  longIntegerToUInt(tmp_lgInt, *cols);
+
+  if(getRegisterDataType(REGISTER_Y) == dtLongInteger)
+    convertLongIntegerRegisterToLongInteger(REGISTER_Y, tmp_lgInt);
+  else // dtReal34
+    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_Y), tmp_lgInt, DEC_ROUND_DOWN);
+  if(longIntegerIsNegativeOrZero(tmp_lgInt)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      char strbuf[32];
+      longIntegerToAllocatedString(tmp_lgInt, strbuf, 32);
+      sprintf(errorMessage, "invalid number of rows");
+      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+  longIntegerToUInt(tmp_lgInt, *rows);
+
+  longIntegerFree(tmp_lgInt);
+  return true;
+}
+
 
 
 static bool_t swapRowsReal(real34Matrix_t *matrix) {
@@ -221,53 +271,9 @@ static bool_t decJReal(real34Matrix_t *matrix) {
 void fnNewMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   uint32_t rows, cols;
-  longInteger_t tmp_lgInt;
   real34Matrix_t matrix;
 
-  //Get Size from REGISTER_X and REGISTER_Y
-  if(((getRegisterDataType(REGISTER_X) != dtLongInteger) && (getRegisterDataType(REGISTER_X) != dtReal34)) ||
-    ((getRegisterDataType(REGISTER_Y) != dtLongInteger) && (getRegisterDataType(REGISTER_Y) != dtReal34))) {
-      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "invalid data type %s and %s", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
-      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-      return;
-  }
-
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger)
-    convertLongIntegerRegisterToLongInteger(REGISTER_X, tmp_lgInt);
-  else // dtReal34
-    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_X), tmp_lgInt, DEC_ROUND_DOWN);
-  if(longIntegerIsNegativeOrZero(tmp_lgInt)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      char strbuf[32];
-      longIntegerToAllocatedString(tmp_lgInt, strbuf, 32);
-      sprintf(errorMessage, "invalid number of columns");
-      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return;
-  }
-  longIntegerToUInt(tmp_lgInt, cols);
-
-  if(getRegisterDataType(REGISTER_Y) == dtLongInteger)
-    convertLongIntegerRegisterToLongInteger(REGISTER_Y, tmp_lgInt);
-  else // dtReal34
-    convertReal34ToLongInteger(REGISTER_REAL34_DATA(REGISTER_Y), tmp_lgInt, DEC_ROUND_DOWN);
-  if(longIntegerIsNegativeOrZero(tmp_lgInt)) {
-    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      char strbuf[32];
-      longIntegerToAllocatedString(tmp_lgInt, strbuf, 32);
-      sprintf(errorMessage, "invalid number of rows");
-      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return;
-  }
-  longIntegerToUInt(tmp_lgInt, rows);
-
-  longIntegerFree(tmp_lgInt);
+  if(!getDimensionArg(&rows, &cols)) return;
 
   //Initialize Memory for Matrix
   realMatrixInit(&matrix, rows, cols);
@@ -508,6 +514,46 @@ void fnDelRow(uint16_t unusedParamButMandatory) {
   }
 #endif // TESTSUITE_BUILD
 }
+
+
+
+/********************************************//**
+ * \brief (Re-)dimension matrix X
+ *
+ * \param[in] regist uint16_t
+ * \return void
+ ***********************************************/
+void fnSetMatrixDimensions(uint16_t regist) {
+#ifndef TESTSUITE_BUILD
+  uint32_t y, x;
+
+  if(!getDimensionArg(&y, &x)) {
+  }
+  else if(getRegisterDataType(regist) == dtReal34Matrix) {
+    real34Matrix_t matrix;
+    uint32_t elements;
+
+    realMatrixInit(&matrix, y, x);
+    elements = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows * REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns;
+    if(elements > y * x) elements = y * x;
+    for(uint32_t i = 0; i < elements; ++i)
+      real34Copy(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i, &matrix.matrixElements[i]);
+    convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
+    realMatrixFree(&matrix);
+  }
+  else if(getRegisterDataType(regist) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  else {
+    real34Matrix_t matrix;
+
+    realMatrixInit(&matrix, y, x);
+    convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
+    realMatrixFree(&matrix);
+  }
+#endif // TESTSUITE_BUILD
+}
+
 
 
 

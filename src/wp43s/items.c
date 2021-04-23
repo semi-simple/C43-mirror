@@ -655,6 +655,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnIncDecJ                   (uint16_t unusedButMandatoryParameter) {}
   void fnInsRow                    (uint16_t unusedButMandatoryParameter) {}
   void fnDelRow                    (uint16_t unusedButMandatoryParameter) {}
+  void fnSetMatrixDimensions       (uint16_t unusedButMandatoryParameter) {}
   void fnGetMatrixDimensions       (uint16_t unusedButMandatoryParameter) {}
   void fnTranspose                 (uint16_t unusedButMandatoryParameter) {}
   void fnLuDecomposition           (uint16_t unusedButMandatoryParameter) {}
@@ -2237,7 +2238,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1523 */  { fnAngularMode,                amMultPi,                    "MUL" STD_pi,                                  "MUL" STD_pi,                                  (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1524 */  { itemToBeCoded,                NOPARAM,                     "MVAR",                                        "MVAR",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1525 */  { fnDelRow,                     NOPARAM,                     "M.DELR",                                      "DELR",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1526 */  { itemToBeCoded,                NOPARAM,                     "M.DIM",                                       "DIM",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1526 */  { fnSetMatrixDimensions,        TM_M_DIM,                    "M.DIM",                                       "DIM",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_UNCHANGED | US_ENABLED  },
 /* 1527 */  { fnGetMatrixDimensions,        NOPARAM,                     "M.DIM?",                                      "DIM?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1528 */  { fnSetDateFormat,              ITM_MDY,                     "M.DY",                                        "M.DY",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1529 */  { fnEditMatrix,                 NOPARAM,                     "M.EDI",                                       "EDIT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_ENABLED  },

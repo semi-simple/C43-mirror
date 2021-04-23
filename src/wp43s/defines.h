@@ -484,9 +484,10 @@
 #define TM_FLAGR                               10004
 #define TM_FLAGW                               10005
 #define TM_STORCL                              10006
-#define TM_SHUFFLE                             10007
-#define TM_LABEL                               10008
-#define TM_CMP                                 10009 // TM_CMP must be the last in this list
+#define TM_M_DIM                               10007
+#define TM_SHUFFLE                             10008
+#define TM_LABEL                               10009
+#define TM_CMP                                 10010 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0

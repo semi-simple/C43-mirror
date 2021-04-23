@@ -41,6 +41,7 @@ void       fnIncDecJ                      (uint16_t mode);
 void       fnInsRow                       (uint16_t unusedParamButMandatory);
 void       fnDelRow                       (uint16_t unusedParamButMandatory);
 
+void       fnSetMatrixDimensions          (uint16_t regist);
 void       fnGetMatrixDimensions          (uint16_t unusedParamButMandatory);
 void       fnTranspose                    (uint16_t unusedParamButMandatory);
 void       fnLuDecomposition              (uint16_t unusedParamButMandatory);

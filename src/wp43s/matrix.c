@@ -1192,7 +1192,7 @@ void showMatrixEditor() {
     }
   }
 
-  sprintf(tmpString, "%" PRIi16";%" PRIi16"= %s", matSelRow+1, matSelCol+1, nimBufferDisplay);
+  sprintf(tmpString, "%" PRIi16";%" PRIi16"= %s", colVector ? matSelCol+1 : matSelRow+1, colVector ? 1 : matSelCol+1, nimBufferDisplay);
   width = stringWidth(tmpString, &numericFont, true, true) + 1;
   if(aimBuffer[0] == 0) {
     real34ToDisplayString(&openMatrixMIMPointer.matrixElements[matSelRow*cols+matSelCol], amNone, &tmpString[strlen(tmpString)], &numericFont, SCREEN_WIDTH - width, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_4_PER_EM);

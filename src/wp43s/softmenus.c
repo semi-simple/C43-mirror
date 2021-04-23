@@ -1043,8 +1043,9 @@ int16_t mm(int16_t id) {
   m = 0;
   if(id != 0) { // Search by ID
     while(softmenu[m].menuItem != 0) {
-      printf(">>> mm %d %d %d %s \n",id, m, softmenu[m].menuItem, indexOfItems[-softmenu[m].menuItem].itemSoftmenuName);
+      //printf(">>> mm %d %d %d %s \n",id, m, softmenu[m].menuItem, indexOfItems[-softmenu[m].menuItem].itemSoftmenuName);
       if(softmenu[m].menuItem == id) {
+       //printf("####>> mm() broken out id=%i m=%i\n",id,m);
        break;
       }
       m++;

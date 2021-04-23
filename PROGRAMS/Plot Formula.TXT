@@ -1,15 +1,11 @@
-//PROGRAM TO PLOT FORMULA based on SINCPI Program Rev. 6
-
- 
-
-XEQLBL FF PLTFORM        // BINDS PROGRAM NAME PLTFORM TO THE SOFTMENU BUTTON PER XEQMINDEX.TXT
+XEQLBL FF PLTFORM        // FF BINDS PROGRAM NAME PER XEQMINDEX.TXT. PLOT ANY FORMULA, EXAMPLE: SINCPI. Rev. 7
 
 3. EXIT CHS STO 10     // REG10: Lower X
 CHS STO 11             // REG11: Higher X
-400 STO 12             // REG12: Number of steps
+399 STO 12             // REG12: Max step no
 
 
-  MULPI                  // SET ADM. ADM not required as SINCPI assumes MULPI if not declared angle
+  MULPI                  // SET ADM
   ERPN                   // SET PROGRAM MODE TO ERPN
   DOTD                   // ENSURE IN REAL MODE
   CLGRF                  // CLEAR GRAPH DEFAULTS AND STATS DATA
@@ -45,16 +41,19 @@ CHS STO 11             // REG11: Higher X
   10 /                   // DIVIDE BY 10 TO GET SECONDS
   ALPHA " SEC" EXIT +    // ADD TEXT
   PLTRST
-  PLOT    EXIT           // PLOTS THE STATS DATA
+  PLOTXY    EXIT         // PLOTS THE STATS DATA
   P_SHADE                // PLOT OPTIONS P_DIFF, P_INT, P_RMS, P_SHADE
 
 RETURN                   // STOPS PROCESSING
 
 
-//---SUBROUTINE-----------
-LBL M4                   // CALC FUNCTION SUBROUTINE: X for use in formula in X and REG13
+//---SUBROUTINE----------
+LBL M4                   // CALC FUNCTION SUBROUTINE: X and REG13
   SINCPI                 // CALCULATE FUNCTION 
 RTN                      // RETURN TO MAIN PROGRAM
 
 
 END                      // OPTIONAL END OF PROCESSING MARKER
+
+
+

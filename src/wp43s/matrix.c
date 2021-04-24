@@ -1271,9 +1271,6 @@ void mimAddNumber(int16_t item) {
         cursorFont = &numericFont;
         lastIntegerBase = 0;
       }
-      else if(nimNumberPart == NP_REAL_FLOAT_PART) {
-        return; // fractional element is unsupported
-      }
       break;
 
     case ITM_PERIOD :
@@ -1285,6 +1282,9 @@ void mimAddNumber(int16_t item) {
         cursorEnabled = true;
         cursorFont = &numericFont;
         lastIntegerBase = 0;
+      }
+      else if(nimNumberPart == NP_REAL_FLOAT_PART) {
+        return; // fractional element is unsupported
       }
       break;
 

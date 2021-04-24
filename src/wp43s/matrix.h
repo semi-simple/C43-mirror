@@ -84,6 +84,7 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   bool_t   wrapIJ                         (uint16_t rows, uint16_t cols);
 
   void     copyRealMatrix                 (const real34Matrix_t *matrix, real34Matrix_t *res);
+  void     linkToRealMatrixRegister       (calcRegister_t regist, real34Matrix_t *linkedMatrix);
   void     insRowRealMatrix               (real34Matrix_t *matrix, uint16_t beforeRowNo);
   void     delRowRealMatrix               (real34Matrix_t *matrix, uint16_t beforeRowNo);
   void     transposeRealMatrix            (const real34Matrix_t *matrix, real34Matrix_t *res);

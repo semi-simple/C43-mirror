@@ -1603,6 +1603,15 @@ void copyRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
 
 
 
+/* Link to real matrix register (data not copied) */
+void linkToRealMatrixRegister(calcRegister_t regist, real34Matrix_t *linkedMatrix) {
+  linkedMatrix->header.matrixRows    = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows;
+  linkedMatrix->header.matrixColumns = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns;
+  linkedMatrix->matrixElements       = REGISTER_REAL34_MATRIX_M_ELEMENTS(regist);
+}
+
+
+
 /* Insert a row */
 void insRowRealMatrix(real34Matrix_t *matrix, uint16_t beforeRowNo) {
   const uint16_t rows = matrix->header.matrixRows;

@@ -1019,17 +1019,18 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
       #endif // PC_BUILD
 
       if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
-        const uint16_t rows = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixRows;
-        const uint16_t cols = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixColumns;
+        real34Matrix_t matrix;
+        linkToRealMatrixRegister(REGISTER_X, &matrix);
+        const uint16_t rows = matrix.header.matrixRows;
+        const uint16_t cols = matrix.header.matrixColumns;
         bool_t smallFont = ((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3));
         for(int i = 0; i < rows; i++) {
           for(int j = 0; j< cols; j++) {
-            real34_t *element = REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_X) + (i*cols+j);
-            bool_t neg = real34IsNegative(element);
+            bool_t neg = real34IsNegative(&matrix.matrixElements[i*cols+j]);
             tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
-            real34SetPositiveSign(element);
-            real34ToDisplayString(element, amNone, tmpString, &numericFont, MATRIX_LINE_WIDTH_LARGE - 20, 4, true, STD_SPACE_4_PER_EM);
-            if(neg) real34SetNegativeSign(element);
+            real34SetPositiveSign(&matrix.matrixElements[i*cols+j]);
+            real34ToDisplayString(&matrix.matrixElements[i*cols+j], amNone, tmpString, &numericFont, MATRIX_LINE_WIDTH_LARGE - 20, 4, true, STD_SPACE_4_PER_EM);
+            if(neg) real34SetNegativeSign(&matrix.matrixElements[i*cols+j]);
             if(stringWidth(tmpString, &numericFont, true, true) + 1 > MATRIX_LINE_WIDTH_LARGE - 20) {
               smallFont = true;
               goto realMatFontDetermined;

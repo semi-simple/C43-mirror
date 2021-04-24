@@ -315,6 +315,7 @@ static void compareRegisters(uint16_t regist, uint8_t mode) {
   int8_t result;
 
   if((regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) || (regist == TEMP_REGISTER_1)) {
+  #ifndef TESTSUITE_BUILD
     // Compare matrices
     if((mode == COMPARE_MODE_EQUAL || mode == COMPARE_MODE_NOT_EQUAL) && getRegisterDataType(REGISTER_X) == dtReal34Matrix && getRegisterDataType(regist) == dtReal34Matrix) {
       real34Matrix_t x, r;
@@ -340,9 +341,10 @@ static void compareRegisters(uint16_t regist, uint8_t mode) {
     else if((mode == COMPARE_MODE_EQUAL || mode == COMPARE_MODE_NOT_EQUAL) && (getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) && (getRegisterDataType(regist) == dtReal34Matrix || getRegisterDataType(regist) == dtComplex34Matrix)) {
       fnToBeCoded();
     }
-
+    else
+  #endif // !TESTSUITE_BUILD
     // Compare complex numbers
-    else if((mode == COMPARE_MODE_EQUAL || mode == COMPARE_MODE_NOT_EQUAL) && (getRegisterDataType(REGISTER_X) == dtComplex34 || getRegisterDataType(regist) == dtComplex34)) {
+    if((mode == COMPARE_MODE_EQUAL || mode == COMPARE_MODE_NOT_EQUAL) && (getRegisterDataType(REGISTER_X) == dtComplex34 || getRegisterDataType(regist) == dtComplex34)) {
       if(getRegisterDataType(REGISTER_X) == getRegisterDataType(regist)) { // == dtComplex34
         temporaryInformation = (real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(regist)) && real34CompareEqual(REGISTER_IMAG34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(regist))) ? TI_TRUE : TI_FALSE;
       }
@@ -408,6 +410,7 @@ void fnXNotEqual(uint16_t regist) {
 }
 
 static void almostEqualMatrix(uint16_t regist) {
+#ifndef TESTSUITE_BUILD
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix && getRegisterDataType(regist) == dtReal34Matrix) {
     real34Matrix_t x, r;
     convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
@@ -425,6 +428,7 @@ static void almostEqualMatrix(uint16_t regist) {
   else {
     fnToBeCoded();
   }
+#endif // !TESTSUITE_BUILD
 }
 
 static void almostEqualScalar(uint16_t regist) {

@@ -929,6 +929,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
     int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
     bool_t prefixPre = true;
     bool_t prefixPost = true;
+    const uint8_t origDisplayStack = displayStack;
 
     char prefix[200], lastBase[4];
 
@@ -1017,6 +1018,32 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         #endif // (SHOW_MEMORY_STATUS == 1)
       #endif // PC_BUILD
 
+      if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+        const uint16_t rows = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixRows;
+        const uint16_t cols = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixColumns;
+        bool_t smallFont = ((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3));
+        for(int i = 0; i < rows; i++) {
+          for(int j = 0; j< cols; j++) {
+            real34_t *element = REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_X) + (i*cols+j);
+            bool_t neg = real34IsNegative(element);
+            tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
+            real34SetPositiveSign(element);
+            real34ToDisplayString(element, amNone, tmpString, &numericFont, MATRIX_LINE_WIDTH_LARGE - 20, 4, true, STD_SPACE_4_PER_EM);
+            if(neg) real34SetNegativeSign(element);
+            if(stringWidth(tmpString, &numericFont, true, true) + 1 > MATRIX_LINE_WIDTH_LARGE - 20) {
+              smallFont = true;
+              goto realMatFontDetermined;
+            }
+            if(j == 3) break;
+          }
+          if(i == 4) break;
+        }
+        realMatFontDetermined:
+        if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
+        if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
+        if(rows >= 4 && cols > 1) displayStack = 2;
+      }
+
       if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
         showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
       }
@@ -1090,6 +1117,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
 
       else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
         prefixWidth = 0;
+        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(REGISTER_X) == dtReal34Matrix) ? 4 - displayStack : 0));
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
           if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
@@ -1172,7 +1200,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
           if(w <= SCREEN_WIDTH) {
-            showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
           }
           else {
             w = stringWidth(tmpString, &standardFont, false, true);
@@ -1185,7 +1213,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
               w = stringWidth(tmpString, &standardFont, false, true);
               lineWidth = w;
             }
-            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            showString(tmpString, &standardFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
           }
         }
 
@@ -1538,9 +1566,9 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
           if(prefixWidth > 0) {
-            showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+            showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
           }
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtComplex34) {
@@ -1548,7 +1576,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
 
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtString) {
@@ -1585,18 +1613,18 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
               xcopy(tmpString + stringByteLength(tmpString), STD_ELLIPSIS, 3);
               w += 14;
               lineWidth = w;
-              showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+              showString(tmpString, &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
             }
           }
           else {
             lineWidth = w;
-            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
           }
         }
 
         else if(getRegisterDataType(regist) == dtShortInteger) {
           shortIntegerToDisplayString(regist, tmpString, true);
-          showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), baseY + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtLongInteger) {
@@ -1612,7 +1640,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
               else if(strcmp(tmpString, "6") == 0) strcpy(prefix, nameOfWday_en[6]);
               else if(strcmp(tmpString, "7") == 0) strcpy(prefix, nameOfWday_en[7]);
               else strcpy(prefix, nameOfWday_en[0]);
-              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
+              showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
             }
           }
 
@@ -1620,7 +1648,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           lineWidth = w;
 
           if(w <= SCREEN_WIDTH) {
-            showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
           }
           else {
             w = stringWidth(tmpString, &standardFont, false, true);
@@ -1632,52 +1660,65 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
             }
             w = stringWidth(tmpString, &standardFont, false, true);
             lineWidth = w;
-            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+            showString(tmpString, &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
           }
         }
 
         else if(getRegisterDataType(regist) == dtTime) {
           timeToDisplayString(regist, tmpString, false);
           w = stringWidth(tmpString, &numericFont, false, true);
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtDate) {
           if(temporaryInformation == TI_DAY_OF_WEEK) {
             if(regist == REGISTER_X) {
               strcpy(prefix, nameOfWday_en[getDayOfWeek(regist)]);
-              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
+              showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
             }
           }
 
           dateToDisplayString(regist, tmpString);
           w = stringWidth(tmpString, &numericFont, false, true);
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtConfig) {
           xcopy(tmpString, "Configuration data", 19);
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtReal34Matrix) {
-          real34MatrixToDisplayString(regist, tmpString);
-          w = stringWidth(tmpString, &numericFont, false, true);
-          lineWidth = w;
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          if(regist == REGISTER_X) {
+            real34Matrix_t matrix;
+            matrix.header.matrixRows    = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixRows;
+            matrix.header.matrixColumns = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixColumns;
+            matrix.matrixElements       = REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_X);
+            showRealMatrix(&matrix);
+          }
+          else {
+            real34MatrixToDisplayString(regist, tmpString);
+            w = stringWidth(tmpString, &numericFont, false, true);
+            lineWidth = w;
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w - 2, baseY, vmNormal, false, true);
+          }
         }
 
         else {
           sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
-          showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+          showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), baseY + 6, vmNormal, false, true);
         }
       }
 
       if(regist == REGISTER_T) {
         lineTWidth = lineWidth;
       }
+    }
+
+    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+      displayStack = origDisplayStack;
     }
   }
 

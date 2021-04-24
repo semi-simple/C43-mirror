@@ -25,7 +25,7 @@
 
 #ifndef TESTSUITE_BUILD
   #define MATRIX_LINE_WIDTH_LARGE      120
-  #define MATRIX_LINE_WIDTH_SMALL      90
+  #define MATRIX_LINE_WIDTH_SMALL      93
   //#define MATRIX_CHAR_LEN              30
 #endif // TESTSUITE_BUILD
 
@@ -72,6 +72,7 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     mimAddNumber                   (int16_t item);
   void     mimFinalize                    (void);
   void     mimRestore                     (void);
+  void     showRealMatrix                 (const real34Matrix_t *matrix);
 
   void     getMatrixFromRegister          (calcRegister_t regist);
 

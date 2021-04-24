@@ -1177,21 +1177,14 @@ void realMatrixRedim(real34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
 
 
 /********************************************//**
- * \brief Displays a Matrix
+ * \brief Displays the matrix editor
  *
  * \return void
  ***********************************************/
 void showMatrixEditor() {
-
   int rows = openMatrixMIMPointer.header.matrixRows;
   int cols = openMatrixMIMPointer.header.matrixColumns;
-  int16_t Y_POS = Y_POSITION_OF_REGISTER_X_LINE;
-  int16_t elementWidth = 0, width = 0;
-  const font_t *font;
-  int16_t fontHeight = NUMERIC_FONT_HEIGHT;
-  int16_t maxWidth = MATRIX_LINE_WIDTH_LARGE - 20;
-
-  Y_POS = Y_POSITION_OF_REGISTER_X_LINE - NUMERIC_FONT_HEIGHT;
+  int16_t width = 0;
 
   bool_t colVector = false;
   if (cols == 1) {
@@ -1199,9 +1192,6 @@ void showMatrixEditor() {
     cols = rows;
     rows = 1;
   }
-
-  int maxCols = cols;
-  int maxRows = rows;
 
   if(wrapIJ(rows, cols)) {
     insRowRealMatrix(&openMatrixMIMPointer, rows);
@@ -1211,16 +1201,14 @@ void showMatrixEditor() {
   int16_t matSelRow = getIRegisterAsInt(true);
   int16_t matSelCol = getJRegisterAsInt(true);
 
-  videoMode_t vm = vmNormal;
-
   if(matSelCol == 0 || cols <= 4) {
     scrollColumn = 0;
   }
   else if(matSelCol == cols - 1) {
     scrollColumn = matSelCol - 3;
   }
-  else if(matSelCol < scrollColumn + 1) {
-    scrollColumn = matSelCol - 1;
+  else if(matSelCol < scrollColumn) {
+    scrollColumn = matSelCol;
   }
   else if(matSelCol > scrollColumn + 2) {
     scrollColumn = matSelCol - 2;
@@ -1239,61 +1227,7 @@ void showMatrixEditor() {
     scrollRow = matSelRow - 3;
   }
 
-  clearRegisterLine(REGISTER_X, true, true);
-  clearRegisterLine(REGISTER_Y, true, true);
-  if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
-  if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
-
-  font = &numericFont;
-  if((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3)) {
-    font = &standardFont;
-    fontHeight = STANDARD_FONT_HEIGHT;
-    Y_POS = Y_POSITION_OF_REGISTER_X_LINE - STANDARD_FONT_HEIGHT;
-    maxWidth = MATRIX_LINE_WIDTH_SMALL - 20;
-  }
-  if(rows > 5) maxRows = 5;
-  if(cols > 4) maxCols = 4;
-
-  for(int i = 0; i < maxRows; i++) {
-    for(int j = 0; j< maxCols; j++) {
-      bool_t neg = real34IsNegative(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
-      tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
-      real34SetPositiveSign(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
-      real34ToDisplayString(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn], amNone, tmpString, font, maxWidth, 5, true, STD_SPACE_4_PER_EM);
-      if(neg) real34SetNegativeSign(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
-      width = stringWidth(tmpString, font, true, true) + 1;
-      if(elementWidth < width) elementWidth = width;
-    }
-  }
-  if(elementWidth > maxWidth) elementWidth = maxWidth;
-
-  for(int i = 0; i < maxRows; i++) {
-    showString((maxRows == 1) ? "[" : (i == 0) ? STD_MAT_TL : (i + 1 == maxRows) ? STD_MAT_BL : STD_MAT_ML, font, 1, Y_POS - (maxRows -1 - i) * fontHeight, vmNormal, true, false);
-    for(int j = 0; j< maxCols; j++) {
-      if(((i == maxRows - 1) && (rows > maxRows + scrollRow)) || ((j == maxCols - 1) && (cols > maxCols + scrollColumn)) || ((i == 0) && (scrollRow > 0)) || ((j == 0) && (scrollColumn > 0))) {
-        strcpy(tmpString, STD_ELLIPSIS);
-        vm = vmNormal;
-      }
-      else {
-        bool_t neg = real34IsNegative(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
-        tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
-        real34SetPositiveSign(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
-        real34ToDisplayString(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn], amNone, &tmpString[1], font, maxWidth, (font == &standardFont) ? 7 : 4, true, STD_SPACE_4_PER_EM);
-        if(neg) real34SetNegativeSign(&openMatrixMIMPointer.matrixElements[(i+scrollRow)*cols+j+scrollColumn]);
-        if (matSelRow == (i + scrollRow) && matSelCol == (j + scrollColumn)) {
-          vm = vmReverse;
-        } else {
-          vm = vmNormal;
-        }
-      }
-      width = stringWidth(tmpString, font, true, true) + 1;
-      showString(tmpString, font, 5 + (j + 1) * (elementWidth + 20) - width, Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
-    }
-    showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, 10 + maxCols * (elementWidth + 20), Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
-    if (colVector == true) {
-      showString(STD_SUP_T, font, 20 + maxCols * (elementWidth + 20), Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
-    }
-  }
+  showRealMatrix(&openMatrixMIMPointer);
 
   sprintf(tmpString, "%" PRIi16";%" PRIi16"= %s", colVector ? matSelCol+1 : matSelRow+1, colVector ? 1 : matSelCol+1, nimBufferDisplay);
   width = stringWidth(tmpString, &numericFont, true, true) + 1;
@@ -1419,6 +1353,117 @@ void mimRestore(void) {
   if(idx != INVALID_VARIABLE) {
     getMatrixFromRegister(idx);
     matrixIndex = idx;
+  }
+}
+
+
+/********************************************//**
+ * \brief Displays a real matrix
+ *
+ * \param[in] matrix real34Matrix_t *
+ * \return void
+ ***********************************************/
+void showRealMatrix(const real34Matrix_t *matrix) {
+  int rows = matrix->header.matrixRows;
+  int cols = matrix->header.matrixColumns;
+  int16_t Y_POS = Y_POSITION_OF_REGISTER_X_LINE;
+  int16_t X_POS = 0;
+  int16_t elementWidth = 0, width = 0;
+  const font_t *font;
+  int16_t fontHeight = NUMERIC_FONT_HEIGHT;
+  int16_t maxWidth = MATRIX_LINE_WIDTH_LARGE - 20;
+  const bool_t forEditor = matrix == &openMatrixMIMPointer;
+  const uint16_t sRow = forEditor ? scrollRow : 0;
+  const uint16_t sCol = forEditor ? scrollColumn : 0;
+
+  Y_POS = Y_POSITION_OF_REGISTER_X_LINE - NUMERIC_FONT_HEIGHT;
+
+  bool_t colVector = false;
+  if (cols == 1) {
+    colVector = true;
+    cols = rows;
+    rows = 1;
+  }
+
+  int maxCols = cols;
+  int maxRows = rows;
+
+  int16_t matSelRow = getIRegisterAsInt(true);
+  int16_t matSelCol = getJRegisterAsInt(true);
+
+  videoMode_t vm = vmNormal;
+
+  if(forEditor) {
+    clearRegisterLine(REGISTER_X, true, true);
+    clearRegisterLine(REGISTER_Y, true, true);
+    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
+  }
+
+  font = &numericFont;
+  if((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3)) {
+smallFont:
+    font = &standardFont;
+    fontHeight = STANDARD_FONT_HEIGHT;
+    Y_POS = Y_POSITION_OF_REGISTER_X_LINE - STANDARD_FONT_HEIGHT + 2;
+    maxWidth = MATRIX_LINE_WIDTH_SMALL - 20;
+  }
+  if(rows > 5) maxRows = 5;
+  if(cols > 4) maxCols = 4;
+
+  if(!forEditor) Y_POS += REGISTER_LINE_HEIGHT;
+  const bool_t rightEllipsis = (cols > maxCols + sCol);
+  const bool_t leftEllipsis = (sCol > 0);
+
+  for(int i = 0; i < maxRows; i++) {
+    for(int j = 0; j< maxCols; j++) {
+      bool_t neg = real34IsNegative(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
+      tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
+      real34SetPositiveSign(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
+      real34ToDisplayString(&matrix->matrixElements[(i+sRow)*cols+j+sCol], amNone, tmpString, font, maxWidth, (font == &standardFont) ? 7 : 4, true, STD_SPACE_4_PER_EM);
+      if(neg) real34SetNegativeSign(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
+      width = stringWidth(tmpString, font, true, true) + 1;
+      if(elementWidth < width) elementWidth = width;
+    }
+  }
+  if(elementWidth > maxWidth) {
+    elementWidth = maxWidth;
+    if(font == &numericFont) goto smallFont;
+  }
+  const int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0) +
+    (rightEllipsis ? (maxCols - 1) * (elementWidth + 20) + stringWidth(STD_ELLIPSIS, font, true, true) + 11 : maxCols * (elementWidth + 20));
+
+  if(!forEditor) X_POS = SCREEN_WIDTH - 2 - ((colVector ? (font == &standardFont ? 12 : 18) + stringWidth(STD_SUP_T, font, true, true) : (font == &standardFont ? 5 : 10) + stringWidth("]", font, true, true)) + baseWidth);
+
+  for(int i = 0; i < maxRows; i++) {
+    showString((maxRows == 1) ? "[" : (i == 0) ? STD_MAT_TL : (i + 1 == maxRows) ? STD_MAT_BL : STD_MAT_ML, font, X_POS + 1, Y_POS - (maxRows -1 - i) * fontHeight, vmNormal, true, false);
+    for(int j = 0; j< maxCols; j++) {
+      if(leftEllipsis) {
+        showString(STD_ELLIPSIS, font, X_POS + 10, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+      }
+      if(((i == maxRows - 1) && (rows > maxRows + sRow)) || ((j == maxCols - 1) && rightEllipsis) || ((i == 0) && (sRow > 0))) {
+        strcpy(tmpString, STD_ELLIPSIS);
+        vm = vmNormal;
+      }
+      else {
+        bool_t neg = real34IsNegative(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
+        tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
+        real34SetPositiveSign(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
+        real34ToDisplayString(&matrix->matrixElements[(i+sRow)*cols+j+sCol], amNone, &tmpString[1], font, maxWidth, (font == &standardFont) ? 7 : 4, true, STD_SPACE_4_PER_EM);
+        if(neg) real34SetNegativeSign(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
+        if (forEditor && matSelRow == (i + sRow) && matSelCol == (j + sCol)) {
+          vm = vmReverse;
+        } else {
+          vm = vmNormal;
+        }
+      }
+      width = stringWidth(tmpString, font, true, true) + 1;
+      showString(tmpString, font, X_POS + 5 + (leftEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0) + (((j == maxCols - 1) && rightEllipsis) ? (j * (elementWidth + 20) + 10) : ((j + 1) * (elementWidth + 20) - width)), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+    }
+    showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, X_POS + (font == &standardFont ? 7 : 10) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+    if (colVector == true) {
+      showString(STD_SUP_T, font, X_POS + (font == &standardFont ? 14 : 18) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+    }
   }
 }
 

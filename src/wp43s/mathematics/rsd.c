@@ -29,6 +29,7 @@
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
 #include "mathematics/toRect.h"
+#include "matrix.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"

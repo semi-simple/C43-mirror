@@ -29,6 +29,7 @@
 #include "items.h"
 #include "mathematics/cos.h"
 #include "mathematics/wp34s.h"
+#include "matrix.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

@@ -24,6 +24,7 @@
 #include "error.h"
 #include "items.h"
 #include "mathematics/toRect.h"
+#include "matrix.h"
 #include "registers.h"
 #include "saveRestoreCalcState.h"
 #include "screen.h"

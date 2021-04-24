@@ -2165,6 +2165,8 @@ void elementwiseRema(void (*f)(void)) {
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     real34Copy(&x.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_X));
     f();
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &x.matrixElements[i]);
   }
 
@@ -2187,6 +2189,8 @@ void elementwiseRema_UInt16(void (*f)(uint16_t), uint16_t param) {
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     real34Copy(&x.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_X));
     f(param);
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &x.matrixElements[i]);
   }
 
@@ -2212,6 +2216,8 @@ void elementwiseRemaLonI(void (*f)(void)) {
     real34Copy(&y.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_Y));
     convertLongIntegerToLongIntegerRegister(x, REGISTER_X);
     f();
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &y.matrixElements[i]);
   }
 
@@ -2239,6 +2245,8 @@ void elementwiseRemaReal(void (*f)(void)) {
     real34Copy(&y.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_Y));
     real34Copy(&x, REGISTER_REAL34_DATA(REGISTER_X));
     f();
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &y.matrixElements[i]);
   }
 
@@ -2265,6 +2273,8 @@ void elementwiseRemaShoI(void (*f)(void)) {
     real34Copy(&y.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_Y));
     convertUInt64ToShortIntegerRegister(sign, x, base, REGISTER_X);
     f();
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger)
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
     real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &y.matrixElements[i]);
   }
 

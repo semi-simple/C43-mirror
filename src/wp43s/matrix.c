@@ -258,6 +258,24 @@ static bool_t decJReal(real34Matrix_t *matrix) {
   wrapIJ(matrix->header.matrixRows, matrix->header.matrixColumns);
   return false;
 }
+
+
+
+static void initSimEqValue(calcRegister_t regist, uint16_t rows, uint16_t cols) {
+  if(getRegisterDataType(regist) != dtReal34Matrix && getRegisterDataType(regist) != dtComplex34Matrix) {
+    real34Matrix_t matrix;
+    realMatrixInit(&matrix, rows, cols);
+    convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
+    realMatrixFree(&matrix);
+  }
+  else if(getRegisterDataType(regist) == dtReal34Matrix && (REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows != rows || REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns != cols)) {
+    real34Matrix_t matrix;
+    convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
+    realMatrixRedim(&matrix, rows, cols);
+    convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
+    realMatrixFree(&matrix);
+  }
+}
 #endif // TESTSUITE_BUILD
 
 
@@ -296,6 +314,7 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 void fnEditMatrix(uint16_t regist) {
 #ifndef TESTSUITE_BUILD
   const uint16_t reg = (regist == NOPARAM) ? REGISTER_X : regist;
+  const bool_t editn = (softmenu[0].menuItem == -MNU_TAM) || (softmenu[0].menuItem == -MNU_VAR);
   if((getRegisterDataType(reg) == dtReal34Matrix) || (getRegisterDataType(reg) == dtComplex34Matrix)) {
     calcMode = CM_MIM;
     matrixIndex = reg;
@@ -303,7 +322,7 @@ void fnEditMatrix(uint16_t regist) {
     getMatrixFromRegister(reg);
 
     showSoftmenu(-MNU_M_EDIT);
-    if(regist != NOPARAM) {
+    if(editn && regist != NOPARAM) {
       showSoftmenu(-MNU_TAM);
       showSoftmenu(-MNU_VAR);
       numberOfTamMenusToPop = 2;
@@ -531,13 +550,9 @@ void fnSetMatrixDimensions(uint16_t regist) {
   }
   else if(getRegisterDataType(regist) == dtReal34Matrix) {
     real34Matrix_t matrix;
-    uint32_t elements;
 
-    realMatrixInit(&matrix, y, x);
-    elements = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows * REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns;
-    if(elements > y * x) elements = y * x;
-    for(uint32_t i = 0; i < elements; ++i)
-      real34Copy(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i, &matrix.matrixElements[i]);
+    convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
+    realMatrixRedim(&matrix, y, x);
     convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
     realMatrixFree(&matrix);
   }
@@ -1020,6 +1035,72 @@ void fnSwapRows(uint16_t unusedParamButMandatory) {
 
 
 
+/********************************************//**
+ * \brief Initialize simultaneous linear equation solver
+ *
+ * \param[in] numberOfUnknowns uint16_t
+ * \return void
+ ***********************************************/
+void fnSimultaneousLinearEquation(uint16_t numberOfUnknowns) {
+#ifndef TESTSUITE_BUILD
+  initSimEqValue(findOrAllocateNamedVariable("Mat_A"), numberOfUnknowns, numberOfUnknowns);
+  initSimEqValue(findOrAllocateNamedVariable("Mat_B"), numberOfUnknowns, 1);
+  initSimEqValue(findOrAllocateNamedVariable("Mat_X"), numberOfUnknowns, 1);
+  showSoftmenu(-MNU_SIMQ);
+  showSoftmenu(-MNU_TAM);
+  numberOfTamMenusToPop = 1;
+#endif // TESTSUITE_BUILD
+}
+
+void fnEditLinearEquationMatrixA(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  fnEditMatrix(findNamedVariable("Mat_A"));
+#endif // TESTSUITE_BUILD
+}
+
+void fnEditLinearEquationMatrixB(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  fnEditMatrix(findNamedVariable("Mat_B"));
+#endif // TESTSUITE_BUILD
+}
+
+void fnEditLinearEquationMatrixX(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  if(findNamedVariable("Mat_A") == INVALID_VARIABLE || findNamedVariable("Mat_B") == INVALID_VARIABLE || findNamedVariable("Mat_X") == INVALID_VARIABLE) {
+    displayCalcErrorMessage(ERROR_UNDEF_SOURCE_VAR, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "At least one of Mat_A, Mat_B or Mat_X is missing");
+      moreInfoOnError("In function fnEditLinearEquationMatrixX:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtReal34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtReal34Matrix) {
+    real34Matrix_t a, b, x;
+    convertReal34MatrixRegisterToReal34Matrix(findNamedVariable("Mat_A"), &a);
+    convertReal34MatrixRegisterToReal34Matrix(findNamedVariable("Mat_B"), &b);
+    WP34S_matrix_linear_eqn(&a, &b, &x);
+    realMatrixFree(&a);
+    realMatrixFree(&b);
+    if(x.matrixElements) {
+      convertReal34MatrixToReal34MatrixRegister(&x, findNamedVariable("Mat_X"));
+      realMatrixFree(&x);
+    }
+  }
+  else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtReal34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtComplex34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtReal34Matrix) {
+    fnToBeCoded();
+  }
+  else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtComplex34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtComplex34Matrix) {
+    fnToBeCoded();
+  }
+  if(lastErrorCode == ERROR_NONE)
+    fnEditMatrix(findNamedVariable("Mat_X"));
+#endif // TESTSUITE_BUILD
+}
+
+
+
 #ifndef TESTSUITE_BUILD
 /********************************************//**
  * \brief Initialize a real matrix
@@ -1070,6 +1151,28 @@ void realMatrixIdentity(real34Matrix_t *matrix, uint16_t size) {
   for(uint16_t i = 0; i < size; ++i) {
     real34Copy(const34_1, &matrix->matrixElements[i * size + i]);
   }
+}
+
+
+/********************************************//**
+ * \brief Redemention a real matrix
+ *
+ * \param[in] matrix real34Matrix_t *
+ * \return void
+ ***********************************************/
+void realMatrixRedim(real34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
+  real34Matrix_t newMatrix;
+  uint32_t elements;
+
+  realMatrixInit(&newMatrix, rows, cols);
+  elements = matrix->header.matrixRows * matrix->header.matrixColumns;
+  if(elements > rows * cols) elements = rows * cols;
+  for(uint32_t i = 0; i < elements; ++i)
+    real34Copy(&matrix->matrixElements[i], &newMatrix.matrixElements[i]);
+  realMatrixFree(matrix);
+  matrix->header.matrixRows = newMatrix.header.matrixRows;
+  matrix->header.matrixColumns = newMatrix.header.matrixColumns;
+  matrix->matrixElements = newMatrix.matrixElements;
 }
 
 
@@ -1917,6 +2020,75 @@ void divideRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34
     return;
   }
   multiplyRealMatrices(y, &invX, res);
+}
+
+
+
+/* Solve a system of linear equations Ac = b
+ */
+void WP34S_matrix_linear_eqn(const real34Matrix_t *a, const real34Matrix_t *b, real34Matrix_t *r) {
+  const uint16_t n = a->header.matrixRows;
+  int i;
+  real34Matrix_t mat;
+  real_t *cv = NULL;
+  uint16_t *pivots = NULL;
+  real_t *bv = NULL;
+
+  if(r != a && r != b) {
+    r->matrixElements = NULL;
+    r->header.matrixRows = r->header.matrixColumns = 0;
+  }
+
+  if(a->header.matrixColumns != n) {
+    displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+              n, a->header.matrixColumns);
+      moreInfoOnError("In function WP34S_matrix_linear_eqn:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+  if(b->header.matrixRows != n || b->header.matrixColumns != 1) {
+    displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "not a column vector or size mismatch (%d" STD_CROSS "%d)",
+              b->header.matrixRows, b->header.matrixColumns);
+      moreInfoOnError("In function WP34S_matrix_linear_eqn:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+
+  /* Everything is happy so far -- decompose */
+  pivots = allocWp43s(TO_BLOCKS(sizeof(uint16_t) * n));
+  WP34S_LU_decomposition(a, &mat, pivots);
+  if(!mat.matrixElements) {
+    freeWp43s(&pivots, TO_BLOCKS(sizeof(uint16_t) * n));
+    displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "attempt to LU-decompose a singular matrix");
+      moreInfoOnError("In function WP34S_matrix_linear_eqn:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+
+  /* And solve */
+  if(r == a)
+    realMatrixFree(r);
+  if(r != b)
+    realMatrixInit(r, n, 1);
+  cv = allocWp43s(n * REAL_SIZE);
+  bv = allocWp43s(n * REAL_SIZE);
+  for(i = 0; i < n; i++) {
+    real34ToReal(&b->matrixElements[i] , bv + i);
+    pivots[i] = i;
+  }
+  WP34S_matrix_pivoting_solve(&mat, bv, pivots, cv, &ctxtReal39);
+  for(i = 0; i < n; i++)
+    realToReal34(cv + i, &r->matrixElements[i]);
+  freeWp43s(pivots, TO_BLOCKS(sizeof(uint16_t) * n));
+  freeWp43s(cv, n * REAL_SIZE);
+  freeWp43s(bv, n * REAL_SIZE);
+  return;
 }
 #endif
 

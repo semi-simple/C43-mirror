@@ -56,10 +56,16 @@ void       fnGetMatrix                    (uint16_t unusedParamButMandatory);
 void       fnPutMatrix                    (uint16_t unusedParamButMandatory);
 void       fnSwapRows                     (uint16_t unusedParamButMandatory);
 
+void       fnSimultaneousLinearEquation   (uint16_t numberOfUnknowns);
+void       fnEditLinearEquationMatrixA    (uint16_t unusedParamButMandatory);
+void       fnEditLinearEquationMatrixB    (uint16_t unusedParamButMandatory);
+void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
+
 #ifndef TESTSUITE_BUILD
   void     realMatrixInit                 (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);
   void     realMatrixFree                 (real34Matrix_t *matrix);
   void     realMatrixIdentity             (real34Matrix_t *matrix, uint16_t size);
+  void     realMatrixRedim                (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);
 
   void     showMatrixEditor               (void);
   void     mimEnter                       (bool_t commit);
@@ -97,6 +103,8 @@ void       fnSwapRows                     (uint16_t unusedParamButMandatory);
   void     WP34S_matrix_inverse           (const real34Matrix_t *matrix, real34Matrix_t *res);
   void     divideRealMatrix               (const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res);
   void     divideRealMatrices             (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
+
+  void     WP34S_matrix_linear_eqn        (const real34Matrix_t *a, const real34Matrix_t *b, real34Matrix_t *r);
 #endif // TESTSUITE_BUILD
 
 void       elementwiseRema                (void (*f)(void));

@@ -153,7 +153,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         break;
 
       case dtReal34Matrix:
-        strcpy(tmpString, "Copying a real16 matrix to the clipboard is to be coded!");
+        real34MatrixToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
         break;
 
       case dtComplex34Matrix:
@@ -989,6 +989,12 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           else if(getRegisterDataType(REGISTER_L) == dtDate) {
             strcat(string1, "date = ");
             formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
+          }
+
+          else if(getRegisterDataType(REGISTER_L) == dtReal34Matrix) {
+            sprintf(&string1[strlen(string1)], "real34 %" PRIu16 STD_CROSS "%" PRIu16 " matrix = ",
+              REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_L)->matrixRows, REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_L)->matrixColumns);
+            formatReal34Debug(string2, REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_L));
           }
 
           else if(getRegisterDataType(REGISTER_L) == dtConfig) {

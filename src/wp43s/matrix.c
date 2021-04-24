@@ -1193,13 +1193,13 @@ void showMatrixEditor() {
     rows = 1;
   }
 
-  if(wrapIJ(rows, cols)) {
+  if(wrapIJ(colVector ? cols : rows, colVector ? 1 : cols)) {
     insRowRealMatrix(&openMatrixMIMPointer, rows);
     convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
   }
 
-  int16_t matSelRow = getIRegisterAsInt(true);
-  int16_t matSelCol = getJRegisterAsInt(true);
+  int16_t matSelRow = colVector ? getJRegisterAsInt(true) : getIRegisterAsInt(true);
+  int16_t matSelCol = colVector ? getIRegisterAsInt(true) : getJRegisterAsInt(true);
 
   if(matSelCol == 0 || cols <= 4) {
     scrollColumn = 0;
@@ -1388,8 +1388,8 @@ void showRealMatrix(const real34Matrix_t *matrix) {
   int maxCols = cols;
   int maxRows = rows;
 
-  int16_t matSelRow = getIRegisterAsInt(true);
-  int16_t matSelCol = getJRegisterAsInt(true);
+  int16_t matSelRow = colVector ? getJRegisterAsInt(true) : getIRegisterAsInt(true);
+  int16_t matSelCol = colVector ? getIRegisterAsInt(true) : getJRegisterAsInt(true);
 
   videoMode_t vm = vmNormal;
 

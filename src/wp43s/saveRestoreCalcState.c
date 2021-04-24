@@ -246,6 +246,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
     save(&ix_count,                           sizeof(ix_count),                           BACKUP);
+    save(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
 
 
     fclose(BACKUP);
@@ -440,6 +441,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);
       restore(&ix_count,                           sizeof(ix_count),                           BACKUP);
+      restore(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
 
       fclose(BACKUP);
       printf("End of calc's restoration\n");

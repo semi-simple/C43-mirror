@@ -1991,7 +1991,7 @@ static void WP34S_matrix_pivoting_solve(const real34Matrix_t *LU, real_t *b, uin
 void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
   const uint16_t n = matrix->header.matrixColumns;
   real_t *x;
-  real34Matrix_t lu;
+  real34Matrix_t lu, pvt;
   uint16_t *pivots;
   uint16_t i, j;
   real_t *b;
@@ -2026,10 +2026,23 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
     for(j = 0; j < n; j++)
       realToReal34(x + j, &res->matrixElements[j * n + i]);
   }
-
   freeWp43s(b, res->header.matrixRows * REAL_SIZE);
   freeWp43s(x, res->header.matrixRows * REAL_SIZE);
+  realMatrixFree(&lu);
+
+  lu.header.matrixRows    = res->header.matrixRows;
+  lu.header.matrixColumns = res->header.matrixColumns;
+  lu.matrixElements       = res->matrixElements;
+  res->header.matrixRows    = 0;
+  res->header.matrixColumns = 0;
+  res->matrixElements       = NULL;
+  realMatrixIdentity(&pvt, n);
+  for(i = 0; i < n; ++i)
+    realMatrixSwapRows(&pvt, &pvt, i, pivots[i]);
+  multiplyRealMatrices(&lu, &pvt, res);
+
   freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  realMatrixFree(&pvt);
   realMatrixFree(&lu);
 }
 

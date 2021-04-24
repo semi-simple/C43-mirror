@@ -715,6 +715,8 @@
 #define CHECK_VALUE_SPECIAL                        4
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
+#define CHECK_VALUE_MATRIX                         7
+#define CHECK_VALUE_MATRIX_SQUARE                  8
 
 #define OPMOD_MULTIPLY                             0
 #define OPMOD_POWER                                1

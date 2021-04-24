@@ -79,7 +79,7 @@ void fpLonI(void) {
 
 
 void fpRema(void) {
-  fnToBeCoded();
+  elementwiseRema(fpReal);
 }
 
 

@@ -72,7 +72,7 @@ void fnRoundi(uint16_t unusedButMandatoryParameter) {
 
 
 void roundiRema(void) {
-  fnToBeCoded();
+  elementwiseRema(roundiReal);
 }
 
 

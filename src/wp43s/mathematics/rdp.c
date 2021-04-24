@@ -150,7 +150,7 @@ void rdpTime(uint16_t digits) {
 
 
 void rdpRema(uint16_t digits) {
-  fnToBeCoded();
+  elementwiseRema_UInt16(rdpReal, digits);
 }
 
 

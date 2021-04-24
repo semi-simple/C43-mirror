@@ -127,7 +127,7 @@ void roundDate(void) {
 
 
 void roundRema(void) {
-  fnToBeCoded();
+  elementwiseRema(roundReal);
 }
 
 

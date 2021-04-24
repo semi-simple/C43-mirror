@@ -80,7 +80,7 @@ void chsLonI(void) {
 
 
 void chsRema(void) {
-  fnToBeCoded();
+  elementwiseRema(chsReal);
 }
 
 

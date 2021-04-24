@@ -108,6 +108,7 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
 #endif // TESTSUITE_BUILD
 
 void       elementwiseRema                (void (*f)(void));
+void       elementwiseRema_UInt16         (void (*f)(uint16_t), uint16_t param);
 void       elementwiseRemaLonI            (void (*f)(void));
 void       elementwiseRemaReal            (void (*f)(void));
 void       elementwiseRemaShoI            (void (*f)(void));

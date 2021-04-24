@@ -187,7 +187,7 @@ void rsdTime(uint16_t digits) {
 
 
 void rsdRema(uint16_t digits) {
-  fnToBeCoded();
+  elementwiseRema_UInt16(rsdReal, digits);
 }
 
 

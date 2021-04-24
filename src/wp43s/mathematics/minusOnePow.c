@@ -103,7 +103,7 @@ void m1PowLonI(void) {
 
 
 void m1PowRema(void) {
-  fnToBeCoded();
+  elementwiseRema(m1PowReal);
 }
 
 

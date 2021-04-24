@@ -77,7 +77,7 @@ void magnitudeLonI(void) {
 
 
 void magnitudeRema(void) {
-  fnToBeCoded();
+  elementwiseRema(magnitudeReal);
 }
 
 

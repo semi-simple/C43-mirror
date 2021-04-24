@@ -78,7 +78,7 @@ void ceilLonI(void) {
 
 
 void ceilRema(void) {
-  fnToBeCoded();
+  elementwiseRema(ceilReal);
 }
 
 

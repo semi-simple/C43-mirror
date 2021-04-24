@@ -74,7 +74,7 @@ void ipLonI(void) {
 
 
 void ipRema(void) {
-  fnToBeCoded();
+  elementwiseRema(ipReal);
 }
 
 

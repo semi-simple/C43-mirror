@@ -2117,6 +2117,28 @@ void elementwiseRema(void (*f)(void)) {
 #endif // TESTSUITE_BUILD
 }
 
+void elementwiseRema_UInt16(void (*f)(uint16_t), uint16_t param) {
+#ifndef TESTSUITE_BUILD
+  real34Matrix_t x;
+  const bool_t cpxres = getSystemFlag(FLAG_CPXRES);
+
+  clearSystemFlag(FLAG_CPXRES);
+  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+
+  for(int i = 0; i < x.header.matrixRows * x.header.matrixColumns; ++i) {
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    real34Copy(&x.matrixElements[i], REGISTER_REAL34_DATA(REGISTER_X));
+    f(param);
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &x.matrixElements[i]);
+  }
+
+  convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_X);
+  if(cpxres) setSystemFlag(FLAG_CPXRES);
+
+  realMatrixFree(&x);
+#endif // TESTSUITE_BUILD
+}
+
 void elementwiseRemaLonI(void (*f)(void)) {
 #ifndef TESTSUITE_BUILD
   real34Matrix_t y;

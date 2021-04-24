@@ -97,7 +97,7 @@ void signLonI(void) {
 
 
 void signRema(void) {
-  fnToBeCoded();
+  elementwiseRema(signReal);
 }
 
 

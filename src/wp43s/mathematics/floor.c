@@ -78,7 +78,7 @@ void floorLonI(void) {
 
 
 void floorRema(void) {
-  fnToBeCoded();
+  elementwiseRema(floorReal);
 }
 
 

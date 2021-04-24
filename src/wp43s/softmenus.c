@@ -28,6 +28,7 @@
 
 #include "charString.h"
 #include "error.h"
+#include "fonts.h"
 #include "gui.h"
 #include "items.h"
 #include "registers.h"

@@ -155,7 +155,9 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void runFunction(int16_t func) {
     funcOK = true;
     #ifdef RECORDLOG                               //JMEXEC
-    capture_sequence("runFunction:", func);        //JMEXEC
+      #ifdef PC_BUILD
+        capture_sequence("runFunction:", func);        //JMEXEC
+      #endif
     #endif                                         //JMEXEC
 
     #ifdef PC_BUILD

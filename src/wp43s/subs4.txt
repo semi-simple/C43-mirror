@@ -1,1 +1,0 @@
-s/\ITM_FG_DOTS\b/ITM_NO_BASE_SCREEN/g;

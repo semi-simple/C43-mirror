@@ -109,6 +109,9 @@ int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
 
 //################################################################################################
 
+
+// OUTPUT is in TMPSTR
+
 void displaywords(char *line1) {  //Preprocessor and display
   char bb[2];
   char aa[2];
@@ -116,10 +119,20 @@ void displaywords(char *line1) {  //Preprocessor and display
   aa[1]=0;
   bb[1]=0;
   bb[0]=0;
+
   #if (VERBOSE_LEVEL >= 2) 
     print_linestr("Code:",true);
   #endif
   //printf("4:%s\n",line1);
+
+  #if (VERBOSE_LEVEL >= 2) 
+   char tmp[400];          //Messages
+   sprintf(tmp, " F: Displaywords: %lu bytes.\n",stringByteLength(line1) );
+   print_linestr(tmp,false);
+   print_linestr(line1,false);
+  #endif
+
+
 
   if(line1[stringByteLength(line1)-1] != 32) {
     strcat(line1," ");
@@ -132,7 +145,7 @@ void displaywords(char *line1) {  //Preprocessor and display
     aa[0]=line1[ix];
     bb[0]=line1[ix+1];
 
-    if ((aa[0]==47 && bb[0]==47) && state_comments == false) {         //start comment on double slash
+    if ((aa[0]=='/' && bb[0]=='/') && state_comments == false) {         //start comment on double slash
       state_comments=true;
       ix++; //skip the second slash
     } 
@@ -144,12 +157,12 @@ void displaywords(char *line1) {  //Preprocessor and display
     else
       if(!state_comments) {                //proceed only if not comment mode
         switch(aa[0]) {
-          case 32:                         //remove all whitespace
+          case ' ':                         //remove all whitespace
           case 8:
           case 13:
           case 10:
-          case 44: if(strlen(tmpString)!=0) {
-                     if(tmpString[strlen(tmpString)-1] != 32) {
+          case ',': if(strlen(tmpString)!=0) {
+                     if(tmpString[strlen(tmpString)-1] != ' ') {
                        strcat(tmpString," ");
                      }
                    }
@@ -171,11 +184,11 @@ void displaywords(char *line1) {  //Preprocessor and display
   line1[0]=0;
   while (tmpString[ix] != 0) {
     aa[0]=tmpString[ix];    
-    if (tmpString[ix-1] != 32) {
+    if (tmpString[ix-1] != ' ') {
       strcat(line1,aa);
       #ifdef DISPLOADING
       strcat(ll,aa);
-      if(strlen(ll)>30 && aa[0] == 32) {
+      if(strlen(ll)>30 && aa[0] == ' ') {
         #if (VERBOSE_LEVEL >= 2) 
           print_linestr(ll,false);
         #endif
@@ -183,7 +196,7 @@ void displaywords(char *line1) {  //Preprocessor and display
       }
       #endif
     } else {
-      if(aa[0] != 32) {
+      if(aa[0] != ' ') {
         strcat(line1,aa);
         #ifdef DISPLOADING
         strcat(ll,aa);          
@@ -215,7 +228,7 @@ void displaywords(char *line1) {  //Preprocessor and display
 
 
 
-int16_t t_line_x, t_line_y;
+uint32_t t_line_x, t_line_y;
 
 void print_inlinestr(const char *line1, bool_t endline) {
 #ifndef TESTSUITE_BUILD
@@ -224,7 +237,7 @@ void print_inlinestr(const char *line1, bool_t endline) {
     int16_t ix = 0;
     int16_t ixx;
     ixx = stringByteLength(line1);
-    while(ix<ixx && ix<98 && t_line_x+stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12) {
+    while(ix<ixx && ix<98 && t_line_x + stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12) {
        xcopy(l1, line1, ix+1);
        l1[ix+1]=0;
        ix = stringNextGlyph(line1, ix);

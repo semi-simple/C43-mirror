@@ -516,7 +516,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
 }
 
 // PC_BUILD
-int16_t import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback) { //PC_BUILD
+int16_t import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback, bool_t scanning) { //PC_BUILD
 
   #if (VERBOSE_LEVEL >= 2) 
     print_inlinestr("From dir:",false);

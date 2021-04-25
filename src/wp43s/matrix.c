@@ -208,15 +208,13 @@ static bool_t putMatrixReal(real34Matrix_t *matrix) {
     return false;
   }
 
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &mat);
+  linkToRealMatrixRegister(REGISTER_X, &mat);
   if((mat.header.matrixRows + i) <= matrix->header.matrixRows && (mat.header.matrixColumns + j) <= matrix->header.matrixColumns) {
     for(r = 0; r < mat.header.matrixRows; ++r)
       for(c = 0; c < mat.header.matrixColumns; ++c)
         real34Copy(&mat.matrixElements[r * mat.header.matrixColumns + c], &matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j]);
-    realMatrixFree(&mat);
   }
   else {
-    realMatrixFree(&mat);
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "%" PRIu16 " " STD_CROSS " %" PRIu16 " out of range", mat.header.matrixRows, mat.header.matrixColumns);
@@ -629,11 +627,9 @@ void fnTranspose(uint16_t unusedButMandatoryParameter) {
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, res;
 
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+    linkToRealMatrixRegister(REGISTER_X, &x);
     transposeRealMatrix(&x, &res);
     convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
-    realMatrixFree(&res);
-    realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     fnToBeCoded();
@@ -735,7 +731,7 @@ void fnDeterminant(uint16_t unusedParamButMandatory) {
     real34Matrix_t x;
     real34_t res;
 
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+    linkToRealMatrixRegister(REGISTER_X, &x);
 
     if(x.header.matrixRows != x.header.matrixColumns) {
       displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
@@ -750,8 +746,6 @@ void fnDeterminant(uint16_t unusedParamButMandatory) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       real34Copy(&res, REGISTER_REAL34_DATA(REGISTER_X));
     }
-
-    realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     fnToBeCoded();
@@ -783,7 +777,7 @@ void fnInvertMatrix(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, res;
 
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+    linkToRealMatrixRegister(REGISTER_X, &x);
 
     if(x.header.matrixRows != x.header.matrixColumns) {
       displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
@@ -808,8 +802,6 @@ void fnInvertMatrix(uint16_t unusedParamButMandatory) {
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
     }
-
-    realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     fnToBeCoded();
@@ -842,7 +834,7 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
     real34Matrix_t matrix;
     real_t elem, sum;
 
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &matrix);
+    linkToRealMatrixRegister(REGISTER_X, &matrix);
 
     realZero(&sum);
     for(int i = 0; i < matrix.header.matrixRows * matrix.header.matrixColumns; ++i) {
@@ -852,10 +844,9 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
     }
     realSquareRoot(&sum, &sum, &ctxtReal39);
 
+    // `matrix` invalidates here
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&sum, REGISTER_REAL34_DATA(REGISTER_X));
-
-    realMatrixFree(&matrix);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     fnToBeCoded();
@@ -887,7 +878,7 @@ void fnRowSum(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, res;
     real_t sum, elem;
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+    linkToRealMatrixRegister(REGISTER_X, &x);
 
     realMatrixInit(&res, x.header.matrixRows, 1);
     for(uint16_t i = 0; i < x.header.matrixRows; ++i) {
@@ -901,7 +892,6 @@ void fnRowSum(uint16_t unusedParamButMandatory) {
 
     convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
     realMatrixFree(&res);
-    realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     fnToBeCoded();
@@ -933,7 +923,7 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x;
     real_t norm, sum, elem;
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+    linkToRealMatrixRegister(REGISTER_X, &x);
 
     realZero(&norm);
     for(uint16_t i = 0; i < x.header.matrixRows; ++i) {
@@ -949,7 +939,6 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&norm, REGISTER_REAL34_DATA(REGISTER_X));
-    realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     fnToBeCoded();
@@ -1075,11 +1064,9 @@ void fnEditLinearEquationMatrixX(uint16_t unusedParamButMandatory) {
   }
   else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtReal34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtReal34Matrix) {
     real34Matrix_t a, b, x;
-    convertReal34MatrixRegisterToReal34Matrix(findNamedVariable("Mat_A"), &a);
-    convertReal34MatrixRegisterToReal34Matrix(findNamedVariable("Mat_B"), &b);
+    linkToRealMatrixRegister(findNamedVariable("Mat_A"), &a);
+    linkToRealMatrixRegister(findNamedVariable("Mat_B"), &b);
     WP34S_matrix_linear_eqn(&a, &b, &x);
-    realMatrixFree(&a);
-    realMatrixFree(&b);
     if(x.matrixElements) {
       convertReal34MatrixToReal34MatrixRegister(&x, findNamedVariable("Mat_X"));
       realMatrixFree(&x);

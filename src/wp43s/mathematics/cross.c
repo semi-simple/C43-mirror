@@ -284,8 +284,8 @@ void crossRemaRema(void) {
 #ifndef TESTSUITE_BUILD
   real34Matrix_t y, x, res;
 
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+  linkToRealMatrixRegister(REGISTER_Y, &y);
+  linkToRealMatrixRegister(REGISTER_X, &x);
 
   if((realVectorSize(&y) == 0) || (realVectorSize(&x) == 0) || (realVectorSize(&y) > 3) || (realVectorSize(&x) > 3)) {
     displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
@@ -300,9 +300,6 @@ void crossRemaRema(void) {
     crossRealVectors(&y, &x, &res);
     convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   }
-
-  realMatrixFree(&x);
-  realMatrixFree(&y);
 #endif // TESTSUITE_BUILD
 }
 

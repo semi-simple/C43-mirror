@@ -659,7 +659,7 @@ void divRemaLonI(void) {
   }
 
   else {
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &matrix);
+    linkToRealMatrixRegister(REGISTER_Y, &matrix);
     rows = matrix.header.matrixRows;
     cols = matrix.header.matrixColumns;
 
@@ -672,7 +672,6 @@ void divRemaLonI(void) {
 
     convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
     realMatrixFree(&res);
-    realMatrixFree(&matrix);
   }
 #endif // TESTSUITE_BUILD
 }
@@ -689,8 +688,8 @@ void divRemaRema(void) {
 #ifndef TESTSUITE_BUILD
   real34Matrix_t y, x, res;
 
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+  linkToRealMatrixRegister(REGISTER_Y, &y);
+  linkToRealMatrixRegister(REGISTER_X, &x);
 
   if(y.header.matrixColumns != x.header.matrixRows || y.header.matrixColumns != x.header.matrixColumns || x.header.matrixRows != x.header.matrixColumns) {
     displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
@@ -715,9 +714,6 @@ void divRemaRema(void) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
-
-  realMatrixFree(&x);
-  realMatrixFree(&y);
 #endif // TESTSUITE_BUILD
 }
 
@@ -757,7 +753,7 @@ void divRemaShoI(void) {
   }
 
   else {
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &matrix);
+    linkToRealMatrixRegister(REGISTER_Y, &matrix);
     rows = matrix.header.matrixRows;
     cols = matrix.header.matrixColumns;
 
@@ -770,7 +766,6 @@ void divRemaShoI(void) {
 
     convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
     realMatrixFree(&res);
-    realMatrixFree(&matrix);
   }
 #endif // TESTSUITE_BUILD
 }
@@ -793,10 +788,9 @@ void divRemaReal(void) {
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
   else if(getRegisterAngularMode(REGISTER_Y) == amNone) {
-    convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &matrix);
+    linkToRealMatrixRegister(REGISTER_Y, &matrix);
     divideRealMatrix(&matrix, REGISTER_REAL34_DATA(REGISTER_X), &matrix);
     convertReal34MatrixToReal34MatrixRegister(&matrix, REGISTER_X);
-    realMatrixFree(&matrix);
   }
   else {
     divError();

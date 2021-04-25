@@ -430,7 +430,7 @@ void subRemaRema(void) {
 #ifndef TESTSUITE_BUILD
   real34Matrix_t y, x;
 
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
+  linkToRealMatrixRegister(REGISTER_Y, &y);
   convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
 
   subtractRealMatrices(&y, &x, &x);
@@ -448,7 +448,6 @@ void subRemaRema(void) {
   }
 
   realMatrixFree(&x);
-  realMatrixFree(&y);
 #endif // TESTSUITE_BUILD
 }
 

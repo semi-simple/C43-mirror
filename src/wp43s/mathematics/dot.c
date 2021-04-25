@@ -286,8 +286,8 @@ void dotRemaRema(void) {
   real34Matrix_t y, x;
   real34_t res;
 
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_Y, &y);
-  convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
+  linkToRealMatrixRegister(REGISTER_Y, &y);
+  linkToRealMatrixRegister(REGISTER_X, &x);
 
   if((realVectorSize(&y) == 0) || (realVectorSize(&x) == 0) || (realVectorSize(&y) != realVectorSize(&x))) {
     displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
@@ -303,9 +303,6 @@ void dotRemaRema(void) {
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     real34Copy(&res, REGISTER_REAL34_DATA(REGISTER_X));
   }
-
-  realMatrixFree(&x);
-  realMatrixFree(&y);
 #endif // TESTSUITE_BUILD
 }
 

@@ -69,7 +69,7 @@ codeDocs:
   script:
     - apt-get update -qq
     - apt-get install -qq -y doxygen
-    - python -m pip install sphinx breathe furo
+    - python3 -m pip install sphinx breathe furo
     - cd docs/code
     - make html
 

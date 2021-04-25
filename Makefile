@@ -22,7 +22,7 @@ CFLAGS += -Wextra -Wall -MMD
 SIM_CFLAGS += -std=c11
 DMCP_CFLAGS += -Wno-unused-parameter
 
-C_INCLUDES = -Idep/decNumberICU -Isrc/wp43s -Isrc/testSuite
+C_INCLUDES = -Idep/decNumberICU -I$(BUILD_DIR)/generated -Isrc/wp43s -Isrc/testSuite
 DMCP_INCLUDES = -Idep/DMCP_SDK/dmcp -Idep/gmp-6.2.0 -Isrc/wp43s-dmcp
 
 # Simulator CFLAGS and binaries configuration
@@ -137,6 +137,14 @@ DMCP_LDFLAGS = $(DMCP_CPUFLAGS) -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/dmcp
 
 SRC_DECIMAL              = $(addprefix dep/decNumberICU/, decContext.c decDouble.c decimal128.c decimal64.c decNumber.c decQuad.c)
 
+GEN_SRC_CONSTANTPOINTERS = $(addprefix $(BUILD_DIR)/generated/, constantPointers.c constantPointers.h)
+GEN_SRC_RASTERFONTSDATA  = $(addprefix $(BUILD_DIR)/generated/, rasterFontsData.c)
+GEN_SRC_SOFTMENUCATALOGS = $(addprefix $(BUILD_DIR)/generated/, softmenuCatalogs.h)
+GEN_BIN_TESTPGMS         = $(addprefix res/dmcp/, testPgms.bin)
+
+GENERATED_SOURCES        = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
+GENERATED_SRC_NOT_H      = $(addprefix $(BUILD_DIR)/generated/, constantPointers.c rasterFontsData.c)
+
 SRC_WP43S                = $(SRC_DECIMAL) \
                            $(sort $(wildcard src/wp43s/*.c) \
                            $(wildcard src/wp43s/mathematics/*.c) \
@@ -144,7 +152,8 @@ SRC_WP43S                = $(SRC_DECIMAL) \
                            $(wildcard src/wp43s/logicalOps/*.c) \
                            $(wildcard src/wp43s/programming/*.c) \
                            $(wildcard src/wp43s/distributions/*.c) \
-                           $(wildcard src/wp43s/ui/*.c) )
+                           $(wildcard src/wp43s/ui/*.c) \
+                           $(GENERATED_SRC_NOT_H) )
 
 SRC_SIMULATOR            = $(SRC_WP43S) \
                            $(wildcard src/wp43s-gtk/*.c)
@@ -169,7 +178,8 @@ OBJ_GENERATECONSTANTS    = $(addprefix $(BUILD_DIR)/generateConstants/,$(notdir 
 DEPS_GENERATECONSTANTS   = $(addprefix $(BUILD_DIR)/generateConstants/,$(notdir $(SRC_GENERATECONSTANTS:.c=.d)))
 
 SRC_GENERATECATALOGS     = $(addprefix src/generateCatalogs/, generateCatalogs.c) \
-                           $(addprefix src/wp43s/, charString.c fonts.c items.c rasterFontsData.c sort.c)
+                           $(addprefix src/wp43s/, charString.c fonts.c items.c sort.c) \
+                           $(addprefix $(BUILD_DIR)/generated/, rasterFontsData.c)
 OBJ_GENERATECATALOGS     = $(addprefix $(BUILD_DIR)/generateCatalogs/,$(notdir $(SRC_GENERATECATALOGS:.c=.o)))
 DEPS_GENERATECATALOGS    = $(addprefix $(BUILD_DIR)/generateCatalogs/,$(notdir $(SRC_GENERATECATALOGS:.c=.d)))
 
@@ -182,21 +192,14 @@ OBJ_TTF2RASTERFONTS      = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(
 DEPS_TTF2RASTERFONTS     = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(SRC_TTF2RASTERFONTS:.c=.d)))
 
 SRC_TESTTTF2RASTERFONTS  = $(addprefix src/ttf2RasterFonts/, testTtf2RasterFonts.c) \
-                           $(addprefix src/wp43s/, rasterFontsData.c)
+                           $(addprefix $(BUILD_DIR)/generated/, rasterFontsData.c)
 OBJ_TESTTTF2RASTERFONTS  = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(SRC_TESTTTF2RASTERFONTS:.c=.o)))
 DEPS_TESTTTF2RASTERFONTS = $(addprefix $(BUILD_DIR)/ttf2RasterFonts/,$(notdir $(SRC_TESTTTF2RASTERFONTS:.c=.d)))
-
-GEN_SRC_CONSTANTPOINTERS = $(addprefix src/wp43s/, constantPointers.c constantPointers.h)
-GEN_SRC_RASTERFONTSDATA  = $(addprefix src/wp43s/, rasterFontsData.c)
-GEN_SRC_SOFTMENUCATALOGS = $(addprefix src/wp43s/, softmenuCatalogs.h)
-GEN_BIN_TESTPGMS         = $(addprefix res/dmcp/, testPgms.bin)
-
-GENERATED_SOURCES = $(GEN_SRC_CONSTANTPOINTERS) $(GEN_SRC_RASTERFONTSDATA) $(GEN_SRC_SOFTMENUCATALOGS) $(GEN_BIN_TESTPGMS)
 
 STAMP_FILES = $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-rasterFontsData $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms
 
 vpath %.c dep/decNumberICU src/testSuite src/generateConstants src/generateCatalogs src/generateTestPgms src/ttf2RasterFonts \
-          dep/DMCP_SDK/dmcp/sys \
+          dep/DMCP_SDK/dmcp/sys $(BUILD_DIR)/generated \
           src/wp43s src/wp43s/mathematics src/wp43s/browsers src/wp43s/logicalOps src/wp43s/programming src/wp43s/distributions \
           src/wp43s/ui src/wp43s-gtk
 vpath %.s dep/DMCP_SDK/dmcp
@@ -303,6 +306,7 @@ $(BUILD_DIR)/dmcp:
 
 
 version:
+	mkdir -p $(BUILD_DIR)/generated
 	tools/versionUpdate
 
 docs:
@@ -329,6 +333,8 @@ $(BUILD_DIR)/generateConstants/%.o: %.c | $(BUILD_DIR)/generateConstants
 $(BUILD_DIR)/.stamp-constantPointers: $(GENERATECONSTANTS_APP)
 	@echo -e "\n====> running $(GENERATECONSTANTS_APP) <===="
 	./$(GENERATECONSTANTS_APP)
+	cp $(BUILD_DIR)/generated/constantPointers.h src/generated/constantPointers.h
+	cp $(BUILD_DIR)/generated/constantPointers.c src/generated/constantPointers.c
 	touch $@
 
 $(GEN_SRC_CONSTANTPOINTERS): $(BUILD_DIR)/.stamp-constantPointers
@@ -345,13 +351,18 @@ $(GENERATECATALOGS_APP): $(OBJ_GENERATECATALOGS)
 	@echo -e "\n====> $(GENERATECATALOGS_APP): binary/exe $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_GENERATECATALOGS) -o $@ $(SIM_LDFLAGS)
 
-$(BUILD_DIR)/generateCatalogs/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers | $(BUILD_DIR)/generateCatalogs
+$(BUILD_DIR)/generateCatalogs/rasterFontsData.o: $(BUILD_DIR)/generated/rasterFontsData.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-rasterFontsData | $(BUILD_DIR)/generateCatalogs
+	@echo -e "\n====> $<: $@ <===="
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+
+$(BUILD_DIR)/generateCatalogs/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-rasterFontsData | $(BUILD_DIR)/generateCatalogs
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
 $(BUILD_DIR)/.stamp-softmenuCatalog: $(GENERATECATALOGS_APP)
 	@echo -e "\n====> running $(GENERATECATALOGS_APP) <===="
 	./$(GENERATECATALOGS_APP)
+	cp $(BUILD_DIR)/generated/softmenuCatalogs.h src/generated/softmenuCatalogs.h
 	touch $@
 
 $(GEN_SRC_SOFTMENUCATALOGS): $(BUILD_DIR)/.stamp-softmenuCatalog
@@ -396,6 +407,7 @@ $(BUILD_DIR)/ttf2RasterFonts/%.o: %.c | $(BUILD_DIR)/ttf2RasterFonts
 $(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) res/fonts/WP43S_NumericFont.ttf res/fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> running $(TTF2RASTERFONTS_APP) <===="
 	./$(TTF2RASTERFONTS_APP) > /dev/null
+	cp $(BUILD_DIR)/generated/rasterFontsData.c src/generated/rasterFontsData.c
 	touch $@
 
 $(BUILD_DIR)/ttf2RasterFonts/rasterFontsData.o: $(BUILD_DIR)/.stamp-rasterFontsData
@@ -425,7 +437,15 @@ $(TESTSUITE_APP): version $(OBJ_TESTSUITE)
 	@echo -e "\n====> $(TESTSUITE_APP): binary/exe $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_TESTSUITE) -o $(TESTSUITE_APP) $(SIM_LDFLAGS)
 
-$(BUILD_DIR)/testSuite/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers | $(BUILD_DIR)/testSuite
+$(BUILD_DIR)/testSuite/rasterFontsData.o: $(BUILD_DIR)/generated/rasterFontsData.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-rasterFontsData | $(BUILD_DIR)/testSuite
+	@echo -e "\n====> $<: $@ <===="
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+
+$(BUILD_DIR)/testSuite/constantPointers.o: $(BUILD_DIR)/generated/constantPointers.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-rasterFontsData | $(BUILD_DIR)/testSuite
+	@echo -e "\n====> $<: $@ <===="
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+
+$(BUILD_DIR)/testSuite/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-rasterFontsData | $(BUILD_DIR)/testSuite
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
@@ -440,7 +460,15 @@ $(WP43S_APP): version $(OBJ_SIMULATOR)
 	@echo -e "\n====> $(WP43S_APP): binary/exe $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(OBJ_SIMULATOR) -o $(WP43S_APP) $(SIM_LDFLAGS)
 
-$(BUILD_DIR)/simulator/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/simulator
+$(BUILD_DIR)/simulator/rasterFontsData.o: $(BUILD_DIR)/generated/rasterFontsData.c $(STAMP_FILES) | $(BUILD_DIR)/simulator
+	@echo -e "\n====> $<: $@ <===="
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+
+$(BUILD_DIR)/simulator/constantPointers.o: $(BUILD_DIR)/generated/constantPointers.c $(STAMP_FILES) | $(BUILD_DIR)/simulator
+	@echo -e "\n====> $<: $@ <===="
+	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
+
+$(BUILD_DIR)/simulator/%.o: %.c $(STAMP_FILES) | $(BUILD_DIR)/simulator
 	@echo -e "\n====> $<: $@ <===="
 	$(CC) $(SIM_CFLAGS) $(CFLAGS) $(C_INCLUDES) -c -o $@ $<
 
@@ -476,6 +504,14 @@ clean_dmcp:
 	-rm -rf $(BUILD_DIR)/dmcp
 
 -include $(DEPS_DMCP)
+
+$(BUILD_DIR)/dmcp/rasterFontsData.o: $(BUILD_DIR)/generated/rasterFontsData.c dep/DMCP_SDK/dmcp/dmcp.h $(GMPLIB) $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/dmcp
+	@echo -e "\n====> $<: $@ <===="
+	$(DMCP_CC) $(DMCP_CFLAGS) $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/dmcp/$(notdir $(<:.c=.lst)) -c -o $@ $<
+
+$(BUILD_DIR)/dmcp/constantPointers.o: $(BUILD_DIR)/generated/constantPointers.c dep/DMCP_SDK/dmcp/dmcp.h $(GMPLIB) $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/dmcp
+	@echo -e "\n====> $<: $@ <===="
+	$(DMCP_CC) $(DMCP_CFLAGS) $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/dmcp/$(notdir $(<:.c=.lst)) -c -o $@ $<
 
 $(BUILD_DIR)/dmcp/%.o: %.c dep/DMCP_SDK/dmcp/dmcp.h $(GMPLIB) $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-softmenuCatalog $(BUILD_DIR)/.stamp-testPgms | $(BUILD_DIR)/dmcp
 	@echo -e "\n====> $<: $@ <===="

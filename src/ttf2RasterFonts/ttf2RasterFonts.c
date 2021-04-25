@@ -324,13 +324,13 @@ int main(int argc, char* argv[]) {
   ////////////////
   #if (__linux__ == 1)
     sortingOrder = fopen("res/fonts/sortingOrder.csv", "rb");
-    cFile        = fopen("src/wp43s/rasterFontsData.c", "wb");
+    cFile        = fopen("build/generated/rasterFontsData.c", "wb");
   #elif defined(__MINGW64__)
     sortingOrder = fopen("res/fonts\\sortingOrder.csv", "rb");
-    cFile        = fopen("src\\wp43s\\rasterFontsData.c", "wb");
+    cFile        = fopen("build\\generated\\rasterFontsData.c", "wb");
   #elif defined(__APPLE__)
     sortingOrder = fopen("res/fonts/sortingOrder.csv", "rb");
-    cFile        = fopen("src/wp43s/rasterFontsData.c", "wb");
+    cFile        = fopen("build/generated/rasterFontsData.c", "wb");
   #else // Unsupported OS
     #error Only Linux, MacOS and Windows MINGW64 are supported for now
   #endif // OS

@@ -18,6 +18,7 @@
  * \file generateTestPgms.c
  ***********************************************/
 
+#include <stdlib.h>
 #include "fonts.h"
 #include "items.h"
 

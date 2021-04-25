@@ -32,7 +32,7 @@
 #define LIBGMP                           1 // Use GMP for the big integers
 #define MMHG_PA_133_3224                 1 // mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328 // 1001 decimal digits: 3328 â‰ƒ log2(10^1001)
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328 // 1001 decimal digits: 3328 â‰? log2(10^1001)
 #define SHORT_INTEGER_SIZE               2 // 2 blocks = 8 bytes = 64 bits
 
 #define IBM_DECIMAL                      1 // Use the IBM decNumber library for the floating point data type
@@ -466,6 +466,7 @@
 #define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
+#define CM_MIM                                    12 // Matrix imput mode tbd reorder
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -483,9 +484,10 @@
 #define TM_FLAGR                               10004
 #define TM_FLAGW                               10005
 #define TM_STORCL                              10006
-#define TM_SHUFFLE                             10007
-#define TM_LABEL                               10008
-#define TM_CMP                                 10009 // TM_CMP must be the last in this list
+#define TM_M_DIM                               10007
+#define TM_SHUFFLE                             10008
+#define TM_LABEL                               10009
+#define TM_CMP                                 10010 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -598,7 +600,7 @@
 #define LM_SUMS                                    4
 #define LM_SYSTEM_STATE                            5
 
-// Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2Ã—(7Ã—60 - 4 - 6Ã—16) = 640 bytes
+// Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2Ã?(7Ã?60 - 4 - 6Ã?16) = 640 bytes
 #define SUM_X                                      1
 #define SUM_Y                                      2
 #define SUM_X2                                     3
@@ -713,6 +715,8 @@
 #define CHECK_VALUE_SPECIAL                        4
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
+#define CHECK_VALUE_MATRIX                         7
+#define CHECK_VALUE_MATRIX_SQUARE                  8
 
 #define OPMOD_MULTIPLY                             0
 #define OPMOD_POWER                                1

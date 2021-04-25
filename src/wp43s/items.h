@@ -1190,8 +1190,8 @@
 #define ITM_1P                        1144
 #define ITM_EXPONENT                  1145
 #define ITM_HEX                       1146
-#define ITM_1147                      1147
-#define ITM_1148                      1148
+#define ITM_M_GOTO_ROW                1147
+#define ITM_M_GOTO_COLUMN             1148
 #define ITM_1149                      1149
 #define ITM_1150                      1150
 #define ITM_1151                      1151

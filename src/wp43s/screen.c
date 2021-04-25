@@ -1024,9 +1024,9 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         #endif // (SHOW_MEMORY_STATUS == 1)
       #endif // PC_BUILD
 
-      if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+      if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || calcMode == CM_MIM) {
         real34Matrix_t matrix;
-        linkToRealMatrixRegister(REGISTER_X, &matrix);
+        linkToRealMatrixRegister(calcMode == CM_MIM ? matrixIndex : REGISTER_X, &matrix);
         const uint16_t rows = matrix.header.matrixRows;
         const uint16_t cols = matrix.header.matrixColumns;
         bool_t smallFont = ((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3));
@@ -1049,6 +1049,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
         if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
         if(rows >= 4 && cols > 1) displayStack = 2;
+        if(calcMode == CM_MIM) displayStack -= 2;
       }
 
       if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
@@ -1698,7 +1699,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         }
 
         else if(getRegisterDataType(regist) == dtReal34Matrix) {
-          if(regist == REGISTER_X) {
+          if(regist == REGISTER_X && calcMode != CM_MIM) {
             real34Matrix_t matrix;
             linkToRealMatrixRegister(REGISTER_X, &matrix);
             showRealMatrix(&matrix);

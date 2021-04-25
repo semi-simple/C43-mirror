@@ -28,6 +28,7 @@
 
 #include "charString.h"
 #include "error.h"
+#include "fonts.h"
 #include "gui.h"
 #include "items.h"
 #include "registers.h"
@@ -66,7 +67,7 @@ TO_QSPI const int16_t menu_CLK[]         = { ITM_DATE,                      ITM_
 
 TO_QSPI const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_CLP,                    ITM_CF,                   ITM_CLMENU,            ITM_CLCVAR,                  ITM_CLX,
                                              ITM_CLREGS,                    ITM_CLPALL,                 ITM_CLFALL,               ITM_CLGRF,             ITM_CLLCD,                   ITM_CLSTK,
-                                             ITM_CLALL,                     ITM_NULL,                   ITM_CLAIM,                ITM_DELITM,            ITM_CLA,                     ITM_RESET                     };
+                                             ITM_CLALL,                     ITM_NULL,                   ITM_NULL,                 ITM_DELITM,            ITM_NULL,                    ITM_RESET                     };
 
 /*      Menu name                  <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                 <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */

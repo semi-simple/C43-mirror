@@ -1146,9 +1146,11 @@ bool_t lowercaseselected;
             }
           }
           #ifdef RECORDLOG
-            if(keyActionProcessed) {                         //JMEXEC
-              capture_sequence("keyActionProcessed:", item);  //JMEXEC
-            }                                                //JMEXEC
+            #ifdef PC_BUILD
+              if(keyActionProcessed) {                         //JMEXEC
+                capture_sequence("keyActionProcessed:", item);  //JMEXEC
+              }                                                //JMEXEC
+            #endif
           #endif
         }
       }

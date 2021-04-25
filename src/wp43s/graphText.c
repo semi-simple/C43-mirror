@@ -283,7 +283,7 @@ char dirfile[40];
 
 
 //DMCP_BUILD
-int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename_short,  char *filename,  char *fallback) { //DMCP_BUILD 
+int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename_short,  char *filename,  char *fallback, bool_t scanning) { //DMCP_BUILD 
     
     #if (VERBOSE_LEVEL >= 2) 
       print_inlinestr("From dir:",false);
@@ -379,7 +379,7 @@ int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename
 
     /* Read if open */
     line1[0]=0;
-    f_getsline(line1, TMP_STR_LENGTH, &fil);
+    f_getsline(line1, (scanning ? min(100,TMP_STR_LENGTH) : TMP_STR_LENGTH), &fil);
     f_close(&fil);
 
     #if (VERBOSE_LEVEL >= 1) 
@@ -516,7 +516,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
 }
 
 // PC_BUILD
-int16_t import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback) { //PC_BUILD
+int16_t import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback, bool_t scanning) { //PC_BUILD
 
   #if (VERBOSE_LEVEL >= 2) 
     print_inlinestr("From dir:",false);
@@ -691,7 +691,7 @@ int16_t g_line_x, g_line_y;
 
 void print_linestr(const char *line1, bool_t line_init) {
 #ifndef TESTSUITE_BUILD
-    char l1[100];
+    char l1[200];
     l1[0]=0;
     int16_t ix = 0;
     int16_t ixx;
@@ -700,15 +700,19 @@ void print_linestr(const char *line1, bool_t line_init) {
       g_line_y = 20;
       g_line_x = 0;
     }
+    strcat(l1,"-");
     ixx = stringByteLength(line1);
     while(ix<ixx && ix<98 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12-g_line_x) {
-       xcopy(l1, line1, ix+1);
-       l1[ix+1]=0;
+       xcopy(l1 + 1, line1, ix+1);
+       l1[ix+1+1]=0;
        ix = stringNextGlyph(line1, ix);
+    }
+    while(stringByteLength(l1) < 200 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12-g_line_x) {
+       strcat(l1," ");
     }
 
     if(g_line_y < SCREEN_HEIGHT) { 
-        ixx = showString(l1, &standardFont, g_line_x, g_line_y, vmNormal, true, true);
+        ixx = showString(l1, &standardFont, (uint32_t) g_line_x, (uint32_t) g_line_y, vmNormal, true, true);
     }
     g_line_y += 20;
     if(g_line_y > SCREEN_HEIGHT - 20) {
@@ -727,7 +731,7 @@ void print_numberstr(const char *line1, bool_t line_init) {     //ONLY N=ASCII N
         char tt[2];
         while(line1[cnt] != 0 && g_line_x < SCREEN_WIDTH-8 +1) {
           tt[0]=line1[cnt]; tt[1]=0;
-          g_line_x = showString(tt, &standardFont, cnt * 8, g_line_y, vmNormal, true, true);
+          g_line_x = showString(tt, &standardFont, (uint32_t)cnt * 8, (uint32_t) g_line_y, vmNormal, true, true);
           cnt++;
         }
     }

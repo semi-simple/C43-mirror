@@ -52,6 +52,8 @@
 #define PC_BUILD_TELLTALE            //JM verbose on PC: jm_show_comment
 #undef  PC_BUILD_TELLTALE
 
+#define PC_BUILD_VERBOSE0
+#undef PC_BUILD_VERBOSE0
 
 #define PC_BUILD_VERBOSE1            //JM verbose XEQM basic operation on PC
 #undef  PC_BUILD_VERBOSE1
@@ -1044,7 +1046,7 @@
 #ifdef DMCP_BUILD
   #define TMP_STR_LENGTH       AUX_BUF_SIZE
 #else // !DMCP_BUILD
-  #define TMP_STR_LENGTH     2560 //JMMAX ORG:2560
+  #define TMP_STR_LENGTH     3000 //2560 //JMMAX ORG:2560
 #endif // DMCP_BUILD
   #define WRITE_BUFFER_LEN       4096
   #define ERROR_MESSAGE_LENGTH    512 //JMMAX(325) 512          //JMMAX Temporarily reduced - ORG:512.

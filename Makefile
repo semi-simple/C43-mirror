@@ -231,7 +231,7 @@ dist_windows:	wp43s.exe $(BUILD_DIR)/wiki
 	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
 	cp res/dmcp/testPgms.bin $(WIN_DIST_DIR)/res/dmcp/
 	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
-	cp res/fonts/WP43S_StandardFont.ttf $(WIN_DIST_DIR)/
+	cp res/fonts/C43___StandardFont.ttf $(WIN_DIST_DIR)/
 	cp $(BUILD_DIR)/wiki/Windows-installation.md $(WIN_DIST_DIR)/readme.txt
 	zip -r wp43s-windows.zip $(WIN_DIST_DIR)
 
@@ -249,6 +249,7 @@ dist_dm42:	dmcp $(BUILD_DIR)/wiki
 	cp $(BUILD_DIR)/dmcp/WP43S.pgm $(BUILD_DIR)/dmcp/WP43S_qspi.bin $(DM_DIST_DIR)
 	cp -r res/offimg $(DM_DIST_DIR)
 	cp res/dmcp/keymap.bin res/dmcp/original_DM42_keymap.bin res/dmcp/testPgms.bin $(DM_DIST_DIR)
+	cp res/artwork/WP43S_layout.svg $(DM_DIST_DIR)/WP43S_layout.svg
 	cp $(BUILD_DIR)/wiki/DM42-installation.md $(DM_DIST_DIR)/readme.txt
 	zip -r wp43s-dm42.zip $(DM_DIST_DIR)
 
@@ -474,7 +475,7 @@ $(GMPLIB): dep/gmp-6.2.0
 		--disable-werror \
 		--disable-cxx \
 		LDFLAGS='-Wl,--fix-cortex-a8 -Wl,--no-undefined -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now' \
-		CFLAGS="-nostartfiles --specs=nosys.specs -mcpu=cortex-m4 -Os -s -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -no-canonical-prefixes -fno-strict-aliasing -fstack-protector -finline-limit=64 -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16"
+		CFLAGS="-nostartfiles --specs=nosys.specs -mcpu=cortex-m4 -Os -s -pedantic -fomit-frame-pointer -Wa,--noexecstack -ffunction-sections -funwind-tables -fno-strict-aliasing -fstack-protector -finline-limit=64 -mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16"
 	cd dep/gmp-6.2.0 && make -j8 V=1
 
 clean_dmcp:

@@ -985,6 +985,11 @@ bool_t lowercaseselected;
         else {
           switch(calcMode) {
             case CM_NORMAL:
+              #ifdef PC_BUILD_VERBOSE0
+                 #ifdef PC_BUILD
+                   printf("$"); //####
+                 #endif
+              #endif
               if(item == ITM_EXPONENT || item == ITM_PERIOD || (ITM_0 <= item && item <= ITM_9)) {
                 addItemToNimBuffer(item);
                 keyActionProcessed = true;
@@ -997,18 +1002,28 @@ bool_t lowercaseselected;
               break;
 
             case CM_AIM:
+              #ifdef PC_BUILD_VERBOSE0
+                 #ifdef PC_BUILD
+                   printf("^"); //####
+                 #endif
+              #endif
               processAimInput(item);
               refreshRegisterLine(AIM_REGISTER_LINE);   //JM  No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;
               break;
 
-              case CM_NIM:
-                keyActionProcessed = true;
-                addItemToNimBuffer(item);
+            case CM_NIM:
+              #ifdef PC_BUILD_VERBOSE0
+                #ifdef PC_BUILD
+                  printf("&"); //####
+                #endif
+              #endif
+              keyActionProcessed = true;
+              addItemToNimBuffer(item);
 
-                if( ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == ITM_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
-                  refreshRegisterLine(REGISTER_X);
-                }                                                                                   //JM^^
-                break;
+              if( ((ITM_0 <= item && item <= ITM_9) || ((ITM_A <= item && item <= ITM_F) && lastIntegerBase >= 11) ) || item == ITM_CHS || item == ITM_EXPONENT || item == ITM_PERIOD) {   //JMvv Direct keypresses; //JMNIM Added direct A-F for hex entry
+                refreshRegisterLine(REGISTER_X);
+              }                                                                                   //JM^^
+              break;
 
             case CM_REGISTER_BROWSER:
               if(item == ITM_PERIOD) {
@@ -1131,9 +1146,11 @@ bool_t lowercaseselected;
             }
           }
           #ifdef RECORDLOG
-            if(keyActionProcessed) {                         //JMEXEC
-              capture_sequence("keyActionProcessed:", item);  //JMEXEC
-            }                                                //JMEXEC
+            #ifdef PC_BUILD
+              if(keyActionProcessed) {                         //JMEXEC
+                capture_sequence("keyActionProcessed:", item);  //JMEXEC
+              }                                                //JMEXEC
+            #endif
           #endif
         }
       }

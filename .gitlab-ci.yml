@@ -68,7 +68,7 @@ codeDocs:
   stage: test
   script:
     - apt-get update -qq
-    - apt-get install -qq -y doxygen
+    - apt-get install -qq -y doxygen python3-pip
     - python3 -m pip install sphinx breathe furo
     - cd docs/code
     - make html

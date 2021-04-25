@@ -1297,6 +1297,12 @@ void mimAddNumber(int16_t item) {
 
     case ITM_BACKSPACE :
       if(aimBuffer[0] == 0) {
+        const int cols = openMatrixMIMPointer.header.matrixColumns;
+        const int16_t row = getIRegisterAsInt(true);
+        const int16_t col = getJRegisterAsInt(true);
+
+        real34Zero(&openMatrixMIMPointer.matrixElements[row * cols + col]);
+        setSystemFlag(FLAG_ASLIFT);
         return;
       }
       else if((aimBuffer[0] == '+') && (aimBuffer[1] != 0) && (aimBuffer[2] == 0)) {
@@ -1308,13 +1314,11 @@ void mimAddNumber(int16_t item) {
 
     case ITM_CHS :
       if(aimBuffer[0] == 0) {
-        int cols = openMatrixMIMPointer.header.matrixColumns;
-        int16_t row = getIRegisterAsInt(true);
-        int16_t col = getJRegisterAsInt(true);
+        const int cols = openMatrixMIMPointer.header.matrixColumns;
+        const int16_t row = getIRegisterAsInt(true);
+        const int16_t col = getJRegisterAsInt(true);
 
         real34ChangeSign(&openMatrixMIMPointer.matrixElements[row * cols + col]);
-
-        convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
         setSystemFlag(FLAG_ASLIFT);
         return;
       }

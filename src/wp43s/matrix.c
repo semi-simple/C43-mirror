@@ -1074,8 +1074,11 @@ void fnEditLinearEquationMatrixX(uint16_t unusedParamButMandatory) {
   else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtComplex34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtComplex34Matrix) {
     fnToBeCoded();
   }
-  if(lastErrorCode == ERROR_NONE)
-    fnEditMatrix(findNamedVariable("Mat_X"));
+  if(lastErrorCode == ERROR_NONE) {
+    liftStack();
+    copySourceRegisterToDestRegister(findNamedVariable("Mat_X"), REGISTER_X);
+    popSoftmenu();
+  }
 #endif // TESTSUITE_BUILD
 }
 

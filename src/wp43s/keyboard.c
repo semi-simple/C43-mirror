@@ -28,6 +28,7 @@
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
+#include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
@@ -255,7 +256,7 @@
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
     // Shift f pressed and shift g not active
-    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
+    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
       shiftF = !shiftF;
@@ -263,7 +264,7 @@
     }
 
     // Shift g pressed and shift f not active
-    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
+    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
       shiftG = !shiftG;
@@ -279,7 +280,7 @@
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -575,6 +576,11 @@
               addItemToNimBuffer(item);
               break;
 
+            case CM_MIM:
+              addItemToBuffer(item);
+              keyActionProcessed = true;
+              break;
+
             case CM_REGISTER_BROWSER:
               if(item == ITM_PERIOD) {
                 rbr1stDigit = true;
@@ -744,7 +750,6 @@
           softmenuStack[0].firstItem = ((       softmenu[menuId].numItems - 1)/6) / (itemShift/6) * itemShift;
         }
       }
-
       setCatalogLastPos();
     }
   }
@@ -792,6 +797,10 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           aimBuffer[0] = 0;
         }
+        break;
+
+      case CM_MIM:
+        mimEnter(false);
         break;
 
       case CM_NIM:
@@ -873,6 +882,13 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       case CM_NIM:
         addItemToNimBuffer(ITM_EXIT);
+        break;
+
+      case CM_MIM:
+        mimEnter(true);
+        mimFinalize();
+        calcModeNormal();
+        popSoftmenu(); // close softmenu dedicated for the MIM
         break;
 
       case CM_PEM:
@@ -1012,6 +1028,10 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
       case CM_NIM:
         addItemToNimBuffer(ITM_BACKSPACE);
+        break;
+
+      case CM_MIM:
+        mimAddNumber(ITM_BACKSPACE);
         break;
 
       //case CM_ASM_OVER_NORMAL:

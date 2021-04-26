@@ -466,6 +466,7 @@
 #define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
+#define CM_MIM                                    12 // Matrix imput mode tbd reorder
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -483,9 +484,10 @@
 #define TM_FLAGR                               10004
 #define TM_FLAGW                               10005
 #define TM_STORCL                              10006
-#define TM_SHUFFLE                             10007
-#define TM_LABEL                               10008
-#define TM_CMP                                 10009 // TM_CMP must be the last in this list
+#define TM_M_DIM                               10007
+#define TM_SHUFFLE                             10008
+#define TM_LABEL                               10009
+#define TM_CMP                                 10010 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -713,6 +715,8 @@
 #define CHECK_VALUE_SPECIAL                        4
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
+#define CHECK_VALUE_MATRIX                         7
+#define CHECK_VALUE_MATRIX_SQUARE                  8
 
 #define OPMOD_MULTIPLY                             0
 #define OPMOD_POWER                                1

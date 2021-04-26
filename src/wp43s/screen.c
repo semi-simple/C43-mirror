@@ -34,6 +34,7 @@
 #include "items.h"
 #include "keyboard.h"
 #include "mathematics/comparisonReals.h"
+#include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
@@ -56,7 +57,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
   /* Names of day of week */
   TO_QSPI static const char *nameOfWday_en[8] = {"invalid day of week",                                   "Monday",            "Tuesday",                     "Wednesday",               "Thursday",           "Friday",             "Saturday",             "Sunday"};
   /*
-  TO_QSPI static const char *nameOfWday_de[8] = {ung" STD_u_DIARESIS "ltiger Wochentag",                  "Montag",            "Dienstag",                    "Mittwoch",                "Donnerstag",         "Freitag",            "Samstag",              "Sonntag"};
+  TO_QSPI static const char *nameOfWday_de[8] = {"ung" STD_u_DIARESIS "ltiger Wochentag",                 "Montag",            "Dienstag",                    "Mittwoch",                "Donnerstag",         "Freitag",            "Samstag",              "Sonntag"};
   TO_QSPI static const char *nameOfWday_fr[8] = {"jour de la semaine invalide",                           "lundi",             "mardi",                       "mercredi",                "jeudi",              "vendredi",           "samedi",               "dimanche"};
   TO_QSPI static const char *nameOfWday_es[8] = {"d" STD_i_ACUTE "a inv" STD_a_ACUTE "lido de la semana", "lunes",             "martes",                      "mi" STD_e_ACUTE "rcoles", "jueves",             "viernes",            "s" STD_a_ACUTE "bado", "domingo"};
   TO_QSPI static const char *nameOfWday_it[8] = {"giorno della settimana non valido",                     "luned" STD_i_GRAVE, "marted" STD_i_GRAVE,          "mercoled" STD_i_GRAVE,    "gioved" STD_i_GRAVE, "venerd" STD_i_GRAVE, "sabato",               "domenica"};
@@ -152,7 +153,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         break;
 
       case dtReal34Matrix:
-        strcpy(tmpString, "Copying a real16 matrix to the clipboard is to be coded!");
+        real34MatrixToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
         break;
 
       case dtComplex34Matrix:
@@ -928,6 +929,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
     int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
     bool_t prefixPre = true;
     bool_t prefixPost = true;
+    const uint8_t origDisplayStack = displayStack;
 
     char prefix[200], lastBase[4];
 
@@ -989,6 +991,12 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
             formatReal34Debug(string2, (real34_t *)getRegisterDataPointer(REGISTER_L));
           }
 
+          else if(getRegisterDataType(REGISTER_L) == dtReal34Matrix) {
+            sprintf(&string1[strlen(string1)], "real34 %" PRIu16 STD_CROSS "%" PRIu16 " matrix = ",
+              REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_L)->matrixRows, REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_L)->matrixColumns);
+            formatReal34Debug(string2, REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_L));
+          }
+
           else if(getRegisterDataType(REGISTER_L) == dtConfig) {
             strcat(string1, "Configuration data");
             string2[0] = 0;
@@ -1015,6 +1023,34 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           gtk_widget_show(lblMemoryStatus);
         #endif // (SHOW_MEMORY_STATUS == 1)
       #endif // PC_BUILD
+
+      if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || calcMode == CM_MIM) {
+        real34Matrix_t matrix;
+        linkToRealMatrixRegister(calcMode == CM_MIM ? matrixIndex : REGISTER_X, &matrix);
+        const uint16_t rows = matrix.header.matrixRows;
+        const uint16_t cols = matrix.header.matrixColumns;
+        bool_t smallFont = ((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3));
+        for(int i = 0; i < rows; i++) {
+          for(int j = 0; j< cols; j++) {
+            bool_t neg = real34IsNegative(&matrix.matrixElements[i*cols+j]);
+            tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
+            real34SetPositiveSign(&matrix.matrixElements[i*cols+j]);
+            real34ToDisplayString(&matrix.matrixElements[i*cols+j], amNone, tmpString, &numericFont, MATRIX_LINE_WIDTH_LARGE - 20, 4, true, STD_SPACE_4_PER_EM);
+            if(neg) real34SetNegativeSign(&matrix.matrixElements[i*cols+j]);
+            if(stringWidth(tmpString, &numericFont, true, true) + 1 > MATRIX_LINE_WIDTH_LARGE - 20) {
+              smallFont = true;
+              goto realMatFontDetermined;
+            }
+            if(j == 3) break;
+          }
+          if(i == 4) break;
+        }
+        realMatFontDetermined:
+        if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
+        if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
+        if(rows >= 4 && cols > 1) displayStack = 2;
+        if(calcMode == CM_MIM) displayStack -= 2;
+      }
 
       if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
         showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
@@ -1089,6 +1125,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
 
       else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
         prefixWidth = 0;
+        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(REGISTER_X) == dtReal34Matrix) ? 4 - displayStack : 0));
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
           if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
@@ -1125,48 +1162,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
             wLastBaseStandard = 0;
           }
 
-          if(stringWidth(nimBufferDisplay, &numericFont, true, true) + wLastBaseNumeric <= SCREEN_WIDTH - 16) { // 16 is the numeric font cursor width
-            xCursor = showString(nimBufferDisplay, &numericFont, 0, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
-            yCursor = Y_POSITION_OF_NIM_LINE;
-            cursorFont = &numericFont;
-
-            if(lastIntegerBase != 0) {
-              showString(lastBase, &numericFont, xCursor + 16, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
-            }
-          }
-          else if(stringWidth(nimBufferDisplay, &standardFont, true, true) + wLastBaseStandard <= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-            xCursor = showString(nimBufferDisplay, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-            yCursor = Y_POSITION_OF_NIM_LINE + 6;
-            cursorFont = &standardFont;
-
-            if(lastIntegerBase != 0) {
-              showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
-            }
-          }
-          else {
-            w = stringByteLength(nimBufferDisplay) + 1;
-            xcopy(tmpString,        nimBufferDisplay, w);
-            xcopy(tmpString + 1500, nimBufferDisplay, w);
-            while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH) {
-              w = stringLastGlyph(tmpString);
-              tmpString[w] = 0;
-            }
-
-            if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) + wLastBaseStandard > SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
-              btnClicked(NULL, "16"); // back space
-            }
-            else {
-              showString(tmpString, &standardFont, 0, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
-
-              xCursor = showString(tmpString + 1500 + w, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
-              yCursor = Y_POSITION_OF_NIM_LINE + 18;
-              cursorFont = &standardFont;
-
-              if(lastIntegerBase != 0) {
-                showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
-              }
-            }
-          }
+          displayNim(nimBufferDisplay, lastBase, wLastBaseNumeric, wLastBaseStandard);
         }
 
         else if(regist == AIM_REGISTER_LINE && calcMode == CM_AIM && !tam.mode) {
@@ -1212,7 +1208,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
           if(w <= SCREEN_WIDTH) {
-            showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
           }
           else {
             w = stringWidth(tmpString, &standardFont, false, true);
@@ -1225,7 +1221,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
               w = stringWidth(tmpString, &standardFont, false, true);
               lineWidth = w;
             }
-            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            showString(tmpString, &standardFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
           }
         }
 
@@ -1578,9 +1574,9 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
           if(prefixWidth > 0) {
-            showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+            showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
           }
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtComplex34) {
@@ -1588,7 +1584,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
 
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtString) {
@@ -1625,18 +1621,18 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
               xcopy(tmpString + stringByteLength(tmpString), STD_ELLIPSIS, 3);
               w += 14;
               lineWidth = w;
-              showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+              showString(tmpString, &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
             }
           }
           else {
             lineWidth = w;
-            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
           }
         }
 
         else if(getRegisterDataType(regist) == dtShortInteger) {
           shortIntegerToDisplayString(regist, tmpString, true);
-          showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+          showString(tmpString, fontForShortInteger, SCREEN_WIDTH - stringWidth(tmpString, fontForShortInteger, false, true), baseY + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtLongInteger) {
@@ -1652,7 +1648,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
               else if(strcmp(tmpString, "6") == 0) strcpy(prefix, nameOfWday_en[6]);
               else if(strcmp(tmpString, "7") == 0) strcpy(prefix, nameOfWday_en[7]);
               else strcpy(prefix, nameOfWday_en[0]);
-              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
+              showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
             }
           }
 
@@ -1660,7 +1656,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           lineWidth = w;
 
           if(w <= SCREEN_WIDTH) {
-            showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
           }
           else {
             w = stringWidth(tmpString, &standardFont, false, true);
@@ -1672,44 +1668,114 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
             }
             w = stringWidth(tmpString, &standardFont, false, true);
             lineWidth = w;
-            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+            showString(tmpString, &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
           }
         }
 
         else if(getRegisterDataType(regist) == dtTime) {
           timeToDisplayString(regist, tmpString, false);
           w = stringWidth(tmpString, &numericFont, false, true);
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtDate) {
           if(temporaryInformation == TI_DAY_OF_WEEK) {
             if(regist == REGISTER_X) {
               strcpy(prefix, nameOfWday_en[getDayOfWeek(regist)]);
-              showString(prefix, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
+              showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
             }
           }
 
           dateToDisplayString(regist, tmpString);
           w = stringWidth(tmpString, &numericFont, false, true);
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtConfig) {
           xcopy(tmpString, "Configuration data", 19);
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X), vmNormal, false, true);
+          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
+        }
+
+        else if(getRegisterDataType(regist) == dtReal34Matrix) {
+          if(regist == REGISTER_X && calcMode != CM_MIM) {
+            real34Matrix_t matrix;
+            linkToRealMatrixRegister(REGISTER_X, &matrix);
+            showRealMatrix(&matrix);
+            if(lastErrorCode != 0)
+              refreshRegisterLine(errorMessageRegisterLine);
+            if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE)
+              refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
+          }
+          else {
+            real34MatrixToDisplayString(regist, tmpString);
+            w = stringWidth(tmpString, &numericFont, false, true);
+            lineWidth = w;
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w - 2, baseY, vmNormal, false, true);
+          }
         }
 
         else {
           sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
-          showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, false, true);
+          showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), baseY + 6, vmNormal, false, true);
         }
       }
 
       if(regist == REGISTER_T) {
         lineTWidth = lineWidth;
+      }
+    }
+
+    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+      displayStack = origDisplayStack;
+    }
+  }
+
+
+
+  void displayNim(const char *nim, const char *lastBase, int16_t wLastBaseNumeric, int16_t wLastBaseStandard) {
+    int16_t w;
+    if(stringWidth(nim, &numericFont, true, true) + wLastBaseNumeric <= SCREEN_WIDTH - 16) { // 16 is the numeric font cursor width
+      xCursor = showString(nim, &numericFont, 0, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
+      yCursor = Y_POSITION_OF_NIM_LINE;
+      cursorFont = &numericFont;
+
+      if(lastIntegerBase != 0) {
+        showString(lastBase, &numericFont, xCursor + 16, Y_POSITION_OF_NIM_LINE, vmNormal, true, true);
+      }
+    }
+    else if(stringWidth(nim, &standardFont, true, true) + wLastBaseStandard <= SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+      xCursor = showString(nim, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
+      yCursor = Y_POSITION_OF_NIM_LINE + 6;
+      cursorFont = &standardFont;
+
+      if(lastIntegerBase != 0) {
+        showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 6, vmNormal, true, true);
+      }
+    }
+    else {
+      w = stringByteLength(nim) + 1;
+      xcopy(tmpString,        nim, w);
+      xcopy(tmpString + 1500, nim, w);
+      while(stringWidth(tmpString, &standardFont, true, true) >= SCREEN_WIDTH) {
+        w = stringLastGlyph(tmpString);
+        tmpString[w] = 0;
+      }
+
+      if(stringWidth(tmpString + 1500 + w, &standardFont, true, true) + wLastBaseStandard > SCREEN_WIDTH - 8) { // 8 is the standard font cursor width
+        btnClicked(NULL, "16"); // back space
+      }
+      else {
+        showString(tmpString, &standardFont, 0, Y_POSITION_OF_NIM_LINE - 3, vmNormal, true, true);
+
+        xCursor = showString(tmpString + 1500 + w, &standardFont, 0, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+        yCursor = Y_POSITION_OF_NIM_LINE + 18;
+        cursorFont = &standardFont;
+
+        if(lastIntegerBase != 0) {
+          showString(lastBase, &standardFont, xCursor + 8, Y_POSITION_OF_NIM_LINE + 18, vmNormal, true, true);
+        }
       }
     }
   }
@@ -1775,6 +1841,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
       case CM_NORMAL:
       case CM_AIM:
       case CM_NIM:
+      case CM_MIM:
       case CM_ASSIGN:
       case CM_ERROR_MESSAGE:
       case CM_CONFIRMATION:
@@ -1785,7 +1852,12 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         refreshRegisterLine(REGISTER_Z);
         refreshRegisterLine(REGISTER_Y);
         refreshRegisterLine(REGISTER_X);
+        if(calcMode == CM_MIM) {
+          showMatrixEditor();
+        }
+
         displayShiftAndTamBuffer();
+
         showSoftmenuCurrentPart();
         hourGlassIconEnabled = false;
         refreshStatusBar();

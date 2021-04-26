@@ -30,6 +30,7 @@
 #include "gui.h"
 #include "items.h"
 #include "keyboard.h"
+#include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
@@ -757,6 +758,11 @@ void fnReset(uint16_t confirmation) {
     ((dataBlock_t *)memPtr)->matrixColumns = 1;
     real34Zero(memPtr + 4);
 
+    #ifndef TESTSUITE_BUILD
+      matrixIndex = INVALID_VARIABLE; // Unset matrix index
+    #endif // TESTSUITE_BUILD
+
+
     #ifdef PC_BUILD
       debugWindow = DBG_REGISTERS;
     #endif // PC_BUILD
@@ -850,6 +856,7 @@ void fnReset(uint16_t confirmation) {
     #ifdef TESTSUITE_BUILD
       calcMode = CM_NORMAL;
     #else // TESTSUITE_BUILD
+      if(calcMode == CM_MIM) mimFinalize();
       calcModeNormal();
     #endif // TESTSUITE_BUILD
 

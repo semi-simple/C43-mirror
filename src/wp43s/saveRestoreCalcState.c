@@ -27,6 +27,7 @@
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
+#include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
@@ -245,6 +246,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
     save(&ix_count,                           sizeof(ix_count),                           BACKUP);
+    save(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
 
 
     fclose(BACKUP);
@@ -439,6 +441,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);
       restore(&ix_count,                           sizeof(ix_count),                           BACKUP);
+      restore(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
 
       fclose(BACKUP);
       printf("End of calc's restoration\n");
@@ -460,6 +463,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
         else if(calcMode == CM_PLOT_STAT)             {}
+        else if(calcMode == CM_MIM)                   {mimRestore();}
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);
@@ -473,6 +477,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
         else if(calcMode == CM_PLOT_STAT)              calcModeNormalGui();
+        else if(calcMode == CM_MIM)                   {calcModeNormalGui(); mimRestore();}
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);

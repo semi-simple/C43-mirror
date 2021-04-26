@@ -332,7 +332,7 @@ $(BUILD_DIR)/generateConstants/%.o: %.c | $(BUILD_DIR)/generateConstants
 
 $(BUILD_DIR)/.stamp-constantPointers: $(GENERATECONSTANTS_APP)
 	@echo -e "\n====> running $(GENERATECONSTANTS_APP) <===="
-	./$(GENERATECONSTANTS_APP)
+	./$(GENERATECONSTANTS_APP) $(BUILD_DIR)/generated/constantPointers.c $(BUILD_DIR)/generated/constantPointers.h
 	cp $(BUILD_DIR)/generated/constantPointers.h src/generated/constantPointers.h
 	cp $(BUILD_DIR)/generated/constantPointers.c src/generated/constantPointers.c
 	touch $@
@@ -361,7 +361,7 @@ $(BUILD_DIR)/generateCatalogs/%.o: %.c $(BUILD_DIR)/.stamp-constantPointers $(BU
 
 $(BUILD_DIR)/.stamp-softmenuCatalog: $(GENERATECATALOGS_APP)
 	@echo -e "\n====> running $(GENERATECATALOGS_APP) <===="
-	./$(GENERATECATALOGS_APP)
+	./$(GENERATECATALOGS_APP) $(BUILD_DIR)/generated/softmenuCatalogs.h
 	cp $(BUILD_DIR)/generated/softmenuCatalogs.h src/generated/softmenuCatalogs.h
 	touch $@
 
@@ -384,7 +384,7 @@ $(BUILD_DIR)/generateTestPgms/%.o: %.c | $(BUILD_DIR)/generateTestPgms
 
 $(BUILD_DIR)/.stamp-testPgms: $(GENERATETESTPGMS_APP)
 	@echo -e "\n====> running $(GENERATETESTPGMS_APP) <===="
-	./$(GENERATETESTPGMS_APP)
+	./$(GENERATETESTPGMS_APP) res/dmcp/testPgms.bin
 	touch $@
 
 $(GEN_BIN_TESTPGMS): $(BUILD_DIR)/.stamp-testPgms
@@ -406,7 +406,7 @@ $(BUILD_DIR)/ttf2RasterFonts/%.o: %.c | $(BUILD_DIR)/ttf2RasterFonts
 
 $(BUILD_DIR)/.stamp-rasterFontsData: $(TTF2RASTERFONTS_APP) res/fonts/WP43S_NumericFont.ttf res/fonts/WP43S_StandardFont.ttf
 	@echo -e "\n====> running $(TTF2RASTERFONTS_APP) <===="
-	./$(TTF2RASTERFONTS_APP) > /dev/null
+	./$(TTF2RASTERFONTS_APP) res/fonts build/generated/rasterFontsData.c > /dev/null
 	cp $(BUILD_DIR)/generated/rasterFontsData.c src/generated/rasterFontsData.c
 	touch $@
 

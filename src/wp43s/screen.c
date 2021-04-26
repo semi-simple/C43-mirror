@@ -1727,7 +1727,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
       }
     }
 
-    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || calcMode == CM_MIM) {
       displayStack = origDisplayStack;
     }
   }

@@ -312,19 +312,12 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 void fnEditMatrix(uint16_t regist) {
 #ifndef TESTSUITE_BUILD
   const uint16_t reg = (regist == NOPARAM) ? REGISTER_X : regist;
-  const bool_t editn = (softmenu[0].menuItem == -MNU_TAM) || (softmenu[0].menuItem == -MNU_VAR);
   if((getRegisterDataType(reg) == dtReal34Matrix) || (getRegisterDataType(reg) == dtComplex34Matrix)) {
     calcMode = CM_MIM;
     matrixIndex = reg;
 
     getMatrixFromRegister(reg);
 
-    showSoftmenu(-MNU_M_EDIT);
-    if(editn && regist != NOPARAM) {
-      showSoftmenu(-MNU_TAM);
-      showSoftmenu(-MNU_VAR);
-      numberOfTamMenusToPop = 2;
-    }
     setIRegisterAsInt(true, 0);
     setJRegisterAsInt(true, 0);
     aimBuffer[0] = 0;
@@ -1172,6 +1165,9 @@ void showMatrixEditor() {
   int rows = openMatrixMIMPointer.header.matrixRows;
   int cols = openMatrixMIMPointer.header.matrixColumns;
   int16_t width = 0;
+
+  if(softmenuStack[0].firstItem != -MNU_M_EDIT)
+    showSoftmenu(-MNU_M_EDIT);
 
   bool_t colVector = false;
   if (cols == 1) {

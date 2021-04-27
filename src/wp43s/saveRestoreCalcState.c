@@ -27,6 +27,7 @@
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
+#include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
@@ -245,6 +246,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
     save(&ix_count,                           sizeof(ix_count),                           BACKUP);
+    save(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
 
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
     save(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -474,6 +476,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);
       restore(&ix_count,                           sizeof(ix_count),                           BACKUP);
+      restore(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
 
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
       restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -535,6 +538,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
         else if(calcMode == CM_PLOT_STAT)             {}
+        else if(calcMode == CM_MIM)                   {mimRestore();}
         else if(calcMode == CM_LISTXY)                {}             //JM
         else if(calcMode == CM_GRAPH)                 {}             //JM
         else {
@@ -550,6 +554,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
         else if(calcMode == CM_PLOT_STAT)              calcModeNormalGui();
+        else if(calcMode == CM_MIM)                   {calcModeNormalGui(); mimRestore();}
         else if(calcMode == CM_LISTXY)                 calcModeNormalGui();             //JM
         else if(calcMode == CM_GRAPH)                  calcModeNormalGui();             //JM
         else {
@@ -805,7 +810,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
 
 
-  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
+  // Graph memory                                  //vv GRAPH MEMORY RESTORE
   sprintf(tmpString, "STAT_GRAPH_DATA\n%u\n",LIM*2+2);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "%u\n",ix_count);
@@ -818,7 +823,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     sprintf(tmpString, "%E\n",gr_y[i]);
     save(tmpString, strlen(tmpString), BACKUP);
   }
-  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
+  // Graph memory                                  //^^ GRAPH MEMORY RESTORE
 
 
 
@@ -1296,7 +1301,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     }
   }
 
-  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
+  // Graph memory                                  //vv GRAPH MEMORY RESTORE
   else if(strcmp(tmpString, "STAT_GRAPH_DATA") == 0) {
     char* end;
     readLine(stream, tmpString); // Number of params
@@ -1314,8 +1319,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       //printf("^^^^### %u %f %f \n",i,gr_x[i],gr_y[i]);
     }
   }
-  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
-
+  // Graph memory                                  //^^ GRAPH MEMORY RESTORE
 
 }
 

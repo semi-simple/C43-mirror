@@ -775,6 +775,8 @@ size_t                 wp43sMemInBlocks;
   #include "testSuite.h"
 
   int main(int argc, char* argv[]) {
+    int exitCode;
+
     #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no longer in the correct directory! Why?
       (*strstr(argv[0], "/bin/")) = 0;
       chdir(argv[0]);
@@ -822,10 +824,10 @@ size_t                 wp43sMemInBlocks;
     */
 
 
-    processTests();
+    exitCode = processTests();
     printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
     debugMemory("End of testsuite");
 
-    return 0;
+    return exitCode;
   }
 #endif // TESTSUITE_BUILD

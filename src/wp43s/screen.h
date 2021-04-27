@@ -116,6 +116,7 @@
   void     hideFunctionName                   (void);
   void     clearRegisterLine                  (calcRegister_t regist, bool_t clearTop, bool_t clearBottom);
   void     refreshRegisterLine                (calcRegister_t regist);
+  void     displayNim                         (const char *nim, const char *lastBase, int16_t wLastBaseNumeric, int16_t wLastBaseStandard);
 #endif // TESTSUITE_BUILD
 
 #endif // SCREEN_H

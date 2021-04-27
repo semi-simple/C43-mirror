@@ -26,6 +26,7 @@
 #include "flags.h"
 #include "items.h"
 #include "keyboard.h"
+#include "matrix.h"
 #include "registers.h"
 #include "saveRestoreCalcState.h"
 #include "screen.h"
@@ -4202,6 +4203,10 @@ void setupUI(void) {
   void fnOff(uint16_t unsuedParamButMandatory) {
     shiftF = false;
     shiftG = false;
+
+    if(openMatrixMIMPointer.matrixElements) {
+      realMatrixFree(&openMatrixMIMPointer);
+    }
 
     #ifdef PC_BUILD
       saveCalc();

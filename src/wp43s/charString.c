@@ -23,9 +23,9 @@
 #include <string.h>
 #include "error.h"
 #include "fonts.h"
+#include <string.h>
 
 #include "wp43s.h"
-#include <string.h>
 
 
 //JM The state of maxiC influences the width, depending on the auto selected font. JM

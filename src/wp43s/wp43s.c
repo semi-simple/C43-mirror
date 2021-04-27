@@ -27,9 +27,14 @@
 #include "keyboard.h"
 #include "memory.h"
 #include "screen.h"
-#include "typeDefinitions.h"
+//??? #include "typeDefinitions.h"
 
 //#define JMSHOWCODES
+
+#if defined(DMCP_BUILD)
+#include "keyboardTweak.h"
+#include "jm.h"
+#endif
 
 
 #if defined(PC_BUILD) || defined(TESTSUITE_BUILD)

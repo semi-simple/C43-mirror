@@ -20,9 +20,12 @@
 
 #include "statusBar.h"
 
+#include "bufferize.h"
 #include "dateTime.h"
 #include "flags.h"
 #include "fonts.h"
+#include "gui.h"
+#include "jm.h"
 #include "screen.h"
 #include <string.h>
 

@@ -23,7 +23,10 @@
 #ifndef ADDONS_H
 #define ADDONS_H
 
+#include "decNumberWrappers.h"
 #include "typeDefinitions.h"
+#include <stdint.h>
+
 
 
 void fnPlotStatJM   (uint16_t mode);
@@ -54,13 +57,13 @@ void fnP_All_Regs   (uint16_t option);
 void fnMinute       (uint16_t unusedButMandatoryParameter); //JM
 void fnSecond       (uint16_t unusedButMandatoryParameter); //JM
 void fnHrDeg        (uint16_t unusedButMandatoryParameter); //JM
-void fnTimeTo       (uint16_t unusedButMandatoryParameter);    //JM
-void fnToTime       (uint16_t unusedButMandatoryParameter);    //JM
+void fnTimeTo       (uint16_t unusedButMandatoryParameter); //JM
+void fnToTime       (uint16_t unusedButMandatoryParameter); //JM
 
 
-void fnByteShortcutsS(uint16_t size);     //JM POC BASE2 vv
-void fnByteShortcutsU(uint16_t size);
-void fnByte          (uint16_t command);  //JM POC BASE2 ^^
+void fnByteShortcutsS   (uint16_t size);                    //JM POC BASE2 vv
+void fnByteShortcutsU   (uint16_t size);
+void fnByte             (uint16_t command);                 //JM POC BASE2 ^^
 
 
 //for display.c
@@ -72,14 +75,14 @@ void exponentToUnitDisplayString(int32_t exponent, char *displayString, char *di
 
 void   printf_cpx               (calcRegister_t regist);
 void   print_stck               ();
-void   doubleToXRegisterReal34  (double x);             //Convert from double to X register REAL34
+void   doubleToXRegisterReal34  (double x);                 //Convert from double to X register REAL34
 double convert_to_double        (calcRegister_t regist);    //Convert from X register to double
 
 
-void   fnStrtoX                 (char aimBuffer[]);      //DONE
-void   fnStrInputReal34         (char inp1[]);  // CONVERT STRING to REAL IN X      //DONE
-void   fnStrInputLongint        (char inp1[]);  // CONVERT STRING to Longint X      //DONE
-void   fnRCL                    (int16_t inp);      //DONE
+void   fnStrtoX                 (char aimBuffer[]);         //DONE
+void   fnStrInputReal34         (char inp1[]);              // CONVERT STRING to REAL IN X      //DONE
+void   fnStrInputLongint        (char inp1[]);              // CONVERT STRING to Longint X      //DONE
+void   fnRCL                    (int16_t inp);              //DONE
 
 
 #endif //ADDONS_H

@@ -23,6 +23,13 @@
 
 /* ADDITIONAL WP43C functions and routines */
 
+#ifndef GRAPHTEXT_H
+#define GRAPHTEXT_H
+
+#include "defines.h"
+#include "plotstat.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 #define      CSV_NEWLINE "\n"
 #define      CSV_TAB     "\t"
@@ -30,8 +37,8 @@
 #define      CSV_SLASH   "\\"
 #define      CSV_STR     "\""
 #define      T_CR        "\x0D"
-#define      append  0
-#define      overwrite 1
+#define      APPEND      0
+#define      OVERWRITE   1
 
 void         create_filename(char *fn);
 
@@ -47,3 +54,4 @@ void         print_linestr  (const char *line1, bool_t line_init);
 int16_t      export_xy_to_file(graphtype x, graphtype y);
 int16_t      import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback, bool_t scanning);
 
+#endif // GRAPHTEXT_H

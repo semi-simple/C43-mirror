@@ -21,6 +21,7 @@
 #define CONFIG_H
 
 #include "decContext.h"
+#include "defines.h"
 #include <stdint.h>
 
 void     showSoftmenu          (int16_t id);  //JM repeat here to make DMCP compile

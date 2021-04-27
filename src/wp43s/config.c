@@ -20,25 +20,31 @@
 
 #include "config.h"
 
-#include "defines.h"
 #include "browsers/fontBrowser.h"
 #include "bufferize.h"
 #include "charString.h"
 #include "constantPointers.h"
 #include "debug.h"
+#include "display.h"
 #include "error.h"
 #include "flags.h"
+#include "fractions.h"
 #include "gui.h"
 #include "items.h"
+#include "jm.h"
 #include "keyboard.h"
 #include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
+#include "radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
+#include "screen.h"
+#include "softmenus.h"
 #include "stack.h"
 #include "stats.h"
+#include "store.h"
 #include <stdlib.h>
 #include <string.h>
 

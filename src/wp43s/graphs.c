@@ -20,10 +20,23 @@
 
 /* C43 functions and routines written by JM, adapted from C43 to WP43S by JM */
 
+#include "graphs.h"
 
+#include "charString.h"
 #include "constantPointers.h"
+#include "error.h"
+#include "graphText.h"
+#include "items.h"
 #include "math.h"
+#include "plotstat.h"
+#include "radioButtonCatalog.h"
+#include "registers.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "stats.h"
+#include "statusBar.h"
 #include <string.h>
+
 #include "wp43s.h"
 
 //#define STATDEBUG

@@ -42,7 +42,7 @@
 #undef STAT_DISPLAY_ABCDEFG                      //to display helper functions A-H
 
 
-static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables
+static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables, available to the different functions
 realContext_t *realContext;
 realContext_t *realContextForecast;
 
@@ -202,8 +202,6 @@ void fnProcessLR (uint16_t unusedButMandatoryParameter){
 
 
 
-
-
 void calc_BCD(real_t *BB, real_t *CC, real_t *DD){                        //Aux terms, calc_BCD must be run before calc_AEFG
 realContext = &ctxtReal75;
 real_t SS,TT;
@@ -276,7 +274,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
     #if defined STATDEBUG && defined PC_BUILD
       printf("processCurvefitSelectionA selection:%u reduced selection to:%u\n",selection,jx);
     #endif
-
 
     realContext = &ctxtReal75;    //Use 75 as the sums can reach high values and the accuracy of the regressionn depends on this. Could arguably be optimized.
     real_t VV,WW;
@@ -856,7 +853,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         #endif
         break;
 
-
       default: break;
     }
   }
@@ -973,29 +969,28 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
   }
 
 
-
   void fnYIsFnx(uint16_t unusedButMandatoryParameter){
-  real_t XX,YY,RR,SMI,aa0,aa1,aa2;
-  uint16_t sel=1;
-  double x=-99,y = 0,a0=-99,a1=-99,a2=-99;
-  realCopy(const_0,&aa0);
-  realCopy(const_0,&aa1);
-  realCopy(const_0,&aa2);
-  if(checkMinimumDataPoints(const_2)) {
-    if(lrChosen == 0) {
-      sel = 1; 
-    }
-    else {
-      sel = lrChosen;
-    }
-    processCurvefitSelection(sel, &RR, &SMI, &aa0, &aa1, &aa2);
-    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-      convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
-    }
-    if(getRegisterDataType(REGISTER_X) == dtReal34) {
-      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &XX);
-      yIsFnx(useREAL39, sel, x, &y, a0, a1, a2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
-      realToReal34(&YY,REGISTER_REAL34_DATA(REGISTER_X));
+    real_t XX,YY,RR,SMI,aa0,aa1,aa2;
+    uint16_t sel=1;
+    double x=-99,y = 0,a0=-99,a1=-99,a2=-99;
+    realCopy(const_0,&aa0);
+    realCopy(const_0,&aa1);
+    realCopy(const_0,&aa2);
+    if(checkMinimumDataPoints(const_2)) {
+      if(lrChosen == 0) {
+        sel = 1; 
+      }
+      else {
+        sel = lrChosen;
+      }
+      processCurvefitSelection(sel, &RR, &SMI, &aa0, &aa1, &aa2);
+      if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+        convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
+      }
+      if(getRegisterDataType(REGISTER_X) == dtReal34) {
+        real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &XX);
+        yIsFnx(useREAL39, sel, x, &y, a0, a1, a2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
+        realToReal34(&YY,REGISTER_REAL34_DATA(REGISTER_X));
 
         setSystemFlag(FLAG_ASLIFT);
         temporaryInformation = TI_CALCY;
@@ -1009,9 +1004,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
       }
     }
   }
-
-
-
 
 
   void xIsFny(uint16_t selection, uint8_t rootNo, real_t *XX, real_t *YY, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){

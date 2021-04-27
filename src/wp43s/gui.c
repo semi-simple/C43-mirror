@@ -21,16 +21,21 @@
 #include "gui.h"
 
 #include "bufferize.h"
+#include "charString.h"
 #include "debug.h"
 #include "error.h"
 #include "flags.h"
 #include "items.h"
+#include "jm.h"
 #include "keyboard.h"
+#include "keyboardTweak.h"
 #include "matrix.h"
 #include "registers.h"
 #include "saveRestoreCalcState.h"
 #include "screen.h"
 #include "stack.h"
+#include "statusBar.h"
+#include "softmenus.h"
 #include <string.h>
 #include "typeDefinitions.h"
 

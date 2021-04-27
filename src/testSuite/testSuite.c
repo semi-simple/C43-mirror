@@ -20,6 +20,7 @@
 
 #include "testSuite.h"
 
+#include "addons.h"
 #include "charString.h"
 #include "config.h"
 #include "constants.h"

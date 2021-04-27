@@ -25,7 +25,13 @@
 
 //#define DISPLOADING
 
+#include "textfiles.h"
+
+#include "charString.h"
+#include "graphText.h"
+#include "screen.h"
 #include <string.h>
+
 #include "wp43s.h"
 
   uint8_t reg_Name(uint16_t no) {
@@ -102,7 +108,7 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 
 #ifndef TESTSUITE_BUILD
 int16_t export_string_to_file(const char line1[TMP_STR_LENGTH]) {
-  return export_string_to_filename(line1, append, "PROGRAMS", "C43_LOG.TXT");
+  return export_string_to_filename(line1, APPEND, "PROGRAMS", "C43_LOG.TXT");
 }
 #endif
 

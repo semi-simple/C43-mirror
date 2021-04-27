@@ -20,6 +20,8 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+//??? #include "flags.h"
+//??? #include "defines.h"
 
 //*********************************
 // JM VARIOUS OPTIONS
@@ -953,6 +955,7 @@
 #define mod(n, d)                            (((n)%(d) + (d)) % (d))                                         // mod(n,d) = n - d*floor(n/d)  where floor(a) is the biggest integer <= a
 //#define modulo(n, d)                         ((n)%(d)<0 ? ((d)<0 ? (n)%(d) - (d) : (n)%(d) + (d)) : (n)%(d)) // modulo(n,d) = rmd(n,d) (+ |d| if rmd(n,d)<0)  thus the result is always >= 0
 #define modulo(n, d)                         ((n)%(d)<0 ? (n)%(d)+(d) : (n)%(d))                             // This version works only if d > 0
+#define nbrOfElements(x)                     (sizeof(x) / sizeof((x)[0]))                                    //dr
 #define COMPLEX_UNIT                         (getSystemFlag(FLAG_CPXj)   ? STD_j     : STD_i)
 #define RADIX34_MARK_CHAR                    (getSystemFlag(FLAG_DECIMP) ? '.'       : ',')
 #define RADIX34_MARK_STRING                  (getSystemFlag(FLAG_DECIMP) ? "."       : ",")
@@ -1043,10 +1046,10 @@
   #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 /* Turn off -Wunused-result for a specific function call */
-#define ignore_result(M) if(1==((int)M)){;}
+#define ignore_result(M) if(1==((uint64_t)M)){;}
 
 #ifdef DMCP_BUILD
-  #define TMP_STR_LENGTH       AUX_BUF_SIZE
+  #define TMP_STR_LENGTH       (5*512)  //dr temporary change to be abele to compile //AUX_BUF_SIZE
 #else // !DMCP_BUILD
   #define TMP_STR_LENGTH     3000 //2560 //JMMAX ORG:2560
 #endif // DMCP_BUILD

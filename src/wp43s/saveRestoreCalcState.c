@@ -27,6 +27,7 @@
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
+#include "jm.h"
 #include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
@@ -810,7 +811,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
 
 
-  // Graph memory                                  //vv GRAPH MEMORY RESTORE
+  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
   sprintf(tmpString, "STAT_GRAPH_DATA\n%u\n",LIM*2+2);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "%u\n",ix_count);
@@ -823,7 +824,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     sprintf(tmpString, "%E\n",gr_y[i]);
     save(tmpString, strlen(tmpString), BACKUP);
   }
-  // Graph memory                                  //^^ GRAPH MEMORY RESTORE
+  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
 
 
 
@@ -1301,7 +1302,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     }
   }
 
-  // Graph memory                                  //vv GRAPH MEMORY RESTORE
+  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
   else if(strcmp(tmpString, "STAT_GRAPH_DATA") == 0) {
     char* end;
     readLine(stream, tmpString); // Number of params
@@ -1319,7 +1320,8 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       //printf("^^^^### %u %f %f \n",i,gr_x[i],gr_y[i]);
     }
   }
-  // Graph memory                                  //^^ GRAPH MEMORY RESTORE
+  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
+
 
 }
 

@@ -26,6 +26,7 @@
 #include "fonts.h"
 #include "items.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 

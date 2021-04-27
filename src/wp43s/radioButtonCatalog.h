@@ -21,6 +21,11 @@
  * \file radioButtonCatalog.h
  ***********************************************/
 
+#ifndef RADIOBUTTONCATALOG_H
+#define RADIOBUTTONCATALOG_H
+
+#include "defines.h"
+#include <stdint.h>
 
 #define RB_FALSE    0
 #define RB_TRUE     1
@@ -83,3 +88,5 @@ typedef struct {
 //uint8_t  state;             ///<
   char     radioButton;       ///< Menu of RADIO in which the item is located: see #define RB_*
 } radiocb_eeprom_t;
+
+#endif // RADIOBUTTONCATALOG_H

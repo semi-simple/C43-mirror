@@ -33,6 +33,13 @@ Modes available in the mode menu:
 8. ALPHAHOME
 */
 
+#ifndef JM_H
+#define JM_H
+
+#include "decNumberWrappers.h"
+#include "gmpWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
 
 // Radix Mark 1 bit
 #define RX_PERIOD               103
@@ -244,3 +251,5 @@ void JM_DOT(int16_t xx, int16_t yy);
 #endif
 
 void fnShowJM  (uint16_t jmConfig);
+
+#endif // JM_H

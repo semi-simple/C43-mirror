@@ -22,6 +22,7 @@
 #include "gui.h"
 #include "items.h"
 #include "memory.h"
+#include "keyboardTweak.h"
 #include "saveRestoreCalcState.h"
 #include "screen.h"
 

@@ -23,6 +23,7 @@
 #include "config.h"
 #include "error.h"
 #include "items.h"
+#include "radioButtonCatalog.h"
 #include <string.h>
 
 #include "wp43s.h"

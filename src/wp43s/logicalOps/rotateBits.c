@@ -20,6 +20,7 @@
 
 #include "logicalOps/rotateBits.h"
 
+#include "config.h"
 #include "debug.h"
 #include "error.h"
 #include "flags.h"

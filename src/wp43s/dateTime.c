@@ -20,6 +20,7 @@
 
 #include "dateTime.h"
 
+#include "bufferize.h"
 #include "debug.h"
 #include "error.h"
 #include "flags.h"

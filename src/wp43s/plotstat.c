@@ -1270,7 +1270,6 @@ graph_axis();
     double    y = 0.0;
     int16_t   Intervals = numberIntervals; //increase resulution in beginning and end of graph, to get a better starting and ending point in y
     uint16_t  iterations = 0;
-    bool_t    onScreen = false;
 
     for (ix = (double)x_min; iterations < 2000 && x < x_max+(x_max-x_min)*0.5 && xN != SCREEN_WIDTH-1; iterations++) {       //Variable accuracy line plot
       
@@ -1300,7 +1299,6 @@ graph_axis();
 
         #define tol 4
         if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH-tol && yN>minN_y) {
-          onScreen = true;
           yn = yN;
           xn = xN;
           #if defined STATDEBUG_VERBOSE && defined PC_BUILD
@@ -1315,7 +1313,6 @@ graph_axis();
           }
         } 
         else {
-          onScreen = false;
           #if defined STATDEBUG && defined PC_BUILD
             printf("Not plotted line: (%u %u) ",xN,yN);
             if(!(xN < SCREEN_WIDTH_GRAPH ))  printf("x>>%u ",SCREEN_WIDTH_GRAPH); else

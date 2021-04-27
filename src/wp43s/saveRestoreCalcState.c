@@ -27,6 +27,8 @@
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
+#include "jm.h"
+#include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
@@ -245,6 +247,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
     save(&ix_count,                           sizeof(ix_count),                           BACKUP);
+    save(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
 
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
     save(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -474,6 +477,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);
       restore(&ix_count,                           sizeof(ix_count),                           BACKUP);
+      restore(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
 
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
       restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -535,6 +539,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
         else if(calcMode == CM_PLOT_STAT)             {}
+        else if(calcMode == CM_MIM)                   {mimRestore();}
         else if(calcMode == CM_LISTXY)                {}             //JM
         else if(calcMode == CM_GRAPH)                 {}             //JM
         else {
@@ -550,6 +555,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
         else if(calcMode == CM_PLOT_STAT)              calcModeNormalGui();
+        else if(calcMode == CM_MIM)                   {calcModeNormalGui(); mimRestore();}
         else if(calcMode == CM_LISTXY)                 calcModeNormalGui();             //JM
         else if(calcMode == CM_GRAPH)                  calcModeNormalGui();             //JM
         else {

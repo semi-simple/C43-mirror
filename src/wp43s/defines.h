@@ -20,6 +20,8 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+//??? #include "flags.h"
+//??? #include "defines.h"
 
 //*********************************
 // JM VARIOUS OPTIONS
@@ -149,8 +151,6 @@
   #define SCREEN_800x480 0
 #endif // RASPBERRY
 
-
- 
 
 #if __linux__ == 1
   #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
@@ -624,6 +624,7 @@
 #define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
+#define CM_MIM                                    12 // Matrix imput mode tbd reorder
 #define CM_GRAPH                                  97 //JM Display graph       //JM
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
 
@@ -643,9 +644,10 @@
 #define TM_FLAGR                               10004
 #define TM_FLAGW                               10005
 #define TM_STORCL                              10006
-#define TM_SHUFFLE                             10007
-#define TM_LABEL                               10008
-#define TM_CMP                                 10009 // TM_CMP must be the last in this list
+#define TM_M_DIM                               10007
+#define TM_SHUFFLE                             10008
+#define TM_LABEL                               10009
+#define TM_CMP                                 10010 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -703,6 +705,7 @@
 #define TI_CALCY                                  40
 #define TI_CALCX2                                 41
 #define TI_STATISTIC_LR                           42
+#define TI_SA                                     43
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -877,6 +880,8 @@
 #define CHECK_VALUE_SPECIAL                        4
 #define CHECK_VALUE_NAN                            5
 #define CHECK_VALUE_INFINITY                       6
+#define CHECK_VALUE_MATRIX                         7
+#define CHECK_VALUE_MATRIX_SQUARE                  8
 
 #define OPMOD_MULTIPLY                             0
 #define OPMOD_POWER                                1
@@ -951,6 +956,7 @@
 #define mod(n, d)                            (((n)%(d) + (d)) % (d))                                         // mod(n,d) = n - d*floor(n/d)  where floor(a) is the biggest integer <= a
 //#define modulo(n, d)                         ((n)%(d)<0 ? ((d)<0 ? (n)%(d) - (d) : (n)%(d) + (d)) : (n)%(d)) // modulo(n,d) = rmd(n,d) (+ |d| if rmd(n,d)<0)  thus the result is always >= 0
 #define modulo(n, d)                         ((n)%(d)<0 ? (n)%(d)+(d) : (n)%(d))                             // This version works only if d > 0
+#define nbrOfElements(x)                     (sizeof(x) / sizeof((x)[0]))                                    //dr
 #define COMPLEX_UNIT                         (getSystemFlag(FLAG_CPXj)   ? STD_j     : STD_i)
 #define RADIX34_MARK_CHAR                    (getSystemFlag(FLAG_DECIMP) ? '.'       : ',')
 #define RADIX34_MARK_STRING                  (getSystemFlag(FLAG_DECIMP) ? "."       : ",")
@@ -1041,17 +1047,16 @@
   #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 /* Turn off -Wunused-result for a specific function call */
-#define ignore_result(M) if(1==((int)M)){;}
+#define ignore_result(M) if(1==((uint64_t)M)){;}
 
 #ifdef DMCP_BUILD
-  #define TMP_STR_LENGTH       AUX_BUF_SIZE
+  #define TMP_STR_LENGTH       (5*512)  //dr temporary change to be abele to compile //AUX_BUF_SIZE
 #else // !DMCP_BUILD
   #define TMP_STR_LENGTH     3000 //2560 //JMMAX ORG:2560
 #endif // DMCP_BUILD
   #define WRITE_BUFFER_LEN       4096
   #define ERROR_MESSAGE_LENGTH    512 //JMMAX(325) 512          //JMMAX Temporarily reduced - ORG:512.
   #define DISPLAY_VALUE_LEN        80
-
 
 //************************
 //* Macros for debugging *

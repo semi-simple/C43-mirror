@@ -53,13 +53,13 @@
     #endif
 
     #include <dmcp.h>
-  #endif //DMCP_BUILD
+  #endif // DMCP_BUILD
 
   #include "decNumberWrappers.h"
   #include "mathematics/pcg_basic.h"
   #include "typeDefinitions.h"
 
-
+/*
   #include "assign.h"
   #include "ui/tam.h"
   #include "bufferize.h"
@@ -112,9 +112,7 @@
   #ifdef INLINE_TEST                      //vv dr
     #include "inlineTest.h"
   #endif                                  //^^
-
-
-#define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))        //dr vv
+*/
 
   // Variables for the simulator
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
@@ -148,6 +146,8 @@
   extern const font_t                   *fontForShortInteger;
   extern const font_t                   *cursorFont;
   extern const char                      digits[17];
+  extern real34Matrix_t                  openMatrixMIMPointer;
+  extern uint16_t                        matrixIndex;
   extern void                            (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
   extern void                            (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
   extern void                            (* const multiplication[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);

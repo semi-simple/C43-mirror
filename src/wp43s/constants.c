@@ -22,6 +22,7 @@
 #include "constants.h"
 
 #include "constantPointers.h"
+#include "radioButtonCatalog.h"
 #include "registers.h"
 #include "stack.h"
 

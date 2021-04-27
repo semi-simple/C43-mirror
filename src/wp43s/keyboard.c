@@ -24,10 +24,14 @@
 #include "charString.h"
 #include "constants.h"
 #include "debug.h"
+#include "display.h"
 #include "error.h"
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
+#include "matrix.h"
+#include "jm.h"
+#include "keyboardTweak.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
@@ -355,7 +359,7 @@ bool_t lastshiftG = false;
     #endif //PC_BUILD
 
     // Shift f pressed and JM REMOVED shift g not active
-    if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {    //JM Mode added
+    if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {    //JM Mode added
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -371,8 +375,8 @@ bool_t lastshiftG = false;
       return ITM_NOP;
     }
 
-    // Shift g pressed and JM REMOVED shift f not active
-    else if(key->primary == ITM_SHIFTg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {
+    // Shift g pressed and shift f not active
+    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -390,7 +394,7 @@ bool_t lastshiftG = false;
 
     // JM Shift f pressed  //JM shifts change f/g to a single function key toggle to match DM42 keyboard
     // JM Inserted new section and removed old f and g key processing sections
-    else if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_PEM || (calcMode == CM_PLOT_STAT) || calcMode == CM_GRAPH)) {   //JM shifts
+    else if(key->primary == KEY_fg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_PEM || (calcMode == CM_PLOT_STAT) || calcMode == CM_GRAPH)) {   //JM shifts
       Shft_timeouts = true;                         //JM SHIFT NEW
       fnTimerStart(TO_FG_LONG, TO_FG_LONG, JM_TO_FG_LONG);    //vv dr
       if(ShiftTimoutMode) {
@@ -433,7 +437,7 @@ bool_t lastshiftG = false;
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH  || calcMode == CM_LISTXY) {  //JM added modes
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -1025,6 +1029,11 @@ bool_t lowercaseselected;
               }                                                                                   //JM^^
               break;
 
+            case CM_MIM:
+              addItemToBuffer(item);
+              keyActionProcessed = true;
+              break;
+
             case CM_REGISTER_BROWSER:
               if(item == ITM_PERIOD) {
                 rbr1stDigit = true;
@@ -1306,6 +1315,10 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         }
         break;
 
+      case CM_MIM:
+        mimEnter(false);
+        break;
+
       case CM_NIM:
         closeNim();
 
@@ -1419,6 +1432,13 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
       case CM_NIM:
         addItemToNimBuffer(ITM_EXIT1);
+        break;
+
+      case CM_MIM:
+        mimEnter(true);
+        mimFinalize();
+        calcModeNormal();
+        popSoftmenu(); // close softmenu dedicated for the MIM
         break;
 
       case CM_PEM:
@@ -1591,6 +1611,10 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
       case CM_NIM:
         addItemToNimBuffer(ITM_BACKSPACE);
+        break;
+
+      case CM_MIM:
+        mimAddNumber(ITM_BACKSPACE);
         break;
 
       //case CM_ASM_OVER_NORMAL:

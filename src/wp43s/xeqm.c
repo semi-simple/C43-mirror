@@ -20,8 +20,25 @@
  * \file xeqm.c
  ***********************************************/
 
+#include "xeqm.h"
+
+#include "bufferize.h"
+#include "charString.h"
+#include "flags.h"
+#include "gui.h"
+#include "graphText.h"
 #include "items.h"
+#include "jm.h"
+#include "keyboard.h"
+#include "keyboardTweak.h"
+#include "registers.h"
+#include "screen.h"
+#include "softmenus.h"
+#include "stack.h"
+#include "statusBar.h"
+#include "textfiles.h"
 #include <string.h>
+
 #include "wp43s.h"
 
 #define commandnumberl NIM_BUFFER_LENGTH
@@ -1521,7 +1538,7 @@ void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGIST
 
     #ifndef TESTSUITE_BUILD
       stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
-      if(tt[0]!=0) export_string_to_filename(tmpString, overwrite, "PROGRAMS", tt);
+      if(tt[0]!=0) export_string_to_filename(tmpString, OVERWRITE, "PROGRAMS", tt);
     #endif
   }
 }

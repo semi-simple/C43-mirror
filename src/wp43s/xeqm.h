@@ -22,7 +22,11 @@
 #ifndef XEQM_H
 #define XEQM_H
 
-bool_t strcompare            ( char *in1, char *in2);
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+
+bool_t strcompare            (char *in1, char *in2);
 void fnXEQMENU               (uint16_t unusedButMandatoryParameter);
 void capture_sequence        (char *origin, uint16_t item);
 void XEQMENU_loadAllfromdisk (void);

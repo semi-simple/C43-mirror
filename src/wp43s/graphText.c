@@ -25,7 +25,16 @@
 
 //#define DISPLOADING
 
+#include "graphText.h"
+
+#include "charString.h"
+#include "math.h"
+#include "screen.h"
+#include "time.h"
+#include "timer.h"
+#include "xeqm.h"
 #include <string.h>
+
 #include "wp43s.h"
 
 char                 filename_csv[40]; //JMMAX                //JM_CSV Changed from 60 to 40 to save 20 bytes.
@@ -220,7 +229,7 @@ char line[100];               /* Line buffer */
     }
 
     /* Opens an existing file. If not exist, creates a new file. */
-    if(mode == append) fr = f_open(&fil, filedir, FA_OPEN_APPEND | FA_WRITE); else fr = f_open(&fil, filedir, FA_WRITE|FA_CREATE_ALWAYS);
+    if(mode == APPEND) fr = f_open(&fil, filedir, FA_OPEN_APPEND | FA_WRITE); else fr = f_open(&fil, filedir, FA_WRITE|FA_CREATE_ALWAYS);
     if (fr) {
       sprintf(line,"File open error ID002--> %d    \n",fr);       print_linestr(line,false);
       f_close(&fil);
@@ -229,7 +238,7 @@ char line[100];               /* Line buffer */
     }
 
     /* Seek to end of the file to append data */
-    if(mode == append) {
+    if(mode == APPEND) {
       fr = f_lseek(&fil, f_size(&fil));
       if (fr) {
         sprintf(line,"Seek error ID003--> %d    \n",fr);            print_linestr(line,false);
@@ -413,7 +422,7 @@ int16_t export_xy_to_file(graphtype x, graphtype y){
   char line[100];               /* Line buffer */
   create_filename(".STAT.TSV");
   sprintf(line,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
-  if(export_append_string_to_file(line, append, filename_csv) != 0) {
+  if(export_append_string_to_file(line, APPEND, filename_csv) != 0) {
     //ERROR ALREADY ANNOUNCED
     return 1;
   }
@@ -493,7 +502,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
   strcat(dirfile,"/");
   strcat(dirfile,filename);
     
-  if(mode == append) outfile = fopen(dirfile, "ab"); else outfile = fopen(dirfile, "wb"); 
+  if(mode == APPEND) outfile = fopen(dirfile, "ab"); else outfile = fopen(dirfile, "wb"); 
   if (outfile == NULL) {
     printf("Cannot open ID008: %s %s\n",dirfile,line1);
     return 1;

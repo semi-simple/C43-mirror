@@ -2,6 +2,9 @@
 /build
 /dep/gmp-6.2.0
 /wp43s
+/testSuite
+/wp43s.exe
+/testSuite.exe
 backup.bin
 wp43s.sav
 
@@ -80,11 +83,7 @@ bb.out.*
 
 
 ### vscode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+/.vscode
 *.code-workspace
 
 ### Windows ###

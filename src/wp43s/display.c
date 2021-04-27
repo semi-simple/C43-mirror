@@ -30,10 +30,14 @@
 #include "flags.h"
 #include "fonts.h"
 #include "fractions.h"
+#include "items.h"
+#include "jm.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
+#include "radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
+#include "screen.h"
 #include <string.h>
 
 #include "wp43s.h"
@@ -1985,7 +1989,10 @@ void timeToDisplayString(calcRegister_t regist, char *displayString, bool_t igno
   }
 }
 
-
+void real34MatrixToDisplayString(calcRegister_t regist, char *displayString) {
+  dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+  sprintf(displayString, "[%" PRIu16 STD_CROSS "%" PRIu16" Matrix]", dblock->matrixRows, dblock->matrixColumns);
+}
 
 void fnShow(uint16_t unusedButMandatoryParameter) {
 #ifndef SAVE_SPACE_DM42

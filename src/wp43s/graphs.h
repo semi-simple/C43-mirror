@@ -25,6 +25,10 @@
 #ifndef GRAPHS_H
 #define GRAPHS_H
 
+#include "decNumberWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+
 //Graph functions
 void    graph_reset        (void);
 void    fnClGrf            (uint16_t unusedButMandatoryParameter);

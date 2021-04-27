@@ -20,6 +20,19 @@
  * \file keyboardTweak.c
  ***********************************************/
 
+#include "keyboardTweak.h"
+
+#include "charString.h"
+#include "flags.h"
+#include "fonts.h"
+#include "gui.h"
+#include "items.h"
+#include "jm.h"
+#include "keyboard.h"
+#include "screen.h"
+#include "stack.h"
+#include "statusBar.h"
+#include "softmenus.h"
 
 #include "wp43s.h"
 

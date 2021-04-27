@@ -21,8 +21,8 @@
 #define GUI_H
 
 #include "defines.h"
-#include <stdint.h>
 #include "typeDefinitions.h"
+#include <stdint.h>
 
 #ifndef TESTSUITE_BUILD
   void btn_Clicked_Gen(bool_t shF, bool_t shG, char *st);

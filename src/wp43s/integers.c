@@ -27,6 +27,7 @@
 #include "flags.h"
 #include "fonts.h"
 #include "mathematics/wp34s.h"
+#include "radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

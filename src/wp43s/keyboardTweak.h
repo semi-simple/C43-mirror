@@ -21,6 +21,16 @@
  * \file keyboardTweak.h
  ***********************************************/
 
+#ifndef KEYBOARDTWEAK_H
+#define KEYBOARDTWEAK_H
+
+#include "defines.h"
+#include "typeDefinitions.h"
+#include <stdint.h>
+#ifdef PC_BUILD
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
+#endif // PC_BUILD
 
 //#ifdef DMCP_BUILD
 //extern uint32_t nextTimerRefresh;
@@ -29,9 +39,6 @@
 void     showAlphaModeonGui   (void);
 void     resetShiftState      (void);
 void     showShiftState       (void);
-
-
-void     processKeyAction    (int16_t item); //JM
 
 #ifndef TESTSUITE_BUILD
 void     show_f_jm           (void);
@@ -138,4 +145,4 @@ typedef struct {
 
 void fnT_ARROW(uint16_t command);
 
-
+#endif // KEYBOARDTWEAK_H

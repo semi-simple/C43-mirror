@@ -27,6 +27,7 @@
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
+#include "jm.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"

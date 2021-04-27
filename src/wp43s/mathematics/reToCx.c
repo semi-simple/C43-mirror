@@ -29,6 +29,7 @@
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toRect.h"
 #include "mathematics/wp34s.h"
+#include "radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "stack.h"

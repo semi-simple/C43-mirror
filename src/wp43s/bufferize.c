@@ -33,9 +33,12 @@
 #include "fonts.h"
 #include "gui.h"
 #include "items.h"
+#include "jm.h"
+#include "keyboardTweak.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toRect.h"
 #include "mathematics/wp34s.h"
+#include "radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "saveRestoreCalcState.h"
@@ -48,6 +51,7 @@
 #include <string.h>
 
 #include "wp43s.h"
+
 
 #ifndef TESTSUITE_BUILD
   void fnAim(uint16_t unusedButMandatoryParameter) {

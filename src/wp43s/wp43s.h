@@ -53,13 +53,13 @@
     #endif
 
     #include <dmcp.h>
-  #endif //DMCP_BUILD
+  #endif // DMCP_BUILD
 
   #include "decNumberWrappers.h"
   #include "mathematics/pcg_basic.h"
   #include "typeDefinitions.h"
 
-
+/*
   #include "assign.h"
   #include "ui/tam.h"
   #include "bufferize.h"
@@ -112,9 +112,7 @@
   #ifdef INLINE_TEST                      //vv dr
     #include "inlineTest.h"
   #endif                                  //^^
-
-
-#define nbrOfElements(x)        (sizeof(x) / sizeof((x)[0]))        //dr vv
+*/
 
   // Variables for the simulator
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)

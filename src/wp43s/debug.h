@@ -16,7 +16,6 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include "defines.h"
 #include "decNumberWrappers.h"
 #include "typeDefinitions.h"
 #include <stdint.h>

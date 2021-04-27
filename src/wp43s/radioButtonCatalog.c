@@ -21,7 +21,16 @@
  * \file radioButtonCatalog.c
  ***********************************************/
 
+#include "radioButtonCatalog.h"
+
+#include "curveFitting.h"
+#include "fonts.h"
+#include "items.h"
+#include "jm.h"
+#include "plotstat.h"
+#include "screen.h"
 #include <string.h>
+
 #include "wp43s.h"
 
 

@@ -30,10 +30,14 @@
 #include "flags.h"
 #include "fonts.h"
 #include "fractions.h"
+#include "items.h"
+#include "jm.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
+#include "radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
+#include "screen.h"
 #include <string.h>
 
 #include "wp43s.h"

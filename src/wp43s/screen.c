@@ -31,8 +31,12 @@
 #include "error.h"
 #include "flags.h"
 #include "fonts.h"
+#include "graphs.h"
+#include "graphText.h"
 #include "items.h"
+#include "jm.h"
 #include "keyboard.h"
+#include "keyboardTweak.h"
 #include "mathematics/comparisonReals.h"
 #include "memory.h"
 #include "plotstat.h"
@@ -40,6 +44,7 @@
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "softmenus.h"
+#include "stack.h"
 #include "statusBar.h"
 #include "timer.h"
 #include "version.h"
@@ -56,7 +61,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
   /* Names of day of week */
   TO_QSPI static const char *nameOfWday_en[8] = {"invalid day of week",                                   "Monday",            "Tuesday",                     "Wednesday",               "Thursday",           "Friday",             "Saturday",             "Sunday"};
   /*
-  TO_QSPI static const char *nameOfWday_de[8] = {ung" STD_u_DIARESIS "ltiger Wochentag",                  "Montag",            "Dienstag",                    "Mittwoch",                "Donnerstag",         "Freitag",            "Samstag",              "Sonntag"};
+  TO_QSPI static const char *nameOfWday_de[8] = {"ung" STD_u_DIARESIS "ltiger Wochentag",                 "Montag",            "Dienstag",                    "Mittwoch",                "Donnerstag",         "Freitag",            "Samstag",              "Sonntag"};
   TO_QSPI static const char *nameOfWday_fr[8] = {"jour de la semaine invalide",                           "lundi",             "mardi",                       "mercredi",                "jeudi",              "vendredi",           "samedi",               "dimanche"};
   TO_QSPI static const char *nameOfWday_es[8] = {"d" STD_i_ACUTE "a inv" STD_a_ACUTE "lido de la semana", "lunes",             "martes",                      "mi" STD_e_ACUTE "rcoles", "jueves",             "viernes",            "s" STD_a_ACUTE "bado", "domingo"};
   TO_QSPI static const char *nameOfWday_it[8] = {"giorno della settimana non valido",                     "luned" STD_i_GRAVE, "marted" STD_i_GRAVE,          "mercoled" STD_i_GRAVE,    "gioved" STD_i_GRAVE, "venerd" STD_i_GRAVE, "sabato",               "domenica"};

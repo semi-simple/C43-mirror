@@ -18,6 +18,8 @@
  * \file inlineTest.h
  ***********************************************/
 
+#ifndef INLINETEST_H
+#define INLINETEST_H
  
 #ifdef INLINE_TEST
 extern bool_t   testEnabled;
@@ -34,3 +36,5 @@ void fnSetInlineTestXToBs     (uint16_t unusedButMandatoryParameter);
 void fnSysFreeMem             (uint16_t unusedButMandatoryParameter);
 bool_t fnTestBitIsSet         (uint8_t bit);
 #endif
+
+#endif // INLINETEST_H

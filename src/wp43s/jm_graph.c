@@ -49,7 +49,22 @@
 //ITM_STO
 //ITM_RCL
 
+#include "jm_graph.h"
+
+#include "addons.h"
+#include "mathematics/comparisonReals.h"
 #include "constantPointers.h"
+#include "graphs.h"
+#include "graphText.h"
+#include "items.h"
+#include "jm.h"
+#include "registers.h"
+#include "screen.h"
+#include "stack.h"
+#include "stats.h"
+#include "statusBar.h"
+#include "store.h"
+#include "xeqm.h"
 
 #include "wp43s.h"
 

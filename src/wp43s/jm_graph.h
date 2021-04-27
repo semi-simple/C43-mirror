@@ -22,4 +22,11 @@
 
 //graph.h
 
+#ifndef JM_GRAPH_H
+#define JM_GRAPH_H
+
+#include <stdint.h>
+
 void fnGraph          (uint16_t func);
+
+#endif // JM_GRAPH_H

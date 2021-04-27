@@ -25,6 +25,7 @@
 #include "error.h"
 #include "integers.h"
 #include "items.h"
+#include "jm.h"
 #include "mathematics/addition.h"
 #include "registers.h"
 #include "registerValueConversions.h"

@@ -35,9 +35,13 @@
 #include "flags.h"
 #include "fonts.h"
 #include "fractions.h"
+#include "graphs.h"
 #include "gui.h"
 #include "integers.h"
+#include "jm.h"
+#include "jm_graph.h"
 #include "keyboard.h"
+#include "keyboardTweak.h"
 #include "logicalOps/logicalOps.h"
 #include "mathematics/mathematics.h"
 #include "plotstat.h"
@@ -53,6 +57,7 @@
 #include "stringFuncs.h"
 #include "timer.h"
 #include "ui/tam.h"
+#include "xeqm.h"
 
 #include "wp43s.h"
 

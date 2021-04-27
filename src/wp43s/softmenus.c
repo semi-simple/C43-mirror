@@ -31,9 +31,14 @@
 #include "fonts.h"
 #include "gui.h"
 #include "items.h"
+#include "jm.h"
+#include "keyboardTweak.h"
+#include "plotstat.h"
+#include "radioButtonCatalog.h"
 #include "registers.h"
 #include "screen.h"
 #include "sort.h"
+#include "xeqm.h"
 #include <string.h>
 #include <stdlib.h>
 

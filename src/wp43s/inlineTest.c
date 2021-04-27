@@ -18,6 +18,10 @@
  * \file inlineTest.c
  ***********************************************/
 
+#include "inlineTest.h"
+
+#include "radioButtonCatalog.h"
+
 #include "wp43s.h"
 
 

@@ -22,7 +22,9 @@
 
 #include "charString.h"
 #include "error.h"
+#include "jm.h"
 #include "mathematics/compare.h"
+#include "plotstat.h"
 #include "registers.h"
 
 #include "wp43s.h"

@@ -5,5 +5,4 @@ ttf2RasterFonts = executable(
 rasterFontsData_c = custom_target(
   'rasterFontsData.c',
   output  : 'rasterFontsData.c',
-  input   : '../../res/fonts',
-  command : [ttf2RasterFonts, '@INPUT@', '@OUTPUT@'])
+  command : [ttf2RasterFonts, '@CURRENT_SOURCE_DIR@/../../res/fonts', '@OUTPUT@'])

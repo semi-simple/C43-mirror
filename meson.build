@@ -4,8 +4,11 @@ add_global_arguments('-DOSX', language : 'c')
 add_global_arguments('-DPC_BUILD', language : 'c')
 add_global_arguments('-DOS64BIT', language : 'c')
 
-ft_dep = dependency('freetype2')
+cc = meson.get_compiler('c')
+
+ft_dep  = dependency('freetype2')
 gtk_dep = dependency('gtk+-3.0')
+m_dep   = cc.find_library('m', required : false)
 
 conf_data = configuration_data()
 conf_data.set('CI_COMMIT_TAG', '0.1.20')

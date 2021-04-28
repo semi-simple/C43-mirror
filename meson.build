@@ -15,6 +15,7 @@ conf_data.set('CI_COMMIT_TAG', '0.1.20')
 conf_data.set('TODAY', '2021.05.01')
 conf_data.set('GIT_SHA', 'abcdef88')
 
+subdir('docs/code')
 subdir('dep')
 subdir('src/wp43s')
 subdir('src/ttf2RasterFonts')

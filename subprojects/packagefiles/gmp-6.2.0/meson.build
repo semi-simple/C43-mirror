@@ -4,6 +4,23 @@ project('gmp', 'c',
   license       : ['LGPL-3.0-only', 'GPL-2.0-only'],
 )
 
+env = environment()
+env.append('CFLAGS',
+  '-nostartfiles',
+  '-Os',
+  '-funwind-tables',
+  '-fno-strict-aliasing',
+  '-fstack-protector',
+  '-finline-limit=64',
+  '-Wa,--noexecstack',
+  separator : ' ')
+env.append('LDFLAGS',
+  '-Wl,--fix-cortex-a8',
+  '-Wl,-z,noexecstack',
+  '-Wl,-z,relro',
+  '-Wl,-z,now',
+  separator : ' ')
+
 mod = import('unstable_external_project')
 
 p = mod.add_project(
@@ -18,6 +35,7 @@ p = mod.add_project(
     '--disable-assembly',
     '--disable-shared',
     '--disable-fft'],
+  env : env
 )
 
 arm_gmp_dep = p.dependency('gmp')

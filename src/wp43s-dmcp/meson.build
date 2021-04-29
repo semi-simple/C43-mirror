@@ -7,7 +7,9 @@ executable(
                         [rasterFontsData_c, softmenuCatalogs_h,
                           constantPointers_ch, version_h] +
                         dmcp_files,
-  c_args              : ['-D__weak="__attribute__((weak))"', '-D__packed="__attribute__((__packed__))"'],
+  c_args              : ['-D__weak="__attribute__((weak))"',
+                          '-D__packed="__attribute__((__packed__))"',
+                          '-Wno-unused-parameter'],
   link_args           : ['-T' + meson.current_source_dir() + '/stm32_program.ld',
                           '--specs=nosys.specs',
                           '-Wl,-Map=' + meson.current_build_dir() + '/WP43S.map,--cref',

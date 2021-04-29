@@ -2364,5 +2364,5 @@ int processTests(const char *listPath) {
 
   free(listPathDup);
 
-  return numTestsTotal > 0;
+  return failedTests > 0;
 }

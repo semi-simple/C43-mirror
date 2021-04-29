@@ -1028,22 +1028,8 @@
         const uint16_t rows = matrix.header.matrixRows;
         const uint16_t cols = matrix.header.matrixColumns;
         bool_t smallFont = ((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3));
-        for(int i = 0; i < rows; i++) {
-          for(int j = 0; j< cols; j++) {
-            bool_t neg = real34IsNegative(&matrix.matrixElements[i*cols+j]);
-            tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
-            real34SetPositiveSign(&matrix.matrixElements[i*cols+j]);
-            real34ToDisplayString(&matrix.matrixElements[i*cols+j], amNone, tmpString, &numericFont, MATRIX_LINE_WIDTH_LARGE - 20, 4, true, STD_SPACE_4_PER_EM);
-            if(neg) real34SetNegativeSign(&matrix.matrixElements[i*cols+j]);
-            if(stringWidth(tmpString, &numericFont, true, true) + 1 > MATRIX_LINE_WIDTH_LARGE - 20) {
-              smallFont = true;
-              goto realMatFontDetermined;
-            }
-            if(j == 3) break;
-          }
-          if(i == 4) break;
-        }
-        realMatFontDetermined:
+        int16_t dummyVal[25] = {};
+        if(getRealMatrixColumnWidths(&matrix, &numericFont, dummyVal, dummyVal + 4, dummyVal + 24) > (MATRIX_LINE_WIDTH_LARGE * 3 - 20)) smallFont = true;
         if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
         if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
         if(rows >= 4 && cols > 1) displayStack = 2;
@@ -1736,7 +1722,7 @@
       }
     }
 
-    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || calcMode == CM_MIM) {
       displayStack = origDisplayStack;
     }
   }

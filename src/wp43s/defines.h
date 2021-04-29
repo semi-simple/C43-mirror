@@ -32,7 +32,7 @@
 #define LIBGMP                           1 // Use GMP for the big integers
 #define MMHG_PA_133_3224                 1 // mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
-#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328 // 1001 decimal digits: 3328 â‰? log2(10^1001)
+#define MAX_LONG_INTEGER_SIZE_IN_BITS 3328 // 1001 decimal digits: 3328 â‰ƒ log2(10^1001)
 #define SHORT_INTEGER_SIZE               2 // 2 blocks = 8 bytes = 64 bits
 
 #define IBM_DECIMAL                      1 // Use the IBM decNumber library for the floating point data type
@@ -545,6 +545,7 @@
 #define TI_CALCY                                  40
 #define TI_CALCX2                                 41
 #define TI_STATISTIC_LR                           42
+#define TI_SA                                     43
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -600,7 +601,7 @@
 #define LM_SUMS                                    4
 #define LM_SYSTEM_STATE                            5
 
-// Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2Ã?(7Ã?60 - 4 - 6Ã?16) = 640 bytes
+// Statistical sums TODO: optimize size of SIGMA_N, _X, _Y, _XMIN, _XMAX, _YMIN, and _YMAX. Thus, saving 2Ã—(7Ã—60 - 4 - 6Ã—16) = 640 bytes
 #define SUM_X                                      1
 #define SUM_Y                                      2
 #define SUM_X2                                     3

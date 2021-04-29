@@ -616,9 +616,6 @@
 		<Unit filename="src/testSuite/mant.txt">
 			<Option target="testSuite" />
 		</Unit>
-		<Unit filename="src/testSuite/matrix.txt">
-			<Option target="testSuite" />
-		</Unit>
 		<Unit filename="src/testSuite/max.txt">
 			<Option target="testSuite" />
 		</Unit>

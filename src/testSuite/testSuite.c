@@ -2362,5 +2362,5 @@ int processTests(void) {
   printf("* %6d TEST%c FAILED              *\n", failedTests, failedTests == 1 ? ' ' : 'S');
   printf("************************************\n");
 
-  return numTestsTotal > 0;
+  return failedTests > 0;
 }

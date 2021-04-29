@@ -357,6 +357,7 @@ void fnSigma(uint16_t plusMinus) {
 
     temporaryInformation = TI_STATISTIC_SUMS;
   }
+#ifndef TESTSUITE_BUILD
   else if(getRegisterDataType(REGISTER_X) == dtReal34Matrix && plusMinus == 1) {
     real34Matrix_t matrix;
     linkToRealMatrixRegister(REGISTER_X, &matrix);
@@ -388,6 +389,7 @@ void fnSigma(uint16_t plusMinus) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
+#endif // TESTSUITE_BUILD
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

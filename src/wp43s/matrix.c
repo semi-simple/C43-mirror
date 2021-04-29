@@ -1232,7 +1232,16 @@ void mimEnter(bool_t commit) {
   int16_t col = getJRegisterAsInt(true);
 
   if(aimBuffer[0] != 0) {
-    stringToReal34(aimBuffer, &openMatrixMIMPointer.matrixElements[row * cols + col]);
+    real34_t *real34Ptr;
+
+    real34Ptr = &openMatrixMIMPointer.matrixElements[row * cols + col];
+
+    if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
+      closeNimWithFraction(real34Ptr);
+    }
+    else {
+      stringToReal34(aimBuffer, real34Ptr);
+    }
 
     aimBuffer[0] = 0;
     nimBufferDisplay[0] = 0;
@@ -1268,9 +1277,6 @@ void mimAddNumber(int16_t item) {
         cursorEnabled = true;
         cursorFont = &numericFont;
         lastIntegerBase = 0;
-      }
-      else if(nimNumberPart == NP_REAL_FLOAT_PART) {
-        return; // fractional element is unsupported
       }
       break;
 

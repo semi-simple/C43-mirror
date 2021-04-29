@@ -189,14 +189,7 @@ generateCatalogs_src = files(
   'fonts.c',
   'items.c',
   'sort.c')
-wp43s_inc = include_directories(
-  '.',
-  'browsers',
-  'distributions',
-  'logicalOps',
-  'mathematics',
-  'programming',
-  'ui')
+wp43s_inc = include_directories('.')
 
 version_h = configure_file(
   input         : 'version.h.in',

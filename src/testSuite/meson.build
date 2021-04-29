@@ -5,7 +5,8 @@ testSuite = executable(
                           constantPointers_ch],
   c_args              : '-DTESTSUITE_BUILD',
   include_directories : [decNumber_inc, wp43s_inc],
-  dependencies        : [gtk_dep, gmp_dep, m_dep])
+  dependencies        : [gtk_dep, gmp_dep, m_dep],
+  native              : true)
 test(
   'testSuite',
   testSuite,

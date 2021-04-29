@@ -1,7 +1,8 @@
 ttf2RasterFonts = executable(
   'ttf2RasterFonts',
   sources      : files('ttf2RasterFonts.c'),
-  dependencies : ft_dep)
+  dependencies : ft_dep,
+  native       : true)
 rasterFontsData_c = custom_target(
   'rasterFontsData.c',
   output  : 'rasterFontsData.c',

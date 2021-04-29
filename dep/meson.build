@@ -7,4 +7,4 @@ decNumber_src = files(
   'decNumberICU/decQuad.c')
 decNumber_inc = include_directories('decNumberICU')
 
-gmp_dep = dependency('gmp')
+gmp_dep = dependency('gmp', native : true)

@@ -1,13 +1,35 @@
-project('wp43s', 'c')
+project('wp43s', 'c',
+  meson_version   : '>=0.56.0',
+  license         : 'GPL-3.0-only',
+  default_options : ['warning_level=2']
+)
 
-add_global_arguments('-DOSX', language : 'c')
-add_global_arguments('-DPC_BUILD', language : 'c')
-add_global_arguments('-DOS64BIT', language : 'c')
+# Simulator and generate tools arguments
+add_project_arguments('-DPC_BUILD',   native : true, language : 'c')
+if build_machine.system() == 'windows'
+  add_project_arguments('-DWIN32',    native : true, language : 'c')
+elif build_machine.system() == 'darwin'
+  add_project_arguments('-DOSX',      native : true, language : 'c')
+elif build_machine.system() == 'linux'
+  add_project_arguments('-DLINUX',    native : true, language : 'c')
+else
+  error('Unsupported platform')
+endif
+if build_machine.cpu_family() in ['aarch64', 'x86_64']
+  add_project_arguments('-DOS64BIT',    native : true, language : 'c')
+elif build_machine.cpu_family() in ['x86']
+  add_project_arguments('-DOS32BIT',    native : true, language : 'c')
+else
+  error('Unsupported platform')
+endif
+
+# DMCP arguments
+add_project_arguments('-DDMCP_BUILD', native : false, language : 'c')
+add_project_arguments('-DOS32BIT',    native : false, language : 'c')
 
 cc = meson.get_compiler('c')
-
-ft_dep  = dependency('freetype2')
-gtk_dep = dependency('gtk+-3.0')
+ft_dep  = dependency('freetype2', native : true)
+gtk_dep = dependency('gtk+-3.0',  native : true)
 m_dep   = cc.find_library('m', required : false)
 
 conf_data = configuration_data()
@@ -24,3 +46,10 @@ subdir('src/generateCatalogs')
 subdir('src/generateTestPgms')
 subdir('src/testSuite')
 subdir('src/wp43s-gtk')
+
+# Only attempt to include the DMCP target if we have set-up the cross compiler
+if meson.is_cross_build()
+  subproject('gmp-6.2.0')
+  arm_gmp_dep = dependency('arm-gmp-6.2.0', native : false)
+  subdir('src/wp43s-dmcp')
+endif

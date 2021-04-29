@@ -7,4 +7,6 @@ if sphinx.found() and doxygen.found() and breathe.found()
     'docs',
     output  : ['index.html'],
     command : [sphinx, '-M', 'html', meson.current_source_dir(), meson.current_build_dir()])
+else
+  message('Sphinx, Doxygen, or Breathe not found so cannot produce code documentation')
 endif

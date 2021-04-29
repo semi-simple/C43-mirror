@@ -46,7 +46,7 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-real34Matrix_t        openMatrixMIMPointer;
+any34Matrix_t         openMatrixMIMPointer;
 bool_t                matEditMode;
 uint16_t              scrollRow;
 uint16_t              scrollColumn;
@@ -351,8 +351,13 @@ void fnOldMatrix(uint16_t unusedParamButMandatory) {
     hideCursor();
     cursorEnabled = false;
 
-    if(openMatrixMIMPointer.matrixElements) realMatrixFree(&openMatrixMIMPointer);
-    convertReal34MatrixRegisterToReal34Matrix(matrixIndex, &openMatrixMIMPointer);
+    if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+      if(openMatrixMIMPointer.realMatrix.matrixElements) realMatrixFree(&openMatrixMIMPointer.realMatrix);
+      convertReal34MatrixRegisterToReal34Matrix(matrixIndex, &openMatrixMIMPointer.realMatrix);
+    }
+    else {
+      // TO BE CODED
+    }
   }
   else {
     displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -414,7 +419,12 @@ void fnGoToColumn(uint16_t col) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
+      if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+        convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer.realMatrix, matrixIndex);
+      }
+      else {
+        // TO BE CODED
+      }
       setIRegisterAsInt(false, tmpRow);
       setJRegisterAsInt(false, col);
     }
@@ -486,7 +496,12 @@ void fnInsRow(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   if(calcMode == CM_MIM) {
     mimEnter(false);
-    insRowRealMatrix(&openMatrixMIMPointer, getIRegisterAsInt(true));
+    if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+      insRowRealMatrix(&openMatrixMIMPointer.realMatrix, getIRegisterAsInt(true));
+    }
+    else {
+      // TO BE CODED
+    }
     mimEnter(true);
   }
   else {
@@ -511,8 +526,14 @@ void fnDelRow(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   if(calcMode == CM_MIM) {
     mimEnter(false);
-    if(openMatrixMIMPointer.header.matrixRows > 1)
-      delRowRealMatrix(&openMatrixMIMPointer, getIRegisterAsInt(true));
+    if(openMatrixMIMPointer.header.matrixRows > 1) {
+      if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+        delRowRealMatrix(&openMatrixMIMPointer.realMatrix, getIRegisterAsInt(true));
+      }
+      else {
+        // TO BE CODED
+      }
+    }
     mimEnter(true);
   }
   else {
@@ -1180,8 +1201,13 @@ void showMatrixEditor() {
   }
 
   if(wrapIJ(colVector ? cols : rows, colVector ? 1 : cols)) {
-    insRowRealMatrix(&openMatrixMIMPointer, rows);
-    convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
+    if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+      insRowRealMatrix(&openMatrixMIMPointer.realMatrix, rows);
+      convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer.realMatrix, matrixIndex);
+    }
+    else {
+      // TO BE CODED
+    }
   }
 
   int16_t matSelRow = colVector ? getJRegisterAsInt(true) : getIRegisterAsInt(true);
@@ -1213,12 +1239,19 @@ void showMatrixEditor() {
     scrollRow = matSelRow - 3;
   }
 
-  showRealMatrix(&openMatrixMIMPointer);
+  if(getRegisterDataType(matrixIndex) == dtReal34Matrix)
+    showRealMatrix(&openMatrixMIMPointer.realMatrix);
+  //else
+  //  TO BE CODED
 
   sprintf(tmpString, "%" PRIi16";%" PRIi16"= %s", colVector ? matSelCol+1 : matSelRow+1, colVector ? 1 : matSelCol+1, nimBufferDisplay);
   width = stringWidth(tmpString, &numericFont, true, true) + 1;
   if(aimBuffer[0] == 0) {
-    real34ToDisplayString(&openMatrixMIMPointer.matrixElements[matSelRow*cols+matSelCol], amNone, &tmpString[strlen(tmpString)], &numericFont, SCREEN_WIDTH - width, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_4_PER_EM);
+    if(getRegisterDataType(matrixIndex) == dtReal34Matrix)
+      real34ToDisplayString(&openMatrixMIMPointer.realMatrix.matrixElements[matSelRow*cols+matSelCol], amNone, &tmpString[strlen(tmpString)], &numericFont, SCREEN_WIDTH - width, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_4_PER_EM);
+  //else
+  //  TO BE CODED
+
     showString(tmpString, &numericFont, 0, Y_POSITION_OF_NIM_LINE, vmNormal, true, false);
   }
   else {
@@ -1234,13 +1267,18 @@ void mimEnter(bool_t commit) {
   if(aimBuffer[0] != 0) {
     real34_t *real34Ptr;
 
-    real34Ptr = &openMatrixMIMPointer.matrixElements[row * cols + col];
+    if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+      real34Ptr = &openMatrixMIMPointer.realMatrix.matrixElements[row * cols + col];
 
-    if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
-      closeNimWithFraction(real34Ptr);
+      if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
+        closeNimWithFraction(real34Ptr);
+      }
+      else {
+        stringToReal34(aimBuffer, real34Ptr);
+      }
     }
     else {
-      stringToReal34(aimBuffer, real34Ptr);
+      // TO BE CODED
     }
 
     aimBuffer[0] = 0;
@@ -1250,7 +1288,12 @@ void mimEnter(bool_t commit) {
 
     setSystemFlag(FLAG_ASLIFT);
   }
-  if(commit) convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer, matrixIndex);
+  if(commit) {
+    if(getRegisterDataType(matrixIndex) == dtReal34Matrix)
+      convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer.realMatrix, matrixIndex);
+    //else
+    // TO BE CODED
+  }
 }
 
 void mimAddNumber(int16_t item) {
@@ -1306,7 +1349,12 @@ void mimAddNumber(int16_t item) {
         const int16_t row = getIRegisterAsInt(true);
         const int16_t col = getJRegisterAsInt(true);
 
-        real34Zero(&openMatrixMIMPointer.matrixElements[row * cols + col]);
+        if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+          real34Zero(&openMatrixMIMPointer.realMatrix.matrixElements[row * cols + col]);
+        }
+        else {
+          // TO BE CODED
+        }
         setSystemFlag(FLAG_ASLIFT);
         return;
       }
@@ -1323,7 +1371,12 @@ void mimAddNumber(int16_t item) {
         const int16_t row = getIRegisterAsInt(true);
         const int16_t col = getJRegisterAsInt(true);
 
-        real34ChangeSign(&openMatrixMIMPointer.matrixElements[row * cols + col]);
+        if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+          real34ChangeSign(&openMatrixMIMPointer.realMatrix.matrixElements[row * cols + col]);
+        }
+        else {
+          // TO BE CODED
+        }
         setSystemFlag(FLAG_ASLIFT);
         return;
       }
@@ -1337,8 +1390,12 @@ void mimAddNumber(int16_t item) {
 }
 
 void mimFinalize(void) {
-  if(openMatrixMIMPointer.matrixElements) {
-    realMatrixFree(&openMatrixMIMPointer);
+  if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+    if(openMatrixMIMPointer.realMatrix.matrixElements)
+      realMatrixFree(&openMatrixMIMPointer.realMatrix);
+  }
+  else {
+    // TO BE CODED
   }
   matrixIndex = INVALID_VARIABLE;
 }
@@ -1369,7 +1426,7 @@ void showRealMatrix(const real34Matrix_t *matrix) {
   int16_t fontHeight = NUMERIC_FONT_HEIGHT;
   int16_t maxWidth = MATRIX_LINE_WIDTH_LARGE * 3 - 20;
   int16_t colWidth[4] = {}, rPadWidth[20] = {};
-  const bool_t forEditor = matrix == &openMatrixMIMPointer;
+  const bool_t forEditor = matrix == &openMatrixMIMPointer.realMatrix;
   const uint16_t sRow = forEditor ? scrollRow : 0;
   const uint16_t sCol = forEditor ? scrollColumn : 0;
   const uint16_t tmpDisplayFormat = displayFormat;
@@ -1476,7 +1533,7 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
   const int cols = matrix->header.matrixColumns;
   const int maxCols = cols > 4 ? 4 : cols;
   const int maxRows = rows > 5 ? 5 : rows;
-  const bool_t forEditor = matrix == &openMatrixMIMPointer;
+  const bool_t forEditor = matrix == &openMatrixMIMPointer.realMatrix;
   const uint16_t sRow = forEditor ? scrollRow : 0;
   const uint16_t sCol = forEditor ? scrollColumn : 0;
   const int16_t maxWidth = (font == &numericFont) ? (MATRIX_LINE_WIDTH_LARGE * 3 - 20) : (MATRIX_LINE_WIDTH_SMALL * 4 - 20);
@@ -1549,9 +1606,18 @@ void storeMatrixToXRegister(real34Matrix_t *matrix) {
 */
 
 void getMatrixFromRegister(calcRegister_t regist) {
-  real34Matrix_t matrix;
+  if(getRegisterDataType(regist) == dtReal34Matrix) {
+    real34Matrix_t matrix;
 
-  if (getRegisterDataType(regist) != dtReal34Matrix) {
+    if(openMatrixMIMPointer.realMatrix.matrixElements) realMatrixFree(&openMatrixMIMPointer.realMatrix);
+    convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
+
+    openMatrixMIMPointer.realMatrix = matrix;
+  }
+  else if(getRegisterDataType(regist) == dtComplex34Matrix) {
+    // TO BE CODED
+  }
+  else {
     #ifdef PC_BUILD
     sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(regist));
     moreInfoOnError("In function getMatrixFromRegister:", errorMessage, "is not dataType dtRealMatrix.", "");
@@ -1560,13 +1626,6 @@ void getMatrixFromRegister(calcRegister_t regist) {
     return;
   }
 
-  if(openMatrixMIMPointer.matrixElements) realMatrixFree(&openMatrixMIMPointer);
-  convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
-
-
-  //NOT WORKING//
-  openMatrixMIMPointer = matrix;
-  //END NOT WORKING//
 }
 
 //Row of Matrix

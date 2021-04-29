@@ -91,7 +91,7 @@
   extern const font_t                   *fontForShortInteger;
   extern const font_t                   *cursorFont;
   extern const char                      digits[17];
-  extern real34Matrix_t                  openMatrixMIMPointer;
+  extern any34Matrix_t                   openMatrixMIMPointer;
   extern uint16_t                        matrixIndex;
   extern void                            (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
   extern void                            (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);

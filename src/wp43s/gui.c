@@ -1402,8 +1402,12 @@
     shiftF = false;
     shiftG = false;
 
-    if(openMatrixMIMPointer.matrixElements) {
-      realMatrixFree(&openMatrixMIMPointer);
+    if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+      if(openMatrixMIMPointer.realMatrix.matrixElements)
+      realMatrixFree(&openMatrixMIMPointer.realMatrix);
+    }
+    else if(getRegisterDataType(matrixIndex) == dtComplex34Matrix) {
+      // TO BE CODED
     }
 
     #ifdef PC_BUILD

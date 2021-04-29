@@ -308,6 +308,21 @@ typedef struct {
 } real34Matrix_t;
 
 /********************************************//**
+ * \typedef complex34Matrix_t
+ * \brief A type for complex34Matrix
+ ***********************************************/
+typedef struct {
+   dataBlock_t header;
+   complex34_t *matrixElements;
+} complex34Matrix_t;
+
+typedef union {
+   dataBlock_t header;
+   real34Matrix_t    realMatrix;
+   complex34Matrix_t complexMatrix;
+} any34Matrix_t;
+
+/********************************************//**
  * \typedef item_t
  * \brief Structure keeping the information for one item
  ***********************************************/

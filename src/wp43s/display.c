@@ -1935,6 +1935,11 @@ void real34MatrixToDisplayString(calcRegister_t regist, char *displayString) {
   sprintf(displayString, "[%" PRIu16 STD_CROSS "%" PRIu16" Matrix]", dblock->matrixRows, dblock->matrixColumns);
 }
 
+void complex34MatrixToDisplayString(calcRegister_t regist, char *displayString) {
+  dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+  sprintf(displayString, "[%" PRIu16 STD_CROSS "%" PRIu16 " " STD_COMPLEX_C " Matrix]", dblock->matrixRows, dblock->matrixColumns);
+}
+
 void fnShow(uint16_t unusedButMandatoryParameter) {
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
   int16_t source, dest, last, d, maxWidth, offset, bytesProcessed;

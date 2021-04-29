@@ -506,5 +506,24 @@ void convertReal34MatrixToReal34MatrixRegister(const real34Matrix_t *matrix, cal
   xcopy(REGISTER_REAL34_MATRIX(regist), matrix, sizeof(dataBlock_t));
   xcopy(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist), matrix->matrixElements, (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(real34_t));
 }
+
+void convertComplex34MatrixRegisterToComplex34Matrix(calcRegister_t regist, complex34Matrix_t *matrix) {
+
+  dataBlock_t *dblock           = REGISTER_COMPLEX34_MATRIX_DBLOCK(regist);
+  complex34_t *matrixElem       = REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist);
+
+  complexMatrixInit(matrix, dblock->matrixRows, dblock->matrixColumns);
+  xcopy(matrix->matrixElements, REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist), (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(complex34_t));
+
+  for(int i = 0; i < matrix->header.matrixColumns * matrix->header.matrixRows; i++) {
+    real34Copy(&matrixElem[i], &matrix->matrixElements[i]);
+  }
+}
+
+void convertComplex34MatrixToComplex34MatrixRegister(const complex34Matrix_t *matrix, calcRegister_t regist) {
+  reallocateRegister(regist, dtComplex34Matrix, TO_BLOCKS((matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(complex34_t)), amNone);
+  xcopy(REGISTER_COMPLEX34_MATRIX(regist), matrix, sizeof(dataBlock_t));
+  xcopy(REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist), matrix->matrixElements, (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(complex34_t));
+}
 #endif // TESTSUITE_BUILD
 

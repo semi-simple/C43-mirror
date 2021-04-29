@@ -67,6 +67,11 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     realMatrixIdentity             (real34Matrix_t *matrix, uint16_t size);
   void     realMatrixRedim                (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);
 
+  void     complexMatrixInit              (complex34Matrix_t *matrix, uint16_t rows, uint16_t cols);
+  void     complexMatrixFree              (complex34Matrix_t *matrix);
+  void     complexMatrixIdentity          (complex34Matrix_t *matrix, uint16_t size);
+  void     complexMatrixRedim             (complex34Matrix_t *matrix, uint16_t rows, uint16_t cols);
+
   void     showMatrixEditor               (void);
   void     mimEnter                       (bool_t commit);
   void     mimAddNumber                   (int16_t item);
@@ -74,6 +79,8 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     mimRestore                     (void);
   void     showRealMatrix                 (const real34Matrix_t *matrix);
   int16_t  getRealMatrixColumnWidths      (const real34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *rPadWidth, int16_t *digits);
+  void     showComplexMatrix              (const complex34Matrix_t *matrix);
+  int16_t  getComplexMatrixColumnWidths   (const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i, int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits);
 
   void     getMatrixFromRegister          (calcRegister_t regist);
 
@@ -89,6 +96,8 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     insRowRealMatrix               (real34Matrix_t *matrix, uint16_t beforeRowNo);
   void     delRowRealMatrix               (real34Matrix_t *matrix, uint16_t beforeRowNo);
   void     transposeRealMatrix            (const real34Matrix_t *matrix, real34Matrix_t *res);
+
+  void     linkToComplexMatrixRegister    (calcRegister_t regist, complex34Matrix_t *linkedMatrix);
 
   void     addRealMatrices                (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
   void     subtractRealMatrices           (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);

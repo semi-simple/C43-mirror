@@ -958,6 +958,12 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
         else if(dataTypeX == dtComplex34) {
           runFunction(ITM_CXtoRE);
         }
+        else if(dataTypeX == dtReal34Matrix && dataTypeY == dtReal34Matrix) {
+          runFunction(ITM_REtoCX);
+        }
+        else if(dataTypeX == dtComplex34Matrix) {
+          runFunction(ITM_CXtoRE);
+        }
         else {
           displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -972,7 +978,7 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_MIM:
-        itemToBeCoded(NOPARAM);
+        mimAddNumber(ITM_CC);
         break;
 
       case CM_REGISTER_BROWSER:

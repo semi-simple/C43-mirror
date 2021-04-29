@@ -157,7 +157,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         break;
 
       case dtComplex34Matrix:
-        strcpy(tmpString, "Copying a complex16 matrix to the clipboard is to be coded!");
+        complex34MatrixToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
         break;
 
       case dtShortInteger:
@@ -997,6 +997,12 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
             formatReal34Debug(string2, REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_L));
           }
 
+          else if(getRegisterDataType(REGISTER_L) == dtComplex34Matrix) {
+            sprintf(&string1[strlen(string1)], "complex34 %" PRIu16 STD_CROSS "%" PRIu16 " matrix = ",
+              REGISTER_COMPLEX34_MATRIX_DBLOCK(REGISTER_L)->matrixRows, REGISTER_COMPLEX34_MATRIX_DBLOCK(REGISTER_L)->matrixColumns);
+            formatComplex34Debug(string2, REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(REGISTER_L));
+          }
+
           else if(getRegisterDataType(REGISTER_L) == dtConfig) {
             strcat(string1, "Configuration data");
             string2[0] = 0;
@@ -1032,6 +1038,19 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
         bool_t smallFont = ((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3));
         int16_t dummyVal[25] = {};
         if(getRealMatrixColumnWidths(&matrix, &numericFont, dummyVal, dummyVal + 4, dummyVal + 24) > (MATRIX_LINE_WIDTH_LARGE * 3 - 20)) smallFont = true;
+        if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
+        if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
+        if(rows >= 4 && cols > 1) displayStack = 2;
+        if(calcMode == CM_MIM) displayStack -= 2;
+      }
+      else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix || calcMode == CM_MIM) {
+        complex34Matrix_t matrix;
+        linkToComplexMatrixRegister(calcMode == CM_MIM ? matrixIndex : REGISTER_X, &matrix);
+        const uint16_t rows = matrix.header.matrixRows;
+        const uint16_t cols = matrix.header.matrixColumns;
+        bool_t smallFont = ((rows >= 4) || (cols >= 3) || (displayFormat != DF_ALL && displayFormatDigits > 3));
+        int16_t dummyVal[27] = {};
+        if(getComplexMatrixColumnWidths(&matrix, &numericFont, dummyVal, dummyVal + 2, dummyVal + 4, dummyVal + 6, dummyVal + 16, dummyVal + 26) > (MATRIX_LINE_WIDTH_LARGE * 3 - 20)) smallFont = true;
         if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
         if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
         if(rows >= 4 && cols > 1) displayStack = 2;
@@ -1111,7 +1130,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
 
       else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
         prefixWidth = 0;
-        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(REGISTER_X) == dtReal34Matrix) ? 4 - displayStack : 0));
+        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) ? 4 - displayStack : 0));
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
           if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
@@ -1713,6 +1732,24 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
           }
         }
 
+        else if(getRegisterDataType(regist) == dtComplex34Matrix) {
+          if(regist == REGISTER_X && calcMode != CM_MIM) {
+            complex34Matrix_t matrix;
+            linkToComplexMatrixRegister(REGISTER_X, &matrix);
+            showComplexMatrix(&matrix);
+            if(lastErrorCode != 0)
+              refreshRegisterLine(errorMessageRegisterLine);
+            if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE)
+              refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
+          }
+          else {
+            complex34MatrixToDisplayString(regist, tmpString);
+            w = stringWidth(tmpString, &numericFont, false, true);
+            lineWidth = w;
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w - 2, baseY, vmNormal, false, true);
+          }
+        }
+
         else {
           sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
           showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), baseY + 6, vmNormal, false, true);
@@ -1724,7 +1761,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
       }
     }
 
-    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || calcMode == CM_MIM) {
+    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix || calcMode == CM_MIM) {
       displayStack = origDisplayStack;
     }
   }

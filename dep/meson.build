@@ -7,4 +7,7 @@ decNumber_src = files(
   'decNumberICU/decQuad.c')
 decNumber_inc = include_directories('decNumberICU')
 
-gmp_dep = dependency('gmp', native : true)
+dmcp_src = files(
+  'DMCP_SDK/dmcp/sys/pgm_syscalls.c',
+  'DMCP_SDK/dmcp/startup_pgm.s')
+dmcp_inc = include_directories('DMCP_SDK/dmcp')

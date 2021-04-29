@@ -30,6 +30,7 @@ add_project_arguments('-DOS32BIT',    native : false, language : 'c')
 cc = meson.get_compiler('c')
 ft_dep  = dependency('freetype2', native : true)
 gtk_dep = dependency('gtk+-3.0',  native : true)
+gmp_dep = dependency('gmp', native : true)
 m_dep   = cc.find_library('m', required : false)
 
 conf_data = configuration_data()

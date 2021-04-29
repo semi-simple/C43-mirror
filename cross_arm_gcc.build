@@ -19,14 +19,12 @@ c_args = [
   '-mfpu=fpv4-sp-d16',
   '--specs=nosys.specs',
   '-s',
-#  '-fsigned-char',
+  '-fsigned-char',
   '-ffunction-sections',
   '-fdata-sections',
-#  '-funwind-tables',
-#  '-fno-strict-aliasing',
+  '-fno-strict-aliasing',
   '-fmerge-all-constants',
-  '-fomit-frame-pointer']
-#  '-nostartfiles']
+  '-nostartfiles']
 
 c_link_args = [
   '-mthumb',

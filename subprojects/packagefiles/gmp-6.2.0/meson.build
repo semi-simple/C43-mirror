@@ -6,19 +6,7 @@ project('gmp', 'c',
 
 env = environment()
 env.append('CFLAGS',
-  '-nostartfiles',
   '-Os',
-  '-funwind-tables',
-  '-fno-strict-aliasing',
-  '-fstack-protector',
-  '-finline-limit=64',
-  '-Wa,--noexecstack',
-  separator : ' ')
-env.append('LDFLAGS',
-  '-Wl,--fix-cortex-a8',
-  '-Wl,-z,noexecstack',
-  '-Wl,-z,relro',
-  '-Wl,-z,now',
   separator : ' ')
 
 mod = import('unstable_external_project')

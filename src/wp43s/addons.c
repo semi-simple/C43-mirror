@@ -94,7 +94,7 @@ All the below: because both Last x and savestack does not work due to multiple s
 #include "mathematics/roundi.h"
 #include "mathematics/toPolar.h"
 #include "mathematics/toRect.h"
-//??? #include "plotstat.h"
+#include "plotstat.h"
 #include "radioButtonCatalog.h"
 #include "recall.h"
 #include "registers.h"

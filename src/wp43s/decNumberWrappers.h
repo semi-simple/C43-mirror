@@ -88,6 +88,8 @@ typedef struct {
 
 #define real_t                                                 decNumber
 
+#define graph_t                                                float            //JM plotstat
+
 #define REAL_SIZE                                              TO_BLOCKS(sizeof(real_t))
 #define REAL34_SIZE                                            TO_BLOCKS(sizeof(real34_t))
 #define REAL39_SIZE                                            TO_BLOCKS(sizeof(real39_t))

@@ -27,6 +27,7 @@
 #include "matrix.h"
 #include "registerValueConversions.h"
 #include "registers.h"
+#include "toPolar.h"
 
 #include "wp43s.h"
 

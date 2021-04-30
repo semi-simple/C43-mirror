@@ -1407,7 +1407,8 @@
       realMatrixFree(&openMatrixMIMPointer.realMatrix);
     }
     else if(getRegisterDataType(matrixIndex) == dtComplex34Matrix) {
-      // TO BE CODED
+      if(openMatrixMIMPointer.complexMatrix.matrixElements)
+      complexMatrixFree(&openMatrixMIMPointer.complexMatrix);
     }
 
     #ifdef PC_BUILD

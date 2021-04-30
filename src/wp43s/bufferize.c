@@ -1328,7 +1328,6 @@
     }
     aimBuffer[imaginaryMantissaSignLocation] = 0;
 
-    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     stringToReal34(aimBuffer, dest_r);
 
     stringToReal34(aimBuffer + imaginaryMantissaSignLocation + 2, dest_i);
@@ -1557,6 +1556,7 @@
             closeNimWithFraction(REGISTER_REAL34_DATA(REGISTER_X));
           }
           else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
+            reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
             closeNimWithComplex(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
           }
           else {

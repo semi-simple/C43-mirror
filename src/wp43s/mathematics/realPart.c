@@ -68,7 +68,18 @@ void fnRealPart(uint16_t unusedButMandatoryParameter) {
 
 
 void realPartCxma(void) {
-  fnToBeCoded();
+  complex34Matrix_t cMat;
+  real34Matrix_t rMat;
+
+  linkToComplexMatrixRegister(REGISTER_X, &cMat);
+  realMatrixInit(&rMat, cMat.header.matrixRows, cMat.header.matrixColumns);
+
+  for(uint16_t i = 0; i < cMat.header.matrixRows * cMat.header.matrixColumns; ++i) {
+    real34Copy(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), &rMat.matrixElements[i]);
+  }
+
+  convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X); // cMat invalidates here
+  realMatrixFree(&rMat);
 }
 
 

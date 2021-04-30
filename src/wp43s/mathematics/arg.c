@@ -26,6 +26,8 @@
 #include "error.h"
 #include "conversionAngles.h"
 #include "mathematics/toPolar.h"
+#include "matrix.h"
+#include "registerValueConversions.h"
 #include "registers.h"
 
 #include "wp43s.h"

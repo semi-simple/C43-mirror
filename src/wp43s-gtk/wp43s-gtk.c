@@ -21,8 +21,8 @@
 #include "gmpWrappers.h"
 #include "gui.h"
 #include "items.h"
-#include "memory.h"
 #include "keyboardTweak.h"
+#include "memory.h"
 #include "saveRestoreCalcState.h"
 #include "screen.h"
 

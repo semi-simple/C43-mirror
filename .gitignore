@@ -1,12 +1,12 @@
 # WP43S project specific files
 /build
 /dep/gmp-6.2.0
+/wp43c
 /wp43s
 /testSuite
-/wp43s.exe
-/testSuite.exe
+/*.exe
 backup.bin
-wp43s.sav
+*.sav
 
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,linux,codeblocks,valgrind,vscode
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,linux,codeblocks,valgrind,vscode

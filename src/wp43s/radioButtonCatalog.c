@@ -25,6 +25,7 @@
 
 #include "curveFitting.h"
 #include "fonts.h"
+#include "inlineTest.h"
 #include "items.h"
 #include "jm.h"
 #include "plotstat.h"
@@ -34,7 +35,7 @@
 #include "wp43s.h"
 
 
-const radiocb_eeprom_t indexOfRadioCbEepromItems[] = {
+TO_QSPI const radiocb_t indexOfRadioCbEepromItems[] = {
 //  itemNr    item                  parameter                         function
 /*  117 */  { ITM_DEG,              amDegree,              RB_AM },  //fnAngularMode
 /*  134 */  { ITM_DMS,              amDMS,                 RB_AM },  //fnAngularMode
@@ -150,341 +151,289 @@ int8_t fnCbIsSet(int16_t item) {
   int8_t result = NOVAL;
   int16_t itemNr = max(item, -item);
   size_t n = nbrOfElements(indexOfRadioCbEepromItems);
-  for(uint8_t i=0; i < n; i++) {
+  for(uint_fast8_t i = 0; i < n; i++) {
     if(indexOfRadioCbEepromItems[i].itemNr == itemNr) {
       //printf("^^^^**** item found %d\n",itemNr);
       bool_t is_cb = false;
       int32_t rb_param = 0;
-      bool_t cb_param =  false;
+      bool_t cb_param = false;
 
-      switch (indexOfRadioCbEepromItems[i].radioButton)
-      {
-      case RB_AM:
-        {
-          rb_param = currentAngularMode;
-        }
-        break;
+      switch(indexOfRadioCbEepromItems[i].radioButton) {
+      case RB_AM: {
+        rb_param = currentAngularMode;
+      }
+      break;
 
-      case RB_CM:
-        {
-          if(getSystemFlag(FLAG_POLAR)) { rb_param = CM_POLAR; }
-          else { rb_param = CM_RECTANGULAR; }
-        }
-        break;
+      case RB_CM: {
+        if(getSystemFlag(FLAG_POLAR)) { rb_param = CM_POLAR;        }
+        else {                          rb_param = CM_RECTANGULAR;  }
+      }
+      break;
 
-      case RB_CU:
-        {
-          if(getSystemFlag(FLAG_CPXj)) { rb_param = CU_J; }
-          else { rb_param = CU_I; }
-        }
-        break;
+      case RB_CU: {
+        if(getSystemFlag(FLAG_CPXj)) {  rb_param = CU_J;  }
+        else {                          rb_param = CU_I;  }
+      }
+      break;
 #ifdef XXXXX
-      case RB_CF:
-        {
-          rb_param = curveFitting;
-        }
-        break;
+      case RB_CF: {
+        rb_param = curveFitting;
+      }
+      break;
 #endif
 
-      case RB_DF:
-        {
-          if     (getSystemFlag(FLAG_YMD)) { rb_param = DF_YMD; }
-          else if(getSystemFlag(FLAG_DMY)) { rb_param = DF_DMY; }
-          else                             { rb_param = DF_MDY; }
+      case RB_DF: {
+        if(getSystemFlag(FLAG_YMD)) {       rb_param = DF_YMD;  }
+        else if(getSystemFlag(FLAG_DMY)) {  rb_param = DF_DMY;  }
+        else {                              rb_param = DF_MDY;  }
+      }
+      break;
+
+      case RB_DI: {
+        rb_param = displayFormat;
+        if(rb_param == DF_FIX && SigFigMode != 0) { rb_param = DF_SF; }
+        if(rb_param == DF_ENG && UNITDisplay) {     rb_param = DF_UN; }
+      }
+      break;
+
+      case RB_DO: {
+        if(getSystemFlag(FLAG_ALLENG)) {  rb_param = DO_ENG;  }
+        else {                            rb_param = DO_SCI;  }
+      }
+      break;
+
+      case RB_ID: {
+        rb_param = Input_Default;
+      }
+      break;
+
+      case RB_IM: {
+        rb_param = shortIntegerMode;
+      }
+      break;
+
+      case RB_PS: {
+        if(getSystemFlag(FLAG_MULTx)) { rb_param = PS_CROSS;  }
+        else {                          rb_param = PS_DOT;    }
+      }
+      break;
+
+      case RB_RX: {
+        if(getSystemFlag(FLAG_DECIMP)) {  rb_param = RX_PERIOD; }
+        else {                            rb_param = RX_COMMA;  }
+      }
+      break;
+
+      case RB_WS: {
+        rb_param = shortIntegerWordSize;
+      }
+      break;
+
+      case RB_SS: {
+        if(getSystemFlag(FLAG_SSIZE8)) {  rb_param = SS_8;  }
+        else {                            rb_param = SS_4;  }
+      }
+      break;
+
+      case RB_TF: {
+        if(getSystemFlag(FLAG_TDM24)) { rb_param = TF_H24;  }
+        else {                          rb_param = TF_H12;  }
+      }
+      break;
+
+      case RB_SA: {
+        rb_param = Norm_Key_00_VAR;
+        //printf("^^^^*** activated %d\n",rb_param);
+      }
+      break;
+
+      case RB_HX: {
+        if(lastIntegerBase != 0) {  rb_param = lastIntegerBase; }
+        else                        return result;
+      }
+      break;
+
+      case CB_JC: {
+        is_cb = true;
+
+        switch(indexOfRadioCbEepromItems[i].param) {
+        case JC_BASE_AHOME: {
+          cb_param = SH_BASE_AHOME;
         }
         break;
 
-      case RB_DI:
-        {
-          rb_param = displayFormat;
-          if(rb_param == DF_FIX && SigFigMode != 0) { rb_param = DF_SF; }
-          if(rb_param == DF_ENG && UNITDisplay)     { rb_param = DF_UN; }
+        case JC_BASE_HOME: {
+          cb_param = SH_BASE_HOME;
         }
         break;
 
-      case RB_DO:
-        {
-          if(getSystemFlag(FLAG_ALLENG)) { rb_param = DO_ENG; }
-          else { rb_param = DO_SCI; }
+        case JC_BCR: {
+          cb_param = getSystemFlag(FLAG_CPXRES);
         }
         break;
 
-      case RB_ID:
-        {
-          rb_param = Input_Default;
+        case JC_BSR: {                                      //JMvv
+          cb_param = getSystemFlag(FLAG_SPCRES);
+        }
+        break;                                              //JM^^
+
+        case JC_BLZ: {
+          cb_param = getSystemFlag(FLAG_LEAD0);
         }
         break;
 
-      case RB_IM:
-        {
-          rb_param = shortIntegerMode;
+        case DM_ANY: {
+          cb_param = getSystemFlag(FLAG_DENANY);
         }
         break;
 
-      case RB_PS:
-        {
-          if(getSystemFlag(FLAG_MULTx)) { rb_param = PS_CROSS; }
-          else { rb_param = PS_DOT; }
+        case DM_FIX: {
+          cb_param = getSystemFlag(FLAG_DENFIX);
         }
         break;
 
-      case RB_RX:
-        {
-          if(getSystemFlag(FLAG_DECIMP)) { rb_param = RX_PERIOD; }
-          else { rb_param = RX_COMMA; }
+        case JC_ERPN: {
+          cb_param = eRPN;
         }
         break;
 
-      case RB_WS:
-        {
-          rb_param = shortIntegerWordSize;
+        case JC_NO_BASE_SCREEN: {
+          cb_param = jm_NO_BASE_SCREEN;
         }
         break;
 
-      case RB_SS:
-        {
-          if(getSystemFlag(FLAG_SSIZE8)) { rb_param = SS_8; }
-          else { rb_param = SS_4; }
+        case JC_GGREEK: {
+          cb_param = jm_GGREEK;
         }
         break;
 
-      case RB_TF:
-        {
-          if(getSystemFlag(FLAG_TDM24)) { rb_param = TF_H24; }
-          else { rb_param = TF_H12; }
+        case JC_FG_LINE: {
+          cb_param = jm_FG_LINE;
         }
         break;
 
-      case RB_SA:
-        {
-          rb_param = Norm_Key_00_VAR;
-          //printf("^^^^*** activated %d\n",rb_param);
+        case JC_G_DOUBLETAP: {
+          cb_param = jm_G_DOUBLETAP;
         }
         break;
 
-      case RB_HX:
-        {
-          if(lastIntegerBase !=0) {rb_param = lastIntegerBase;} else return result;
+        case JC_HOME_TRIPLE: {
+          cb_param = HOME3;
         }
         break;
 
-      case CB_JC:
-        {
-          is_cb = true;
+        case JC_SH_3T: {
+          cb_param = Home3TimerMode;
+        }
+        break;
 
-          switch (indexOfRadioCbEepromItems[i].param)
-          {
-          case JC_BASE_AHOME:
-            {
-              cb_param = SH_BASE_AHOME;
-            }
-            break;
+        case JC_SHFT_4s: {
+          cb_param = ShiftTimoutMode;
+        }
+        break;
 
-          case JC_BASE_HOME:
-            {
-              cb_param = SH_BASE_HOME;
-            }
-            break;
+        case JC_VECT: {
+          cb_param = jm_VECT;
+        }
+        break;
 
-          case JC_BCR:
-            {
-              cb_param = getSystemFlag(FLAG_CPXRES);
-            }
-            break;
+        case JC_NVECT: {
+          cb_param = jm_NVECT;
+        }
+        break;
 
-          case JC_BSR:                                     //JMvv
-            {
-              cb_param = getSystemFlag(FLAG_SPCRES);
-            }
-            break;                                         //JM^^
+        case JC_SCALE: {
+          cb_param = jm_SCALE;
+        }
+        break;
 
-          case JC_BLZ:
-            {
-              cb_param = getSystemFlag(FLAG_LEAD0);
-            }
-            break;
+        case JC_H_SUM: {
+          cb_param = jm_HOME_SUM;
+        }
+        break;
 
-          case DM_ANY:
-            {
-              cb_param = getSystemFlag(FLAG_DENANY);
-            }
-            break;
+        case JC_H_MIR: {
+          cb_param = jm_HOME_MIR;
+        }
+        break;
 
-          case DM_FIX:
-            {
-              cb_param = getSystemFlag(FLAG_DENFIX);
-            }
-            break;
+        case JC_H_FIX: {
+          cb_param = jm_HOME_FIX;
+        }
+        break;
 
-          case JC_ERPN:
-            {
-              cb_param = eRPN;
-            }
-            break;
+        case JC_LARGELI: {
+          cb_param = jm_LARGELI;
+        }
+        break;
 
-          case JC_NO_BASE_SCREEN:
-            {
-              cb_param = jm_NO_BASE_SCREEN;
-            }
-            break;
+        case JC_EXTENTX: {
+          cb_param = extentx;
+        }
+        break;
 
-          case JC_GGREEK:
-            {
-              cb_param = jm_GGREEK;
-            }
-            break;
+        case JC_EXTENTY: {
+          cb_param = extenty;
+        }
+        break;
 
-          case JC_FG_LINE:
-            {
-              cb_param = jm_FG_LINE;
-            }
-            break;
+        case JC_PLINE: {
+          cb_param = PLOT_LINE;
+        }
+        break;
 
-          case JC_G_DOUBLETAP:
-            {
-              cb_param = jm_G_DOUBLETAP;
-            }
-            break;
+        case JC_PCROS: {
+          cb_param = PLOT_CROSS;
+        }
+        break;
 
-          case JC_HOME_TRIPLE:
-            {
-              cb_param = HOME3;
-            }
-            break;
+        case JC_PBOX: {
+          cb_param = PLOT_BOX;
+        }
+        break;
 
-          case JC_SH_3T:
-            {
-              cb_param = Home3TimerMode;
-            }
-            break;
+        case JC_DIFF: {
+          cb_param = PLOT_DIFF;
+        }
+        break;
 
-          case JC_SHFT_4s:
-            {
-              cb_param = ShiftTimoutMode;
-            }
-            break;
+        case JC_INTG: {
+          cb_param = PLOT_INTG;
+        }
+        break;
 
-          case JC_VECT:
-            {
-              cb_param = jm_VECT;
-            }
-            break;
+        case JC_RMS: {
+          cb_param = PLOT_RMS;
+        }
+        break;
 
-          case JC_NVECT:
-            {
-              cb_param = jm_NVECT;
-            }
-            break;
+        case JC_SHADE: {
+          cb_param = PLOT_SHADE;
+        }
+        break;
 
-          case JC_SCALE:
-            {
-              cb_param = jm_SCALE;
-            }
-            break;
+        case JC_NL: {
+          cb_param = numLock;
+        }
+        break;
 
-          case JC_H_SUM:
-            {
-              cb_param = jm_HOME_SUM;
-            }
-            break;
-
-          case JC_H_MIR:
-            {
-              cb_param = jm_HOME_MIR;
-            }
-            break;
-
-          case JC_H_FIX:
-            {
-              cb_param = jm_HOME_FIX;
-            }
-            break;
-
-          case JC_LARGELI:
-            {
-              cb_param = jm_LARGELI;
-            }
-            break;
-
-          case JC_EXTENTX:
-            {
-              cb_param = extentx;
-            }
-            break;
-
-          case JC_EXTENTY:
-            {
-              cb_param = extenty;
-            }
-            break;
-
-          case JC_PLINE:
-            {
-              cb_param = PLOT_LINE;
-            }
-            break;
-
-          case JC_PCROS:
-            {
-              cb_param = PLOT_CROSS;
-            }
-            break;
-
-          case JC_PBOX:
-            {
-              cb_param = PLOT_BOX;
-            }
-            break;
-
-          case JC_DIFF:
-            {
-              cb_param = PLOT_DIFF;
-            }
-            break;
-
-          case JC_INTG:
-            {
-              cb_param = PLOT_INTG;
-            }
-            break;
-
-          case JC_RMS:
-            {
-              cb_param = PLOT_RMS;
-            }
-            break;
-
-          case JC_SHADE:
-            {
-              cb_param = PLOT_SHADE;
-            }
-            break;
-
-          case JC_NL:
-            {
-              cb_param = numLock;
-            }
-            break;
-
-          case JC_UC:
-            {
-              cb_param = !alphaCase;
-            }
-            break;
+        case JC_UC: {
+          cb_param = !alphaCase;
+        }
+        break;
 
 #ifdef INLINE_TEST
-          case JC_ITM_TST:
-            {
-              cb_param = testEnabled;
-            }
-            break;
-#endif
-
-          default:
-            break;
-          }
+        case JC_ITM_TST: {
+          cb_param = testEnabled;
         }
         break;
+#endif
+
+        default:
+          break;
+        }
+      }
+      break;
 
       default:
         break;
@@ -495,7 +444,7 @@ int8_t fnCbIsSet(int16_t item) {
       }
       else {
         //printf("^^^^*** %d %d\n",indexOfRadioCbEepromItems[i].param, rb_param);
-        result = (indexOfRadioCbEepromItems[i].param == rb_param) ? RB_TRUE : RB_FALSE; 
+        result = (indexOfRadioCbEepromItems[i].param == rb_param) ? RB_TRUE : RB_FALSE;
       }
     }
   }
@@ -512,12 +461,12 @@ void fnRefreshState(void) {
 }
 
 
+
 int16_t fnItemShowValue(int16_t item) {
   int16_t result = NOVAL;
   uint16_t itemNr = max(item, -item);
 
-  switch(itemNr)
-  {
+  switch(itemNr) {
   case ITM_DSTACK:  //  132
     result = displayStack;
     break;
@@ -571,32 +520,34 @@ int16_t fnItemShowValue(int16_t item) {
     break;
 
   case ITM_PZOOMX:
-      result = PLOT_ZMX;
+    result = PLOT_ZMX;
     break;
 
   case ITM_PZOOMY:
-      result = PLOT_ZMY;
+    result = PLOT_ZMY;
     break;
 
   case ITM_WSIZE:   //  664
     result = shortIntegerWordSize;
     break;
 
-  case ITM_RNG:   //  
+  case ITM_RNG:     //
     result = exponentLimit;
     break;
 
-  case ITM_RM:   //  
+  case ITM_RM:      //
     result = roundingMode;
     break;
 
-  case ITM_HASH_JM:   //  
-    if(lastIntegerBase!=0) result = lastIntegerBase; 
-    else result = NOVAL;
+  case ITM_HASH_JM: //
+    if(lastIntegerBase != 0)
+      result = lastIntegerBase;
+    else
+      result = NOVAL;
     break;
 
   default:
-    if(indexOfItems[itemNr].func == itemToBeCoded) {
+    if(indexOfItems[itemNr].func == itemToBeCoded)  {
       result = ITEM_NOT_CODED;
     }
     break;
@@ -612,8 +563,7 @@ char tmp[12];
 void add_digitglyph_to_tmp2(char* tmp2, int16_t xx) {
   tmp2[0] = 0;
 
-  switch(xx)
-  {
+  switch(xx) {
     case  0: strcat(tmp2, STD_SUB_0);   break;
     case  1: strcat(tmp2, STD_BASE_1);  break;
     case  2: strcat(tmp2, STD_BASE_2);  break;
@@ -637,7 +587,7 @@ void add_digitglyph_to_tmp2(char* tmp2, int16_t xx) {
 
 
 
-void use_base_glyphs(char* tmp1, int16_t xx) {                         //Needs non-local variable tmp2
+void use_base_glyphs(char* tmp1, int16_t xx) {              // Needs non-local variable tmp2
   char tmp2[12];
   tmp1[0] = 0;
   
@@ -669,7 +619,7 @@ void use_base_glyphs(char* tmp1, int16_t xx) {                         //Needs n
 
 
 
-char* figlabel(const char* label, int16_t showValue) {      //JM
+char *figlabel(const char *label, int16_t showValue) {      //JM
   char tmp1[12];
   tmp[0] = 0;
 
@@ -678,7 +628,7 @@ char* figlabel(const char* label, int16_t showValue) {      //JM
   }
 
   if(showValue != NOVAL && showValue != ITEM_NOT_CODED && showValue < 0) {
-    strcat(tmp,STD_SUB_MINUS);
+    strcat(tmp, STD_SUB_MINUS);
   }
 
   if(showValue != NOVAL && showValue != ITEM_NOT_CODED && strlen(label) <= 8) {
@@ -689,5 +639,3 @@ char* figlabel(const char* label, int16_t showValue) {      //JM
 
   return tmp;
 }                                                           //JM ^^
-
-

@@ -37,6 +37,7 @@
 #include "fractions.h"
 #include "graphs.h"
 #include "gui.h"
+#include "inlineTest.h"
 #include "integers.h"
 #include "jm.h"
 #include "jm_graph.h"

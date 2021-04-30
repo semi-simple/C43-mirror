@@ -23,7 +23,6 @@
 #ifndef ADDONS_H
 #define ADDONS_H
 
-#include "decNumberWrappers.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 

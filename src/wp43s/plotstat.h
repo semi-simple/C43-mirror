@@ -20,7 +20,6 @@
 #ifndef PLOTSTAT_H
 #define PLOTSTAT_H
 
-#include "decNumberWrappers.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 

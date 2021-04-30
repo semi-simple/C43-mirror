@@ -48,19 +48,20 @@ uint32_t    timerLastCalled;
 
 
 void showAlphaModeonGui(void) {
-  #ifdef PC_BUILD
-    char tmp[200]; sprintf(tmp,"^^^^showAlphaModeonGui\n"); jm_show_comment(tmp);
-  #endif //PC_BUILD
-  if(calcMode == CM_AIM || tam.mode)    //vv dr JM
-  {
-    #ifndef TESTSUITE_BUILD
+#ifdef PC_BUILD
+  char tmp[200];
+  sprintf(tmp, "^^^^showAlphaModeonGui\n");
+  jm_show_comment(tmp);
+#endif                                  //PC_BUILD
+  if(calcMode == CM_AIM || tam.mode) {                      //vv dr JM
+#ifndef TESTSUITE_BUILD
     showHideAlphaMode();
-    #endif
-    #ifdef PC_BUILD     //dr - new AIM
-      calcModeAimGui();
-    #endif
-  }                                               //^^
-doRefreshSoftMenu = true;     //jm
+#endif
+#ifdef PC_BUILD                         //dr - new AIM
+    calcModeAimGui();
+#endif
+  }                                                         //^^
+  doRefreshSoftMenu = true;             //jm
 }
 
 
@@ -68,23 +69,24 @@ doRefreshSoftMenu = true;     //jm
 
 void showShiftState(void) {
 #ifndef TESTSUITE_BUILD
-//showAlphaModeonGui(); 
+//showAlphaModeonGui();
 #ifdef PC_BUILD_TELLTALE
-  printf("    >>> showShiftState: calcMode=%d\n",calcMode );
+  printf("    >>> showShiftState: calcMode=%d\n", calcMode);
 #endif //PC_BUILD_TELLTALE
-  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER && temporaryInformation != TI_SHOW_REGISTER_BIG && temporaryInformation != TI_SHOW_REGISTER_SMALL && temporaryInformation != TI_SHOW_REGISTER) {
-    if(shiftF) {          //SEE screen.c:refreshScreen
-      showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+  if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER &&
+     temporaryInformation != TI_SHOW_REGISTER_BIG && temporaryInformation != TI_SHOW_REGISTER_SMALL && temporaryInformation != TI_SHOW_REGISTER) {
+    if(shiftF) {                        //SEE screen.c:refreshScreen
+      showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);   // f is pixel 4+8+3 wide
       show_f_jm();
       showHideAlphaMode();
     }
-    else if(shiftG) {     //SEE screen.c:refreshScreen
-      showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+    else if(shiftG) {                   //SEE screen.c:refreshScreen
+      showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);   // g is pixel 4+10+1 wide
       show_g_jm();
       showHideAlphaMode();
     }
     else {
-      showGlyph(" ", &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // space clears the f and g
+      showGlyph(" ", &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);         // space clears the f and g
       clear_fg_jm();
       showHideAlphaMode();
     }
@@ -124,115 +126,114 @@ void resetShiftState(void) {
  * \return void
  ***********************************************/
 
-void show_f_jm(void){
-          //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-//JMTOCHECK2        if(softmenuStackPointer >= 0) {                                            //JM - Display dot in the f - line
-          if(!FN_timeouts_in_progress) {
-            if(!ULFL) {
-              underline(1);
-              ULFL = !ULFL;
-              doRefreshSoftMenu = true;
-            }
-            if(ULGL) {
-              underline(2);
-              ULGL = !ULGL;
-              doRefreshSoftMenu = true;
-            }
-          }
-    //    }                                                                         //JM - Display dot in the f - line
+void show_f_jm(void) {
+//showSoftmenuCurrentPart();                                                    //JM - Redraw boxes etc after shift is shown
+//JMTOCHECK2        if(softmenuStackPointer >= 0) {                             //JM - Display dot in the f - line
+    if(!FN_timeouts_in_progress) {
+      if(!ULFL) {
+        underline(1);
+        ULFL = !ULFL;
+        doRefreshSoftMenu = true;
+      }
+      if(ULGL) {
+        underline(2);
+        ULGL = !ULGL;
+        doRefreshSoftMenu = true;
+      }
+    }
+//}                                                                             //JM - Display dot in the f - line
 }
 
 
-void show_g_jm(void){
-      //showSoftmenuCurrentPart();                                                //JM - Redraw boxes etc after shift is shown
-//JMTOCHECK2        if(softmenuStackPointer >= 0) {                                            //JM - Display dot in the g - line
-          if(!FN_timeouts_in_progress) {
-            if(ULFL) {
-              underline(1);
-              ULFL = !ULFL;
-              doRefreshSoftMenu = true;
-            }
-            if(!ULGL) {
-              underline(2);
-              ULGL = !ULGL;
-              doRefreshSoftMenu = true;
-            }
-          }
-  //      }                                                                         //JM - Display dot in the g - line
+void show_g_jm(void) {
+//showSoftmenuCurrentPart();                                                    //JM - Redraw boxes etc after shift is shown
+//JMTOCHECK2        if(softmenuStackPointer >= 0) {                             //JM - Display dot in the g - line
+    if(!FN_timeouts_in_progress) {
+      if(ULFL) {
+        underline(1);
+        ULFL = !ULFL;
+        doRefreshSoftMenu = true;
+      }
+      if(!ULGL) {
+        underline(2);
+        ULGL = !ULGL;
+        doRefreshSoftMenu = true;
+      }
+    }
+//}                                                                             //JM - Display dot in the g - line
 }
 
 
-void clear_fg_jm(void){
-      //  showSoftmenuCurrentPart();            //JM TO REMOVE STILL !!             //JM - Redraw boxes etc after shift is shown
-        if(!FN_timeouts_in_progress) {        //Cancel lines
-          if(ULFL) {
-            underline(1);
-            ULFL = !ULFL;
-            doRefreshSoftMenu = true;
-          }
-          if(ULGL) {
-            underline(2);
-            ULGL = !ULGL;
-            doRefreshSoftMenu = true;
-          }
-        }
-
+void clear_fg_jm(void) {
+//showSoftmenuCurrentPart();            //JM TO REMOVE STILL !!                 //JM - Redraw boxes etc after shift is shown
+  if(!FN_timeouts_in_progress) {        //Cancel lines
+    if(ULFL) {
+      underline(1);
+      ULFL = !ULFL;
+      doRefreshSoftMenu = true;
+    }
+    if(ULGL) {
+      underline(2);
+      ULGL = !ULGL;
+      doRefreshSoftMenu = true;
+    }
+  }
 }
 
 
 void fg_processing_jm(void) {
-    if(ShiftTimoutMode || Home3TimerMode) {
-      if(Home3TimerMode) {
-        if(fnTimerGetStatus(TO_3S_CTFF) == TMR_RUNNING) {
-          JM_SHIFT_HOME_TIMER1++;
-          if(JM_SHIFT_HOME_TIMER1 >= 3) {
-            fnTimerStop(TO_3S_CTFF);
-            shiftF = false;  // Set it up, for flags to be cleared below.
-            shiftG = true;
-            if(HOME3) {
-              #ifdef PC_BUILD
-              //printf("HOME3 %d %d\n",softmenuStack[softmenuStackPointer].softmenu, mm_MNU_HOME);
-              jm_show_calc_state("keyboardtweak.c: fg_processing_jm: HOME3");
-              #endif //PC_BUILD
-              if(softmenuStack[0].softmenuId == mm_MNU_HOME) {              //JM shifts
-                 //printf("popping\n");
-                 popSoftmenu();                                                                                                //JM shifts
+  if(ShiftTimoutMode || Home3TimerMode) {
+    if(Home3TimerMode) {
+      if(fnTimerGetStatus(TO_3S_CTFF) == TMR_RUNNING) {
+        JM_SHIFT_HOME_TIMER1++;
+        if(JM_SHIFT_HOME_TIMER1 >= 3) {
+          fnTimerStop(TO_3S_CTFF);
+          shiftF = false;               // Set it up, for flags to be cleared below.
+          shiftG = true;
+          if(HOME3) {
+#ifdef PC_BUILD
+          //printf("HOME3 %d %d\n", softmenuStack[softmenuStackPointer].softmenu, mm_MNU_HOME);
+            jm_show_calc_state("keyboardtweak.c: fg_processing_jm: HOME3");
+#endif //PC_BUILD
+            if(softmenuStack[0].softmenuId == mm_MNU_HOME) {                    //JM shifts
+            //printf("popping\n");
+              popSoftmenu();                                                    //JM shifts
+            }
+            else {
+              if(calcMode == CM_AIM) {                                          //JM shifts
+                processKeyAction(CHR_num);
               }
-              else {
-                if(calcMode == CM_AIM) {                                                                                      //JM shifts
-                  processKeyAction(CHR_num);
-                }
-                else {                                                                                                        //JM SHIFTS
-                  showSoftmenu(-MNU_HOME);                                                                        //JM shifts  //JM ALPHA-HOME
-                }                                                                                                             //JM shifts                                                                                                                              //JM shifts
-              }
+              else {                                                            //JM SHIFTS
+                showSoftmenu(-MNU_HOME);                                        //JM shifts  //JM ALPHA-HOME
+              }                                                                 //JM shifts
+            }                                                                   //JM shifts
             showSoftmenuCurrentPart();
-            }                                                                                                                 //JM shifts
-          }
-        }
-        if(fnTimerGetStatus(TO_3S_CTFF) == TMR_STOPPED) {
-          JM_SHIFT_HOME_TIMER1 = 1;
-          fnTimerStart(TO_3S_CTFF, TO_3S_CTFF, JM_TO_3S_CTFF);        //dr
+          }                                                                     //JM shifts
         }
       }
+      if(fnTimerGetStatus(TO_3S_CTFF) == TMR_STOPPED) {
+        JM_SHIFT_HOME_TIMER1 = 1;
+        fnTimerStart(TO_3S_CTFF, TO_3S_CTFF, JM_TO_3S_CTFF);                    //dr
+      }
     }
+  }
 
-    if(!shiftF && !shiftG) {                                                                                                  //JM shifts
-      shiftF = true;                                                                                                          //JM shifts
-      shiftG = false;
-    }                                                                                                                         //JM shifts
-    else if(shiftF && !shiftG) {                                                                                              //JM shifts
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = true;                                                                                                          //JM shifts
-    }
-    else if(!shiftF && shiftG) {                                                                                              //JM shifts
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = false;                                                                                                         //JM shifts
-    }
-    else if(shiftF && shiftG) {                                                                                               //JM shifts  should never be possible. included for completeness
-      shiftF = false;                                                                                                         //JM shifts
-      shiftG = false;                                                                                                         //JM shifts
-    }                                                                                                                         //JM shifts
+  if(!shiftF && !shiftG) {                                                      //JM shifts
+    shiftF = true;                                                              //JM shifts
+    shiftG = false;
+  }                                                                             //JM shifts
+  else if(shiftF && !shiftG) {                                                  //JM shifts
+    shiftF = false;                                                             //JM shifts
+    shiftG = true;                                                              //JM shifts
+  }
+  else if(!shiftF && shiftG) {                                                  //JM shifts
+    shiftF = false;                                                             //JM shifts
+    shiftG = false;                                                             //JM shifts
+  }
+  else if(shiftF && shiftG) {                                                   //JM shifts  should never be possible. included for completeness
+    shiftF = false;                                                             //JM shifts
+    shiftG = false;                                                             //JM shifts
+  }                                                                             //JM shifts
 }
 
 
@@ -259,29 +260,29 @@ void  Check_Assign_in_progress(int16_t * result, int16_t tempkey) {
 
 
 /*
-  //JM ASSIGN - GET FUNCTION NUMBER --------------------------------------------------------------------------------
-  if(JM_ASN_MODE == 32766) {            //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
-                                        //JM GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
-    JM_ASN_MODE = result;               //JM The result is the function number, item number, asnd is placed in
-    fnKEYSELECT();                           //JM Place in auto trigger register, ready for next keypress
-    result = ITM_EXIT1;                      //JM EXIT key to exit when done and cancel shifts
+//JM ASSIGN - GET FUNCTION NUMBER --------------------------------------------------------------------------------
+  if(JM_ASN_MODE == 32766) {                        //JM Check if JM ASSIGN IS IN PROGRESS AND CAPTURE THE FUNCTION AND KEY TO BE ASSIGNED
+                                                    //JM GET FUNCTION NUMBER: If seek is pressed, a function can be chosen and pressed.
+    JM_ASN_MODE = result;                           //JM The result is the function number, item number, asnd is placed in
+    fnKEYSELECT();                                  //JM Place in auto trigger register, ready for next keypress
+    result = ITM_EXIT1;                             //JM EXIT key to exit when done and cancel shifts
   }
 
   //JM ASSIGN - GET KEY & ASSIGN MEMORY FUNCTION JM_ASN_MODE
-                                             //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
-  else if(JM_ASN_MODE != 0) {                //JM GET KEY
-    fnASSIGN(JM_ASN_MODE, stringToKeyNumber(data));          //JM CHECKS FOR INVALID KEYS IN HERE
-    JM_ASN_MODE = 0;                         //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
-    result = ITM_EXIT1;                       //JM EXIT key to exit when done and cancel shifts
+  //JM JM_ASN_MODE contains the command to be put on a key. 0 if not active
+  else if(JM_ASN_MODE != 0) {                       //JM GET KEY
+    fnASSIGN(JM_ASN_MODE, stringToKeyNumber(data)); //JM CHECKS FOR INVALID KEYS IN HERE
+    JM_ASN_MODE = 0;                                //JM Catchall - cancel the mode once it had the opportunity to be handled. Whether handled or not.
+    result = ITM_EXIT1;                             //JM EXIT key to exit when done and cancel shifts
   }
 
   //JM NORMKEY _ CHANGE NORMAL MODE KEY SIGMA+ TO SOMETHING ELSE vv
-  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && ( stringToKeyNumber(data) == 0) )) {
+  else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (!getSystemFlag(FLAG_USER) && !shiftF && !shiftG && (stringToKeyNumber(data) == 0))) {
     //printf("%d", stringToKeyNumber(data));
     result = Norm_Key_00_VAR;
   } //JM ^^
   //JM    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ --------------------------------------------------------------------------------
-*/
+  */
 
 
 
@@ -289,18 +290,18 @@ void  Check_Assign_in_progress(int16_t * result, int16_t tempkey) {
 
 //JM Changing the individual softmenu cell, based on the content of the assigned keyboard array
 bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
-  int16_t ix_fn, ix_sm,ix, ix0;  //JMXXX
+  int16_t ix_fn, ix_sm, ix, ix0; //JMXXX
   bool_t tmp;
   tmp = false;
 
   ix = itemShift + (fn - 1);
   ix0 = softmenuStack[0].firstItem;
   ix_sm = softmenu[softmenuStack[0].softmenuId].menuItem;
-  
+
   if(ix_sm == -MNU_HOME) {
-    if(menu_A_HOME[ix0+ix]!=-1) {
-      ix_fn = -9999; 
-  
+    if(menu_A_HOME[ix0 + ix] != -1) {
+      ix_fn = -9999;
+
       //The problem was at this point menu_A_HOME[ix0+ix] could be -1.
       //Which means kbd_std or kbd_usr[-1] is looked up.
   
@@ -315,11 +316,12 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
       //printf(   "  %s\n", indexOfItems[ix_fn].itemSoftmenuName );
   
       //Handle normal mode key change in dynamic HOME menu
-      if(ix_fn != -9999 && ix == 0 && !getSystemFlag(FLAG_USER) && menu_A_HOME[ix0+ix] == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)){
+      if(ix_fn != -9999 && ix == 0 && !getSystemFlag(FLAG_USER) && menu_A_HOME[ix0 + ix] == 0 &&
+        (calcMode == CM_NORMAL || calcMode == CM_NIM) && (Norm_Key_00_VAR != kbd_std[0].primary)) {
         ix_fn = Norm_Key_00_VAR;
         tmp = true;
       }
-  
+
       *funk = ix_fn;
       return ix_fn != -9999 && ((getSystemFlag(FLAG_USER)) || (!getSystemFlag(FLAG_USER) && tmp));
     }
@@ -330,132 +332,134 @@ bool_t func_lookup(int16_t fn, int16_t itemShift, int16_t *funk) {
 
 
 
-void Setup_MultiPresses(int16_t result){
-  JM_auto_doublepress_enabled = 0;                   //JM TIMER CLRDROP. Autodrop mean double click normal key.
+void Setup_MultiPresses(int16_t result) {
+  JM_auto_doublepress_enabled = 0;                          //JM TIMER CLRDROP. Autodrop mean double click normal key.
   int16_t tmp = 0;
   if(calcMode == CM_NORMAL) {
     switch(result) {
-      case ITM_BACKSPACE: tmp = ITM_DROP; break;        //Set up backspace double click to DROP
-      //case ITM_XEQ      : tmp = -MNU_XXEQ; break;     //XEQ XEQMENU, removed as it does not properly work on double clieck. It still accesses XEQ
-      //case ITM_CHS      : tmp = ITM_XexY; break;      //sample on CHS, operating X<>Y. XEQ must still be created.
-      default:;
+    case ITM_BACKSPACE:       tmp = ITM_DROP;     break;    //Set up backspace double click to DROP
+  //case ITM_XEQ:             tmp = -MNU_XXEQ;    break;    //XEQ XEQMENU, removed as it does not properly work on double clieck. It still accesses XEQ
+  //case ITM_CHS:             tmp = ITM_XexY;     break;    //sample on CHS, operating X<>Y. XEQ must still be created.
+    default:;
     }
   }
 
 
-  if(tmp != 0){
+  if(tmp != 0) {
     if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) {
       JM_auto_doublepress_enabled = tmp;
     }
-    fnTimerStart(TO_CL_DROP, TO_CL_DROP, JM_CLRDROP_TIMER);       
+    fnTimerStart(TO_CL_DROP, TO_CL_DROP, JM_CLRDROP_TIMER);
   }
-  fnTimerStop(TO_FG_LONG);                          //dr
-  fnTimerStop(TO_FN_LONG);                          //dr
+  fnTimerStop(TO_FG_LONG);                        //dr
+  fnTimerStop(TO_FN_LONG);                        //dr
 }
 
 
 
-void Check_MultiPresses(int16_t * result, int8_t key_no){          //Set up longpress
+void Check_MultiPresses(int16_t *result, int8_t key_no) { //Set up longpress
   int16_t longpressDelayedkey1 = 0;
   longpressDelayedkey2 = 0;
   longpressDelayedkey3 = 0;
 
-  if(longpressDelayedkey1 == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) {    //longpress yellow math functions on the first 14 keys
-    for(int i=0; i<=16; i++) {      //16 //0=E+  6=STO  12=ENTER 13=X<>Y 14=CHS 15=E 16=BKSPC
-      if(key_no == i 
-        #ifndef TESTING
-          && i!=14       //Do not allow longpress CHS
-          && i!=15       //Do not allow longpress EEX as EEX is a leading edge button
-        #endif
-        && i!=16) {    //Do not allow longpress BKSPC
+  if(longpressDelayedkey1 == 0 && (calcMode == CM_NORMAL || calcMode == CM_NIM)) { //longpress yellow math functions on the first 14 keys
+    for(int i = 0; i <= 16; i++) {  //16 //0=E+  6=STO  12=ENTER 13=X<>Y 14=CHS 15=E 16=BKSPC
+      if(key_no == i
+#ifndef TESTING
+          && i != 14      //Do not allow longpress CHS
+          && i != 15      //Do not allow longpress EEX as EEX is a leading edge button
+#endif
+          && i != 16) {   //Do not allow longpress BKSPC
         if(getSystemFlag(FLAG_USER)) {
           longpressDelayedkey1 = kbd_usr[i].fShifted;
-          if(i!=13 && i!=14 && i!=15) longpressDelayedkey3 = kbd_usr[i].gShifted;
+          if(i != 13 && i != 14 && i != 15)
+            longpressDelayedkey3 = kbd_usr[i].gShifted;
         }
         else {
           longpressDelayedkey1 = kbd_std[i].fShifted;
           if(
-               i!=12     //Do not allow second longpress ENTER
-          	&& i!=13     //Do not allow second longpress x<>y
-          #ifndef TESTING
-          	&& i!=14     //Do not allow second longpress CHS
-          	&& i!=15     //Do not allow second longpress EEX
-          #endif
-          ) longpressDelayedkey3 = kbd_std[i].gShifted;
+              i    != 12  //Do not allow second longpress ENTER
+              && i != 13  //Do not allow second longpress x<>y
+#ifndef TESTING
+              && i != 14  //Do not allow second longpress CHS
+              && i != 15  //Do not allow second longpress EEX
+#endif
+              )
+            longpressDelayedkey3 = kbd_std[i].gShifted;
         }
         break;
       }
     }
-  }                                                                         //yellow and blue function keys ^^
+  } //yellow and blue function keys ^^
 
   if(calcMode == CM_NORMAL) {
     switch(*result) {
-      case ITM_XEQ      : longpressDelayedkey2=longpressDelayedkey1;   longpressDelayedkey1 = -MNU_XXEQ; break;    //XEQ longpress to XEQMENU 
-      case ITM_BACKSPACE: longpressDelayedkey2=longpressDelayedkey1;   longpressDelayedkey1 = ITM_CLSTK; break;    //backspace longpress to CLSTK
-      case ITM_EXIT1    :                                              longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
-      //case ITM_CHS    :                                              longpressDelayedkey1 = ITM_XexY;  break;     //sample on CHS, operating X<>Y. XEQ must still be created.
+      case ITM_XEQ      : longpressDelayedkey2=longpressDelayedkey1;  longpressDelayedkey1 = -MNU_XXEQ; break;    //XEQ longpress to XEQMENU 
+      case ITM_BACKSPACE: longpressDelayedkey2=longpressDelayedkey1;  longpressDelayedkey1 = ITM_CLSTK; break;    //backspace longpress to CLSTK
+      case ITM_EXIT1    :                                             longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+    //case ITM_CHS      :                                             longpressDelayedkey1 = ITM_XexY;  break;    //sample on CHS, operating X<>Y. XEQ must still be created.
       default:;
     }
-  } else
-	  if(calcMode == CM_NIM) {
-	    switch(*result) {
-	      case ITM_XEQ      : longpressDelayedkey2=longpressDelayedkey1; longpressDelayedkey1 = -MNU_XXEQ; break;    //XEQ longpress to XEQMENU 
-	      case ITM_BACKSPACE:                                            longpressDelayedkey1 = ITM_CLN;   break;    //BACKSPACE longpress clears input buffer
-          case ITM_EXIT1    :                                          longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
-	      default:;
-	    }
-	  } else
-		  if(calcMode == CM_AIM) {
-		    switch(*result) {
-              case ITM_BACKSPACE:                                      longpressDelayedkey1 = ITM_CLA;   break;     //BACKSPACE longpress clears input buffer
-              case ITM_EXIT1    :                                      longpressDelayedkey1 = ITM_CLAIM; break;     //EXIT longpress DOES CLAIM
-              case ITM_ENTER    :                                      longpressDelayedkey1 = ITM_XEDIT; break;
-		      default:;
-		    }
-		  } else {
-		      switch(*result) {
-                case ITM_EXIT1    :                                    longpressDelayedkey1 = ITM_CLAIM; break;     //EXIT longpress DOES CLAIM
-                default:;
-              }
-		    }
+  }
+  else if(calcMode == CM_NIM) {
+    switch(*result) {
+      case ITM_XEQ      : longpressDelayedkey2=longpressDelayedkey1;  longpressDelayedkey1 = -MNU_XXEQ; break;    //XEQ longpress to XEQMENU 
+      case ITM_BACKSPACE:                                             longpressDelayedkey1 = ITM_CLN;   break;    //BACKSPACE longpress clears input buffer
+      case ITM_EXIT1    :                                             longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+      default:;
+    }
+  }
+  else if(calcMode == CM_AIM) {
+    switch(*result) {
+      case ITM_BACKSPACE:                                             longpressDelayedkey1 = ITM_CLA;   break;    //BACKSPACE longpress clears input buffer
+      case ITM_EXIT1    :                                             longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+      case ITM_ENTER    :                                             longpressDelayedkey1 = ITM_XEDIT; break;
+      default:;
+    }
+  }
+  else {
+    switch(*result) {
+      case ITM_EXIT1    :                                             longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+      default:;
+    }
+  }
 
-  if(longpressDelayedkey1 !=0) {                                      //if activated key pressed 
+  if(longpressDelayedkey1 != 0) {       //if activated key pressed
     JM_auto_longpress_enabled = longpressDelayedkey1;
     fnTimerStart(TO_CL_LONG, TO_CL_LONG, JM_TO_CL_LONG);    //dr
 
     if(JM_auto_doublepress_enabled != 0) {
-       hideFunctionName();    
-       undo();
-       showFunctionName(JM_auto_doublepress_enabled, FUNCTION_NOPTIME);  //JM CLRDROP
-       *result = JM_auto_doublepress_enabled;
-       fnTimerStop(TO_CL_DROP);         //JM TIMER CLRDROP ON DOUBLE BACKSPACE
-       setSystemFlag(FLAG_ASLIFT);      //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+      hideFunctionName();
+      undo();
+      showFunctionName(JM_auto_doublepress_enabled, FUNCTION_NOPTIME);          //JM CLRDROP
+      *result = JM_auto_doublepress_enabled;
+      fnTimerStop(TO_CL_DROP);          //JM TIMER CLRDROP ON DOUBLE BACKSPACE
+      setSystemFlag(FLAG_ASLIFT);       //JM TIMER CLRDROP ON DOUBLE BACKSPACE
     }
   }
-
 }
 
 
 
 //******************* JM LONGPRESS & JM DOUBLE CLICK START *******************************
 
-int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM LONGPRESS vv
+int16_t nameFunction(int16_t fn, int16_t itemShift) { //JM LONGPRESS vv
   int16_t row, func;
-  int16_t ix_fn;  //JMXXX
+  int16_t ix_fn; //JMXXX
   func = 0;
   const softmenu_t *sm;
 
-//JMTOCHECK2
-  if(/*softmenuStackPointer > 0*/true) {
+  //JMTOCHECK2
+  if(/*softmenuStackPointer > 0*/ true) {
     sm = &softmenu[softmenuStack[0].softmenuId];
-    row = min(3, (sm->numItems + modulo(softmenuStack[0].firstItem - sm->numItems, 6))/6 - softmenuStack[0].firstItem/6) - 1;
+    row = min(3, (sm->numItems + modulo(softmenuStack[0].firstItem - sm->numItems, 6)) / 6 - softmenuStack[0].firstItem / 6) - 1;
 
-    if(itemShift/6 <= row && softmenuStack[0].firstItem + itemShift + (fn - 1) < sm->numItems) {
+    if(itemShift / 6 <= row && softmenuStack[0].firstItem + itemShift + (fn - 1) < sm->numItems) {
       func = (sm->softkeyItem)[softmenuStack[0].firstItem + itemShift + (fn - 1)];
 /*XXX*/
       ix_fn = 0;
-      if(func_lookup(fn,itemShift,&ix_fn)) {
-        //printf("---%d\n",ix_fn);
+      if(func_lookup(fn, itemShift, &ix_fn)) {
+      //printf("---%d\n",ix_fn);
         func = ix_fn;
       }
 /*XXX*/
@@ -464,8 +468,8 @@ int16_t nameFunction(int16_t fn, int16_t itemShift) {                       //JM
         func = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
       }
 
-      if(func < 0) {
-        func = - func;
+      if(func < 0)  {
+        func = -func;
       }
     }
   }
@@ -753,21 +757,21 @@ void shiftCutoff(uint16_t unusedButMandatoryParameter) {        //dr - press shi
 
 uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT, bool_t GSHIFT) {
   int16_t item1 = 0;
-  //printf("####A>>%u %u %u\n",id,item,item1);
-  if(ITM_A +26 <= item && item <= ITM_Z +26) {
-    if(keyReplacements(item-26, &item1, NL, FSHIFT, GSHIFT)) {
-      return max(item1,-item1);
+//printf("####A>>%u %u %u\n",id,item,item1);
+  if(ITM_A + 26 <= item && item <= ITM_Z + 26) {
+    if(keyReplacements(item - 26, &item1, NL, FSHIFT, GSHIFT)) {
+      return max(item1, -item1);
     }
     else {
-      return max(item,-item);
+      return max(item, -item);
     }
   }
   else {
-    if(keyReplacements(item, &item1, NL, FSHIFT, GSHIFT)) {
-      return max(item1,-item1);
+    if(keyReplacements(item, &item1, NL, FSHIFT, GSHIFT))  {
+      return max(item1, -item1);
     }
     else {
-      return max(item,-item);
+      return max(item, -item);
     }
   }
 }
@@ -889,9 +893,9 @@ void fnRebuildTimerRefresh(void) {
 #ifdef DMCP_BUILD
   bool_t hasRunning = false;
   uint32_t next;
-  
-  for(int i=0; i<TMR_NUMBER; i++) {
-    if(timer[i].state == TMR_RUNNING) {
+
+  for(int i = 0; i < TMR_NUMBER; i++) {
+    if (timer[i].state == TMR_RUNNING) {
       hasRunning = true;
       next = timer[i].timer_will_expire;
       if(nextTimerRefresh != 0 && next < nextTimerRefresh) {
@@ -902,7 +906,7 @@ void fnRebuildTimerRefresh(void) {
       }
     }
   }
-  
+
   if(!hasRunning) {
     nextTimerRefresh = 0;
   }
@@ -924,7 +928,7 @@ gboolean refreshTimer(gpointer data) {      // This function is called every 5 m
   gint64 now = g_get_monotonic_time();
 
   if(now < timerLastCalled) {
-    for(int i=0; i<TMR_NUMBER; i++) {
+    for(int i = 0; i < TMR_NUMBER; i++) {
       if(timer[i].state == TMR_RUNNING) {
         timer[i].state = TMR_COMPLETED;
         timer[i].func(timer[i].param);      // Callback to configured function
@@ -932,10 +936,9 @@ gboolean refreshTimer(gpointer data) {      // This function is called every 5 m
     }
   }
   else {
-    for(int i=0; i<TMR_NUMBER; i++) {
+    for(int i = 0; i < TMR_NUMBER; i++) {
       if(timer[i].state == TMR_RUNNING) {
-        if(timer[i].timer_will_expire <= now)
-        {
+        if(timer[i].timer_will_expire <= now) {
           timer[i].state = TMR_COMPLETED;
           timer[i].func(timer[i].param);    // Callback to configured function
         }
@@ -956,20 +959,19 @@ void refreshTimer(void) {                   // This function is called when next
   uint32_t now = (uint32_t)sys_current_ms();
 
   if(now < timerLastCalled) {
-    for(int i=0; i<TMR_NUMBER; i++) {
+    for(int i = 0; i < TMR_NUMBER; i++) {
       if(timer[i].state == TMR_RUNNING) {
         timer[i].state = TMR_COMPLETED;
-        timer[i].func(timer[i].param);      // Callback to configured function
+        timer[i].func(timer[i].param); // Callback to configured function
       }
     }
   }
   else {
-    for(int i=0; i<TMR_NUMBER; i++) {
+    for(int i = 0; i < TMR_NUMBER; i++) {
       if(timer[i].state == TMR_RUNNING) {
-        if(timer[i].timer_will_expire <= now)
-        {
+        if(timer[i].timer_will_expire <= now) {
           timer[i].state = TMR_COMPLETED;
-          timer[i].func(timer[i].param);    // Callback to configured function
+          timer[i].func(timer[i].param); // Callback to configured function
         }
       }
     }
@@ -995,9 +997,9 @@ void fnTimerReset(void) {
   timerLastCalled = 0;
 #endif
 
-  for(int i=0; i<TMR_NUMBER; i++) {
+  for(int i = 0; i < TMR_NUMBER; i++) {
     timer[i].state = TMR_UNUSED;
-    timer[i].func  = fnTimerDummyTest;
+    timer[i].func = fnTimerDummyTest;
     timer[i].param = 0;
   }
 

@@ -25,7 +25,6 @@
 #ifndef GRAPHS_H
 #define GRAPHS_H
 
-#include "decNumberWrappers.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 

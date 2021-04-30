@@ -22,7 +22,6 @@
 #ifndef XEQM_H
 #define XEQM_H
 
-#include "decNumberWrappers.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 

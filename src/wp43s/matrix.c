@@ -1292,7 +1292,7 @@ void showMatrixEditor() {
   if(matSelCol == 0 || cols <= 4) {
     scrollColumn = 0;
   }
-  else if(matSelCol == cols - 1) {
+  else if(matSelCol == cols) {
     scrollColumn = matSelCol - 3;
   }
   else if(matSelCol < scrollColumn) {
@@ -1575,7 +1575,7 @@ smallFont:
   }
 
   if(!forEditor) Y_POS += REGISTER_LINE_HEIGHT;
-  const bool_t rightEllipsis = (cols > maxCols + sCol);
+  const bool_t rightEllipsis = (cols > maxCols) && (cols > maxCols + sCol - 1);
   const bool_t leftEllipsis = (sCol > 0);
   int16_t digits;
 
@@ -1599,11 +1599,11 @@ smallFont:
   for(int i = 0; i < maxRows; i++) {
     int16_t colX = 20;
     showString((maxRows == 1) ? "[" : (i == 0) ? STD_MAT_TL : (i + 1 == maxRows) ? STD_MAT_BL : STD_MAT_ML, font, X_POS + 1, Y_POS - (maxRows -1 - i) * fontHeight, vmNormal, true, false);
-    for(int j = 0; j< maxCols; j++) {
-      if(leftEllipsis) {
-        showString(STD_ELLIPSIS, font, X_POS + 10, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
-        colX += stringWidth(STD_ELLIPSIS, font, true, true);
-      }
+    if(leftEllipsis) {
+      showString(STD_ELLIPSIS, font, X_POS + 10, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+      colX += stringWidth(STD_ELLIPSIS, font, true, true);
+    }
+    for(int j = 0; j< maxCols - ((cols > maxCols && !rightEllipsis) ? 1 : 0); j++) {
       if(((i == maxRows - 1) && (rows > maxRows + sRow)) || ((j == maxCols - 1) && rightEllipsis) || ((i == 0) && (sRow > 0))) {
         strcpy(tmpString, STD_ELLIPSIS);
         vm = vmNormal;
@@ -1623,7 +1623,7 @@ smallFont:
         }
       }
       width = stringWidth(tmpString, font, true, true) + 1;
-      showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + (((j == maxCols - 1) && rightEllipsis) ? 10 : (colWidth[j] - width)) - rPadWidth[i * 4 + j], Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+      showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + (((j == maxCols - 1) && rightEllipsis) ? 8 - width : (colWidth[j] - width) - rPadWidth[i * 4 + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
       colX += colWidth[j] + 20;
     }
     showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, X_POS + (font == &standardFont ? 7 : 10) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);

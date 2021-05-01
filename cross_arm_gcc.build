@@ -1,6 +1,6 @@
 [binaries]
-c       = 'arm-none-eabi-gcc'
-cpp     = 'arm-none-eabi-g++'
+c       = ['ccache', 'arm-none-eabi-gcc']
+cpp     = ['ccache', 'arm-none-eabi-g++']
 ld      = 'arm-none-eabi-ld'
 ar      = 'arm-none-eabi-ar'
 as      = 'arm-none-eabi-as'

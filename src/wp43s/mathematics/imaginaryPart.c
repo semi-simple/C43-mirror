@@ -71,6 +71,7 @@ void fnImaginaryPart(uint16_t unusedButMandatoryParameter) {
 
 
 void imagPartCxma(void) {
+#ifndef TESTSUITE_BUILD
   complex34Matrix_t cMat;
   real34Matrix_t rMat;
 
@@ -83,6 +84,7 @@ void imagPartCxma(void) {
 
   convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X); // cMat invalidates here
   realMatrixFree(&rMat);
+#endif // TESTSUITE_BUILD
 }
 
 

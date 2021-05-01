@@ -70,6 +70,7 @@ void fnSwapRealImaginary(uint16_t unusedButMandatoryParameter) {
 
 
 void swapReImCxma(void) {
+#ifndef TESTSUITE_BUILD
   complex34Matrix_t cMat;
   real34_t tmp;
 
@@ -80,6 +81,7 @@ void swapReImCxma(void) {
     real34Copy(VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]), VARIABLE_REAL34_DATA(&cMat.matrixElements[i]));
     real34Copy(&tmp                                         , VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]));
   }
+#endif // TESTSUITE_BUILD
 }
 
 

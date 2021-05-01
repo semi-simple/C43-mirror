@@ -109,6 +109,7 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
     fnDropY(NOPARAM);
     setSystemFlag(FLAG_ASLIFT);
   }
+#ifndef TESTSUITE_BUILD
   else if(dataTypeX == dtReal34Matrix && dataTypeY == dtReal34Matrix) {
     real34Matrix_t rMat, iMat;
     complex34Matrix_t cMat;
@@ -163,6 +164,7 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
     fnDropY(NOPARAM);
     setSystemFlag(FLAG_ASLIFT);
   }
+#endif // TESTSUITE_BUILD
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

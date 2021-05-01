@@ -65,7 +65,8 @@ void fnCxToRe(uint16_t unusedButMandatoryParameter) {
     }
   }
 
-  if(dataTypeX == dtComplex34Matrix) {
+#ifndef TESTSUITE_BUILD
+  else if(dataTypeX == dtComplex34Matrix) {
     complex34Matrix_t cMat;
     real34Matrix_t rMat, iMat;
 
@@ -93,6 +94,7 @@ void fnCxToRe(uint16_t unusedButMandatoryParameter) {
     realMatrixFree(&rMat);
     realMatrixFree(&iMat);
   }
+#endif // TESTSUITE_BUILD
 
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation

@@ -70,6 +70,7 @@ void fnRealPart(uint16_t unusedButMandatoryParameter) {
 
 
 void realPartCxma(void) {
+#ifndef TESTSUITE_BUILD
   complex34Matrix_t cMat;
   real34Matrix_t rMat;
 
@@ -82,6 +83,7 @@ void realPartCxma(void) {
 
   convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X); // cMat invalidates here
   realMatrixFree(&rMat);
+#endif // TESTSUITE_BUILD
 }
 
 

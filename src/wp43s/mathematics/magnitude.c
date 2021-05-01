@@ -86,6 +86,7 @@ void magnitudeRema(void) {
 
 
 void magnitudeCxma(void) {
+#ifndef TESTSUITE_BUILD
   complex34Matrix_t cMat;
   real34Matrix_t rMat;
   real34_t dummy;
@@ -99,6 +100,7 @@ void magnitudeCxma(void) {
 
   convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X);
   realMatrixFree(&rMat);
+#endif // TESTSUITE_BUILD
 }
 
 

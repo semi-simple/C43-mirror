@@ -121,6 +121,7 @@ void argCplx(void) {
 
 
 void argCxma(void) {
+#ifndef TESTSUITE_BUILD
   complex34Matrix_t cMat;
   real34Matrix_t rMat;
   real34_t dummy;
@@ -135,4 +136,5 @@ void argCxma(void) {
 
   convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X);
   realMatrixFree(&rMat);
+#endif // TESTSUITE_BUILD
 }

@@ -111,6 +111,9 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     multiplyRealMatrix             (const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res);
   void     multiplyRealMatrices           (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
 
+  void     multiplyComplexMatrix          (const complex34Matrix_t *matrix, const real34_t *xr, const real34_t *xi, complex34Matrix_t *res);
+  void     multiplyComplexMatrices        (const complex34Matrix_t *y, const complex34Matrix_t *x, complex34Matrix_t *res);
+
   uint16_t realVectorSize                 (const real34Matrix_t *matrix);
   void     dotRealVectors                 (const real34Matrix_t *y, const real34Matrix_t *x, real34_t *res);
   void     crossRealVectors               (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);

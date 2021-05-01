@@ -35,6 +35,7 @@
 #include "gmpWrappers.h"
 #include "items.h"
 #include "mathematics/comparisonReals.h"
+#include "mathematics/multiplication.h"
 #include "mathematics/toPolar.h"
 #include "memory.h"
 #include "registers.h"
@@ -2376,6 +2377,58 @@ void multiplyRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real
         realAdd(&sum, &prod, &sum, &ctxtReal39);
       }
       realToReal34(&sum, &res->matrixElements[i * cols + j]);
+    }
+  }
+}
+
+void multiplyComplexMatrix(const complex34Matrix_t *matrix, const real34_t *xr, const real34_t *xi, complex34Matrix_t *res) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+  real_t yr, yi, _xr, _xi;
+
+  if(matrix != res) complexMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    real34ToReal(VARIABLE_REAL34_DATA(&matrix->matrixElements[i]), &yr);
+    real34ToReal(VARIABLE_IMAG34_DATA(&matrix->matrixElements[i]), &yi);
+    real34ToReal(xr, &_xr);
+    real34ToReal(xi, &_xi);
+    mulComplexComplex(&yr, &yi, &_xr, &_xi, &yr, &yi, &ctxtReal39);
+    realToReal34(&yr, VARIABLE_REAL34_DATA(&res->matrixElements[i]));
+    realToReal34(&yi, VARIABLE_IMAG34_DATA(&res->matrixElements[i]));
+  }
+}
+
+void multiplyComplexMatrices(const complex34Matrix_t *y, const complex34Matrix_t *x, complex34Matrix_t *res){
+  const uint16_t rows = y->header.matrixRows;
+  const uint16_t iter = y->header.matrixColumns;
+  const uint16_t cols = x->header.matrixColumns;
+  int32_t i, j, k;
+  real_t sumr, prodr, pr, qr;
+  real_t sumi, prodi, pi, qi;
+
+  if(y->header.matrixColumns != x->header.matrixRows) {
+    res->matrixElements = NULL; // Matrix mismatch
+    res->header.matrixRows = res->header.matrixColumns = 0;
+    return;
+  }
+
+  complexMatrixInit(res, rows, cols);
+  for(i = 0; i < rows; ++i) {
+    for(j = 0; j < cols; ++j) {
+      realCopy(const_0, &sumr);  realCopy(const_0, &sumi);
+      realCopy(const_0, &prodr); realCopy(const_0, &prodi);
+      for(k = 0; k < iter; ++k) {
+        real34ToReal(VARIABLE_REAL34_DATA(&y->matrixElements[i * iter + k]), &pr);
+        real34ToReal(VARIABLE_IMAG34_DATA(&y->matrixElements[i * iter + k]), &pi);
+        real34ToReal(VARIABLE_REAL34_DATA(&x->matrixElements[k * cols + j]), &qr);
+        real34ToReal(VARIABLE_IMAG34_DATA(&x->matrixElements[k * cols + j]), &qi);
+        mulComplexComplex(&pr, &pi, &qr, &qi, &prodr, &prodi, &ctxtReal39);
+        realAdd(&sumr, &prodr, &sumr, &ctxtReal39);
+        realAdd(&sumi, &prodi, &sumi, &ctxtReal39);
+      }
+      realToReal34(&sumr, VARIABLE_REAL34_DATA(&res->matrixElements[i * cols + j]));
+      realToReal34(&sumi, VARIABLE_IMAG34_DATA(&res->matrixElements[i * cols + j]));
     }
   }
 }

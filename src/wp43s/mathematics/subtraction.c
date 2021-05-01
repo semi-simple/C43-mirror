@@ -460,7 +460,10 @@ void subRemaRema(void) {
  * \return void
  ***********************************************/
 void subRemaCxma(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
+  addCxmaCxma();
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -472,7 +475,10 @@ void subRemaCxma(void) {
  * \return void
  ***********************************************/
 void subCxmaRema(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_X, REGISTER_X);
+  addCxmaCxma();
+#endif // TESTSUITE_BUILD
 }
 
 

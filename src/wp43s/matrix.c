@@ -1367,11 +1367,7 @@ void mimEnter(bool_t commit) {
       else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
         complex34_t *complex34Ptr;
         complex34Matrix_t cxma;
-        complexMatrixInit(&cxma, openMatrixMIMPointer.header.matrixRows, cols);
-        for(uint16_t i = 0; i < openMatrixMIMPointer.header.matrixRows * cols; ++i) {
-          real34Copy(&openMatrixMIMPointer.realMatrix.matrixElements[i], VARIABLE_REAL34_DATA(&cxma.matrixElements[i]));
-          real34Zero(VARIABLE_IMAG34_DATA(&cxma.matrixElements[i]));
-        }
+        convertReal34MatrixToComplex34Matrix(&openMatrixMIMPointer.realMatrix, &cxma);
         realMatrixFree(&openMatrixMIMPointer.realMatrix);
         convertComplex34MatrixToComplex34MatrixRegister(&cxma, matrixIndex);
         openMatrixMIMPointer.complexMatrix.header.matrixRows = cxma.header.matrixRows;
@@ -2307,6 +2303,38 @@ void addRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Mat
 
 void subtractRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
   addSubRealMatrices(y, x, true, res);
+}
+
+static void addSubComplexMatrices(const complex34Matrix_t *y, const complex34Matrix_t *x, bool_t subtraction, complex34Matrix_t *res) {
+  const uint16_t rows = y->header.matrixRows;
+  const uint16_t cols = y->header.matrixColumns;
+  int32_t i;
+
+  if((y->header.matrixColumns != x->header.matrixColumns) || (y->header.matrixRows != x->header.matrixRows)) {
+    res->matrixElements = NULL; // Matrix mismatch
+    res->header.matrixRows = res->header.matrixColumns = 0;
+    return;
+  }
+
+  if((y != res) && (x != res)) complexMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    if(subtraction) {
+      real34Subtract(VARIABLE_REAL34_DATA(&y->matrixElements[i]), VARIABLE_REAL34_DATA(&x->matrixElements[i]), VARIABLE_REAL34_DATA(&res->matrixElements[i]));
+      real34Subtract(VARIABLE_IMAG34_DATA(&y->matrixElements[i]), VARIABLE_IMAG34_DATA(&x->matrixElements[i]), VARIABLE_IMAG34_DATA(&res->matrixElements[i]));
+    }
+    else {
+      real34Add(VARIABLE_REAL34_DATA(&y->matrixElements[i]), VARIABLE_REAL34_DATA(&x->matrixElements[i]), VARIABLE_REAL34_DATA(&res->matrixElements[i]));
+      real34Add(VARIABLE_IMAG34_DATA(&y->matrixElements[i]), VARIABLE_IMAG34_DATA(&x->matrixElements[i]), VARIABLE_IMAG34_DATA(&res->matrixElements[i]));
+    }
+  }
+}
+
+void addComplexMatrices(const complex34Matrix_t *y, const complex34Matrix_t *x, complex34Matrix_t *res) {
+  addSubComplexMatrices(y, x, false, res);
+}
+
+void subtractComplexMatrices(const complex34Matrix_t *y, const complex34Matrix_t *x, complex34Matrix_t *res) {
+  addSubComplexMatrices(y, x, true, res);
 }
 
 

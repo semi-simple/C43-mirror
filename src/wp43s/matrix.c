@@ -883,7 +883,33 @@ void fnInvertMatrix(uint16_t unusedParamButMandatory) {
     }
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t x, res;
+
+    linkToComplexMatrixRegister(REGISTER_X, &x);
+
+    if(x.header.matrixRows != x.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+                x.header.matrixRows, x.header.matrixColumns);
+        moreInfoOnError("In function fnInvertMatrix:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      complex_matrix_inverse(&x, &res);
+      if(res.matrixElements) {
+        convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
+        complexMatrixFree(&res);
+        setSystemFlag(FLAG_ASLIFT);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "attempt to invert a singular matrix");
+          moreInfoOnError("In function fnInvertMatrix:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+    }
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -2948,6 +2974,50 @@ static void WP34S_matrix_pivoting_solve(const real34Matrix_t *LU, real_t *b, uin
   }
 }
 
+static void complex_matrix_pivoting_solve(const complex34Matrix_t *LU, real_t *b, uint16_t *pivot, real_t *x, realContext_t *realContext) {
+  const uint16_t n = LU->header.matrixColumns;
+  uint16_t i, k;
+  real_t rr, ri, tr, ti;
+
+  /* Solve the first linear equation Ly = b */
+  for(k = 0; k < n; k++) {
+    if(k != pivot[k]) {
+      real_t swap;
+      realCopy(&b[k * 2], &swap);
+      realCopy(&b[pivot[k] * 2], &b[k * 2]);
+      realCopy(&swap, &b[pivot[k] * 2]);
+      realCopy(&b[k * 2 + 1], &swap);
+      realCopy(&b[pivot[k] * 2 + 1], &b[k * 2 + 1]);
+      realCopy(&swap, &b[pivot[k] * 2 + 1]);
+    }
+    realCopy(&b[k * 2    ], x + (k * 2    ));
+    realCopy(&b[k * 2 + 1], x + (k * 2 + 1));
+    for(i = 0; i < k; i++) {
+      real34ToReal(VARIABLE_REAL34_DATA(&LU->matrixElements[k * n + i]), &rr);
+      real34ToReal(VARIABLE_IMAG34_DATA(&LU->matrixElements[k * n + i]), &ri);
+      mulComplexComplex(&rr, &ri, x + i * 2, x + (i * 2 + 1), &tr, &ti, realContext);
+      realSubtract(x + (k * 2    ), &tr, x + (k * 2    ), realContext);
+      realSubtract(x + (k * 2 + 1), &ti, x + (k * 2 + 1), realContext);
+    }
+  }
+
+  /* Solve the second linear equation Ux = y */
+  for(k = n; k > 0; k--) {
+    --k;
+    for(i = k + 1; i < n; i++) {
+      real34ToReal(VARIABLE_REAL34_DATA(&LU->matrixElements[k * n + i]), &rr);
+      real34ToReal(VARIABLE_IMAG34_DATA(&LU->matrixElements[k * n + i]), &ri);
+      mulComplexComplex(&rr, &ri, x + i * 2, x + (i * 2 + 1), &tr, &ti, realContext);
+      realSubtract(x + (k * 2    ), &tr, x + (k * 2    ), realContext);
+      realSubtract(x + (k * 2 + 1), &ti, x + (k * 2 + 1), realContext);
+    }
+    real34ToReal(VARIABLE_REAL34_DATA(&LU->matrixElements[k * n + k]), &rr);
+    real34ToReal(VARIABLE_IMAG34_DATA(&LU->matrixElements[k * n + k]), &ri);
+    divComplexComplex(x + (k * 2), x + (k * 2 + 1), &rr, &ri, x + (k * 2), x + (k * 2 + 1), realContext);
+    ++k;
+  }
+}
+
 /* Invert a matrix
  * Do this by calculating the LU decomposition and solving lots of systems
  * of linear equations.
@@ -3008,6 +3078,68 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
   freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
   realMatrixFree(&pvt);
   realMatrixFree(&lu);
+}
+
+void complex_matrix_inverse(const complex34Matrix_t *matrix, complex34Matrix_t *res) {
+  const uint16_t n = matrix->header.matrixColumns;
+  real_t *x;
+  complex34Matrix_t lu, pvt;
+  uint16_t *pivots;
+  uint16_t i, j;
+  real_t *b;
+
+  if(matrix->header.matrixRows != matrix->header.matrixColumns) {
+    if(matrix != res) {
+      res->matrixElements = NULL; // Matrix is not square
+      res->header.matrixRows = res->header.matrixColumns = 0;
+    }
+    return;
+  }
+
+  pivots = allocWp43s(TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  complex_LU_decomposition(matrix, &lu, pivots);
+  if(lu.matrixElements == NULL) {
+    freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+    if(matrix != res) {
+      res->matrixElements = NULL; // Singular matrix
+      res->header.matrixRows = res->header.matrixColumns = 0;
+    }
+    return;
+  }
+
+  if(matrix != res) copyComplexMatrix(matrix, res);
+
+  x = allocWp43s(res->header.matrixRows * REAL_SIZE * 2);
+  b = allocWp43s(res->header.matrixRows * REAL_SIZE * 2);
+  for(i = 0; i < n; i++) {
+    for(j = 0; j < n; j++) {
+      realCopy((i == j) ? const_1 : const_0, &b[j * 2    ]);
+      realCopy(                     const_0, &b[j * 2 + 1]);
+    }
+    complex_matrix_pivoting_solve(&lu, b, pivots, x, &ctxtReal39);
+    for(j = 0; j < n; j++) {
+      realToReal34(x + (j * 2    ), VARIABLE_REAL34_DATA(&res->matrixElements[j * n + i]));
+      realToReal34(x + (j * 2 + 1), VARIABLE_IMAG34_DATA(&res->matrixElements[j * n + i]));
+    }
+  }
+  freeWp43s(b, res->header.matrixRows * REAL_SIZE * 2);
+  freeWp43s(x, res->header.matrixRows * REAL_SIZE * 2);
+  complexMatrixFree(&lu);
+
+  lu.header.matrixRows    = res->header.matrixRows;
+  lu.header.matrixColumns = res->header.matrixColumns;
+  lu.matrixElements       = res->matrixElements;
+  res->header.matrixRows    = 0;
+  res->header.matrixColumns = 0;
+  res->matrixElements       = NULL;
+  complexMatrixIdentity(&pvt, n);
+  for(i = 0; i < n; ++i)
+    complexMatrixSwapRows(&pvt, &pvt, i, pivots[i]);
+  multiplyComplexMatrices(&lu, &pvt, res);
+
+  freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  complexMatrixFree(&pvt);
+  complexMatrixFree(&lu);
 }
 
 

@@ -1,6 +1,6 @@
 project('gmp', 'c',
   version       : '6.2.0',
-  meson_version : '>=0.53.2',
+  meson_version : '>=0.56.0',
   license       : ['LGPL-3.0-only', 'GPL-2.0-only'],
 )
 

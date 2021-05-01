@@ -2470,8 +2470,7 @@ void crossRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34Ma
   real_t a1, a2, a3, b1, b2, b3, p, q;
 
   if((elementsY == 0) || (elementsX == 0) || (elementsY > 3) || (elementsX > 3)) {
-    realToReal34(const_NaN, res); // Not a vector or mismatched
-    return;
+    return; // Not a vector or mismatched
   }
 
   real34ToReal(                 &y->matrixElements[0]            , &a1);
@@ -2492,6 +2491,79 @@ void crossRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34Ma
 
   realMultiply(&a1, &b2, &p, &ctxtReal39); realMultiply(&a2, &b1, &q, &ctxtReal39);
   realSubtract(&p, &q, &p, &ctxtReal39); realToReal34(&p, &res->matrixElements[2]);
+}
+
+uint16_t complexVectorSize(const complex34Matrix_t *matrix) {
+  return realVectorSize((const real34Matrix_t *)matrix);
+}
+
+void dotComplexVectors(const complex34Matrix_t *y, const complex34Matrix_t *x, real34_t *res_r, real34_t *res_i) {
+  const uint16_t elements = complexVectorSize(y);
+  int32_t i;
+  real_t sumr, prodr, pr, qr;
+  real_t sumi, prodi, pi, qi;
+
+  if((complexVectorSize(y) == 0) || (complexVectorSize(x) == 0) || (complexVectorSize(y) != complexVectorSize(x))) {
+    realToReal34(const_NaN, res_r); realToReal34(const_NaN, res_i); // Not a vector or mismatched
+    return;
+  }
+
+  realCopy(const_0, &sumr);  realCopy(const_0, &sumi);
+  realCopy(const_0, &prodr); realCopy(const_0, &prodi);
+  for(i = 0; i < elements; ++i) {
+    real34ToReal(VARIABLE_REAL34_DATA(&y->matrixElements[i]), &pr); real34ToReal(VARIABLE_IMAG34_DATA(&y->matrixElements[i]), &pi);
+    real34ToReal(VARIABLE_REAL34_DATA(&x->matrixElements[i]), &qr); real34ToReal(VARIABLE_IMAG34_DATA(&x->matrixElements[i]), &qi);
+    mulComplexComplex(&pr, &pi, &qr, &qi, &prodr, &prodi, &ctxtReal39);
+    realAdd(&sumr, &prodr, &sumr, &ctxtReal39);
+    realAdd(&sumi, &prodi, &sumi, &ctxtReal39);
+  }
+  realToReal34(&sumr, res_r);
+  realToReal34(&sumi, res_i);
+}
+
+void crossComplexVectors(const complex34Matrix_t *y, const complex34Matrix_t *x, complex34Matrix_t *res) {
+  const uint16_t elementsY = complexVectorSize(y);
+  const uint16_t elementsX = complexVectorSize(x);
+  real_t a1r, a2r, a3r, b1r, b2r, b3r, pr, qr;
+  real_t a1i, a2i, a3i, b1i, b2i, b3i, pi, qi;
+
+  if((elementsY == 0) || (elementsX == 0) || (elementsY > 3) || (elementsX > 3)) {
+    return; // Not a vector or mismatched
+  }
+
+  real34ToReal(                 VARIABLE_REAL34_DATA(&y->matrixElements[0])            , &a1r);
+  real34ToReal(                 VARIABLE_IMAG34_DATA(&y->matrixElements[0])            , &a1i);
+  real34ToReal(elementsY >= 2 ? VARIABLE_REAL34_DATA(&y->matrixElements[1]) : const34_0, &a2r);
+  real34ToReal(elementsY >= 2 ? VARIABLE_IMAG34_DATA(&y->matrixElements[1]) : const34_0, &a2i);
+  real34ToReal(elementsY >= 3 ? VARIABLE_REAL34_DATA(&y->matrixElements[2]) : const34_0, &a3r);
+  real34ToReal(elementsY >= 3 ? VARIABLE_IMAG34_DATA(&y->matrixElements[2]) : const34_0, &a3i);
+
+  real34ToReal(                 VARIABLE_REAL34_DATA(&x->matrixElements[0])            , &b1r);
+  real34ToReal(                 VARIABLE_IMAG34_DATA(&x->matrixElements[0])            , &b1i);
+  real34ToReal(elementsX >= 2 ? VARIABLE_REAL34_DATA(&x->matrixElements[1]) : const34_0, &b2r);
+  real34ToReal(elementsX >= 2 ? VARIABLE_IMAG34_DATA(&x->matrixElements[1]) : const34_0, &b2i);
+  real34ToReal(elementsX >= 3 ? VARIABLE_REAL34_DATA(&x->matrixElements[2]) : const34_0, &b3r);
+  real34ToReal(elementsX >= 3 ? VARIABLE_IMAG34_DATA(&x->matrixElements[2]) : const34_0, &b3i);
+
+  complexMatrixInit(res, 1, 3);
+
+  mulComplexComplex(&a2r, &a2i, &b3r, &b3i, &pr, &pi, &ctxtReal39);
+  mulComplexComplex(&a3r, &a3i, &b2r, &b2i, &qr, &qi, &ctxtReal39);
+  realSubtract(&pr, &qr, &pr, &ctxtReal39), realSubtract(&pi, &qi, &pi, &ctxtReal39);
+  realToReal34(&pr, VARIABLE_REAL34_DATA(&res->matrixElements[0]));
+  realToReal34(&pi, VARIABLE_IMAG34_DATA(&res->matrixElements[0]));
+
+  mulComplexComplex(&a3r, &a3i, &b1r, &b1i, &pr, &pi, &ctxtReal39);
+  mulComplexComplex(&a1r, &a1i, &b3r, &b3i, &qr, &qi, &ctxtReal39);
+  realSubtract(&pr, &qr, &pr, &ctxtReal39), realSubtract(&pi, &qi, &pi, &ctxtReal39);
+  realToReal34(&pr, VARIABLE_REAL34_DATA(&res->matrixElements[1]));
+  realToReal34(&pi, VARIABLE_IMAG34_DATA(&res->matrixElements[1]));
+
+  mulComplexComplex(&a1r, &a1i, &b2r, &b2i, &pr, &pi, &ctxtReal39);
+  mulComplexComplex(&a2r, &a2i, &b1r, &b1i, &qr, &qi, &ctxtReal39);
+  realSubtract(&pr, &qr, &pr, &ctxtReal39), realSubtract(&pi, &qi, &pi, &ctxtReal39);
+  realToReal34(&pr, VARIABLE_REAL34_DATA(&res->matrixElements[2]));
+  realToReal34(&pi, VARIABLE_IMAG34_DATA(&res->matrixElements[2]));
 }
 
 

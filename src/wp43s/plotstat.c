@@ -72,9 +72,9 @@ char * padEquals(const char * ss);
 #endif
 
 #define roundedTicks false    //todo make variable
-graph_t   *gr_x;
-graph_t   *gr_y;
-graph_t   telltale;
+float   *gr_x;
+float   *gr_y;
+float   telltale;
 uint16_t  ix_count;
   
 float     graph_dx;           // Many unused functions in WP43S. Do not change the variables.
@@ -138,10 +138,10 @@ void statGraphReset(void){
 void graph_setupmemory(void) {
   int i;
   if(telltale != MEM_INITIALIZED) {
-    gr_x = (graph_t*)malloc(LIM * sizeof(graph_t)); 
-    memset(gr_x, 0,         LIM * sizeof(graph_t));
-    gr_y = (graph_t*)malloc(LIM * sizeof(graph_t)); 
-    memset(gr_y, 0,         LIM * sizeof(graph_t));
+    gr_x = (float*)malloc(LIM * sizeof(float)); 
+    memset(gr_x, 0,         LIM * sizeof(float));
+    gr_y = (float*)malloc(LIM * sizeof(float)); 
+    memset(gr_y, 0,         LIM * sizeof(float));
     telltale = MEM_INITIALIZED;
     ix_count = 0;
   }
@@ -153,7 +153,7 @@ void graph_setupmemory(void) {
   } else
   {
   #ifdef PC_BUILD
-    printf("^^@@ Two arrays of %u bytes each created, i.e. %u blocks total\n",(uint32_t) (LIM * sizeof(graph_t)), (uint32_t)(2 * LIM * sizeof(graph_t) / 4));
+    printf("^^@@ Two arrays of %u bytes each created, i.e. %u blocks total\n",(uint32_t) (LIM * sizeof(float)), (uint32_t)(2 * LIM * sizeof(float) / 4));
   #endif
   }
   
@@ -241,7 +241,7 @@ infinite:
 
 //#define realToReal39(source, destination) decQuadFromNumber ((real39_t *)(destination), source, &ctxtReal39)
 
-void realToFloat(const real_t *vv, graph_t *v) {
+void realToFloat(const real_t *vv, float *v) {
   *v = fnRealToFloat(vv);
   #ifdef PC_BUILD
     char tmpString1[100];                      //allow for 75 digits
@@ -262,7 +262,7 @@ void realToDouble1(const real_t *vv, double *v) {
 
 void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
   int16_t cnt;
-  graph_t x,y;
+  float x,y;
   realToInt32(SIGMA_N, cnt);
 
   if(cnt <= LIM) {
@@ -326,7 +326,7 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
 }
 
 
-graph_t grf_x(int i) {
+float grf_x(int i) {
   if (jm_NVECT) {
     return gr_y[i];
   }
@@ -335,7 +335,7 @@ graph_t grf_x(int i) {
   }
 }
 
-graph_t grf_y(int i) {
+float grf_y(int i) {
   if (jm_NVECT) {
     return gr_x[i];
   }
@@ -346,10 +346,10 @@ graph_t grf_y(int i) {
 
 
 #ifndef TESTSUITE_BUILD
-  int16_t screen_window_x(graph_t x_min, graph_t x, graph_t x_max) {
-    int16_t temp; graph_t tempr;
+  int16_t screen_window_x(float x_min, float x, float x_max) {
+    int16_t temp; float tempr;
     if (Aspect_Square) {
-      tempr = ((x-x_min)/(x_max-x_min)*(graph_t)(SCREEN_HEIGHT_GRAPH-1.0f));
+      tempr = ((x-x_min)/(x_max-x_min)*(float)(SCREEN_HEIGHT_GRAPH-1.0f));
       temp = (int16_t) tempr;
       if (temp>SCREEN_HEIGHT_GRAPH-1) {
         temp=SCREEN_HEIGHT_GRAPH-1;
@@ -358,7 +358,7 @@ graph_t grf_y(int i) {
       return temp+SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
     } 
     else {  //FULL SCREEN
-      tempr = ((x-x_min)/(x_max-x_min)*(graph_t)(SCREEN_WIDTH_GRAPH-1.0f));
+      tempr = ((x-x_min)/(x_max-x_min)*(float)(SCREEN_WIDTH_GRAPH-1.0f));
       temp = (int16_t) tempr;
       //printf("--> %d (%f %f)  ",temp, x_min,x_max);
       if (temp>SCREEN_WIDTH_GRAPH-1) {
@@ -374,13 +374,13 @@ graph_t grf_y(int i) {
   }
 
 
-  int16_t screen_window_y(graph_t y_min, graph_t y, graph_t y_max) {
+  int16_t screen_window_y(float y_min, float y, float y_max) {
     int16_t temp, minn;
-    graph_t tempr;
+    float tempr;
     if (!Aspect_Square) minn = SCREEN_NONSQ_HMIN;
     else minn = 0;
 
-    tempr = ((y-y_min)/(y_max-y_min)*(graph_t)(SCREEN_HEIGHT_GRAPH-1.0f - minn));
+    tempr = ((y-y_min)/(y_max-y_min)*(float)(SCREEN_HEIGHT_GRAPH-1.0f - minn));
     temp = (int16_t) tempr;
     if (temp>SCREEN_HEIGHT_GRAPH-1 - minn) {
       temp=SCREEN_HEIGHT_GRAPH-1 - minn;
@@ -671,8 +671,8 @@ void graphAxisDraw (void){
     printf("xzero=%d yzero=%d   \n",(int)xzero,(int)yzero);
   #endif
 
-  graph_t x; 
-  graph_t y;
+  float x; 
+  float y;
 
   if( PLOT_AXIS && !(yzero == SCREEN_HEIGHT_GRAPH-1 || yzero == minny)) {
     //DRAW XAXIS
@@ -826,7 +826,7 @@ void graphAxisDraw (void){
 float auto_tick(float tick_int_f) {
   return tick_int_f;
   //Obtain scaling of ticks, to about 20 intervals left to right.
-  //graph_t tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
+  //float tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
   snprintf(tmpString, TMP_STR_LENGTH, "%.1e", tick_int_f);
   char tx[4];
   tx[0] = tmpString[0]; //expecting the form 6.5e+01
@@ -1055,8 +1055,8 @@ void graphPlotstat(uint16_t selection){
   uint16_t  cnt, ix, statnum;
   uint16_t  xo, xn, xN; 
   uint8_t   yo, yn, yN;
-  graph_t x; 
-  graph_t y;
+  float x; 
+  float y;
 
   statnum = 0;
 //  graphAxisDraw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
@@ -1137,8 +1137,8 @@ graph_axis();
       printf("Axis2: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
   
-    graph_t dx = x_max-x_min;
-    graph_t dy = y_max-y_min;
+    float dx = x_max-x_min;
+    float dy = y_max-y_min;
   
     if (dy == 0.0f) {
       dy = 1.0f;
@@ -1299,8 +1299,8 @@ graph_axis();
           sprintf(ss,"%f",x); stringToReal(ss,&XX,&ctxtReal39);
         }
         yIsFnx( USEFLOATING, selection, x, &y, a0, a1, a2, &XX, &YY, RR, SMI, aa0, aa1, aa2);
-        xN = screen_window_x(x_min,(graph_t)x,x_max);
-        yN = screen_window_y(y_min,(graph_t)y,y_max);
+        xN = screen_window_x(x_min,(float)x,x_max);
+        yN = screen_window_y(y_min,(float)y,y_max);
         if(abs((int)yN-(int)yo)<=2 && abs((int)xN-(int)xo)<=2) break;
       }
       ix = x;

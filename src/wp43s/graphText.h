@@ -49,7 +49,7 @@ extern uint32_t     mem__32;                                          //JM_CSV
 extern bool_t       cancelFilename;
 void         print_numberstr(const char *line1, bool_t line_init);
 void         print_linestr  (const char *line1, bool_t line_init);
-int16_t      export_xy_to_file(graph_t x, graph_t y);
+int16_t      export_xy_to_file(float x, float y);
 int16_t      import_string_from_filename(char *line1,  char *dirname,   char *filename_short,  char *filename,  char *fallback, bool_t scanning);
 
 #endif // GRAPHTEXT_H

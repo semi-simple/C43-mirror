@@ -358,7 +358,8 @@ void fnOldMatrix(uint16_t unusedParamButMandatory) {
       convertReal34MatrixRegisterToReal34Matrix(matrixIndex, &openMatrixMIMPointer.realMatrix);
     }
     else {
-      // TO BE CODED
+      if(openMatrixMIMPointer.complexMatrix.matrixElements) complexMatrixFree(&openMatrixMIMPointer.complexMatrix);
+      convertComplex34MatrixRegisterToComplex34Matrix(matrixIndex, &openMatrixMIMPointer.complexMatrix);
     }
   }
   else {
@@ -425,7 +426,7 @@ void fnGoToColumn(uint16_t col) {
         convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer.realMatrix, matrixIndex);
       }
       else {
-        // TO BE CODED
+        convertComplex34MatrixToComplex34MatrixRegister(&openMatrixMIMPointer.complexMatrix, matrixIndex);
       }
       setIRegisterAsInt(false, tmpRow);
       setJRegisterAsInt(false, col);
@@ -502,7 +503,7 @@ void fnInsRow(uint16_t unusedParamButMandatory) {
       insRowRealMatrix(&openMatrixMIMPointer.realMatrix, getIRegisterAsInt(true));
     }
     else {
-      // TO BE CODED
+      insRowComplexMatrix(&openMatrixMIMPointer.complexMatrix, getIRegisterAsInt(true));
     }
     mimEnter(true);
   }
@@ -533,7 +534,7 @@ void fnDelRow(uint16_t unusedParamButMandatory) {
         delRowRealMatrix(&openMatrixMIMPointer.realMatrix, getIRegisterAsInt(true));
       }
       else {
-        // TO BE CODED
+        delRowComplexMatrix(&openMatrixMIMPointer.complexMatrix, getIRegisterAsInt(true));
       }
     }
     mimEnter(true);
@@ -1203,7 +1204,8 @@ void complexMatrixInit(complex34Matrix_t *matrix, uint16_t rows, uint16_t cols) 
 
   //Initialize with 0.
   for(uint32_t i = 0; i < rows * cols * 2; i++) {
-    real34Copy(const34_0, &matrix->matrixElements[i]);
+    real34Copy(const34_0, VARIABLE_REAL34_DATA(&matrix->matrixElements[i]));
+    real34Copy(const34_0, VARIABLE_IMAG34_DATA(&matrix->matrixElements[i]));
   }
 }
 
@@ -1233,7 +1235,8 @@ void complexMatrixFree(complex34Matrix_t *matrix) {
 void complexMatrixIdentity(complex34Matrix_t *matrix, uint16_t size) {
   complexMatrixInit(matrix, size, size);
   for(uint16_t i = 0; i < size; ++i) {
-    real34Copy(const34_1, &matrix->matrixElements[2 * (i * size + i)]);
+    real34Copy(const34_1, VARIABLE_REAL34_DATA(&matrix->matrixElements[i * size + i]));
+    real34Copy(const34_0, VARIABLE_IMAG34_DATA(&matrix->matrixElements[i * size + i]));
   }
 }
 
@@ -1252,8 +1255,7 @@ void complexMatrixRedim(complex34Matrix_t *matrix, uint16_t rows, uint16_t cols)
   elements = matrix->header.matrixRows * matrix->header.matrixColumns;
   if(elements > rows * cols) elements = rows * cols;
   for(uint32_t i = 0; i < elements; ++i) {
-    real34Copy(&matrix->matrixElements[i * 2    ], &newMatrix.matrixElements[i * 2    ]);
-    real34Copy(&matrix->matrixElements[i * 2 + 1], &newMatrix.matrixElements[i * 2 + 1]);
+    complex34Copy(&matrix->matrixElements[i], &newMatrix.matrixElements[i]);
   }
   complexMatrixFree(matrix);
   matrix->header.matrixRows = newMatrix.header.matrixRows;
@@ -1288,7 +1290,8 @@ void showMatrixEditor() {
       convertReal34MatrixToReal34MatrixRegister(&openMatrixMIMPointer.realMatrix, matrixIndex);
     }
     else {
-      // TO BE CODED
+      insRowComplexMatrix(&openMatrixMIMPointer.complexMatrix, rows);
+      convertComplex34MatrixToComplex34MatrixRegister(&openMatrixMIMPointer.complexMatrix, matrixIndex);
     }
   }
 
@@ -2178,6 +2181,29 @@ void insRowRealMatrix(real34Matrix_t *matrix, uint16_t beforeRowNo) {
   matrix->matrixElements       = newMat.matrixElements;
 }
 
+void insRowComplexMatrix(complex34Matrix_t *matrix, uint16_t beforeRowNo) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+  complex34Matrix_t newMat;
+
+  complexMatrixInit(&newMat, rows + 1, cols);
+  for(i = 0; i < beforeRowNo * cols; ++i) {
+    complex34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i]);
+  }
+  for(i = 0; i < cols; ++i) {
+    real34Copy(const34_0, VARIABLE_REAL34_DATA(&newMat.matrixElements[beforeRowNo * cols + i]));
+    real34Copy(const34_0, VARIABLE_IMAG34_DATA(&newMat.matrixElements[beforeRowNo * cols + i]));
+  }
+  for(i = beforeRowNo * cols; i < cols * rows; ++i) {
+    complex34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i + cols]);
+  }
+
+  complexMatrixFree(matrix);
+  matrix->header.matrixRows    = newMat.header.matrixRows;
+  matrix->header.matrixColumns = newMat.header.matrixColumns;
+  matrix->matrixElements       = newMat.matrixElements;
+}
 
 
 
@@ -2202,6 +2228,25 @@ void delRowRealMatrix(real34Matrix_t *matrix, uint16_t beforeRowNo) {
   matrix->matrixElements       = newMat.matrixElements;
 }
 
+void delRowComplexMatrix(complex34Matrix_t *matrix, uint16_t beforeRowNo) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+  complex34Matrix_t newMat;
+
+  complexMatrixInit(&newMat, rows - 1, cols);
+  for(i = 0; i < beforeRowNo * cols; ++i) {
+    complex34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i]);
+  }
+  for(i = (beforeRowNo + 1) * cols; i < cols * rows; ++i) {
+    complex34Copy(&matrix->matrixElements[i], &newMat.matrixElements[i - cols]);
+  }
+
+  complexMatrixFree(matrix);
+  matrix->header.matrixRows    = newMat.header.matrixRows;
+  matrix->header.matrixColumns = newMat.header.matrixColumns;
+  matrix->matrixElements       = newMat.matrixElements;
+}
 
 
 /* Transpose */

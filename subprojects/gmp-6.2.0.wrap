@@ -7,7 +7,7 @@ source_hash = f51c99cb114deb21a60075ffb494c1a210eb9d7cb729ed042ddb7de9534451ea
 
 patch_url = https://fake.url.to.please.meson.but.file.in.packagecache/
 patch_filename = gmp-wrap-6.2.0.tar
-patch_hash = b108bc91b468671d939b19ee16938d8461195dd70155464007b54ee5d4774d07
+patch_hash = 39dccc24f9fa4df8b8da21add8960750eccb58946a57ac4d3cdad49b4f4e54f2
 patch_directory = gmp-6.2.0
 
 [provide]

@@ -27,7 +27,7 @@ linux:
   stage: build
   script:
     - apt-get update -qq
-    - apt-get install -qq -y build-essential libgtk-3-dev libgmp-dev meson
+    - apt-get install -qq -y git build-essential meson libgtk-3-dev libgmp-dev
     - make sim
   tags:
     - linux
@@ -47,7 +47,7 @@ dm42:
   stage: build
   script:
     - apt-get update -qq
-    - apt-get install -qq -y build-essential gcc-arm-none-eabi meson
+    - apt-get install -qq -y git build-essential meson gcc-arm-none-eabi
     - make dist_dm42
   artifacts:
     expire_in: 1 day

@@ -58,6 +58,7 @@
 #include "graphText.h"
 #include "items.h"
 #include "jm.h"
+#include "plotstat.h"
 #include "registers.h"
 #include "screen.h"
 #include "stack.h"

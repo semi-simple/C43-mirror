@@ -20,7 +20,15 @@
 
 #include "inlineTest.h"
 
+#include "display.h"
+#include "fonts.h"
+#include "jm.h"
 #include "radioButtonCatalog.h"
+#include "registers.h"
+#include "registerValueConversions.h"
+#include "screen.h"
+#include "stack.h"
+#include <string.h>
 
 #include "wp43s.h"
 
@@ -89,7 +97,7 @@ void fnSetInlineTest(uint16_t drConfig) {
   switch(drConfig) {
   case JC_ITM_TST:
     testEnabled = !testEnabled;
-    fnRefreshState();                //jm
+    fnRefreshState();                                       //jm
     break;
 
   default:

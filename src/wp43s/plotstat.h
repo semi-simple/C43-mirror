@@ -20,19 +20,8 @@
 #ifndef PLOTSTAT_H
 #define PLOTSTAT_H
 
-#include "decNumberWrappers.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
-
-//****************************************************************************************************************************
-//#define graphtype float/*double*/      //Define the type of floating point used in the STATS memory. float uses 4 bytes per number
-// graphtype:
-//
-// For normal 32-bit floating-point values, this corresponds to values in the range from 1.175494351 * 10^-38 to 3.40282347 * 10^+38.
-//
-// Array: 400 x 2 * 4 byte = 3200 bytes required for STATS Graph array, which corresponds to 800 blocks.
-//
-//****************************************************************************************************************************
 
 #define   LIM              400 //100     //Number of points; MUST be multiple of 4
 #define   zoomfactor     0.05f     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
@@ -41,15 +30,14 @@
 #define   USEFLOATING useFLOAT     // useFLOAT is faster than 
                                    // useREAL4 for graph reproduction
                                    // Note: if useREAL4, then see plotstat.c TODO create REAL from x (double) if REALS will be used
-#define   graphtype      float  
 #define   FLoatingMax    1e38f     //convenient round figures used for maxima and minima determination
 #define   FLoatingMin    -1e38f
 
 
 //Memory structure
-extern    graphtype *gr_x;
-extern    graphtype *gr_y;
-extern    graphtype telltale;
+extern    graph_t *gr_x;
+extern    graph_t *gr_y;
+extern    graph_t telltale;
 extern    uint16_t  ix_count;
 #define   MEM_INITIALIZED 199
 
@@ -107,7 +95,7 @@ void    plotbox            (uint16_t xn, uint8_t yn);                // Plots li
 void    pixelline          (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal);              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
 void    plotline           (uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn);
 void    graphAxisDraw      (void);
-void    realToFloat        (const real_t *vv, graphtype *v);
+void    realToFloat        (const real_t *vv, graph_t *v);
 void    realToDouble1       (const real_t *vv, double *v);
 void    graph_axis         (void);
 float   auto_tick          (float tick_int_f);	
@@ -117,12 +105,12 @@ float   auto_tick          (float tick_int_f);
 void    graph_setupmemory  (void);
 void    graph_sigmaplus    (int8_t plusminus, real_t *xx, real_t *yy);   //Called from STAT module from fnSigma(), to store the x,y pair to the memory structure.
 void    graph_end          (void);
-graphtype grf_x(int i);
-graphtype grf_y(int i);
+graph_t grf_x(int i);
+graph_t grf_y(int i);
 
 #ifndef TESTSUITE_BUILD
-int16_t screen_window_x(graphtype x_min, graphtype x, graphtype x_max);
-int16_t screen_window_y(graphtype y_min, graphtype y, graphtype y_max);
+int16_t screen_window_x(graph_t x_min, graph_t x, graph_t x_max);
+int16_t screen_window_y(graph_t y_min, graph_t y, graph_t y_max);
 #endif
 
 void    fnStatDemo0        (uint16_t unusedButMandatoryParameter);

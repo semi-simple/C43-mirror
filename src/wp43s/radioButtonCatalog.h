@@ -39,7 +39,6 @@
 int8_t   fnCbIsSet             (int16_t item);
 void     fnRefreshState        (void);
 int16_t  fnItemShowValue       (int16_t item);
-//void   fnRebuildRadioState   (void);
 char*    figlabel              (const char* label, int16_t showValue);
 
 
@@ -47,7 +46,7 @@ char*    figlabel              (const char* label, int16_t showValue);
  * \typedef radiocb_t
  * \brief Structure keeping the information for one item
  ***********************************************/
-#define RB_NO   ' '
+//??? #define RB_NO   ' '
 #define RB_AM   '!' // AngularMode
 #define RB_CM   '"' // ComplexMode
 #define RB_CU   '#' // ComplexUnit
@@ -55,7 +54,7 @@ char*    figlabel              (const char* label, int16_t showValue);
 #define RB_DF   '%' // DateFormat
 #define RB_DI   '\''// DisplayFormat
 #define RB_DO   '(' // DisplayModeOverride
-#define RB_FT   ')' // FractionType
+//??? #define RB_FT   ')' // FractionType
 #define RB_IM   '*' // IntegerMode
 #define RB_PS   '+' // ProductSign
 #define RB_RX   ',' // RadixMark
@@ -68,25 +67,15 @@ char*    figlabel              (const char* label, int16_t showValue);
 #define RB_ID   '?' // InputDefault
 #define CB_JC   'A' // CheckBox 
 #define RB_HX   'B' // BASE
-#define RB_AM2  'C' // AngularMode
-#define RB_ZM   'D' // AngularMode
-
-
-
-typedef struct {
-//uint16_t itemNr;            ///<
-//uint16_t param;             ///< 1st parameter to the above function
-  uint8_t  state;             ///<
-//char     radioButton;       ///< Menu of RADIO in which the item is located: see #define RB_*
-} radiocb_t;
+//??? #define RB_AM2  'C' // AngularMode
+//??? #define RB_ZM   'D' // AngularMode
 
 
 
 typedef struct {
   uint16_t itemNr;            ///<
   uint16_t param;             ///< 1st parameter to the above function
-//uint8_t  state;             ///<
   char     radioButton;       ///< Menu of RADIO in which the item is located: see #define RB_*
-} radiocb_eeprom_t;
+} radiocb_t;
 
 #endif // RADIOBUTTONCATALOG_H

@@ -418,7 +418,7 @@ void create_filename(char *fn){ //DMCP_BUILD //fn must be in format ".STAT.TSV"
 
 
 //DMCP_BUILD
-int16_t export_xy_to_file(graphtype x, graphtype y){
+int16_t export_xy_to_file(graph_t x, graph_t y){
   char line[100];               /* Line buffer */
   create_filename(".STAT.TSV");
   sprintf(line,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
@@ -677,7 +677,7 @@ void create_filename(char *fn){  //PC_BUILD //fn must be in format ".STAT.TSV"
 }
 
 
-int16_t export_xy_to_file(graphtype x, graphtype y){ //PC_BUILD
+int16_t export_xy_to_file(graph_t x, graph_t y) { //PC_BUILD
   char line[100];               /* Line buffer */
   create_filename(".STAT.TSV");
   sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);

@@ -339,7 +339,16 @@ typedef struct {
 } softmenuStack_t;
 
 
-
+/********************************************//**
+ * Define the type of floating point used in the STATS memory. float uses 4 bytes per number
+ * graphtype:
+ *
+ * For normal 32-bit floating-point values, this corresponds to values in the range from 1.175494351 * 10^-38 to 3.40282347 * 10^+38.
+ *
+ * Array: 400 x 2 * 4 byte = 3200 bytes required for STATS Graph array, which corresponds to 800 blocks.
+ *
+ ***********************************************/
+typedef float graph_t;
 
 /********************************************//**
  * \typedef calcRegister_t

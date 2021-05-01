@@ -20,7 +20,6 @@
 
 #include "charString.h"
 
-#include <string.h>
 #include "error.h"
 #include "fonts.h"
 #include <string.h>

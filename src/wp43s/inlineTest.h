@@ -20,7 +20,11 @@
 
 #ifndef INLINETEST_H
 #define INLINETEST_H
- 
+
+#include "gmpWrappers.h"
+#include "typeDefinitions.h"
+#include <stdint.h> 
+
 #ifdef INLINE_TEST
 extern bool_t   testEnabled;
 extern uint16_t testBitset;

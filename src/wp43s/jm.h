@@ -36,7 +36,6 @@ Modes available in the mode menu:
 #ifndef JM_H
 #define JM_H
 
-#include "decNumberWrappers.h"
 #include "gmpWrappers.h"
 #include "typeDefinitions.h"
 #include <stdint.h>

@@ -512,15 +512,15 @@ void graph_plotmem(void) {
   uint16_t cnt, ix, statnum;
   uint16_t xo, xn, xN; 
   uint8_t yo, yn, yN;
-  graphtype x; 
-  graphtype y;
-  graphtype sx, sy;
-  graphtype ddx = FLoatingMax;
-  graphtype dydx = FLoatingMax;
-  graphtype inty = 0;
-  graphtype inty0 = 0;
-  graphtype inty_off = 0;
-  graphtype rmsy = 0;
+  graph_t x; 
+  graph_t y;
+  graph_t sx, sy;
+  graph_t ddx = FLoatingMax;
+  graph_t dydx = FLoatingMax;
+  graph_t inty = 0;
+  graph_t inty0 = 0;
+  graph_t inty_off = 0;
+  graph_t rmsy = 0;
 
 //printf("TEST %d %d\n",screen_window_x(-0.405573,0.45,0.689633), screen_window_y(-0.405573,0.45,0.689633));
 //printf("TEST %d %d\n",screen_window_x(0,1,1), screen_window_y(0,1,1));

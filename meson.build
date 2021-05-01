@@ -1,5 +1,5 @@
 project('wp43s', 'c',
-  meson_version   : '>=0.49.2',
+  meson_version   : '>=0.56.0',
   license         : 'GPL-3.0-only',
   default_options : ['warning_level=2']
 )

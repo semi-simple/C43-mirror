@@ -1307,7 +1307,6 @@
       return;
     }
 
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     int32ToReal34(numer, dest);
     int32ToReal34(denom, &temp);
     real34Divide(dest, &temp, dest);
@@ -1512,6 +1511,7 @@
             stringToReal34(aimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
           }
           else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
+            reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
             closeNimWithFraction(REGISTER_REAL34_DATA(REGISTER_X));
           }
           else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {

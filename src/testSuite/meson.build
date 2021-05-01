@@ -1,5 +1,6 @@
 testSuite = executable(
   'testSuite',
+  build_by_default    : false,
   sources             : decNumber_src + wp43s_src + files('testSuite.c') +
                         [rasterFontsData_c, softmenuCatalogs_h,
                           constantPointers_ch],

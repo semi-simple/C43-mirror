@@ -1,4 +1,4 @@
-executable(
+sim = executable(
   'wp43s',
   sources             : decNumber_src + wp43s_src + files('wp43s-gtk.c') +
                         [rasterFontsData_c, softmenuCatalogs_h,
@@ -8,3 +8,4 @@ executable(
   dependencies        : [gtk_dep, gmp_dep, m_dep],
   native              : true,
   override_options    : ['b_lto=true'])
+alias_target('sim', sim)

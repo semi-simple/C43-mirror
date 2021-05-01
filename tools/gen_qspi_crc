@@ -1,8 +1,7 @@
 #!/bin/bash
 
-forcecrc32=$1
-input=$2
-output=$3
+input=$1
+output=$2
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
         # Host is Mac: use gstat for GNU version
@@ -12,23 +11,27 @@ else
         STAT=stat
 fi
 
-
-
 filesize() {
 	$STAT -Lc%s "$1"
 }
-
 
 if [ ! -f "$input" ];then
 	echo "ERROR: Missing qspi file '$input'"
 	exit 1
 fi
 
-sz=`filesize $input`
+nsz=`filesize $input`
 
-dir=`dirname $input`
+cat << OI
+====
+QSPI Contents:
+   Size: $nsz
+====
+OI
 
-cp $input $output
-echo -n -e '\x00\x00\x00\x00' >> $output
-$forcecrc32 $output $sz 000CFED6
+cat << OI > $output
 
+#define QSPI_DATA_SIZE $nsz
+#define QSPI_DATA_CRC 0x000CFED6
+
+OI

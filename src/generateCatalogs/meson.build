@@ -1,5 +1,6 @@
 generateCatalogs = executable(
   'generateCatalogs',
+  build_by_default    : false,
   sources             : files('generateCatalogs.c') +
                         generateCatalogs_src +
                         [rasterFontsData_c],
@@ -9,5 +10,6 @@ generateCatalogs = executable(
   native              : true)
 softmenuCatalogs_h = custom_target(
   'softmenuCatalogs.h',
-  output  : 'softmenuCatalogs.h',
-  command : [generateCatalogs, '@OUTPUT@'])
+  build_by_default : false,
+  output           : 'softmenuCatalogs.h',
+  command          : [generateCatalogs, '@OUTPUT@'])

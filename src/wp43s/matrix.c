@@ -648,7 +648,11 @@ void fnTranspose(uint16_t unusedButMandatoryParameter) {
     convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t x, res;
+
+    linkToComplexMatrixRegister(REGISTER_X, &x);
+    transposeComplexMatrix(&x, &res);
+    convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -2210,6 +2214,19 @@ void transposeRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
   for(i = 0; i < rows; ++i) {
     for(j = 0; j < cols; ++j) {
       real34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+    }
+  }
+}
+
+void transposeComplexMatrix(const complex34Matrix_t *matrix, complex34Matrix_t *res) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i, j;
+
+  complexMatrixInit(res, cols, rows);
+  for(i = 0; i < rows; ++i) {
+    for(j = 0; j < cols; ++j) {
+      complex34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
     }
   }
 }

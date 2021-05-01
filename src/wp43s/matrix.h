@@ -98,6 +98,7 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     transposeRealMatrix            (const real34Matrix_t *matrix, real34Matrix_t *res);
 
   void     linkToComplexMatrixRegister    (calcRegister_t regist, complex34Matrix_t *linkedMatrix);
+  void     transposeComplexMatrix         (const complex34Matrix_t *matrix, complex34Matrix_t *res);
 
   void     addRealMatrices                (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
   void     subtractRealMatrices           (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);

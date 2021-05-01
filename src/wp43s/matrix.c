@@ -809,7 +809,25 @@ void fnDeterminant(uint16_t unusedParamButMandatory) {
     }
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t x;
+    real34_t res_r, res_i;
+
+    linkToComplexMatrixRegister(REGISTER_X, &x);
+
+    if(x.header.matrixRows != x.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+                x.header.matrixRows, x.header.matrixColumns);
+        moreInfoOnError("In function fnDeterminant:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      detComplexMatrix(&x, &res_r, &res_i);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+      real34Copy(&res_r, REGISTER_REAL34_DATA(REGISTER_X));
+      real34Copy(&res_i, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -2851,6 +2869,37 @@ void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
   }
   else { // singular
     real34Copy(const34_0, res);
+  }
+
+  freeWp43s(p, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+}
+
+void detComplexMatrix(const complex34Matrix_t *matrix, real34_t *res_r, real34_t *res_i) {
+  const uint16_t n = matrix->header.matrixColumns;
+  uint16_t *p;
+  complex34Matrix_t lu;
+  real_t tr, ti, ur, ui;
+
+  if(matrix->header.matrixRows != n) {
+    realToReal34(const_NaN, res_r);
+    realToReal34(const_NaN, res_i);
+    return;
+  }
+
+  p = allocWp43s(TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+
+  complex_LU_decomposition(matrix, &lu, p);
+  realCopy(const_1, &tr), realCopy(const_0, &ti);
+  if(lu.matrixElements) {
+    for(uint16_t i = 0; i < n; ++i) {
+      real34ToReal(VARIABLE_REAL34_DATA(&lu.matrixElements[i * n + i]), &ur);
+      real34ToReal(VARIABLE_IMAG34_DATA(&lu.matrixElements[i * n + i]), &ui);
+      mulComplexComplex(&tr, &ti, &ur, &ui, &tr, &ti, &ctxtReal51);
+    }
+    realToReal34(&tr, res_r); realToReal34(&ti, res_i);
+  }
+  else { // singular
+    real34Copy(const34_0, res_r); real34Copy(const34_0, res_i);
   }
 
   freeWp43s(p, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));

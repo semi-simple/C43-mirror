@@ -462,7 +462,7 @@ void subRemaRema(void) {
 void subRemaCxma(void) {
 #ifndef TESTSUITE_BUILD
   convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
-  addCxmaCxma();
+  subCxmaCxma();
 #endif // TESTSUITE_BUILD
 }
 
@@ -477,7 +477,7 @@ void subRemaCxma(void) {
 void subCxmaRema(void) {
 #ifndef TESTSUITE_BUILD
   convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_X, REGISTER_X);
-  addCxmaCxma();
+  subCxmaCxma();
 #endif // TESTSUITE_BUILD
 }
 

@@ -11,7 +11,6 @@ variables:
 macOS:
   stage: build
   script:
-    - make -j8 rebuild DEST=gitlab
     - make dist_macos
   artifacts:
     expire_in: 1 day
@@ -25,14 +24,14 @@ linux:
   script:
     - apt-get update -qq
     - apt-get install -qq -y libgtk-3-dev 
-    - make -j8 rebuild DEST=gitlab
+    - make sim
   tags:
     - linux
 
 windows:
   stage: build
   script:
-    - C:\msys64\msys2_shell.cmd -defterm -mingw64 -no-start -here -c "make -j8 rebuild DEST=gitlab; make dist_windows"
+    - C:\msys64\msys2_shell.cmd -defterm -mingw64 -no-start -here -c "make dist_windows"
   artifacts:
     expire_in: 1 day
     paths:
@@ -43,8 +42,6 @@ windows:
 dm42:
   stage: build
   script:
-    - make mrproper
-    - make -j8 dmcp
     - make dist_dm42
   artifacts:
     expire_in: 1 day
@@ -58,9 +55,7 @@ testSuite:
   script:
     - apt-get update -qq
     - apt-get install -qq -y libgtk-3-dev 
-    - make mrproper
-    - make -j8 testSuite
-    - ./testSuite
+    - make test
   tags:
     - linux
 
@@ -70,8 +65,7 @@ codeDocs:
     - apt-get update -qq
     - apt-get install -qq -y doxygen python3-pip
     - python3 -m pip install sphinx breathe furo
-    - cd docs/code
-    - make html
+    - make docs
 
 upload:
   stage: upload

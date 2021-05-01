@@ -27,6 +27,9 @@ endif
 add_project_arguments('-DDMCP_BUILD', native : false, language : 'c')
 add_project_arguments('-DOS32BIT',    native : false, language : 'c')
 
+git = find_program('git')
+run_command(git, 'submodule', 'update', meson.project_source_root(), '--init', '--recursive')
+
 cc = meson.get_compiler('c')
 ft_dep  = dependency('freetype2', native : true)
 gtk_dep = dependency('gtk+-3.0',  native : true)

@@ -25,8 +25,8 @@ macOS:
 linux:
   stage: build
   script:
-    - apt update
-    - apt install build-essential libgtk-3-dev libgmp-dev meson
+    - apt update -qq
+    - apt install -qq -y build-essential libgtk-3-dev libgmp-dev meson
     - make sim
   tags:
     - linux
@@ -45,8 +45,8 @@ windows:
 dm42:
   stage: build
   script:
-    - apt update
-    - apt install build-essential libgtk-3-dev libgmp-dev meson
+    - apt update -qq
+    - apt install -qq -y build-essential libgtk-3-dev libgmp-dev meson
     - make dist_dm42
   artifacts:
     expire_in: 1 day

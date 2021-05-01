@@ -44,6 +44,7 @@ windows:
     - wp43s_windows
 
 dm42:
+  image: ubuntu:hirsute
   stage: build
   script:
     - apt-get update -qq

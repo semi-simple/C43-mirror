@@ -35,6 +35,7 @@
 #include "gmpWrappers.h"
 #include "items.h"
 #include "mathematics/comparisonReals.h"
+#include "mathematics/division.h"
 #include "mathematics/multiplication.h"
 #include "mathematics/toPolar.h"
 #include "memory.h"
@@ -723,7 +724,45 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
     realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t x, res;
+    real34Matrix_t pivot;
+    uint16_t *p;
+
+    convertComplex34MatrixRegisterToComplex34Matrix(REGISTER_X, &x);
+
+    if(x.header.matrixRows != x.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+                x.header.matrixRows, x.header.matrixColumns);
+        moreInfoOnError("In function fnLuDecomposition:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      p = allocWp43s(x.header.matrixRows * sizeof(uint16_t));
+      complex_LU_decomposition(&x, &res, p);
+      if(res.matrixElements) {
+        realMatrixIdentity(&pivot, res.header.matrixColumns);
+        for(uint16_t i = 0; i < res.header.matrixColumns; ++i) {
+          complexMatrixSwapRows(&x, &x, i, p[i]);
+        }
+        liftStack();
+        convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
+        convertReal34MatrixToReal34MatrixRegister(&pivot, REGISTER_Y);
+        complexMatrixFree(&res);
+        setSystemFlag(FLAG_ASLIFT);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "attempt to LU-decompose a singular matrix");
+          moreInfoOnError("In function fnLuDecomposition:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+      freeWp43s(p, x.header.matrixRows * sizeof(uint16_t));
+    }
+
+    complexMatrixFree(&x);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -2136,6 +2175,17 @@ void copyRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
   }
 }
 
+void copyComplexMatrix(const complex34Matrix_t *matrix, complex34Matrix_t *res) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+
+  complexMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    complex34Copy(&matrix->matrixElements[i], &res->matrixElements[i]);
+  }
+}
+
 
 
 /* Link to real matrix register (data not copied) */
@@ -2651,6 +2701,90 @@ void WP34S_LU_decomposition(const real34Matrix_t *matrix, real34Matrix_t *lu, ui
   freeWp43s(tmpMat, m * n * REAL_SIZE);
 }
 
+void complex_LU_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t *lu, uint16_t *p) {
+  int i, j, k;
+  int pvt;
+  real_t max, t, u, v;
+  real_t *tmpMat;
+
+  const uint16_t m = matrix->header.matrixRows;
+  const uint16_t n = matrix->header.matrixColumns;
+
+  if(matrix->header.matrixRows != matrix->header.matrixColumns) {
+    if(matrix != lu) {
+      lu->matrixElements = NULL; // Matrix is not square
+      lu->header.matrixRows = lu->header.matrixColumns = 0;
+    }
+    return;
+  }
+
+  if(matrix != lu) copyComplexMatrix(matrix, lu);
+
+  tmpMat = allocWp43s(m * n * REAL_SIZE * 2);
+  for(i = 0; i < n; i++) {
+    for(j = 0; j < n; j++) {
+      real34ToReal(VARIABLE_REAL34_DATA(&lu->matrixElements[i * n + j]), &tmpMat[(i * n + j) * 2    ]);
+      real34ToReal(VARIABLE_IMAG34_DATA(&lu->matrixElements[i * n + j]), &tmpMat[(i * n + j) * 2 + 1]);
+    }
+  }
+
+  for(k = 0; k < n; k++) {
+    /* Find the pivot row */
+    pvt = k;
+    realMultiply(&tmpMat[(k * n + k) * 2    ], &tmpMat[(k * n + k) * 2    ], &u, &ctxtReal39);
+    realMultiply(&tmpMat[(k * n + k) * 2 + 1], &tmpMat[(k * n + k) * 2 + 1], &v, &ctxtReal39);
+    realAdd(&u, &v, &u, &ctxtReal39);
+    realSquareRoot(&u, &max, &ctxtReal39);
+    for(j = k + 1; j < n; j++) {
+      realMultiply(&tmpMat[(j * n + k) * 2    ], &tmpMat[(j * n + k) * 2    ], &t, &ctxtReal39);
+      realMultiply(&tmpMat[(j * n + k) * 2 + 1], &tmpMat[(j * n + k) * 2 + 1], &v, &ctxtReal39);
+      realAdd(&t, &v, &t, &ctxtReal39);
+      realSquareRoot(&t, &u, &ctxtReal39);
+      if (realCompareGreaterThan(&u, &max)) {
+        realCopy(&u, &max);
+        pvt = j;
+      }
+    }
+    if(p != NULL)
+      *p++ = pvt;
+
+    /* pivot if required */
+    if(pvt != k)
+      complexMatrixSwapRows(lu, lu, k, pvt);
+
+    /* Check for singular */
+    if(realIsZero(&tmpMat[(k * n + k) * 2]) && realIsZero(&tmpMat[(k * n + k) * 2 + 1])) {
+      complexMatrixFree(lu);
+      return;
+    }
+
+    /* Find the lower triangular elements for column k */
+    for(i = k + 1; i < n; i++) {
+      divComplexComplex(&tmpMat[(i * n + k) * 2], &tmpMat[(i * n + k) * 2 + 1], &tmpMat[(k * n + k) * 2], &tmpMat[(k * n + k) * 2 + 1], &t, &u, &ctxtReal39);
+      realCopy(&t, &tmpMat[(i * n + k) * 2    ]);
+      realCopy(&u, &tmpMat[(i * n + k) * 2 + 1]);
+    }
+    /* Update the upper triangular elements */
+    for(i = k + 1; i < n; i++) {
+      for(j = k + 1; j < n; j++) {
+        mulComplexComplex(&tmpMat[(i * n + k) * 2], &tmpMat[(i * n + k) * 2 + 1], &tmpMat[(k * n + j) * 2], &tmpMat[(k * n + j) * 2 + 1], &t, &u, &ctxtReal39);
+        realCopy(&tmpMat[(i * n + j) * 2], &v), realCopy(&tmpMat[(i * n + j) * 2 + 1], &max);
+        realSubtract(&v,   &t, &tmpMat[(i * n + j) * 2    ], &ctxtReal39);
+        realSubtract(&max, &u, &tmpMat[(i * n + j) * 2 + 1], &ctxtReal39);
+      }
+    }
+  }
+
+  for(i = 0; i < n; i++) {
+    for(j = 0; j < n; j++) {
+      realToReal34(&tmpMat[(i * n + j) * 2    ], VARIABLE_REAL34_DATA(&lu->matrixElements[i * n + j]));
+      realToReal34(&tmpMat[(i * n + j) * 2 + 1], VARIABLE_IMAG34_DATA(&lu->matrixElements[i * n + j]));
+    }
+  }
+
+  freeWp43s(tmpMat, m * n * REAL_SIZE * 2);
+}
+
 
 
 /* Swap 2 rows */
@@ -2666,6 +2800,25 @@ void realMatrixSwapRows(const real34Matrix_t *matrix, real34Matrix_t *res, uint1
       real34Copy(&res->matrixElements[a * cols + i], &t);
       real34Copy(&res->matrixElements[b * cols + i], &res->matrixElements[a * cols + i]);
       real34Copy(&t,                                 &res->matrixElements[b * cols + i]);
+    }
+  }
+}
+
+void complexMatrixSwapRows(const complex34Matrix_t *matrix, complex34Matrix_t *res, uint16_t a, uint16_t b) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  uint16_t i;
+  real34_t t;
+
+  if(matrix != res) copyComplexMatrix(matrix, res);
+  if((a < rows) && (b < rows) && (a != b)) {
+    for(i = 0; i < cols; i++) {
+      real34Copy(VARIABLE_REAL34_DATA(&res->matrixElements[a * cols + i]), &t);
+      real34Copy(VARIABLE_REAL34_DATA(&res->matrixElements[b * cols + i]), VARIABLE_REAL34_DATA(&res->matrixElements[a * cols + i]));
+      real34Copy(&t,                                                       VARIABLE_REAL34_DATA(&res->matrixElements[b * cols + i]));
+      real34Copy(VARIABLE_IMAG34_DATA(&res->matrixElements[a * cols + i]), &t);
+      real34Copy(VARIABLE_IMAG34_DATA(&res->matrixElements[b * cols + i]), VARIABLE_IMAG34_DATA(&res->matrixElements[a * cols + i]));
+      real34Copy(&t,                                                       VARIABLE_IMAG34_DATA(&res->matrixElements[b * cols + i]));
     }
   }
 }

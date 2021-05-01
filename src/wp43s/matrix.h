@@ -97,6 +97,7 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     delRowRealMatrix               (real34Matrix_t *matrix, uint16_t beforeRowNo);
   void     transposeRealMatrix            (const real34Matrix_t *matrix, real34Matrix_t *res);
 
+  void     copyComplexMatrix              (const complex34Matrix_t *matrix, complex34Matrix_t *res);
   void     linkToComplexMatrixRegister    (calcRegister_t regist, complex34Matrix_t *linkedMatrix);
   void     insRowComplexMatrix            (complex34Matrix_t *matrix, uint16_t beforeRowNo);
   void     delRowComplexMatrix            (complex34Matrix_t *matrix, uint16_t beforeRowNo);
@@ -128,6 +129,9 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     WP34S_matrix_inverse           (const real34Matrix_t *matrix, real34Matrix_t *res);
   void     divideRealMatrix               (const real34Matrix_t *matrix, const real34_t *x, real34Matrix_t *res);
   void     divideRealMatrices             (const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res);
+
+  void     complex_LU_decomposition       (const complex34Matrix_t *matrix, complex34Matrix_t *lu, uint16_t *p);
+  void     complexMatrixSwapRows          (const complex34Matrix_t *matrix, complex34Matrix_t *res, uint16_t a, uint16_t b);
 
   void     WP34S_matrix_linear_eqn        (const real34Matrix_t *a, const real34Matrix_t *b, real34Matrix_t *r);
 #endif // TESTSUITE_BUILD

@@ -166,7 +166,7 @@ void fnProcessLRfind(uint16_t curveFitting){
         printf("processCurvefitSelection curveFitting:%u sweep:%u %s\n",curveFitting,jx,getCurveFitModeNames(jx));
       #endif
       
-      if(nn >= minDataPoints(jx)) {
+      if(nn >= minLRDataPoints(jx)) {
         processCurvefitSelection(jx,&RR,&SMI, &aa0, &aa1, &aa2);
         realMultiply(&RR,&RR,&RR2,&ctxtReal39);
 
@@ -181,7 +181,7 @@ void fnProcessLRfind(uint16_t curveFitting){
 	  printf("Found best fit: %u %s\n",s,getCurveFitModeNames(s));
 	#endif //PC_BUILD
 
-  if(nn >= minDataPoints(s)) {
+  if(nn >= minLRDataPoints(s)) {
 
     processCurvefitSelection(s,&RR,&SMI, &aa0, &aa1, &aa2);
     lrChosen = s;
@@ -202,8 +202,8 @@ void fnProcessLRfind(uint16_t curveFitting){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&aa0, REGISTER_REAL34_DATA(REGISTER_X));
   } else {
-    uInt32ToReal(minDataPoints(s),&NN);
-    checkMinimumDataPoints(&NN);
+    uInt32ToReal(minLRDataPoints(s),&NN);
+    checkMinimumDataPoints(&NN);              //Report an error
   }
 }
 

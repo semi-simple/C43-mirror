@@ -1417,15 +1417,15 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix,"a" STD_SUB_0 "=");
+                strcat(prefix,"a" STD_SUB_0 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               } else
               if(regist == REGISTER_Y) {
-                strcpy(prefix,"y=");
+                strcpy(prefix,"y" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix, "a" STD_SUB_1 "=");
+                strcat(prefix, "a" STD_SUB_1 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               } else
               if(regist == REGISTER_Z) {
@@ -1434,18 +1434,18 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix, "a" STD_SUB_2 "=");
+                strcat(prefix, "a" STD_SUB_2 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               }
             } else
 
             if(regist == REGISTER_X) {
-              strcpy(prefix,"y=");
+              strcpy(prefix,"y" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
               strcat(prefix,getCurveFitModeFormula(lrChosen));
               while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                 strcat(prefix,STD_SPACE_6_PER_EM);
               }
-              strcat(prefix,"a" STD_SUB_0 "=");
+              strcat(prefix,"a" STD_SUB_0 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
               prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
             } else if(regist == REGISTER_Y) {
               strcpy(prefix, eatSpacesEnd(getCurveFitModeName(lrChosen)));
@@ -1453,7 +1453,7 @@ static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM
               while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                 strcat(prefix,STD_SPACE_6_PER_EM);
               }
-              strcat(prefix, "a" STD_SUB_1 "=");
+              strcat(prefix, "a" STD_SUB_1 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
               prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
             }
 

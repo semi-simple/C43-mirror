@@ -469,10 +469,11 @@ void plotline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {               
  }
 
 void plotline2(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {                   // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-#define offset 0.55f
    pixelline(xo,yo,xn,yn,1);
    pixelline(xo-1,yo,xn-1,yn,1);
    pixelline(xo,yo-1,xn,yn-1,1);
+   //   pixelline(xo+1,yo,xn+1,yn,1);   //Do not use the full doubling, without it give as nice profile if the slope changes
+   //   pixelline(xo,yo+1,xn,yn+1,1);   
  }
 
 
@@ -1242,24 +1243,19 @@ graph_axis();
 }
 
 
-int32_t minDataPoints(uint16_t selection){
+int32_t minLRDataPoints(uint16_t selection){
       switch(selection) {
-        case 1:
-        case 2:
-        case 4:
-        case 8:
-        case 16:
-        case 32: return 2; break;
-        case 64:
+        case 1  :
+        case 2  :
+        case 4  :
+        case 8  :
+        case 16 :
+        case 32 : return 2; break;
+        case 64 :
         case 128:
         case 256: return 3; break;
-        case 512: 
-          if (softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) {
-            return 30;
-          } else return 2;
-          break;
-
-        default: return 0xFFFF; break;
+        case 512: return 2; break;                      //ORTHOF ASSESS (2 points minimum)
+        default : return 0xFFFF; break;
       }
 }
 
@@ -1276,7 +1272,7 @@ int32_t minDataPoints(uint16_t selection){
     char ss[100], tt[100];
 
     realToInt32(SIGMA_N, nn);  
-    if(nn >= minDataPoints(selection)) {
+    if(nn >= minLRDataPoints(selection)) {
       realToFloat(RR , &rr );
       realToFloat(SMI, &smi);
       realToFloat(aa0, &a0 );
@@ -1320,7 +1316,7 @@ int32_t minDataPoints(uint16_t selection){
 
         if(iterations > 0) {  //Allow for starting values to accumulate in the registers at ix = 0
           #if defined STATDEBUG && defined PC_BUILD
-            printf("plotting graph: jm:%i iter:%u ix:%f I.vals:%u ==>xmin:%f (x:%f) xmax:%f ymin:%f (y:%f) ymax:%f xN:%d yN:%d \n",jumpMonitor,iterations,ix,Intervals,x_min,x,x_max,y_min,y,y_max,  xN,yN);
+            printf("plotting graph: iter:%u ix:%f I.vals:%u ==>xmin:%f (x:%f) xmax:%f ymin:%f (y:%f) ymax:%f xN:%d yN:%d \n",iterations,ix,Intervals,x_min,x,x_max,y_min,y,y_max,  xN,yN);
           #endif
           int16_t minN_y,minN_x;
           if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
@@ -1355,7 +1351,7 @@ int32_t minDataPoints(uint16_t selection){
       }
     }
 
-    #define horOffsetR 109 //digit righ side aliognment
+    #define horOffsetR 109+5 //digit righ side aliognment
     #define autoinc 19 //text line spacing
     #define autoshift -5 //text line spacing
     #define horOffset 1 //labels from the left
@@ -1365,7 +1361,7 @@ int32_t minDataPoints(uint16_t selection){
       if(lrCountOnes(lrSelection)>1 && selection == lrChosen) strcat(ss,lrChosen == 0 ? "" : STD_SUP_ASTERISK);
         showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -10 +autoshift, vmNormal, false, false);
  
-      if(nn >= minDataPoints(selection)) {
+      if(nn >= minLRDataPoints(selection)) {
 
         if(selection != CF_GAUSS_FITTING && selection != CF_CAUCHY_FITTING) {
           strcpy(ss,"y="); strcat(ss,getCurveFitModeFormula(selection)); showString(padEquals(ss), &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7 +autoshift, vmNormal, false, false);
@@ -1457,9 +1453,6 @@ void fnPlotStat(uint16_t plotMode){
 #if defined STATDEBUG && defined PC_BUILD
   printf("fnPlotStat1: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
-#endif //STATDEBUG
-
-#if defined STATDEBUG && defined PC_BUILD
   uint16_t i;
   int16_t cnt;
   realToInt32(SIGMA_N, cnt);

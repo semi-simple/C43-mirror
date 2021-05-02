@@ -1402,13 +1402,15 @@
     shiftF = false;
     shiftG = false;
 
-    if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
-      if(openMatrixMIMPointer.realMatrix.matrixElements)
-      realMatrixFree(&openMatrixMIMPointer.realMatrix);
-    }
-    else if(getRegisterDataType(matrixIndex) == dtComplex34Matrix) {
-      if(openMatrixMIMPointer.complexMatrix.matrixElements)
-      complexMatrixFree(&openMatrixMIMPointer.complexMatrix);
+    if(getRegisterDataType(matrixIndex) != INVALID_VARIABLE) {
+      if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+        if(openMatrixMIMPointer.realMatrix.matrixElements)
+        realMatrixFree(&openMatrixMIMPointer.realMatrix);
+      }
+      else if(getRegisterDataType(matrixIndex) == dtComplex34Matrix) {
+        if(openMatrixMIMPointer.complexMatrix.matrixElements)
+        complexMatrixFree(&openMatrixMIMPointer.complexMatrix);
+      }
     }
 
     #ifdef PC_BUILD

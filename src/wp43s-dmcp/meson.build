@@ -15,7 +15,6 @@ wp43s_lib = static_library(
   sources             : decNumber_src + wp43s_src +
                         [rasterFontsData_c, softmenuCatalogs_h,
                           constantPointers_ch, vcs_h, version_h],
-  c_pch               : 'pch/wp43s-dmcp_pch.h',
   c_args              : dmcp_cargs,
   include_directories : [decNumber_inc, wp43s_inc, dmcp_inc],
   dependencies        : arm_gmp_dep,

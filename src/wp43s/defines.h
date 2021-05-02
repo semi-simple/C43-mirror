@@ -20,9 +20,6 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-//??? #include "flags.h"
-//??? #include "defines.h"
-
 //*********************************
 // JM VARIOUS OPTIONS
 //*********************************
@@ -1016,8 +1013,8 @@
  #endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
 
 #if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
-  #undef  JM_LAYOUT_1A
-  #undef  JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
+    #undef  JM_LAYOUT_1A
+    #undef  JM_LAYOUT_2_DM42_STRICT     //DM42 compatible layout
 
     #undef  PC_BUILD
     #undef  DMCP_BUILD
@@ -1035,7 +1032,7 @@
     #define registerBrowser fnNop
     #define flagBrowser     fnNop
     #define fontBrowser     fnNop
-    #define flagBrowser_old fnNop      //JM
+    #define flagBrowser_old fnNop       //JM
     #define refreshRegisterLine(a)  {}
     #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
     #define showHideHourGlass()     {}
@@ -1043,7 +1040,7 @@
     #define refreshLcd(a)           {}
     #define initFontBrowser()       {}
 
-  #define JM_LAYOUT_1A               //JM Preferred layout
+    #define JM_LAYOUT_1A                //JM Preferred layout
   #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 /* Turn off -Wunused-result for a specific function call */

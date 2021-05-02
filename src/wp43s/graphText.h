@@ -26,6 +26,7 @@
 #ifndef GRAPHTEXT_H
 #define GRAPHTEXT_H
 
+#include "defines.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 

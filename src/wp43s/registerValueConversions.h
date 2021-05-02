@@ -23,7 +23,6 @@
 #include "decNumberWrappers.h"
 #include "gmpWrappers.h"
 #include "typeDefinitions.h"
-#include <stdint.h>
 
 void convertLongIntegerRegisterToReal34Register      (calcRegister_t source, calcRegister_t destination);
 void convertLongIntegerRegisterToShortIntegerRegister(calcRegister_t source, calcRegister_t destination);

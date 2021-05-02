@@ -27,7 +27,6 @@
 #include "keyboard.h"
 #include "memory.h"
 #include "screen.h"
-//??? #include "typeDefinitions.h"
 
 //#define JMSHOWCODES
 
@@ -280,7 +279,6 @@ size_t                 wp43sMemInBlocks;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
 
-
 #ifdef DMCP_BUILD
   void program_main(void) {
     int key = 0;
@@ -303,7 +301,6 @@ size_t                 wp43sMemInBlocks;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   lcd_clear_buf();
-
 #ifdef NOKEYMAP
   lcd_putsAt(t24, 4, "Press the bottom left key."); lcd_refresh();           //vv dr - no keymap is used
   while(key != 33 && key != 37) {
@@ -319,8 +316,6 @@ size_t                 wp43sMemInBlocks;
 
   lcd_clear_buf();                                             //^^
 #endif //NOKEYMAP
-
-
   fnReset(CONFIRMED);
   refreshScreen();
 

@@ -59,61 +59,6 @@
   #include "mathematics/pcg_basic.h"
   #include "typeDefinitions.h"
 
-/*
-  #include "assign.h"
-  #include "ui/tam.h"
-  #include "bufferize.h"
-  #include "browsers/browsers.h"
-  #include "config.h"
-  #include "conversionAngles.h"
-  #include "conversionUnits.h"
-  #include "curveFitting.h"
-  #include "dateTime.h"
-  #include "constants.h"
-  #include "debug.h"
-  #include "error.h"
-  #include "flags.h"
-  #include "fractions.h"
-  #include "fonts.h"
-  #include "charString.h" // must be after font.h
-  #include "display.h"    // must be after font.h
-  #include "distributions/distributions.h"
-  #include "gui.h"
-  #include "integers.h"
-  #include "items.h"
-  #include "keyboard.h"
-  #include "logicalOps/logicalOps.h"
-  #include "mathematics/mathematics.h"
-  #include "memory.h"
-  #include "programming/programming.h"
-  #include "plotstat.h"
-  #include "recall.h"
-  #include "registers.h"
-  #include "registerValueConversions.h"
-  #include "saveRestoreCalcState.h"
-  #include "screen.h"
-  #include "softmenus.h"
-  #include "sort.h"
-  #include "stack.h"
-  #include "stats.h"
-  #include "statusBar.h"
-  #include "store.h"
-  #include "stringFuncs.h"
-  #include "timer.h"
-  #include "jm_graph.h"                   //JM include 
-  #include "graphs.h"                     //JM include 
-  #include "jm.h"                         //JM include
-  #include "addons.h"                     //JM include
-  #include "graphText.h"                  //JM include
-  #include "textfiles.h"                  //JM include
-  #include "xeqm.h"                       //JM include
-  #include "keyboardTweak.h"              //dr
-  #include "radioButtonCatalog.h"         //dr
-  #ifdef INLINE_TEST                      //vv dr
-    #include "inlineTest.h"
-  #endif                                  //^^
-*/
-
   // Variables for the simulator
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
     extern bool_t               debugMemAllocation;

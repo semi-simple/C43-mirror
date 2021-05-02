@@ -24,6 +24,7 @@
 #ifndef KEYBOARDTWEAK_H
 #define KEYBOARDTWEAK_H
 
+#include "defines.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 #ifdef PC_BUILD

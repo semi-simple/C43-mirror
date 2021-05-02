@@ -25,7 +25,6 @@
 #ifndef GRAPHS_H
 #define GRAPHS_H
 
-#include "typeDefinitions.h"
 #include <stdint.h>
 
 //Graph functions

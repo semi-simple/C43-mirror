@@ -45,8 +45,6 @@
 
   void       fnScreenDump                       (uint16_t unusedButMandatoryParameter);
 
-
-
 #ifdef PC_BUILD
   gboolean drawScreen                         (GtkWidget *widget, cairo_t *cr, gpointer data);
   void     copyScreenToClipboard              (void);

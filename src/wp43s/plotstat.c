@@ -72,9 +72,9 @@ char * padEquals(const char * ss);
 #endif
 
 #define roundedTicks false    //todo make variable
-float   *gr_x;
-float   *gr_y;
-float   telltale;
+float     *gr_x;
+float     *gr_y;
+float     telltale;
 uint16_t  ix_count;
   
 float     graph_dx;           // Many unused functions in WP43S. Do not change the variables.
@@ -139,9 +139,9 @@ void graph_setupmemory(void) {
   int i;
   if(telltale != MEM_INITIALIZED) {
     gr_x = (float*)malloc(LIM * sizeof(float)); 
-    memset(gr_x, 0,         LIM * sizeof(float));
+    memset(gr_x, 0,       LIM * sizeof(float));
     gr_y = (float*)malloc(LIM * sizeof(float)); 
-    memset(gr_y, 0,         LIM * sizeof(float));
+    memset(gr_y, 0,       LIM * sizeof(float));
     telltale = MEM_INITIALIZED;
     ix_count = 0;
   }
@@ -276,11 +276,11 @@ void graph_sigmaplus(int8_t plusminus, real_t *xx, real_t *yy) {    //Called fro
       graph_setupmemory();
     }
 
-    //Convert from X register to graph_t
+    //Convert from X register to float
     realToFloat(yy,&y);
     //printf("y=%f ",y);
 
-    //Convert from X register to graph_t
+    //Convert from X register to float
     realToFloat(xx, &x);
     //printf("x=%f ",x);
 

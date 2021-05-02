@@ -37,11 +37,11 @@
 
 TO_QSPI const radiocb_t indexOfRadioCbEepromItems[] = {
 //  itemNr    item                  parameter                         function
-/*  117 */  { ITM_DEG,              amDegree,              RB_AM },  //fnAngularMode
-/*  134 */  { ITM_DMS,              amDMS,                 RB_AM },  //fnAngularMode
-/*  229 */  { ITM_GRAD,             amGrad,                RB_AM },  //fnAngularMode
-/*  375 */  { ITM_MULPI,            amMultPi,              RB_AM },  //fnAngularMode
-/*  483 */  { ITM_RAD,              amRadian,              RB_AM },  //fnAngularMode
+/*  117 */  { ITM_DEG,              amDegree,               RB_AM },  //fnAngularMode
+/*  134 */  { ITM_DMS,              amDMS,                  RB_AM },  //fnAngularMode
+/*  229 */  { ITM_GRAD,             amGrad,                 RB_AM },  //fnAngularMode
+/*  375 */  { ITM_MULPI,            amMultPi,               RB_AM },  //fnAngularMode
+/*  483 */  { ITM_RAD,              amRadian,               RB_AM },  //fnAngularMode
 /* 1965 */  { ITM_POLAR,            CM_POLAR,               RB_CM },  //fnSetSetJM          /*  464 */ //fnComplexMode
 /* 1969 */  { ITM_RECT,             CM_RECTANGULAR,         RB_CM },  //fnSetSetJM          /*  507 */ //fnComplexMode
 /* 1960 */  { ITM_CPXI,             CU_I,                   RB_CU },  //fnSetSetJM          /*   96 */ //fnComplexUnit
@@ -137,10 +137,10 @@ TO_QSPI const radiocb_t indexOfRadioCbEepromItems[] = {
 /*      */  { CHR_num,              JC_NL,                  CB_JC },  //
 /*      */  { CHR_case,             JC_UC,                  CB_JC },  //
 
-/* 1685 */  { ITM_2BIN,               2,                     RB_HX  },  //fnChangeBaseJM
-/* 1686 */  { ITM_2OCT,               8,                     RB_HX  },  //fnChangeBaseJM
-/* 1687 */  { ITM_2DEC,              10,                     RB_HX  },  //fnChangeBaseJM
-/* 1688 */  { ITM_2HEX,              16,                     RB_HX  }   //fnChangeBaseJM
+/* 1685 */  { ITM_2BIN,             2,                      RB_HX  }, //fnChangeBaseJM
+/* 1686 */  { ITM_2OCT,             8,                      RB_HX  }, //fnChangeBaseJM
+/* 1687 */  { ITM_2DEC,             10,                     RB_HX  }, //fnChangeBaseJM
+/* 1688 */  { ITM_2HEX,             16,                     RB_HX  }  //fnChangeBaseJM
 
 
 };
@@ -547,7 +547,7 @@ int16_t fnItemShowValue(int16_t item) {
     break;
 
   default:
-    if(indexOfItems[itemNr].func == itemToBeCoded)  {
+    if(indexOfItems[itemNr].func == itemToBeCoded) {
       result = ITEM_NOT_CODED;
     }
     break;

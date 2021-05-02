@@ -37,7 +37,6 @@
 #include "statusBar.h"
 #include "softmenus.h"
 #include <string.h>
-#include "typeDefinitions.h"
 
 #include "wp43s.h"
 

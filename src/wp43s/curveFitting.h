@@ -20,9 +20,9 @@
 #ifndef CURVEFITTING_H
 #define CURVEFITTING_H
 
+#include "decNumberWrappers.h"
 #include <stdint.h>
 
-#include "wp43s.h"
 
 #define useFLOAT   0
 #define useREAL4   4

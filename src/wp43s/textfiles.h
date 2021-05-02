@@ -24,6 +24,7 @@
 #ifndef TEXTFILES_H
 #define TEXTFILES_H
 
+#include "defines.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 

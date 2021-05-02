@@ -24,7 +24,6 @@
 #ifndef RADIOBUTTONCATALOG_H
 #define RADIOBUTTONCATALOG_H
 
-#include "defines.h"
 #include <stdint.h>
 
 #define RB_FALSE    0

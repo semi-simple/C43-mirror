@@ -15,12 +15,17 @@ elif build_machine.system() == 'linux'
 else
   error('Unsupported platform')
 endif
+
 if build_machine.cpu_family() in ['aarch64', 'x86_64']
   add_project_arguments('-DOS64BIT',    native : true, language : 'c')
 elif build_machine.cpu_family() in ['x86']
   add_project_arguments('-DOS32BIT',    native : true, language : 'c')
 else
   error('Unsupported platform')
+endif
+
+if get_option('RASPBERRY')
+  add_project_arguments('-DRASPBERRY',  native : true, language : 'c')
 endif
 
 # DMCP arguments

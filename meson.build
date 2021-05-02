@@ -37,9 +37,16 @@ gmp_dep = dependency('gmp', native : true)
 m_dep   = cc.find_library('m', required : false)
 
 conf_data = configuration_data()
-conf_data.set('CI_COMMIT_TAG', '0.1.20')
-conf_data.set('TODAY', '2021.05.01')
-conf_data.set('GIT_SHA', 'abcdef88')
+commit_tag = get_option('CI_COMMIT_TAG')
+if commit_tag != ''
+  today = run_command('date', '+%Y-%m-%d')
+  conf_data.set('CI_USE_TAG',    true)
+  conf_data.set('CI_COMMIT_TAG', commit_tag)
+  conf_data.set('TODAY',         today.stdout().strip())
+else
+  conf_data.set('CI_COMMIT_TAG', '')
+  conf_data.set('TODAY',         '')
+endif
 
 subdir('docs/code')
 subdir('dep')

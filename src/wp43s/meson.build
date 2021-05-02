@@ -191,6 +191,10 @@ generateCatalogs_src = files(
   'sort.c')
 wp43s_inc = include_directories('.')
 
+vcs_h = vcs_tag(
+  command        : ['git', 'describe', '--match=NeVeRmAtCh', '--always', '--abbrev=8', '--dirty=-mod'],
+  input          : 'vcs.h.in',
+  output         : 'vcs.h')
 version_h = configure_file(
   input         : 'version.h.in',
   output        : 'version.h',

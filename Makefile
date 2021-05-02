@@ -16,10 +16,10 @@ build.sim:
 	meson setup build.sim --buildtype=debug
 
 build.rel:
-	meson setup build.rel --buildtype=release
+	meson setup build.rel --buildtype=release -DCI_COMMIT_TAG=$(CI_COMMIT_TAG)
 
 build.dmcp:
-	meson setup build.dmcp --cross-file=cross_arm_gcc.build
+	meson setup build.dmcp --cross-file=cross_arm_gcc.build -DCI_COMMIT_TAG=$(CI_COMMIT_TAG)
 
 sim: build.sim
 	cd build.sim && ninja sim

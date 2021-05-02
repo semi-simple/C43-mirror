@@ -14,7 +14,8 @@ wp43s_lib = static_library(
   build_by_default    : false,
   sources             : decNumber_src + wp43s_src +
                         [rasterFontsData_c, softmenuCatalogs_h,
-                          constantPointers_ch, version_h],
+                          constantPointers_ch, vcs_h, version_h],
+  c_pch               : 'pch/wp43s-dmcp_pch.h',
   c_args              : dmcp_cargs,
   include_directories : [decNumber_inc, wp43s_inc, dmcp_inc],
   dependencies        : arm_gmp_dep,
@@ -25,7 +26,7 @@ wp43s_lib = static_library(
 wp43s_pre_elf = executable(
   'WP43S_pre.elf',
   build_by_default    : false,
-  sources             : dmcp_src + [version_h],
+  sources             : dmcp_src + [vcs_h, version_h],
   c_args              : dmcp_cargs,
   link_args           : dmcp_linkargs,
   link_with           : wp43s_lib,
@@ -55,7 +56,7 @@ generated_qspi_crc_h = custom_target(
 wp43s_elf = executable(
   'WP43S.elf',
   build_by_default    : false,
-  sources             : dmcp_src + [version_h, generated_qspi_crc_h],
+  sources             : dmcp_src + [vcs_h, version_h, generated_qspi_crc_h],
   c_args              : dmcp_cargs + ['-DUSE_GEN_QSPI_CRC'],
   link_args           : dmcp_linkargs,
   link_with           : wp43s_lib,

@@ -1,0 +1,4 @@
+option('CI_COMMIT_TAG',
+  type        : 'string',
+  value       : '',
+  description : 'Commit tag for version information in a release')

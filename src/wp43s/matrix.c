@@ -3175,6 +3175,20 @@ void divideRealMatrix(const real34Matrix_t *matrix, const real34_t *x, real34Mat
   }
 }
 
+void _divideRealMatrix(const real34Matrix_t *matrix, const real_t *x, real34Matrix_t *res, realContext_t *realContext) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+  real_t y;
+
+  if(matrix != res) realMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    real34ToReal(&matrix->matrixElements[i], &y);
+    realDivide(&y, x, &y, realContext);
+    realToReal34(&y, &res->matrixElements[i]);
+  }
+}
+
 void divideRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
   real34Matrix_t invX;
 
@@ -3193,6 +3207,49 @@ void divideRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34
     return;
   }
   multiplyRealMatrices(y, &invX, res);
+}
+
+void divideComplexMatrix(const complex34Matrix_t *matrix, const real34_t *xr, const real34_t *xi, complex34Matrix_t *res) {
+  real_t _xr, _xi;
+
+  real34ToReal(xr, &_xr); real34ToReal(xi, &_xi);
+  _divideComplexMatrix(matrix, &_xr, &_xi, res, &ctxtReal39);
+}
+
+void _divideComplexMatrix(const complex34Matrix_t *matrix, const real_t *xr, const real_t *xi, complex34Matrix_t *res, realContext_t *realContext) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+  real_t yr, yi;
+
+  if(matrix != res) complexMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    real34ToReal(VARIABLE_REAL34_DATA(&matrix->matrixElements[i]), &yr);
+    real34ToReal(VARIABLE_IMAG34_DATA(&matrix->matrixElements[i]), &yi);
+    divComplexComplex(&yr, &yi, xr, xi, &yr, &yi, realContext);
+    realToReal34(&yr, VARIABLE_REAL34_DATA(&res->matrixElements[i]));
+    realToReal34(&yi, VARIABLE_IMAG34_DATA(&res->matrixElements[i]));
+  }
+}
+
+void divideComplexMatrices(const complex34Matrix_t *y, const complex34Matrix_t *x, complex34Matrix_t *res) {
+  complex34Matrix_t invX;
+
+  if(y->header.matrixColumns != x->header.matrixRows || x->header.matrixRows != x->header.matrixColumns) {
+    res->matrixElements = NULL; // Matrix mismatch
+    res->header.matrixRows = res->header.matrixColumns = 0;
+    return;
+  }
+
+  complex_matrix_inverse(x, &invX);
+  if(invX.matrixElements == NULL) {
+    if(y != res && x != res) {
+      res->matrixElements = NULL; // Singular matrix
+      res->header.matrixRows = res->header.matrixColumns = 0;
+    }
+    return;
+  }
+  multiplyComplexMatrices(y, &invX, res);
 }
 
 

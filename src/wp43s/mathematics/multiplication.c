@@ -212,23 +212,11 @@ void mulTimeLonI(void) {
 void mulLonIRema(void) {
 #ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
-  real_t y, x;
-  uint16_t rows, cols;
-  int32_t i;
+  real_t y;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-
   linkToRealMatrixRegister(REGISTER_X, &matrix);
-  rows = matrix.header.matrixRows;
-  cols = matrix.header.matrixColumns;
-
-  realMatrixInit(&res, rows, cols);
-  for(i = 0; i < cols * rows; ++i) {
-    real34ToReal(&matrix.matrixElements[i], &x);
-    realMultiply(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, &res.matrixElements[i]);
-  }
-
+  _multiplyRealMatrix(&matrix, &y, &res, &ctxtReal39);
   convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   realMatrixFree(&res);
 #endif // TESTSUITE_BUILD
@@ -245,23 +233,11 @@ void mulLonIRema(void) {
 void mulRemaLonI(void) {
 #ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
-  real_t y, x;
-  uint16_t rows, cols;
-  int32_t i;
+  real_t x;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-
   linkToRealMatrixRegister(REGISTER_Y, &matrix);
-  rows = matrix.header.matrixRows;
-  cols = matrix.header.matrixColumns;
-
-  realMatrixInit(&res, rows, cols);
-  for(i = 0; i < cols * rows; ++i) {
-    real34ToReal(&matrix.matrixElements[i], &y);
-    realMultiply(&y, &x, &y, &ctxtReal39);
-    realToReal34(&y, &res.matrixElements[i]);
-  }
-
+  _multiplyRealMatrix(&matrix, &x, &res, &ctxtReal39);
   convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   realMatrixFree(&res);
 #endif // TESTSUITE_BUILD
@@ -278,25 +254,11 @@ void mulRemaLonI(void) {
 void mulLonICxma(void) {
 #ifndef TESTSUITE_BUILD
   complex34Matrix_t matrix, res;
-  real_t y, xr, xi;
-  uint16_t rows, cols;
-  int32_t i;
+  real_t y;
 
   convertLongIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
-
   linkToComplexMatrixRegister(REGISTER_X, &matrix);
-  rows = matrix.header.matrixRows;
-  cols = matrix.header.matrixColumns;
-
-  complexMatrixInit(&res, rows, cols);
-  for(i = 0; i < cols * rows; ++i) {
-    real34ToReal(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]), &xr);
-    real34ToReal(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i]), &xi);
-    mulComplexComplex(&y, const_0, &xr, &xi, &xr, &xi, &ctxtReal39);
-    realToReal34(&xr, VARIABLE_REAL34_DATA(&res.matrixElements[i]));
-    realToReal34(&xi, VARIABLE_IMAG34_DATA(&res.matrixElements[i]));
-  }
-
+  _multiplyComplexMatrix(&matrix, &y, const_0, &res, &ctxtReal39);
   convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
   complexMatrixFree(&res);
 #endif // TESTSUITE_BUILD
@@ -313,25 +275,11 @@ void mulLonICxma(void) {
 void mulCxmaLonI(void) {
 #ifndef TESTSUITE_BUILD
   complex34Matrix_t matrix, res;
-  real_t y, xr, xi;
-  uint16_t rows, cols;
-  int32_t i;
+  real_t y;
 
   convertLongIntegerRegisterToReal(REGISTER_X, &y, &ctxtReal39);
-
   linkToComplexMatrixRegister(REGISTER_Y, &matrix);
-  rows = matrix.header.matrixRows;
-  cols = matrix.header.matrixColumns;
-
-  complexMatrixInit(&res, rows, cols);
-  for(i = 0; i < cols * rows; ++i) {
-    real34ToReal(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]), &xr);
-    real34ToReal(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i]), &xi);
-    mulComplexComplex(&xr, &xi, &y, const_0, &xr, &xi, &ctxtReal39);
-    realToReal34(&xr, VARIABLE_REAL34_DATA(&res.matrixElements[i]));
-    realToReal34(&xi, VARIABLE_IMAG34_DATA(&res.matrixElements[i]));
-  }
-
+  _multiplyComplexMatrix(&matrix, &y, const_0, &res, &ctxtReal39);
   convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
   complexMatrixFree(&res);
 #endif // TESTSUITE_BUILD
@@ -660,23 +608,11 @@ void mulCxmaRema(void) {
 void mulRemaShoI(void) {
 #ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
-  real_t y, x;
-  uint16_t rows, cols;
-  int32_t i;
+  real_t x;
 
   convertShortIntegerRegisterToReal(REGISTER_X, &x, &ctxtReal39);
-
   linkToRealMatrixRegister(REGISTER_Y, &matrix);
-  rows = matrix.header.matrixRows;
-  cols = matrix.header.matrixColumns;
-
-  realMatrixInit(&res, rows, cols);
-  for(i = 0; i < cols * rows; ++i) {
-    real34ToReal(&matrix.matrixElements[i], &y);
-    realMultiply(&y, &x, &y, &ctxtReal39);
-    realToReal34(&y, &res.matrixElements[i]);
-  }
-
+  _multiplyRealMatrix(&matrix, &x, &res, &ctxtReal39);
   convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   realMatrixFree(&res);
 #endif // TESTSUITE_BUILD
@@ -693,23 +629,12 @@ void mulRemaShoI(void) {
 void mulShoIRema(void) {
 #ifndef TESTSUITE_BUILD
   real34Matrix_t matrix, res;
-  real_t y, x;
-  uint16_t rows, cols;
-  int32_t i;
+  real_t y;
 
   convertShortIntegerRegisterToReal(REGISTER_Y, &y, &ctxtReal39);
 
   linkToRealMatrixRegister(REGISTER_X, &matrix);
-  rows = matrix.header.matrixRows;
-  cols = matrix.header.matrixColumns;
-
-  realMatrixInit(&res, rows, cols);
-  for(i = 0; i < cols * rows; ++i) {
-    real34ToReal(&matrix.matrixElements[i], &x);
-    realMultiply(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, &res.matrixElements[i]);
-  }
-
+  _multiplyRealMatrix(&matrix, &y, &res, &ctxtReal39);
   convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
   realMatrixFree(&res);
 #endif // TESTSUITE_BUILD

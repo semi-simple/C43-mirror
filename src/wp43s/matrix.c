@@ -2446,6 +2446,20 @@ void multiplyRealMatrix(const real34Matrix_t *matrix, const real34_t *x, real34M
   }
 }
 
+void _multiplyRealMatrix(const real34Matrix_t *matrix, const real_t *x, real34Matrix_t *res, realContext_t *realContext) {
+  const uint16_t rows = matrix->header.matrixRows;
+  const uint16_t cols = matrix->header.matrixColumns;
+  int32_t i;
+  real_t y;
+
+  if(matrix != res) realMatrixInit(res, rows, cols);
+  for(i = 0; i < cols * rows; ++i) {
+    real34ToReal(&matrix->matrixElements[i], &y);
+    realMultiply(&y, x, &y, realContext);
+    realToReal34(&y, &matrix->matrixElements[i]);
+  }
+}
+
 void multiplyRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
   const uint16_t rows = y->header.matrixRows;
   const uint16_t iter = y->header.matrixColumns;
@@ -2476,18 +2490,23 @@ void multiplyRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real
 }
 
 void multiplyComplexMatrix(const complex34Matrix_t *matrix, const real34_t *xr, const real34_t *xi, complex34Matrix_t *res) {
+  real_t _xr, _xi;
+
+  real34ToReal(xr, &_xr); real34ToReal(xi, &_xi);
+  _multiplyComplexMatrix(matrix, &_xr, &_xi, res, &ctxtReal39);
+}
+
+void _multiplyComplexMatrix(const complex34Matrix_t *matrix, const real_t *xr, const real_t *xi, complex34Matrix_t *res, realContext_t *realContext) {
   const uint16_t rows = matrix->header.matrixRows;
   const uint16_t cols = matrix->header.matrixColumns;
   int32_t i;
-  real_t yr, yi, _xr, _xi;
+  real_t yr, yi;
 
   if(matrix != res) complexMatrixInit(res, rows, cols);
   for(i = 0; i < cols * rows; ++i) {
     real34ToReal(VARIABLE_REAL34_DATA(&matrix->matrixElements[i]), &yr);
     real34ToReal(VARIABLE_IMAG34_DATA(&matrix->matrixElements[i]), &yi);
-    real34ToReal(xr, &_xr);
-    real34ToReal(xi, &_xi);
-    mulComplexComplex(&yr, &yi, &_xr, &_xi, &yr, &yi, &ctxtReal39);
+    mulComplexComplex(&yr, &yi, xr, xi, &yr, &yi, &ctxtReal39);
     realToReal34(&yr, VARIABLE_REAL34_DATA(&res->matrixElements[i]));
     realToReal34(&yi, VARIABLE_IMAG34_DATA(&res->matrixElements[i]));
   }

@@ -1287,7 +1287,7 @@ void complexMatrixInit(complex34Matrix_t *matrix, uint16_t rows, uint16_t cols) 
   matrix->header.matrixRows = rows;
 
   //Initialize with 0.
-  for(uint32_t i = 0; i < rows * cols * 2; i++) {
+  for(uint32_t i = 0; i < rows * cols; i++) {
     real34Copy(const34_0, VARIABLE_REAL34_DATA(&matrix->matrixElements[i]));
     real34Copy(const34_0, VARIABLE_IMAG34_DATA(&matrix->matrixElements[i]));
   }

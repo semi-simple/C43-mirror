@@ -516,7 +516,7 @@ void convertComplex34MatrixRegisterToComplex34Matrix(calcRegister_t regist, comp
   xcopy(matrix->matrixElements, REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist), (matrix->header.matrixColumns * matrix->header.matrixRows) * sizeof(complex34_t));
 
   for(int i = 0; i < matrix->header.matrixColumns * matrix->header.matrixRows; i++) {
-    real34Copy(&matrixElem[i], &matrix->matrixElements[i]);
+    complex34Copy(&matrixElem[i], &matrix->matrixElements[i]);
   }
 }
 

@@ -48,12 +48,10 @@
 
 #include "wp43s.h"
 
-//static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "v" VERSION_SHORT STD_SPACE_3_PER_EM VERSION_DATE STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin";
-//static const char *versionStr = "Pre-alpha" STD_SPACE_3_PER_EM "version" STD_SPACE_3_PER_EM VERSION_DATE;
-static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin";
-static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM VERSION_STRING;
-
 #ifndef TESTSUITE_BUILD
+  static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin";
+  static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM VERSION_STRING;
+
   /* Names of day of week */
   TO_QSPI static const char *nameOfWday_en[8] = {"invalid day of week",                                   "Monday",            "Tuesday",                     "Wednesday",               "Thursday",           "Friday",             "Saturday",             "Sunday"};
   /*

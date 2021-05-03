@@ -1,3 +1,7 @@
+font_files = files(
+  '../../res/fonts/sortingOrder.csv',
+  '../../res/fonts/WP43S_NumericFont.ttf',
+  '../../res/fonts/WP43S_StandardFont.ttf')
 ttf2RasterFonts = executable(
   'ttf2RasterFonts',
   build_by_default : false,
@@ -7,6 +11,7 @@ ttf2RasterFonts = executable(
 rasterFontsData_c = custom_target(
   'rasterFontsData.c',
   build_by_default : false,
+  input            : font_files,
   output           : 'rasterFontsData.c',
   command          : [ttf2RasterFonts, '@CURRENT_SOURCE_DIR@/../../res/fonts', '@OUTPUT@'])
 

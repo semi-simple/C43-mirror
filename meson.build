@@ -33,7 +33,7 @@ add_project_arguments('-DDMCP_BUILD', native : false, language : 'c')
 add_project_arguments('-DOS32BIT',    native : false, language : 'c')
 
 git = find_program('git')
-run_command(git, 'submodule', 'update', meson.source_root(), '--init', '--recursive')
+run_command(git, 'submodule', 'update', '--init', '--recursive', meson.source_root())
 
 cc = meson.get_compiler('c')
 ft_dep  = dependency('freetype2', native : true)

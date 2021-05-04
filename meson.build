@@ -18,7 +18,7 @@ endif
 
 if build_machine.cpu_family() in ['aarch64', 'x86_64']
   add_project_arguments('-DOS64BIT',    native : true, language : 'c')
-elif build_machine.cpu_family() in ['x86']
+elif build_machine.cpu_family() in ['arm', 'x86']
   add_project_arguments('-DOS32BIT',    native : true, language : 'c')
 else
   error('Unsupported platform')

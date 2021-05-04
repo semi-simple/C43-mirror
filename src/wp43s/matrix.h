@@ -142,6 +142,7 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
   void     divideComplexMatrices          (const complex34Matrix_t *y, const complex34Matrix_t *x, complex34Matrix_t *res);
 
   void     WP34S_matrix_linear_eqn        (const real34Matrix_t *a, const real34Matrix_t *b, real34Matrix_t *r);
+  void     complex_matrix_linear_eqn      (const complex34Matrix_t *a, const complex34Matrix_t *b, complex34Matrix_t *r);
 #endif // TESTSUITE_BUILD
 
 void       elementwiseRema                (void (*f)(void));

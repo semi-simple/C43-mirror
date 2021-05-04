@@ -277,6 +277,13 @@ static void initSimEqValue(calcRegister_t regist, uint16_t rows, uint16_t cols) 
     convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
     realMatrixFree(&matrix);
   }
+  else if(getRegisterDataType(regist) == dtComplex34Matrix && (REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows != rows || REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns != cols)) {
+    complex34Matrix_t matrix;
+    convertComplex34MatrixRegisterToComplex34Matrix(regist, &matrix);
+    complexMatrixRedim(&matrix, rows, cols);
+    convertComplex34MatrixToComplex34MatrixRegister(&matrix, regist);
+    complexMatrixFree(&matrix);
+  }
 }
 #endif // TESTSUITE_BUILD
 
@@ -1235,13 +1242,36 @@ void fnEditLinearEquationMatrixX(uint16_t unusedParamButMandatory) {
     }
   }
   else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtReal34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t a, b, x;
+    convertReal34MatrixRegisterToComplex34Matrix(findNamedVariable("Mat_A"), &a);
+    linkToComplexMatrixRegister(findNamedVariable("Mat_B"), &b);
+    complex_matrix_linear_eqn(&a, &b, &x);
+    if(x.matrixElements) {
+      convertComplex34MatrixToComplex34MatrixRegister(&x, findNamedVariable("Mat_X"));
+      complexMatrixFree(&x);
+    }
+    complexMatrixFree(&a);
   }
   else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtComplex34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtReal34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t a, b, x;
+    linkToComplexMatrixRegister(findNamedVariable("Mat_A"), &a);
+    convertReal34MatrixRegisterToComplex34Matrix(findNamedVariable("Mat_B"), &b);
+    complex_matrix_linear_eqn(&a, &b, &x);
+    if(x.matrixElements) {
+      convertComplex34MatrixToComplex34MatrixRegister(&x, findNamedVariable("Mat_X"));
+      complexMatrixFree(&x);
+    }
+    complexMatrixFree(&b);
   }
   else if(getRegisterDataType(findNamedVariable("Mat_A")) == dtComplex34Matrix && getRegisterDataType(findNamedVariable("Mat_B")) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t a, b, x;
+    linkToComplexMatrixRegister(findNamedVariable("Mat_A"), &a);
+    linkToComplexMatrixRegister(findNamedVariable("Mat_B"), &b);
+    complex_matrix_linear_eqn(&a, &b, &x);
+    if(x.matrixElements) {
+      convertComplex34MatrixToComplex34MatrixRegister(&x, findNamedVariable("Mat_X"));
+      complexMatrixFree(&x);
+    }
   }
   if(lastErrorCode == ERROR_NONE) {
     liftStack();
@@ -3375,6 +3405,74 @@ void WP34S_matrix_linear_eqn(const real34Matrix_t *a, const real34Matrix_t *b, r
   freeWp43s(pivots, TO_BLOCKS(sizeof(uint16_t) * n));
   freeWp43s(cv, n * REAL_SIZE);
   freeWp43s(bv, n * REAL_SIZE);
+  return;
+}
+
+void complex_matrix_linear_eqn(const complex34Matrix_t *a, const complex34Matrix_t *b, complex34Matrix_t *r) {
+  const uint16_t n = a->header.matrixRows;
+  int i;
+  complex34Matrix_t mat;
+  real_t *cv = NULL;
+  uint16_t *pivots = NULL;
+  real_t *bv = NULL;
+
+  if(r != a && r != b) {
+    r->matrixElements = NULL;
+    r->header.matrixRows = r->header.matrixColumns = 0;
+  }
+
+  if(a->header.matrixColumns != n) {
+    displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+              n, a->header.matrixColumns);
+      moreInfoOnError("In function complex_matrix_linear_eqn:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+  if(b->header.matrixRows != n || b->header.matrixColumns != 1) {
+    displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "not a column vector or size mismatch (%d" STD_CROSS "%d)",
+              b->header.matrixRows, b->header.matrixColumns);
+      moreInfoOnError("In function complex_matrix_linear_eqn:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+
+  /* Everything is happy so far -- decompose */
+  pivots = allocWp43s(TO_BLOCKS(sizeof(uint16_t) * n));
+  complex_LU_decomposition(a, &mat, pivots);
+  if(!mat.matrixElements) {
+    freeWp43s(&pivots, TO_BLOCKS(sizeof(uint16_t) * n));
+    displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "attempt to LU-decompose a singular matrix");
+      moreInfoOnError("In function complex_matrix_linear_eqn:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+
+  /* And solve */
+  if(r == a)
+    complexMatrixFree(r);
+  if(r != b)
+    complexMatrixInit(r, n, 1);
+  cv = allocWp43s(n * REAL_SIZE * 2);
+  bv = allocWp43s(n * REAL_SIZE * 2);
+  for(i = 0; i < n; i++) {
+    real34ToReal(VARIABLE_REAL34_DATA(&b->matrixElements[i]) , bv + i * 2    );
+    real34ToReal(VARIABLE_IMAG34_DATA(&b->matrixElements[i]) , bv + i * 2 + 1);
+    pivots[i] = i;
+  }
+  complex_matrix_pivoting_solve(&mat, bv, pivots, cv, &ctxtReal39);
+  for(i = 0; i < n; i++) {
+    realToReal34(cv + i * 2    , VARIABLE_REAL34_DATA(&b->matrixElements[i]));
+    realToReal34(cv + i * 2 + 1, VARIABLE_IMAG34_DATA(&b->matrixElements[i]));
+  }
+  freeWp43s(pivots, TO_BLOCKS(sizeof(uint16_t) * n));
+  freeWp43s(cv, n * REAL_SIZE * 2);
+  freeWp43s(bv, n * REAL_SIZE * 2);
   return;
 }
 #endif

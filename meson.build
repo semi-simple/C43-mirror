@@ -65,9 +65,6 @@ subdir('src/wp43s-gtk')
 
 # Only attempt to include the DMCP target if we have set-up the cross compiler
 if meson.is_cross_build()
-  add_pgm_chsum = find_program('add_pgm_chsum', dirs : meson.project_source_root() / 'tools')
-  modify_crc    = find_program('modify_crc', dirs : meson.project_source_root() / 'tools')
-  gen_qspi_crc  = find_program('gen_qspi_crc', dirs : meson.project_source_root() / 'tools')
   arm_objcopy   = find_program('arm-none-eabi-objcopy')
   subproject('gmp-6.2.0')
   arm_gmp_dep   = dependency('arm-gmp-6.2.0', native : false)

@@ -349,7 +349,8 @@ static void realToDisplayString2a(const real34_t *real34, char *displayString, i
   real_t value;
 
   real34ToReal(real34, &value);
-  ctxtReal39.digits = displayHasNDigits;
+  ctxtReal39.digits =  (displayFormat == DF_FIX ? 24 : displayHasNDigits); // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123 
+  //ctxtReal39.digits =  displayHasNDigits; // This line is for fixed number of displayed digits, e.g. in FIX 15: 123 456.789 123 456 8
   realPlus(&value, &value, &ctxtReal39);
   ctxtReal39.digits = 39;
   realToReal34(&value, &value34);
@@ -691,7 +692,6 @@ static void realToDisplayString2a(const real34_t *real34, char *displayString, i
           }
         }
 
-
         // Significant digits
         for(digitPointer=firstDigit; digitPointer<=lastDigit; digitPointer++, digitCount--) {
           if(digitCount!=0 && groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
@@ -717,7 +717,9 @@ static void realToDisplayString2a(const real34_t *real34, char *displayString, i
         }
       }
       else { // zero or positive exponent
-        for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits_active, 15); digitPointer++, digitCount--) {   //JM SIGFIGNEW hackpoint
+  //JM SIGFIGNEW hackpoint
+        for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + exponent + (int16_t)displayFormatDigits_active; digitPointer++, digitCount--) { // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123 
+        //for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) { // This line is for fixed number of displayed digits, e.g. in FIX 15: 123 456.789 123 456 8
           if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
             xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;

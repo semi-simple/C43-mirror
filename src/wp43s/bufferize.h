@@ -22,6 +22,7 @@
 
 #include "typeDefinitions.h"
 #include <stdint.h>
+#include "decNumberWrappers.h"
 
 #ifndef TESTSUITE_BUILD
   void    fnAim                    (uint16_t unusedButMandatoryParameter);
@@ -33,6 +34,7 @@
 
   void    addItemToBuffer          (uint16_t item);
   void    addItemToNimBuffer       (int16_t item);
+  void    closeNimWithFraction     (real34_t *dest);
   void    closeNim                 (void);
   void    closeAim                 (void);
   void    nimBufferToDisplayBuffer (const char *buffer, char *displayBuffer);

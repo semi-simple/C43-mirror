@@ -376,7 +376,7 @@ bool_t lastshiftG = false;
     }
 
     // Shift g pressed and shift f not active
-    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
+    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -437,7 +437,7 @@ bool_t lastshiftG = false;
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -1535,6 +1535,10 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
       addItemToNimBuffer(ITM_CC);
       break;
 
+      case CM_MIM:
+        itemToBeCoded(NOPARAM);
+        break;
+
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
@@ -1767,6 +1771,9 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         ListXYposition += 10;
         break;                            //JM ^^
           
+      case CM_MIM:
+        break;
+
       default:
         sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
         displayBugScreen(errorMessage);
@@ -1882,6 +1889,9 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       ListXYposition -= 10;
       break;                            //JM ^^
           
+      case CM_MIM:
+        break;
+
     default:
       sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" PRIu8 ") while processing key DOWN!", calcMode);
       displayBugScreen(errorMessage);
@@ -1917,6 +1927,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_MIM:
       case CM_LISTXY:                     //JM
       case CM_GRAPH:                      //JM
       break;

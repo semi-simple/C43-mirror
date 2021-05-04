@@ -413,8 +413,10 @@ void logxyCxmaReal(void) {
 
 
 void logxyRemaCplx(void) {
+#ifndef TESTSUITE_BUILD
   convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
   logxyCxmaCplx();
+#endif // TESTSUITE_BUILD
 }
 
 

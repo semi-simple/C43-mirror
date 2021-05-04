@@ -309,8 +309,10 @@ void powRemaReal(void) {
  * \return void
  ***********************************************/
 void powRemaCplx(void) {
+#ifndef TESTSUITE_BUILD
   convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
   powCxmaCplx();
+#endif // TESTSUITE_BUILD
 }
 
 

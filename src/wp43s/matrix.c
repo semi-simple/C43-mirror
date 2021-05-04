@@ -1017,7 +1017,25 @@ void fnRowSum(uint16_t unusedParamButMandatory) {
     realMatrixFree(&res);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t x, res;
+    real_t sumr, sumi, elem;
+    linkToComplexMatrixRegister(REGISTER_X, &x);
+
+    complexMatrixInit(&res, x.header.matrixRows, 1);
+    for(uint16_t i = 0; i < x.header.matrixRows; ++i) {
+      realZero(&sumr); realZero(&sumi);
+      for(uint16_t j = 0; j < x.header.matrixColumns; ++j) {
+        real34ToReal(VARIABLE_REAL34_DATA(&x.matrixElements[i * x.header.matrixColumns + j]), &elem);
+        realAdd(&sumr, &elem, &sumr, &ctxtReal39);
+        real34ToReal(VARIABLE_IMAG34_DATA(&x.matrixElements[i * x.header.matrixColumns + j]), &elem);
+        realAdd(&sumi, &elem, &sumi, &ctxtReal39);
+      }
+      realToReal34(&sumr, VARIABLE_REAL34_DATA(&res.matrixElements[i]));
+      realToReal34(&sumi, VARIABLE_IMAG34_DATA(&res.matrixElements[i]));
+    }
+
+    convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
+    complexMatrixFree(&res);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -1064,7 +1082,28 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
     realToReal34(&norm, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t x;
+    real_t norm, sum, elem, imag;
+    linkToComplexMatrixRegister(REGISTER_X, &x);
+
+    realZero(&norm);
+    for(uint16_t i = 0; i < x.header.matrixRows; ++i) {
+      realZero(&sum);
+      for(uint16_t j = 0; j < x.header.matrixColumns; ++j) {
+        real34ToReal(VARIABLE_REAL34_DATA(&x.matrixElements[i * x.header.matrixColumns + j]), &elem);
+        real34ToReal(VARIABLE_IMAG34_DATA(&x.matrixElements[i * x.header.matrixColumns + j]), &imag);
+        realMultiply(&elem, &elem, &elem, &ctxtReal39);
+        realMultiply(&imag, &imag, &imag, &ctxtReal39);
+        realAdd(&elem, &imag, &elem, &ctxtReal39);
+        realSquareRoot(&elem, &elem, &ctxtReal39);
+        realAdd(&sum, &elem, &sum, &ctxtReal39);
+      }
+      if(realCompareGreaterThan(&sum, &norm))
+        realCopy(&sum, &norm);
+    }
+
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    realToReal34(&norm, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);

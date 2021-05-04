@@ -23,7 +23,7 @@
 #include "charString.h"
 #include "debug.h"
 #include "error.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "mathematics/compare.h"
 #include "plotstat.h"
 #include "matrix.h"

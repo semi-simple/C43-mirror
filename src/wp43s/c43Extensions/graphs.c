@@ -20,16 +20,16 @@
 
 /* C43 functions and routines written by JM, adapted from C43 to WP43S by JM */
 
-#include "graphs.h"
+#include "c43Extensions/graphs.h"
 
 #include "charString.h"
 #include "constantPointers.h"
 #include "error.h"
-#include "graphText.h"
+#include "c43Extensions/graphText.h"
 #include "items.h"
 #include "math.h"
 #include "plotstat.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "screen.h"
 #include "softmenus.h"

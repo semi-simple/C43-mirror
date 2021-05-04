@@ -25,10 +25,10 @@
 
 //#define DISPLOADING
 
-#include "textfiles.h"
+#include "c43Extensions/textfiles.h"
 
 #include "charString.h"
-#include "graphText.h"
+#include "c43Extensions/graphText.h"
 #include "screen.h"
 #include <string.h>
 

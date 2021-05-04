@@ -20,14 +20,14 @@
  * \file keyboardTweak.c
  ***********************************************/
 
-#include "keyboardTweak.h"
+#include "c43Extensions/keyboardTweak.h"
 
 #include "charString.h"
 #include "flags.h"
 #include "fonts.h"
 #include "gui.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "keyboard.h"
 #include "screen.h"
 #include "stack.h"

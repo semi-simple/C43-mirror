@@ -20,7 +20,7 @@
 
 #include "items.h"
 
-#include "addons.h"
+#include "c43Extensions/addons.h"
 #include "browsers/browsers.h"
 #include "bufferize.h"
 #include "config.h"
@@ -35,14 +35,14 @@
 #include "flags.h"
 #include "fonts.h"
 #include "fractions.h"
-#include "graphs.h"
+#include "c43Extensions/graphs.h"
 #include "gui.h"
-#include "inlineTest.h"
+#include "c43Extensions/inlineTest.h"
 #include "integers.h"
-#include "jm.h"
-#include "jm_graph.h"
+#include "c43Extensions/jm.h"
+#include "c43Extensions/jm_graph.h"
 #include "keyboard.h"
-#include "keyboardTweak.h"
+#include "c43Extensions/keyboardTweak.h"
 #include "logicalOps/logicalOps.h"
 #include "mathematics/mathematics.h"
 #include "matrix.h"
@@ -59,7 +59,7 @@
 #include "stringFuncs.h"
 #include "timer.h"
 #include "ui/tam.h"
-#include "xeqm.h"
+#include "c43Extensions/xeqm.h"
 
 #include "wp43s.h"
 

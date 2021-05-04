@@ -25,14 +25,14 @@
 
 //#define DISPLOADING
 
-#include "graphText.h"
+#include "c43Extensions/graphText.h"
 
 #include "charString.h"
 #include "math.h"
 #include "screen.h"
 #include "time.h"
 #include "timer.h"
-#include "xeqm.h"
+#include "c43Extensions/xeqm.h"
 #include <string.h>
 
 #include "wp43s.h"

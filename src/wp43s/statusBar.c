@@ -25,7 +25,7 @@
 #include "flags.h"
 #include "fonts.h"
 #include "gui.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "screen.h"
 #include <string.h>
 

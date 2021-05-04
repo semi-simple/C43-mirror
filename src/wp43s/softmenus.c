@@ -31,14 +31,14 @@
 #include "fonts.h"
 #include "gui.h"
 #include "items.h"
-#include "jm.h"
-#include "keyboardTweak.h"
+#include "c43Extensions/jm.h"
+#include "c43Extensions/keyboardTweak.h"
 #include "plotstat.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "screen.h"
 #include "sort.h"
-#include "xeqm.h"
+#include "c43Extensions/xeqm.h"
 #include <string.h>
 #include <stdlib.h>
 

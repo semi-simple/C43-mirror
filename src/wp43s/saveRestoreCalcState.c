@@ -27,7 +27,7 @@
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"

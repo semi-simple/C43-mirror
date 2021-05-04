@@ -20,23 +20,23 @@
  * \file xeqm.c
  ***********************************************/
 
-#include "xeqm.h"
+#include "c43Extensions/xeqm.h"
 
 #include "bufferize.h"
 #include "charString.h"
 #include "flags.h"
 #include "gui.h"
-#include "graphText.h"
+#include "c43Extensions/graphText.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "keyboard.h"
-#include "keyboardTweak.h"
+#include "c43Extensions/keyboardTweak.h"
 #include "registers.h"
 #include "screen.h"
 #include "softmenus.h"
 #include "stack.h"
 #include "statusBar.h"
-#include "textfiles.h"
+#include "c43Extensions/textfiles.h"
 #include <string.h>
 
 #include "wp43s.h"

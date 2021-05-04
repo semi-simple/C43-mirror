@@ -20,7 +20,7 @@
 
 #include "testSuite.h"
 
-#include "addons.h"
+#include "c43Extensions/addons.h"
 #include "bufferize.h"
 #include "charString.h"
 #include "config.h"

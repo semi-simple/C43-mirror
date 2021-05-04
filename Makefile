@@ -147,6 +147,7 @@ GENERATED_SRC_NOT_H      = $(addprefix $(BUILD_DIR)/generated/, constantPointers
 
 SRC_WP43S                = $(SRC_DECIMAL) \
                            $(sort $(wildcard src/wp43s/*.c) \
+                           $(wildcard src/wp43s/c43Extensions/*.c) \
                            $(wildcard src/wp43s/mathematics/*.c) \
                            $(wildcard src/wp43s/browsers/*.c) \
                            $(wildcard src/wp43s/logicalOps/*.c) \
@@ -200,8 +201,8 @@ STAMP_FILES = $(BUILD_DIR)/.stamp-constantPointers $(BUILD_DIR)/.stamp-rasterFon
 
 vpath %.c dep/decNumberICU src/testSuite src/generateConstants src/generateCatalogs src/generateTestPgms src/ttf2RasterFonts \
           dep/DMCP_SDK/dmcp/sys $(BUILD_DIR)/generated \
-          src/wp43s src/wp43s/mathematics src/wp43s/browsers src/wp43s/logicalOps src/wp43s/programming src/wp43s/distributions \
-          src/wp43s/ui src/wp43s-gtk
+          src/wp43s src/wp43s/c43Extensions src/wp43s/mathematics src/wp43s/browsers src/wp43s/logicalOps src/wp43s/programming \
+          src/wp43s/distributions src/wp43s/ui src/wp43s-gtk
 vpath %.s dep/DMCP_SDK/dmcp
 
 

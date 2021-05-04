@@ -18,12 +18,12 @@
  * \file inlineTest.c
  ***********************************************/
 
-#include "inlineTest.h"
+#include "c43Extensions/inlineTest.h"
 
 #include "display.h"
 #include "fonts.h"
-#include "jm.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/jm.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"

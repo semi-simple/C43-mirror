@@ -20,7 +20,7 @@
 
 #include "display.h"
 
-#include "addons.h"
+#include "c43Extensions/addons.h"
 #include "charString.h"
 #include "constantPointers.h"
 #include "conversionAngles.h"
@@ -31,10 +31,10 @@
 #include "fonts.h"
 #include "fractions.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"

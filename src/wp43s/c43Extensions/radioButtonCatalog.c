@@ -21,13 +21,13 @@
  * \file radioButtonCatalog.c
  ***********************************************/
 
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 
 #include "curveFitting.h"
 #include "fonts.h"
-#include "inlineTest.h"
+#include "c43Extensions/inlineTest.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "plotstat.h"
 #include "screen.h"
 #include <string.h>

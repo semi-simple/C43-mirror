@@ -64,7 +64,7 @@ All the below: because both Last x and savestack does not work due to multiple s
 
 */
 
-#include "addons.h"
+#include "c43Extensions/addons.h"
 
 #include "bufferize.h"
 #include "charString.h"
@@ -78,11 +78,11 @@ All the below: because both Last x and savestack does not work due to multiple s
 #include "error.h"
 #include "flags.h"
 #include "fonts.h"
-#include "graphText.h"
+#include "c43Extensions/graphText.h"
 #include "gui.h"
 #include "integers.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "keyboard.h"
 //#include "mathematics/mathematics.h"
 #include "mathematics/arg.h"
@@ -95,7 +95,7 @@ All the below: because both Last x and savestack does not work due to multiple s
 #include "mathematics/toPolar.h"
 #include "mathematics/toRect.h"
 #include "plotstat.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -104,7 +104,7 @@ All the below: because both Last x and savestack does not work due to multiple s
 #include "softmenus.h"
 #include "stack.h"
 #include "statusBar.h"
-#include "textfiles.h"
+#include "c43Extensions/textfiles.h"
 #include <string.h>
 
 #include "wp43s.h"

@@ -20,25 +20,25 @@
 
 /* ADDITIONAL C43 functions and routines */
 
-#include "jm.h"
+#include "c43Extensions/jm.h"
 
-#include "addons.h"
+#include "c43Extensions/addons.h"
 #include "charString.h"
 #include "display.h"
 #include "flags.h"
-#include "graphs.h"
-#include "graphText.h"
+#include "c43Extensions/graphs.h"
+#include "c43Extensions/graphText.h"
 #include "items.h"
-#include "keyboardTweak.h"
+#include "c43Extensions/keyboardTweak.h"
 #include "mathematics/mathematics.h"
 #include "memory.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
 #include "stack.h"
 #include "stats.h"
-#include "xeqm.h"
+#include "c43Extensions/xeqm.h"
 #include <string.h>
 
 #include "wp43s.h"

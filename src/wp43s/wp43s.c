@@ -31,8 +31,8 @@
 //#define JMSHOWCODES
 
 #if defined(DMCP_BUILD)
-#include "keyboardTweak.h"
-#include "jm.h"
+  #include "c43Extensions/keyboardTweak.h"
+  #include "c43Extensions/jm.h"
 #endif
 
 

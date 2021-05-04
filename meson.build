@@ -1,5 +1,5 @@
 project('wp43s', 'c',
-  meson_version   : '>=0.53.2',
+  meson_version   : '>=0.56.0',
   license         : 'GPL-3.0-only',
   default_options : ['warning_level=2']
 )
@@ -33,7 +33,7 @@ add_project_arguments('-DDMCP_BUILD', native : false, language : 'c')
 add_project_arguments('-DOS32BIT',    native : false, language : 'c')
 
 git = find_program('git')
-run_command(git, 'submodule', 'update', '--init', '--recursive', meson.source_root())
+run_command(git, 'submodule', 'update', '--init', '--recursive', meson.project_source_root())
 
 cc = meson.get_compiler('c')
 ft_dep  = dependency('freetype2', native : true)
@@ -65,9 +65,9 @@ subdir('src/wp43s-gtk')
 
 # Only attempt to include the DMCP target if we have set-up the cross compiler
 if meson.is_cross_build()
-  add_pgm_chsum = find_program('add_pgm_chsum', dirs : meson.source_root() / 'tools')
-  modify_crc    = find_program('modify_crc', dirs : meson.source_root() / 'tools')
-  gen_qspi_crc  = find_program('gen_qspi_crc', dirs : meson.source_root() / 'tools')
+  add_pgm_chsum = find_program('add_pgm_chsum', dirs : meson.project_source_root() / 'tools')
+  modify_crc    = find_program('modify_crc', dirs : meson.project_source_root() / 'tools')
+  gen_qspi_crc  = find_program('gen_qspi_crc', dirs : meson.project_source_root() / 'tools')
   arm_objcopy   = find_program('arm-none-eabi-objcopy')
   subproject('gmp-6.2.0')
   arm_gmp_dep   = dependency('arm-gmp-6.2.0', native : false)

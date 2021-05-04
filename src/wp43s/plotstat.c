@@ -1538,9 +1538,10 @@ void fnPlotRegressionLine(uint16_t plotMode){
         plotSelection = 1;
       }
 
-    //  while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024)){ //fast forward to selected LR
-    //    plotSelection = plotSelection << 1;
-    //  }
+      while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024)){ //fast forward to selected LR
+        plotSelection = plotSelection << 1;
+      }
+    
       if(plotSelection >= 1024) {
         plotSelection = 0;  //purposely change to zero graph display to give a no-line view
       }
@@ -1554,6 +1555,11 @@ void fnPlotRegressionLine(uint16_t plotMode){
       if(plotSelection >= 1024){
         plotSelection = 0;  //purposely change to zero graph display to give a no line view
       }
+
+      while((plotSelection != ( (lrSelection == 0 ? 1023 : lrSelection) & plotSelection)) && (plotSelection < 1024) && (plotSelection > 0)){ //fast forward to selected LR
+        plotSelection = plotSelection >> 1;
+      }
+    
       break;
 
     case PLOT_LR:

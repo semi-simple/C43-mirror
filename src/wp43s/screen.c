@@ -1022,6 +1022,7 @@
         #endif // (SHOW_MEMORY_STATUS == 1)
       #endif // PC_BUILD
 
+
       if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || calcMode == CM_MIM) {
         real34Matrix_t matrix;
         linkToRealMatrixRegister(calcMode == CM_MIM ? matrixIndex : REGISTER_X, &matrix);
@@ -1035,6 +1036,24 @@
         if(rows >= 4 && cols > 1) displayStack = 2;
         if(calcMode == CM_MIM) displayStack -= 2;
       }
+
+
+      if(temporaryInformation == TI_STATISTIC_LR && (getRegisterDataType(REGISTER_X) != dtReal34)) {
+         if(regist == REGISTER_X) {
+           if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {
+             sprintf(tmpString, "L.R. selected to OrthoF. Only for REAL data.");
+           } else {
+             sprintf(tmpString, "L.R. selected to %03" PRIu16 ". Only for REAL data.", (uint16_t)((~lrSelection) & 0x01FF));
+           }
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              sprintf(errorMessage, "BestF is set, but will not work until REAL data points are used.");
+              moreInfoOnError("In function refreshRegisterLine:", errorMessage, errorMessages[24], NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            w = stringWidth(tmpString, &standardFont, true, true);
+            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+         }            
+       } else
+
 
       if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
         showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
@@ -1552,17 +1571,17 @@
             }
           }
 
-         else if(temporaryInformation == TI_STATISTIC_LR) {
-            if(regist == REGISTER_Y) {
-              if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {
-                sprintf(prefix, "L.R. selected to OrthoF");
-              } else {
-                sprintf(prefix, "L.R. selected to %03" PRIu16, (uint16_t)((~lrSelection) & 0x01FF));
-              }
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
-            }            
-          }
+          else if(temporaryInformation == TI_STATISTIC_LR) {
+             if(regist == REGISTER_X) {
+               if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {
+                 sprintf(prefix, "L.R. selected to OrthoF");
+               } else {
+                 sprintf(prefix, "L.R. selected to %03" PRIu16, (uint16_t)((~lrSelection) & 0x01FF));
+               }
+               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+               //lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
+             }            
+           }
 
           real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);
 

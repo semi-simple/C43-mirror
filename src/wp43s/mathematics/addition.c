@@ -611,7 +611,29 @@ void addStriRema(void) {
  * \return void
  ***********************************************/
 void addStriCxma(void) {
-  fnToBeCoded();
+  int16_t len1, len2;
+
+  complex34MatrixToDisplayString(REGISTER_X, tmpString);
+
+  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
+    displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "the resulting string would be %d (Y %d + X %d) characters long. Maximum is %d",
+                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
+                                                                 stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
+                                                                        stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
+      moreInfoOnError("In function addStriCxma:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else {
+    len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
+    len2 = stringByteLength(tmpString) + 1;
+
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
+
+    xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
+  }
 }
 
 

@@ -14,9 +14,9 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file wp43s.h
- ***********************************************/
+ */
 
 #ifndef WP43S_H
 #define WP43S_H

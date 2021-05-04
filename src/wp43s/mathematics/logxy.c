@@ -395,7 +395,7 @@ void logxyRemaLonI(void) {
 
 
 void logxyCxmaLonI(void) {
-  fnToBeCoded();
+  elementwiseCxmaLonI(logxyCplxLonI);
 }
 
 
@@ -407,19 +407,20 @@ void logxyRemaReal(void) {
 
 
 void logxyCxmaReal(void) {
-  fnToBeCoded();
+  elementwiseCxmaReal(logxyCplxReal);
 }
 
 
 
 void logxyRemaCplx(void) {
-  fnToBeCoded();
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
+  logxyCxmaCplx();
 }
 
 
 
 void logxyCxmaCplx(void) {
-  fnToBeCoded();
+  elementwiseCxmaCplx(logxyCplxCplx);
 }
 
 
@@ -431,5 +432,5 @@ void logxyRemaShoI(void) {
 
 
 void logxyCxmaShoI(void) {
-  fnToBeCoded();
+  elementwiseCxmaShoI(logxyCplxShoI);
 }

@@ -954,7 +954,25 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
     realToReal34(&sum, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t matrix;
+    real_t elem, sum;
+
+    linkToComplexMatrixRegister(REGISTER_X, &matrix);
+
+    realZero(&sum);
+    for(int i = 0; i < matrix.header.matrixRows * matrix.header.matrixColumns; ++i) {
+      real34ToReal(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]), &elem);
+      realMultiply(&elem, &elem, &elem, &ctxtReal39);
+      realAdd(&sum, &elem, &sum, &ctxtReal39);
+      real34ToReal(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i]), &elem);
+      realMultiply(&elem, &elem, &elem, &ctxtReal39);
+      realAdd(&sum, &elem, &sum, &ctxtReal39);
+    }
+    realSquareRoot(&sum, &sum, &ctxtReal39);
+
+    // `matrix` invalidates here
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    realToReal34(&sum, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);

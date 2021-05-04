@@ -581,7 +581,12 @@ void fnSetMatrixDimensions(uint16_t regist) {
     realMatrixFree(&matrix);
   }
   else if(getRegisterDataType(regist) == dtComplex34Matrix) {
-    fnToBeCoded();
+    complex34Matrix_t matrix;
+
+    convertComplex34MatrixRegisterToComplex34Matrix(regist, &matrix);
+    complexMatrixRedim(&matrix, y, x);
+    convertComplex34MatrixToComplex34MatrixRegister(&matrix, regist);
+    complexMatrixFree(&matrix);
   }
   else {
     real34Matrix_t matrix;
@@ -606,9 +611,9 @@ void fnGetMatrixDimensions(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
-  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
-    const uint16_t rows = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixRows;
-    const uint16_t cols = REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixColumns;
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+    const uint16_t rows = REGISTER_DATA(REGISTER_X)->matrixRows;
+    const uint16_t cols = REGISTER_DATA(REGISTER_X)->matrixColumns;
     longInteger_t li;
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
@@ -621,9 +626,6 @@ void fnGetMatrixDimensions(uint16_t unusedButMandatoryParameter) {
     uIntToLongInteger(cols, li);
     convertLongIntegerToLongIntegerRegister(li, REGISTER_X);
     longIntegerFree(li);
-  }
-  else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    fnToBeCoded();
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);

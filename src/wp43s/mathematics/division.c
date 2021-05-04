@@ -903,6 +903,7 @@ void divCxmaReal(void) {
   complex34Matrix_t matrix;
   linkToComplexMatrixRegister(REGISTER_Y, &matrix);
   divideComplexMatrix(&matrix, REGISTER_REAL34_DATA(REGISTER_X), const34_0, &matrix);
+  convertComplex34MatrixToComplex34MatrixRegister(&matrix, REGISTER_X);
 #endif // TESTSUITE_BUILD
 }
 
@@ -919,6 +920,7 @@ void divCxmaCplx(void) {
   complex34Matrix_t matrix;
   linkToComplexMatrixRegister(REGISTER_Y, &matrix);
   divideComplexMatrix(&matrix, REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X), &matrix);
+  convertComplex34MatrixToComplex34MatrixRegister(&matrix, REGISTER_X);
 #endif // TESTSUITE_BUILD
 }
 

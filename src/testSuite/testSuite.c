@@ -35,6 +35,7 @@
 #include "items.h"
 #include "logicalOps/logicalOps.h"
 #include "mathematics/mathematics.h"
+#include "memory.h"
 #include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"

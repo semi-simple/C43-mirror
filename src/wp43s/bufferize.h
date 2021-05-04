@@ -21,7 +21,7 @@
 #define BUFFERIZE_H
 
 #include <stdint.h>
-#include "decNumberWrappers.h"
+#include "realType.h"
 
 #ifndef TESTSUITE_BUILD
   void    fnAim                    (uint16_t unusedButMandatoryParameter);

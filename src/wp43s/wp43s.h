@@ -55,8 +55,8 @@
     #include <dmcp.h>
   #endif // DMCP_BUILD
 
-  #include "decNumberWrappers.h"
   #include "mathematics/pcg_basic.h"
+  #include "realType.h"
   #include "typeDefinitions.h"
 
   // Variables for the simulator

@@ -20,8 +20,8 @@
 #ifndef REGISTERS_H
 #define REGISTERS_H
 
-#include "decNumberWrappers.h"
-#include "gmpWrappers.h"
+#include "longIntegerType.h"
+#include "realType.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 

@@ -17,9 +17,9 @@
 #include "wp43s.h"
 
 #include "config.h"
-#include "gmpWrappers.h"
 #include "items.h"
 #include "keyboard.h"
+#include "longIntegerType.h"
 #include "memory.h"
 #include "screen.h"
 

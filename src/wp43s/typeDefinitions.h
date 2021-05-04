@@ -20,8 +20,8 @@
 #ifndef TYPEDEFINITIONS_H
 #define TYPEDEFINITIONS_H
 
+#include "realType.h"
 #include <stdint.h>
-#include "decNumberWrappers.h"
 
 /**
  * \union multiplyDivide_t

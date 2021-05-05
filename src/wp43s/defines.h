@@ -20,9 +20,9 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-#ifdef DMCP_BUILD
-  #include <dmcp.h>
-#endif // DMCP_BUILD
+//??? #ifdef DMCP_BUILD
+//???   #include <dmcp.h>
+//??? #endif // DMCP_BUILD
 
 //*********************************
 // JM VARIOUS OPTIONS
@@ -1051,7 +1051,7 @@
 #define ignore_result(M) if(1==((uint64_t)M)){;}
 
 #ifdef DMCP_BUILD
-  #define TMP_STR_LENGTH     AUX_BUF_SIZE
+  #define TMP_STR_LENGTH     2560 //dr - remove #include <dmcp.h> again - AUX_BUF_SIZE
 #else // !DMCP_BUILD
   #define TMP_STR_LENGTH     3000 //2560 //JMMAX ORG:2560
 #endif // DMCP_BUILD

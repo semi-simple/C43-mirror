@@ -14,12 +14,13 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file plot.h
  ***********************************************/
 #ifndef PLOTSTAT_H
 #define PLOTSTAT_H
 
+#include "realType.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 

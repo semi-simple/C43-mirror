@@ -69,6 +69,7 @@ if meson.is_cross_build()
   modify_crc    = files('tools/modify_crc')[0]
   gen_qspi_crc  = files('tools/gen_qspi_crc')[0]
   arm_objcopy   = find_program('arm-none-eabi-objcopy')
+  bash          = find_program('bash')
   subproject('gmp-6.2.0')
   arm_gmp_dep   = dependency('arm-gmp-6.2.0', native : false)
   subdir('src/wp43s-dmcp')

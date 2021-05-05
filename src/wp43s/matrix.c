@@ -1570,7 +1570,7 @@ void showMatrixEditor() {
     showSoftmenu(-MNU_M_EDIT);
 
   bool_t colVector = false;
-  if (cols == 1) {
+  if(cols == 1 && rows > 1) {
     colVector = true;
     cols = rows;
     rows = 1;
@@ -1849,7 +1849,7 @@ void showRealMatrix(const real34Matrix_t *matrix) {
   Y_POS = Y_POSITION_OF_REGISTER_X_LINE - NUMERIC_FONT_HEIGHT;
 
   bool_t colVector = false;
-  if (cols == 1) {
+  if(cols == 1 && rows > 1) {
     colVector = true;
     cols = rows;
     rows = 1;
@@ -1943,8 +1943,9 @@ smallFont:
 }
 
 int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *rPadWidth, int16_t *digits) {
-  const int rows = matrix->header.matrixColumns == 1 ? 1 : matrix->header.matrixRows;
-  const int cols = matrix->header.matrixColumns == 1 ? matrix->header.matrixRows : matrix->header.matrixColumns;
+  const bool_t colVector = matrix->header.matrixColumns == 1 && matrix->header.matrixRows > 1;
+  const int rows = colVector ? 1 : matrix->header.matrixRows;
+  const int cols = colVector ? matrix->header.matrixRows : matrix->header.matrixColumns;
   const int maxCols = cols > 4 ? 4 : cols;
   const int maxRows = rows > 5 ? 5 : rows;
   const bool_t forEditor = matrix == &openMatrixMIMPointer.realMatrix;
@@ -2030,7 +2031,7 @@ void showComplexMatrix(const complex34Matrix_t *matrix) {
   Y_POS = Y_POSITION_OF_REGISTER_X_LINE - NUMERIC_FONT_HEIGHT;
 
   bool_t colVector = false;
-  if (cols == 1) {
+  if(cols == 1 && rows > 1) {
     colVector = true;
     cols = rows;
     rows = 1;
@@ -2177,8 +2178,9 @@ smallFont:
 }
 
 int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i, int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits) {
-  const int rows = matrix->header.matrixColumns == 1 ? 1 : matrix->header.matrixRows;
-  const int cols = matrix->header.matrixColumns == 1 ? matrix->header.matrixRows : matrix->header.matrixColumns;
+  const bool_t colVector = matrix->header.matrixColumns == 1 && matrix->header.matrixRows > 1;
+  const int rows = colVector ? 1 : matrix->header.matrixRows;
+  const int cols = colVector ? matrix->header.matrixRows : matrix->header.matrixColumns;
   const int maxCols = cols > 2 ? 2 : cols;
   const int maxRows = rows > 5 ? 5 : rows;
   const bool_t forEditor = matrix == &openMatrixMIMPointer.complexMatrix;

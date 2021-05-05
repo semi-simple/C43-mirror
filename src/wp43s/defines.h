@@ -188,9 +188,11 @@
 #define FLAG_USB                              0xc028
 #define NUMBER_OF_SYSTEM_FLAGS                    41
 
-#define LI_ZERO                                    0 // Long integer sign 0
-#define LI_NEGATIVE                                1 // Long integer sign -
-#define LI_POSITIVE                                2 // Long integer sign +
+typedef enum {
+  LI_ZERO     = 0, // Long integer sign 0
+  LI_NEGATIVE = 1, // Long integer sign -
+  LI_POSITIVE = 2  // Long integer sign +
+} longIntegerSign_t;
 
 
 // PC GUI

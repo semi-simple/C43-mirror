@@ -12,6 +12,10 @@ find build/ -type f -name "*.o" -exec rm {} \;
 find build/ -type f -name "*.d" -exec rm {} \;
 find src/ -type f -name "*.o" -exec rm {} \;
 find src/ -type f -name "*.d" -exec rm {} \;
+find build.dmcp/ -type f -name "*.o" -exec rm {} \;
+find build.dmcp/ -type f -name "*.d" -exec rm {} \;
+find build.sim/ -type f -name "*.o" -exec rm {} \;
+find build.sim/ -type f -name "*.d" -exec rm {} \;
 
 find . -type f -name "*.dSYM" -exec rm {} \;
 find . -type f -name ".DS_Store" -exec rm {} \;

@@ -915,28 +915,6 @@ void eformat_fix3 (char* s02, const char* s01, double inreal) {
 }
 
 
-
-// Remove trailing zeroes from float strings
-static char * eatZeroesEnd(const char * ss) {
-  int8_t ix;
-  strcpy(tmp_names1,ss);
-  ix = stringByteLength(tmp_names1)-1;
-  while( ix > 0 ){
-    if(tmp_names1[ix]=='0' || tmp_names1[ix]==' ') {
-      tmp_names1[ix]=0;
-    } 
-    else {
-      break;
-    }
-    ix--;
-  }
-  if(tmp_names1[ix]=='.' || tmp_names1[ix]==',') {
-    tmp_names1[ix]=0;
-  } 
-  return tmp_names1;
-}
-
-
 char * padEquals(const char * ss) {
   int8_t ix = 0, iy = 0;
   tmp_names1[0]=0;

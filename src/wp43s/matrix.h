@@ -159,7 +159,7 @@ void       elementwiseCxmaShoI            (void (*f)(void));
 void       elementwiseCxmaCplx            (void (*f)(void));
 
 #ifndef TESTSUITE_BUILD
-  void     callByIndexedMatrix            (bool_t (*real_f)(real34Matrix_t *), void *reserved);
+  void     callByIndexedMatrix            (bool_t (*real_f)(real34Matrix_t *), bool_t (*complex_f)(complex34Matrix_t *));
 #endif // TESTSUITE_BUILD
 
 #endif // MATRIX_H

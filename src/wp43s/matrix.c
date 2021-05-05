@@ -156,6 +156,32 @@ static bool_t swapRowsReal(real34Matrix_t *matrix) {
   return true;
 }
 
+static bool_t swapRowsComplex(complex34Matrix_t *matrix) {
+  real_t ry, rx, rrows;
+  uint16_t a, b;
+
+  int32ToReal(matrix->header.matrixRows, &rrows);
+
+  if((!getArg(REGISTER_Y, &ry)) || (!getArg(REGISTER_X, &rx))) return false;
+
+  realToInt32(&ry, a);
+  realToInt32(&rx, b);
+  if(realIsPositive(&rx) && realIsPositive(&ry) && realCompareLessEqual(&rx, &rrows) && realCompareLessEqual(&ry, &rrows)) {
+    if(!realCompareEqual(&ry, &rx))
+      complexMatrixSwapRows(matrix, matrix, a - 1, b - 1);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "rows %" PRIu16 " and/or %" PRIu16 " out of range", a, b);
+      moreInfoOnError("In function swapRowsComplex:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+
+  return true;
+}
+
 
 
 static bool_t getMatrixReal(real34Matrix_t *matrix) {
@@ -187,6 +213,42 @@ static bool_t getMatrixReal(real34Matrix_t *matrix) {
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "%" PRIu16 " " STD_CROSS " %" PRIu16 " out of range", a, b);
       moreInfoOnError("In function getMatrixReal:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+
+  return false;
+}
+
+static bool_t getMatrixComplex(complex34Matrix_t *matrix) {
+  real_t ry, rx, rrows, rcols;
+  uint16_t a, b, r, c;
+
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  int32ToReal(matrix->header.matrixRows    - i, &rrows);
+  int32ToReal(matrix->header.matrixColumns - j, &rcols);
+
+  if((!getArg(REGISTER_Y, &ry)) || (!getArg(REGISTER_X, &rx))) return false;
+
+  realToInt32(&ry, a);
+  realToInt32(&rx, b);
+  if(realIsPositive(&rx) && realIsPositive(&ry) && realCompareLessEqual(&rx, &rcols) && realCompareLessEqual(&ry, &rrows)) {
+    complex34Matrix_t mat;
+    fnDropY(NOPARAM);
+    complexMatrixInit(&mat, a, b);
+    for(r = 0; r < a; ++r)
+      for(c = 0; c < b; ++c)
+        complex34Copy(&matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j], &mat.matrixElements[r * b + c]);
+    convertComplex34MatrixToComplex34MatrixRegister(&mat, REGISTER_X);
+    complexMatrixFree(&mat);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "%" PRIu16 " " STD_CROSS " %" PRIu16 " out of range", a, b);
+      moreInfoOnError("In function getMatrixComplex:", errorMessage, NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
@@ -230,6 +292,40 @@ static bool_t putMatrixReal(real34Matrix_t *matrix) {
   return true;
 }
 
+static bool_t putMatrixComplex(complex34Matrix_t *matrix) {
+  uint16_t r, c;
+  complex34Matrix_t mat;
+
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  if(getRegisterDataType(REGISTER_X) != dtComplex34Matrix) {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "%s is not a complex matrix", getRegisterDataTypeName(REGISTER_X, true, false));
+      moreInfoOnError("In function putMatrixComplex:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+
+  linkToComplexMatrixRegister(REGISTER_X, &mat);
+  if((mat.header.matrixRows + i) <= matrix->header.matrixRows && (mat.header.matrixColumns + j) <= matrix->header.matrixColumns) {
+    for(r = 0; r < mat.header.matrixRows; ++r)
+      for(c = 0; c < mat.header.matrixColumns; ++c)
+        complex34Copy(&mat.matrixElements[r * mat.header.matrixColumns + c], &matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j]);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "%" PRIu16 " " STD_CROSS " %" PRIu16 " out of range", mat.header.matrixRows, mat.header.matrixColumns);
+      moreInfoOnError("In function putMatrixComplex:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+
+  return true;
+}
+
 
 
 static bool_t incIReal(real34Matrix_t *matrix) {
@@ -259,6 +355,29 @@ static bool_t decJReal(real34Matrix_t *matrix) {
   setJRegisterAsInt(true, getJRegisterAsInt(true) - 1);
   wrapIJ(matrix->header.matrixRows, matrix->header.matrixColumns);
   return false;
+}
+
+static bool_t incIComplex(complex34Matrix_t *matrix) {
+  return incIReal((real34Matrix_t *)matrix);
+}
+
+static bool_t decIComplex(complex34Matrix_t *matrix) {
+  return decIReal((real34Matrix_t *)matrix);
+}
+
+static bool_t incJComplex(complex34Matrix_t *matrix) {
+  setJRegisterAsInt(true, getJRegisterAsInt(true) + 1);
+  if(wrapIJ(matrix->header.matrixRows, matrix->header.matrixColumns)) {
+    insRowComplexMatrix(matrix, matrix->header.matrixRows);
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+static bool_t decJComplex(complex34Matrix_t *matrix) {
+  return decJReal((real34Matrix_t *)matrix);
 }
 
 
@@ -427,7 +546,7 @@ void fnGoToColumn(uint16_t col) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "(%" PRIu16 ", %" PRIu16 ") out of range", tmpRow, col);
-        moreInfoOnError("In function putMatrixReal:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function putGoToColumn:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
@@ -478,7 +597,7 @@ void fnSetGrowMode(uint16_t growFlag) {
  ***********************************************/
 void fnIncDecI(uint16_t mode) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix((mode == DEC_FLAG) ? decIReal : incIReal, NULL);
+  callByIndexedMatrix((mode == DEC_FLAG) ? decIReal : incIReal, (mode == DEC_FLAG) ? decIComplex : incIComplex);
 #endif // TESTSUITE_BUILD
 }
 
@@ -492,7 +611,7 @@ void fnIncDecI(uint16_t mode) {
  ***********************************************/
 void fnIncDecJ(uint16_t mode) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix((mode == DEC_FLAG) ? decJReal : incJReal, NULL);
+  callByIndexedMatrix((mode == DEC_FLAG) ? decJReal : incJReal, (mode == DEC_FLAG) ? decJComplex : incJComplex);
 #endif // TESTSUITE_BUILD
 }
 
@@ -1161,7 +1280,7 @@ void fnIndexMatrix(uint16_t regist) {
  ***********************************************/
 void fnGetMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix(getMatrixReal, NULL);
+  callByIndexedMatrix(getMatrixReal, getMatrixComplex);
 #endif // TESTSUITE_BUILD
 }
 
@@ -1175,7 +1294,7 @@ void fnGetMatrix(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnPutMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix(putMatrixReal, NULL);
+  callByIndexedMatrix(putMatrixReal, putMatrixComplex);
 #endif // TESTSUITE_BUILD
 }
 
@@ -1189,7 +1308,7 @@ void fnPutMatrix(uint16_t unusedParamButMandatory) {
  ***********************************************/
 void fnSwapRows(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix(swapRowsReal, NULL);
+  callByIndexedMatrix(swapRowsReal, swapRowsComplex);
 #endif // TESTSUITE_BUILD
 }
 
@@ -3821,7 +3940,7 @@ void elementwiseCxmaCplx(void (*f)(void)) {
 
 
 #ifndef TESTSUITE_BUILD
-void callByIndexedMatrix(bool_t (*real_f)(real34Matrix_t *), void *reserved) {
+void callByIndexedMatrix(bool_t (*real_f)(real34Matrix_t *), bool_t (*complex_f)(complex34Matrix_t *)) {
   const int16_t i = getIRegisterAsInt(true);
   const int16_t j = getJRegisterAsInt(true);
 
@@ -3848,10 +3967,19 @@ void callByIndexedMatrix(bool_t (*real_f)(real34Matrix_t *), void *reserved) {
     realMatrixFree(&mat);
   }
   else if(getRegisterDataType(matrixIndex) == dtComplex34Matrix) {
-    displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-    #ifdef PC_BUILD
-      moreInfoOnError("In function callByIndexedMatrix:", "To be coded", NULL, NULL);
-    #endif // PC_BUILD
+    complex34Matrix_t mat;
+    convertComplex34MatrixRegisterToComplex34Matrix(matrixIndex, &mat);
+    if(i < 0 || i >= mat.header.matrixRows || j < 0 || j >= mat.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Cannot execute: element (%" PRId16 ", %" PRId16 ") out of range", (int16_t)(i + 1), (int16_t)(j + 1));
+        moreInfoOnError("In function callByIndexedMatrix:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      if(complex_f(&mat)) convertComplex34MatrixToComplex34MatrixRegister(&mat, matrixIndex);
+    }
+    complexMatrixFree(&mat);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);

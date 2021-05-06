@@ -43,9 +43,9 @@
 #endif // RASPBERRY
 
 
-#if __linux__ == 1
+#ifdef LINUX
   #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
-#endif // __linux__ == 1
+#endif // LINUX
 
 
 #define DEBUG_STAT                       0 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
@@ -369,11 +369,11 @@ typedef enum {
 #define TIMER_IDX_AUTO_REPEAT                      1 // use timer 1 to wake up for key auto-repeat
 
 #ifdef PC_BUILD
-  #if (__linux__ == 1)
+  #ifdef LINUX
     #define LINEBREAK                           "\n"
-  #elif defined(__MINGW64__)
+  #elif defined(WIN32)
     #define LINEBREAK                         "\n\r"
-  #elif defined(__APPLE__)
+  #elif defined(OSX)
     #define LINEBREAK                         "\r\n"
   #else // Unsupported OS
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
@@ -816,10 +816,10 @@ typedef enum {
 #endif // defined(OS32BIT) && defined(OS64BIT)
 
 #ifdef PC_BUILD
-  #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
+  #ifdef WIN32 // No DEBUG_PANEL mode for Windows
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
-  #endif // __MINGW64__
+  #endif // WIN32
   #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0

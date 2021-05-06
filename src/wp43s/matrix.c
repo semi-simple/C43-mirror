@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file matrix.c
- ***********************************************/
-
 #include "matrix.h"
 
 #include <string.h>
@@ -278,12 +274,6 @@ static void initSimEqValue(calcRegister_t regist, uint16_t rows, uint16_t cols) 
 
 
 
-/********************************************//**
- * \brief creates new Matrix of size y->m x x ->n
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnNewMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   uint32_t rows, cols;
@@ -303,12 +293,6 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 #endif // TESTSUITE_BUILD
 }
 
-/********************************************//**
- * \brief Opens the Matrix Editor
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnEditMatrix(uint16_t regist) {
 #ifndef TESTSUITE_BUILD
   const uint16_t reg = (regist == NOPARAM) ? REGISTER_X : regist;
@@ -337,12 +321,6 @@ void fnEditMatrix(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Recalls old element in the Matrix Editor
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnOldMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   if(calcMode == CM_MIM) {
@@ -366,12 +344,6 @@ void fnOldMatrix(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Go to an element in the Matrix Editor
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnGoToElement(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   if(calcMode == CM_MIM) {
@@ -431,12 +403,6 @@ void fnGoToColumn(uint16_t col) {
 
 
 
-/********************************************//**
- * \brief Set grow mode
- *
- * \param[in] growFlag uint16_t
- * \return void
- ***********************************************/
 void fnSetGrowMode(uint16_t growFlag) {
   if(growFlag) {
     setSystemFlag(FLAG_GROW);
@@ -448,12 +414,6 @@ void fnSetGrowMode(uint16_t growFlag) {
 
 
 
-/********************************************//**
- * \brief Increment or decrement of register I as row pointer
- *
- * \param[in] mode uint16_t
- * \return void
- ***********************************************/
 void fnIncDecI(uint16_t mode) {
 #ifndef TESTSUITE_BUILD
   callByIndexedMatrix((mode == DEC_FLAG) ? decIReal : incIReal, NULL);
@@ -462,12 +422,6 @@ void fnIncDecI(uint16_t mode) {
 
 
 
-/********************************************//**
- * \brief Increment or decrement of register J as column pointer
- *
- * \param[in] mode uint16_t
- * \return void
- ***********************************************/
 void fnIncDecJ(uint16_t mode) {
 #ifndef TESTSUITE_BUILD
   callByIndexedMatrix((mode == DEC_FLAG) ? decJReal : incJReal, NULL);
@@ -476,12 +430,6 @@ void fnIncDecJ(uint16_t mode) {
 
 
 
-/********************************************//**
- * \brief Insert a row
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnInsRow(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   if(calcMode == CM_MIM) {
@@ -501,12 +449,6 @@ void fnInsRow(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Delete a row
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnDelRow(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   if(calcMode == CM_MIM) {
@@ -527,12 +469,6 @@ void fnDelRow(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief (Re-)dimension matrix X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnSetMatrixDimensions(uint16_t regist) {
 #ifndef TESTSUITE_BUILD
   uint32_t y, x;
@@ -563,12 +499,6 @@ void fnSetMatrixDimensions(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Get dimensions of matrix X
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnGetMatrixDimensions(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -607,12 +537,6 @@ void fnGetMatrixDimensions(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Transpose matrix
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnTranspose(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -642,12 +566,6 @@ void fnTranspose(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief LU decomposition
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnLuDecomposition(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -710,12 +628,6 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Determinant
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnDeterminant(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -757,12 +669,6 @@ void fnDeterminant(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Invert a square matrix
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnInvertMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -813,12 +719,6 @@ void fnInvertMatrix(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Euclidean norm of matrix X
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -858,12 +758,6 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Row sum of matrix X
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnRowSum(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -903,12 +797,6 @@ void fnRowSum(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Row norm of matrix X
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnRowNorm(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -950,12 +838,6 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Index a named matrix
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnIndexMatrix(uint16_t regist) {
 #ifndef TESTSUITE_BUILD
   if((getRegisterDataType(regist) == dtReal34Matrix) || (getRegisterDataType(regist) == dtComplex34Matrix)) {
@@ -975,12 +857,6 @@ void fnIndexMatrix(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Get submatrix of the indexed matrix
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnGetMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   callByIndexedMatrix(getMatrixReal, NULL);
@@ -989,12 +865,6 @@ void fnGetMatrix(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Put submatrix to the indexed matrix
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnPutMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   callByIndexedMatrix(putMatrixReal, NULL);
@@ -1003,12 +873,6 @@ void fnPutMatrix(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Swap rows of the indexed matrix
- *
- * \param[in] unusedParamButMandatory uint16_t
- * \return void
- ***********************************************/
 void fnSwapRows(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   callByIndexedMatrix(swapRowsReal, NULL);
@@ -1017,12 +881,6 @@ void fnSwapRows(uint16_t unusedParamButMandatory) {
 
 
 
-/********************************************//**
- * \brief Initialize simultaneous linear equation solver
- *
- * \param[in] numberOfUnknowns uint16_t
- * \return void
- ***********************************************/
 void fnSimultaneousLinearEquation(uint16_t numberOfUnknowns) {
 #ifndef TESTSUITE_BUILD
   initSimEqValue(findOrAllocateNamedVariable("Mat_A"), numberOfUnknowns, numberOfUnknowns);
@@ -1085,14 +943,6 @@ void fnEditLinearEquationMatrixX(uint16_t unusedParamButMandatory) {
 
 
 #ifndef TESTSUITE_BUILD
-/********************************************//**
- * \brief Initialize a real matrix
- *
- * \param[out] matrix real34Matrix_t*
- * \param[in] rows uint16_t
- * \param[in] cols uint16_t
- * \return void
- ***********************************************/
 void realMatrixInit(real34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
   //Allocate Memory for Matrix
   matrix->matrixElements = allocWp43s(TO_BLOCKS((rows * cols) * sizeof(real34_t)));
@@ -1107,12 +957,6 @@ void realMatrixInit(real34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
 }
 
 
-/********************************************//**
- * \brief Free a real matrix
- *
- * \param[in] matrix real34Matrix_t *
- * \return void
- ***********************************************/
 void realMatrixFree(real34Matrix_t *matrix) {
   uint16_t cols = matrix->header.matrixColumns;
   uint16_t rows = matrix->header.matrixRows;
@@ -1123,12 +967,6 @@ void realMatrixFree(real34Matrix_t *matrix) {
 }
 
 
-/********************************************//**
- * \brief Returns identity matrix of given size
- *
- * \param[in] matrix real34Matrix_t *
- * \return void
- ***********************************************/
 void realMatrixIdentity(real34Matrix_t *matrix, uint16_t size) {
   realMatrixInit(matrix, size, size);
   for(uint16_t i = 0; i < size; ++i) {
@@ -1137,12 +975,6 @@ void realMatrixIdentity(real34Matrix_t *matrix, uint16_t size) {
 }
 
 
-/********************************************//**
- * \brief Redemention a real matrix
- *
- * \param[in] matrix real34Matrix_t *
- * \return void
- ***********************************************/
 void realMatrixRedim(real34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
   real34Matrix_t newMatrix;
   uint32_t elements;
@@ -1159,11 +991,6 @@ void realMatrixRedim(real34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
 }
 
 
-/********************************************//**
- * \brief Displays the matrix editor
- *
- * \return void
- ***********************************************/
 void showMatrixEditor() {
   int rows = openMatrixMIMPointer.header.matrixRows;
   int cols = openMatrixMIMPointer.header.matrixColumns;
@@ -1353,12 +1180,6 @@ void mimRestore(void) {
 }
 
 
-/********************************************//**
- * \brief Displays a real matrix
- *
- * \param[in] matrix real34Matrix_t *
- * \return void
- ***********************************************/
 void showRealMatrix(const real34Matrix_t *matrix) {
   int rows = matrix->header.matrixRows;
   int cols = matrix->header.matrixColumns;

@@ -14,9 +14,9 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file matrix.h
- ***********************************************/
+ */
 
 #ifndef MATRIX_H
 #define MATRIX_H
@@ -29,49 +29,194 @@
   //#define MATRIX_CHAR_LEN              30
 #endif // TESTSUITE_BUILD
 
+/**
+ * Creates new Matrix of size y->m x x ->n.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnNewMatrix                    (uint16_t unusedParamButMandatory);
+/**
+ * Opens the Matrix Editor.
+ *
+ * \param[in] regist
+ */
 void       fnEditMatrix                   (uint16_t regist);
+/**
+ * Recalls old element in the Matrix Editor.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnOldMatrix                    (uint16_t unusedParamButMandatory);
+/**
+ * Go to an element in the Matrix Editor.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnGoToElement                  (uint16_t unusedParamButMandatory);
 void       fnGoToRow                      (uint16_t row);
 void       fnGoToColumn                   (uint16_t col);
+/**
+ * Set grow mode.
+ *
+ * \param[in] growFlag
+ */
 void       fnSetGrowMode                  (uint16_t growFlag);
+/**
+ * Increment or decrement of register I as row pointer.
+ *
+ * \param[in] mode
+ */
 void       fnIncDecI                      (uint16_t mode);
+/**
+ * Increment or decrement of register J as column pointer.
+ *
+ * \param[in] mode
+ */
 void       fnIncDecJ                      (uint16_t mode);
+/**
+ * Insert a row.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnInsRow                       (uint16_t unusedParamButMandatory);
+/**
+ * Delete a row.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnDelRow                       (uint16_t unusedParamButMandatory);
 
+/**
+ * (Re-)dimension matrix X.
+ *
+ * \param[in] regist
+ */
 void       fnSetMatrixDimensions          (uint16_t regist);
+/**
+ * Get dimensions of matrix X.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnGetMatrixDimensions          (uint16_t unusedParamButMandatory);
+/**
+ * Transpose matrix.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnTranspose                    (uint16_t unusedParamButMandatory);
+/**
+ * LU decomposition.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnLuDecomposition              (uint16_t unusedParamButMandatory);
+/**
+ * Determinant.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnDeterminant                  (uint16_t unusedParamButMandatory);
+/**
+ * Invert a square matrix.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnInvertMatrix                 (uint16_t unusedParamButMandatory);
+/**
+ * Euclidean norm of matrix X.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnEuclideanNorm                (uint16_t unusedParamButMandatory);
+/**
+ * Row sum of matrix X.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnRowSum                       (uint16_t unusedParamButMandatory);
+/**
+ * Row norm of matrix X.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnRowNorm                      (uint16_t unusedParamButMandatory);
 
+/**
+ * Index a named matrix.
+ *
+ * \param[in] regist
+ */
 void       fnIndexMatrix                  (uint16_t regist);
+/**
+ * Get submatrix of the indexed matrix.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnGetMatrix                    (uint16_t unusedParamButMandatory);
+/**
+ * Put submatrix to the indexed matrix.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnPutMatrix                    (uint16_t unusedParamButMandatory);
+/**
+ * Swap rows of the indexed matrix.
+ *
+ * \param[in] unusedParamButMandatory
+ */
 void       fnSwapRows                     (uint16_t unusedParamButMandatory);
 
+/**
+ * Initialize simultaneous linear equation solver.
+ *
+ * \param[in] numberOfUnknowns
+ */
 void       fnSimultaneousLinearEquation   (uint16_t numberOfUnknowns);
 void       fnEditLinearEquationMatrixA    (uint16_t unusedParamButMandatory);
 void       fnEditLinearEquationMatrixB    (uint16_t unusedParamButMandatory);
 void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
 
 #ifndef TESTSUITE_BUILD
+  /**
+   * Initialize a real matrix.
+   *
+   * \param[out] matrix
+   * \param[in] rows
+   * \param[in] cols
+   */
   void     realMatrixInit                 (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);
+  /**
+   * Free a real matrix.
+   *
+   * \param[in] matrix
+   */
   void     realMatrixFree                 (real34Matrix_t *matrix);
+  /**
+   * Returns identity matrix of given size.
+   *
+   * \param[in] matrix
+   */
   void     realMatrixIdentity             (real34Matrix_t *matrix, uint16_t size);
+  /**
+   * Redemention a real matrix.
+   *
+   * \param[in] matrix
+   */
   void     realMatrixRedim                (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);
 
+  /**
+   * Displays the matrix editor.
+   */
   void     showMatrixEditor               (void);
   void     mimEnter                       (bool_t commit);
   void     mimAddNumber                   (int16_t item);
   void     mimFinalize                    (void);
   void     mimRestore                     (void);
+  /**
+   * Displays a real matrix.
+   *
+   * \param[in] matrix
+   */
   void     showRealMatrix                 (const real34Matrix_t *matrix);
   int16_t  getRealMatrixColumnWidths      (const real34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *rPadWidth, int16_t *digits);
 

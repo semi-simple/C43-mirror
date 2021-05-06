@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file items.c Item list and function to run them
- ***********************************************/
-
 #include "items.h"
 
 #include "browsers/browsers.h"
@@ -56,12 +52,6 @@
 
 #include "wp43s.h"
 
-/********************************************//**
- * \brief Dummy function for an item to be coded
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void itemToBeCoded(uint16_t unusedButMandatoryParameter) {
   funcOK = false;
 }
@@ -69,12 +59,6 @@ void itemToBeCoded(uint16_t unusedButMandatoryParameter) {
 
 
 #ifndef GENERATE_CATALOGS
-/********************************************//**
- * \brief Dummy function for a function (part of an item) to be coded
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnToBeCoded(void) {
   displayCalcErrorMessage(ERROR_FUNCTION_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
   #ifdef PC_BUILD
@@ -85,12 +69,6 @@ void fnToBeCoded(void) {
 
 
 
-/********************************************//**
- * \brief No OPeration
- *
- * \param  unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnNop(uint16_t unusedButMandatoryParameter) {
 }
 
@@ -125,12 +103,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 
 
 
-  /********************************************//**
-   * \brief Runs a function
-   *
-   * \param[in] fn int16_t Index in the indexOfItems area of the function to run
-   * \return void
-   ***********************************************/
   void runFunction(int16_t func) {
     funcOK = true;
 

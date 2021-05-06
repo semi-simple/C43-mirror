@@ -102,19 +102,10 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
  * \param[in] displayFormatN uint16_t Display format
  * \return void
  ***********************************************/
-/*void fnDisplayFormatDsp(uint16_t displayFormatN) {
+void fnDisplayFormatDsp(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
-  displayRealAsFraction = false;
-
-  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-    convertLongIntegerRegisterToReal16Register(REGISTER_X, REGISTER_X);
-  }
-  #ifdef PC_BUILD
-    else if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
-      moreInfoOnError("In function fnDisplayFormatDsp:", "converting an integer to a real16", "is to be coded", NULL);
-    }
-  #endif // PC_BUILD
-}*/
+  clearSystemFlag(FLAG_FRACT);
+}
 
 
 

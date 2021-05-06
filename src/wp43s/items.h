@@ -1838,12 +1838,12 @@ void reallyRunFunction(int16_t func, uint16_t param);
  * \param[in] func Index in the indexOfItems area of the function to run
  */
 void runFunction      (int16_t func);
-/**
- * Dummy function for a function (part of an item) to be coded.
- *
- * \param[in] unusedButMandatoryParameter
- */
-void fnToBeCoded      (void);
+///**
+// * Dummy function for a function (part of an item) to be coded.
+// *
+// * \param[in] unusedButMandatoryParameter
+// */
+//void fnToBeCoded      (void);
 /**
  * Dummy function for an item to be coded.
  *

@@ -414,9 +414,9 @@
 
     // If LCD has changed: update the GTK screen
     if(screenChange) {
-      #if (__linux__ == 1) && (DEBUG_PANEL == 1)
+      #if defined(LINUX) && (DEBUG_PANEL == 1)
         refreshDebugPanel();
-      #endif // (__linux__ == 1) && (DEBUG_PANEL == 1)
+      #endif // defined(LINUX) && (DEBUG_PANEL == 1)
 
       gtk_widget_queue_draw(screen);
       while(gtk_events_pending()) {

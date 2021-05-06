@@ -636,9 +636,9 @@
         switch(nimNumberPart) {
           case NP_INT_10 :
             strcat(aimBuffer, "."); // no break here
-            #ifndef __APPLE__
+            #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
           case NP_REAL_FLOAT_PART :
             strcat(aimBuffer, "e+");
             exponentSignLocation = strlen(aimBuffer) - 1;
@@ -649,9 +649,9 @@
 
           case NP_COMPLEX_INT_PART :
             strcat(aimBuffer, "."); // no break here
-            #ifndef __APPLE__
+            #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
           case NP_COMPLEX_FLOAT_PART :
             strcat(aimBuffer, "e+");
             imaginaryExponentSignLocation = strlen(aimBuffer) - 1;
@@ -758,9 +758,9 @@
 
           case NP_INT_10 :
             strcat(aimBuffer, "."); // no break here
-            #ifndef __APPLE__
+            #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
 
           case NP_REAL_FLOAT_PART :
             imaginaryMantissaSignLocation = strlen(aimBuffer);

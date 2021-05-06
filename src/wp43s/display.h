@@ -25,7 +25,7 @@ void fnDisplayFormatFix                (uint16_t displayFormatN);
 void fnDisplayFormatSci                (uint16_t displayFormatN);
 void fnDisplayFormatEng                (uint16_t displayFormatN);
 void fnDisplayFormatAll                (uint16_t displayFormatN);
-//void fnDisplayFormatDsp                (uint16_t displayFormatN);
+void fnDisplayFormatDsp                (uint16_t displayFormatN);
 void fnDisplayFormatGap                (uint16_t gap);
 void fnDisplayFormatTime               (uint16_t displayFormatN);
 void fnShow                            (uint16_t unusedButMandatoryParameter);

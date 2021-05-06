@@ -1382,7 +1382,7 @@
 #define MNU_CPX                       1323
 #define MNU_CPXS                      1324
 #define MNU_DATES                     1325
-#define MNU_DSP                       1326
+#define MNU_DISP                      1326
 #define MNU_EQN                       1327
 #define MNU_EXP                       1328
 #define MNU_CONVE                     1329
@@ -1631,7 +1631,7 @@
 #define ITM_REexIM                    1570
 #define ITM_RM                        1571
 #define ITM_RMQ                       1572
-#define ITM_1573                      1573
+#define ITM_DSP                       1573
 #define ITM_RNORM                     1574
 #define ITM_EX1                       1575
 #define ITM_ROUNDI                    1576

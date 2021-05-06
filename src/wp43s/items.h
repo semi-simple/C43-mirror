@@ -14,9 +14,10 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file items.h
- ***********************************************/
+ * Item list and function to run them.
+ */
 #ifndef ITEMS_H
 #define ITEMS_H
 
@@ -1828,12 +1829,32 @@
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL
 #define NOT_CONFIRMED                 9878 // Confirmation for RESET, CLPALL, CLALL
-#define ITM_PROD_SIGN                 9999 // Multiplication sign × or ·
+#define ITM_PROD_SIGN                 9999 // Multiplication sign �? or ·
 
 void reallyRunFunction(int16_t func, uint16_t param);
+/**
+ * Runs a function.
+ *
+ * \param[in] func Index in the indexOfItems area of the function to run
+ */
 void runFunction      (int16_t func);
+///**
+// * Dummy function for a function (part of an item) to be coded.
+// *
+// * \param[in] unusedButMandatoryParameter
+// */
 //void fnToBeCoded      (void);
+/**
+ * Dummy function for an item to be coded.
+ *
+ * \param[in] unusedButMandatoryParameter
+ */
 void itemToBeCoded    (uint16_t unusedButMandatoryParameter);
+/**
+ * No OPeration.
+ *
+ * \param[in] unusedButMandatoryParameter
+ */
 void fnNop            (uint16_t unusedButMandatoryParameter);
 
 #endif // ITEMS_H

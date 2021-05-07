@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file gui.c
- ***********************************************/
-
 #include "gui.h"
 
 #include "bufferize.h"
@@ -1005,13 +1001,8 @@ return FALSE;
 
 #ifdef PC_BUILD
   #if (SCREEN_800X480 == 0)
-    /********************************************//**
-     * \brief Reads the CSS file to configure the calc's GUI style
-     *
-     * \param void
-     * \return void
-     ***********************************************/
-    void prepareCssData(void) {
+    /* Reads the CSS file to configure the calc's GUI style. */
+    static void prepareCssData(void) {
       FILE *cssFile;
       char *toReplace, *replaceWith, needle[100], newNeedle[100];
       int  fileLg;
@@ -4208,11 +4199,17 @@ void setupUI(void) {
     shiftF = false;
     shiftG = false;
 
-    if(openMatrixMIMPointer.matrixElements) {
-      realMatrixFree(&openMatrixMIMPointer);
-    }
-
     #ifdef PC_BUILD
+      if(matrixIndex != INVALID_VARIABLE) {
+        if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+          if(openMatrixMIMPointer.realMatrix.matrixElements)
+          realMatrixFree(&openMatrixMIMPointer.realMatrix);
+        }
+        else if(getRegisterDataType(matrixIndex) == dtComplex34Matrix) {
+          if(openMatrixMIMPointer.complexMatrix.matrixElements)
+          complexMatrixFree(&openMatrixMIMPointer.complexMatrix);
+        }
+      }
       saveCalc();
       gtk_main_quit();
     #endif // PC_BUILD
@@ -4224,12 +4221,6 @@ void setupUI(void) {
 
 
 
-  /********************************************//**
-   * \brief Sets the calc mode to normal
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void calcModeNormal(void) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### calcModeNormal"); jm_show_comment(tmp);
@@ -4251,12 +4242,6 @@ void setupUI(void) {
 
 
 
-  /********************************************//**
-   * \brief Sets the calc mode to alpha input mode
-   *
-   * \param[in] unusedButMandatoryParameter uint16_t
-   * \return void
-   ***********************************************/
   void calcModeAim(uint16_t unusedButMandatoryParameter) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### calcModeAim"); jm_show_comment(tmp);
@@ -4298,11 +4283,6 @@ if(!tam.mode) {
 
 
 
-  /********************************************//**
-   * \brief Sets the calc mode to alpha selection menu if needed
-   *
-   * \return void
-   ***********************************************/
   void enterAsmModeIfMenuIsACatalog(int16_t id) {
     switch(-id) {
       case MNU_FCNS:      catalog = CATALOG_FCNS;    break;
@@ -4349,11 +4329,6 @@ if(!tam.mode) {
 
 
 
-  /********************************************//**
-   * \brief Leaves the alpha selection mode
-   *
-   * \return void
-   ***********************************************/
   void leaveAsmMode(void) {
     catalog = CATALOG_NONE;
 
@@ -4372,12 +4347,6 @@ if(!tam.mode) {
 
 
 
-  /********************************************//**
-   * \brief Sets the calc mode to number input mode
-   *
-   * \param[in] unusedButMandatoryParameter uint16_t
-   * \return void
-   ***********************************************/
   void calcModeNim(uint16_t unusedButMandatoryParameter) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### calcModeNim"); jm_show_comment(tmp);

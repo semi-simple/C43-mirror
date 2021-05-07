@@ -125,7 +125,6 @@
 #define DEBUG_PANEL                      0 //1 JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
 #define DEBUG_REGISTER_L                 0 //1 JM Showing register L content on the PC GUI
 #define SHOW_MEMORY_STATUS               0 //1 JM Showing the memory status on the PC GUI
-#define LIBGMP                           1 // Use GMP for the big integers
 #define MMHG_PA_133_3224                 0 //1 JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
 #define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
@@ -143,7 +142,6 @@
 
 #define SHORT_INTEGER_SIZE               2 // 2 blocks = 8 bytes = 64 bits
 
-#define IBM_DECIMAL                      1 // Use the IBM decNumber library for the floating point data type
 #define DECNUMDIGITS                    75 // Default number of digits used in the decNumber library
 
 #define SCREEN_800X480                   1 // Set to 0 if you want a keyboard in addition to the screen on Raspberry pi
@@ -153,7 +151,7 @@
 #endif // RASPBERRY
 
 
-#if __linux__ == 1
+#ifdef LINUX
   #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
 #endif // __linux__ == 1
 
@@ -305,9 +303,11 @@
 #define FLAG_USB                              0xc028
 #define NUMBER_OF_SYSTEM_FLAGS                    41
 
-#define LI_ZERO                                    0 // Long integer sign 0
-#define LI_NEGATIVE                                1 // Long integer sign -
-#define LI_POSITIVE                                2 // Long integer sign +
+typedef enum {
+  LI_ZERO     = 0, // Long integer sign 0
+  LI_NEGATIVE = 1, // Long integer sign -
+  LI_POSITIVE = 2  // Long integer sign +
+} longIntegerSign_t;
 
 
 #ifdef PC_BUILD
@@ -526,11 +526,11 @@
 
 
 #ifdef PC_BUILD
-  #if (__linux__ == 1)
+  #ifdef LINUX
     #define LINEBREAK                           "\n"
-  #elif defined(__MINGW64__)
+  #elif defined(WIN32)
     #define LINEBREAK                         "\n\r"
-  #elif defined(__APPLE__)
+  #elif defined(OSX)
     #define LINEBREAK                         "\r\n"
   #else // Unsupported OS
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
@@ -988,7 +988,7 @@
 #endif // defined(OS32BIT) && defined(OS64BIT)
 
 #ifdef PC_BUILD
-  #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
+  #ifdef WIN32 // No DEBUG_PANEL mode for Windows
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
   #endif // __MINGW64__

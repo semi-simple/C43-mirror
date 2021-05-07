@@ -14,16 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file softmenus.c List of softmenus and related functions.
- * The numbers refer to the index of items in items.c
- * *         item <     0  ==>  sub menu
- * *     0 < item <  9999  ==>  item with top and bottom line
- * * 10000 < item < 19999  ==>  item without top line
- * * 20000 < item < 29999  ==>  item without bottom line
- * * 30000 < item < 39999  ==>  item without top and bottom line
- ***********************************************/
-
 #include "softmenus.h"
 
 #include "charString.h"
@@ -43,6 +33,14 @@
 #include <stdlib.h>
 
 #include "wp43s.h"
+
+/* The numbers refer to the index of items in items.c
+ *         item <     0  ==>  sub menu
+ *     0 < item <  9999  ==>  item with top and bottom line
+ * 10000 < item < 19999  ==>  item without top line
+ * 20000 < item < 29999  ==>  item without bottom line
+ * 30000 < item < 39999  ==>  item without top and bottom line
+ */
 
 /*      Menu name                           <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */
 /*                                          <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
@@ -758,7 +756,7 @@ TO_QSPI const softmenu_t softmenu[] = {
 /*  22 */  {.menuItem = -MNU_CLK,         .numItems = sizeof(menu_CLK        )/sizeof(int16_t), .softkeyItem = menu_CLK         },
 /*  23 */  {.menuItem = -MNU_CLR,         .numItems = sizeof(menu_CLR        )/sizeof(int16_t), .softkeyItem = menu_CLR         },
 /*  24 */  {.menuItem = -MNU_CPX,         .numItems = sizeof(menu_CPX        )/sizeof(int16_t), .softkeyItem = menu_CPX         },
-/*  25 */  {.menuItem = -MNU_DSP,         .numItems = sizeof(menu_DISP       )/sizeof(int16_t), .softkeyItem = menu_DISP        },
+/*  25 */  {.menuItem = -MNU_DISP,        .numItems = sizeof(menu_DISP       )/sizeof(int16_t), .softkeyItem = menu_DISP        },
 /*  26 */  {.menuItem = -MNU_EQN,         .numItems = sizeof(menu_EQN        )/sizeof(int16_t), .softkeyItem = menu_EQN         },
 /*  27 */  {.menuItem = -MNU_1STDERIV,    .numItems = sizeof(menu_1stDeriv   )/sizeof(int16_t), .softkeyItem = menu_1stDeriv    },
 /*  28 */  {.menuItem = -MNU_2NDDERIV,    .numItems = sizeof(menu_2ndDeriv   )/sizeof(int16_t), .softkeyItem = menu_2ndDeriv    },
@@ -1448,12 +1446,6 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
 
 
 
-  /********************************************//**
-   * \brief Displays the current part of the displayed softmenu
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showSoftmenuCurrentPart(void) {
 
 //JMTOCHECK: Removed exceptions for underline removal. 
@@ -1834,8 +1826,7 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
 
 
-  /********************************************//**
-   * \brief Pushes a new softmenu on the softmenu stack
+  /* Pushes a new softmenu on the softmenu stack.
    *
    * \param[in] softmenuId int16_t Softmenu ID
    * \return void
@@ -1871,12 +1862,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
 
 
-  /********************************************//**
-   * \brief Pops a softmenu from the softmenu stack
-   *
-   * \param[in] softmenu int16_t Softmenu number
-   * \return void
-   ***********************************************/
   void popSoftmenu(void) {
 //    if(running_program_jm) return;                             //JM
 
@@ -1915,12 +1900,6 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
 
 
-  /********************************************//**
-   * \brief Displays a softmenu.
-   *
-   * \param[in] id int16_t       ID of softmenu
-   * \return void
-   ***********************************************/
   void showSoftmenu(int16_t id) {
 //    if(running_program_jm) return;                             //JM
     int16_t m;

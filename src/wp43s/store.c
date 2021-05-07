@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file store.c
- ***********************************************/
-
 #include "store.h"
 
 #include "charString.h"
@@ -78,6 +74,33 @@ static bool_t storeElementReal(real34Matrix_t *matrix) {
   return true;
 }
 
+static bool_t storeElementComplex(complex34Matrix_t *matrix) {
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToReal34(REGISTER_X, VARIABLE_REAL34_DATA(&matrix->matrixElements[i * matrix->header.matrixColumns + j]));
+    real34Zero(VARIABLE_IMAG34_DATA(&matrix->matrixElements[i * matrix->header.matrixColumns + j]));
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&matrix->matrixElements[i * matrix->header.matrixColumns + j]));
+    real34Zero(VARIABLE_IMAG34_DATA(&matrix->matrixElements[i * matrix->header.matrixColumns + j]));
+  }
+  else if(getRegisterDataType(REGISTER_X) == dtComplex34) {
+    real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&matrix->matrixElements[i * matrix->header.matrixColumns + j]));
+    real34Copy(REGISTER_IMAG34_DATA(REGISTER_X), VARIABLE_IMAG34_DATA(&matrix->matrixElements[i * matrix->header.matrixColumns + j]));
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Cannot store %s in a matrix", getRegisterDataTypeName(REGISTER_X, true, false));
+      moreInfoOnError("In function storeElementReal:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return false;
+  }
+  return true;
+}
+
 
 
 static bool_t storeIjReal(real34Matrix_t *matrix) {
@@ -113,16 +136,14 @@ static bool_t storeIjReal(real34Matrix_t *matrix) {
   }
   return false;
 }
+
+static bool_t storeIjComplex(complex34Matrix_t *matrix) {
+  return storeIjReal((real34Matrix_t *)matrix);
+}
 #endif // TESTSUITE_BUILD
 
 
 
-/********************************************//**
- * \brief Stores X in an other register
- *
- * \param[in] registerNumber uint16_t
- * \return void
- ***********************************************/
 void fnStore(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, regist);
@@ -131,12 +152,6 @@ void fnStore(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Adds X to a register
- *
- * \param[in] registerNumber uint16_t
- * \return void
- ***********************************************/
 void fnStoreAdd(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -157,12 +172,6 @@ void fnStoreAdd(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Subtracts X from a register
- *
- * \param[in] registerNumber calcRegister_t
- * \return void
- ***********************************************/
 void fnStoreSub(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -183,12 +192,6 @@ void fnStoreSub(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Multiplies a register by X
- *
- * \param[in] registerNumber uint16_t
- * \return void
- ***********************************************/
 void fnStoreMult(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -209,12 +212,6 @@ void fnStoreMult(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Divides a register by X
- *
- * \param[in] registerNumber uint16_t
- * \return void
- ***********************************************/
 void fnStoreDiv(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -235,12 +232,6 @@ void fnStoreDiv(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Keeps in a register min(X, register)
- *
- * \param[in] registerNumber uint16_t
- * \return void
- ***********************************************/
 void fnStoreMin(uint16_t regist) {
   if(regInRange(regist)) {
     registerMin(REGISTER_X, regist, regist);
@@ -249,12 +240,6 @@ void fnStoreMin(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Keeps in a register max(X, register)
- *
- * \param[in] registerNumber uint16_t
- * \return void
- ***********************************************/
 void fnStoreMax(uint16_t regist) {
   if(regInRange(regist)) {
     registerMax(REGISTER_X, regist, regist);
@@ -263,12 +248,6 @@ void fnStoreMax(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Stores the configuration
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnStoreConfig(uint16_t regist) {
   reallocateRegister(regist, dtConfig, CONFIG_SIZE, amNone);
   dtConfigDescriptor_t *configToStore = REGISTER_CONFIG_DATA(regist);
@@ -333,12 +312,6 @@ void fnStoreConfig(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Stores the stack
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnStoreStack(uint16_t regist) {
   uint16_t size = getSystemFlag(FLAG_SSIZE8) ? 8 : 4;
 
@@ -358,28 +331,16 @@ void fnStoreStack(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Stores X in the element I,J of a matrix
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnStoreElement(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix(storeElementReal, NULL);
+  callByIndexedMatrix(storeElementReal, storeElementComplex);
 #endif // TESTSUITE_BUILD
 }
 
 
 
-/********************************************//**
- * \brief Stores X and Y in the indexes I and J
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnStoreIJ(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix(storeIjReal, NULL);
+  callByIndexedMatrix(storeIjReal, storeIjComplex);
 #endif // TESTSUITE_BUILD
 }

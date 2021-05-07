@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file screen.c Screen related functions
- ***********************************************/
-
 #include "screen.h"
 
 #include "browsers/browsers.h"
@@ -70,14 +66,6 @@
 
 
 #ifdef PC_BUILD
-  /********************************************//**
-   * \brief Draws the calc's screen on the PC window widget
-   *
-   * \param[in] widget GtkWidget* Not used
-   * \param[in] cr cairo_t*
-   * \param[in] data gpointer     Not used
-   * \return gboolean
-   ***********************************************/
   gboolean drawScreen(GtkWidget *widget, cairo_t *cr, gpointer data) {
     cairo_surface_t *imageSurface;
 
@@ -185,7 +173,7 @@
         break;
 
       case dtComplex34Matrix:
-        strcpy(tmpString, "Copying a complex16 matrix to the clipboard is to be coded!");
+        complex34MatrixToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
         break;
 
       case dtShortInteger:
@@ -475,7 +463,7 @@
 
     // If LCD has changed: update the GTK screen
     if(screenChange) {
-      #if (__linux__ == 1) && (DEBUG_PANEL == 1)
+      #if defined(LINUX) && (DEBUG_PANEL == 1)
         refreshDebugPanel();
       #endif // (__linux__ == 1) && (DEBUG_PANEL == 1)
 
@@ -777,13 +765,6 @@ void Shft_stop() {
   resetShiftState();                        //force into no shift state, i.e. to wait
 }
   #ifndef DMCP_BUILD
-    /********************************************//**
-     * \brief Sets a black pixel on the screen.
-     *
-     * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
-     * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
-     * \return void
-     ***********************************************/
     void setBlackPixel(uint32_t x, uint32_t y) {
       //if(y >= (uint32_t)(-6)) return;  //JM allowing allowing -1..-5 for top row text
     
@@ -798,13 +779,6 @@ void Shft_stop() {
 
 
 
-    /********************************************//**
-     * \brief Sets a white pixel on the screen.
-     *
-     * \param[in] x uint32_t x coordinate from 0 (left) to 399 (right)
-     * \param[in] y uint32_t y coordinate from 0 (top) to 239 (bottom)
-     * \return void
-     ***********************************************/
     void setWhitePixel(uint32_t x, uint32_t y) {
       //if(y >= (uint32_t)(-6)) return;  //JM allowing allowing -1..-5 for top row text
       
@@ -874,18 +848,6 @@ uint8_t  maxiC = 0;                                                             
 bool_t   noShow = false;                                                         //JM
 uint8_t  displaymode = stdNoEnlarge;
 
-/********************************************//**
- * \brief Displays a glyph using it's Unicode code point
- *
- * \param[in] charCode uint16_t      Unicode code point of the glyph to display
- * \param[in] font font_t*           Font to use
- * \param[in] x uint32_t             x coordinate where to display the glyph
- * \param[in] y uint32_t             y coordinate where to display the glyph
- * \param[in] videoMode videoMode_t  Video mode normal or reverse
- * \param[in] showLeadingCols bool_t Display the leading empty columns
- * \param[in] showEndingCols bool_t  Display the ending empty columns
- * \return uint32_t                  x coordinate for the next glyph
- ***********************************************/
   uint32_t showGlyphCode(uint16_t charCode, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
   uint32_t col, row, xGlyph, endingCols;
   int32_t  glyphId;
@@ -986,8 +948,7 @@ uint8_t  displaymode = stdNoEnlarge;
 
 
 
-  /********************************************//**
-   * \brief Returns the character code from the first glyph of a string
+  /* Returns the character code from the first glyph of a string.
    *
    * \param[in]     ch     const char* String whose first glyph is to extract
    * \param[in,out] offset uint16_t*   Offset which is updated, or null if zero and no update
@@ -1009,26 +970,13 @@ uint8_t  displaymode = stdNoEnlarge;
 
 
 
-  /********************************************//**
-   * \brief Displays the first glyph of a string
-   *
-   * \param[in] ch const char*         String whose first glyph is to display
-   * \param[in] font font_t*           Font to use
-   * \param[in] x int16_t              x coordinate where to display the glyph
-   * \param[in] y int16_t              y coordinate where to display the glyph
-   * \param[in] videoMode videoMode_t  Video mode normal or reverse
-   * \param[in] showLeadingCols bool_t Display the leading empty columns
-   * \param[in] showEndingCols bool_t  Display the ending empty columns
-   * \return uint32_t                  x coordinate for the next glyph
-   ***********************************************/
   uint32_t showGlyph(const char *ch, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
     return showGlyphCode(charCodeFromString(ch, 0), font, x, y, videoMode, showLeadingCols, showEndingCols);
   }
 
 
 
-  /********************************************//**
-   * \brief Finds the cols and rows for a glyph
+  /* Finds the cols and rows for a glyph.
    *
    * \param[in]     ch     const char*   String whose first glyph is to find the bounds for
    * \param[in,out] offset uint16_t*     Offset for string or null if zero should be used
@@ -1055,18 +1003,6 @@ uint8_t  displaymode = stdNoEnlarge;
 
   uint8_t  compressString = 0;                                                              //JM compressString
 
-  /********************************************//**
-   * \brief Displays a 0 terminated string
-   *
-   * \param[in] string const char*     String whose first glyph is to display
-   * \param[in] font font_t*           Font to use
-   * \param[in] x uint32_t             x coordinate where to display the glyph
-   * \param[in] y uint32_t             y coordinate where to display the glyph
-   * \param[in] videoMode videoMode_t  Video mode normal or reverse
-   * \param[in] showLeadingCols bool_t Display the leading empty columns
-   * \param[in] showEndingCols bool_t  Display the ending empty columns
-   * \return uint32_t                  x coordinate for the next glyph
-   ***********************************************/
   uint32_t showString(const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
     uint16_t ch, lg;
     bool_t   slc, sec;
@@ -1353,12 +1289,6 @@ void force_refresh(void) {
 
 
 
-  /********************************************//**
-   * \brief Hides the cursor
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void hideCursor(void) {
     if(cursorEnabled) {
       if(cursorFont == &standardFont) {
@@ -1372,15 +1302,6 @@ void force_refresh(void) {
 
 
 
-  /********************************************//**
-   * \brief Displays the function of the
-   * currently pressed button in the
-   * upper left corner of the T register line
-   *
-   * \param[in] item     int16_t  Item ID to show
-   * \param[in] counter  int8_t   number of 1/10 seconds until NOP
-   * \return void
-   ***********************************************/
   void showFunctionName(int16_t item, int16_t delayInMs) {
     uint32_t fcol, frow, gcol, grow;
 
@@ -1425,14 +1346,6 @@ void force_refresh(void) {
 
 
 
-/********************************************//**
- * \brief Hides the function name in the
- * upper left corner of the T register line
- * and clears the counter
- *
- * \param void
- * \return void
- ***********************************************/
 void hideFunctionName(void) {
 #ifdef CLEARNAME
   uint32_t col, row;
@@ -1449,12 +1362,6 @@ void hideFunctionName(void) {
 
 
 
-  /********************************************//**
-   * \brief Clears one register line
-   *
-   * \param[in] yStart int16_t y coordinate from where starting to clear
-   * \return void
-   ***********************************************/
   void clearRegisterLine(calcRegister_t regist, bool_t clearTop, bool_t clearBottom) {
     if(REGISTER_X <= regist && regist <= REGISTER_T) {
       uint32_t yStart = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X);
@@ -1479,12 +1386,6 @@ void hideFunctionName(void) {
 
 uint8_t   displayStack_m = 255;                                                  //JMSHOIDISP
 
-  /********************************************//**
-   * \brief Displays one register line
-   *
-   * \param[in] regist int16_t Register line to display
-   * \return void
-   ***********************************************/
   void refreshRegisterLine(calcRegister_t regist) {
     int32_t w;
     int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth = 0, lineWidth = 0;
@@ -1573,6 +1474,12 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             formatReal34Debug(string2, REGISTER_REAL34_MATRIX_M_ELEMENTS(REGISTER_L));
           }
 
+          else if(getRegisterDataType(REGISTER_L) == dtComplex34Matrix) {
+            sprintf(&string1[strlen(string1)], "complex34 %" PRIu16 STD_CROSS "%" PRIu16 " matrix = ",
+              REGISTER_COMPLEX34_MATRIX_DBLOCK(REGISTER_L)->matrixRows, REGISTER_COMPLEX34_MATRIX_DBLOCK(REGISTER_L)->matrixColumns);
+            formatComplex34Debug(string2, REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(REGISTER_L));
+          }
+
           else if(getRegisterDataType(REGISTER_L) == dtConfig) {
             strcat(string1, "Configuration data");
             string2[0] = 0;
@@ -1618,6 +1525,37 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         if(rows >= 4 && cols > 1) displayStack = 2;
         if(calcMode == CM_MIM) displayStack -= 2;
       }
+      else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix || calcMode == CM_MIM) {
+        complex34Matrix_t matrix;
+        linkToComplexMatrixRegister(calcMode == CM_MIM ? matrixIndex : REGISTER_X, &matrix);
+        const uint16_t rows = matrix.header.matrixRows;
+        const uint16_t cols = matrix.header.matrixColumns;
+        bool_t smallFont = ((rows >= 4) || (cols >= 3) || (displayFormat != DF_ALL && displayFormatDigits > 3));
+        int16_t dummyVal[27] = {};
+        if(getComplexMatrixColumnWidths(&matrix, &numericFont, dummyVal, dummyVal + 2, dummyVal + 4, dummyVal + 6, dummyVal + 16, dummyVal + 26) > (MATRIX_LINE_WIDTH_LARGE * 3 - 20)) smallFont = true;
+        if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
+        if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
+        if(rows >= 4 && cols > 1) displayStack = 2;
+        if(calcMode == CM_MIM) displayStack -= 2;
+      }
+
+
+      if(temporaryInformation == TI_STATISTIC_LR && (getRegisterDataType(REGISTER_X) != dtReal34)) {
+         if(regist == REGISTER_X) {
+           if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {
+             sprintf(tmpString, "L.R. selected to OrthoF. Only for REAL data.");
+           } else {
+             sprintf(tmpString, "L.R. selected to %03" PRIu16 ". Only for REAL data.", (uint16_t)((~lrSelection) & 0x01FF));
+           }
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              sprintf(errorMessage, "BestF is set, but will not work until REAL data points are used.");
+              moreInfoOnError("In function refreshRegisterLine:", errorMessage, errorMessages[24], NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            w = stringWidth(tmpString, &standardFont, true, true);
+            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+         }            
+       } else
+
 
       if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
         showString("Are you sure?", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
@@ -1795,7 +1733,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
       else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
         prefixWidth = 0;
-        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(REGISTER_X) == dtReal34Matrix) ? 4 - displayStack : 0));
+        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) ? 4 - displayStack : 0));
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
           if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
@@ -2146,15 +2084,15 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix,"a" STD_SUB_0 "=");
+                strcat(prefix,"a" STD_SUB_0 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               } else
               if(regist == REGISTER_Y) {
-                strcpy(prefix,"y=");
+                strcpy(prefix,"y" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix, "a" STD_SUB_1 "=");
+                strcat(prefix, "a" STD_SUB_1 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               } else
               if(regist == REGISTER_Z) {
@@ -2163,18 +2101,18 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix, "a" STD_SUB_2 "=");
+                strcat(prefix, "a" STD_SUB_2 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               }
             } else
 
             if(regist == REGISTER_X) {
-              strcpy(prefix,"y=");
+              strcpy(prefix,"y" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
               strcat(prefix,getCurveFitModeFormula(lrChosen));
               while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                 strcat(prefix,STD_SPACE_6_PER_EM);
               }
-              strcat(prefix,"a" STD_SUB_0 "=");
+              strcat(prefix,"a" STD_SUB_0 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
               prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
             } else if(regist == REGISTER_Y) {
               strcpy(prefix, eatSpacesEnd(getCurveFitModeName(lrChosen)));
@@ -2182,7 +2120,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                 strcat(prefix,STD_SPACE_6_PER_EM);
               }
-              strcat(prefix, "a" STD_SUB_1 "=");
+              strcat(prefix, "a" STD_SUB_1 STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM "=" STD_SPACE_4_PER_EM STD_SPACE_4_PER_EM);
               prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
             }
 
@@ -2283,17 +2221,17 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
 
-         else if(temporaryInformation == TI_STATISTIC_LR) {
-            if(regist == REGISTER_Y) {
-              if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {
-                sprintf(prefix, "L.R. selected to OrthoF");
-              } else {
-                sprintf(prefix, "L.R. selected to %03" PRIu16, (uint16_t)((~lrSelection) & 0x01FF));
-              }
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
-            }            
-          }
+          else if(temporaryInformation == TI_STATISTIC_LR) {
+             if(regist == REGISTER_X) {
+               if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {
+                 sprintf(prefix, "L.R. selected to OrthoF");
+               } else {
+                 sprintf(prefix, "L.R. selected to %03" PRIu16, (uint16_t)((~lrSelection) & 0x01FF));
+               }
+               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+               //lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
+             }            
+           }
 
 
             else if(temporaryInformation == TI_ABC) {                             //JM EE \/
@@ -2664,6 +2602,24 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           }
         }
 
+        else if(getRegisterDataType(regist) == dtComplex34Matrix) {
+          if(regist == REGISTER_X && calcMode != CM_MIM) {
+            complex34Matrix_t matrix;
+            linkToComplexMatrixRegister(REGISTER_X, &matrix);
+            showComplexMatrix(&matrix);
+            if(lastErrorCode != 0)
+              refreshRegisterLine(errorMessageRegisterLine);
+            if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE)
+              refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
+          }
+          else {
+            complex34MatrixToDisplayString(regist, tmpString);
+            w = stringWidth(tmpString, &numericFont, false, true);
+            lineWidth = w;
+            showString(tmpString, &numericFont, SCREEN_WIDTH - w - 2, baseY, vmNormal, false, true);
+          }
+        }
+
         else {
           sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
           showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), baseY + 6, vmNormal, false, true);
@@ -2675,7 +2631,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
       }
     }
 
-    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || calcMode == CM_MIM) {
+    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix || calcMode == CM_MIM) {
       displayStack = origDisplayStack;
     }
   }

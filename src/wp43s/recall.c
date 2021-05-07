@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file recall.c
- ***********************************************/
-
 #include "recall.h"
 
 #include "charString.h"
@@ -48,16 +44,20 @@ static bool_t recallElementReal(real34Matrix_t *matrix) {
   real34Copy(&matrix->matrixElements[i * matrix->header.matrixColumns + j], REGISTER_REAL34_DATA(REGISTER_X));
   return false;
 }
+
+static bool_t recallElementComplex(complex34Matrix_t *matrix) {
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  liftStack();
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+  complex34Copy(&matrix->matrixElements[i * matrix->header.matrixColumns + j], REGISTER_COMPLEX34_DATA(REGISTER_X));
+  return false;
+}
 #endif // TESTSUITE_BUILD
 
 
 
-/********************************************//**
- * \brief Recalls a register in X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecall(uint16_t regist) {
   if(regInRange(regist)) {
     if(REGISTER_X <= regist && regist <= getStackTop()) {
@@ -77,24 +77,12 @@ void fnRecall(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Recalls register L in X
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnLastX(uint16_t unusedButMandatoryParameter) {
   fnRecall(REGISTER_L);
 }
 
 
 
-/********************************************//**
- * \brief Adds a register to X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallAdd(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -114,12 +102,6 @@ void fnRecallAdd(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Subtracts a register from X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallSub(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -139,12 +121,6 @@ void fnRecallSub(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Multiplies X by a register
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallMult(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -164,12 +140,6 @@ void fnRecallMult(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Divides X by a register
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallDiv(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -189,12 +159,6 @@ void fnRecallDiv(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Keeps in X min(X, register)
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallMin(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -204,12 +168,6 @@ void fnRecallMin(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Keeps in X max(X, register)
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallMax(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
@@ -219,12 +177,6 @@ void fnRecallMax(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Recalls a configuration
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallConfig(uint16_t regist) {
   if(getRegisterDataType(regist) == dtConfig) {
     dtConfigDescriptor_t *configToRecall = REGISTER_CONFIG_DATA(regist);
@@ -300,12 +252,6 @@ void fnRecallConfig(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Recalls a stack
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallStack(uint16_t regist) {
   uint16_t size = getSystemFlag(FLAG_SSIZE8) ? 8 : 4;
 
@@ -333,26 +279,14 @@ void fnRecallStack(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Recalls the matrix element I,J in X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallElement(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix(recallElementReal, NULL);
+  callByIndexedMatrix(recallElementReal, recallElementComplex);
 #endif // TESTSUITE_BUILD
 }
 
 
 
-/********************************************//**
- * \brief Recalls the indexes I and J in X and Y
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallIJ(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   longInteger_t zero;

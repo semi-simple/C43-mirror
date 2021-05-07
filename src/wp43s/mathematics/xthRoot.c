@@ -33,6 +33,7 @@
 #include "mathematics/toPolar.h"
 #include "mathematics/toRect.h"
 #include "mathematics/wp34s.h"
+#include "matrix.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 
@@ -513,7 +514,7 @@ void xthRootCplxLonI(void) {
  * \return void
  ***********************************************/
 void xthRootRemaLonI(void) {
-  fnToBeCoded();
+  elementwiseRemaLonI(xthRootRealLonI);
 }
 
 
@@ -525,7 +526,7 @@ void xthRootRemaLonI(void) {
  * \return void
  ***********************************************/
 void xthRootRemaShoI(void) {
-  fnToBeCoded();
+  elementwiseRemaShoI(xthRootRealShoI);
 }
 
 
@@ -537,7 +538,7 @@ void xthRootRemaShoI(void) {
  * \return void
  ***********************************************/
 void xthRootRemaReal(void) {
-  fnToBeCoded();
+  elementwiseRemaReal(xthRootRealReal);
 }
 
 
@@ -549,7 +550,10 @@ void xthRootRemaReal(void) {
  * \return void
  ***********************************************/
 void xthRootRemaCplx(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
+  xthRootCxmaCplx();
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -565,7 +569,7 @@ void xthRootRemaCplx(void) {
  * \return void
  ***********************************************/
 void xthRootCxmaLonI(void) {
-  fnToBeCoded();
+  elementwiseCxmaLonI(xthRootCplxLonI);
 }
 
 
@@ -577,7 +581,7 @@ void xthRootCxmaLonI(void) {
  * \return void
  ***********************************************/
 void xthRootCxmaShoI(void) {
-  fnToBeCoded();
+  elementwiseCxmaShoI(xthRootCplxShoI);
 }
 
 
@@ -589,7 +593,7 @@ void xthRootCxmaShoI(void) {
  * \return void
  ***********************************************/
 void xthRootCxmaReal(void) {
-  fnToBeCoded();
+  elementwiseCxmaReal(xthRootCplxReal);
 }
 
 
@@ -601,7 +605,7 @@ void xthRootCxmaReal(void) {
  * \return void
  ***********************************************/
 void xthRootCxmaCplx(void) {
-  fnToBeCoded();
+  elementwiseCxmaCplx(xthRootCplxCplx);
 }
 
 

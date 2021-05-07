@@ -14,12 +14,13 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file plot.h
  ***********************************************/
 #ifndef PLOTSTAT_H
 #define PLOTSTAT_H
 
+#include "realType.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 
@@ -120,11 +121,11 @@ void    fnStatDemo105      (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo107      (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo109      (uint16_t unusedButMandatoryParameter);
 void    graphPlotstat      (uint16_t selection);
+int32_t minLRDataPoints    (uint16_t selection);
 void    drawline           (uint16_t selection, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2);
 void    fnPlotClose        (uint16_t unusedButMandatoryParameter);
 void    fnPlotCloseSmi     (uint16_t unusedButMandatoryParameter);
 void    fnPlotStat         (uint16_t unusedButMandatoryParameter);
-void    fnPlotRegressionLine(uint16_t plotMode);
 void    fnPlotZoom         (uint16_t unusedButMandatoryParameter);
 
 #endif // PLOTSTAT_H 

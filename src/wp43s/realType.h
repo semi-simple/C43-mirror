@@ -14,21 +14,19 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file decNumberWrappers.h
- ***********************************************/
-#ifndef DECNUMBERWRAPPERS_H
-#define DECNUMBERWRAPPERS_H
+/**
+ * \file realType.h
+ */
+#ifndef REALTYPE_H
+#define REALTYPE_H
 
 #include "defines.h"
-
-#if (IBM_DECIMAL == 1)
 
 #include "decimal128.h"
 #include "decimal64.h"
 #include "decDouble.h"
 #include "decQuad.h"
-#include "decNumberWrappers.h"
+#include "realType.h"
 extern int decGetInt(const decNumber *x); // Because decNumberToInt32 seems buggy! Needs more investigation
 
 typedef struct {
@@ -111,9 +109,13 @@ typedef struct {
 
 #define REGISTER_CONFIG_DATA(a)                                ((dtConfigDescriptor_t *)(getRegisterDataPointer(a)))
 
-#define REGISTER_REAL34_MATRIX_DBLOCK(a)                      ((dataBlock_t *)(getRegisterDataPointer(a)))
-#define REGISTER_REAL34_MATRIX_M_ELEMENTS(a)                  ((real34_t *)((void *)getRegisterDataPointer(a) + sizeof(dataBlock_t)))
-#define REGISTER_REAL34_MATRIX(a)                             ((real34Matrix_t *)(getRegisterDataPointer(a)))
+#define REGISTER_REAL34_MATRIX_DBLOCK(a)                       ((dataBlock_t *)(getRegisterDataPointer(a)))
+#define REGISTER_REAL34_MATRIX_M_ELEMENTS(a)                   ((real34_t *)((void *)getRegisterDataPointer(a) + sizeof(dataBlock_t)))
+#define REGISTER_REAL34_MATRIX(a)                              ((real34Matrix_t *)(getRegisterDataPointer(a)))
+
+#define REGISTER_COMPLEX34_MATRIX_DBLOCK(a)                    ((dataBlock_t *)(getRegisterDataPointer(a)))
+#define REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(a)                ((complex34_t *)((void *)getRegisterDataPointer(a) + sizeof(dataBlock_t)))
+#define REGISTER_COMPLEX34_MATRIX(a)                           ((complex34Matrix_t *)(getRegisterDataPointer(a)))
 
 #define REGISTER_SHORT_INTEGER_DATA(a)                         ((uint64_t    *)(getRegisterDataPointer(a)))
 #define VARIABLE_REAL34_DATA(a)                                ((real34_t    *)(a))
@@ -222,6 +224,4 @@ typedef struct {
 #define stringToReal(source, destination, ctxt)                decNumberFromString      (destination, source, ctxt)
 #define uInt32ToReal(source, destination)                      decNumberFromUInt32      (destination, source)
 
-#endif // (IBM_DECIMAL == 1)
-
-#endif // DECNUMBERWRAPPERS_H
+#endif // REALTYPE_H

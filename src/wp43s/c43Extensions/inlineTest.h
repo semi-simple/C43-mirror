@@ -21,7 +21,7 @@
 #ifndef INLINETEST_H
 #define INLINETEST_H
 
-#include "gmpWrappers.h"
+#include "longIntegerType.h"
 #include "typeDefinitions.h"
 #include <stdint.h> 
 

@@ -1827,5 +1827,3 @@ void fnStatDemo109(uint16_t unusedButMandatoryParameter){
   #endif //TESTSUITE_BUILD
 #endif //DEMO109
 }
-
-*/

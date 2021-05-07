@@ -20,9 +20,8 @@
 #ifndef CURVEFITTING_H
 #define CURVEFITTING_H
 
-#include "decNumberWrappers.h"
 #include <stdint.h>
-
+#include "realType.h"
 
 #define useFLOAT   0
 #define useREAL4   4

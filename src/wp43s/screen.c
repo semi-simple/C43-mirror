@@ -29,6 +29,7 @@
 #include "fonts.h"
 #include "c43Extensions/graphs.h"
 #include "c43Extensions/graphText.h"
+#include "c43Extensions/inlineTest.h"
 #include "items.h"
 #include "c43Extensions/jm.h"
 #include "keyboard.h"

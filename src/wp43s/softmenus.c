@@ -555,7 +555,7 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
                                              ITM_NULL,                 ITM_RBR,                  -MNU_HOME,                -MNU_CONST,               -MNU_XFN,                 -MNU_SUMS,                
 
                                              ITM_NULL,                 ITM_ENTER,                ITM_XexY,                 ITM_CHS,                  ITM_EXPONENT,             ITM_BACKSPACE,            
-                                             ITM_NULL,                 KEY_COMPLEX,              ITM_LASTX,                -MNU_MODE,                -MNU_DSP,                 ITM_UNDO,                 
+                                             ITM_NULL,                 KEY_COMPLEX,              ITM_LASTX,                -MNU_MODE,                -MNU_DISP,                ITM_UNDO,                 
                                              ITM_NULL,                 -MNU_CPX,                 ITM_Rup,                  -MNU_STK,                 -MNU_EXP,                 -MNU_CLR,                 
 
                                              ITM_STO,                  ITM_RCL,                  ITM_Rdown,                ITM_sin,                  ITM_cos,                  ITM_tan,                  
@@ -588,7 +588,7 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
                                              ITM_NULL,                 ITM_RBR,                  -MNU_INFO,                -MNU_CONST,               -MNU_XFN,                 -MNU_SUMS,                
 
                                              ITM_NULL,                 ITM_ENTER,                ITM_XexY,                 ITM_CHS,                  ITM_EXPONENT,             ITM_BACKSPACE,            
-                                             ITM_NULL,                 ITM_AIM,                  ITM_LASTX,                -MNU_MODE,                -MNU_DSP,                 -MNU_CLR,                 
+                                             ITM_NULL,                 ITM_AIM,                  ITM_LASTX,                -MNU_MODE,                -MNU_DISP,                -MNU_CLR,                 
                                              ITM_NULL,                 -MNU_CPX,                 ITM_Rup,                  -MNU_STK,                 -MNU_EXP,                 ITM_UNDO,                 
 
                                              ITM_STO,                  ITM_RCL,                  ITM_Rdown,                ITM_sin,                  ITM_cos,                  ITM_tan,                  
@@ -635,7 +635,7 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
                                             ITM_UP1,                  ITM_RBR,                  -MNU_HOME,                -MNU_CONST,               -MNU_XFN,                 -MNU_SUMS,                
                 
                                             ITM_SIGMAMINUS,           ITM_YX,                   ITM_SQUARE,               ITM_10x,                  ITM_EXP,                  ITM_XFACT, 
-                                            ITM_ENTER,                KEY_COMPLEX,              ITM_LASTX,                -MNU_MODE,                -MNU_DSP,                 ITM_UNDO,                 
+                                            ITM_ENTER,                KEY_COMPLEX,              ITM_LASTX,                -MNU_MODE,                -MNU_DISP,                 ITM_UNDO,                 
                                             ITM_ENTER,                -MNU_CPX,                 ITM_Rup,                  -MNU_STK,                 -MNU_EXP,                 -MNU_CLR,                 
                 
                                             ITM_SIGMAMINUS,           ITM_YX,                   ITM_SQUARE,               ITM_10x,                  ITM_EXP,                  ITM_XFACT, 
@@ -668,7 +668,7 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
                                            ITM_UP1,                  ITM_RBR,                  -MNU_INFO,                -MNU_CONST,               -MNU_XFN,                 -MNU_SUMS,                
 
                                            ITM_SIGMAMINUS,           ITM_YX,                   ITM_SQUARE,               ITM_10x,                  ITM_EXP,                  ITM_XFACT, 
-                                           ITM_ENTER,                ITM_AIM,                  ITM_LASTX,                -MNU_MODE,                -MNU_DSP,                 -MNU_CLR,                 
+                                           ITM_ENTER,                ITM_AIM,                  ITM_LASTX,                -MNU_MODE,                -MNU_DISP,                 -MNU_CLR,                 
                                            ITM_ENTER,                -MNU_CPX,                 ITM_Rup,                  -MNU_STK,                 -MNU_EXP,                 ITM_UNDO,                 
 
                                            ITM_SIGMAMINUS,           ITM_YX,                   ITM_SQUARE,               ITM_10x,                  ITM_EXP,                  ITM_XFACT, 

@@ -75,40 +75,19 @@ void itemToBeCoded(uint16_t unusedButMandatoryParameter) {
 
 
 
-#ifndef GENERATE_CATALOGS
-/********************************************//**
- * \brief Dummy function for a function (part of an item) to be coded
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
-void fnToBeCoded(void) {
-  displayCalcErrorMessage(ERROR_FUNCTION_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-  #ifdef PC_BUILD
-    moreInfoOnError("Function to be coded", "for that data type(s)!", NULL, NULL);
-  #endif // PC_BUILD
-}
-#endif // GENERATE_CATALOGS
+//#ifndef GENERATE_CATALOGS
+//void fnToBeCoded(void) {
+//  displayCalcErrorMessage(ERROR_FUNCTION_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
+//  #ifdef PC_BUILD
+//    moreInfoOnError("Function to be coded", "for that data type(s)!", NULL, NULL);
+//  #endif // PC_BUILD
+//}
+//#endif // GENERATE_CATALOGS
 
 
 
-/********************************************//**
- * \brief No OPeration
- *
- * \param  unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnNop(uint16_t unusedButMandatoryParameter) {
 }
-
-
-
-#if !defined(GENERATE_CATALOGS) && !defined(INLINE_TEST)              //vv dr
-  void fnSetInlineTest      (uint16_t drConfig)                    {};
-  void fnGetInlineTestBsToX (uint16_t unusedButMandatoryParameter) {};
-  void fnSetInlineTestXToBs (uint16_t unusedButMandatoryParameter) {};
-  void fnSysFreeMem         (uint16_t unusedButMandatoryParameter) {};
-#endif                                                                //^^
 
 
 #if !defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
@@ -225,6 +204,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnDisplayFormatFix          (uint16_t unusedButMandatoryParameter) {}
   void fnDisplayFormatSci          (uint16_t unusedButMandatoryParameter) {}
   void fnDisplayFormatEng          (uint16_t unusedButMandatoryParameter) {}
+  void fnDisplayFormatDsp          (uint16_t unusedButMandatoryParameter) {}
   void fnDisplayFormatGap          (uint16_t unusedButMandatoryParameter) {}
   void fnDisplayFormatTime         (uint16_t unusedButMandatoryParameter) {}
   void fnArccos                    (uint16_t unusedButMandatoryParameter) {}
@@ -2029,9 +2009,9 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1199 */  { itemToBeCoded,                NOPARAM,                     "PMT",                                         "PMT",                                         (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
 /* 1200 */  { itemToBeCoded,                NOPARAM,                     "PV",                                          "PV",                                          (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
 /* 1201 */  { itemToBeCoded,                NOPARAM,                     "GRAMOD",                                      "GRAMOD",                                      (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
-/* 1202 */  { itemToBeCoded,                NOPARAM,                     "Mat_A",                                       "Mat A",                                       (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
-/* 1203 */  { fnEditLinearEquationMatrixA,  NOPARAM,                     "Mat_B",                                       "Mat B",                                       (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
-/* 1204 */  { fnEditLinearEquationMatrixB,  NOPARAM,                     "Mat_X",                                       "Mat X",                                       (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
+/* 1202 */  { fnEditLinearEquationMatrixA,  NOPARAM,                     "Mat_A",                                       "Mat A",                                       (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
+/* 1203 */  { fnEditLinearEquationMatrixB,  NOPARAM,                     "Mat_B",                                       "Mat B",                                       (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
+/* 1204 */  { itemToBeCoded,                NOPARAM,                     "Mat_X",                                       "Mat X",                                       (0 << TAM_MAX_BITS) |     0, CAT_RVAR | SLS_UNCHANGED | US_UNCHANGED},
 /* 1205 */  { itemToBeCoded,                NOPARAM,                     "1205",                                        "1205",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1206 */  { itemToBeCoded,                NOPARAM,                     "1206",                                        "1206",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 

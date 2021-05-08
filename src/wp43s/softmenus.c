@@ -230,7 +230,7 @@ TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_
                                              ITM_CLSIGMA,                   ITM_XG,                     ITM_SCATTFACT,            ITM_SCATTFACTp,        ITM_SCATTFACTm,              ITM_NULL,
                                              ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_COV,               ITM_XCIRC,                   ITM_YCIRC,
                                              ITM_SA,                        ITM_XH,                     ITM_XRMS,                 ITM_XMAX,              ITM_XMIN,                    ITM_NULL,
-                                             ITM_PLOT_LRALL,                ITM_NULL,                   ITM_LISTXY,               ITM_PLOT_XY,           ITM_PLOTRST,                  ITM_PLOT,
+                                             ITM_PLOT_LRALL,                ITM_PLOT_LR,                ITM_LISTXY,               ITM_PLOT_XY,           ITM_PLOTRST,                  ITM_PLOT,
 
                                              ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                    ITM_ORTHOF,
                                              ITM_PARABF,                    ITM_HYPF,                   ITM_ROOTF,                ITM_NULL,              ITM_NULL,                    ITM_NULL,

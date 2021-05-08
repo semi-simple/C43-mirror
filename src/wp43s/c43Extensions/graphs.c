@@ -932,7 +932,7 @@ void graph_plotmem(void) {
           #ifdef STATDEBUG
             printf("Plotting line to x=%d y=%d\n",xn,yn);
           #endif
-          plotline(xo, yo, xn, yn);
+          plotline2(xo, yo, xn, yn);
         }
 
       } else {

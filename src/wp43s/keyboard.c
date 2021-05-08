@@ -351,7 +351,7 @@ bool_t lastshiftG = false;
     }
 
     // Shift g pressed and shift f not active
-    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
+    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -412,7 +412,7 @@ bool_t lastshiftG = false;
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH || calcMode == CM_LISTXY) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -1068,7 +1068,9 @@ bool_t lowercaseselected;
             case CM_LISTXY:                     //JM VV
             case CM_GRAPH:
                 if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
-                  calcMode = previousCalcMode;
+//                  calcMode = previousCalcMode;
+                fnPlotClose(0);
+
                 }
                 keyActionProcessed = true;
                 break;                            //JM ^^
@@ -1402,9 +1404,18 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
     case CM_BUG_ON_SCREEN:
-    case CM_LISTXY:                     //JM
       calcMode = previousCalcMode;
       break;
+
+
+    case CM_GRAPH:                      //JM vv
+    case CM_LISTXY:                    
+      calcMode = previousCalcMode;
+      softmenuStack[0].firstItem = 0;
+      fnUndo(0);
+      break;                              //JM ^^
+
+
 
       case CM_PLOT_STAT:
         lastPlotMode = PLOT_NOTHING;
@@ -1414,10 +1425,6 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         popSoftmenu();
         break;
 
-    case CM_GRAPH:                      //JM vv
-      calcMode = previousCalcMode;
-      softmenuStack[0].firstItem = 0;
-      break;                            //JM ^^
 
     case CM_CONFIRMATION:
       calcMode = previousCalcMode;

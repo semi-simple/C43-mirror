@@ -36,7 +36,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         55  // Added x_min
+#define BACKUP_VERSION         56  // Added roundedTicks
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -213,6 +213,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
 
     save(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
     save(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
+    save(&roundedTicks,                       sizeof(roundedTicks),                       BACKUP);
     save(&extentx,                            sizeof(extentx),                            BACKUP);
     save(&extenty,                            sizeof(extenty),                            BACKUP);
     save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
@@ -443,6 +444,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
 
       restore(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
       restore(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
+      restore(&roundedTicks,                       sizeof(roundedTicks),                       BACKUP);
       restore(&extentx,                            sizeof(extentx),                            BACKUP);
       restore(&extenty,                            sizeof(extenty),                            BACKUP);
       restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);

@@ -181,6 +181,7 @@ typedef struct {
   double graph_ymax;
   double graph_dx;
   double graph_dy;
+  bool_t roundedTicks;
   bool_t extentx;
   bool_t extenty;
   bool_t jm_VECT;

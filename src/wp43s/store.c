@@ -286,6 +286,7 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(graph_ymax);
   storeToDtConfigDescriptor(graph_dx);
   storeToDtConfigDescriptor(graph_dy);
+  storeToDtConfigDescriptor(roundedTicks);
   storeToDtConfigDescriptor(extentx);
   storeToDtConfigDescriptor(extenty);
   storeToDtConfigDescriptor(jm_VECT);

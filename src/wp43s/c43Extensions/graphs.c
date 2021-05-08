@@ -530,6 +530,7 @@ void graph_plotmem(void) {
 
   statnum = 0;
 
+  roundedTicks = true;
   graph_axis();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
   if(PLOT_AXIS) graph_text();
 
@@ -750,6 +751,7 @@ void graph_plotmem(void) {
     printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
 
+    roundedTicks = true;
     graph_axis();
     if(PLOT_AXIS) graph_text();
 

@@ -71,7 +71,6 @@ void fnPlotRegressionLine(uint16_t plotMode);
   #define DEMO109
 #endif
 
-#define roundedTicks false    //todo make variable
 float   *gr_x;
 float   *gr_y;
 float   telltale;
@@ -79,6 +78,7 @@ uint16_t  ix_count;
   
 float     graph_dx;           // Many unused functions in WP43S. Do not change the variables.
 float     graph_dy; 
+bool_t    roundedTicks;
 bool_t    extentx;
 bool_t    extenty;
 bool_t    jm_VECT;
@@ -108,9 +108,12 @@ uint32_t  xzero;
 uint32_t  yzero;
 
 
+
+
 void statGraphReset(void){
   graph_dx      = 0;
   graph_dy      = 0;
+  roundedTicks  = true;
   extentx       = true;
   extenty       = true;
   jm_VECT       = false;
@@ -349,8 +352,10 @@ float grf_y(int i) {
   int16_t screen_window_x(float x_min, float x, float x_max) {
     int16_t temp; float tempr;
     if (Aspect_Square) {
-      tempr = ((x-x_min)/(x_max-x_min)*(float)(SCREEN_HEIGHT_GRAPH-1.0f));
-      temp = (int16_t) tempr;
+      tempr = ((x-x_min)/(x_max-x_min)*(float)(SCREEN_HEIGHT_GRAPH-1));
+      if(tempr > 32766) temp = 32767; else
+        if (tempr < -32766) temp = -32767; else
+          temp = (int16_t) tempr;
       if (temp>SCREEN_HEIGHT_GRAPH-1) {
         temp=SCREEN_HEIGHT_GRAPH-1;
       }
@@ -358,8 +363,10 @@ float grf_y(int i) {
       return temp+SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
     } 
     else {  //FULL SCREEN
-      tempr = ((x-x_min)/(x_max-x_min)*(float)(SCREEN_WIDTH_GRAPH-1.0f));
-      temp = (int16_t) tempr;
+      tempr = ((x-x_min)/(x_max-x_min)*(float)(SCREEN_WIDTH_GRAPH-1));
+      if(tempr > 32766) temp = 32767; else
+        if (tempr < -32766) temp = -32767; else
+          temp = (int16_t) tempr;
       //printf("--> %d (%f %f)  ",temp, x_min,x_max);
       if (temp>SCREEN_WIDTH_GRAPH-1) {
         temp=SCREEN_WIDTH_GRAPH-1;
@@ -380,8 +387,10 @@ float grf_y(int i) {
     if (!Aspect_Square) minn = SCREEN_NONSQ_HMIN;
     else minn = 0;
 
-    tempr = ((y-y_min)/(y_max-y_min)*(float)(SCREEN_HEIGHT_GRAPH-1.0f - minn));
-    temp = (int16_t) tempr;
+    tempr = ((y-y_min)/(y_max-y_min)*(float)(SCREEN_HEIGHT_GRAPH-1 - minn));
+    if(tempr > 32766) temp = 32767; else
+      if (tempr < -32766) temp = -32767; else
+        temp = (int16_t) tempr;
     if (temp>SCREEN_HEIGHT_GRAPH-1 - minn) {
       temp=SCREEN_HEIGHT_GRAPH-1 - minn;
     }
@@ -493,88 +502,6 @@ void plotline2(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn) {              
 
 
 
-
-
-
-/*
-void pixelline_org(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) { // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-    uint16_t x1;  //range 0-399
-    uint8_t  y1;  //range 0-239
-    #if defined STATDEBUG_VERBOSE && defined PC_BUILD
-      printf("pixelline: xo,yo,xn,yn: %d %d   %d %d \n",xo,yo,xn,yn);
-    #endif
-    if(xo == xn && yo == yn) {
-      if(vmNormal) placePixel(xn,yn); else removePixel(xn,yn);
-      return;
-    } 
-    else
-    if(xo > xn) {
-      for(x1=xo; x1!=xn; x1-=1) {
-        y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
-        if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
-      }
-    } 
-    else if(xo < xn) {
-      for(x1=xo; x1!=xn; x1+=1) {
-        y1 = yo + (x1-xo)*(yn-yo)/(xn-xo);
-        if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
-      }
-    }
-
-    if(yo > yn) {
-      for(y1=yo; y1!=yn; y1-=1) {
-        x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
-        if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
-      }
-    } 
-    else if(yo < yn) {
-      for(y1=yo; y1!=yn; y1+=1) {
-        x1 = xo + (y1-yo)*(xn-xo)/(yn-yo);
-        if(vmNormal) placePixel(x1,y1); else removePixel(x1,y1);
-      }
-    }
-  }
-*/
-
-
-
-/*
-//Bresenham variable width - not really working well. glitchy.
-  //http://members.chello.at/~easyfilter/bresenham.html
-void pixelline_width(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal)                 //Bresenham line width: plotLineWidth
-{ 
-#define thres 0.0f
-float wd = 1.0f;
-   int dx = abs(xn-xo), sx = xo < xn ? 1 : -1; 
-   int dy = abs(yn-yo), sy = yo < yn ? 1 : -1; 
-   int err = dx-dy, e2, x2, y2;                                // error value e_xy
-   float ed = dx+dy == 0 ? 1 : sqrt((float)dx*dx+(float)dy*dy);
-   
-   for (wd = (wd+1)/2; ; ) {                                   // pixel loop
-      if(abs(err-dx+dy)/ed-wd+1>thres) {if(vmNormal) placePixel(xo,yo); else removePixel(xo,yo);}
-      e2 = err; x2 = xo;
-      if (2*e2 >= -dx) {                                           // x step
-         for (e2 += dy, y2 = yo; e2 < ed*wd && (yn != y2 || dx > dy); e2 += dx)
-            if(abs(e2)/ed-wd+1>thres) {if(vmNormal) placePixel(xo, y2 += sy); else removePixel(xo, y2 += sy);}
-         if (xo == xn) break;
-         e2 = err; err -= dy; xo += sx; 
-      } 
-      if (2*e2 <= dy) {                                            // y step
-         for (e2 = dx-e2; e2 < ed*wd && (xn != x2 || dx < dy); e2 += dy)
-            if(abs(e2)/ed-wd+1>thres) {if(vmNormal) placePixel(x2 += sx, yo); else removePixel(x2 += sx, yo);}
-         if (yo == yn) break;
-         err += dx; yo += sy; 
-      }
-   }
-}
-*/
-
-
-
-
-
-
-
 //Exhange the name of this routine with pixelline() above to try Bresenham
 void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal) { // Plots line from xo,yo to xn,yn; uses temporary x1,y1
     #if defined STATDEBUG_VERBOSE && defined PC_BUILD
@@ -593,34 +520,7 @@ void pixelline(uint16_t xo, uint8_t yo, uint16_t xn, uint8_t yn, bool_t vmNormal
       if (e2 >= dy) { err += dy; xo += sx; } /* e_xy+e_x > 0 */
       if (e2 <= dx) { err += dx; yo += sy; } /* e_xy+e_y < 0 */
    }
-
-
-/* Another Bresenham example
-    //Bresenham line draw algo. https://stackoverflow.com/questions/62651042/how-to-implement-bresenhams-line-algorithm-in-c-when-trying-to-draw-a-line-in-b
-    int dx = abs((int)(xn - xo)), sx = xo < xn ? 1 : -1;
-    int dy = abs((int)(yn - yo)), sy = yo < yn ? 1 : -1;
-    int err = (dx > dy ? dx : -dy) / 2, e2;
-    for (;;) {
-      // setPixel(xo,yo,Matrix);
-      if(vmNormal) placePixel(xo,yo); else removePixel(xo,yo);
-      if (xo == xn && yo == yn)
-        break;
-      e2 = err;
-      if (e2 > -dx) {
-        err -= dy;
-        xo += sx;
-      }
-      if (e2 < dy) {
-        err += dx;
-        yo += sy;
-      }
-    }
-*/
-
-
 }
-
-
 
 
 
@@ -825,7 +725,7 @@ void graphAxisDraw (void){
 
 
 float auto_tick(float tick_int_f) {
-  return tick_int_f;
+  if (!roundedTicks) return tick_int_f;
   //Obtain scaling of ticks, to about 20 intervals left to right.
   //graphtype tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
   snprintf(tmpString, TMP_STR_LENGTH, "%.1e", tick_int_f);
@@ -837,7 +737,7 @@ float auto_tick(float tick_int_f) {
   //printf("tick0 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
   tick_int_f = strtof (tx, NULL);
   //tick_int_f = (float)(tx[0]-48) + (float)(tx[2]-48)/10.0f;
-  //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
+printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
 
   if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpString[0] = '0'; tmpString[2]='2'; } else
   if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpString[0] = '0'; tmpString[2]='5'; } else
@@ -847,9 +747,9 @@ float auto_tick(float tick_int_f) {
   if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpString[0] = '5'; tmpString[2]='0'; } else
   if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpString[0] = '7'; tmpString[2]='5'; }
 
-  if (roundedTicks) tick_int_f = strtof (tmpString, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
+  tick_int_f = strtof (tmpString, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
 
-  //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
+printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
   return tick_int_f;
 }
 
@@ -1041,8 +941,9 @@ void graphPlotstat(uint16_t selection){
   float y;
 
   statnum = 0;
-//  graphAxisDraw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
-graph_axis();
+  roundedTicks = false;
+  //  graphAxisDraw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
+  graph_axis();
   plotmode = _SCAT;
 
   if(telltale == MEM_INITIALIZED && checkMinimumDataPoints(const_2)) {
@@ -1141,6 +1042,7 @@ graph_axis();
     #endif
   
     //graphAxisDraw();
+    roundedTicks = false;
     graph_axis();
     yn = screen_window_y(y_min,grf_y(0),y_max);
     xn = screen_window_x(x_min,grf_x(0),x_max);
@@ -1283,16 +1185,25 @@ int32_t minLRDataPoints(uint16_t selection){
     uint8_t   yo = 0, yn, yN = 0;
     double    x = x_min; 
     double    y = 0.0;
-    int16_t   Intervals = numberIntervals; //increase resulution in beginning and end of graph, to get a better starting and ending point in y
+    int16_t   Intervals = numberIntervals; //starting point to calculate dx
     uint16_t  iterations = 0;
+    double    intervalW = (double)(x_max-x_min)/(double)(Intervals);
 
-    for (ix = (double)x_min; iterations < 2000 && x < x_max+(x_max-x_min)*0.5 && xN != SCREEN_WIDTH-1; iterations++) {       //Variable accuracy line plot
-      
+    int16_t minN_y,minN_x;
+    if (!Aspect_Square) {
+      minN_y = SCREEN_NONSQ_HMIN; 
+      minN_x = 0;
+    }
+    else {
+      minN_y = 0; 
+      minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;
+    }
+    for (ix = (double)x_min-intervalW; iterations < 2000 && x < x_max+(x_max-x_min)*0.5 && xN < SCREEN_WIDTH-1; iterations++) {       //Variable accuracy line plot
       xo = xN;
       yo = yN;
-
-        for(int xx =1; xx<50; xx++) {
-          x = ix + (double)(x_max-x_min)/(double)(Intervals) * (double)(1.0/(double)xx );
+        uint16_t xx;
+        for( xx=0; xx<14; xx++) {      //the starting point is ix + dx where dx=2^-0*interval and reduce it to dx=2^-31*interval until dy<=2 
+          x = ix + intervalW / ((double)((uint16_t) 1 << xx));
           if(USEFLOATING != 0) {
             //TODO create REAL from x (double) if REALS will be used
             sprintf(ss,"%f",x); stringToReal(ss,&XX,&ctxtReal39);
@@ -1300,17 +1211,14 @@ int32_t minLRDataPoints(uint16_t selection){
           yIsFnx( USEFLOATING, selection, x, &y, a0, a1, a2, &XX, &YY, RR, SMI, aa0, aa1, aa2);
           xN = screen_window_x(x_min,(float)x,x_max);
           yN = screen_window_y(y_min,(float)y,y_max);
-          if(abs((int)yN-(int)yo)<=2 && abs((int)xN-(int)xo)<=2) break;
+          if((abs((int)yN-(int)yo)<=2 /*&& abs((int)xN-(int)xo)<=2*/) || iterations == 0 || xN <= minN_x ) break;
         }
         ix = x;
-
+        //printf("### iter:%u ix=%20lf xx=%i x=%lf y=%lf xN=%u yN=%u\n",iterations,ix,xx,x,y,xN,yN);
         if(iterations > 0) {  //Allow for starting values to accumulate in the registers at ix = 0
           #if defined STATDEBUG && defined PC_BUILD
             printf("plotting graph: iter:%u ix:%f I.vals:%u ==>xmin:%f (x:%f) xmax:%f ymin:%f (y:%f) ymax:%f xN:%d yN:%d \n",iterations,ix,Intervals,x_min,x,x_max,y_min,y,y_max,  xN,yN);
           #endif
-          int16_t minN_y,minN_x;
-          if (!Aspect_Square) {minN_y = SCREEN_NONSQ_HMIN; minN_x = 0;}
-          else {minN_y = 0; minN_x = SCREEN_WIDTH-SCREEN_HEIGHT_GRAPH;}
 
           #define tol 4
           if(xN<SCREEN_WIDTH_GRAPH && xN>minN_x && yN<SCREEN_HEIGHT_GRAPH-tol && yN>minN_y) {
@@ -1339,6 +1247,9 @@ int32_t minLRDataPoints(uint16_t selection){
           }
         }
       }
+      #ifdef PC_BUILD
+        printf("Drawline: %u / 2000 iterations\n",iterations);
+      #endif
     }
 
     #define horOffsetR 109+5 //digit righ side aliognment

@@ -46,6 +46,7 @@ extern    uint16_t  ix_count;
 //Graph options
 extern  float    graph_dx;
 extern  float    graph_dy;
+extern  bool_t   roundedTicks;
 extern  bool_t   extentx;
 extern  bool_t   extenty;
 extern  bool_t   jm_VECT;

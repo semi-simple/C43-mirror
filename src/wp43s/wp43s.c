@@ -168,24 +168,6 @@ float                 graph_xmin;                              //JM Graph
 float                 graph_xmax;                              //JM Graph
 float                 graph_ymin;                              //JM Graph
 float                 graph_ymax;                              //JM Graph
-// float                 graph_dx;                                //JM Graph
-// float                 graph_dy;                                //JM Graph
-// bool_t                extentx;                                 //JM Graph
-// bool_t                extenty;                                 //JM Graph
-// bool_t                jm_VECT;                                 //JM GRAPH
-// bool_t                jm_NVECT;                                //JM GRAPH
-// bool_t                jm_SCALE;                                //JM GRAPH
-// bool_t                Aspect_Square;                           //JM GRAPH
-// bool_t                PLOT_LINE;                               //JM GRAPH
-// bool_t                PLOT_CROSS;                              //JM GRAPH
-// bool_t                PLOT_BOX;                                //JM GRAPH
-// bool_t                PLOT_INTG;                               //JM GRAPH
-// bool_t                PLOT_DIFF;                               //JM GRAPH
-// bool_t                PLOT_RMS;                                //JM GRAPH
-// bool_t                PLOT_SHADE;                              //JM GRAPH
-// bool_t                PLOT_AXIS;                               //JM GRAPH
-// int8_t                PLOT_ZMX;                                //JM GRAPH
-// int8_t                PLOT_ZMY;                                //JM GRAPH
 uint8_t               lastSetAngularMode;
 bool_t                AlphaSelectionBufferTimerRunning;        //JM
 #ifdef INLINE_TEST                                             //vv dr

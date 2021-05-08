@@ -214,7 +214,8 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(graph_ymin);        
     recallFromDtConfigDescriptor(graph_ymax);        
     recallFromDtConfigDescriptor(graph_dx);          
-    recallFromDtConfigDescriptor(graph_dy);          
+    recallFromDtConfigDescriptor(graph_dy);
+    recallFromDtConfigDescriptor(roundedTicks);
     recallFromDtConfigDescriptor(extentx);
     recallFromDtConfigDescriptor(extenty);
     recallFromDtConfigDescriptor(jm_VECT);

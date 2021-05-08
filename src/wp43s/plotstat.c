@@ -59,6 +59,9 @@ void fnPlotRegressionLine(uint16_t plotMode);
 //  #undef DEMO105
 //  #undef DEMO107
 //  #undef DEMO109
+  #define DEMO105
+  #define DEMO107
+  #define DEMO109
 #else
   #define DEMO0
   #define DEMO1

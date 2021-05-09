@@ -3385,8 +3385,8 @@ void complex_matrix_linear_eqn(const complex34Matrix_t *a, const complex34Matrix
   }
   complex_matrix_pivoting_solve(&mat, bv, pivots, cv, &ctxtReal39);
   for(i = 0; i < n; i++) {
-    realToReal34(cv + i * 2    , VARIABLE_REAL34_DATA(&b->matrixElements[i]));
-    realToReal34(cv + i * 2 + 1, VARIABLE_IMAG34_DATA(&b->matrixElements[i]));
+    realToReal34(cv + i * 2    , VARIABLE_REAL34_DATA(&r->matrixElements[i]));
+    realToReal34(cv + i * 2 + 1, VARIABLE_IMAG34_DATA(&r->matrixElements[i]));
   }
   freeWp43s(pivots, TO_BLOCKS(sizeof(uint16_t) * n));
   freeWp43s(cv, n * REAL_SIZE * 2);

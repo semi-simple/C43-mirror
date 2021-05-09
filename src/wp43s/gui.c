@@ -4367,13 +4367,20 @@ if(!tam.mode) {
     cursorEnabled = true;
     cursorFont = &numericFont;
   }
+
+
   void refreshModeGui(void) {  //JM Added here to force icon update in Gui
+  #ifdef PC_BUILD
+    if((calcMode == CM_AIM) && !tam.mode) calcModeAimGui();
+  #endif
+/*
     #ifdef PC_BUILD
-      if     (calcMode == CM_NORMAL || calcMode == CM_PEM) calcModeNormalGui();
-      else if(calcMode == CM_AIM) calcModeAimGui();
-      else if(tam.mode) calcModeTamGui();
+      if     ((calcMode == CM_NORMAL || calcMode == CM_PEM) && !tam.mode) calcModeNormalGui();
+      else if((calcMode == CM_AIM) && !tam.mode) calcModeAimGui();
+      else if(tam.mode && !(calcMode == CM_AIM)) calcModeTamGui();
       else if(catalog) calcModeAimGui();
     #endif
+*/
   }
 
 #endif // !TESTSUITE_BUILD

@@ -99,9 +99,9 @@ void statGraphReset(void){
   roundedTicks  = true;
   extentx       = true;
   extenty       = true;
-  PLOT_VECT       = false;
-  PLOT_NVECT      = false;
-  PLOT_SCALE      = false;
+  PLOT_VECT     = false;
+  PLOT_NVECT    = false;
+  PLOT_SCALE    = false;
   Aspect_Square = true;
   PLOT_LINE     = false;
   PLOT_CROSS    = false;

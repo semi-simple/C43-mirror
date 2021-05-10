@@ -780,6 +780,17 @@ char * radixProcess(const char * ss) {  //  .  HIERDIE WERK GLAD NIE
 }
 
 
+void nanCheck(char* s02) {
+  if(stringByteLength(s02) > 2) {
+    for (int ix = 2; s02[ix]!=0; ix++) {
+      if(s02[ix]=='n' && s02[ix-1]=='a' && s02[ix-2]=='n') {
+        s02[ix]='N';
+        s02[ix-2]='N';
+      }
+    }
+  }
+}
+
 void eformat (char* s02, const char* s01, double inreal, uint8_t prec, const char* s05) {
   char s03[100];
   if(((fabs(inreal) > 1000000.0 || fabs(inreal) < 0.001)) && (inreal != 0.0)) {
@@ -791,6 +802,7 @@ void eformat (char* s02, const char* s01, double inreal, uint8_t prec, const cha
   if(inreal > 0) strcat(s02,"");  //in place of negative sign
   strcat(s02,eatSpacesMid(radixProcess(s03)));
   strcat(s02,s05);
+  nanCheck(s02);
 }
 
 
@@ -814,6 +826,7 @@ void eformat_fix3 (char* s02, const char* s01, double inreal) {
   if(inreal > 0) strcpy(s04," ");  //in place of negative sign
   strcat(s04,s03);
   strcat(s02,eatSpacesMid(radixProcess(s04)));
+  nanCheck(s02);
 }
 
 
@@ -910,6 +923,7 @@ void eformat_eng2 (char* s02, const char* s01, double inreal, int8_t digits, con
   strcpy(s02,s01);
   strcat(s02,eatSpacesMid(radixProcess(s03)));
   strcat(s02,s05);
+  nanCheck(s02);
 }
 
 

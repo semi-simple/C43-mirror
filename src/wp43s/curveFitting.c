@@ -289,8 +289,8 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
       if(jx) break;
     }
     selection = jx;
-    #if defined STATDEBUG && defined PC_BUILD
-      printf("processCurvefitSelectionA selection:%u reduced selection to:%u\n",selection,jx);
+    #if (defined STATDEBUG || defined STAT_DISPLAY_ABCDEFG) && defined PC_BUILD
+      printf("processCurvefitSelection selection:%u, reduced selection to:%u\n",selection,jx);
     #endif
 
     realContext = &ctxtReal75;    //Use 75 as the sums can reach high values and the accuracy of the regressionn depends on this. Could arguably be optimized.

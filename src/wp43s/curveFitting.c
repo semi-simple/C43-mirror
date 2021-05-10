@@ -39,7 +39,7 @@
 #include "wp43s.h"
 
 
-#undef STAT_DISPLAY_ABCDEFG                      //to display helper functions A-H
+#define STAT_DISPLAY_ABCDEFG                      //to display helper functions A-H
 
 
 static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables, available to the different functions
@@ -170,7 +170,7 @@ void fnProcessLRfind(uint16_t curveFitting){
         processCurvefitSelection(jx,&RR,&SMI, &aa0, &aa1, &aa2);
         realMultiply(&RR,&RR,&RR2,&ctxtReal39);
 
-        if(realCompareGreaterThan(&RR2, &RRMAX) && realCompareLessThan(&RR2, const_1)) {
+        if(realCompareGreaterThan(&RR2, &RRMAX) && realCompareLessEqual(&RR2, const_1)) {
           realCopy(&RR2,&RRMAX);
         	s = jx;
         }
@@ -213,22 +213,9 @@ void fnProcessLRfind(uint16_t curveFitting){
          //0010 0011 1111    //0x23F     (internal is inverted: '1' means enabled)
          //0001 1100 0000    //0x1C0
 void fnProcessLR (uint16_t unusedButMandatoryParameter){
+
   fnProcessLRfind(lrSelection);
-/*                                           //check for number of parameters (superceded)
-  if( (lrSelection & 0x23F)) {               //if any 2-param models are included, at least 2 points needed
-    if(!checkMinimumDataPoints(const_2)) {
-      return;
-    } else {
-      fnProcessLRfind(lrSelection);
-    }
-  } else {                                   //otherwise all 2-param models excluded therefore check for 3 params
-    if(!checkMinimumDataPoints(const_3)) {
-      return;
-    } else {
-      fnProcessLRfind(lrSelection);
-    }
-  }
-*/
+
 }
 
 
@@ -550,6 +537,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           formatRealDebug(ss, RR_); printf("§§ r: %s\n",ss);
         #endif
         #if defined STAT_DISPLAY_ABCDEFG && defined PC_BUILD
+          realToDouble1(SIGMA_N, &v); printf("§§ n: %f\n",v);
           realToDouble1(&AA, &v); printf("§§ AA: %f\n",v);
           realToDouble1(&BB, &v); printf("§§ BB: %f\n",v);
           realToDouble1(&CC, &v); printf("§§ CC: %f\n",v);
@@ -635,6 +623,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realSquareRoot(&RR2, RR_, realContext);
 
         #if defined STAT_DISPLAY_ABCDEFG && defined PC_BUILD
+          realToDouble1(SIGMA_N, &v); printf("§§ n: %f\n",v);
           realToDouble1(&AA, &v); printf("§§ AA: %f\n",v);
           realToDouble1(&BB, &v); printf("§§ BB: %f\n",v);
           realToDouble1(&CC, &v); printf("§§ CC: %f\n",v);
@@ -717,6 +706,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realSquareRoot(&RR2, RR_, realContext);
 
         #if defined STAT_DISPLAY_ABCDEFG && defined PC_BUILD
+          realToDouble1(SIGMA_N, &v); printf("§§ n: %f\n",v);
           realToDouble1(&AA, &v); printf("§§ AA: %f\n",v);
           realToDouble1(&BB, &v); printf("§§ BB: %f\n",v);
           realToDouble1(&CC, &v); printf("§§ CC: %f\n",v);
@@ -795,6 +785,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
         realSquareRoot(&RR2, RR_, realContext);
 
         #if defined STAT_DISPLAY_ABCDEFG && defined PC_BUILD
+          realToDouble1(SIGMA_N, &v); printf("§§ n: %f\n",v);
           realToDouble1(&AA, &v); printf("§§ AA: %f\n",v);
           realToDouble1(&BB, &v); printf("§§ BB: %f\n",v);
           realToDouble1(&CC, &v); printf("§§ CC: %f\n",v);

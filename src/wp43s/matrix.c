@@ -3101,7 +3101,6 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
   freeWp43s(b, res->header.matrixRows * REAL_SIZE);
   freeWp43s(x, res->header.matrixRows * REAL_SIZE);
   freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
-  realMatrixFree(&pvt);
   realMatrixFree(&lu);
 }
 

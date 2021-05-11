@@ -3832,6 +3832,7 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
       QR_decomposition_householder(a, size, q, r, &ctxtReal51);
       printf("Multiplication\n"); fflush(stdout);
       mulCpxMat(r, q, size, eig, &ctxtReal51);
+    #ifdef PC_BUILD
       for(i = 0; i < size * size; i++) {
         printRealToConsole(q + i * 2, i == 0 ? "q= " : "   ", "  ");
         printRealToConsole(q + i * 2 + 1, "", "\n");
@@ -3847,6 +3848,7 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
         printRealToConsole(eig + i * 2 + 1, "", "\n");
       }
       fflush(stdout);
+    #endif // PC_BUILD
 
       printf("Checking convergence"); fflush(stdout);
       converged = true;

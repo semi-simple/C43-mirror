@@ -3654,7 +3654,7 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
   }
 
   // Cleanup
-  freeWp43s(bulk, (size * size * 6 + size) * REAL_SIZE * 2);
+  freeWp43s(bulk, (size * size * 5 + size) * REAL_SIZE * 2);
 }
 
 void real_QR_decomposition(const real34Matrix_t *matrix, real34Matrix_t *q, real34Matrix_t *r) {

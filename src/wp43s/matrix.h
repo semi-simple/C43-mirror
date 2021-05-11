@@ -184,6 +184,14 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
  */
 void       fnQrDecomposition              (uint16_t unusedParamButMandatory);
 
+/**
+ * Calculate eigenvalues.
+ * Generally returns in a diagonal matrix.
+ *
+ * \param[in] unusedParamButMandatory
+ */
+void       fnEigenvalues                  (uint16_t unusedParamButMandatory);
+
 #ifndef TESTSUITE_BUILD
   /**
    * Initialize a real matrix.
@@ -326,6 +334,9 @@ void       fnQrDecomposition              (uint16_t unusedParamButMandatory);
 
   void     real_QR_decomposition          (const real34Matrix_t *matrix, real34Matrix_t *q, real34Matrix_t *r);
   void     complex_QR_decomposition       (const complex34Matrix_t *matrix, complex34Matrix_t *q, complex34Matrix_t *r);
+
+  void     realEigenvalues                (const real34Matrix_t *matrix, real34Matrix_t *res);
+  void     complexEigenvalues             (const complex34Matrix_t *matrix, complex34Matrix_t *res);
 #endif // TESTSUITE_BUILD
 
 void       elementwiseRema                (void (*f)(void));

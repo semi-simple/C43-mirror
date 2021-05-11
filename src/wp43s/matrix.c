@@ -34,6 +34,7 @@
 #include "mathematics/multiplication.h"
 #include "mathematics/toPolar.h"
 #include "mathematics/toRect.h"
+#include "mathematics/wp34s.h"
 #include "memory.h"
 #include "realType.h"
 #include "registers.h"
@@ -1317,6 +1318,63 @@ void fnQrDecomposition(uint16_t unusedParamButMandatory) {
     #ifdef PC_BUILD
     sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
     moreInfoOnError("In function fnQrDecomposition:", errorMessage, "is not a matrix.", "");
+    #endif
+  }
+#endif // TESTSUITE_BUILD
+}
+
+
+
+void fnEigenvalues(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
+    real34Matrix_t x, res;
+
+    linkToRealMatrixRegister(REGISTER_X, &x);
+
+    if(x.header.matrixRows != x.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+                x.header.matrixRows, x.header.matrixColumns);
+        moreInfoOnError("In function fnEigenvalues:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      realEigenvalues(&x, &res);
+      convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
+      realMatrixFree(&res);
+      setSystemFlag(FLAG_ASLIFT);
+    }
+  }
+  /*else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+    complex34Matrix_t x, q, r;
+
+    linkToComplexMatrixRegister(REGISTER_X, &x);
+
+    if(x.header.matrixRows != x.header.matrixColumns) {
+      displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "not a square matrix (%d" STD_CROSS "%d)",
+                x.header.matrixRows, x.header.matrixColumns);
+        moreInfoOnError("In function fnEigenvalues:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      complex_QR_decomposition(&x, &q, &r);
+      setSystemFlag(FLAG_ASLIFT);
+      liftStack();
+      convertComplex34MatrixToComplex34MatrixRegister(&q, REGISTER_Y);
+      convertComplex34MatrixToComplex34MatrixRegister(&r, REGISTER_X);
+      complexMatrixFree(&q);
+      complexMatrixFree(&r);
+    }
+  }*/
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnEigenvalues:", errorMessage, "is not a matrix.", "");
     #endif
   }
 #endif // TESTSUITE_BUILD
@@ -3522,19 +3580,29 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
   real_t *bulk;
   real_t *matq, *matr;
 
+  real_t *v, *qq, *qt, *newMat, sum, m, t;
+
   // Allocate
   bulk = allocWp43s((size * size * 5 + size) * REAL_SIZE * 2);
+    printf("bulk : %" PRIxPTR "\n", (intptr_t)bulk); fflush(stdout);
 
   matr = bulk;
   matq = bulk + (size * size * 2);
 
+  qq     = bulk + 2 * (size * size * 2);
+  qt     = bulk + 3 * (size * size * 2);
+  newMat = bulk + 4 * (size * size * 2);
+  v      = bulk + 5 * (size * size * 2);
+
   // Copy mat to matr
+  printf("Copy mat to matr\n"); fflush(stdout);
   for(i = 0; i < size * size; i++) {
     realCopy(mat + i * 2,     matr + i * 2    );
     realCopy(mat + i * 2 + 1, matr + i * 2 + 1);
   }
 
   // Initialize Q
+  printf("Initialize Q\n"); fflush(stdout);
   for(i = 0; i < size * size; i++) {
     realCopy(const_0, matq + i * 2    );
     realCopy(const_0, matq + i * 2 + 1);
@@ -3543,16 +3611,9 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
     realCopy(const_1, matq + (i * size + i) * 2);
   }
 
+  printf("Calculate\n"); fflush(stdout);
   // Calculate
   for(j = 0; j < (size - 1u); ++j) {
-    real_t *v, *qq, *qt, *newMat, sum, m, t;
-
-    // Allocate
-    qq     = bulk + 2 * (size * size * 2);
-    qt     = bulk + 3 * (size * size * 2);
-    newMat = bulk + 4 * (size * size * 2);
-    v      = bulk + 5 * (size * size * 2);
-
     // Column vector of submatrix
     realCopy(const_0, &sum);
     for(i = 0; i < (size - j); i++) {
@@ -3588,7 +3649,17 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
 
     // Calculate v = u / ||u||
     for(i = 0; i < (size - j); i++) {
-      divComplexComplex(v + i * 2, v + i * 2 + 1, &sum, const_0, &m, &t, realContext);
+      if(realIsZero(&sum)) {
+        realCopy(v + i * 2,     &m);
+        realCopy(v + i * 2 + 1, &t);
+      }
+      else if(realIsZero(v + i * 2 + 1)) {
+        realDivide(v + i * 2, &sum, &m, realContext);
+        realCopy(const_0, &t);
+      }
+      else {
+        divComplexComplex(v + i * 2, v + i * 2 + 1, &sum, const_0, &m, &t, realContext);
+      }
       realCopy(&m, v + i * 2    );
       realCopy(&t, v + i * 2 + 1);
     }
@@ -3637,6 +3708,7 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
     }
   }
 
+  printf("Make sure R is triangular\n"); fflush(stdout);
   // Make sure R is triangular
   for(j = 0; j < (size - 1u); j++) {
     for(i = j + 1; i < size; i++) {
@@ -3645,6 +3717,7 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
     }
   }
 
+  printf("Copy results\n"); fflush(stdout);
   // Copy results
   for(i = 0; i < size * size; i++) {
     realCopy(matq + i * 2,     q + i * 2    );
@@ -3653,8 +3726,10 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
     realCopy(matr + i * 2 + 1, r + i * 2 + 1);
   }
 
+  printf("Cleanup\n"); fflush(stdout);
   // Cleanup
   freeWp43s(bulk, (size * size * 5 + size) * REAL_SIZE * 2);
+  printf("Done\n"); fflush(stdout);
 }
 
 void real_QR_decomposition(const real34Matrix_t *matrix, real34Matrix_t *q, real34Matrix_t *r) {
@@ -3723,6 +3798,97 @@ void complex_QR_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t
 
     // Cleanup
     freeWp43s(mat, matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
+  }
+}
+
+void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
+  const uint16_t size = matrix->header.matrixRows;
+  real_t *bulk, *a, *q, *r, *eig;
+  uint16_t i, j;
+  bool_t converged;
+
+  if(matrix->header.matrixRows == matrix->header.matrixColumns) {
+    bulk = allocWp43s(size * size * REAL_SIZE * 2 * 4);
+    a   = bulk;
+    q   = bulk + size * size * 2;
+    r   = bulk + size * size * 2 * 2;
+    eig = bulk + size * size * 2 * 3;
+    printf("REAL_SIZE : %" PRIdPTR "\n", REAL_SIZE);
+    printf("a   : %" PRIxPTR "\n", (intptr_t)a);
+    printf("q   : %" PRIxPTR "\n", (intptr_t)q);
+    printf("r   : %" PRIxPTR "\n", (intptr_t)r);
+    printf("eig : %" PRIxPTR "\n", (intptr_t)eig);
+    fflush(stdout);
+
+    // Convert real34 to real
+    for(i = 0; i < size * size; i++) {
+      real34ToReal(&matrix->matrixElements[i], a + i * 2);
+      realZero(a + i * 2 + 1);
+    }
+
+    // Calculate
+    while(true) {
+      printf("QR decomposition\n"); fflush(stdout);
+      QR_decomposition_householder(a, size, q, r, &ctxtReal51);
+      printf("Multiplication\n"); fflush(stdout);
+      mulCpxMat(r, q, size, eig, &ctxtReal51);
+      for(i = 0; i < size * size; i++) {
+        printRealToConsole(q + i * 2, i == 0 ? "q= " : "   ", "  ");
+        printRealToConsole(q + i * 2 + 1, "", "\n");
+      }
+      fflush(stdout);
+      for(i = 0; i < size * size; i++) {
+        printRealToConsole(r + i * 2, i == 0 ? "r= " : "   ", "  ");
+        printRealToConsole(r + i * 2 + 1, "", "\n");
+      }
+      fflush(stdout);
+      for(i = 0; i < size * size; i++) {
+        printRealToConsole(eig + i * 2, i == 0 ? "-> " : "   ", "  ");
+        printRealToConsole(eig + i * 2 + 1, "", "\n");
+      }
+      fflush(stdout);
+
+      printf("Checking convergence"); fflush(stdout);
+      converged = true;
+      for(i = 0; i < size; i++) {
+        printf("."); fflush(stdout);
+        if(realIsNaN(eig + (i * size + i) * 2) || realIsNaN(eig + (i * size + i) * 2 + 1)) {
+          for(j = 0; j < size * size; j++) {
+            printf("."); fflush(stdout);
+            realCopy(a + j * 2,     eig + j * 2    );
+            realCopy(a + j * 2 + 1, eig + j * 2 + 1);
+          }
+          converged = true;
+          break;
+        }
+        else if(!WP34S_RelativeError(a + (i * size + i) * 2, eig + (i * size + i) * 2, const_1e_49, &ctxtReal51) || !WP34S_RelativeError(a + (i * size + i) * 2 + 1, eig + (i * size + i) * 2 + 1, const_1e_49, &ctxtReal51)) {
+          converged = false;
+        }
+      }
+      if(converged) {
+        printf("!"); fflush(stdout);
+        break;
+      }
+      else {
+        printf("\nWriteback"); fflush(stdout);
+        for(i = 0; i < size * size; i++) {
+          printf("."); fflush(stdout);
+          realCopy(eig + i * 2, a + i * 2);
+        }
+        printf("\n"); fflush(stdout);
+      }
+    }
+
+    // Write back
+    printf("\n->Writeback"); fflush(stdout);
+    if(matrix != res) realMatrixInit(res, size, size);
+    for(i = 0; i < size; i++) {
+          printf("."); fflush(stdout);
+      realToReal34(eig + (i * size + i) * 2, &res->matrixElements[i * size + i]);
+    }
+        printf("\n"); fflush(stdout);
+
+    freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
   }
 }
 

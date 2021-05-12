@@ -1328,7 +1328,7 @@ void fnQrDecomposition(uint16_t unusedParamButMandatory) {
 void fnEigenvalues(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
-    real34Matrix_t x, res;
+    real34Matrix_t x, res, ires;
 
     linkToRealMatrixRegister(REGISTER_X, &x);
 
@@ -1341,8 +1341,23 @@ void fnEigenvalues(uint16_t unusedParamButMandatory) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      realEigenvalues(&x, &res);
-      convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
+      ires.header.matrixRows = ires.header.matrixColumns = 0;
+      ires.matrixElements = NULL;
+      realEigenvalues(&x, &res, &ires);
+      if(ires.matrixElements) {
+        complex34Matrix_t cres;
+        complexMatrixInit(&cres, res.header.matrixRows, res.header.matrixColumns);
+        for(uint32_t i = 0; i < x.header.matrixRows * x.header.matrixColumns; i++) {
+          real34Copy(&res.matrixElements[i],  VARIABLE_REAL34_DATA(&cres.matrixElements[i]));
+          real34Copy(&ires.matrixElements[i], VARIABLE_IMAG34_DATA(&cres.matrixElements[i]));
+        }
+        convertComplex34MatrixToComplex34MatrixRegister(&cres, REGISTER_X);
+        realMatrixFree(&ires);
+        complexMatrixFree(&cres);
+      }
+      else {
+        convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
+      }
       realMatrixFree(&res);
       setSystemFlag(FLAG_ASLIFT);
     }
@@ -3904,13 +3919,13 @@ static void calculateQrShift(const real_t *mat, uint16_t size, real_t *re, real_
 }
 #endif // TESTSUITE_BUILD
 
-void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
+void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires) {
 #ifndef TESTSUITE_BUILD
   const uint16_t size = matrix->header.matrixRows;
   real_t *bulk, *a, *q, *r, *eig;
   real_t shiftRe, shiftIm;
   uint16_t i, j;
-  bool_t converged;
+  bool_t converged, isComplex;
 
   if(matrix->header.matrixRows == matrix->header.matrixColumns) {
     bulk = allocWp43s(size * size * REAL_SIZE * 2 * 4);
@@ -4002,12 +4017,31 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
       }
     }
 
+    // Check imaginary part (mutually conjugate complex roots are possible in real quadratic equations)
+    printf("\n->Check imaginary part"); fflush(stdout);
+    isComplex = false;
+    for(i = 0; i < size * size; i++) {
+      printf("."); fflush(stdout);
+      if(!realIsZero(eig + i * 2 + 1)) {
+        printf("!"); fflush(stdout);
+        isComplex = true;
+        break;
+      }
+    }
+
     // Write back
     printf("\n->Writeback"); fflush(stdout);
     if(matrix != res) realMatrixInit(res, size, size);
     for(i = 0; i < size; i++) {
-          printf("."); fflush(stdout);
+      printf("."); fflush(stdout);
       realToReal34(eig + (i * size + i) * 2, &res->matrixElements[i * size + i]);
+    }
+    if(isComplex && (ires != NULL)) {
+      if(matrix != ires && res != ires) realMatrixInit(ires, size, size);
+      for(i = 0; i < size; i++) {
+        printf("."); fflush(stdout);
+        realToReal34(eig + (i * size + i) * 2 + 1, &ires->matrixElements[i * size + i]);
+      }
     }
         printf("\n"); fflush(stdout);
 

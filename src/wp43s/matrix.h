@@ -335,7 +335,7 @@ void       fnEigenvalues                  (uint16_t unusedParamButMandatory);
   void     real_QR_decomposition          (const real34Matrix_t *matrix, real34Matrix_t *q, real34Matrix_t *r);
   void     complex_QR_decomposition       (const complex34Matrix_t *matrix, complex34Matrix_t *q, complex34Matrix_t *r);
 
-  void     realEigenvalues                (const real34Matrix_t *matrix, real34Matrix_t *res);
+  void     realEigenvalues                (const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires);
   void     complexEigenvalues             (const complex34Matrix_t *matrix, complex34Matrix_t *res);
 #endif // TESTSUITE_BUILD
 

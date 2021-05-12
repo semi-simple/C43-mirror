@@ -3536,6 +3536,7 @@ void complex_matrix_linear_eqn(const complex34Matrix_t *a, const complex34Matrix
 
 /* Routines for calculating eigenpairs */
 
+#ifndef TESTSUITE_BUILD
 static void adjCpxMat(const real_t *x, uint16_t size, real_t *res) {
   int32_t i, j;
   for(i = 0; i < size; ++i) {
@@ -3731,8 +3732,10 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
   freeWp43s(bulk, (size * size * 5 + size) * REAL_SIZE * 2);
   printf("Done\n"); fflush(stdout);
 }
+#endif // TESTSUITE_BUILD
 
 void real_QR_decomposition(const real34Matrix_t *matrix, real34Matrix_t *q, real34Matrix_t *r) {
+#ifndef TESTSUITE_BUILD
   if(matrix->header.matrixRows == matrix->header.matrixColumns) {
     real_t *mat, *matq, *matr;
     uint32_t i;
@@ -3764,9 +3767,11 @@ void real_QR_decomposition(const real34Matrix_t *matrix, real34Matrix_t *q, real
     // Cleanup
     freeWp43s(mat, matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
   }
+#endif // TESTSUITE_BUILD
 }
 
 void complex_QR_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t *q, complex34Matrix_t *r) {
+#ifndef TESTSUITE_BUILD
   if(matrix->header.matrixRows == matrix->header.matrixColumns) {
     real_t *mat, *matq, *matr;
     uint32_t i;
@@ -3799,11 +3804,111 @@ void complex_QR_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t
     // Cleanup
     freeWp43s(mat, matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
   }
+#endif // TESTSUITE_BUILD
 }
 
+#ifndef TESTSUITE_BUILD
+static void calculateQrShift(const real_t *mat, uint16_t size, real_t *re, real_t *im, realContext_t *realContext) {
+  // Calculate eigenvalue of 2x2-submatrix
+  // Characteristic equation of A = [[a b] [c d]] : t^2 - trace(A) t +      det(A) = 0
+  //                                                t^2 -  (a + d) t + (a d - b c) = 0
+  //                                            t = ((a + d) ± √(a^2 + 2 a d + d^2 - 4 (a d - b c))) / 2
+  //                                                ((a + d) ± √(a^2         + d^2 - 2 a d + 4 b c)) / 2
+  const real_t *ar, *ai, *br, *bi, *cr, *ci, *dr, *di;
+  real_t tmp, tmpR, tmpI, discrR, discrI, t1r, t1i, t2r, t2i;
+
+  ar = mat + ((size - 2) * size + (size - 2)) * 2; ai = ar + 1;
+  br = mat + ((size - 2) * size + (size - 1)) * 2; bi = br + 1;
+  cr = mat + ((size - 1) * size + (size - 2)) * 2; ci = cr + 1;
+  dr = mat + ((size - 1) * size + (size - 1)) * 2; di = dr + 1;
+
+  // a^2
+  if(realIsZero(ai))
+    realMultiply(ar, ar, &discrR, realContext), realZero(&discrI);
+  else
+    mulComplexComplex(ar, ai, ar, ai, &discrR, &discrI, realContext);
+
+  // d^2
+  if(realIsZero(di))
+    realMultiply(dr, dr, &tmpR, realContext), realZero(&tmpI);
+  else
+    mulComplexComplex(dr, di, dr, di, &tmpR, &tmpI, realContext);
+  realAdd(&discrR, &tmpR, &discrR, realContext), realAdd(&discrI, &tmpI, &discrI, realContext);
+
+  // -2ad
+  if(realIsZero(ai) && realIsZero(di)) {
+    realMultiply(ar, dr, &tmpR, realContext), realZero(&tmpI);
+    realMultiply(&tmpR, const_2, &tmpR, realContext);
+  }
+  else {
+    mulComplexComplex(ar, ai, dr, di, &tmpR, &tmpI, realContext);
+    realMultiply(&tmpR, const_2, &tmpR, realContext);
+    realMultiply(&tmpI, const_2, &tmpI, realContext);
+  }
+  realSubtract(&discrR, &tmpR, &discrR, realContext), realSubtract(&discrI, &tmpI, &discrI, realContext);
+
+  // 4bc
+  int32ToReal(4, &tmp);
+  if(realIsZero(bi) && realIsZero(ci)) {
+    realMultiply(br, cr, &tmpR, realContext), realZero(&tmpI);
+    realMultiply(&tmpR, &tmp, &tmpR, realContext);
+  }
+  else {
+    mulComplexComplex(br, bi, cr, ci, &tmpR, &tmpI, realContext);
+    realMultiply(&tmpR, &tmp, &tmpR, realContext);
+    realMultiply(&tmpI, &tmp, &tmpI, realContext);
+  }
+  realAdd(&discrR, &tmpR, &discrR, realContext), realAdd(&discrI, &tmpI, &discrI, realContext);
+
+  // sqrt
+  if(realIsZero(&discrI) && !realIsNegative(&discrR)) {
+    realSquareRoot(&discrR, &t1r, realContext);
+    realCopy(&t1r, &t2r); realChangeSign(&t2r);
+    realZero(&t1i); realZero(&t2i);
+  }
+  else if(realIsZero(&discrI)) {
+    realCopy(&discrR, &t1i); realSetPositiveSign(&t1i);
+    realSquareRoot(&t1i, &t1i, realContext);
+    realCopy(&t1i, &t2i); realChangeSign(&t2i);
+    realZero(&t1r); realZero(&t2r);
+  }
+  else {
+    realRectangularToPolar(&discrR, &discrI, &t1r, &t1i, realContext);
+    realSquareRoot(&t1r, &t1r, realContext);
+    realMultiply(&t1i, const_1on2, &t1i, realContext);
+    realPolarToRectangular(&t1r, &t1i, &t1r, &t1i, realContext);
+    realCopy(&t1r, &t2r); realChangeSign(&t2r);
+    realCopy(&t1i, &t2i); realChangeSign(&t2i);
+  }
+
+  // +a +d /2
+  realAdd(&t1r, ar, &t1r, realContext), realAdd(&t1i, ai, &t1i, realContext);
+  realAdd(&t1r, dr, &t1r, realContext), realAdd(&t1i, di, &t1i, realContext);
+  realAdd(&t2r, ar, &t2r, realContext), realAdd(&t2i, ai, &t2i, realContext);
+  realAdd(&t2r, dr, &t2r, realContext), realAdd(&t2i, di, &t2i, realContext);
+  realDivide(&t1r, const_2, &t1r, realContext), realDivide(&t1i, const_2, &t1i, realContext);
+  realDivide(&t2r, const_2, &t2r, realContext), realDivide(&t2i, const_2, &t2i, realContext);
+
+  // Choose shift parameter
+  realSubtract(&t1r, dr, &tmpR, realContext), realSubtract(&t1i, di, &tmpI, realContext);
+  realRectangularToPolar(&tmpR, &tmpI, &tmpR, &tmpI, realContext);
+  realSubtract(&t2r, dr, &tmp, realContext), realSubtract(&t2i, di, &tmpI, realContext);
+  realRectangularToPolar(&tmp, &tmpI, &tmp, &tmpI, realContext);
+
+  if(realCompareLessThan(&tmpR, &tmp)) {
+    realCopy(&t1r, re); realCopy(&t1i, im);
+  }
+  else {
+    realCopy(&t2r, re); realCopy(&t2i, im);
+  }
+}
+#endif // TESTSUITE_BUILD
+
 void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
+#ifndef TESTSUITE_BUILD
   const uint16_t size = matrix->header.matrixRows;
   real_t *bulk, *a, *q, *r, *eig;
+  real_t shiftRe, shiftIm;
   uint16_t i, j;
   bool_t converged;
 
@@ -3828,11 +3933,26 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
 
     // Calculate
     while(true) {
+      printf("Shift matrix\n"); fflush(stdout);
+      calculateQrShift(a, size, &shiftRe, &shiftIm, &ctxtReal75);
+      for(i = 0; i < size; i++) {
+        realSubtract(a + (i * size + i) * 2,     &shiftRe, a + (i * size + i) * 2,     &ctxtReal75);
+        realSubtract(a + (i * size + i) * 2 + 1, &shiftIm, a + (i * size + i) * 2 + 1, &ctxtReal75);
+      }
       printf("QR decomposition\n"); fflush(stdout);
-      QR_decomposition_householder(a, size, q, r, &ctxtReal51);
+      QR_decomposition_householder(a, size, q, r, &ctxtReal75);
       printf("Multiplication\n"); fflush(stdout);
-      mulCpxMat(r, q, size, eig, &ctxtReal51);
+      mulCpxMat(r, q, size, eig, &ctxtReal75);
+      printf("Unshift matrix\n"); fflush(stdout);
+      for(i = 0; i < size; i++) {
+        realAdd(a   + (i * size + i) * 2,     &shiftRe, a   + (i * size + i) * 2,     &ctxtReal75);
+        realAdd(a   + (i * size + i) * 2 + 1, &shiftIm, a   + (i * size + i) * 2 + 1, &ctxtReal75);
+        realAdd(eig + (i * size + i) * 2,     &shiftRe, eig + (i * size + i) * 2,     &ctxtReal75);
+        realAdd(eig + (i * size + i) * 2 + 1, &shiftIm, eig + (i * size + i) * 2 + 1, &ctxtReal75);
+      }
     #ifdef PC_BUILD
+      printRealToConsole(&shiftRe, "shift= ", "  ");
+      printRealToConsole(&shiftIm, "", "\n");
       for(i = 0; i < size * size; i++) {
         printRealToConsole(q + i * 2, i == 0 ? "q= " : "   ", "  ");
         printRealToConsole(q + i * 2 + 1, "", "\n");
@@ -3854,7 +3974,7 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
       converged = true;
       for(i = 0; i < size; i++) {
         printf("."); fflush(stdout);
-        if(realIsNaN(eig + (i * size + i) * 2) || realIsNaN(eig + (i * size + i) * 2 + 1)) {
+        if(realIsNaN(eig + i * 2) || realIsNaN(eig + i * 2 + 1)) {
           for(j = 0; j < size * size; j++) {
             printf("."); fflush(stdout);
             realCopy(a + j * 2,     eig + j * 2    );
@@ -3863,7 +3983,7 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
           converged = true;
           break;
         }
-        else if(!WP34S_RelativeError(a + (i * size + i) * 2, eig + (i * size + i) * 2, const_1e_49, &ctxtReal51) || !WP34S_RelativeError(a + (i * size + i) * 2 + 1, eig + (i * size + i) * 2 + 1, const_1e_49, &ctxtReal51)) {
+        else if(!WP34S_RelativeError(a + (i * size + i) * 2, eig + (i * size + i) * 2, const_1e_37, &ctxtReal75) || !WP34S_RelativeError(a + (i * size + i) * 2 + 1, eig + (i * size + i) * 2 + 1, const_1e_37, &ctxtReal75)) {
           converged = false;
         }
       }
@@ -3875,7 +3995,8 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
         printf("\nWriteback"); fflush(stdout);
         for(i = 0; i < size * size; i++) {
           printf("."); fflush(stdout);
-          realCopy(eig + i * 2, a + i * 2);
+          realCopy(eig + i * 2,     a + i * 2    );
+          realCopy(eig + i * 2 + 1, a + i * 2 + 1);
         }
         printf("\n"); fflush(stdout);
       }
@@ -3892,6 +4013,7 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res) {
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
   }
+#endif // TESTSUITE_BUILD
 }
 
 

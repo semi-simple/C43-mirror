@@ -1806,6 +1806,7 @@
         refreshStatusBar();
         hourGlassIconEnabled = true;
         graphPlotstat(plotSelection);
+        graphDrawLRline(plotSelection);
         hourGlassIconEnabled = false;
         refreshStatusBar();
         break;

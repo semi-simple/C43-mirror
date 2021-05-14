@@ -138,7 +138,7 @@ void graph_setupmemory(void) {
   #endif
   } else
   {
-  #ifdef PC_BUILD
+  #if defined STATDEBUG && defined PC_BUILD
     printf("^^@@ Two arrays of %u bytes each created, i.e. %u blocks total\n",(uint32_t) (LIM * sizeof(float)), (uint32_t)(2 * LIM * sizeof(float) / 4));
   #endif
   }

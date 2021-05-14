@@ -62,7 +62,7 @@
   #define STATDEBUG_VERBOSE
 #endif
 
-	
+
 
 //*************************
 //* Other defines         *
@@ -426,15 +426,15 @@ typedef enum {
 
 // Curve fitting excluding all other curve fitting bits, 10 bits
 #define CF_LINEAR_FITTING_EX                     (~CF_LINEAR_FITTING) & 0x01FF
-#define CF_EXPONENTIAL_FITTING_EX                (~CF_EXPONENTIAL_FITTING) & 0x01FF     
+#define CF_EXPONENTIAL_FITTING_EX                (~CF_EXPONENTIAL_FITTING) & 0x01FF
 #define CF_LOGARITHMIC_FITTING_EX                (~CF_LOGARITHMIC_FITTING) & 0x01FF
-#define CF_POWER_FITTING_EX                      (~CF_POWER_FITTING) & 0x03FF 
-#define CF_ROOT_FITTING_EX                       (~CF_ROOT_FITTING) & 0x01FF      
-#define CF_HYPERBOLIC_FITTING_EX                 (~CF_HYPERBOLIC_FITTING) & 0x01FF      
-#define CF_PARABOLIC_FITTING_EX                  (~CF_PARABOLIC_FITTING) & 0x01FF     
-#define CF_CAUCHY_FITTING_EX                     (~CF_CAUCHY_FITTING) & 0x01FF  
-#define CF_GAUSS_FITTING_EX                      (~CF_GAUSS_FITTING) & 0x01FF 
-#define CF_ORTHOGONAL_FITTING_EX                 (~CF_ORTHOGONAL_FITTING) & 0x01FF       
+#define CF_POWER_FITTING_EX                      (~CF_POWER_FITTING) & 0x03FF
+#define CF_ROOT_FITTING_EX                       (~CF_ROOT_FITTING) & 0x01FF
+#define CF_HYPERBOLIC_FITTING_EX                 (~CF_HYPERBOLIC_FITTING) & 0x01FF
+#define CF_PARABOLIC_FITTING_EX                  (~CF_PARABOLIC_FITTING) & 0x01FF
+#define CF_CAUCHY_FITTING_EX                     (~CF_CAUCHY_FITTING) & 0x01FF
+#define CF_GAUSS_FITTING_EX                      (~CF_GAUSS_FITTING) & 0x01FF
+#define CF_ORTHOGONAL_FITTING_EX                 (~CF_ORTHOGONAL_FITTING) & 0x01FF
 
 // Plot curve fitting 3 bits
 #define PLOT_ORTHOF                                0
@@ -863,7 +863,11 @@ typedef enum {
 #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 /* Turn off -Wunused-result for a specific function call */
-#define ignore_result(M) if(1==((uint64_t)M)){;}
+#ifdef OS32BIT
+  #define ignore_result(M) if(1==((uint32_t)M)){;}
+#else
+  #define ignore_result(M) if(1==((uint64_t)M)){;}
+#endif
 
 #ifdef DMCP_BUILD
   #define TMP_STR_LENGTH       AUX_BUF_SIZE

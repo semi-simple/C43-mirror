@@ -135,6 +135,29 @@ uint16_t lrCountOnes(uint16_t curveFitting) { // count the number of allowed met
 }
 
 
+int32_t minLRDataPoints(uint16_t selection){
+  if (selection > 1023)     return 65535; else
+    if(selection & 448)       return 3;     else
+      if(selection & (63+512))  return 2;     else
+        return 65535; //if 0
+
+//  switch(selection) {
+//    case CF_LINEAR_FITTING      /*   1 */ :
+//    case CF_EXPONENTIAL_FITTING /*   2 */ :
+//    case CF_LOGARITHMIC_FITTING /*   4 */ :
+//    case CF_POWER_FITTING       /*   8 */ :
+//    case CF_ROOT_FITTING        /*  16 */ :
+//    case CF_HYPERBOLIC_FITTING  /*  32 */ : return 2; break;
+//    case CF_PARABOLIC_FITTING   /*  64 */ :
+//    case CF_CAUCHY_FITTING      /* 128 */ :
+//    case CF_GAUSS_FITTING       /* 256 */ : return 3; break;
+//    case CF_ORTHOGONAL_FITTING  /* 512 */ : return 2; break;                      //ORTHOF ASSESS (2 points minimum)
+//    default : return 0xFFFF; break;
+//  }
+
+}
+
+
 /********************************************//**
  * \brief Finds the best curve fit
  *
@@ -156,7 +179,7 @@ void fnProcessLRfind(uint16_t curveFitting){
 	  printf("Processing for best fit: %s\n",getCurveFitModeNames(curveFitting));
 	#endif //PC_BUILD
   realCopy(const__4,&RRMAX);
-  uint16_t s = curveFitting;       //default
+  uint16_t s = 0;       //default
   uint16_t ix,jx;                  //only a single graph can be evaluated at once, so retain the single lowest bit, and clear the higher order bits.
   jx = 0;
   for(ix=0; ix<10; ix++) {         //up to 2^9 inclusive of 512 which is ORTHOF. The ReM is respectedby usage of 0 only, not by manual selection.
@@ -170,15 +193,18 @@ void fnProcessLRfind(uint16_t curveFitting){
         processCurvefitSelection(jx,&RR,&SMI, &aa0, &aa1, &aa2);
         realMultiply(&RR,&RR,&RR2,&ctxtReal39);
 
-        if(realCompareGreaterThan(&RR2, &RRMAX) && realCompareLessEqual(&RR2, const_1)) {
+        if(realCompareGreaterThan(&RR2, &RRMAX) && realCompareLessEqual(&RR2, const_1)) { //Only consider L.R. models where R^2<=1
           realCopy(&RR2,&RRMAX);
         	s = jx;
         }
       }
     }
   }
+  if(lrCountOnes(s) > 1) s = 0; //error condition, cannot have >1 solutions, do not do L.R.
+
   #ifdef PC_BUILD
-	  printf("Found best fit: %u %s\n",s,getCurveFitModeNames(s));
+	  if(s != 0) printf("Found best fit: %u %s\n",s,getCurveFitModeNames(s)); else
+      printf("Found no fit: %u\n",s);
 	#endif //PC_BUILD
 
   if(nn >= minLRDataPoints(s)) {
@@ -202,8 +228,15 @@ void fnProcessLRfind(uint16_t curveFitting){
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&aa0, REGISTER_REAL34_DATA(REGISTER_X));
   } else {
-    uInt32ToReal(minLRDataPoints(s),&NN);
-    checkMinimumDataPoints(&NN);              //Report an error
+    if(minLRDataPoints(s) == 65535) {
+      displayCalcErrorMessage(ERROR_TOO_FEW_DATA, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnProcessLRfind:", "There is insufficient statistical data to do L.R., possibly due to data manipulation!", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    } else {
+      uInt32ToReal(minLRDataPoints(s),&NN);
+      checkMinimumDataPoints(&NN);              //Report an error
+    }
   }
 }
 

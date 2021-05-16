@@ -192,6 +192,8 @@ void       fnQrDecomposition              (uint16_t unusedParamButMandatory);
  */
 void       fnEigenvalues                  (uint16_t unusedParamButMandatory);
 
+void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
+
 #ifndef TESTSUITE_BUILD
   /**
    * Initialize a real matrix.
@@ -337,6 +339,7 @@ void       fnEigenvalues                  (uint16_t unusedParamButMandatory);
 
   void     realEigenvalues                (const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires);
   void     complexEigenvalues             (const complex34Matrix_t *matrix, complex34Matrix_t *res);
+  void     realEigenvectors               (const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires);
 #endif // TESTSUITE_BUILD
 
 void       elementwiseRema                (void (*f)(void));

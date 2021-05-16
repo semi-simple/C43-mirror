@@ -4189,6 +4189,192 @@ static void calculateEigenvalues(real_t *a, real_t *q, real_t *r, real_t *eig, u
     }
   }
 }
+
+static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex, real_t *a, real_t *q, real_t *r, real_t *eig, realContext_t *realContext) {
+  // Call after the eigenvalues are calculated!
+  const uint16_t size = matrix->header.matrixRows;
+  uint16_t i, j, k, l, mult, multIter, multTotal;
+  bool_t isIndeterminate = false;
+  bool_t tmpFlag = false;
+
+  if(matrix->header.matrixRows == matrix->header.matrixColumns) {
+    for(i = 0; i < size * size * 2; i++) realZero(r + i);
+    for(k = 0; k < size; k++) {
+      // Round to 34 digits
+      realAdd(eig + (k * size + k) * 2,     const_0, eig + (k * size + k) * 2,     &ctxtReal34);
+      realAdd(eig + (k * size + k) * 2 + 1, const_0, eig + (k * size + k) * 2 + 1, &ctxtReal34);
+    }
+
+    for(k = 0; k < size; k++) {
+      // Restore the original matrix
+      if(isComplex) {
+        for(i = 0; i < size * size; i++) {
+          real34ToReal(VARIABLE_REAL34_DATA(&matrix->complexMatrix.matrixElements[i]), a + i * 2    );
+          real34ToReal(VARIABLE_IMAG34_DATA(&matrix->complexMatrix.matrixElements[i]), a + i * 2 + 1);
+        }
+      }
+      else {
+        for(i = 0; i < size * size; i++) {
+          real34ToReal(&matrix->realMatrix.matrixElements[i], a + i * 2);
+          realZero(a + i * 2 + 1);
+        }
+      }
+      #ifdef PC_BUILD
+        printRealToConsole(eig + (k * size + k) * 2, "Eigenvalue = ", "  ");
+        printRealToConsole(eig + (k * size + k) * 2 + 1, "", "\n");
+        for(i = 0; i < size * size; i++) {
+          printRealToConsole(a + i * 2, i == 0 ? "a = " : "    ", "  ");
+          printRealToConsole(a + i * 2 + 1, "", "\n");
+        }
+        fflush(stdout);
+      #endif // PC_BUILD
+
+      // Check for multiples
+      mult = k; multIter = 0; multTotal = 0;
+      for(i = 0; i < k; i++) {
+        if(realCompareEqual(eig + (i * size + i) * 2, eig + (k * size + k) * 2) && realCompareEqual(eig + (i * size + i) * 2 + 1, eig + (k * size + k) * 2 + 1)) {
+          printf("Multiple found: %" PRIu16 "\n", i);
+          fflush(stdout);
+          mult = i;
+          multIter++;
+          multTotal++;
+        }
+      }
+      for(i = k; i < size; i++) {
+        if(realCompareEqual(eig + (i * size + i) * 2, eig + (k * size + k) * 2) && realCompareEqual(eig + (i * size + i) * 2 + 1, eig + (k * size + k) * 2 + 1)) {
+          multTotal++;
+        }
+      }
+
+      // Make the equation matrices
+      for(i = 0; i < size; i++) {
+        // Subtract an eigenvalue
+        realSubtract(a + (i * size + i) * 2,     eig + (k * size + k) * 2,     a + (i * size + i) * 2,     realContext);
+        realSubtract(a + (i * size + i) * 2 + 1, eig + (k * size + k) * 2 + 1, a + (i * size + i) * 2 + 1, realContext);
+        realCopy(const_0, q + i * 2    );
+        realCopy(const_0, q + i * 2 + 1);
+        // Singular (a variant not mentioned)
+        isIndeterminate = true;
+        for(j = 0; j < size; j++) {
+          if(!realIsZero(a + (j * size + i) * 2) || !realIsZero(a + (j * size + i) * 2 + 1))
+            isIndeterminate = false;
+        }
+        if(isIndeterminate) {
+          printf("Unmentioned element: %" PRIu16 "\n", i);
+          fflush(stdout);
+          for(j = 0; j < size; j++) {
+            realCopy(const_0, a + (i * size + j) * 2    );
+            realCopy(const_0, a + (i * size + j) * 2 + 1);
+          }
+          realCopy(const_1, a + (i * size + i) * 2);
+          multTotal--;
+        }
+      }
+      printf("multIter: %" PRIu16 ", multTotal: %" PRIu16 "\n", multIter, multTotal); fflush(stdout);
+      if(mult == k) { // distinct
+        printf("Distinct or the first of multiples: %" PRIu16 "\n", k); fflush(stdout);
+        for(j = 0; j < size; j++) {
+          realCopy(const_0, a + ((size - 1) * size + j) * 2    );
+          realCopy(const_0, a + ((size - 1) * size + j) * 2 + 1);
+        }
+        realCopy(const_1, a + ((size - 1) * size + (size - 1)) * 2);
+        realCopy(const_1, q + (size - 1) * 2    );
+        realCopy(const_0, q + (size - 1) * 2 + 1);
+      }
+      else if(multIter < multTotal) { // multiples
+        printf("Multiple: %" PRIu16 "\n", k); fflush(stdout);
+        i = size - 1;
+        for(l = 1; l <= multIter + 1; ++l) {
+          --i;
+          isIndeterminate = true; tmpFlag = false;
+          for(j = 0; j < size; j++) {
+            if(isIndeterminate && !tmpFlag && realCompareEqual(a + (j * size + i) * 2, const_1) && realIsZero(a + (j * size + i) * 2 + 1))
+              tmpFlag = true;
+            else if(!realIsZero(a + (j * size + i) * 2) || !realIsZero(a + (j * size + i) * 2 + 1))
+              isIndeterminate = false;
+          }
+          if(isIndeterminate && tmpFlag) --l;
+        }
+        printf("i = %" PRIu16 "\n", i); fflush(stdout);
+        for(j = 0; j < size; j++) {
+          realCopy(const_0, a + (i * size + j) * 2    );
+          realCopy(const_0, a + (i * size + j) * 2 + 1);
+        }
+        realCopy(const_1, a + (i * size + i) * 2);
+        realCopy(const_1, q + (size - 1) * 2    );
+        realCopy(const_0, q + (size - 1) * 2 + 1);
+      }
+      else { // orphan elements
+        printf("Orphan: %" PRIu16 "\n", k); fflush(stdout);
+        i = size - 1;
+        for(l = 1; l <= multIter - multTotal + 1; ++l) {
+          --i;
+          isIndeterminate = true; tmpFlag = false;
+          for(j = 0; j < size; j++) {
+            if(isIndeterminate && !tmpFlag && realCompareEqual(a + (j * size + i) * 2, const_1) && realIsZero(a + (j * size + i) * 2 + 1))
+              tmpFlag = true;
+            else if(!realIsZero(a + (j * size + i) * 2) || !realIsZero(a + (j * size + i) * 2 + 1))
+              isIndeterminate = false;
+          }
+          if(!isIndeterminate || !tmpFlag) --l;
+        }
+        printf("i = %" PRIu16 "\n", i); fflush(stdout);
+        for(j = 0; j < size; j++) {
+          realCopy(const_0, a + ((size - 1) * size + j) * 2    );
+          realCopy(const_0, a + ((size - 1) * size + j) * 2 + 1);
+        }
+        realCopy(const_1, a + ((size - 1) * size + (size - 1)) * 2);
+        realCopy(const_1, q + i * 2    );
+        realCopy(const_0, q + i * 2 + 1);
+      }
+      #ifdef PC_BUILD
+        for(i = 0; i < size * size; i++) {
+          printRealToConsole(a + i * 2, i == 0 ? "a = " : "    ", "  ");
+          printRealToConsole(a + i * 2 + 1, "", "\n");
+        }
+        fflush(stdout);
+      #endif // PC_BUILD
+
+      // Solve linear equations from the submatrix
+      if(invCpxMat(a, size, &ctxtReal51)) {
+        for(i = 0; i < size; ++i) {
+          real_t sumr, sumi, prodr, prodi;
+          realCopy(const_0, &sumr);  realCopy(const_0, &sumi);
+          realCopy(const_0, &prodr); realCopy(const_0, &prodi);
+          for(j = 0; j < size; ++j) {
+            mulComplexComplex(a + (i * size + j) * 2, a + (i * size + j) * 2 + 1,
+              q + j * 2, q + j * 2 + 1,
+              &prodr, &prodi, realContext);
+            realAdd(&sumr, &prodr, &sumr, realContext);
+            realAdd(&sumi, &prodi, &sumi, realContext);
+          }
+          realCopy(&sumr, r + (i * size + k) * 2    );
+          realCopy(&sumi, r + (i * size + k) * 2 + 1);
+        }
+      }
+      else {
+        printf("Singular!\n"); fflush(stdout);
+      }
+      #ifdef PC_BUILD
+        for(i = 0; i < size * size; i++) {
+          printRealToConsole(a + i * 2, i == 0 ? "a^-1 = " : "       ", "  ");
+          printRealToConsole(a + i * 2 + 1, "", "\n");
+        }
+        fflush(stdout);
+        for(i = 0; i < size; i++) {
+          printRealToConsole(q + i * 2, i == 0 ? "q = " : "    ", "  ");
+          printRealToConsole(q + i * 2 + 1, "", "\n");
+        }
+        fflush(stdout);
+        for(i = 0; i < size; i++) {
+          printRealToConsole(r + (i * size + k) * 2, i == 0 ? "r = " : "    ", "  ");
+          printRealToConsole(r + (i * size + k) * 2 + 1, "", "\n");
+        }
+        fflush(stdout);
+      #endif // PC_BUILD
+    }
+  }
+}
 #endif // TESTSUITE_BUILD
 
 void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires) {
@@ -4370,11 +4556,9 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
 #ifndef TESTSUITE_BUILD
   const uint16_t size = matrix->header.matrixRows;
   real_t *bulk, *a, *q, *r, *eig;
-  uint16_t i, j, k, l, mult, multIter, multTotal;
+  uint16_t i;
   bool_t isComplex;
   bool_t shifted = true;
-  bool_t isIndeterminate = false;
-  bool_t tmpFlag = false;
 
   if(matrix->header.matrixRows == matrix->header.matrixColumns) {
     bulk = allocWp43s(size * size * REAL_SIZE * 2 * 4);
@@ -4398,174 +4582,7 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
     // Calculate eigenvalues
     calculateEigenvalues(a, q, r, eig, size, shifted, &ctxtReal75);
     shifted = false;
-
-    for(i = 0; i < size * size * 2; i++) realZero(r + i);
-    for(k = 0; k < size; k++) {
-      // Round to 34 digits
-      realAdd(eig + (k * size + k) * 2,     const_0, eig + (k * size + k) * 2,     &ctxtReal34);
-      realAdd(eig + (k * size + k) * 2 + 1, const_0, eig + (k * size + k) * 2 + 1, &ctxtReal34);
-    }
-
-    for(k = 0; k < size; k++) {
-      // Restore the original matrix
-      for(i = 0; i < size * size; i++) {
-        real34ToReal(&matrix->matrixElements[i], a + i * 2);
-        realZero(a + i * 2 + 1);
-      }
-      #ifdef PC_BUILD
-        printRealToConsole(eig + (k * size + k) * 2, "Eigenvalue = ", "  ");
-        printRealToConsole(eig + (k * size + k) * 2 + 1, "", "\n");
-        for(i = 0; i < size * size; i++) {
-          printRealToConsole(a + i * 2, i == 0 ? "a = " : "    ", "  ");
-          printRealToConsole(a + i * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-      #endif // PC_BUILD
-
-      // Check for multiples
-      mult = k; multIter = 0; multTotal = 0;
-      for(i = 0; i < k; i++) {
-        if(realCompareEqual(eig + (i * size + i) * 2, eig + (k * size + k) * 2) && realCompareEqual(eig + (i * size + i) * 2 + 1, eig + (k * size + k) * 2 + 1)) {
-          printf("Multiple found: %" PRIu16 "\n", i);
-          fflush(stdout);
-          mult = i;
-          multIter++;
-          multTotal++;
-        }
-      }
-      for(i = k; i < size; i++) {
-        if(realCompareEqual(eig + (i * size + i) * 2, eig + (k * size + k) * 2) && realCompareEqual(eig + (i * size + i) * 2 + 1, eig + (k * size + k) * 2 + 1)) {
-          multTotal++;
-        }
-      }
-
-      // Make the equation matrices
-      for(i = 0; i < size; i++) {
-        // Subtract an eigenvalue
-        realSubtract(a + (i * size + i) * 2,     eig + (k * size + k) * 2,     a + (i * size + i) * 2,     &ctxtReal75);
-        realSubtract(a + (i * size + i) * 2 + 1, eig + (k * size + k) * 2 + 1, a + (i * size + i) * 2 + 1, &ctxtReal75);
-        realCopy(const_0, q + i * 2    );
-        realCopy(const_0, q + i * 2 + 1);
-        // Singular (a variant not mentioned)
-        isIndeterminate = true;
-        for(j = 0; j < size; j++) {
-          if(!realIsZero(a + (j * size + i) * 2) || !realIsZero(a + (j * size + i) * 2 + 1))
-            isIndeterminate = false;
-        }
-        if(isIndeterminate) {
-          printf("Unmentioned element: %" PRIu16 "\n", i);
-          fflush(stdout);
-          for(j = 0; j < size; j++) {
-            realCopy(const_0, a + (i * size + j) * 2    );
-            realCopy(const_0, a + (i * size + j) * 2 + 1);
-          }
-          realCopy(const_1, a + (i * size + i) * 2);
-          multTotal--;
-        }
-      }
-      printf("multIter: %" PRIu16 ", multTotal: %" PRIu16 "\n", multIter, multTotal); fflush(stdout);
-      if(mult == k) { // distinct
-        printf("Distinct or the first of multiples: %" PRIu16 "\n", k); fflush(stdout);
-        for(j = 0; j < size; j++) {
-          realCopy(const_0, a + ((size - 1) * size + j) * 2    );
-          realCopy(const_0, a + ((size - 1) * size + j) * 2 + 1);
-        }
-        realCopy(const_1, a + ((size - 1) * size + (size - 1)) * 2);
-        realCopy(const_1, q + (size - 1) * 2    );
-        realCopy(const_0, q + (size - 1) * 2 + 1);
-      }
-      else if(multIter < multTotal) { // multiples
-        printf("Multiple: %" PRIu16 "\n", k); fflush(stdout);
-        i = size - 1;
-        for(l = 1; l <= multIter + 1; ++l) {
-          --i;
-          isIndeterminate = true; tmpFlag = false;
-          for(j = 0; j < size; j++) {
-            if(isIndeterminate && !tmpFlag && realCompareEqual(a + (j * size + i) * 2, const_1) && realIsZero(a + (j * size + i) * 2 + 1))
-              tmpFlag = true;
-            else if(!realIsZero(a + (j * size + i) * 2) || !realIsZero(a + (j * size + i) * 2 + 1))
-              isIndeterminate = false;
-          }
-          if(isIndeterminate && tmpFlag) --l;
-        }
-        printf("i = %" PRIu16 "\n", i); fflush(stdout);
-        for(j = 0; j < size; j++) {
-          realCopy(const_0, a + (i * size + j) * 2    );
-          realCopy(const_0, a + (i * size + j) * 2 + 1);
-        }
-        realCopy(const_1, a + (i * size + i) * 2);
-        realCopy(const_1, q + (size - 1) * 2    );
-        realCopy(const_0, q + (size - 1) * 2 + 1);
-      }
-      else { // orphan elements
-        printf("Orphan: %" PRIu16 "\n", k); fflush(stdout);
-        i = size - 1;
-        for(l = 1; l <= multIter - multTotal + 1; ++l) {
-          --i;
-          isIndeterminate = true; tmpFlag = false;
-          for(j = 0; j < size; j++) {
-            if(isIndeterminate && !tmpFlag && realCompareEqual(a + (j * size + i) * 2, const_1) && realIsZero(a + (j * size + i) * 2 + 1))
-              tmpFlag = true;
-            else if(!realIsZero(a + (j * size + i) * 2) || !realIsZero(a + (j * size + i) * 2 + 1))
-              isIndeterminate = false;
-          }
-          if(!isIndeterminate || !tmpFlag) --l;
-        }
-        printf("i = %" PRIu16 "\n", i); fflush(stdout);
-        for(j = 0; j < size; j++) {
-          realCopy(const_0, a + ((size - 1) * size + j) * 2    );
-          realCopy(const_0, a + ((size - 1) * size + j) * 2 + 1);
-        }
-        realCopy(const_1, a + ((size - 1) * size + (size - 1)) * 2);
-        realCopy(const_1, q + i * 2    );
-        realCopy(const_0, q + i * 2 + 1);
-      }
-      #ifdef PC_BUILD
-        for(i = 0; i < size * size; i++) {
-          printRealToConsole(a + i * 2, i == 0 ? "a = " : "    ", "  ");
-          printRealToConsole(a + i * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-      #endif // PC_BUILD
-
-      // Solve linear equations from the submatrix
-      if(invCpxMat(a, size, &ctxtReal51)) {
-        for(i = 0; i < size; ++i) {
-          real_t sumr, sumi, prodr, prodi;
-          realCopy(const_0, &sumr);  realCopy(const_0, &sumi);
-          realCopy(const_0, &prodr); realCopy(const_0, &prodi);
-          for(j = 0; j < size; ++j) {
-            mulComplexComplex(a + (i * size + j) * 2, a + (i * size + j) * 2 + 1,
-              q + j * 2, q + j * 2 + 1,
-              &prodr, &prodi, &ctxtReal75);
-            realAdd(&sumr, &prodr, &sumr, &ctxtReal75);
-            realAdd(&sumi, &prodi, &sumi, &ctxtReal75);
-          }
-          realCopy(&sumr, r + (i * size + k) * 2    );
-          realCopy(&sumi, r + (i * size + k) * 2 + 1);
-        }
-      }
-      else {
-        printf("Singular!\n"); fflush(stdout);
-      }
-      #ifdef PC_BUILD
-        for(i = 0; i < size * size; i++) {
-          printRealToConsole(a + i * 2, i == 0 ? "a^-1 = " : "       ", "  ");
-          printRealToConsole(a + i * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-        for(i = 0; i < size; i++) {
-          printRealToConsole(q + i * 2, i == 0 ? "q = " : "    ", "  ");
-          printRealToConsole(q + i * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-        for(i = 0; i < size; i++) {
-          printRealToConsole(r + (i * size + k) * 2, i == 0 ? "r = " : "    ", "  ");
-          printRealToConsole(r + (i * size + k) * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-      #endif // PC_BUILD
-    }
+    calculateEigenvectors((any34Matrix_t *)matrix, false, a, q, r, eig, &ctxtReal75);
 
     // Check imaginary part (mutually conjugate complex roots are possible in real quadratic equations)
     printf("\n->Check imaginary part"); fflush(stdout);

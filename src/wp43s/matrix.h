@@ -176,6 +176,24 @@ void       fnEditLinearEquationMatrixA    (uint16_t unusedParamButMandatory);
 void       fnEditLinearEquationMatrixB    (uint16_t unusedParamButMandatory);
 void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
 
+/**
+ * QR decomposition. Square matrices only.
+ * Returns unitary Q in Y and upper triangular R in X.
+ *
+ * \param[in] unusedParamButMandatory
+ */
+void       fnQrDecomposition              (uint16_t unusedParamButMandatory);
+
+/**
+ * Calculate eigenvalues.
+ * Generally returns in a diagonal matrix.
+ *
+ * \param[in] unusedParamButMandatory
+ */
+void       fnEigenvalues                  (uint16_t unusedParamButMandatory);
+
+void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
+
 #ifndef TESTSUITE_BUILD
   /**
    * Initialize a real matrix.
@@ -315,6 +333,14 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
 
   void     WP34S_matrix_linear_eqn        (const real34Matrix_t *a, const real34Matrix_t *b, real34Matrix_t *r);
   void     complex_matrix_linear_eqn      (const complex34Matrix_t *a, const complex34Matrix_t *b, complex34Matrix_t *r);
+
+  void     real_QR_decomposition          (const real34Matrix_t *matrix, real34Matrix_t *q, real34Matrix_t *r);
+  void     complex_QR_decomposition       (const complex34Matrix_t *matrix, complex34Matrix_t *q, complex34Matrix_t *r);
+
+  void     realEigenvalues                (const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires);
+  void     complexEigenvalues             (const complex34Matrix_t *matrix, complex34Matrix_t *res);
+  void     realEigenvectors               (const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires);
+  void     complexEigenvectors            (const complex34Matrix_t *matrix, complex34Matrix_t *res);
 #endif // TESTSUITE_BUILD
 
 void       elementwiseRema                (void (*f)(void));

@@ -2118,39 +2118,31 @@ smallFont:
           vm = vmNormal;
         }
       }
-      if(strcmp(tmpString, STD_ELLIPSIS) == 0 || !real34IsZero(&re) || real34IsZero(&im)) {
-        width = stringWidth(tmpString, font, true, true) + 1;
-        showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + (((j == maxCols) && rightEllipsis) ? 8 - width : (colWidth_r[j] - width) - rPadWidth_r[i * 2 + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
-      }
+      width = stringWidth(tmpString, font, true, true) + 1;
+      showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + (((j == maxCols) && rightEllipsis) ? 8 - width : (colWidth_r[j] - width) - rPadWidth_r[i * 2 + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
       if(strcmp(tmpString, STD_ELLIPSIS) != 0) {
-        if(!real34IsZero(&im)) {
-          bool_t neg = real34IsNegative(&im);
-          int16_t cpxUnitWidth;
+        bool_t neg = real34IsNegative(&im);
+        int16_t cpxUnitWidth;
 
-          if(getSystemFlag(FLAG_POLAR)) { // polar mode
-            strcpy(tmpString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-          }
-          else { // rectangular mode
-            strcpy(tmpString, "+");
-            strcat(tmpString, COMPLEX_UNIT);
-            strcat(tmpString, PRODUCT_SIGN);
-          }
-          cpxUnitWidth = width = stringWidth(tmpString, font, true, true);
-          if(!getSystemFlag(FLAG_POLAR)) {
-            if(neg) tmpString[0] = '-';
-            if(!neg && real34IsZero(&re)) {
-              strcpy(tmpString, COMPLEX_UNIT);
-              strcat(tmpString, PRODUCT_SIGN);
-            }
-          }
-          showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + colWidth_r[j] + (width - stringWidth(tmpString, font, true, true)), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
-
-          if(!getSystemFlag(FLAG_POLAR)) real34SetPositiveSign(&im);
-          real34ToDisplayString(&im, amNone, tmpString, font, colWidth_i[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM);
-          if(neg) real34SetNegativeSign(&im);
-          width = stringWidth(tmpString, font, true, true) + 1;
-          showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + colWidth_r[j] + cpxUnitWidth + (((j == maxCols - 1) && rightEllipsis) ? 0 : (colWidth_i[j] - width) - rPadWidth_i[i * 2 + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+        if(getSystemFlag(FLAG_POLAR)) { // polar mode
+          strcpy(tmpString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
         }
+        else { // rectangular mode
+          strcpy(tmpString, "+");
+          strcat(tmpString, COMPLEX_UNIT);
+          strcat(tmpString, PRODUCT_SIGN);
+        }
+        cpxUnitWidth = width = stringWidth(tmpString, font, true, true);
+        if(!getSystemFlag(FLAG_POLAR)) {
+          if(neg) tmpString[0] = '-';
+        }
+        showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + colWidth_r[j] + (width - stringWidth(tmpString, font, true, true)), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+
+        if(!getSystemFlag(FLAG_POLAR)) real34SetPositiveSign(&im);
+        real34ToDisplayString(&im, amNone, tmpString, font, colWidth_i[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM);
+        if(neg) real34SetNegativeSign(&im);
+        width = stringWidth(tmpString, font, true, true) + 1;
+        showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + colWidth_r[j] + cpxUnitWidth + (((j == maxCols - 1) && rightEllipsis) ? 0 : (colWidth_i[j] - width) - rPadWidth_i[i * 2 + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
       }
       colX += colWidth[j] + 20;
     }
@@ -2209,36 +2201,32 @@ int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, const font
         }
 
         rPadWidth_r[i * 2 + j] = 0;
-        if(!real34IsZero(VARIABLE_REAL34_DATA(&c34Val)) || real34IsZero(VARIABLE_IMAG34_DATA(&c34Val))) {
-          real34SetPositiveSign(VARIABLE_REAL34_DATA(&c34Val));
-          real34ToDisplayString(VARIABLE_REAL34_DATA(&c34Val), amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM);
-          width = stringWidth(tmpString, font, true, true) + 1;
-          for(char *xStr = tmpString; *xStr != 0; xStr++) {
-            if(((displayFormat != DF_ENG && (displayFormat != DF_ALL || !getSystemFlag(FLAG_ALLENG))) && (*xStr == '.' || *xStr == ',')) ||
-               ((displayFormat == DF_ENG || (displayFormat == DF_ALL && getSystemFlag(FLAG_ALLENG))) && xStr[0] == (char)0x80 && (xStr[1] == (char)0x87 || xStr[1] == (char)0xd7))) {
-              rPadWidth_r[i * 2 + j] = stringWidth(xStr, font, true, true) + 1;
-              if(maxRightWidth_r[j] < rPadWidth_r[i * 2 + j]) maxRightWidth_r[j] = rPadWidth_r[i * 2 + j];
-              break;
-            }
+        real34SetPositiveSign(VARIABLE_REAL34_DATA(&c34Val));
+        real34ToDisplayString(VARIABLE_REAL34_DATA(&c34Val), amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM);
+        width = stringWidth(tmpString, font, true, true) + 1;
+        for(char *xStr = tmpString; *xStr != 0; xStr++) {
+          if(((displayFormat != DF_ENG && (displayFormat != DF_ALL || !getSystemFlag(FLAG_ALLENG))) && (*xStr == '.' || *xStr == ',')) ||
+             ((displayFormat == DF_ENG || (displayFormat == DF_ALL && getSystemFlag(FLAG_ALLENG))) && xStr[0] == (char)0x80 && (xStr[1] == (char)0x87 || xStr[1] == (char)0xd7))) {
+            rPadWidth_r[i * 2 + j] = stringWidth(xStr, font, true, true) + 1;
+            if(maxRightWidth_r[j] < rPadWidth_r[i * 2 + j]) maxRightWidth_r[j] = rPadWidth_r[i * 2 + j];
+            break;
           }
-          if(maxLeftWidth_r[j] < (width - rPadWidth_r[i * 2 + j])) maxLeftWidth_r[j] = (width - rPadWidth_r[i * 2 + j]);
         }
+        if(maxLeftWidth_r[j] < (width - rPadWidth_r[i * 2 + j])) maxLeftWidth_r[j] = (width - rPadWidth_r[i * 2 + j]);
 
         rPadWidth_i[i * 2 + j] = 0;
-        if(!real34IsZero(VARIABLE_IMAG34_DATA(&c34Val))) {
-          if(!getSystemFlag(FLAG_POLAR))real34SetPositiveSign(VARIABLE_IMAG34_DATA(&c34Val));
-          real34ToDisplayString(VARIABLE_IMAG34_DATA(&c34Val), amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM);
-          width = stringWidth(tmpString, font, true, true) + 1;
-          for(char *xStr = tmpString; *xStr != 0; xStr++) {
-            if(((displayFormat != DF_ENG && (displayFormat != DF_ALL || !getSystemFlag(FLAG_ALLENG))) && (*xStr == '.' || *xStr == ',')) ||
-               ((displayFormat == DF_ENG || (displayFormat == DF_ALL && getSystemFlag(FLAG_ALLENG))) && xStr[0] == (char)0x80 && (xStr[1] == (char)0x87 || xStr[1] == (char)0xd7))) {
-              rPadWidth_i[i * 2 + j] = stringWidth(xStr, font, true, true) + 1;
-              if(maxRightWidth_i[j] < rPadWidth_i[i * 2 + j]) maxRightWidth_i[j] = rPadWidth_i[i * 2 + j];
-              break;
-            }
+        if(!getSystemFlag(FLAG_POLAR))real34SetPositiveSign(VARIABLE_IMAG34_DATA(&c34Val));
+        real34ToDisplayString(VARIABLE_IMAG34_DATA(&c34Val), amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM);
+        width = stringWidth(tmpString, font, true, true) + 1;
+        for(char *xStr = tmpString; *xStr != 0; xStr++) {
+          if(((displayFormat != DF_ENG && (displayFormat != DF_ALL || !getSystemFlag(FLAG_ALLENG))) && (*xStr == '.' || *xStr == ',')) ||
+             ((displayFormat == DF_ENG || (displayFormat == DF_ALL && getSystemFlag(FLAG_ALLENG))) && xStr[0] == (char)0x80 && (xStr[1] == (char)0x87 || xStr[1] == (char)0xd7))) {
+            rPadWidth_i[i * 2 + j] = stringWidth(xStr, font, true, true) + 1;
+            if(maxRightWidth_i[j] < rPadWidth_i[i * 2 + j]) maxRightWidth_i[j] = rPadWidth_i[i * 2 + j];
+            break;
           }
-          if(maxLeftWidth_i[j] < (width - rPadWidth_i[i * 2 + j])) maxLeftWidth_i[j] = (width - rPadWidth_i[i * 2 + j]);
         }
+        if(maxLeftWidth_i[j] < (width - rPadWidth_i[i * 2 + j])) maxLeftWidth_i[j] = (width - rPadWidth_i[i * 2 + j]);
       }
     }
     for(int i = 0; i < maxRows; i++) {

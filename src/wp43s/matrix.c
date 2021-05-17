@@ -3693,7 +3693,6 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
 
   // Allocate
   bulk = allocWp43s((size * size * 5 + size) * REAL_SIZE * 2);
-    printf("bulk : %" PRIxPTR "\n", (intptr_t)bulk); fflush(stdout);
 
   matr = bulk;
   matq = bulk + (size * size * 2);
@@ -3704,14 +3703,12 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
   v      = bulk + 5 * (size * size * 2);
 
   // Copy mat to matr
-  printf("Copy mat to matr\n"); fflush(stdout);
   for(i = 0; i < size * size; i++) {
     realCopy(mat + i * 2,     matr + i * 2    );
     realCopy(mat + i * 2 + 1, matr + i * 2 + 1);
   }
 
   // Initialize Q
-  printf("Initialize Q\n"); fflush(stdout);
   for(i = 0; i < size * size; i++) {
     realCopy(const_0, matq + i * 2    );
     realCopy(const_0, matq + i * 2 + 1);
@@ -3720,7 +3717,6 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
     realCopy(const_1, matq + (i * size + i) * 2);
   }
 
-  printf("Calculate\n"); fflush(stdout);
   // Calculate
   for(j = 0; j < (size - 1u); ++j) {
     // Column vector of submatrix
@@ -3817,7 +3813,6 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
     }
   }
 
-  printf("Make sure R is triangular\n"); fflush(stdout);
   // Make sure R is triangular
   for(j = 0; j < (size - 1u); j++) {
     for(i = j + 1; i < size; i++) {
@@ -3826,7 +3821,6 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
     }
   }
 
-  printf("Copy results\n"); fflush(stdout);
   // Copy results
   for(i = 0; i < size * size; i++) {
     realCopy(matq + i * 2,     q + i * 2    );
@@ -3835,10 +3829,8 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
     realCopy(matr + i * 2 + 1, r + i * 2 + 1);
   }
 
-  printf("Cleanup\n"); fflush(stdout);
   // Cleanup
   freeWp43s(bulk, (size * size * 5 + size) * REAL_SIZE * 2);
-  printf("Done\n"); fflush(stdout);
 }
 #endif // TESTSUITE_BUILD
 
@@ -4011,103 +4003,6 @@ static void calculateQrShift(const real_t *mat, uint16_t size, real_t *re, real_
   }
 }
 
-/*static void JacobiRotate(real_t *eigVal, real_t *eigVec, real_t *rot, real_t *tmpMat, real_t *tmpMat2, uint16_t size, realContext_t *realContext) {
-  real_t tmp, tmpR, tmpI;
-  uint16_t i, j, maxI, maxJ;
-  uint32_t k;
-  bool_t converged;
-
-  // Make symmetric
-  for(i = 0; i < size * size * 2; i++) realCopy(eigVal + i, tmpMat + i);
-  adjCpxMat(tmpMat, size, tmpMat2);
-  mulCpxMat(tmpMat2, tmpMat, size, eigVal, realContext);
-  #ifdef PC_BUILD
-    for(i = 0; i < size * size; i++) {
-      printRealToConsole(eigVal + i * 2, i == 0 ? "eigVal = " : "         ", "  ");
-      printRealToConsole(eigVal + i * 2 + 1, "", "\n");
-    }
-    fflush(stdout);
-  #endif // PC_BUILD
-
-  // Initialize
-  for(i = 0; i < size; i++) {
-    for(j = 0; j < size; j++) {
-      if(i == j) realCopy(const_1, eigVec + (i * size + j) * 2);
-      else       realCopy(const_0, eigVec + (i * size + j) * 2);
-      realCopy(const_0, eigVec + (i * size + j) * 2 + 1);
-      if(i == j) realCopy(const_1, rot + (i * size + j) * 2);
-      else       realCopy(const_0, rot + (i * size + j) * 2);
-      realCopy(const_0, rot + (i * size + j) * 2 + 1);
-    }
-  }
-
-  while(true) {
-    // Find maximum
-    realCopy(const__1, &tmp);
-    for(i = 0; i < size; i++) {
-      for(j = 0; j < i; j++) {
-        realRectangularToPolar(eigVal + (i * size + j) * 2, eigVal + (i * size + j) * 2 + 1, &tmpR, &tmpI, realContext);
-        if(realCompareGreaterThan(&tmpR, &tmp)) {
-          realCopy(&tmpR, &tmp);
-          maxI = i; maxJ = j;
-        }
-      }
-    }
-
-    // Rotate
-    if(realIsZero(eigVal + (maxI * size + maxI) * 2 + 1) && realIsZero(eigVal + (maxI * size + maxJ) * 2 + 1) && realIsZero(eigVal + (maxJ * size + maxI) * 2 + 1) && realIsZero(eigVal + (maxJ * size + maxJ) * 2 + 1)) {
-      realSubtract(eigVal + (maxI * size + maxI) * 2, eigVal + (maxJ * size + maxJ) * 2, &tmpR, realContext);
-      realDivide(const_2, &tmpR,  &tmpR, realContext);
-      realMultiply(&tmpR, eigVal + (maxI * size + maxJ) * 2, &tmpR, realContext);
-      //realChangeSign(&tmpR);
-      WP34S_Atan(&tmpR, &tmpR, realContext);
-      realMultiply(&tmpR, const_1on2, &tmpR, realContext);
-      WP34S_SinCosTanTaylor(&tmpR, false, rot + (maxI * size + maxJ) * 2, rot + (maxI * size + maxI) * 2, NULL, realContext);
-      realCopy(rot + (maxI * size + maxJ) * 2, rot + (maxJ * size + maxI) * 2);
-      realCopy(rot + (maxI * size + maxI) * 2, rot + (maxJ * size + maxJ) * 2);
-      realChangeSign(rot + (maxI * size + maxJ) * 2);
-    }
-    adjCpxMat(rot, size, tmpMat2);
-    mulCpxMat(tmpMat2, eigVal, size, tmpMat, realContext);
-    mulCpxMat(tmpMat, rot, size, eigVal, realContext);
-    for(i = 0; i < size * size * 2; i++) realCopy(eigVec + i, tmpMat + i);
-    mulCpxMat(tmpMat, rot, size, eigVec, realContext);
-    #ifdef PC_BUILD
-      for(i = 0; i < size * size; i++) {
-        printRealToConsole(rot + i * 2, i == 0 ? "rot = " : "      ", "  ");
-        printRealToConsole(rot + i * 2 + 1, "", "\n");
-      }
-      fflush(stdout);
-      for(i = 0; i < size * size; i++) {
-        printRealToConsole(eigVal + i * 2, i == 0 ? "eigVal = " : "         ", "  ");
-        printRealToConsole(eigVal + i * 2 + 1, "", "\n");
-      }
-      fflush(stdout);
-      for(i = 0; i < size * size; i++) {
-        printRealToConsole(eigVec + i * 2, i == 0 ? "eigVec = " : "         ", "  ");
-        printRealToConsole(eigVec + i * 2 + 1, "", "\n");
-      }
-      fflush(stdout);
-    #endif // PC_BUILD
-
-    converged = true;
-    for(i = 0; i < size; i++) {
-      for(j = 0; j < i; j++) {
-        if(!(realIsZero(rot + (i * size + j) * 2) && realIsZero(rot + (i * size + j) * 2 + 1))) {
-          converged = false;
-        }
-      }
-    }
-    if(converged) break;
-
-    // Reset rotation matrix
-    realCopy(const_1, rot + (maxI * size + maxI) * 2); realCopy(const_0, rot + (maxI * size + maxI) * 2 + 1);
-    realCopy(const_0, rot + (maxI * size + maxJ) * 2); realCopy(const_0, rot + (maxI * size + maxJ) * 2 + 1);
-    realCopy(const_0, rot + (maxJ * size + maxI) * 2); realCopy(const_0, rot + (maxJ * size + maxI) * 2 + 1);
-    realCopy(const_1, rot + (maxJ * size + maxJ) * 2); realCopy(const_0, rot + (maxJ * size + maxJ) * 2 + 1);
-  }
-}*/
-
 static void calculateEigenvalues(real_t *a, real_t *q, real_t *r, real_t *eig, uint16_t size, bool_t shifted, realContext_t *realContext) {
   real_t shiftRe, shiftIm;
   uint16_t i, j;
@@ -4115,19 +4010,15 @@ static void calculateEigenvalues(real_t *a, real_t *q, real_t *r, real_t *eig, u
 
   while(true) {
     if(shifted) {
-      printf("Shift matrix\n"); fflush(stdout);
       calculateQrShift(a, size, &shiftRe, &shiftIm, realContext);
       for(i = 0; i < size; i++) {
         realSubtract(a + (i * size + i) * 2,     &shiftRe, a + (i * size + i) * 2,     realContext);
         realSubtract(a + (i * size + i) * 2 + 1, &shiftIm, a + (i * size + i) * 2 + 1, realContext);
       }
     }
-    printf("QR decomposition\n"); fflush(stdout);
     QR_decomposition_householder(a, size, q, r, realContext);
-    printf("Multiplication\n"); fflush(stdout);
     mulCpxMat(r, q, size, eig, realContext);
     if(shifted) {
-      printf("Unshift matrix\n"); fflush(stdout);
       for(i = 0; i < size; i++) {
         realAdd(a   + (i * size + i) * 2,     &shiftRe, a   + (i * size + i) * 2,     realContext);
         realAdd(a   + (i * size + i) * 2 + 1, &shiftIm, a   + (i * size + i) * 2 + 1, realContext);
@@ -4135,35 +4026,11 @@ static void calculateEigenvalues(real_t *a, real_t *q, real_t *r, real_t *eig, u
         realAdd(eig + (i * size + i) * 2 + 1, &shiftIm, eig + (i * size + i) * 2 + 1, realContext);
       }
     }
-  #ifdef PC_BUILD
-    if(shifted) {
-      printRealToConsole(&shiftRe, "shift= ", "  ");
-      printRealToConsole(&shiftIm, "", "\n");
-    }
-    for(i = 0; i < size * size; i++) {
-      printRealToConsole(q + i * 2, i == 0 ? "q= " : "   ", "  ");
-      printRealToConsole(q + i * 2 + 1, "", "\n");
-    }
-    fflush(stdout);
-    for(i = 0; i < size * size; i++) {
-      printRealToConsole(r + i * 2, i == 0 ? "r= " : "   ", "  ");
-      printRealToConsole(r + i * 2 + 1, "", "\n");
-    }
-    fflush(stdout);
-    for(i = 0; i < size * size; i++) {
-      printRealToConsole(eig + i * 2, i == 0 ? "-> " : "   ", "  ");
-      printRealToConsole(eig + i * 2 + 1, "", "\n");
-    }
-    fflush(stdout);
-  #endif // PC_BUILD
 
-    printf("Checking convergence"); fflush(stdout);
     converged = true;
     for(i = 0; i < size; i++) {
-      printf("."); fflush(stdout);
       if(realIsNaN(eig + i * 2) || realIsNaN(eig + i * 2 + 1)) {
         for(j = 0; j < size * size; j++) {
-          printf("."); fflush(stdout);
           realCopy(a + j * 2,     eig + j * 2    );
           realCopy(a + j * 2 + 1, eig + j * 2 + 1);
         }
@@ -4175,17 +4042,13 @@ static void calculateEigenvalues(real_t *a, real_t *q, real_t *r, real_t *eig, u
       }
     }
     if(converged) {
-      printf("!"); fflush(stdout);
       break;
     }
     else {
-      printf("\nWriteback"); fflush(stdout);
       for(i = 0; i < size * size; i++) {
-        printf("."); fflush(stdout);
         realCopy(eig + i * 2,     a + i * 2    );
         realCopy(eig + i * 2 + 1, a + i * 2 + 1);
       }
-      printf("\n"); fflush(stdout);
     }
   }
 }
@@ -4219,22 +4082,11 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
           realZero(a + i * 2 + 1);
         }
       }
-      #ifdef PC_BUILD
-        printRealToConsole(eig + (k * size + k) * 2, "Eigenvalue = ", "  ");
-        printRealToConsole(eig + (k * size + k) * 2 + 1, "", "\n");
-        for(i = 0; i < size * size; i++) {
-          printRealToConsole(a + i * 2, i == 0 ? "a = " : "    ", "  ");
-          printRealToConsole(a + i * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-      #endif // PC_BUILD
 
       // Check for multiples
       mult = k; multIter = 0; multTotal = 0;
       for(i = 0; i < k; i++) {
         if(realCompareEqual(eig + (i * size + i) * 2, eig + (k * size + k) * 2) && realCompareEqual(eig + (i * size + i) * 2 + 1, eig + (k * size + k) * 2 + 1)) {
-          printf("Multiple found: %" PRIu16 "\n", i);
-          fflush(stdout);
           mult = i;
           multIter++;
           multTotal++;
@@ -4260,8 +4112,6 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
             isIndeterminate = false;
         }
         if(isIndeterminate) {
-          printf("Unmentioned element: %" PRIu16 "\n", i);
-          fflush(stdout);
           for(j = 0; j < size; j++) {
             realCopy(const_0, a + (i * size + j) * 2    );
             realCopy(const_0, a + (i * size + j) * 2 + 1);
@@ -4270,9 +4120,7 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
           multTotal--;
         }
       }
-      printf("multIter: %" PRIu16 ", multTotal: %" PRIu16 "\n", multIter, multTotal); fflush(stdout);
       if(mult == k) { // distinct
-        printf("Distinct or the first of multiples: %" PRIu16 "\n", k); fflush(stdout);
         for(j = 0; j < size; j++) {
           realCopy(const_0, a + ((size - 1) * size + j) * 2    );
           realCopy(const_0, a + ((size - 1) * size + j) * 2 + 1);
@@ -4282,7 +4130,6 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
         realCopy(const_0, q + (size - 1) * 2 + 1);
       }
       else if(multIter < multTotal) { // multiples
-        printf("Multiple: %" PRIu16 "\n", k); fflush(stdout);
         i = size - 1;
         for(l = 1; l <= multIter + 1; ++l) {
           --i;
@@ -4295,7 +4142,6 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
           }
           if(isIndeterminate && tmpFlag) --l;
         }
-        printf("i = %" PRIu16 "\n", i); fflush(stdout);
         for(j = 0; j < size; j++) {
           realCopy(const_0, a + (i * size + j) * 2    );
           realCopy(const_0, a + (i * size + j) * 2 + 1);
@@ -4305,7 +4151,6 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
         realCopy(const_0, q + (size - 1) * 2 + 1);
       }
       else { // orphan elements
-        printf("Orphan: %" PRIu16 "\n", k); fflush(stdout);
         i = size - 1;
         for(l = 1; l <= multIter - multTotal + 1; ++l) {
           --i;
@@ -4318,7 +4163,6 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
           }
           if(!isIndeterminate || !tmpFlag) --l;
         }
-        printf("i = %" PRIu16 "\n", i); fflush(stdout);
         for(j = 0; j < size; j++) {
           realCopy(const_0, a + ((size - 1) * size + j) * 2    );
           realCopy(const_0, a + ((size - 1) * size + j) * 2 + 1);
@@ -4327,13 +4171,6 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
         realCopy(const_1, q + i * 2    );
         realCopy(const_0, q + i * 2 + 1);
       }
-      #ifdef PC_BUILD
-        for(i = 0; i < size * size; i++) {
-          printRealToConsole(a + i * 2, i == 0 ? "a = " : "    ", "  ");
-          printRealToConsole(a + i * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-      #endif // PC_BUILD
 
       // Solve linear equations from the submatrix
       if(invCpxMat(a, size, &ctxtReal51)) {
@@ -4352,26 +4189,6 @@ static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex,
           realCopy(&sumi, r + (i * size + k) * 2 + 1);
         }
       }
-      else {
-        printf("Singular!\n"); fflush(stdout);
-      }
-      #ifdef PC_BUILD
-        for(i = 0; i < size * size; i++) {
-          printRealToConsole(a + i * 2, i == 0 ? "a^-1 = " : "       ", "  ");
-          printRealToConsole(a + i * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-        for(i = 0; i < size; i++) {
-          printRealToConsole(q + i * 2, i == 0 ? "q = " : "    ", "  ");
-          printRealToConsole(q + i * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-        for(i = 0; i < size; i++) {
-          printRealToConsole(r + (i * size + k) * 2, i == 0 ? "r = " : "    ", "  ");
-          printRealToConsole(r + (i * size + k) * 2 + 1, "", "\n");
-        }
-        fflush(stdout);
-      #endif // PC_BUILD
     }
   }
 }
@@ -4391,12 +4208,6 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res, real34Ma
     q   = bulk + size * size * 2;
     r   = bulk + size * size * 2 * 2;
     eig = bulk + size * size * 2 * 3;
-    printf("REAL_SIZE : %" PRIdPTR "\n", REAL_SIZE);
-    printf("a   : %" PRIxPTR "\n", (intptr_t)a);
-    printf("q   : %" PRIxPTR "\n", (intptr_t)q);
-    printf("r   : %" PRIxPTR "\n", (intptr_t)r);
-    printf("eig : %" PRIxPTR "\n", (intptr_t)eig);
-    fflush(stdout);
 
     // Convert real34 to real
     for(i = 0; i < size * size; i++) {
@@ -4409,32 +4220,25 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res, real34Ma
     shifted = false;
 
     // Check imaginary part (mutually conjugate complex roots are possible in real quadratic equations)
-    printf("\n->Check imaginary part"); fflush(stdout);
     isComplex = false;
     for(i = 0; i < size * size; i++) {
-      printf("."); fflush(stdout);
       if(!realIsZero(eig + i * 2 + 1)) {
-        printf("!"); fflush(stdout);
         isComplex = true;
         break;
       }
     }
 
     // Write back
-    printf("\n->Writeback"); fflush(stdout);
     if(matrix != res) realMatrixInit(res, size, size);
     for(i = 0; i < size; i++) {
-      printf("."); fflush(stdout);
       realToReal34(eig + (i * size + i) * 2, &res->matrixElements[i * size + i]);
     }
     if(isComplex && (ires != NULL)) {
       if(matrix != ires && res != ires) realMatrixInit(ires, size, size);
       for(i = 0; i < size; i++) {
-        printf("."); fflush(stdout);
         realToReal34(eig + (i * size + i) * 2 + 1, &ires->matrixElements[i * size + i]);
       }
     }
-        printf("\n"); fflush(stdout);
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
   }
@@ -4454,12 +4258,6 @@ void complexEigenvalues(const complex34Matrix_t *matrix, complex34Matrix_t *res)
     q   = bulk + size * size * 2;
     r   = bulk + size * size * 2 * 2;
     eig = bulk + size * size * 2 * 3;
-    printf("REAL_SIZE : %" PRIdPTR "\n", REAL_SIZE);
-    printf("a   : %" PRIxPTR "\n", (intptr_t)a);
-    printf("q   : %" PRIxPTR "\n", (intptr_t)q);
-    printf("r   : %" PRIxPTR "\n", (intptr_t)r);
-    printf("eig : %" PRIxPTR "\n", (intptr_t)eig);
-    fflush(stdout);
 
     // Convert real34 to real
     for(i = 0; i < size * size; i++) {
@@ -4472,85 +4270,16 @@ void complexEigenvalues(const complex34Matrix_t *matrix, complex34Matrix_t *res)
     shifted = false;
 
     // Write back
-    printf("\n->Writeback"); fflush(stdout);
     if(matrix != res) complexMatrixInit(res, size, size);
     for(i = 0; i < size; i++) {
-      printf("."); fflush(stdout);
       realToReal34(eig + (i * size + i) * 2,     VARIABLE_REAL34_DATA(&res->matrixElements[i * size + i]));
       realToReal34(eig + (i * size + i) * 2 + 1, VARIABLE_IMAG34_DATA(&res->matrixElements[i * size + i]));
     }
-        printf("\n"); fflush(stdout);
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
   }
 #endif // TESTSUITE_BUILD
 }
-
-/*void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires) {
-#ifndef TESTSUITE_BUILD
-  const uint16_t size = matrix->header.matrixRows;
-  real_t *bulk, *a, *eig, *rot, *tmp1, *tmp2;
-  uint16_t i;
-  bool_t isComplex;
-  bool_t shifted = true;
-
-  if(matrix->header.matrixRows == matrix->header.matrixColumns) {
-    bulk = allocWp43s(size * size * REAL_SIZE * 2 * 5);
-    a    = bulk;
-    eig  = bulk + size * size * 2;
-    rot  = bulk + size * size * 2 * 2;
-    tmp1 = bulk + size * size * 2 * 3;
-    tmp2 = bulk + size * size * 2 * 4;
-    printf("REAL_SIZE : %" PRIdPTR "\n", REAL_SIZE);
-    printf("a    : %" PRIxPTR "\n", (intptr_t)a);
-    printf("eig  : %" PRIxPTR "\n", (intptr_t)eig);
-    printf("rot  : %" PRIxPTR "\n", (intptr_t)rot);
-    printf("tmp1 : %" PRIxPTR "\n", (intptr_t)tmp1);
-    printf("tmp2 : %" PRIxPTR "\n", (intptr_t)tmp2);
-    fflush(stdout);
-
-    // Convert real34 to real
-    for(i = 0; i < size * size; i++) {
-      real34ToReal(&matrix->matrixElements[i], a + i * 2);
-      realZero(a + i * 2 + 1);
-    }
-
-    // Calculate
-    JacobiRotate(a, eig, rot, tmp1, tmp2, size, &ctxtReal75);
-    shifted = false;
-
-    // Check imaginary part (mutually conjugate complex roots are possible in real quadratic equations)
-    printf("\n->Check imaginary part"); fflush(stdout);
-    isComplex = false;
-    for(i = 0; i < size * size; i++) {
-      printf("."); fflush(stdout);
-      if(!realIsZero(eig + i * 2 + 1)) {
-        printf("!"); fflush(stdout);
-        isComplex = true;
-        break;
-      }
-    }
-
-    // Write back
-    printf("\n->Writeback"); fflush(stdout);
-    if(matrix != res) realMatrixInit(res, size, size);
-    for(i = 0; i < size * size; i++) {
-      printf("."); fflush(stdout);
-      realToReal34(eig + i * 2, &res->matrixElements[i]);
-    }
-    if(isComplex && (ires != NULL)) {
-      if(matrix != ires && res != ires) realMatrixInit(ires, size, size);
-      for(i = 0; i < size * size; i++) {
-        printf("."); fflush(stdout);
-        realToReal34(eig + i * 2 + 1, &ires->matrixElements[i]);
-      }
-    }
-        printf("\n"); fflush(stdout);
-
-    freeWp43s(bulk, size * size * REAL_SIZE * 2 * 5);
-  }
-#endif // TESTSUITE_BUILD
-}*/
 
 void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires) {
 #ifndef TESTSUITE_BUILD
@@ -4566,12 +4295,6 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
     q   = bulk + size * size * 2;
     r   = bulk + size * size * 2 * 2;
     eig = bulk + size * size * 2 * 3;
-    printf("REAL_SIZE : %" PRIdPTR "\n", REAL_SIZE);
-    printf("a   : %" PRIxPTR "\n", (intptr_t)a);
-    printf("q   : %" PRIxPTR "\n", (intptr_t)q);
-    printf("r   : %" PRIxPTR "\n", (intptr_t)r);
-    printf("eig : %" PRIxPTR "\n", (intptr_t)eig);
-    fflush(stdout);
 
     // Convert real34 to real
     for(i = 0; i < size * size; i++) {
@@ -4585,32 +4308,25 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
     calculateEigenvectors((any34Matrix_t *)matrix, false, a, q, r, eig, &ctxtReal75);
 
     // Check imaginary part (mutually conjugate complex roots are possible in real quadratic equations)
-    printf("\n->Check imaginary part"); fflush(stdout);
     isComplex = false;
     for(i = 0; i < size * size; i++) {
-      printf("."); fflush(stdout);
       if(!realIsZero(r + i * 2 + 1)) {
-        printf("!"); fflush(stdout);
         isComplex = true;
         break;
       }
     }
 
     // Write back
-    printf("\n->Writeback"); fflush(stdout);
     if(matrix != res) realMatrixInit(res, size, size);
     for(i = 0; i < size * size; i++) {
-      printf("."); fflush(stdout);
       realToReal34(r + i * 2, &res->matrixElements[i]);
     }
     if(isComplex && (ires != NULL)) {
       if(matrix != ires && res != ires) realMatrixInit(ires, size, size);
       for(i = 0; i < size * size; i++) {
-        printf("."); fflush(stdout);
         realToReal34(r + i * 2 + 1, &ires->matrixElements[i]);
       }
     }
-        printf("\n"); fflush(stdout);
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
   }
@@ -4630,12 +4346,6 @@ void complexEigenvectors(const complex34Matrix_t *matrix, complex34Matrix_t *res
     q   = bulk + size * size * 2;
     r   = bulk + size * size * 2 * 2;
     eig = bulk + size * size * 2 * 3;
-    printf("REAL_SIZE : %" PRIdPTR "\n", REAL_SIZE);
-    printf("a   : %" PRIxPTR "\n", (intptr_t)a);
-    printf("q   : %" PRIxPTR "\n", (intptr_t)q);
-    printf("r   : %" PRIxPTR "\n", (intptr_t)r);
-    printf("eig : %" PRIxPTR "\n", (intptr_t)eig);
-    fflush(stdout);
 
     // Convert real34 to real
     for(i = 0; i < size * size; i++) {
@@ -4650,14 +4360,11 @@ void complexEigenvectors(const complex34Matrix_t *matrix, complex34Matrix_t *res
     calculateEigenvectors((any34Matrix_t *)matrix, false, a, q, r, eig, &ctxtReal75);
 
     // Write back
-    printf("\n->Writeback"); fflush(stdout);
     if(matrix != res) complexMatrixInit(res, size, size);
     for(i = 0; i < size * size; i++) {
-      printf("."); fflush(stdout);
       realToReal34(r + i * 2,     VARIABLE_REAL34_DATA(&res->matrixElements[i]));
       realToReal34(r + i * 2 + 1, VARIABLE_IMAG34_DATA(&res->matrixElements[i]));
     }
-        printf("\n"); fflush(stdout);
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
   }

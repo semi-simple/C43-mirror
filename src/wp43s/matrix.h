@@ -340,6 +340,7 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
   void     realEigenvalues                (const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires);
   void     complexEigenvalues             (const complex34Matrix_t *matrix, complex34Matrix_t *res);
   void     realEigenvectors               (const real34Matrix_t *matrix, real34Matrix_t *res, real34Matrix_t *ires);
+  void     complexEigenvectors            (const complex34Matrix_t *matrix, complex34Matrix_t *res);
 #endif // TESTSUITE_BUILD
 
 void       elementwiseRema                (void (*f)(void));

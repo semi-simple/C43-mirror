@@ -1404,7 +1404,7 @@ void fnEigenvectors(uint16_t unusedParamButMandatory) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "rectangular or single-element matrix or (%d" STD_CROSS "%d)",
                 x.header.matrixRows, x.header.matrixColumns);
-        moreInfoOnError("In function fnEigenvalues:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnEigenvectors:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
@@ -1429,7 +1429,7 @@ void fnEigenvectors(uint16_t unusedParamButMandatory) {
       setSystemFlag(FLAG_ASLIFT);
     }
   }
-  /*else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
+  else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     complex34Matrix_t x, res;
 
     linkToComplexMatrixRegister(REGISTER_X, &x);
@@ -1439,21 +1439,21 @@ void fnEigenvectors(uint16_t unusedParamButMandatory) {
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "rectangular or single-element matrix or (%d" STD_CROSS "%d)",
                 x.header.matrixRows, x.header.matrixColumns);
-        moreInfoOnError("In function fnEigenvalues:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function fnEigenvectors:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      complexEigenvalues(&x, &res);
+      complexEigenvectors(&x, &res);
       convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
       complexMatrixFree(&res);
       setSystemFlag(FLAG_ASLIFT);
     }
-  }*/
+  }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #ifdef PC_BUILD
     sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
-    moreInfoOnError("In function fnEigenvalues:", errorMessage, "is not a matrix.", "");
+    moreInfoOnError("In function fnEigenvectors:", errorMessage, "is not a matrix.", "");
     #endif
   }
 #endif // TESTSUITE_BUILD
@@ -4609,6 +4609,53 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
         printf("."); fflush(stdout);
         realToReal34(r + i * 2 + 1, &ires->matrixElements[i]);
       }
+    }
+        printf("\n"); fflush(stdout);
+
+    freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
+  }
+#endif // TESTSUITE_BUILD
+}
+
+void complexEigenvectors(const complex34Matrix_t *matrix, complex34Matrix_t *res) {
+#ifndef TESTSUITE_BUILD
+  const uint16_t size = matrix->header.matrixRows;
+  real_t *bulk, *a, *q, *r, *eig;
+  uint16_t i;
+  bool_t shifted = true;
+
+  if(matrix->header.matrixRows == matrix->header.matrixColumns) {
+    bulk = allocWp43s(size * size * REAL_SIZE * 2 * 4);
+    a   = bulk;
+    q   = bulk + size * size * 2;
+    r   = bulk + size * size * 2 * 2;
+    eig = bulk + size * size * 2 * 3;
+    printf("REAL_SIZE : %" PRIdPTR "\n", REAL_SIZE);
+    printf("a   : %" PRIxPTR "\n", (intptr_t)a);
+    printf("q   : %" PRIxPTR "\n", (intptr_t)q);
+    printf("r   : %" PRIxPTR "\n", (intptr_t)r);
+    printf("eig : %" PRIxPTR "\n", (intptr_t)eig);
+    fflush(stdout);
+
+    // Convert real34 to real
+    for(i = 0; i < size * size; i++) {
+      real34ToReal(VARIABLE_REAL34_DATA(&matrix->matrixElements[i]), a + i * 2    );
+      real34ToReal(VARIABLE_IMAG34_DATA(&matrix->matrixElements[i]), a + i * 2 + 1);
+      realZero(a + i * 2 + 1);
+    }
+
+    // Calculate eigenvalues
+    calculateEigenvalues(a, q, r, eig, size, shifted, &ctxtReal75);
+    shifted = false;
+    calculateEigenvectors((any34Matrix_t *)matrix, false, a, q, r, eig, &ctxtReal75);
+
+    // Write back
+    printf("\n->Writeback"); fflush(stdout);
+    if(matrix != res) complexMatrixInit(res, size, size);
+    for(i = 0; i < size * size; i++) {
+      printf("."); fflush(stdout);
+      realToReal34(r + i * 2,     VARIABLE_REAL34_DATA(&res->matrixElements[i]));
+      realToReal34(r + i * 2 + 1, VARIABLE_IMAG34_DATA(&res->matrixElements[i]));
     }
         printf("\n"); fflush(stdout);
 

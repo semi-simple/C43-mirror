@@ -270,7 +270,8 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
    * \param[in] matrix
    */
   void     showComplexMatrix              (const complex34Matrix_t *matrix);
-  int16_t  getComplexMatrixColumnWidths   (const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i, int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits);
+  int16_t  getComplexMatrixColumnWidths   (const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i,
+                                           int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits, bool_t singleColumn);
 
   void     getMatrixFromRegister          (calcRegister_t regist);
 

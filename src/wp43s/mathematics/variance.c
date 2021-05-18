@@ -210,12 +210,9 @@ void fnStatR(real_t *RR, real_t *SXY, real_t *SX, real_t *SY){
 
 void fnCoefficientDetermination(uint16_t unusedButMandatoryParameter){  //r
   real_t RR,SMI,aa0,aa1,aa2;
-//  real_t SXY,SX,SY;
   if(checkMinimumDataPoints(const_2)) {
     if(lrChosen == 0) {                        //if lrChosen contains something, the stat data exists
-//      fnStatR(&RR,&SXY,&SX,&SY);
       lrChosen = CF_LINEAR_FITTING;
-      lrSelection = CF_LINEAR_FITTING;
     }
     processCurvefitSelection(lrChosen,&RR,&SMI,&aa0,&aa1,&aa2);
     liftStack();

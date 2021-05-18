@@ -1398,37 +1398,70 @@
 
           else if(temporaryInformation == TI_CALCY) {
             if(regist == REGISTER_X) {
-              strcpy(prefix, STD_y_CIRC STD_SPACE_FIGURE "=");
+              prefix[0]=0;
+              if(lrChosen == 0) {
+              } else {
+                strcpy(prefix,eatSpacesEnd(getCurveFitModeName(lrChosen)));
+                if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
+                strcat(prefix, STD_SPACE_PUNCTUATION);
+              }
+              strcat(prefix, STD_y_CIRC STD_SPACE_FIGURE "=");
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }
 
           else if(temporaryInformation == TI_CALCX) {
             if(regist == REGISTER_X) {
-              strcpy(prefix, STD_x_CIRC STD_SPACE_FIGURE "=");
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-            }
-          }
-
-          else if(temporaryInformation == TI_CALCX2) {
-            if(regist == REGISTER_X) {
-              strcpy(prefix, STD_x_CIRC STD_SUB_1 STD_SPACE_FIGURE "=");
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-            } else
-            if(regist == REGISTER_Y) {
-              strcpy(prefix, STD_x_CIRC STD_SUB_2 STD_SPACE_FIGURE "=");
-              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-            }
-          }
-
-          else if(temporaryInformation == TI_CORR) {             
-            if(regist == REGISTER_X) {
+              prefix[0]=0;
               if(lrChosen == 0) {
-                strcpy(prefix, "r" STD_SPACE_FIGURE "=");
               } else {
                 strcpy(prefix,eatSpacesEnd(getCurveFitModeName(lrChosen)));
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
+                strcat(prefix, STD_SPACE_PUNCTUATION);
               }
+              strcat(prefix, STD_x_CIRC STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+
+          else if(temporaryInformation == TI_CALCX2) {
+            if(regist == REGISTER_X) {
+              prefix[0]=0;
+              if(lrChosen == 0) {
+              } else {
+                strcpy(prefix,eatSpacesEnd(getCurveFitModeName(lrChosen)));
+                if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
+                strcat(prefix, STD_SPACE_PUNCTUATION);
+              }
+              strcat(prefix, STD_x_CIRC STD_SUB_1 STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            } else
+            if(regist == REGISTER_Y) {
+              prefix[0]=0;
+              if(lrChosen == 0) {
+              } else {
+                strcpy(prefix,eatSpacesEnd(getCurveFitModeName(lrChosen)));
+                if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
+                strcat(prefix, STD_SPACE_PUNCTUATION);
+              }
+              strcat(prefix, STD_x_CIRC STD_SUB_2 STD_SPACE_FIGURE "=");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+
+          }
+
+
+          else if(temporaryInformation == TI_CORR) {             
+            if(regist == REGISTER_X) {
+              prefix[0]=0;
+              if(lrChosen == 0) {
+              } else {
+                strcpy(prefix,eatSpacesEnd(getCurveFitModeName(lrChosen)));
+                if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
+                strcat(prefix, STD_SPACE_PUNCTUATION);
+              }
+              strcat(prefix, "r" STD_SPACE_FIGURE "=");
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }

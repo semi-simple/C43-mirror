@@ -28,6 +28,7 @@
 #include "longIntegerType.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/variance.h"
+#include "mathematics/xthRoot.h"
 #include "mathematics/wp34s.h"
 #include "plotstat.h"
 #include "registers.h"
@@ -39,7 +40,7 @@
 #include "wp43s.h"
 
 
-#define STAT_DISPLAY_ABCDEFG                      //to display helper functions A-H
+//#define STAT_DISPLAY_ABCDEFG                      //to display helper functions A-H
 
 
 static real_t RR, RR2, RRMAX, SMI, aa0, aa1, aa2;  // Curve fitting variables, available to the different functions
@@ -1061,6 +1062,11 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
   }
 
 
+
+//CF_CAUCHY_FITTING     
+//CF_GAUSS_FITTING      
+
+
   void xIsFny(uint16_t selection, uint8_t rootNo, real_t *XX, real_t *YY, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){
       realCopy(const_0,XX);
       real_t SS,TT,UU;
@@ -1072,6 +1078,38 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           realSubtract(YY, aa0, &UU, realContextForecast);
           realDivide  (&UU,aa1, &TT, realContextForecast);
           realCopy    (&TT,XX);
+          temporaryInformation = TI_CALCX;
+          break;
+        case CF_EXPONENTIAL_FITTING:
+          realDivide(YY,aa0,&UU,realContextForecast);
+          WP34S_Ln(&UU, &UU, realContextForecast);
+          realDivide(&UU,aa1,XX,realContextForecast);
+          temporaryInformation = TI_CALCX;
+          break;
+        case CF_LOGARITHMIC_FITTING:
+          realSubtract(YY,aa0,&UU,realContextForecast);
+          realDivide(&UU,aa1,&UU,realContextForecast);
+          realExp(&UU,XX,realContextForecast);
+          temporaryInformation = TI_CALCX;
+          break;
+        case CF_POWER_FITTING:
+          realDivide(YY,aa0,&UU,realContextForecast);
+          xthRootReal(&UU,aa1,realContextForecast);             //Note X-register gets written here
+          real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), XX);
+          temporaryInformation = TI_CALCX;
+          break;
+        case CF_ROOT_FITTING:
+          WP34S_Ln(YY,YY,realContextForecast);
+          WP34S_Ln(aa0,&UU,realContextForecast);
+          realSubtract(YY,&UU,YY,realContextForecast);
+          WP34S_Ln(aa1,&UU,realContextForecast);
+          realDivide(&UU,YY,XX,realContextForecast);
+          temporaryInformation = TI_CALCX;
+          break;
+        case CF_HYPERBOLIC_FITTING:
+          realDivide(const_1,YY,&UU,realContextForecast);
+          realSubtract(&UU,aa0,&UU,realContextForecast);
+          realDivide(&UU,aa1,XX,realContextForecast);
           temporaryInformation = TI_CALCX;
           break;
         case CF_PARABOLIC_FITTING:
@@ -1094,6 +1132,13 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           realDivide(&SS,aa2,XX,realContextForecast);
           temporaryInformation = TI_CALCX2;
           break;
+
+        case CF_CAUCHY_FITTING:
+          break;
+        case CF_GAUSS_FITTING:
+          break;
+
+
         default:break;
       }
   }

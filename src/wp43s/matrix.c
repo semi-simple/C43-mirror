@@ -1341,6 +1341,8 @@ void fnEigenvalues(uint16_t unusedParamButMandatory) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
+      setSystemFlag(FLAG_ASLIFT);
+      liftStack();
       ires.header.matrixRows = ires.header.matrixColumns = 0;
       ires.matrixElements = NULL;
       realEigenvalues(&x, &res, &ires);
@@ -1359,7 +1361,6 @@ void fnEigenvalues(uint16_t unusedParamButMandatory) {
         convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
       }
       realMatrixFree(&res);
-      setSystemFlag(FLAG_ASLIFT);
     }
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
@@ -1376,10 +1377,11 @@ void fnEigenvalues(uint16_t unusedParamButMandatory) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
+      setSystemFlag(FLAG_ASLIFT);
+      liftStack();
       complexEigenvalues(&x, &res);
       convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
       complexMatrixFree(&res);
-      setSystemFlag(FLAG_ASLIFT);
     }
   }
   else {
@@ -1408,6 +1410,8 @@ void fnEigenvectors(uint16_t unusedParamButMandatory) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
+      setSystemFlag(FLAG_ASLIFT);
+      liftStack();
       ires.header.matrixRows = ires.header.matrixColumns = 0;
       ires.matrixElements = NULL;
       realEigenvectors(&x, &res, &ires);
@@ -1426,7 +1430,6 @@ void fnEigenvectors(uint16_t unusedParamButMandatory) {
         convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
       }
       realMatrixFree(&res);
-      setSystemFlag(FLAG_ASLIFT);
     }
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
@@ -1443,10 +1446,11 @@ void fnEigenvectors(uint16_t unusedParamButMandatory) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
+      setSystemFlag(FLAG_ASLIFT);
+      liftStack();
       complexEigenvectors(&x, &res);
       convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
       complexMatrixFree(&res);
-      setSystemFlag(FLAG_ASLIFT);
     }
   }
   else {

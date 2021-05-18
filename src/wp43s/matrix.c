@@ -413,15 +413,32 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 
   if(!getDimensionArg(&rows, &cols)) return;
 
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   //Initialize Memory for Matrix
   realMatrixInit(&matrix, rows, cols);
+  if(matrix.matrixElements == NULL) {
+    displayCalcErrorMessage(ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Not enough memory for a %" PRIu32 STD_CROSS "%" PRIu32 " matrix", rows, cols);
+      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
 
   //Drop X_Register and Y_Register
-  fnDropY(NOPARAM);
   convertReal34MatrixToReal34MatrixRegister(&matrix, REGISTER_X);
-  setSystemFlag(FLAG_ASLIFT);
+
+  if(lastErrorCode == ERROR_NONE) {
+    setSystemFlag(FLAG_ASLIFT);
+  }
+  else if(lastErrorCode == ERROR_RAM_FULL) {
+    lastErrorCode = ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX;
+  }
 
   realMatrixFree(&matrix);
+
+  adjustResult(REGISTER_X, true, false, REGISTER_X, REGISTER_Y, -1);
 #endif // TESTSUITE_BUILD
 }
 
@@ -649,7 +666,18 @@ void fnSetMatrixDimensions(uint16_t regist) {
     real34Matrix_t matrix;
 
     realMatrixInit(&matrix, y, x);
+    if(matrix.matrixElements == NULL) {
+      displayCalcErrorMessage(ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Not enough memory for a %" PRIu32 STD_CROSS "%" PRIu32 " matrix", y, x);
+        moreInfoOnError("In function fnSetMatrixDimensions:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+    }
+
     convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
+    if(lastErrorCode == ERROR_RAM_FULL)
+      lastErrorCode = ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX;
     realMatrixFree(&matrix);
   }
 #endif // TESTSUITE_BUILD
@@ -1468,7 +1496,13 @@ void fnEigenvectors(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
 void realMatrixInit(real34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
   //Allocate Memory for Matrix
-  matrix->matrixElements = allocWp43s(TO_BLOCKS((rows * cols) * sizeof(real34_t)));
+  const size_t neededSize = TO_BLOCKS((rows * cols) * sizeof(real34_t));
+  if(!isMemoryBlockAvailable(neededSize)) {
+    matrix->header.matrixColumns = matrix->header.matrixRows = 0;
+    matrix->matrixElements = NULL;
+    return;
+  }
+  matrix->matrixElements = allocWp43s(neededSize);
 
   matrix->header.matrixColumns = cols;
   matrix->header.matrixRows = rows;

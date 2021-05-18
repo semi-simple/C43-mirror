@@ -1903,7 +1903,7 @@ void showRealMatrix(const real34Matrix_t *matrix) {
   }
 
   font = &numericFont;
-  if((rows >= 4) || (cols >= 4) || (displayFormat != DF_ALL && displayFormatDigits > 3)) {
+  if((rows >= 4) || (cols >= 4)) {
 smallFont:
     font = &standardFont;
     fontHeight = STANDARD_FONT_HEIGHT;
@@ -2050,7 +2050,7 @@ void showComplexMatrix(const complex34Matrix_t *matrix) {
   int16_t colWidth[2] = {}, colWidth_r[2] = {}, colWidth_i[2] = {}, rPadWidth_r[10] = {}, rPadWidth_i[10] = {};
   const bool_t forEditor = matrix == &openMatrixMIMPointer.complexMatrix;
   const uint16_t sRow = forEditor ? scrollRow : 0;
-  const uint16_t sCol = forEditor ? scrollColumn : 0;
+  uint16_t sCol = forEditor ? scrollColumn : 0;
   const uint16_t tmpDisplayFormat = displayFormat;
   const uint8_t tmpDisplayFormatDigits = displayFormatDigits;
 
@@ -2063,7 +2063,7 @@ void showComplexMatrix(const complex34Matrix_t *matrix) {
     rows = 1;
   }
 
-  const int maxCols = cols > 2 ? 2 : cols;
+  int maxCols = cols > 2 ? 2 : cols;
   const int maxRows = rows > 5 ? 5 : rows;
 
   int16_t matSelRow = colVector ? getJRegisterAsInt(true) : getIRegisterAsInt(true);
@@ -2079,7 +2079,7 @@ void showComplexMatrix(const complex34Matrix_t *matrix) {
   }
 
   font = &numericFont;
-  if((rows >= 4) || (cols >= 3) || (displayFormat != DF_ALL && displayFormatDigits > 3)) {
+  if((rows >= 4) || (cols >= 3)) {
 smallFont:
     font = &standardFont;
     fontHeight = STANDARD_FONT_HEIGHT;
@@ -2088,11 +2088,11 @@ smallFont:
   }
 
   if(!forEditor) Y_POS += REGISTER_LINE_HEIGHT;
-  const bool_t rightEllipsis = (cols > maxCols) && (cols > maxCols + sCol);
-  const bool_t leftEllipsis = (sCol > 0);
+  bool_t rightEllipsis = (cols > maxCols) && (cols > maxCols + sCol);
+  bool_t leftEllipsis = (sCol > 0);
   int16_t digits;
 
-  totalWidth = getComplexMatrixColumnWidths(matrix, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits);
+  totalWidth = getComplexMatrixColumnWidths(matrix, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits, false);
   if(totalWidth > maxWidth) {
     if(font == &numericFont) {
       goto smallFont;
@@ -2100,7 +2100,14 @@ smallFont:
     else {
       displayFormat = DF_SCI;
       displayFormatDigits = 3;
-      getComplexMatrixColumnWidths(matrix, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits);
+      totalWidth = getComplexMatrixColumnWidths(matrix, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits, false);
+      if(totalWidth > maxWidth) {
+        maxCols = 1;
+        if(forEditor) sCol = scrollColumn = matSelCol;
+        totalWidth = getComplexMatrixColumnWidths(matrix, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits, true);
+        rightEllipsis = (cols > 1) && (cols > 1 + sCol);
+        leftEllipsis = (sCol > 0);
+      }
     }
   }
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0) +
@@ -2195,11 +2202,11 @@ smallFont:
 
 }
 
-int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i, int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits) {
+int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i, int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits, bool_t singleColumn) {
   const bool_t colVector = matrix->header.matrixColumns == 1 && matrix->header.matrixRows > 1;
   const int rows = colVector ? 1 : matrix->header.matrixRows;
   const int cols = colVector ? matrix->header.matrixRows : matrix->header.matrixColumns;
-  const int maxCols = cols > 2 ? 2 : cols;
+  const int maxCols = singleColumn ? 1 : cols > 2 ? 2 : cols;
   const int maxRows = rows > 5 ? 5 : rows;
   const bool_t forEditor = matrix == &openMatrixMIMPointer.complexMatrix;
   const uint16_t sRow = forEditor ? scrollRow : 0;

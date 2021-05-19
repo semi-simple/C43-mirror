@@ -3395,6 +3395,7 @@ void complex_matrix_inverse(const complex34Matrix_t *matrix, complex34Matrix_t *
   }
 
   if(invCpxMat(tmpMat, n, &ctxtReal39)) {
+    if(matrix != res) copyComplexMatrix(matrix, res);
     for(i = 0; i < n; i++) {
       for(j = 0; j < n; j++) {
         realToReal34(&tmpMat[(i * n + j) * 2    ], VARIABLE_REAL34_DATA(&res->matrixElements[i * n + j]));

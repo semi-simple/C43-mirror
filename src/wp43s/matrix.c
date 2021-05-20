@@ -1925,12 +1925,13 @@ smallFont:
       goto smallFont;
     }
   }
-  for(int j = 0; j < maxCols; j++) baseWidth += colWidth[j] + 20;
+  for(int j = 0; j < maxCols; j++) baseWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
+  baseWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
 
-  if(!forEditor) X_POS = SCREEN_WIDTH - 2 - ((colVector ? (font == &standardFont ? 12 : 18) + stringWidth(STD_SUP_T, font, true, true) : (font == &standardFont ? 5 : 10) + stringWidth("]", font, true, true)) + baseWidth);
+  if(!forEditor) X_POS = SCREEN_WIDTH - ((colVector ? stringWidth("[]" STD_SUP_T, font, true, true) : stringWidth("[]", font, true, true)) + baseWidth);
 
   for(int i = 0; i < maxRows; i++) {
-    int16_t colX = 20;
+    int16_t colX = stringWidth("[", font, true, true);
     showString((maxRows == 1) ? "[" : (i == 0) ? STD_MAT_TL : (i + 1 == maxRows) ? STD_MAT_BL : STD_MAT_ML, font, X_POS + 1, Y_POS - (maxRows -1 - i) * fontHeight, vmNormal, true, false);
     if(leftEllipsis) {
       showString(STD_ELLIPSIS, font, X_POS + 10, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
@@ -1949,19 +1950,19 @@ smallFont:
         if(neg) real34SetNegativeSign(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
         if (forEditor && matSelRow == (i + sRow) && matSelCol == (j + sCol)) {
           const int16_t minusWidth = stringWidth("-", font, true, true);
-          lcd_fill_rect(X_POS + 3 + colX - minusWidth, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j] + minusWidth + 3, font == &numericFont ? 32 : 20, 0xFF);
+          lcd_fill_rect(X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX - minusWidth - 1, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j] + minusWidth, font == &numericFont ? 32 : 20, 0xFF);
           vm = vmReverse;
         } else {
           vm = vmNormal;
         }
       }
       width = stringWidth(tmpString, font, true, true) + 1;
-      showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + (((j == maxCols) && rightEllipsis) ? 8 - width : (colWidth[j] - width) - rPadWidth[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
-      colX += colWidth[j] + 20;
+      showString(tmpString, font, X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX + (((j == maxCols) && rightEllipsis) ? stringWidth(STD_SPACE_FIGURE, font, true, true) - width : (colWidth[j] - width) - rPadWidth[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+      colX += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
     }
-    showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, X_POS + (font == &standardFont ? 7 : 10) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
-    if (colVector == true) {
-      showString(STD_SUP_T, font, X_POS + (font == &standardFont ? 14 : 18) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+    showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, X_POS + stringWidth("[", font, true, true) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+    if(colVector == true) {
+      showString(STD_SUP_T, font, X_POS + stringWidth("[]", font, true, true) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
     }
   }
 
@@ -2012,8 +2013,9 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
     }
     for(int j = 0; j < maxCols; j++) {
       colWidth[j] = (maxLeftWidth[j] + maxRightWidth[j]);
-      totalWidth += colWidth[j] + 20;
+      totalWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
     }
+    totalWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
     if(displayFormat != DF_ALL) {
       break;
     }
@@ -2118,15 +2120,16 @@ smallFont:
       goto smallFont;
     }
   }
-  for(int j = 0; j < maxCols; j++) baseWidth += colWidth[j] + 20;
+  for(int j = 0; j < maxCols; j++) baseWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
+  baseWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
   if(colWidth_r[0] == 0) {
     baseWidth -= stringWidth("+", font, true, true);
   }
 
-  if(!forEditor) X_POS = SCREEN_WIDTH - 2 - ((colVector ? (font == &standardFont ? 12 : 18) + stringWidth(STD_SUP_T, font, true, true) : (font == &standardFont ? 5 : 10) + stringWidth("]", font, true, true)) + baseWidth);
+  if(!forEditor) X_POS = SCREEN_WIDTH - ((colVector ? stringWidth("[]" STD_SUP_T, font, true, true) : stringWidth("[]", font, true, true)) + baseWidth);
 
   for(int i = 0; i < maxRows; i++) {
-    int16_t colX = 20;
+    int16_t colX = stringWidth("[", font, true, true);
     showString((maxRows == 1) ? "[" : (i == 0) ? STD_MAT_TL : (i + 1 == maxRows) ? STD_MAT_BL : STD_MAT_ML, font, X_POS + 1, Y_POS - (maxRows -1 - i) * fontHeight, vmNormal, true, false);
     if(!getSystemFlag(FLAG_POLAR) && colWidth_r[0] == 0) {
       colX -= stringWidth("+", font, true, true);
@@ -2163,14 +2166,14 @@ smallFont:
         if(neg) real34SetNegativeSign(&re);
         if (forEditor && matSelRow == (i + sRow) && matSelCol == (j + sCol)) {
           const int16_t minusWidth = stringWidth("-", font, true, true);
-          lcd_fill_rect(X_POS + 3 + colX - minusWidth, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j] + minusWidth + 3, font == &numericFont ? 32 : 20, 0xFF);
+          lcd_fill_rect(X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX - minusWidth - 1, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j] + minusWidth, font == &numericFont ? 32 : 20, 0xFF);
           vm = vmReverse;
         } else {
           vm = vmNormal;
         }
       }
       width = stringWidth(tmpString, font, true, true) + 1;
-      showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + (((j == maxCols) && rightEllipsis) ? 8 - width : (colWidth_r[j] - width) - rPadWidth_r[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+      showString(tmpString, font, X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX + (((j == maxCols) && rightEllipsis) ? stringWidth(STD_SPACE_FIGURE, font, true, true) - width : (colWidth_r[j] - width) - rPadWidth_r[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
       if(strcmp(tmpString, STD_ELLIPSIS) != 0) {
         bool_t neg = real34IsNegative(&im);
         int16_t cpxUnitWidth;
@@ -2187,19 +2190,19 @@ smallFont:
         if(!getSystemFlag(FLAG_POLAR)) {
           if(neg) tmpString[0] = '-';
         }
-        showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + colWidth_r[j] + (width - stringWidth(tmpString, font, true, true)), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+        showString(tmpString, font, X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX + colWidth_r[j] + (width - stringWidth(tmpString, font, true, true)), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
 
         if(!getSystemFlag(FLAG_POLAR)) real34SetPositiveSign(&im);
         real34ToDisplayString(&im, amNone, tmpString, font, colWidth_i[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM);
         if(neg) real34SetNegativeSign(&im);
         width = stringWidth(tmpString, font, true, true) + 1;
-        showString(tmpString, font, X_POS + (font == &numericFont ? 8 : 5) + colX + colWidth_r[j] + cpxUnitWidth + (((j == maxCols - 1) && rightEllipsis) ? 0 : (colWidth_i[j] - width) - rPadWidth_i[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+        showString(tmpString, font, X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX + colWidth_r[j] + cpxUnitWidth + (((j == maxCols - 1) && rightEllipsis) ? 0 : (colWidth_i[j] - width) - rPadWidth_i[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
       }
-      colX += colWidth[j] + 20;
+      colX += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
     }
-    showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, X_POS + (font == &standardFont ? 7 : 10) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
-    if (colVector == true) {
-      showString(STD_SUP_T, font, X_POS + (font == &standardFont ? 14 : 18) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+    showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, X_POS + stringWidth("[", font, true, true) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+    if(colVector == true) {
+      showString(STD_SUP_T, font, X_POS + stringWidth("[]", font, true, true) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
     }
   }
 
@@ -2291,8 +2294,9 @@ int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, const font
       colWidth_r[j] = maxLeftWidth_r[j] + maxRightWidth_r[j];
       colWidth_i[j] = maxLeftWidth_i[j] + maxRightWidth_i[j];
       colWidth[j] = colWidth_r[j] + (colWidth_i[j] > 0 ? (cpxUnitWidth + colWidth_i[j]) : 0);
-      totalWidth += colWidth[j] + 20;
+      totalWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
     }
+    totalWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
     if(displayFormat != DF_ALL) {
       break;
     }

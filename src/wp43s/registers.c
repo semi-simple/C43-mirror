@@ -860,6 +860,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         }
         break;
 
+#ifndef TESTSUITE_BUILD
       case dtReal34Matrix:
         {
           real34Matrix_t matrix;
@@ -896,6 +897,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
           }
         }
         break;
+#endif // TESTSUITE_BUILD
 
       default:
         break;

@@ -24,9 +24,12 @@
 #include "typeDefinitions.h"
 
 #ifndef TESTSUITE_BUILD
-  #define MATRIX_LINE_WIDTH_LARGE      120
-  #define MATRIX_LINE_WIDTH_SMALL      93
+  #define MATRIX_LINE_WIDTH            380
+  //#define MATRIX_LINE_WIDTH_LARGE      120
+  //#define MATRIX_LINE_WIDTH_SMALL      93
   //#define MATRIX_CHAR_LEN              30
+  #define MATRIX_MAX_ROWS              5
+  #define MATRIX_MAX_COLUMNS           11
 #endif // TESTSUITE_BUILD
 
 /**
@@ -263,14 +266,15 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
    * \param[in] matrix
    */
   void     showRealMatrix                 (const real34Matrix_t *matrix);
-  int16_t  getRealMatrixColumnWidths      (const real34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *rPadWidth, int16_t *digits);
+  int16_t  getRealMatrixColumnWidths      (const real34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *rPadWidth, int16_t *digits, uint16_t maxCols);
   /**
    * Displays a complex matrix.
    *
    * \param[in] matrix
    */
   void     showComplexMatrix              (const complex34Matrix_t *matrix);
-  int16_t  getComplexMatrixColumnWidths   (const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i, int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits);
+  int16_t  getComplexMatrixColumnWidths   (const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i,
+                                           int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits, uint16_t maxCols);
 
   void     getMatrixFromRegister          (calcRegister_t regist);
 

@@ -1409,7 +1409,7 @@
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
                 strcat(prefix, STD_SPACE_PUNCTUATION);
               }
-              strcat(prefix, STD_y_CIRC STD_SPACE_FIGURE "=");
+              //strcat(prefix, STD_y_CIRC STD_SPACE_FIGURE "="); //removed for single line results. Kept as reference.
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }
@@ -1423,7 +1423,7 @@
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
                 strcat(prefix, STD_SPACE_PUNCTUATION);
               }
-              strcat(prefix, STD_x_CIRC STD_SPACE_FIGURE "=");
+              //strcat(prefix, STD_x_CIRC STD_SPACE_FIGURE "="); //removed for single line results. Kept as reference.
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }
@@ -1465,7 +1465,7 @@
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
                 strcat(prefix, STD_SPACE_PUNCTUATION);
               }
-              strcat(prefix, "r" STD_SPACE_FIGURE "=");
+              // strcat(prefix, "r" STD_SPACE_FIGURE "="); //removed for single line results. Kept as reference.
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }

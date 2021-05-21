@@ -1134,10 +1134,29 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
           break;
 
         case CF_CAUCHY_FITTING:
-          break;
-        case CF_GAUSS_FITTING:
+          realDivide(const_1,YY,&UU,realContextForecast);
+          realSubtract(&UU,aa2,&UU,realContextForecast);
+          realDivide(&UU,aa0,&UU,realContextForecast);
+          realSquareRoot(&UU,&UU,realContextForecast);
+          realSubtract(const_0,aa1,&SS,realContextForecast);
+          if(rootNo == 1)
+            realSubtract(&SS,&UU,XX,realContextForecast);
+          if(rootNo == 2)
+            realAdd   (&SS,&UU,XX,realContextForecast);
+          temporaryInformation = TI_CALCX2;
           break;
 
+        case CF_GAUSS_FITTING:
+          realDivide(YY,aa0,&UU,realContextForecast);
+          WP34S_Ln(&UU,&UU,realContextForecast);
+          realMultiply(&UU,aa2,&UU,realContextForecast);
+          realSquareRoot(&UU,&UU,realContextForecast);
+          if(rootNo == 1)
+            realSubtract(aa1,&UU,XX,realContextForecast);
+          if(rootNo == 2)
+            realAdd   (aa1,&UU,XX,realContextForecast);
+          temporaryInformation = TI_CALCX2;
+          break;
 
         default:break;
       }
@@ -1167,7 +1186,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
       xIsFny(sel, 1, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
       realToReal34(&XX,REGISTER_REAL34_DATA(REGISTER_X));
 
-      if(sel == CF_PARABOLIC_FITTING) {
+      if(sel == CF_PARABOLIC_FITTING || sel == CF_GAUSS_FITTING || sel == CF_CAUCHY_FITTING) {
         xIsFny(sel, 2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);        
         liftStack();
         setSystemFlag(FLAG_ASLIFT);

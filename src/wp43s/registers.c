@@ -867,7 +867,7 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
           linkToRealMatrixRegister(res, &matrix);
           for(uint32_t i = 0; i < matrix.header.matrixRows * matrix.header.matrixColumns; i++) {
             if(real34IsInfinite(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]))) {
-              displayCalcErrorMessage(real34IsPositive(VARIABLE_REAL34_DATA(&matrix.matrixElements[i])) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, &matrix.matrixElements[i]);
+              displayCalcErrorMessage(real34IsPositive(VARIABLE_REAL34_DATA(&matrix.matrixElements[i])) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
             }
             else if(real34IsZero(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]))) {
               real34SetPositiveSign(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]));
@@ -882,14 +882,14 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
           linkToComplexMatrixRegister(res, &matrix);
           for(uint32_t i = 0; i < matrix.header.matrixRows * matrix.header.matrixColumns; i++) {
             if(real34IsInfinite(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]))) {
-              displayCalcErrorMessage(real34IsPositive(VARIABLE_REAL34_DATA(&matrix.matrixElements[i])) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, &matrix.matrixElements[i]);
+              displayCalcErrorMessage(real34IsPositive(VARIABLE_REAL34_DATA(&matrix.matrixElements[i])) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
             }
             else if(real34IsZero(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]))) {
               real34SetPositiveSign(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]));
             }
 
             if(real34IsInfinite(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i]))) {
-              displayCalcErrorMessage(real34IsPositive(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i])) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, &matrix.matrixElements[i]);
+              displayCalcErrorMessage(real34IsPositive(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i])) ? ERROR_OVERFLOW_PLUS_INF : ERROR_OVERFLOW_MINUS_INF , ERR_REGISTER_LINE, res);
             }
             else if(real34IsZero(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i]))) {
               real34SetPositiveSign(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i]));

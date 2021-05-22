@@ -4081,7 +4081,7 @@ static void sortEigenvalues(real_t *eig, uint16_t size, uint16_t begin_a, uint16
         realCopy(eig + (a * size + a) * 2 + 1, eig + (i * size + (i + 2) % size) * 2 + 1);
         ++a;
       }
-      else if(realCompareLessThan(eig + (a * size + (a + 2) % size) * 2, eig + (b * size + (b + 2) % size) * 2)) {
+      else if(realCompareLessThan(eig + (a * size + (a + 1) % size) * 2, eig + (b * size + (b + 1) % size) * 2)) {
         realCopy(eig + (b * size + b) * 2,     eig + (i * size + (i + 2) % size) * 2    );
         realCopy(eig + (b * size + b) * 2 + 1, eig + (i * size + (i + 2) % size) * 2 + 1);
         ++b;

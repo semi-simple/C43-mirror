@@ -4046,6 +4046,58 @@ static void calculateQrShift(const real_t *mat, uint16_t size, real_t *re, real_
   }
 }
 
+static void sortEigenvalues(real_t *eig, uint16_t size, uint16_t begin_a, uint16_t begin_b, uint16_t end_b, realContext_t *realContext) {
+  const uint16_t end_a = begin_b - 1;
+
+  if(size < 2) { // ... trivial
+    return;
+  }
+  else if(size == 2) { // simply compare
+    realRectangularToPolar(eig,     eig + 1, eig + 2, eig + 3, realContext);
+    realRectangularToPolar(eig + 6, eig + 7, eig + 4, eig + 5, realContext);
+    realZero(eig + 3); realZero(eig + 5);
+    if(realCompareLessThan(eig + 2, eig + 4)) {
+      realCopy(eig,     eig + 2); realCopy(eig + 1, eig + 3);
+      realCopy(eig + 6, eig    ); realCopy(eig + 7, eig + 1);
+      realCopy(eig + 2, eig + 6); realCopy(eig + 1, eig + 7);
+    }
+  }
+  else {
+    uint16_t a = begin_a, b = begin_b;
+    if(end_a - begin_a > 1) sortEigenvalues(eig, size, begin_a, (begin_a + end_a + 2) / 2, end_a, realContext);
+    if(end_b - begin_b > 1) sortEigenvalues(eig, size, begin_b, (begin_b + end_b + 2) / 2, end_b, realContext);
+    for(uint16_t i = begin_a; i <= end_b; i++) {
+      realRectangularToPolar(eig + (i * size + i) * 2, eig + (i * size + i) * 2 + 1, eig + (i * size + (i + 1) % size) * 2, eig + (i * size + (i + 1) % size) * 2 + 1, realContext);
+      realZero(eig + (i * size + (i + 1) % size) * 2 + 1);
+    }
+    for(uint16_t i = begin_a; i <= end_b; i++) {
+      if(a > end_a) {
+        realCopy(eig + (b * size + b) * 2,     eig + (i * size + (i + 2) % size) * 2    );
+        realCopy(eig + (b * size + b) * 2 + 1, eig + (i * size + (i + 2) % size) * 2 + 1);
+        ++b;
+      }
+      else if(b > end_b) {
+        realCopy(eig + (a * size + a) * 2,     eig + (i * size + (i + 2) % size) * 2    );
+        realCopy(eig + (a * size + a) * 2 + 1, eig + (i * size + (i + 2) % size) * 2 + 1);
+        ++a;
+      }
+      else if(realCompareLessThan(eig + (a * size + (a + 2) % size) * 2, eig + (b * size + (b + 2) % size) * 2)) {
+        realCopy(eig + (b * size + b) * 2,     eig + (i * size + (i + 2) % size) * 2    );
+        realCopy(eig + (b * size + b) * 2 + 1, eig + (i * size + (i + 2) % size) * 2 + 1);
+        ++b;
+      }
+      else {
+        realCopy(eig + (a * size + a) * 2,     eig + (i * size + (i + 2) % size) * 2    );
+        realCopy(eig + (a * size + a) * 2 + 1, eig + (i * size + (i + 2) % size) * 2 + 1);
+        ++a;
+      }
+    }
+    for(uint16_t i = begin_a; i <= end_b; i++) {
+      realCopy(eig + (i * size + (i + 2) % size) * 2,     eig + (i * size + i) * 2    );
+      realCopy(eig + (i * size + (i + 2) % size) * 2 + 1, eig + (i * size + i) * 2 + 1);
+    }
+  }
+}
 static void calculateEigenvalues(real_t *a, real_t *q, real_t *r, real_t *eig, uint16_t size, bool_t shifted, realContext_t *realContext) {
   real_t shiftRe, shiftIm;
   uint16_t i, j;
@@ -4094,6 +4146,7 @@ static void calculateEigenvalues(real_t *a, real_t *q, real_t *r, real_t *eig, u
       }
     }
   }
+  sortEigenvalues(eig, size, 0, (size + 1) / 2, size - 1, realContext);
 }
 
 static void calculateEigenvectors(const any34Matrix_t *matrix, bool_t isComplex, real_t *a, real_t *q, real_t *r, real_t *eig, realContext_t *realContext) {
@@ -4328,7 +4381,7 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
 #ifndef TESTSUITE_BUILD
   const uint16_t size = matrix->header.matrixRows;
   real_t *bulk, *a, *q, *r, *eig;
-  uint16_t i;
+  uint16_t i, j;
   bool_t isComplex;
   bool_t shifted = true;
 
@@ -4356,6 +4409,25 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
       if(!realIsZero(r + i * 2 + 1)) {
         isComplex = true;
         break;
+      }
+    }
+
+    // Normalize
+    for(j = 0; j < size; j++) {
+      real_t prod, sum;
+      realZero(&sum);
+      for(i = 0; i < size; i++) {
+        realMultiply(r + (i * size + j) * 2,     r + (i * size + j) * 2,     &prod, &ctxtReal75);
+        realAdd(&sum, &prod, &sum, &ctxtReal75);
+        realMultiply(r + (i * size + j) * 2 + 1, r + (i * size + j) * 2 + 1, &prod, &ctxtReal75);
+        realAdd(&sum, &prod, &sum, &ctxtReal75);
+      }
+      realSquareRoot(&sum, &sum, &ctxtReal75);
+      if(!realIsZero(&sum) && !realIsSpecial(&sum)) {
+        for(i = 0; i < size; i++) {
+          realDivide(r + (i * size + j) * 2,     &sum, r + (i * size + j) * 2,     &ctxtReal75);
+          realDivide(r + (i * size + j) * 2 + 1, &sum, r + (i * size + j) * 2 + 1, &ctxtReal75);
+        }
       }
     }
 

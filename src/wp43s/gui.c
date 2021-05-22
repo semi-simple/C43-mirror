@@ -4373,6 +4373,13 @@ if(!tam.mode) {
   #ifdef PC_BUILD
     if((calcMode == CM_AIM) && !tam.mode) calcModeAimGui();
   #endif
+
+
+
+    #ifdef PC_BUILD
+      if     ((calcMode == CM_NORMAL || calcMode == CM_PEM) && !tam.mode) calcModeNormalGui();
+    #endif
+
 /*
     #ifdef PC_BUILD
       if     ((calcMode == CM_NORMAL || calcMode == CM_PEM) && !tam.mode) calcModeNormalGui();

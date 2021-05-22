@@ -273,7 +273,7 @@ TO_QSPI const int16_t menu_XFN[]         = { ITM_AGM,                       ITM_
                                              ITM_JYX,                       ITM_LNBETA,                 ITM_LNGAMMA,              ITM_MAX,               ITM_MIN,                     ITM_NEXTP,
                                              ITM_WM,                        ITM_WP,                     ITM_WM1,                  ITM_BETAXY,            ITM_gammaXY,                 ITM_GAMMAXY,
                                              ITM_zetaX,                     ITM_M1X,                    ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_PARALLEL,
-                                             ITM_NULL,                      ITM_DMPMNU,                 ITM_PGMTST,               -MNU_XXEQ,             ITM_NULL,                   -MNU_EE                       };    //JM Added
+                                             ITM_sn,                        ITM_cn,                     ITM_dn,                   ITM_Kk,                ITM_Ek,                      ITM_PInk                      };
 
 TO_QSPI const int16_t menu_Orthog[]      = { ITM_HN,                        ITM_Lm,                     ITM_LmALPHA,              ITM_Pn,                ITM_Tn,                      ITM_Un,
                                              ITM_HNP,                       ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
@@ -1828,9 +1828,8 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
 
   /* Pushes a new softmenu on the softmenu stack.
    *
-   * \param[in] softmenuId int16_t Softmenu ID
-   * \return void
-   ***********************************************/
+   * \param[in] softmenuId Softmenu ID
+   */
   static void pushSoftmenu(int16_t softmenuId) {
     int i;
 //    if(running_program_jm) return;                             //JM

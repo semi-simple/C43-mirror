@@ -51,9 +51,9 @@ void graph_reset(void){
   graph_dy      = 0;
   extentx       = false;
   extenty       = false;
-  jm_VECT       = false;
-  jm_NVECT      = false;
-  jm_SCALE      = false;
+  PLOT_VECT       = false;
+  PLOT_NVECT      = false;
+  PLOT_SCALE      = false;
   Aspect_Square = true;
   PLOT_LINE     = true;
   PLOT_CROSS    = false;
@@ -131,21 +131,21 @@ void fnPzoom (uint16_t param) {
 }
 
 void fnPvect (uint16_t unusedButMandatoryParameter) {
-  jm_VECT = !jm_VECT;
-  if(jm_VECT) {jm_NVECT = false;}
+  PLOT_VECT = !PLOT_VECT;
+  if(PLOT_VECT) {PLOT_NVECT = false;}
   fnRefreshState();                //jm
   fnPlot(0);
 }    
 
 void fnPNvect (uint16_t unusedButMandatoryParameter) {
-  jm_NVECT = !jm_NVECT;
-  if(jm_NVECT) {jm_VECT = false;}
+  PLOT_NVECT = !PLOT_NVECT;
+  if(PLOT_NVECT) {PLOT_VECT = false;}
   fnRefreshState();                //jm
   fnPlot(0);
 }    
 
 void fnScale (uint16_t unusedButMandatoryParameter) {
-  jm_SCALE = !jm_SCALE;
+  PLOT_SCALE = !PLOT_SCALE;
   fnRefreshState();                //jm
   fnPlot(0);
 }    
@@ -175,9 +175,9 @@ void fnPlotReset(uint16_t unusedButMandatoryParameter) {
   graph_dy      = 0;
   extentx       = true;
   extenty       = true;
-  jm_VECT       = false;
-  jm_NVECT      = false;
-  jm_SCALE      = false;
+  PLOT_VECT       = false;
+  PLOT_NVECT      = false;
+  PLOT_SCALE      = false;
   //Aspect_Square = true;
   PLOT_LINE     = true;
   PLOT_CROSS    = true;
@@ -534,7 +534,7 @@ void graph_plotmem(void) {
   graph_axis();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
   if(PLOT_AXIS) graph_text();
 
-  if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
+  if(PLOT_VECT || PLOT_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(telltale == MEM_INITIALIZED && checkMinimumDataPoints(const_2)) {
 
@@ -700,7 +700,7 @@ void graph_plotmem(void) {
     }
 
     //Cause scales to be the same    
-    if(jm_SCALE) {
+    if(PLOT_SCALE) {
       x_min = min(x_min,y_min);
       x_max = max(x_max,y_max);
       y_min = x_min;
@@ -977,7 +977,7 @@ void fnStatList() {
       refreshStatusBar();
     }
 
-  if(jm_VECT || jm_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
+  if(PLOT_VECT || PLOT_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(telltale == MEM_INITIALIZED) {
     runFunction(ITM_NSIGMA);

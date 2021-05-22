@@ -216,9 +216,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&roundedTicks,                       sizeof(roundedTicks),                       BACKUP);
     save(&extentx,                            sizeof(extentx),                            BACKUP);
     save(&extenty,                            sizeof(extenty),                            BACKUP);
-    save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
-    save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
-    save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+    save(&PLOT_VECT,                          sizeof(PLOT_VECT),                          BACKUP);
+    save(&PLOT_NVECT,                         sizeof(PLOT_NVECT),                         BACKUP);
+    save(&PLOT_SCALE,                         sizeof(PLOT_SCALE),                         BACKUP);
     save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
     save(&PLOT_LINE,                          sizeof(PLOT_LINE),                          BACKUP);
     save(&PLOT_CROSS,                         sizeof(PLOT_CROSS),                         BACKUP);
@@ -447,9 +447,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&roundedTicks,                       sizeof(roundedTicks),                       BACKUP);
       restore(&extentx,                            sizeof(extentx),                            BACKUP);
       restore(&extenty,                            sizeof(extenty),                            BACKUP);
-      restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
-      restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
-      restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+      restore(&PLOT_VECT,                          sizeof(PLOT_VECT),                          BACKUP);
+      restore(&PLOT_NVECT,                         sizeof(PLOT_NVECT),                         BACKUP);
+      restore(&PLOT_SCALE,                         sizeof(PLOT_SCALE),                         BACKUP);
       restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
       restore(&PLOT_LINE,                          sizeof(PLOT_LINE),                          BACKUP);
       restore(&PLOT_CROSS,                         sizeof(PLOT_CROSS),                         BACKUP);

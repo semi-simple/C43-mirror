@@ -333,17 +333,17 @@ int8_t fnCbIsSet(int16_t item) {
         break;
 
         case JC_VECT: {
-          cb_param = jm_VECT;
+          cb_param = PLOT_VECT;
         }
         break;
 
         case JC_NVECT: {
-          cb_param = jm_NVECT;
+          cb_param = PLOT_NVECT;
         }
         break;
 
         case JC_SCALE: {
-          cb_param = jm_SCALE;
+          cb_param = PLOT_SCALE;
         }
         break;
 

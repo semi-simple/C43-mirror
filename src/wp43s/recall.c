@@ -29,6 +29,7 @@
 #include "registers.h"
 #include "stack.h"
 #include "store.h"
+#include "typeDefinitions.h"
 
 #include "wp43s.h"
 
@@ -218,9 +219,9 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(roundedTicks);
     recallFromDtConfigDescriptor(extentx);
     recallFromDtConfigDescriptor(extenty);
-    recallFromDtConfigDescriptor(jm_VECT);
-    recallFromDtConfigDescriptor(jm_NVECT);
-    recallFromDtConfigDescriptor(jm_SCALE);
+    recallFromDtConfigDescriptor(PLOT_VECT);
+    recallFromDtConfigDescriptor(PLOT_NVECT);
+    recallFromDtConfigDescriptor(PLOT_SCALE);
     recallFromDtConfigDescriptor(Aspect_Square);          
     recallFromDtConfigDescriptor(PLOT_LINE);          
     recallFromDtConfigDescriptor(PLOT_CROSS);          

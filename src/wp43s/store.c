@@ -25,6 +25,7 @@
 #include "matrix.h"
 #include "registerValueConversions.h"
 #include "registers.h"
+#include "typeDefinitions.h"
 
 #include "wp43s.h"
 
@@ -289,9 +290,9 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(roundedTicks);
   storeToDtConfigDescriptor(extentx);
   storeToDtConfigDescriptor(extenty);
-  storeToDtConfigDescriptor(jm_VECT);
-  storeToDtConfigDescriptor(jm_NVECT);
-  storeToDtConfigDescriptor(jm_SCALE);
+  storeToDtConfigDescriptor(PLOT_VECT);
+  storeToDtConfigDescriptor(PLOT_NVECT);
+  storeToDtConfigDescriptor(PLOT_SCALE);
   storeToDtConfigDescriptor(Aspect_Square);          
   storeToDtConfigDescriptor(PLOT_LINE);          
   storeToDtConfigDescriptor(PLOT_CROSS);          
@@ -334,6 +335,10 @@ void fnStoreStack(uint16_t regist) {
 
 void fnStoreElement(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
+  if(matrixIndex != INVALID_VARIABLE && regInRange(matrixIndex) && getRegisterDataType(matrixIndex) == dtReal34Matrix && getRegisterDataType(REGISTER_X) == dtComplex34) {
+    // Real matrices turns to complex matrices by setting a complex element
+    convertReal34MatrixRegisterToComplex34MatrixRegister(matrixIndex, matrixIndex);
+  }
   callByIndexedMatrix(storeElementReal, storeElementComplex);
 #endif // TESTSUITE_BUILD
 }

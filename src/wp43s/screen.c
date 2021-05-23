@@ -1343,15 +1343,15 @@
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix,"a" STD_SUB_0 STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+                strcat(prefix,"a" STD_SUB_0 " =");
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               } else
               if(regist == REGISTER_Y) {
-                strcpy(prefix,"y" STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+                strcpy(prefix,"y = ");
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix, "a" STD_SUB_1 STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+                strcat(prefix, "a" STD_SUB_1 " =");
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               } else
               if(regist == REGISTER_Z) {
@@ -1360,18 +1360,18 @@
                 while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                   strcat(prefix,STD_SPACE_6_PER_EM);
                 }
-                strcat(prefix, "a" STD_SUB_2 STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+                strcat(prefix, "a" STD_SUB_2 " =");
                 prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
               }
             } else
 
             if(regist == REGISTER_X) {
-              strcpy(prefix,"y" STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+              strcpy(prefix,"y = ");
               strcat(prefix,getCurveFitModeFormula(lrChosen));
               while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                 strcat(prefix,STD_SPACE_6_PER_EM);
               }
-              strcat(prefix,"a" STD_SUB_0 STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+              strcat(prefix,"a" STD_SUB_0 " =");
               prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
             } else if(regist == REGISTER_Y) {
               strcpy(prefix, eatSpacesEnd(getCurveFitModeName(lrChosen)));
@@ -1379,7 +1379,7 @@
               while(stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1 < LRWidth) {
                 strcat(prefix,STD_SPACE_6_PER_EM);
               }
-              strcat(prefix, "a" STD_SUB_1 STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+              strcat(prefix, "a" STD_SUB_1 " =");
               prefixWidth = stringWidth(prefix, &standardFont, prefixPre, prefixPost) + 1;
             }
 
@@ -1409,7 +1409,7 @@
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
                 strcat(prefix, STD_SPACE_FIGURE);
               }
-              strcat(prefix, STD_y_CIRC STD_SPACE_FIGURE "=" STD_SPACE_FIGURE STD_SPACE_6_PER_EM);
+              strcat(prefix, STD_y_CIRC " =");
               prefixWidth = stringWidth(prefix, &standardFont, false,false) + 1;
             }
           }
@@ -1423,7 +1423,7 @@
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
                 strcat(prefix, STD_SPACE_FIGURE);
               }
-              strcat(prefix, STD_x_CIRC STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+              strcat(prefix, STD_x_CIRC " =");
               prefixWidth = stringWidth(prefix, &standardFont, false,false) + 1;
             }
           }
@@ -1437,7 +1437,7 @@
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
                 strcat(prefix, STD_SPACE_FIGURE);
               }
-              strcat(prefix, STD_x_CIRC STD_SUB_1 STD_SPACE_FIGURE "=" STD_SPACE_FIGURE STD_SPACE_6_PER_EM);
+              strcat(prefix, STD_x_CIRC STD_SUB_1 " =" );
               prefixWidth = stringWidth(prefix, &standardFont, false,false) + 1;
             } else
             if(regist == REGISTER_Y) {
@@ -1448,7 +1448,7 @@
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
                 strcat(prefix, STD_SPACE_FIGURE);
               }
-              strcat(prefix, STD_x_CIRC STD_SUB_2 STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+              strcat(prefix, STD_x_CIRC STD_SUB_2 " =");
               prefixWidth = stringWidth(prefix, &standardFont, false,false) + 1;
             }
           }
@@ -1462,14 +1462,14 @@
                 if(lrCountOnes(lrSelection)>1) strcat(prefix,STD_SUP_ASTERISK);
                 strcat(prefix, STD_SPACE_FIGURE);
               }
-              strcat(prefix, "r" STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+              strcat(prefix, "r =");
               prefixWidth = stringWidth(prefix, &standardFont, false,false) + 1;
             }
           }
 
           else if(temporaryInformation == TI_SMI) {
             if(regist == REGISTER_X) {
-              strcpy(prefix, "s" STD_SUB_m STD_SUB_i STD_SPACE_FIGURE "=" STD_SPACE_FIGURE);
+              strcpy(prefix, "s" STD_SUB_m STD_SUB_i " =");
               prefixWidth = stringWidth(prefix, &standardFont, false,false) + 1;
             }
           }

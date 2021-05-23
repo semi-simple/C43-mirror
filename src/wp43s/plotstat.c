@@ -1347,7 +1347,7 @@ void graphDrawLRline(uint16_t selection) {
         showString("invalid r", &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7+2 +autoshift, vmNormal, false, false); 
       else if (nn < minLRDataPoints(selection) ) {
         showString("insufficient data", &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7+2 +autoshift, vmNormal, false, false);
-        sprintf(ss," %u < %u", nn,minLRDataPoints(selection));
+        sprintf(ss," %i < %i", (int)nn,(int) minLRDataPoints(selection));
         showString(ss, &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7+2 +autoshift, vmNormal, false, false);
         }
       else if(selection == 0)

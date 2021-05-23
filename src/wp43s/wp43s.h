@@ -232,7 +232,9 @@
   extern uint16_t               currentLocalStepNumber;
   extern uint16_t               currentProgramNumber;
   extern uint16_t               lrSelection;
+  extern uint16_t               lrSelectionUndo;
   extern uint16_t               lrChosen;
+  extern uint16_t               lrChosenUndo;
   extern uint16_t               lastPlotMode;
   extern uint16_t               plotSelection;
   

@@ -35,7 +35,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         55  // Added x_min
+#define BACKUP_VERSION         56  // Added lrChosenUndo
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -206,7 +206,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
     save(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
     save(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+    save(&lrSelectionUndo,                    sizeof(lrSelectionUndo),                    BACKUP);
     save(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
+    save(&lrChosenUndo,                       sizeof(lrChosenUndo),                       BACKUP);
     save(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
     save(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
@@ -402,7 +404,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
       restore(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
       restore(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+      restore(&lrSelectionUndo,                    sizeof(lrSelectionUndo),                    BACKUP);
       restore(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
+      restore(&lrChosenUndo,                       sizeof(lrChosenUndo),                       BACKUP);
       restore(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
       restore(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 

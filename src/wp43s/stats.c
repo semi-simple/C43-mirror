@@ -214,6 +214,8 @@ void fnSigma(uint16_t plusMinus) {
   real_t tmpReal1, tmpReal2, tmpReal3, x, y;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
 
+  lrChosen = 0;
+
   if(   (getRegisterDataType(REGISTER_X) == dtLongInteger || getRegisterDataType(REGISTER_X) == dtReal34)
      && (getRegisterDataType(REGISTER_Y) == dtLongInteger || getRegisterDataType(REGISTER_Y) == dtReal34)) {
     if(statisticalSumsPointer == NULL) {

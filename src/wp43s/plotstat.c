@@ -43,7 +43,6 @@
 static char tmp_names1[30];
 char * padEquals(const char * ss);
 void fnPlotRegressionLine(uint16_t plotMode);
-static void drawline(uint16_t selection, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2);
 
 
 
@@ -52,6 +51,7 @@ static void drawline(uint16_t selection, real_t *RR, real_t *SMI, real_t *aa0, r
 
 #ifndef TESTSUITE_BUILD
   static real_t RR,SMI,aa0,aa1,aa2; //L.R. variables
+  static void drawline(uint16_t selection, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2);
 #endif //TESTSUITE_BUILD
 
 

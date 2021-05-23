@@ -187,6 +187,7 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(groupingGap);
     recallFromDtConfigDescriptor(currentAngularMode);
     recallFromDtConfigDescriptor(lrSelection);
+    recallFromDtConfigDescriptor(lrChosen);
     recallFromDtConfigDescriptor(denMax);
     recallFromDtConfigDescriptor(displayStack);
     recallFromDtConfigDescriptor(firstGregorianDay);

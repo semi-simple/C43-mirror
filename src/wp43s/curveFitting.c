@@ -172,6 +172,7 @@ int32_t minLRDataPoints(uint16_t selection){
 void fnProcessLRfind(uint16_t curveFitting){
   int32_t nn;
   real_t NN;
+
   realToInt32(SIGMA_N, nn);  
   realCopy(const_0,&aa0);
   realCopy(const_0,&aa1);
@@ -209,7 +210,6 @@ void fnProcessLRfind(uint16_t curveFitting){
 	#endif //PC_BUILD
 
   if(nn >= minLRDataPoints(s)) {
-
     processCurvefitSelection(s,&RR,&SMI, &aa0, &aa1, &aa2);
     lrChosen = s;
 
@@ -247,9 +247,9 @@ void fnProcessLRfind(uint16_t curveFitting){
          //0010 0011 1111    //0x23F     (internal is inverted: '1' means enabled)
          //0001 1100 0000    //0x1C0
 void fnProcessLR (uint16_t unusedButMandatoryParameter){
-
-  fnProcessLRfind(lrSelection);
-
+  if(checkMinimumDataPoints(const_2)) {
+    fnProcessLRfind(lrSelection);
+  }
 }
 
 
@@ -1027,25 +1027,21 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
 
   void fnYIsFnx(uint16_t unusedButMandatoryParameter){
     real_t XX,YY,RR,SMI,aa0,aa1,aa2;
-    uint16_t sel=1;
     double x=-99,y = 0,a0=-99,a1=-99,a2=-99;
     realCopy(const_0,&aa0);
     realCopy(const_0,&aa1);
     realCopy(const_0,&aa2);
     if(checkMinimumDataPoints(const_2)) {
-      if(lrChosen == 0) {
-        sel = 1; 
+      if(lrChosen == 0) {                    //if lrChosen contains something, the stat data exists, otherwise set it to linear. lrSelection still has 1 at this point, i.e. the * will not appear.
+        lrChosen = CF_LINEAR_FITTING;
       }
-      else {
-        sel = lrChosen;
-      }
-      processCurvefitSelection(sel, &RR, &SMI, &aa0, &aa1, &aa2);
+      processCurvefitSelection(lrChosen, &RR, &SMI, &aa0, &aa1, &aa2);
       if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
         convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
       }
       if(getRegisterDataType(REGISTER_X) == dtReal34) {
         real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &XX);
-        yIsFnx(useREAL39, sel, x, &y, a0, a1, a2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
+        yIsFnx(useREAL39, lrChosen, x, &y, a0, a1, a2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
         realToReal34(&YY,REGISTER_REAL34_DATA(REGISTER_X));
 
         setSystemFlag(FLAG_ASLIFT);
@@ -1062,9 +1058,6 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
   }
 
 
-
-//CF_CAUCHY_FITTING     
-//CF_GAUSS_FITTING      
 
 
   void xIsFny(uint16_t selection, uint8_t rootNo, real_t *XX, real_t *YY, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){
@@ -1166,28 +1159,24 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
 
   void fnXIsFny(uint16_t unusedButMandatoryParameter){
   real_t XX,YY,RR,SMI,aa0,aa1,aa2;
-  uint16_t sel=1;
   realCopy(const_0,&aa0);
   realCopy(const_0,&aa1);
   realCopy(const_0,&aa2);
   if(checkMinimumDataPoints(const_2)) {
-    if(lrChosen == 0) {
-      sel = 1; 
+    if(lrChosen == 0) {                    //if lrChosen contains something, the stat data exists, otherwise set it to linear. lrSelection still has 1 at this point, i.e. the * will not appear.
+      lrChosen = CF_LINEAR_FITTING;
     }
-    else {
-      sel = lrChosen;
-    }
-    processCurvefitSelection(sel, &RR, &SMI, &aa0, &aa1, &aa2);
+    processCurvefitSelection(lrChosen, &RR, &SMI, &aa0, &aa1, &aa2);
     if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
       convertLongIntegerRegisterToReal34Register (REGISTER_X, REGISTER_X);
     }
     if(getRegisterDataType(REGISTER_X) == dtReal34) {
       real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &YY);
-      xIsFny(sel, 1, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
+      xIsFny(lrChosen, 1, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);
       realToReal34(&XX,REGISTER_REAL34_DATA(REGISTER_X));
 
-      if(sel == CF_PARABOLIC_FITTING || sel == CF_GAUSS_FITTING || sel == CF_CAUCHY_FITTING) {
-        xIsFny(sel, 2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);        
+      if(lrChosen == CF_PARABOLIC_FITTING || lrChosen == CF_GAUSS_FITTING || lrChosen == CF_CAUCHY_FITTING) {
+        xIsFny(lrChosen, 2, &XX, &YY, &RR, &SMI, &aa0, &aa1, &aa2);        
         liftStack();
         setSystemFlag(FLAG_ASLIFT);
         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);

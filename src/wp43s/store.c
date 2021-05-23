@@ -257,6 +257,7 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(groupingGap);
   storeToDtConfigDescriptor(currentAngularMode);
   storeToDtConfigDescriptor(lrSelection);
+  storeToDtConfigDescriptor(lrChosen);
   storeToDtConfigDescriptor(denMax);
   storeToDtConfigDescriptor(displayStack);
   storeToDtConfigDescriptor(firstGregorianDay);

@@ -235,7 +235,8 @@
   extern uint16_t               lrChosen;
   extern uint16_t               lastPlotMode;
   extern uint16_t               plotSelection;
-  
+  //extern uint16_t               largeur; // For the real34 width test
+
   extern int32_t                numberOfFreeMemoryRegions;
   extern int32_t                lgCatalogSelection;
 

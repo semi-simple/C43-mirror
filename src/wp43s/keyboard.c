@@ -770,6 +770,8 @@ bool_t lowercaseselected;
 
     temporaryInformation = TI_NO_INFO;
 
+    //longInteger_t lgInt; // For the real34 width test
+    //longIntegerInit(lgInt); // For the real34 width test
     switch(item) {
       case ITM_BACKSPACE:
 //        keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
@@ -1403,9 +1405,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         calcMode = previousCalcMode;
         break;
 
-    case CM_BUG_ON_SCREEN:
-      calcMode = previousCalcMode;
-      break;
+      case CM_BUG_ON_SCREEN:
+        calcMode = previousCalcMode;
+        break;
 
 
     case CM_GRAPH:                      //JM vv
@@ -1425,11 +1427,10 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         popSoftmenu();
         break;
 
-
-    case CM_CONFIRMATION:
-      calcMode = previousCalcMode;
-      temporaryInformation = TI_NO_INFO;
-      break;
+      case CM_CONFIRMATION:
+        calcMode = previousCalcMode;
+        temporaryInformation = TI_NO_INFO;
+        break;
 
       default:
         sprintf(errorMessage, "In function fnKeyExit: unexpected calcMode value (%" PRIu8 ") while processing key EXIT!", calcMode);

@@ -759,8 +759,8 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
-    real34Matrix_t x, res;
-    uint16_t *p;
+    real34Matrix_t x, l, u;
+    uint16_t *p, i, j;
 
     convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
 
@@ -774,17 +774,32 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
     }
     else {
       p = allocWp43s(x.header.matrixRows * sizeof(uint16_t));
-      WP34S_LU_decomposition(&x, &res, p);
-      if(res.matrixElements) {
+      WP34S_LU_decomposition(&x, &l, p);
+      if(l.matrixElements) {
+        copyRealMatrix(&l, &u);
+        for(i = 0; i < l.header.matrixRows; ++i) {
+          for(j = i; j < l.header.matrixColumns; ++j) {
+            real34Copy(i == j ? const34_1 : const34_0, &l.matrixElements[i * l.header.matrixColumns + j]);
+          }
+        }
+        for(i = 1; i < u.header.matrixRows; ++i) {
+          for(j = 0; j < i; ++j) {
+            real34Copy(const34_0, &u.matrixElements[i * u.header.matrixColumns + j]);
+          }
+        }
         realMatrixFree(&x);
-        realMatrixIdentity(&x, res.header.matrixColumns);
-        for(uint16_t i = 0; i < res.header.matrixColumns; ++i) {
+        realMatrixIdentity(&x, l.header.matrixColumns);
+        for(uint16_t i = 0; i < l.header.matrixColumns; ++i) {
           realMatrixSwapRows(&x, &x, i, p[i]);
         }
+        transposeRealMatrix(&x, &x);
         liftStack();
-        convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
-        convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_Y);
-        realMatrixFree(&res);
+        liftStack();
+        convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_Z);
+        convertReal34MatrixToReal34MatrixRegister(&l, REGISTER_Y);
+        convertReal34MatrixToReal34MatrixRegister(&u, REGISTER_X);
+        realMatrixFree(&l);
+        realMatrixFree(&u);
         setSystemFlag(FLAG_ASLIFT);
       }
       else {
@@ -800,9 +815,9 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
     realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    complex34Matrix_t x, res;
+    complex34Matrix_t x, l, u;
     real34Matrix_t pivot;
-    uint16_t *p;
+    uint16_t *p, i, j;
 
     convertComplex34MatrixRegisterToComplex34Matrix(REGISTER_X, &x);
 
@@ -816,16 +831,33 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
     }
     else {
       p = allocWp43s(x.header.matrixRows * sizeof(uint16_t));
-      complex_LU_decomposition(&x, &res, p);
-      if(res.matrixElements) {
-        realMatrixIdentity(&pivot, res.header.matrixColumns);
-        for(uint16_t i = 0; i < res.header.matrixColumns; ++i) {
+      complex_LU_decomposition(&x, &l, p);
+      if(l.matrixElements) {
+        copyComplexMatrix(&l, &u);
+        for(i = 0; i < l.header.matrixRows; ++i) {
+          for(j = i; j < l.header.matrixColumns; ++j) {
+            real34Copy(i == j ? const34_1 : const34_0, VARIABLE_REAL34_DATA(&l.matrixElements[i * l.header.matrixColumns + j]));
+            real34Copy(                     const34_0, VARIABLE_IMAG34_DATA(&l.matrixElements[i * l.header.matrixColumns + j]));
+          }
+        }
+        for(i = 1; i < u.header.matrixRows; ++i) {
+          for(j = 0; j < i; ++j) {
+            real34Copy(const34_0, VARIABLE_REAL34_DATA(&u.matrixElements[i * u.header.matrixColumns + j]));
+            real34Copy(const34_0, VARIABLE_IMAG34_DATA(&u.matrixElements[i * u.header.matrixColumns + j]));
+          }
+        }
+        realMatrixIdentity(&pivot, l.header.matrixColumns);
+        for(uint16_t i = 0; i < l.header.matrixColumns; ++i) {
           realMatrixSwapRows(&pivot, &pivot, i, p[i]);
         }
+        transposeRealMatrix(&pivot, &pivot);
         liftStack();
-        convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
-        convertReal34MatrixToReal34MatrixRegister(&pivot, REGISTER_Y);
-        complexMatrixFree(&res);
+        liftStack();
+        convertReal34MatrixToReal34MatrixRegister(&pivot, REGISTER_Z);
+        convertComplex34MatrixToComplex34MatrixRegister(&l, REGISTER_Y);
+        convertComplex34MatrixToComplex34MatrixRegister(&u, REGISTER_X);
+        complexMatrixFree(&l);
+        complexMatrixFree(&u);
         realMatrixFree(&pivot);
         setSystemFlag(FLAG_ASLIFT);
       }
@@ -2569,11 +2601,25 @@ void transposeRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
   const uint16_t cols = matrix->header.matrixColumns;
   int32_t i, j;
 
-  realMatrixInit(res, cols, rows);
-  for(i = 0; i < rows; ++i) {
-    for(j = 0; j < cols; ++j) {
-      real34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+  if(matrix != res) {
+    realMatrixInit(res, cols, rows);
+    for(i = 0; i < rows; ++i) {
+      for(j = 0; j < cols; ++j) {
+        real34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+      }
     }
+  }
+  else {
+    real34_t tmp;
+    for(i = 0; i < rows; ++i) {
+      for(j = i + 1; j < cols; ++j) {
+        real34Copy(&res->matrixElements[j * rows + i], &tmp);
+        real34Copy(&res->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+        real34Copy(&tmp,                               &res->matrixElements[i * cols + j]);
+      }
+    }
+    res->header.matrixRows    = cols;
+    res->header.matrixColumns = rows;
   }
 }
 

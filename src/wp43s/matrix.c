@@ -3358,6 +3358,28 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
     return;
   }
 
+  {
+    real34_t maxVal, minVal;
+    real_t p, q;
+    real34CopyAbs(&lu.matrixElements[0], &maxVal);
+    real34CopyAbs(&lu.matrixElements[0], &minVal);
+    for(i = 1; i < n; ++i) {
+      if(real34CompareAbsLessThan(&lu.matrixElements[i * n + i], &minVal))
+        real34CopyAbs(&lu.matrixElements[i * n + i], &minVal);
+      if(real34CompareAbsGreaterThan(&lu.matrixElements[i * n + i], &maxVal))
+        real34CopyAbs(&lu.matrixElements[i * n + i], &maxVal);
+    }
+    real34ToReal(&maxVal, &p);
+    real34ToReal(&minVal, &q);
+    WP34S_Log10(&p, &p, &ctxtReal39);
+    WP34S_Log10(&q, &q, &ctxtReal39);
+    realSubtract(&p, &q, &p, &ctxtReal39);
+    int32ToReal(33 - displayFormatDigits, &q);
+    if(realCompareLessEqual(&q, &p)) {
+      temporaryInformation = TI_INACCURATE;
+    }
+  }
+
   if(matrix != res) copyRealMatrix(matrix, res);
 
   x = allocWp43s(res->header.matrixRows * REAL_SIZE);
@@ -3389,6 +3411,32 @@ static bool_t invCpxMat(real_t *matrix, uint16_t n, realContext_t *realContext) 
     freeWp43s(lu, n * n * REAL_SIZE * 2);
     freeWp43s(pivots, TO_BLOCKS(n * sizeof(uint16_t)));
     return false;
+  }
+
+  {
+    real_t maxVal, minVal;
+    real_t p, q;
+    realCopy(lu,     &p);
+    realCopy(lu + 1, &q);
+    realRectangularToPolar(&p, &q, &p, &q, realContext);
+    realCopy(&p, &maxVal);
+    realCopy(&p, &minVal);
+    for(i = 1; i < n; ++i) {
+      realCopy(lu + (i * n + i) * 2,     &p);
+      realCopy(lu + (i * n + i) * 2 + 1, &q);
+      realRectangularToPolar(&p, &q, &p, &q, realContext);
+      if(realCompareLessThan(&p, &minVal))
+        real34Copy(&p, &minVal);
+      if(realCompareGreaterThan(&p, &maxVal))
+        real34Copy(&p, &maxVal);
+    }
+    WP34S_Log10(&maxVal, &p, realContext);
+    WP34S_Log10(&minVal, &q, realContext);
+    realSubtract(&p, &q, &p, realContext);
+    int32ToReal(33 - displayFormatDigits, &q);
+    if(realCompareLessEqual(&q, &p)) {
+      temporaryInformation = TI_INACCURATE;
+    }
   }
 
   x = allocWp43s(n * REAL_SIZE * 2);

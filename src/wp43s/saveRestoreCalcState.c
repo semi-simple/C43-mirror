@@ -35,7 +35,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         55  // Added x_min
+#define BACKUP_VERSION         56  // Added lrChosenUndo
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -206,7 +206,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
     save(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
     save(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+    save(&lrSelectionUndo,                    sizeof(lrSelectionUndo),                    BACKUP);
     save(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
+    save(&lrChosenUndo,                       sizeof(lrChosenUndo),                       BACKUP);
     save(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
     save(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
@@ -402,7 +404,9 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
       restore(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
       restore(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+      restore(&lrSelectionUndo,                    sizeof(lrSelectionUndo),                    BACKUP);
       restore(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
+      restore(&lrChosenUndo,                       sizeof(lrChosenUndo),                       BACKUP);
       restore(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
       restore(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
@@ -740,7 +744,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   }
 
   // Other configuration stuff
-  sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n14\n");
+  sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n15\n");
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "firstGregorianDay\n%" PRIu32 "\n", firstGregorianDay);
   save(tmpString, strlen(tmpString), BACKUP);
@@ -769,6 +773,8 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   sprintf(tmpString, "rngState\n%" PRIu64 " %" PRIu64 "\n", pcg32_global.state, pcg32_global.inc);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "exponentLimit\n%" PRId16 "\n", exponentLimit);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "notBestF\n%" PRIu16 "\n", lrSelection);
   save(tmpString, strlen(tmpString), BACKUP);
 
 
@@ -1204,7 +1210,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       if(loadMode == LM_ALL || loadMode == LM_SUMS) {
         stringToReal(tmpString, (real_t *)(statisticalSumsPointer + REAL_SIZE * i), &ctxtReal75);
       }
-    }
+    }    
   }
 
   else if(strcmp(tmpString, "SYSTEM_FLAGS") == 0) {
@@ -1356,6 +1362,11 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         else if(strcmp(aimBuffer, "exponentLimit") == 0) {
           exponentLimit = stringToInt16(tmpString);
         }
+        else if(strcmp(aimBuffer, "notBestF") == 0) {
+          lrSelection = stringToUint16(tmpString);
+        }
+
+
       }
     }
   }

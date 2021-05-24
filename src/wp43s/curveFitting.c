@@ -243,9 +243,8 @@ void fnProcessLRfind(uint16_t curveFitting){
 
 
 
-
-         //0010 0011 1111    //0x23F     (internal is inverted: '1' means enabled)
-         //0001 1100 0000    //0x1C0
+//0010 0011 1111    //0x23F     (internal is inverted: '1' means enabled)
+//0001 1100 0000    //0x1C0
 void fnProcessLR (uint16_t unusedButMandatoryParameter){
   if(checkMinimumDataPoints(const_2)) {
     fnProcessLRfind(lrSelection);

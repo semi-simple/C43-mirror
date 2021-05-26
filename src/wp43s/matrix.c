@@ -2725,7 +2725,7 @@ void _multiplyRealMatrix(const real34Matrix_t *matrix, const real_t *x, real34Ma
   for(i = 0; i < cols * rows; ++i) {
     real34ToReal(&matrix->matrixElements[i], &y);
     realMultiply(&y, x, &y, realContext);
-    realToReal34(&y, &matrix->matrixElements[i]);
+    realToReal34(&y, &res->matrixElements[i]);
   }
 }
 

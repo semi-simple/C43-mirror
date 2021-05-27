@@ -980,6 +980,7 @@ void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegiste
         sizeInBlocks = 0;
     }
     reallocateRegister(destRegister, getRegisterDataType(sourceRegister), sizeInBlocks, amNone);
+    if(lastErrorCode == ERROR_RAM_FULL) return;
   }
 
   switch(getRegisterDataType(sourceRegister)) {
@@ -1424,6 +1425,13 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
   }
 
   if(getRegisterDataType(regist) != dataType || ((getRegisterDataType(regist) == dtString || getRegisterDataType(regist) == dtLongInteger || getRegisterDataType(regist) == dtReal34Matrix || getRegisterDataType(regist) == dtComplex34Matrix) && getRegisterMaxDataLength(regist) != dataSizeWithoutDataLenBlocks)) {
+    if(!isMemoryBlockAvailable(dataSizeWithDataLenBlocks)) {
+#ifdef PC_BUILD
+      printf("In function reallocateRegister: required %" PRIu16 " blocks for register #%" PRId16 " but no data blocks with enough size are available!\n", dataSizeWithoutDataLenBlocks, regist); fflush(stdout);
+#endif // PC_BUILD
+      lastErrorCode = ERROR_RAM_FULL;
+      return;
+    }
     freeRegisterData(regist);
     setRegisterDataPointer(regist, allocWp43s(dataSizeWithDataLenBlocks));
     setRegisterDataType(regist, dataType, tag);

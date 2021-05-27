@@ -184,10 +184,9 @@ static void Sigma_u_k(const real_t *nu, const real_t *t_r, const real_t *t_i, bo
   real_t nu_k, tmp, tmp2, prev_r, prev_i;
   uint32_t i, j;
 
-  // TODO: may be allocate that memory on the heap (or on the stack)
-  coeff_current = (real_t *)allocWp43s(COEFF_BUFFER_SIZE);
-  coeff_deriv   = (real_t *)allocWp43s(COEFF_BUFFER_SIZE);
-  coeff_next    = (real_t *)allocWp43s(COEFF_BUFFER_SIZE);
+  checkedAllocate(coeff_current, COEFF_BUFFER_SIZE);
+  checkedAllocate(coeff_deriv,   COEFF_BUFFER_SIZE);
+  checkedAllocate(coeff_next,    COEFF_BUFFER_SIZE);
 
   realCopy(const_0, &prev_r), realCopy(const_0, &prev_i);
   realCopy(even ? const_1 : const_0, res_r), realCopy(const_0, res_i);
@@ -282,9 +281,10 @@ static void Sigma_u_k(const real_t *nu, const real_t *t_r, const real_t *t_i, bo
    coeff_next = coeff_tmpptr;
    coeff_tmpptr = NULL;
   }
-  freeWp43s(coeff_current, COEFF_BUFFER_SIZE);
-  freeWp43s(coeff_deriv  , COEFF_BUFFER_SIZE);
-  freeWp43s(coeff_next   , COEFF_BUFFER_SIZE);
+  freeWp43s(coeff_next,    COEFF_BUFFER_SIZE); cleanup_coeff_next:
+  freeWp43s(coeff_deriv,   COEFF_BUFFER_SIZE); cleanup_coeff_deriv:
+  freeWp43s(coeff_current, COEFF_BUFFER_SIZE); cleanup_coeff_current:
+  return;
 }
 #undef COEFF_BUFFER_SIZE
 #undef NUMBER_OF_COEFF

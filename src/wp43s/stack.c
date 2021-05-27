@@ -229,9 +229,21 @@ void saveForUndo(void) {
 
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(regist, SAVED_REGISTER_X - REGISTER_X + regist);
+    if(lastErrorCode == ERROR_RAM_FULL) {
+#ifdef PC_BUILD
+      printf("In function saveForUndo: not enough space for saving register #%" PRId16 "!\n", regist); fflush(stdout);
+#endif // PC_BUILD
+      goto failed;
+    }
   }
 
   copySourceRegisterToDestRegister(REGISTER_L, SAVED_REGISTER_L);
+  if(lastErrorCode == ERROR_RAM_FULL) {
+#ifdef PC_BUILD
+    printf("In function saveForUndo: not enough space for saving register L!\n"); fflush(stdout);
+#endif // PC_BUILD
+    goto failed;
+  }
 
   if(statisticalSumsPointer == NULL) { // There are no statistical sums to save for undo
     if(savedStatisticalSumsPointer != NULL) {
@@ -249,6 +261,16 @@ void saveForUndo(void) {
   }
 
   thereIsSomethingToUndo = true;
+  return;
+
+failed:
+  for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
+    clearRegister(SAVED_REGISTER_X - REGISTER_X + regist);
+  }
+  clearRegister(SAVED_REGISTER_L);
+  thereIsSomethingToUndo = false;
+  lastErrorCode = ERROR_RAM_FULL;
+  return;
 }
 
 

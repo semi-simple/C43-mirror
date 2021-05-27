@@ -548,6 +548,7 @@ typedef enum {
 #define TI_STATISTIC_LR                           42
 #define TI_SA                                     43
 #define TI_INACCURATE                             44
+#define TI_UNDO_DISABLED                          45
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed

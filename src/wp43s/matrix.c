@@ -773,7 +773,7 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      p = allocWp43s(x.header.matrixRows * sizeof(uint16_t));
+      checkedAllocate(p, x.header.matrixRows * sizeof(uint16_t));
       WP34S_LU_decomposition(&x, &l, p);
       if(l.matrixElements) {
         copyRealMatrix(&l, &u);
@@ -812,7 +812,7 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
       freeWp43s(p, x.header.matrixRows * sizeof(uint16_t));
     }
 
-    realMatrixFree(&x);
+    cleanup_p: realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     complex34Matrix_t x, l, u;
@@ -830,7 +830,7 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      p = allocWp43s(x.header.matrixRows * sizeof(uint16_t));
+      checkedAllocate2(p, x.header.matrixRows * sizeof(uint16_t), cleanup2_p);
       complex_LU_decomposition(&x, &l, p);
       if(l.matrixElements) {
         copyComplexMatrix(&l, &u);
@@ -871,7 +871,7 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
       freeWp43s(p, x.header.matrixRows * sizeof(uint16_t));
     }
 
-    complexMatrixFree(&x);
+    cleanup2_p: complexMatrixFree(&x);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -1582,7 +1582,13 @@ void realMatrixRedim(real34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
 
 void complexMatrixInit(complex34Matrix_t *matrix, uint16_t rows, uint16_t cols) {
   //Allocate Memory for Matrix
-  matrix->matrixElements = allocWp43s(TO_BLOCKS((rows * cols) * sizeof(complex34_t)));
+  const size_t neededSize = TO_BLOCKS((rows * cols) * sizeof(complex34_t));
+  if(!isMemoryBlockAvailable(neededSize)) {
+    matrix->header.matrixColumns = matrix->header.matrixRows = 0;
+    matrix->matrixElements = NULL;
+    return;
+  }
+  matrix->matrixElements = allocWp43s(neededSize);
 
   matrix->header.matrixColumns = cols;
   matrix->header.matrixRows = rows;
@@ -2968,9 +2974,9 @@ void WP34S_LU_decomposition(const real34Matrix_t *matrix, real34Matrix_t *lu, ui
     return;
   }
 
+  checkedAllocate(tmpMat, m * n * REAL_SIZE);
   if(matrix != lu) copyRealMatrix(matrix, lu);
 
-  tmpMat = allocWp43s(m * n * REAL_SIZE);
   for(i = 0; i < n; i++) {
     for(j = 0; j < n; j++) {
       real34ToReal(&lu->matrixElements[i * n + j], &tmpMat[i * n + j]);
@@ -3036,6 +3042,7 @@ void WP34S_LU_decomposition(const real34Matrix_t *matrix, real34Matrix_t *lu, ui
   }
 
   freeWp43s(tmpMat, m * n * REAL_SIZE);
+  cleanup_tmpMat: return;
 }
 
 static bool_t luCpxMat(real_t *tmpMat, uint16_t size, uint16_t *p, realContext_t *realContext) {
@@ -3117,9 +3124,9 @@ void complex_LU_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t
     return;
   }
 
+  checkedAllocate(tmpMat, m * n * REAL_SIZE * 2);
   if(matrix != lu) copyComplexMatrix(matrix, lu);
 
-  tmpMat = allocWp43s(m * n * REAL_SIZE * 2);
   for(i = 0; i < n; i++) {
     for(j = 0; j < n; j++) {
       real34ToReal(VARIABLE_REAL34_DATA(&lu->matrixElements[i * n + j]), &tmpMat[(i * n + j) * 2    ]);
@@ -3137,6 +3144,7 @@ void complex_LU_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t
   }
 
   freeWp43s(tmpMat, m * n * REAL_SIZE * 2);
+  cleanup_tmpMat: return;
 }
 
 
@@ -3191,7 +3199,7 @@ void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
     return;
   }
 
-  p = allocWp43s(TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  checkedAllocate(p, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
 
   WP34S_LU_decomposition(matrix, &lu, p);
   realCopy(const_1, &t);
@@ -3208,6 +3216,7 @@ void detRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
   }
 
   freeWp43s(p, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  cleanup_p: return;
 }
 
 void detComplexMatrix(const complex34Matrix_t *matrix, real34_t *res_r, real34_t *res_i) {
@@ -3222,7 +3231,7 @@ void detComplexMatrix(const complex34Matrix_t *matrix, real34_t *res_r, real34_t
     return;
   }
 
-  p = allocWp43s(TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  checkedAllocate(p, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
 
   complex_LU_decomposition(matrix, &lu, p);
   realCopy(const_1, &tr), realCopy(const_0, &ti);
@@ -3239,6 +3248,7 @@ void detComplexMatrix(const complex34Matrix_t *matrix, real34_t *res_r, real34_t
   }
 
   freeWp43s(p, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  cleanup_p: return;
 }
 
 
@@ -3347,7 +3357,7 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
     return;
   }
 
-  pivots = allocWp43s(TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
+  checkedAllocate(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
   WP34S_LU_decomposition(matrix, &lu, pivots);
   if(lu.matrixElements == NULL) {
     freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
@@ -3382,8 +3392,8 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
 
   if(matrix != res) copyRealMatrix(matrix, res);
 
-  x = allocWp43s(res->header.matrixRows * REAL_SIZE);
-  b = allocWp43s(res->header.matrixRows * REAL_SIZE);
+  checkedAllocate(x, res->header.matrixRows * REAL_SIZE);
+  checkedAllocate(b, res->header.matrixRows * REAL_SIZE);
   for(i = 0; i < n; i++) {
     for(j = 0; j < n; j++)
       realCopy((i == j) ? const_1 : const_0, &b[j]);
@@ -3391,10 +3401,11 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
     for(j = 0; j < n; j++)
       realToReal34(x + j, &res->matrixElements[j * n + i]);
   }
-  freeWp43s(b, res->header.matrixRows * REAL_SIZE);
-  freeWp43s(x, res->header.matrixRows * REAL_SIZE);
-  freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t)));
   realMatrixFree(&lu);
+  freeWp43s(b, res->header.matrixRows * REAL_SIZE);                           cleanup_b:
+  freeWp43s(x, res->header.matrixRows * REAL_SIZE);                           cleanup_x:
+  freeWp43s(pivots, TO_BLOCKS(matrix->header.matrixRows * sizeof(uint16_t))); cleanup_pivots:
+  return;
 }
 
 static bool_t invCpxMat(real_t *matrix, uint16_t n, realContext_t *realContext) {
@@ -3404,8 +3415,8 @@ static bool_t invCpxMat(real_t *matrix, uint16_t n, realContext_t *realContext) 
   uint16_t i, j;
   real_t *b;
 
-  lu = allocWp43s(n * n * REAL_SIZE * 2);
-  pivots = allocWp43s(TO_BLOCKS(n * sizeof(uint16_t)));
+  checkedAllocate(lu, n * n * REAL_SIZE * 2);
+  checkedAllocate(pivots, TO_BLOCKS(n * sizeof(uint16_t)));
   for(i = 0; i < n * n * 2; i++) realCopy(matrix + i, lu + i);
   if(!luCpxMat(lu, n, pivots, realContext)) {
     freeWp43s(lu, n * n * REAL_SIZE * 2);
@@ -3439,8 +3450,8 @@ static bool_t invCpxMat(real_t *matrix, uint16_t n, realContext_t *realContext) 
     }
   }
 
-  x = allocWp43s(n * REAL_SIZE * 2);
-  b = allocWp43s(n * REAL_SIZE * 2);
+  checkedAllocate(x, n * REAL_SIZE * 2);
+  checkedAllocate(b, n * REAL_SIZE * 2);
   for(i = 0; i < n; i++) {
     for(j = 0; j < n; j++) {
       realCopy((i == j) ? const_1 : const_0, &b[j * 2    ]);
@@ -3452,11 +3463,11 @@ static bool_t invCpxMat(real_t *matrix, uint16_t n, realContext_t *realContext) 
       realCopy(x + j * 2 + 1, matrix + (j * n + i) * 2 + 1);
     }
   }
-  freeWp43s(b, n * REAL_SIZE * 2);
-  freeWp43s(x, n * REAL_SIZE * 2);
-  freeWp43s(pivots, TO_BLOCKS(n * sizeof(uint16_t)));
-  freeWp43s(lu, n * n * REAL_SIZE * 2);
-  return true;
+  freeWp43s(b, n * REAL_SIZE * 2);                    cleanup_b:
+  freeWp43s(x, n * REAL_SIZE * 2);                    cleanup_x:
+  freeWp43s(pivots, TO_BLOCKS(n * sizeof(uint16_t))); cleanup_pivots:
+  freeWp43s(lu, n * n * REAL_SIZE * 2);               cleanup_lu:
+  return lastErrorCode == ERROR_NONE;
 }
 
 void complex_matrix_inverse(const complex34Matrix_t *matrix, complex34Matrix_t *res) {
@@ -3472,7 +3483,7 @@ void complex_matrix_inverse(const complex34Matrix_t *matrix, complex34Matrix_t *
     return;
   }
 
-  tmpMat = allocWp43s(n * n * REAL_SIZE * 2);
+  checkedAllocate(tmpMat, n * n * REAL_SIZE * 2);
   for(i = 0; i < n; i++) {
     for(j = 0; j < n; j++) {
       real34ToReal(VARIABLE_REAL34_DATA(&matrix->matrixElements[i * n + j]), &tmpMat[(i * n + j) * 2    ]);
@@ -3490,7 +3501,8 @@ void complex_matrix_inverse(const complex34Matrix_t *matrix, complex34Matrix_t *
     }
   }
 
-  freeWp43s(tmpMat, n * n * REAL_SIZE * 2);
+  freeWp43s(tmpMat, n * n * REAL_SIZE * 2); cleanup_tmpMat:
+  return;
 }
 
 
@@ -3621,7 +3633,7 @@ void WP34S_matrix_linear_eqn(const real34Matrix_t *a, const real34Matrix_t *b, r
   }
 
   /* Everything is happy so far -- decompose */
-  pivots = allocWp43s(TO_BLOCKS(sizeof(uint16_t) * n));
+  checkedAllocate(pivots, TO_BLOCKS(sizeof(uint16_t) * n));
   WP34S_LU_decomposition(a, &mat, pivots);
   if(!mat.matrixElements) {
     freeWp43s(&pivots, TO_BLOCKS(sizeof(uint16_t) * n));
@@ -3638,8 +3650,8 @@ void WP34S_matrix_linear_eqn(const real34Matrix_t *a, const real34Matrix_t *b, r
     realMatrixFree(r);
   if(r != b)
     realMatrixInit(r, n, 1);
-  cv = allocWp43s(n * REAL_SIZE);
-  bv = allocWp43s(n * REAL_SIZE);
+  checkedAllocate(cv, n * REAL_SIZE);
+  checkedAllocate(bv, n * REAL_SIZE);
   for(i = 0; i < n; i++) {
     real34ToReal(&b->matrixElements[i] , bv + i);
     pivots[i] = i;
@@ -3647,9 +3659,9 @@ void WP34S_matrix_linear_eqn(const real34Matrix_t *a, const real34Matrix_t *b, r
   WP34S_matrix_pivoting_solve(&mat, bv, pivots, cv, &ctxtReal39);
   for(i = 0; i < n; i++)
     realToReal34(cv + i, &r->matrixElements[i]);
-  freeWp43s(pivots, TO_BLOCKS(sizeof(uint16_t) * n));
-  freeWp43s(cv, n * REAL_SIZE);
-  freeWp43s(bv, n * REAL_SIZE);
+  freeWp43s(bv, n * REAL_SIZE);                       cleanup_bv:
+  freeWp43s(cv, n * REAL_SIZE);                       cleanup_cv:
+  freeWp43s(pivots, TO_BLOCKS(sizeof(uint16_t) * n)); cleanup_pivots:
   return;
 }
 
@@ -3687,7 +3699,7 @@ void complex_matrix_linear_eqn(const complex34Matrix_t *a, const complex34Matrix
   }
 
   /* Everything is happy so far -- decompose */
-  pivots = allocWp43s(TO_BLOCKS(sizeof(uint16_t) * n));
+  checkedAllocate(pivots, TO_BLOCKS(sizeof(uint16_t) * n));
   complex_LU_decomposition(a, &mat, pivots);
   if(!mat.matrixElements) {
     freeWp43s(&pivots, TO_BLOCKS(sizeof(uint16_t) * n));
@@ -3704,8 +3716,8 @@ void complex_matrix_linear_eqn(const complex34Matrix_t *a, const complex34Matrix
     complexMatrixFree(r);
   if(r != b)
     complexMatrixInit(r, n, 1);
-  cv = allocWp43s(n * REAL_SIZE * 2);
-  bv = allocWp43s(n * REAL_SIZE * 2);
+  checkedAllocate(cv, n * REAL_SIZE * 2);
+  checkedAllocate(bv, n * REAL_SIZE * 2);
   for(i = 0; i < n; i++) {
     real34ToReal(VARIABLE_REAL34_DATA(&b->matrixElements[i]) , bv + i * 2    );
     real34ToReal(VARIABLE_IMAG34_DATA(&b->matrixElements[i]) , bv + i * 2 + 1);
@@ -3716,9 +3728,9 @@ void complex_matrix_linear_eqn(const complex34Matrix_t *a, const complex34Matrix
     realToReal34(cv + i * 2    , VARIABLE_REAL34_DATA(&r->matrixElements[i]));
     realToReal34(cv + i * 2 + 1, VARIABLE_IMAG34_DATA(&r->matrixElements[i]));
   }
-  freeWp43s(pivots, TO_BLOCKS(sizeof(uint16_t) * n));
-  freeWp43s(cv, n * REAL_SIZE * 2);
-  freeWp43s(bv, n * REAL_SIZE * 2);
+  freeWp43s(bv, n * REAL_SIZE * 2);                   cleanup_bv:
+  freeWp43s(cv, n * REAL_SIZE * 2);                   cleanup_cv:
+  freeWp43s(pivots, TO_BLOCKS(sizeof(uint16_t) * n)); cleanup_pivots:
   return;
 }
 #endif
@@ -3812,7 +3824,7 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
   real_t *v, *qq, *qt, *newMat, sum, m, t;
 
   // Allocate
-  bulk = allocWp43s((size * size * 5 + size) * REAL_SIZE * 2);
+  checkedAllocate(bulk, (size * size * 5 + size) * REAL_SIZE * 2);
 
   matr = bulk;
   matq = bulk + (size * size * 2);
@@ -3951,6 +3963,7 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
 
   // Cleanup
   freeWp43s(bulk, (size * size * 5 + size) * REAL_SIZE * 2);
+  cleanup_bulk: return;
 }
 #endif // TESTSUITE_BUILD
 
@@ -3961,7 +3974,7 @@ void real_QR_decomposition(const real34Matrix_t *matrix, real34Matrix_t *q, real
     uint32_t i;
 
     // Allocate
-    mat = allocWp43s(matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
+    checkedAllocate(mat, matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
     matq = mat + matrix->header.matrixRows * matrix->header.matrixColumns * 2;
     matr = mat + matrix->header.matrixRows * matrix->header.matrixColumns * 2 * 2;
 
@@ -3986,6 +3999,7 @@ void real_QR_decomposition(const real34Matrix_t *matrix, real34Matrix_t *q, real
 
     // Cleanup
     freeWp43s(mat, matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
+    cleanup_mat: return;
   }
 #endif // TESTSUITE_BUILD
 }
@@ -3997,7 +4011,7 @@ void complex_QR_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t
     uint32_t i;
 
     // Allocate
-    mat = allocWp43s(matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
+    checkedAllocate(mat, matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
     matq = mat + matrix->header.matrixRows * matrix->header.matrixColumns * 2;
     matr = mat + matrix->header.matrixRows * matrix->header.matrixColumns * 2 * 2;
 
@@ -4023,6 +4037,7 @@ void complex_QR_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t
 
     // Cleanup
     freeWp43s(mat, matrix->header.matrixRows * matrix->header.matrixColumns * REAL_SIZE * 2 * 3);
+    cleanup_mat: return;
   }
 #endif // TESTSUITE_BUILD
 }
@@ -4376,7 +4391,7 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res, real34Ma
   bool_t shifted = true;
 
   if(matrix->header.matrixRows == matrix->header.matrixColumns) {
-    bulk = allocWp43s(size * size * REAL_SIZE * 2 * 4);
+    checkedAllocate(bulk, size * size * REAL_SIZE * 2 * 4);
     a   = bulk;
     q   = bulk + size * size * 2;
     r   = bulk + size * size * 2 * 2;
@@ -4414,6 +4429,7 @@ void realEigenvalues(const real34Matrix_t *matrix, real34Matrix_t *res, real34Ma
     }
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
+    cleanup_bulk: return;
   }
 #endif // TESTSUITE_BUILD
 }
@@ -4426,7 +4442,7 @@ void complexEigenvalues(const complex34Matrix_t *matrix, complex34Matrix_t *res)
   bool_t shifted = true;
 
   if(matrix->header.matrixRows == matrix->header.matrixColumns) {
-    bulk = allocWp43s(size * size * REAL_SIZE * 2 * 4);
+    checkedAllocate(bulk, size * size * REAL_SIZE * 2 * 4);
     a   = bulk;
     q   = bulk + size * size * 2;
     r   = bulk + size * size * 2 * 2;
@@ -4450,6 +4466,7 @@ void complexEigenvalues(const complex34Matrix_t *matrix, complex34Matrix_t *res)
     }
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
+    cleanup_bulk: return;
   }
 #endif // TESTSUITE_BUILD
 }
@@ -4463,7 +4480,7 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
   bool_t shifted = true;
 
   if(matrix->header.matrixRows == matrix->header.matrixColumns) {
-    bulk = allocWp43s(size * size * REAL_SIZE * 2 * 4);
+    checkedAllocate(bulk, size * size * REAL_SIZE * 2 * 4);
     a   = bulk;
     q   = bulk + size * size * 2;
     r   = bulk + size * size * 2 * 2;
@@ -4521,6 +4538,7 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
     }
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
+    cleanup_bulk: return;
   }
 #endif // TESTSUITE_BUILD
 }
@@ -4533,7 +4551,7 @@ void complexEigenvectors(const complex34Matrix_t *matrix, complex34Matrix_t *res
   bool_t shifted = true;
 
   if(matrix->header.matrixRows == matrix->header.matrixColumns) {
-    bulk = allocWp43s(size * size * REAL_SIZE * 2 * 4);
+    checkedAllocate(bulk, size * size * REAL_SIZE * 2 * 4);
     a   = bulk;
     q   = bulk + size * size * 2;
     r   = bulk + size * size * 2 * 2;
@@ -4559,6 +4577,7 @@ void complexEigenvectors(const complex34Matrix_t *matrix, complex34Matrix_t *res
     }
 
     freeWp43s(bulk, size * size * REAL_SIZE * 2 * 4);
+    cleanup_bulk: return;
   }
 #endif // TESTSUITE_BUILD
 }

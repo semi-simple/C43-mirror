@@ -190,15 +190,16 @@ void *wp43sAllocate(size_t sizeInBlocks) {
 
   if(minBlock == WP43S_NULL) {
     #ifdef DMCP_BUILD
-      backToSystem(NOPARAM);
+      //backToSystem(NOPARAM);
     #else // !DMCP_BUILD
       minSizeInBlocks = 0;
       for(i=0; i<numberOfFreeMemoryRegions; i++) {
         minSizeInBlocks += freeMemoryRegions[i].sizeInBlocks;
       }
       printf("\nOUT OF MEMORY\nMemory claimed: %" PRIu64 " bytes\nFragmented free memory: %u bytes\n", (uint64_t)TO_BYTES(sizeInBlocks), TO_BYTES(minSizeInBlocks));
-      exit(-3);
+      //exit(-3);
     #endif // DMCP_BUILD
+    return NULL;
   }
 
   #ifndef DMCP_BUILD

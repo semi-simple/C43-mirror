@@ -759,8 +759,8 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
-    real34Matrix_t x, res;
-    uint16_t *p;
+    real34Matrix_t x, l, u;
+    uint16_t *p, i, j;
 
     convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &x);
 
@@ -774,17 +774,32 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
     }
     else {
       p = allocWp43s(x.header.matrixRows * sizeof(uint16_t));
-      WP34S_LU_decomposition(&x, &res, p);
-      if(res.matrixElements) {
+      WP34S_LU_decomposition(&x, &l, p);
+      if(l.matrixElements) {
+        copyRealMatrix(&l, &u);
+        for(i = 0; i < l.header.matrixRows; ++i) {
+          for(j = i; j < l.header.matrixColumns; ++j) {
+            real34Copy(i == j ? const34_1 : const34_0, &l.matrixElements[i * l.header.matrixColumns + j]);
+          }
+        }
+        for(i = 1; i < u.header.matrixRows; ++i) {
+          for(j = 0; j < i; ++j) {
+            real34Copy(const34_0, &u.matrixElements[i * u.header.matrixColumns + j]);
+          }
+        }
         realMatrixFree(&x);
-        realMatrixIdentity(&x, res.header.matrixColumns);
-        for(uint16_t i = 0; i < res.header.matrixColumns; ++i) {
+        realMatrixIdentity(&x, l.header.matrixColumns);
+        for(uint16_t i = 0; i < l.header.matrixColumns; ++i) {
           realMatrixSwapRows(&x, &x, i, p[i]);
         }
+        transposeRealMatrix(&x, &x);
         liftStack();
-        convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
-        convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_Y);
-        realMatrixFree(&res);
+        liftStack();
+        convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_Z);
+        convertReal34MatrixToReal34MatrixRegister(&l, REGISTER_Y);
+        convertReal34MatrixToReal34MatrixRegister(&u, REGISTER_X);
+        realMatrixFree(&l);
+        realMatrixFree(&u);
         setSystemFlag(FLAG_ASLIFT);
       }
       else {
@@ -800,9 +815,9 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
     realMatrixFree(&x);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    complex34Matrix_t x, res;
+    complex34Matrix_t x, l, u;
     real34Matrix_t pivot;
-    uint16_t *p;
+    uint16_t *p, i, j;
 
     convertComplex34MatrixRegisterToComplex34Matrix(REGISTER_X, &x);
 
@@ -816,16 +831,33 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
     }
     else {
       p = allocWp43s(x.header.matrixRows * sizeof(uint16_t));
-      complex_LU_decomposition(&x, &res, p);
-      if(res.matrixElements) {
-        realMatrixIdentity(&pivot, res.header.matrixColumns);
-        for(uint16_t i = 0; i < res.header.matrixColumns; ++i) {
+      complex_LU_decomposition(&x, &l, p);
+      if(l.matrixElements) {
+        copyComplexMatrix(&l, &u);
+        for(i = 0; i < l.header.matrixRows; ++i) {
+          for(j = i; j < l.header.matrixColumns; ++j) {
+            real34Copy(i == j ? const34_1 : const34_0, VARIABLE_REAL34_DATA(&l.matrixElements[i * l.header.matrixColumns + j]));
+            real34Copy(                     const34_0, VARIABLE_IMAG34_DATA(&l.matrixElements[i * l.header.matrixColumns + j]));
+          }
+        }
+        for(i = 1; i < u.header.matrixRows; ++i) {
+          for(j = 0; j < i; ++j) {
+            real34Copy(const34_0, VARIABLE_REAL34_DATA(&u.matrixElements[i * u.header.matrixColumns + j]));
+            real34Copy(const34_0, VARIABLE_IMAG34_DATA(&u.matrixElements[i * u.header.matrixColumns + j]));
+          }
+        }
+        realMatrixIdentity(&pivot, l.header.matrixColumns);
+        for(uint16_t i = 0; i < l.header.matrixColumns; ++i) {
           realMatrixSwapRows(&pivot, &pivot, i, p[i]);
         }
+        transposeRealMatrix(&pivot, &pivot);
         liftStack();
-        convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
-        convertReal34MatrixToReal34MatrixRegister(&pivot, REGISTER_Y);
-        complexMatrixFree(&res);
+        liftStack();
+        convertReal34MatrixToReal34MatrixRegister(&pivot, REGISTER_Z);
+        convertComplex34MatrixToComplex34MatrixRegister(&l, REGISTER_Y);
+        convertComplex34MatrixToComplex34MatrixRegister(&u, REGISTER_X);
+        complexMatrixFree(&l);
+        complexMatrixFree(&u);
         realMatrixFree(&pivot);
         setSystemFlag(FLAG_ASLIFT);
       }
@@ -1896,8 +1928,8 @@ smallFont:
   const bool_t leftEllipsis = (sCol > 0);
   int16_t digits;
 
-  int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0) +
-    (rightEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) + 11 : 0);
+  int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
+    (rightEllipsis ? stringWidth(" " STD_ELLIPSIS, font, true, true) : 0);
   totalWidth = baseWidth + getRealMatrixColumnWidths(matrix, font, colWidth, rPadWidth, &digits, maxCols);
   if(totalWidth > maxWidth || leftEllipsis) {
     if(font == &numericFont) {
@@ -1925,7 +1957,7 @@ smallFont:
       goto smallFont;
     }
   }
-  for(int j = 0; j < maxCols; j++) baseWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
+  for(int j = 0; j < maxCols; j++) baseWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true);
   baseWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
 
   if(!forEditor) X_POS = SCREEN_WIDTH - ((colVector ? stringWidth("[]" STD_SUP_T, font, true, true) : stringWidth("[]", font, true, true)) + baseWidth);
@@ -1934,31 +1966,26 @@ smallFont:
     int16_t colX = stringWidth("[", font, true, true);
     showString((maxRows == 1) ? "[" : (i == 0) ? STD_MAT_TL : (i + 1 == maxRows) ? STD_MAT_BL : STD_MAT_ML, font, X_POS + 1, Y_POS - (maxRows -1 - i) * fontHeight, vmNormal, true, false);
     if(leftEllipsis) {
-      showString(STD_ELLIPSIS, font, X_POS + 10, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
-      colX += stringWidth(STD_ELLIPSIS, font, true, true);
+      showString(STD_ELLIPSIS " ", font, X_POS + stringWidth("[", font, true, true), Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+      colX += stringWidth(STD_ELLIPSIS " ", font, true, true);
     }
     for(int j = 0; j < maxCols + (rightEllipsis ? 1 : 0); j++) {
       if(((i == maxRows - 1) && (rows > maxRows + sRow)) || ((j == maxCols) && rightEllipsis) || ((i == 0) && (sRow > 0))) {
-        strcpy(tmpString, STD_ELLIPSIS);
+        strcpy(tmpString, " " STD_ELLIPSIS);
         vm = vmNormal;
       }
       else {
-        bool_t neg = real34IsNegative(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
-        tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
-        real34SetPositiveSign(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
-        real34ToDisplayString(&matrix->matrixElements[(i+sRow)*cols+j+sCol], amNone, &tmpString[strlen(tmpString)], font, colWidth[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, true);
-        if(neg) real34SetNegativeSign(&matrix->matrixElements[(i+sRow)*cols+j+sCol]);
-        if (forEditor && matSelRow == (i + sRow) && matSelCol == (j + sCol)) {
-          const int16_t minusWidth = stringWidth("-", font, true, true);
-          lcd_fill_rect(X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX - minusWidth - 1, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j] + minusWidth, font == &numericFont ? 32 : 20, 0xFF);
+        real34ToDisplayString(&matrix->matrixElements[(i+sRow)*cols+j+sCol], amNone, tmpString, font, colWidth[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, true);
+        if(forEditor && matSelRow == (i + sRow) && matSelCol == (j + sCol)) {
+          lcd_fill_rect(X_POS + colX, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j], font == &numericFont ? 32 : 20, 0xFF);
           vm = vmReverse;
         } else {
           vm = vmNormal;
         }
       }
       width = stringWidth(tmpString, font, true, true) + 1;
-      showString(tmpString, font, X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX + (((j == maxCols) && rightEllipsis) ? stringWidth(STD_SPACE_FIGURE, font, true, true) - width : (colWidth[j] - width) - rPadWidth[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
-      colX += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
+      showString(tmpString, font, X_POS + colX + (((j == maxCols) && rightEllipsis) ? -stringWidth(" ", font, true, true) : (colWidth[j] - width) - rPadWidth[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+      colX += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true);
     }
     showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, X_POS + stringWidth("[", font, true, true) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
     if(colVector == true) {
@@ -2091,8 +2118,8 @@ smallFont:
   bool_t leftEllipsis = (sCol > 0);
   int16_t digits;
 
-  int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0) +
-    (rightEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) + 11 : 0);
+  int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
+    (rightEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0);
   totalWidth = baseWidth + getComplexMatrixColumnWidths(matrix, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits, maxCols);
   if(totalWidth > maxWidth || leftEllipsis) {
     if(font == &numericFont) {
@@ -2120,23 +2147,17 @@ smallFont:
       goto smallFont;
     }
   }
-  for(int j = 0; j < maxCols; j++) baseWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
+  for(int j = 0; j < maxCols; j++) baseWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true);
   baseWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
-  if(colWidth_r[0] == 0) {
-    baseWidth -= stringWidth("+", font, true, true);
-  }
 
   if(!forEditor) X_POS = SCREEN_WIDTH - ((colVector ? stringWidth("[]" STD_SUP_T, font, true, true) : stringWidth("[]", font, true, true)) + baseWidth);
 
   for(int i = 0; i < maxRows; i++) {
     int16_t colX = stringWidth("[", font, true, true);
     showString((maxRows == 1) ? "[" : (i == 0) ? STD_MAT_TL : (i + 1 == maxRows) ? STD_MAT_BL : STD_MAT_ML, font, X_POS + 1, Y_POS - (maxRows -1 - i) * fontHeight, vmNormal, true, false);
-    if(!getSystemFlag(FLAG_POLAR) && colWidth_r[0] == 0) {
-      colX -= stringWidth("+", font, true, true);
-    }
     if(leftEllipsis) {
-      showString(STD_ELLIPSIS, font, X_POS + 10, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
-      colX += stringWidth(STD_ELLIPSIS, font, true, true);
+      showString(STD_ELLIPSIS " ", font, X_POS + stringWidth("[", font, true, true), Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
+      colX += stringWidth(STD_ELLIPSIS " ", font, true, true);
     }
     for(int j = 0; j < maxCols + (rightEllipsis ? 1 : 0); j++) {
       real34_t re, im;
@@ -2159,21 +2180,17 @@ smallFont:
         vm = vmNormal;
       }
       else {
-        bool_t neg = real34IsNegative(&re);
-        tmpString[0] = neg ? '-' : ' '; tmpString[1] = 0;
-        if(!getSystemFlag(FLAG_POLAR))real34SetPositiveSign(&re);
-        real34ToDisplayString(&re, amNone, &tmpString[strlen(tmpString)], font, colWidth_r[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, true);
-        if(neg) real34SetNegativeSign(&re);
-        if (forEditor && matSelRow == (i + sRow) && matSelCol == (j + sCol)) {
-          const int16_t minusWidth = stringWidth("-", font, true, true);
-          lcd_fill_rect(X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX - minusWidth - 1, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j] + minusWidth, font == &numericFont ? 32 : 20, 0xFF);
+        tmpString[0] = 0;
+        real34ToDisplayString(&re, amNone, tmpString, font, colWidth_r[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, true);
+        if(forEditor && matSelRow == (i + sRow) && matSelCol == (j + sCol)) {
+          lcd_fill_rect(X_POS + colX, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j], font == &numericFont ? 32 : 20, 0xFF);
           vm = vmReverse;
         } else {
           vm = vmNormal;
         }
       }
       width = stringWidth(tmpString, font, true, true) + 1;
-      showString(tmpString, font, X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX + (((j == maxCols) && rightEllipsis) ? stringWidth(STD_SPACE_FIGURE, font, true, true) - width : (colWidth_r[j] - width) - rPadWidth_r[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+      showString(tmpString, font, X_POS + colX + (((j == maxCols) && rightEllipsis) ? stringWidth(STD_SPACE_FIGURE, font, true, true) - width : (colWidth_r[j] - width) - rPadWidth_r[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
       if(strcmp(tmpString, STD_ELLIPSIS) != 0) {
         bool_t neg = real34IsNegative(&im);
         int16_t cpxUnitWidth;
@@ -2190,15 +2207,13 @@ smallFont:
         if(!getSystemFlag(FLAG_POLAR)) {
           if(neg) tmpString[0] = '-';
         }
-        showString(tmpString, font, X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX + colWidth_r[j] + (width - stringWidth(tmpString, font, true, true)), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+        showString(tmpString, font, X_POS + colX + colWidth_r[j] + (width - stringWidth(tmpString, font, true, true)), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
 
-        if(!getSystemFlag(FLAG_POLAR)) real34SetPositiveSign(&im);
         real34ToDisplayString(&im, amNone, tmpString, font, colWidth_i[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, true);
-        if(neg) real34SetNegativeSign(&im);
-        width = stringWidth(tmpString, font, true, true) + 1;
-        showString(tmpString, font, X_POS + stringWidth(STD_SPACE_FIGURE, font, true, true) + colX + colWidth_r[j] + cpxUnitWidth + (((j == maxCols - 1) && rightEllipsis) ? 0 : (colWidth_i[j] - width) - rPadWidth_i[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+        width = stringWidth(&tmpString[1], font, true, true) + 1;
+        showString(&tmpString[1], font, X_POS + colX + colWidth_r[j] + cpxUnitWidth + (((j == maxCols - 1) && rightEllipsis) ? 0 : (colWidth_i[j] - width) - rPadWidth_i[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
       }
-      colX += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
+      colX += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true);
     }
     showString((maxRows == 1) ? "]" : (i == 0) ? STD_MAT_TR : (i + 1 == maxRows) ? STD_MAT_BR : STD_MAT_MR, font, X_POS + stringWidth("[", font, true, true) + baseWidth, Y_POS - (maxRows -1 -i) * fontHeight, vmNormal, true, false);
     if(colVector == true) {
@@ -2586,11 +2601,25 @@ void transposeRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
   const uint16_t cols = matrix->header.matrixColumns;
   int32_t i, j;
 
-  realMatrixInit(res, cols, rows);
-  for(i = 0; i < rows; ++i) {
-    for(j = 0; j < cols; ++j) {
-      real34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+  if(matrix != res) {
+    realMatrixInit(res, cols, rows);
+    for(i = 0; i < rows; ++i) {
+      for(j = 0; j < cols; ++j) {
+        real34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+      }
     }
+  }
+  else {
+    real34_t tmp;
+    for(i = 0; i < rows; ++i) {
+      for(j = i + 1; j < cols; ++j) {
+        real34Copy(&res->matrixElements[j * rows + i], &tmp);
+        real34Copy(&res->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+        real34Copy(&tmp,                               &res->matrixElements[i * cols + j]);
+      }
+    }
+    res->header.matrixRows    = cols;
+    res->header.matrixColumns = rows;
   }
 }
 
@@ -2696,7 +2725,7 @@ void _multiplyRealMatrix(const real34Matrix_t *matrix, const real_t *x, real34Ma
   for(i = 0; i < cols * rows; ++i) {
     real34ToReal(&matrix->matrixElements[i], &y);
     realMultiply(&y, x, &y, realContext);
-    realToReal34(&y, &matrix->matrixElements[i]);
+    realToReal34(&y, &res->matrixElements[i]);
   }
 }
 
@@ -3329,6 +3358,28 @@ void WP34S_matrix_inverse(const real34Matrix_t *matrix, real34Matrix_t *res) {
     return;
   }
 
+  {
+    real34_t maxVal, minVal;
+    real_t p, q;
+    real34CopyAbs(&lu.matrixElements[0], &maxVal);
+    real34CopyAbs(&lu.matrixElements[0], &minVal);
+    for(i = 1; i < n; ++i) {
+      if(real34CompareAbsLessThan(&lu.matrixElements[i * n + i], &minVal))
+        real34CopyAbs(&lu.matrixElements[i * n + i], &minVal);
+      if(real34CompareAbsGreaterThan(&lu.matrixElements[i * n + i], &maxVal))
+        real34CopyAbs(&lu.matrixElements[i * n + i], &maxVal);
+    }
+    real34ToReal(&maxVal, &p);
+    real34ToReal(&minVal, &q);
+    WP34S_Log10(&p, &p, &ctxtReal39);
+    WP34S_Log10(&q, &q, &ctxtReal39);
+    realSubtract(&p, &q, &p, &ctxtReal39);
+    int32ToReal(33 - displayFormatDigits, &q);
+    if(realCompareLessEqual(&q, &p)) {
+      temporaryInformation = TI_INACCURATE;
+    }
+  }
+
   if(matrix != res) copyRealMatrix(matrix, res);
 
   x = allocWp43s(res->header.matrixRows * REAL_SIZE);
@@ -3360,6 +3411,32 @@ static bool_t invCpxMat(real_t *matrix, uint16_t n, realContext_t *realContext) 
     freeWp43s(lu, n * n * REAL_SIZE * 2);
     freeWp43s(pivots, TO_BLOCKS(n * sizeof(uint16_t)));
     return false;
+  }
+
+  {
+    real_t maxVal, minVal;
+    real_t p, q;
+    realCopy(lu,     &p);
+    realCopy(lu + 1, &q);
+    realRectangularToPolar(&p, &q, &p, &q, realContext);
+    realCopy(&p, &maxVal);
+    realCopy(&p, &minVal);
+    for(i = 1; i < n; ++i) {
+      realCopy(lu + (i * n + i) * 2,     &p);
+      realCopy(lu + (i * n + i) * 2 + 1, &q);
+      realRectangularToPolar(&p, &q, &p, &q, realContext);
+      if(realCompareLessThan(&p, &minVal))
+        real34Copy(&p, &minVal);
+      if(realCompareGreaterThan(&p, &maxVal))
+        real34Copy(&p, &maxVal);
+    }
+    WP34S_Log10(&maxVal, &p, realContext);
+    WP34S_Log10(&minVal, &q, realContext);
+    realSubtract(&p, &q, &p, realContext);
+    int32ToReal(33 - displayFormatDigits, &q);
+    if(realCompareLessEqual(&q, &p)) {
+      temporaryInformation = TI_INACCURATE;
+    }
   }
 
   x = allocWp43s(n * REAL_SIZE * 2);

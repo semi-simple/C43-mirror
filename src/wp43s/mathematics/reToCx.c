@@ -53,7 +53,7 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
   if(    (dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
       && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
 
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     fnSetFlag(FLAG_CPXRES);
 
     xIsAReal = true;
@@ -119,7 +119,7 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
 
     if(rMat.header.matrixRows == iMat.header.matrixRows && rMat.header.matrixColumns == iMat.header.matrixColumns) {
       if(complexMatrixInit(&cMat, rMat.header.matrixRows, rMat.header.matrixColumns)) {
-        copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+        if(!saveLastX()) return;
         fnSetFlag(FLAG_CPXRES);
 
         for(uint16_t i = 0; i < rMat.header.matrixRows * rMat.header.matrixColumns; ++i) {

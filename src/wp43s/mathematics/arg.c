@@ -67,7 +67,7 @@ void argError(void) {
  * \return void
  ***********************************************/
 void fnArg(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   arg[getRegisterDataType(REGISTER_X)]();
 

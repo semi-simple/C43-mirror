@@ -351,7 +351,7 @@ void fnSigma(uint16_t plusMinus) {
         initStatisticalSums();
       }
 
-      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+      if(!saveLastX()) return;
       for(uint16_t i = 0; i < matrix.header.matrixRows; ++i) {
         real34ToReal(&matrix.matrixElements[i * 2    ], &y);
         real34ToReal(&matrix.matrixElements[i * 2 + 1], &x);

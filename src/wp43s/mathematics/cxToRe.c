@@ -44,7 +44,7 @@ void fnCxToRe(uint16_t unusedButMandatoryParameter) {
   uint32_t dataTypeX = getRegisterDataType(REGISTER_X);
 
   if(dataTypeX == dtComplex34) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
     setSystemFlag(FLAG_ASLIFT);
@@ -70,7 +70,7 @@ void fnCxToRe(uint16_t unusedButMandatoryParameter) {
     complex34Matrix_t cMat;
     real34Matrix_t rMat, iMat;
 
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
 
     linkToComplexMatrixRegister(REGISTER_X, &cMat);
     if(realMatrixInit(&rMat, cMat.header.matrixRows, cMat.header.matrixColumns)) {

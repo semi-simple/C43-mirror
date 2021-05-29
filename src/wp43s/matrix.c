@@ -422,7 +422,7 @@ void fnNewMatrix(uint16_t unusedParamButMandatory) {
 
   if(!getDimensionArg(&rows, &cols)) return;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   //Initialize Memory for Matrix
   if(realMatrixInit(&matrix, rows, cols)) {
@@ -701,7 +701,7 @@ void fnSetMatrixDimensions(uint16_t regist) {
 
 void fnGetMatrixDimensions(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     const uint16_t rows = REGISTER_DATA(REGISTER_X)->matrixRows;
@@ -736,7 +736,7 @@ void fnGetMatrixDimensions(uint16_t unusedButMandatoryParameter) {
 
 void fnTranspose(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, res;
@@ -771,7 +771,7 @@ void fnTranspose(uint16_t unusedButMandatoryParameter) {
 
 void fnLuDecomposition(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, l, u;
@@ -913,7 +913,7 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
 
 void fnDeterminant(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x;
@@ -976,7 +976,7 @@ void fnDeterminant(uint16_t unusedParamButMandatory) {
 
 void fnInvertMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, res;
@@ -1062,7 +1062,7 @@ void fnInvertMatrix(uint16_t unusedParamButMandatory) {
 
 void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t matrix;
@@ -1119,7 +1119,7 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
 
 void fnRowSum(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, res;
@@ -1180,7 +1180,7 @@ void fnRowSum(uint16_t unusedParamButMandatory) {
 
 void fnRowNorm(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x;

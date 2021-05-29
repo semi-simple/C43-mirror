@@ -109,7 +109,7 @@ void dblDivide(bool_t remainder_mode) {
   longIntegerDivideQuotientRemainder(dividend, x, z, y);
 
   if(remainder_mode) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     convertLongIntegerToShortIntegerRegister(y, base, REGISTER_X);
   }
   else {
@@ -127,7 +127,7 @@ void dblDivide(bool_t remainder_mode) {
       }
     }
 
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     convertLongIntegerToShortIntegerRegister(z, base, REGISTER_X);
 
     if(longIntegerIsZero(y)) {

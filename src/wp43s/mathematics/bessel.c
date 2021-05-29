@@ -60,7 +60,7 @@ static bool_t besselGetParam(calcRegister_t regist, real_t *r, realContext_t *re
 void fnBessel(uint16_t unusedButMandatoryParameter) {
   real_t x, n, r, a;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(besselGetParam(REGISTER_X, &x, &ctxtReal75) && besselGetParam(REGISTER_Y, &n, &ctxtReal75)) {
     if(realIsAnInteger(&n) || (!realIsNegative(&x))) {

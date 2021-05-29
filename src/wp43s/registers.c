@@ -1492,3 +1492,9 @@ void fnToReal(uint16_t unusedButMandatoryParameter) {
       return;
   }
 }
+
+
+bool_t saveLastX(void) {
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  return lastErrorCode == ERROR_NONE;
+}

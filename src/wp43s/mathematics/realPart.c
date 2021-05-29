@@ -63,7 +63,7 @@ void realPartError(void) {
  * \return void
  ***********************************************/
 void fnRealPart(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
   realPart[getRegisterDataType(REGISTER_X)]();
 }
 

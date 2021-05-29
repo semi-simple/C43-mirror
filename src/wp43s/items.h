@@ -1704,7 +1704,7 @@
 #define ITM_XCIRC                     1643
 #define ITM_XtoDATE                   1644
 #define ITM_XtoALPHA                  1645
-#define ITM_01646                     1646
+#define ITM_M_QR                      1646
 #define ITM_YEAR                      1647
 #define ITM_YCIRC                     1648
 #define ITM_YMD                       1649

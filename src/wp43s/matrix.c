@@ -2215,13 +2215,16 @@ smallFont:
         }
         cpxUnitWidth = width = stringWidth(tmpString, font, true, true);
         if(!getSystemFlag(FLAG_POLAR)) {
-          if(neg) tmpString[0] = '-';
+          if(neg) {
+            tmpString[0] = '-';
+            real34SetPositiveSign(&im);
+          }
         }
         showString(tmpString, font, X_POS + colX + colWidth_r[j] + (width - stringWidth(tmpString, font, true, true)), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
 
-        real34ToDisplayString(&im, amNone, tmpString, font, colWidth_i[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, true);
-        width = stringWidth(&tmpString[1], font, true, true) + 1;
-        showString(&tmpString[1], font, X_POS + colX + colWidth_r[j] + cpxUnitWidth + (((j == maxCols - 1) && rightEllipsis) ? 0 : (colWidth_i[j] - width) - rPadWidth_i[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
+        real34ToDisplayString(&im, amNone, tmpString, font, colWidth_i[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, false);
+        width = stringWidth(tmpString, font, true, true) + 1;
+        showString(tmpString, font, X_POS + colX + colWidth_r[j] + cpxUnitWidth + (((j == maxCols - 1) && rightEllipsis) ? 0 : (colWidth_i[j] - width) - rPadWidth_i[i * MATRIX_MAX_COLUMNS + j]), Y_POS - (maxRows -1 -i) * fontHeight, vm, true, false);
       }
       colX += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true);
     }
@@ -2294,7 +2297,7 @@ int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, const font
 
         rPadWidth_i[i * MATRIX_MAX_COLUMNS + j] = 0;
         if(!getSystemFlag(FLAG_POLAR))real34SetPositiveSign(VARIABLE_IMAG34_DATA(&c34Val));
-        real34ToDisplayString(VARIABLE_IMAG34_DATA(&c34Val), amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM, true);
+        real34ToDisplayString(VARIABLE_IMAG34_DATA(&c34Val), amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM, false);
         width = stringWidth(tmpString, font, true, true) + 1;
         for(char *xStr = tmpString; *xStr != 0; xStr++) {
           if(((displayFormat != DF_ENG && (displayFormat != DF_ALL || !getSystemFlag(FLAG_ALLENG))) && (*xStr == '.' || *xStr == ',')) ||
@@ -2735,7 +2738,7 @@ void _multiplyRealMatrix(const real34Matrix_t *matrix, const real_t *x, real34Ma
   for(i = 0; i < cols * rows; ++i) {
     real34ToReal(&matrix->matrixElements[i], &y);
     realMultiply(&y, x, &y, realContext);
-    realToReal34(&y, &matrix->matrixElements[i]);
+    realToReal34(&y, &res->matrixElements[i]);
   }
 }
 
@@ -4075,14 +4078,14 @@ void complex_QR_decomposition(const complex34Matrix_t *matrix, complex34Matrix_t
 }
 
 #ifndef TESTSUITE_BUILD
-static void calculateQrShift(const real_t *mat, uint16_t size, real_t *re, real_t *im, realContext_t *realContext) {
+static void calculateEigenvalues22(const real_t *mat, uint16_t size, real_t *t1r, real_t *t1i, real_t *t2r, real_t *t2i, realContext_t *realContext) {
   // Calculate eigenvalue of 2x2-submatrix
   // Characteristic equation of A = [[a b] [c d]] : t^2 - trace(A) t +      det(A) = 0
   //                                                t^2 -  (a + d) t + (a d - b c) = 0
   //                                            t = ((a + d) ± √(a^2 + 2 a d + d^2 - 4 (a d - b c))) / 2
   //                                                ((a + d) ± √(a^2         + d^2 - 2 a d + 4 b c)) / 2
   const real_t *ar, *ai, *br, *bi, *cr, *ci, *dr, *di;
-  real_t tmp, tmpR, tmpI, discrR, discrI, t1r, t1i, t2r, t2i;
+  real_t tmp, tmpR, tmpI, discrR, discrI;
 
   ar = mat + ((size - 2) * size + (size - 2)) * 2; ai = ar + 1;
   br = mat + ((size - 2) * size + (size - 1)) * 2; bi = br + 1;
@@ -4129,32 +4132,42 @@ static void calculateQrShift(const real_t *mat, uint16_t size, real_t *re, real_
 
   // sqrt
   if(realIsZero(&discrI) && !realIsNegative(&discrR)) {
-    realSquareRoot(&discrR, &t1r, realContext);
-    realCopy(&t1r, &t2r); realChangeSign(&t2r);
-    realZero(&t1i); realZero(&t2i);
+    realSquareRoot(&discrR, t1r, realContext);
+    realCopy(t1r, t2r); realChangeSign(t2r);
+    realZero(t1i); realZero(t2i);
   }
   else if(realIsZero(&discrI)) {
-    realCopy(&discrR, &t1i); realSetPositiveSign(&t1i);
-    realSquareRoot(&t1i, &t1i, realContext);
-    realCopy(&t1i, &t2i); realChangeSign(&t2i);
-    realZero(&t1r); realZero(&t2r);
+    realCopy(&discrR, t1i); realSetPositiveSign(t1i);
+    realSquareRoot(t1i, t1i, realContext);
+    realCopy(t1i, t2i); realChangeSign(t2i);
+    realZero(t1r); realZero(t2r);
   }
   else {
-    realRectangularToPolar(&discrR, &discrI, &t1r, &t1i, realContext);
-    realSquareRoot(&t1r, &t1r, realContext);
-    realMultiply(&t1i, const_1on2, &t1i, realContext);
-    realPolarToRectangular(&t1r, &t1i, &t1r, &t1i, realContext);
-    realCopy(&t1r, &t2r); realChangeSign(&t2r);
-    realCopy(&t1i, &t2i); realChangeSign(&t2i);
+    realRectangularToPolar(&discrR, &discrI, t1r, t1i, realContext);
+    realSquareRoot(t1r, t1r, realContext);
+    realMultiply(t1i, const_1on2, t1i, realContext);
+    realPolarToRectangular(t1r, t1i, t1r, t1i, realContext);
+    realCopy(t1r, t2r); realChangeSign(t2r);
+    realCopy(t1i, t2i); realChangeSign(t2i);
   }
 
   // +a +d /2
-  realAdd(&t1r, ar, &t1r, realContext), realAdd(&t1i, ai, &t1i, realContext);
-  realAdd(&t1r, dr, &t1r, realContext), realAdd(&t1i, di, &t1i, realContext);
-  realAdd(&t2r, ar, &t2r, realContext), realAdd(&t2i, ai, &t2i, realContext);
-  realAdd(&t2r, dr, &t2r, realContext), realAdd(&t2i, di, &t2i, realContext);
-  realDivide(&t1r, const_2, &t1r, realContext), realDivide(&t1i, const_2, &t1i, realContext);
-  realDivide(&t2r, const_2, &t2r, realContext), realDivide(&t2i, const_2, &t2i, realContext);
+  realAdd(t1r, ar, t1r, realContext), realAdd(t1i, ai, t1i, realContext);
+  realAdd(t1r, dr, t1r, realContext), realAdd(t1i, di, t1i, realContext);
+  realAdd(t2r, ar, t2r, realContext), realAdd(t2i, ai, t2i, realContext);
+  realAdd(t2r, dr, t2r, realContext), realAdd(t2i, di, t2i, realContext);
+  realDivide(t1r, const_2, t1r, realContext), realDivide(t1i, const_2, t1i, realContext);
+  realDivide(t2r, const_2, t2r, realContext), realDivide(t2i, const_2, t2i, realContext);
+}
+
+static void calculateQrShift(const real_t *mat, uint16_t size, real_t *re, real_t *im, realContext_t *realContext) {
+  real_t t1r, t1i, t2r, t2i;
+  real_t tmp, tmpR, tmpI;
+  const real_t *dr, *di;
+
+  dr = mat + ((size - 1) * size + (size - 1)) * 2; di = dr + 1;
+
+  calculateEigenvalues22(mat, size, &t1r, &t1i, &t2r, &t2i, realContext);
 
   // Choose shift parameter
   realSubtract(&t1r, dr, &tmpR, realContext), realSubtract(&t1i, di, &tmpI, realContext);
@@ -4227,48 +4240,54 @@ static void calculateEigenvalues(real_t *a, real_t *q, real_t *r, real_t *eig, u
   uint16_t i, j;
   bool_t converged;
 
-  while(true) {
-    if(shifted) {
-      calculateQrShift(a, size, &shiftRe, &shiftIm, realContext);
-      for(i = 0; i < size; i++) {
-        realSubtract(a + (i * size + i) * 2,     &shiftRe, a + (i * size + i) * 2,     realContext);
-        realSubtract(a + (i * size + i) * 2 + 1, &shiftIm, a + (i * size + i) * 2 + 1, realContext);
-      }
-    }
-    QR_decomposition_householder(a, size, q, r, realContext);
-    mulCpxMat(r, q, size, eig, realContext);
-    if(shifted) {
-      for(i = 0; i < size; i++) {
-        realAdd(a   + (i * size + i) * 2,     &shiftRe, a   + (i * size + i) * 2,     realContext);
-        realAdd(a   + (i * size + i) * 2 + 1, &shiftIm, a   + (i * size + i) * 2 + 1, realContext);
-        realAdd(eig + (i * size + i) * 2,     &shiftRe, eig + (i * size + i) * 2,     realContext);
-        realAdd(eig + (i * size + i) * 2 + 1, &shiftIm, eig + (i * size + i) * 2 + 1, realContext);
-      }
-    }
-
-    converged = true;
-    for(i = 0; i < size; i++) {
-      if(realIsNaN(eig + i * 2) || realIsNaN(eig + i * 2 + 1)) {
-        for(j = 0; j < size * size; j++) {
-          realCopy(a + j * 2,     eig + j * 2    );
-          realCopy(a + j * 2 + 1, eig + j * 2 + 1);
+  if(size == 2) {
+    calculateEigenvalues22(a, size, eig, eig + 1, eig + 6, eig + 7, realContext);
+  }
+  else {
+    while(true) {
+      if(shifted) {
+        calculateQrShift(a, size, &shiftRe, &shiftIm, realContext);
+        for(i = 0; i < size; i++) {
+          realSubtract(a + (i * size + i) * 2,     &shiftRe, a + (i * size + i) * 2,     realContext);
+          realSubtract(a + (i * size + i) * 2 + 1, &shiftIm, a + (i * size + i) * 2 + 1, realContext);
         }
-        converged = true;
+      }
+      QR_decomposition_householder(a, size, q, r, realContext);
+      mulCpxMat(r, q, size, eig, realContext);
+      if(shifted) {
+        for(i = 0; i < size; i++) {
+          realAdd(a   + (i * size + i) * 2,     &shiftRe, a   + (i * size + i) * 2,     realContext);
+          realAdd(a   + (i * size + i) * 2 + 1, &shiftIm, a   + (i * size + i) * 2 + 1, realContext);
+          realAdd(eig + (i * size + i) * 2,     &shiftRe, eig + (i * size + i) * 2,     realContext);
+          realAdd(eig + (i * size + i) * 2 + 1, &shiftIm, eig + (i * size + i) * 2 + 1, realContext);
+        }
+      }
+
+      converged = true;
+      for(i = 0; i < size; i++) {
+        if(realIsNaN(eig + i * 2) || realIsNaN(eig + i * 2 + 1)) {
+          for(j = 0; j < size * size; j++) {
+            realCopy(a + j * 2,     eig + j * 2    );
+            realCopy(a + j * 2 + 1, eig + j * 2 + 1);
+          }
+          converged = true;
+          break;
+        }
+        else if(!WP34S_RelativeError(a + (i * size + i) * 2, eig + (i * size + i) * 2, const_1e_37, realContext) || !WP34S_RelativeError(a + (i * size + i) * 2 + 1, eig + (i * size + i) * 2 + 1, const_1e_37, realContext)) {
+          converged = false;
+        }
+      }
+      if(converged) {
         break;
       }
-      else if(!WP34S_RelativeError(a + (i * size + i) * 2, eig + (i * size + i) * 2, const_1e_37, realContext) || !WP34S_RelativeError(a + (i * size + i) * 2 + 1, eig + (i * size + i) * 2 + 1, const_1e_37, realContext)) {
-        converged = false;
+      else {
+        for(i = 0; i < size * size; i++) {
+          realCopy(eig + i * 2,     a + i * 2    );
+          realCopy(eig + i * 2 + 1, a + i * 2 + 1);
+        }
       }
     }
-    if(converged) {
-      break;
-    }
-    else {
-      for(i = 0; i < size * size; i++) {
-        realCopy(eig + i * 2,     a + i * 2    );
-        realCopy(eig + i * 2 + 1, a + i * 2 + 1);
-      }
-    }
+    shifted = false;
   }
   sortEigenvalues(eig, size, 0, (size + 1) / 2, size - 1, realContext);
 }

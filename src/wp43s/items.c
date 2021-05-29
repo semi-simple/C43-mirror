@@ -78,7 +78,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     if((indexOfItems[func].status & US_STATUS) == US_ENABLED || (indexOfItems[func].status & US_STATUS) == US_ENABL_XEQ) {
       saveForUndo();
       if(lastErrorCode == ERROR_RAM_FULL) {
-        if((indexOfItems[func].status & US_STATUS) == US_ENABLED) {
+        if((indexOfItems[func].status & US_STATUS) == US_ENABLED || calcMode == CM_CONFIRMATION) {
           displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             moreInfoOnError("In function reallyRunFunction:", "there is not enough memory to save for undo!", NULL, NULL);
@@ -706,7 +706,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /*   32 */  { fnCheckValue,                 CHECK_VALUE_INFINITY,        STD_PLUS_MINUS STD_INFINITY "?",               STD_PLUS_MINUS STD_INFINITY "?",               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   33 */  { fnIsPrime,                    NOPARAM,                     "PRIME?",                                      "PRIME?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED},
 /*   34 */  { itemToBeCoded,                NOPARAM,                     "TOP?",                                        "TOP?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED},
-/*   35 */  { fnKeyEnter,                   NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_DISABLED  | US_ENABL_XEQ},
+/*   35 */  { fnKeyEnter,                   NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_DISABLED  | US_ENABLED  },
 /*   36 */  { fnSwapXY,                     NOPARAM,                     "x" STD_LEFT_RIGHT_ARROWS "y",                 "x" STD_LEFT_RIGHT_ARROWS "y",                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABL_XEQ},
 /*   37 */  { fnDrop,                       NOPARAM,                     "DROP",                                        "DROP" STD_DOWN_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   38 */  { itemToBeCoded,                NOPARAM,                     "PAUSE",                                       "PAUSE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

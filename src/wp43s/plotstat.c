@@ -55,23 +55,22 @@ void fnPlotRegressionLine(uint16_t plotMode);
 #endif //TESTSUITE_BUILD
 
 
+
+#define DEMO0
+#define DEMO1
+#define DEMO2
+#define DEMO105
+#define DEMO107
+#define DEMO109
 #ifdef SAVE_SPACE_DM42
   #undef DEMO0
   #undef DEMO1
   #undef DEMO2
-//  #undef DEMO105
-//  #undef DEMO107
-//  #undef DEMO109
-  #define DEMO105
-  #define DEMO107
-  #define DEMO109
-#else
-  #define DEMO0
-  #define DEMO1
-  #define DEMO2
-  #define DEMO105
-  #define DEMO107
-  #define DEMO109
+#endif
+#ifdef SAVE_SPACE_DM42_1
+  #undef DEMO105
+  #undef DEMO107
+  #undef DEMO109
 #endif
 
 float   *gr_x;

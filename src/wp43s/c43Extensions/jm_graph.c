@@ -344,7 +344,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 //###################################################################################
 //SOLVER
 void graph_solver(uint8_t nbr, float x_min, float x_max) {
-//#ifndef SAVE_SPACE_DM42
+#ifndef SAVE_SPACE_DM42_3
   #ifndef TESTSUITE_BUILD
   int16_t ix;
   int16_t oscillations = 0; 
@@ -890,7 +890,7 @@ EndIteration:
   running_program_jm =  running_temp;
   #endif
 
-//#endif //SAVE_SPACE_DM42
+#endif //SAVE_SPACE_DM42_3
 }
 
 
@@ -930,11 +930,13 @@ void fnGraph (uint16_t func){
 
 	  case  3:  graph_demo(randnum(4,6), graph_xmin, graph_xmax);
 	            break;
-    
-    case  9:  graph_solver(2, graph_xmin, graph_xmax);
-              break;
-    case 10:  graph_solver(3, graph_xmin, graph_xmax);
-              break;
+    #ifndef SAVE_SPACE_DM42_4
+
+      case  9:  graph_solver(2, graph_xmin, graph_xmax);
+                break;
+      case 10:  graph_solver(3, graph_xmin, graph_xmax);
+                break;
+    #endif //SAVE_SPACE_DM42_4
 
     case 11:
     case 12:
@@ -943,25 +945,27 @@ void fnGraph (uint16_t func){
     case 15:
     case 16:  graph_demo(func-10, graph_xmin, graph_xmax);
               break;
-    case 20:  //SOLVE
 
-              //This is the desired sequence: FORMULA_TEXT, RPN_FORMULA, starting value in X.
+    #ifndef SAVE_SPACE_DM42_4
+      case 20:  //SOLVE
 
-              fnStore(82);
-              fnDrop(0);
+                //This is the desired sequence: FORMULA_TEXT, RPN_FORMULA, starting value in X.
 
-              ix = convert_to_double(REGISTER_X);
-              //printf("#### Recalling register %u\n",(int)(ix));
-              fnDrop(0);
-              fnRCL((int)(ix+1));
-              fnStore(80);
-              fnRCL((int)(ix));
-              fnStore(81);
+                fnStore(82);
+                fnDrop(0);
 
-              fnRCL(82);
-              graph_solver(20, graph_xmin, graph_xmax);
-              break;
+                ix = convert_to_double(REGISTER_X);
+                //printf("#### Recalling register %u\n",(int)(ix));
+                fnDrop(0);
+                fnRCL((int)(ix+1));
+                fnStore(80);
+                fnRCL((int)(ix));
+                fnStore(81);
 
+                fnRCL(82);
+                graph_solver(20, graph_xmin, graph_xmax);
+                break;
+      #endif //SAVE_SPACE_DM42_4
     case 21: //PLOT
 
               ix1 = convert_to_double(REGISTER_X);
@@ -988,48 +992,48 @@ void fnGraph (uint16_t func){
               break;
 
     case 22:
-//    #ifndef SAVE_SPACE_DM42
-              fnStrtoX("DEMO: Rnn Xo X.SOLV:     ");
-              fnStrtoX("DEMO: Rnn X0 X1 X.PLOT:  ");
-              fnStrtoX("(R=10,12,14,16,18) (X0=0 & X1=0 default range)");
+      #ifndef SAVE_SPACE_DM42_4
+                fnStrtoX("DEMO: Rnn Xo X.SOLV:     ");
+                fnStrtoX("DEMO: Rnn X0 X1 X.PLOT:  ");
+                fnStrtoX("(R=10,12,14,16,18) (X0=0 & X1=0 default range)");
 
-              fnStrtoX("XEQC43 STO 99 X^3 RCL 99  X^2 20 * + RCL 99 3 * + 300 -   RCL 99");
-              fnStore(10);
-              fnDrop(0);
-              fnStrtoX("X^3 + 20X^2 + 3X - 300 = 0");
-              fnStore(11);
-              fnDrop(0);
+                fnStrtoX("XEQC43 STO 99 X^3 RCL 99  X^2 20 * + RCL 99 3 * + 300 -   RCL 99");
+                fnStore(10);
+                fnDrop(0);
+                fnStrtoX("X^3 + 20X^2 + 3X - 300 = 0");
+                fnStore(11);
+                fnDrop(0);
 
-              fnStrtoX("XEQC43 STO 99 SIN RCL 99 X^2 + RCL 99");
-              fnStore(12);
-              fnDrop(0);
-              fnStrtoX("sin(x) + sin(x^2) = 0");
-              fnStore(13);
-              fnDrop(0);
+                fnStrtoX("XEQC43 STO 99 SIN RCL 99 X^2 + RCL 99");
+                fnStore(12);
+                fnDrop(0);
+                fnStrtoX("sin(x) + sin(x^2) = 0");
+                fnStore(13);
+                fnDrop(0);
 
-              fnStrtoX("XEQC43 STO 99 1 ENTER 3 / Y^X 1 + RCL 99");
-              fnStore(14);
-              fnDrop(0);
-              fnStrtoX("x^(1/3) + 1 = 0");
-              fnStore(15);
-              fnDrop(0);
+                fnStrtoX("XEQC43 STO 99 1 ENTER 3 / Y^X 1 + RCL 99");
+                fnStore(14);
+                fnDrop(0);
+                fnStrtoX("x^(1/3) + 1 = 0");
+                fnStore(15);
+                fnDrop(0);
 
-              fnStrtoX("XEQC43 STO 99 5 Y^X RCL 99 - 1 + RCL 99");
-              fnStore(16);
-              fnDrop(0);
-              fnStrtoX("x^5 - x + 1 = 0");
-              fnStore(17);
-              fnDrop(0);
+                fnStrtoX("XEQC43 STO 99 5 Y^X RCL 99 - 1 + RCL 99");
+                fnStore(16);
+                fnDrop(0);
+                fnStrtoX("x^5 - x + 1 = 0");
+                fnStore(17);
+                fnDrop(0);
 
-              fnStrtoX("XEQC43 STO 99 X^2 1 + RCL 99");
-              fnStore(18);
-              fnDrop(0);
-              fnStrtoX("x^2 + 1 = 0");
-              fnStore(19);
-              fnDrop(0);
+                fnStrtoX("XEQC43 STO 99 X^2 1 + RCL 99");
+                fnStore(18);
+                fnDrop(0);
+                fnStrtoX("x^2 + 1 = 0");
+                fnStore(19);
+                fnDrop(0);
 
-              break;
-//    #endif //SAVE_SPACE_DM42
+                break;
+      #endif //SAVE_SPACE_DM42_4
   	  default:;
      }
 

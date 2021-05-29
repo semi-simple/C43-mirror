@@ -56,7 +56,8 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 #ifndef TESTSUITE_BUILD
 
   char csv[TMP_STR_LENGTH];
-  tmpString[0] = 0;
+  char tmp[TMP_STR_LENGTH];
+  tmp[0] = 0;
 
   int16_t ix;
   ix = reg_b;
@@ -68,23 +69,23 @@ void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
       #if (VERBOSE_LEVEL >= 1) 
         print_linestr("-2b",false);
       #endif
-      copyRegisterToClipboardString(ix, tmpString);
+      copyRegisterToClipboardString(ix, tmp);
       #if (VERBOSE_LEVEL >= 1) 
         print_linestr("-2c",false);
       #endif
-      strcat(csv, tmpString);
+      strcat(csv, tmp);
       strcat(csv, CSV_NEWLINE);
       } else
     if((ix>=0)&&(ix<=99)) {
       sprintf(csv, "%sR%02d%s%s", CSV_STR, ix, CSV_STR, CSV_TAB);
-      copyRegisterToClipboardString(ix, tmpString);
-      strcat(csv, tmpString);
+      copyRegisterToClipboardString(ix, tmp);
+      strcat(csv, tmp);
       strcat(csv, CSV_NEWLINE);
     } else
     if((ix>=112)&&(ix<=112+100)) {
       sprintf(csv, "%sU%02d%s%s", CSV_STR, ix-100, CSV_STR, CSV_TAB);
-      copyRegisterToClipboardString(ix, tmpString);
-      strcat(csv, tmpString);
+      copyRegisterToClipboardString(ix, tmp);
+      strcat(csv, tmp);
       strcat(csv, CSV_NEWLINE);
     }
 

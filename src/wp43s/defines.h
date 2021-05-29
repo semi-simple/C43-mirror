@@ -30,6 +30,11 @@
 
 #ifdef PC_BUILD
   #undef SAVE_SPACE_DM42
+  #undef SAVE_SPACE_DM42_1
+  #undef SAVE_SPACE_DM42_2
+  #undef SAVE_SPACE_DM42_3
+  #undef SAVE_SPACE_DM42_4
+  #undef SAVE_SPACE_DM42_5
   //Key layout option
   #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
   #undef  SWAP_TO_L42_ON_SIM
@@ -39,7 +44,13 @@
 
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-  #define SAVE_SPACE_DM42
+  #define SAVE_SPACE_DM42 //STAT DEMOS 0,1,2; 
+//  #define SAVE_SPACE_DM42_1 //STAT DEMOS 101-105-107
+  #undef  SAVE_SPACE_DM42_1    //switch off memoery saving options
+  #define SAVE_SPACE_DM42_2 //XEQM
+  #define SAVE_SPACE_DM42_3 //SOLVER
+  #define SAVE_SPACE_DM42_4 //XY GRAPHDEMOS
+  #define SAVE_SPACE_DM42_5 //fnShow
 //  #undef  SAVE_SPACE_DM42          //switch off memoery saving options
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42

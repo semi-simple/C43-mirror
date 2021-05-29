@@ -223,6 +223,15 @@ TO_QSPI const int16_t menu_PFN2[]        = { ITM_MENU,                      ITM_
   #define ITM_D1 ITM_STATDEMO1
   #define ITM_D2 ITM_STATDEMO2
 #endif
+#if defined SAVE_SPACE_DM42_1
+  #define ITM_D3 ITM_NULL
+  #define ITM_D4 ITM_NULL
+  #define ITM_D5 ITM_NULL
+#else
+  #define ITM_D3 ITM_STATDEM105
+  #define ITM_D4 ITM_STATDEM107
+  #define ITM_D5 ITM_STATDEM109
+#endif
 
 
 TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_XBAR,                   ITM_STDDEVWEIGHTED,       ITM_STDDEV,            ITM_SM,                      ITM_SUM,
@@ -236,7 +245,7 @@ TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_
                                              ITM_PARABF,                    ITM_HYPF,                   ITM_ROOTF,                ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                              ITM_GAUSSF,                    ITM_CAUCHF,                 ITM_NULL,                 ITM_BESTF,             ITM_PLOT_LR,                 ITM_LR,
                 
-                                             ITM_D0,                        ITM_D1,                     ITM_D2,                   ITM_STATDEM105,        ITM_STATDEM107,              ITM_STATDEM109                };
+                                             ITM_D0,                        ITM_D1,                     ITM_D2,                   ITM_D3,                ITM_D4,                      ITM_D5                        };
 
 TO_QSPI const int16_t menu_SUMS[]        = { ITM_NSIGMA,                    ITM_SIGMAx,                 ITM_SIGMAx2,              ITM_SIGMAxy,           ITM_SIGMAy2,                 ITM_SIGMAy,
                                              ITM_NULL,                      ITM_SIGMAlnx,               ITM_SIGMAln2x,            ITM_SIGMAlnxy,         ITM_SIGMAln2y,               ITM_SIGMAlny,
@@ -441,21 +450,23 @@ TO_QSPI const int16_t menu_ASN_N[]       = { ITM_U_KEY_USER,                ITM_
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_SH_NORM_E,               ITM_GET_NORM_E                };    //JM USER NAORMAL MODE
 
 TO_QSPI const int16_t menu_ASN_U[]       = { ITM_USER_ALPHA,                ITM_USER_CC,                ITM_USER_GSHFT,           ITM_USER_MYM,          ITM_USER_DRG,                ITM_NULL,
-                                             ITM_USER_PRGM,                 ITM_USER_USER,              ITM_USER_HOME,            ITM_USER_SIGMAPLUS,    ITM_NULL,                    ITM_NULL                     };
+                                             ITM_USER_PRGM,                 ITM_USER_USER,              ITM_USER_HOME,            ITM_USER_SIGMAPLUS,    ITM_USER_SNAP,               ITM_NULL                     };
 
 
 #ifdef SAVE_SPACE_DM42
-  #define CC_C43 ITM_NULL
-  #define CC_V43 ITM_NULL
+  #define CC_C43  ITM_NULL
+  #define CC_V43  ITM_NULL
   #define CC_V43M ITM_NULL
+  #define CC_43S  ITM_NULL
 #else
-  #define CC_C43 ITM_USER_C43
-  #define CC_V43 ITM_USER_V43
+  #define CC_C43  ITM_USER_C43
+  #define CC_V43  ITM_USER_V43
   #define CC_V43M ITM_USER_V43MIN
+  #define CC_43S  ITM_USER_WP43S
 #endif                                             
 
 TO_QSPI const int16_t menu_ASN[]         = { ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           CC_C43,                   CC_V43,                ITM_USER_DM42,              ITM_USER_RESET,         /*ITM_JM_ASN*/
-                                             ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          CC_V43M,               ITM_USER_WP43S,             ITM_JM_SEEK,
+                                             ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          CC_V43M,               CC_43S,                     ITM_JM_SEEK,
                                              -MNU_ASN_U,                    ITM_ASSIGN,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                   -MNU_ASN_N,
                                                                           
                                              USER_PRIM00U,                  USER_PRIM01U,               USER_PRIM02U,             USER_PRIM03U,          USER_PRIM04U,               USER_PRIM05U,  //JM USER
@@ -538,6 +549,7 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
 // 03 -- 09 HAAKON SUGGESTIONS OF FULL REPLICA
 #ifdef JM_LAYOUT_1A  //JM UPDATED TO LAYOUT 1C. OPTIMAL. SIMULATOR.
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
+
                                              ITM_NULL,                 ITM_EXIT1,                ITM_0,                    ITM_PERIOD,               ITM_RS,                   ITM_ADD,                  
                                              ITM_NULL,                 ITM_OFF,                  ITM_VIEW,                 ITM_SHOW,                 ITM_PR,                   -MNU_CATALOG,             
                                              ITM_NULL,                 -MNU_PRINT,               ITM_TIMER,                -MNU_INFO,                -MNU_PFN,                 -MNU_IO,                  
@@ -564,7 +576,7 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
 
                                              ITM_SIGMAPLUS,            ITM_1ONX,                 ITM_SQUAREROOTX,          ITM_LOG10,                ITM_LN,                   ITM_XEQ,                  
                                              ITM_RI/*ITM_RND*/,        ITM_YX,                   ITM_SQUARE,               ITM_10x,                  ITM_EXP,                  ITM_AIM,                  
-                                             ITM_TGLFRT,               ITM_HASH_JM/*ITM_toINT*/, ITM_ms,                   ITM_dotD,                 ITM_toREC2,               ITM_toPOL2,               
+                                             ITM_TGLFRT,               ITM_HASH_JM/*ITM_toINT*/, ITM_ms,                   ITM_dotD,                 ITM_toREC2,               ITM_toPOL2,
 //keyId primary           fShifted         gShifted      keyLblAim       primaryAim         fShiftedAim      gShiftedAim    primaryTam
 #endif //JM END OF LAYOUT 1a.
 
@@ -611,7 +623,6 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
 /* g       */                                ITM_TGLFRT,           ITM_HASH_JM,      ITM_ms,           ITM_dotD,         ITM_toREC2,       ITM_toPOL2,    
 /* g       */                                ITM_MAGNITUDE,        ITM_ANGLE,        ITM_XTHROOT,      ITM_CC,           ITM_LBL,          ITM_RTN,      
 /* g       */                                -MNU_PRINT,           -MNU_CPX,         ITM_Rup,          -MNU_STK,         -MNU_EXP,         ITM_UNDO,       
-
 
 // 12 - 18 JACO PROPOSAL WITH FIXED BUTTONS RUNG #1, ALL F-functions on RUNG #2, ALL G-functions on RUNG #3
 //

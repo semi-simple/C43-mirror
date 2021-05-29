@@ -183,7 +183,7 @@ typedef struct {
 
 
 TO_QSPI const fuction_t indexOfFunctions[] = {
-
+#ifndef SAVE_SPACE_DM42_2
 //            function                      functionName
 //XEQM TYPE1 ORIGINAL FULL SELECTED LIST
 
@@ -833,6 +833,8 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
            {ITM_PLOT_XY,   "PLOTXY"},
            {ITM_PLOTRST,   "PLTRST"}
 
+#endif //SAVE_SPACE_DM42_2
+
 };
 
 
@@ -856,431 +858,433 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //                      if (strcompare(str,"XEQM17" ) && exec) { *com = ITM_X_g5;} else
 //                      if (strcompare(str,"XEQM18" ) && exec) { *com = ITM_X_g6;} else
 
+#ifndef SAVE_SPACE_DM42_2
+  bool_t checkindexes(int16_t *com, char *str, bool_t exec) {
+    *com = 0;
+    uint_fast16_t n = nbrOfElements(indexOfFunctions);
+    for (uint_fast16_t i = 0; i < n; i++) {
+      if (strcompare(str, indexOfFunctions[i].itemName)) {
+        *com = indexOfFunctions[i].itemNr;
+        break;
+      }
+    }
 
-bool_t checkindexes(int16_t *com, char *str, bool_t exec) {
-  *com = 0;
-  uint_fast16_t n = nbrOfElements(indexOfFunctions);
-  for (uint_fast16_t i = 0; i < n; i++) {
-    if (strcompare(str, indexOfFunctions[i].itemName)) {
-      *com = indexOfFunctions[i].itemNr;
-      break;
+    if (*com != 0) {
+      return true;
+    }
+    else {
+      return false;
     }
   }
-
-  if (*com != 0) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
+#endif //SAVE_SPACE_DM42_2
 
 
 void execute_string(const char *inputstring, bool_t exec1, bool_t namescan) {
-#ifndef TESTSUITE_BUILD
-  #if (VERBOSE_LEVEL > 0)
-    uint32_t ttt = getUptimeMs();
-    while(ttt + 300 != getUptimeMs()){};
-    print_linestr(inputstring,true);
-    print_linestr("",false);
-  #endif
+#ifndef SAVE_SPACE_DM42_2
+  #ifndef TESTSUITE_BUILD
+    #if (VERBOSE_LEVEL > 0)
+      uint32_t ttt = getUptimeMs();
+      while(ttt + 300 != getUptimeMs()){};
+      print_linestr(inputstring,true);
+      print_linestr("",false);
+    #endif
 
-      if(exec1) namescan = false;     //no scanning option if tasked to execute
-      int16_t commno;
-      uint16_t ix, ix_m;
-      uint16_t ix_m1 = 0;
-      uint16_t ix_m2 = 0;
-      uint16_t ix_m3 = 0;
-      uint16_t ix_m4 = 0;
-      int16_t no, ii;
-      char     commandnumber[commandnumberl];
-      char     aa[2], bb[2];
-      bool_t   state_comments, state_commands, state_quotes;
-      uint16_t xeqlblinprogress;
-      uint16_t gotoinprogress;
-      bool_t gotlabels = false;
-      bool_t exec = false;
-      bool_t go;
-      running_program_jm = true;
-      indic_x = 0;
-      indic_y = SCREEN_HEIGHT-1;
-      uint8_t starttoken = 0;
-      #ifdef PC_BUILD
-        uint16_t loopnumber = 0;
-      #endif
-
-
-      hourGlassIconEnabled = true;
-      cancelFilename = true;
-      showHideHourGlass();
-      #ifdef DMCP_BUILD
-        lcd_refresh();
-      #else // !DMCP_BUILD
-        refreshLcd(NULL);
-      #endif // DMCP_BUILD
-
-                                                 //If !gotlabels, means it is a scouting pass/parse to find and mark the goto labels M1-M4
-    while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
-      #ifdef PC_BUILD_VERBOSE1
+        if(exec1) namescan = false;     //no scanning option if tasked to execute
+        int16_t commno;
+        uint16_t ix, ix_m;
+        uint16_t ix_m1 = 0;
+        uint16_t ix_m2 = 0;
+        uint16_t ix_m3 = 0;
+        uint16_t ix_m4 = 0;
+        int16_t no, ii;
+        char     commandnumber[commandnumberl];
+        char     aa[2], bb[2];
+        bool_t   state_comments, state_commands, state_quotes;
+        uint16_t xeqlblinprogress;
+        uint16_t gotoinprogress;
+        bool_t gotlabels = false;
+        bool_t exec = false;
+        bool_t go;
+        running_program_jm = true;
+        indic_x = 0;
+        indic_y = SCREEN_HEIGHT-1;
+        uint8_t starttoken = 0;
         #ifdef PC_BUILD
-          printf("\n------Starting parse ------- Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
-          printf("|%s|\n",inputstring);
+          uint16_t loopnumber = 0;
         #endif
-      #endif
-      xeqlblinprogress = 0;
-      gotoinprogress   = 0;
-      go = false;
-      ix = 0;
-      ix_m = 0;
-      no = 0;
-      state_comments = false;
-      state_commands = false;
-      state_quotes = false;
-      commandnumber[0]=0;
-      aa[0]=0;
 
-      while (inputstring[ix]!=0 && ix < XEQ_STR_LENGTH_LONG)
 
-    {
+        hourGlassIconEnabled = true;
+        cancelFilename = true;
+        showHideHourGlass();
+        #ifdef DMCP_BUILD
+          lcd_refresh();
+        #else // !DMCP_BUILD
+          refreshLcd(NULL);
+        #endif // DMCP_BUILD
 
-//			if( (inputstring[ix]==13 || inputstring[ix]==10) && (aa[0]==13 || aa[0]==10) ) {
-	//			ix++;
-		//	} else 
-			{
-        strcpy(bb,aa);
-        aa[0] = inputstring[ix];
-        aa[1] = 0;
-        #ifdef PC_BUILD_VERBOSE0
+                                                   //If !gotlabels, means it is a scouting pass/parse to find and mark the goto labels M1-M4
+      while(!gotlabels || (gotlabels && exec) ){   //scheme to use for label scouting and name processing in "false", and to do a two parse exec 
+        #ifdef PC_BUILD_VERBOSE1
           #ifdef PC_BUILD
-            printf("##--$ |%s|%s| --gotlabels=%i exec=%i \n",bb,aa,gotlabels,exec);
+            printf("\n------Starting parse ------- Indexes: M1:%d M2:%d M3:%d M4:%d   EXEC:%d\n",ix_m1, ix_m2, ix_m3, ix_m4, exec);
+            printf("|%s|\n",inputstring);
           #endif
         #endif
-//print_linestr(aa,false);
-        switch(bb[0]) {//COMMAND can start after any of these: space, tab, cr, lf, comma, beginning of file
-          case 32:
-          case 8 :
-          case 13:
-          case 10:
-          case 44:
-          case 0 : if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z; %; >; (; a-z; . 
-                    (       aa[0]=='*' //42 // *
-                        ||  aa[0]=='+' //43 // +
-                        ||  aa[0]=='-' //45 // -
-                        ||  aa[0]=='/' //47 // /
-                        ||  aa[0]=='~' //126) //~
-                        || (aa[0]>=48 && aa[0]<=57) //0-9
-                        || (aa[0]>=65 && aa[0]<=90) //A-Z
-                        || (aa[0]>=65+32 && aa[0]<=90+32) //a-z
-                        || aa[0]=='%'
-                        || aa[0]=='>'
-                        || aa[0]=='('
-                        || aa[0]=='.'
-                        )
-                    && !state_comments                 //If not inside comments
-                    && !state_quotes                   //if not inside quotes
-                    && !state_commands                 //Don't re-check until done
-                    ) {
-                        state_commands = true;         // Waiting to open command number or name: nnn
-                      }
-          default:;
-        }
-        
-        if(state_comments && (aa[0] == 13 || aa[0] == 10)) {
-           #ifdef PC_BUILD_VERBOSE0
-             #ifdef PC_BUILD
-               printf("##++ Cancel Comments\n");
+        xeqlblinprogress = 0;
+        gotoinprogress   = 0;
+        go = false;
+        ix = 0;
+        ix_m = 0;
+        no = 0;
+        state_comments = false;
+        state_commands = false;
+        state_quotes = false;
+        commandnumber[0]=0;
+        aa[0]=0;
+
+        while (inputstring[ix]!=0 && ix < XEQ_STR_LENGTH_LONG)
+
+      {
+
+  //			if( (inputstring[ix]==13 || inputstring[ix]==10) && (aa[0]==13 || aa[0]==10) ) {
+  	//			ix++;
+  		//	} else 
+  			{
+          strcpy(bb,aa);
+          aa[0] = inputstring[ix];
+          aa[1] = 0;
+          #ifdef PC_BUILD_VERBOSE0
+            #ifdef PC_BUILD
+              printf("##--$ |%s|%s| --gotlabels=%i exec=%i \n",bb,aa,gotlabels,exec);
+            #endif
+          #endif
+  //print_linestr(aa,false);
+          switch(bb[0]) {//COMMAND can start after any of these: space, tab, cr, lf, comma, beginning of file
+            case 32:
+            case 8 :
+            case 13:
+            case 10:
+            case 44:
+            case 0 : if( //COMMAND WORD START DETECTION +-*/ 0-9; A-Z; %; >; (; a-z; . 
+                      (       aa[0]=='*' //42 // *
+                          ||  aa[0]=='+' //43 // +
+                          ||  aa[0]=='-' //45 // -
+                          ||  aa[0]=='/' //47 // /
+                          ||  aa[0]=='~' //126) //~
+                          || (aa[0]>=48 && aa[0]<=57) //0-9
+                          || (aa[0]>=65 && aa[0]<=90) //A-Z
+                          || (aa[0]>=65+32 && aa[0]<=90+32) //a-z
+                          || aa[0]=='%'
+                          || aa[0]=='>'
+                          || aa[0]=='('
+                          || aa[0]=='.'
+                          )
+                      && !state_comments                 //If not inside comments
+                      && !state_quotes                   //if not inside quotes
+                      && !state_commands                 //Don't re-check until done
+                      ) {
+                          state_commands = true;         // Waiting to open command number or name: nnn
+                        }
+            default:;
+          }
+          
+          if(state_comments && (aa[0] == 13 || aa[0] == 10)) {
+             #ifdef PC_BUILD_VERBOSE0
+               #ifdef PC_BUILD
+                 printf("##++ Cancel Comments\n");
+               #endif
              #endif
-           #endif
-          state_comments=false;
-        } else
-        switch(aa[0]) {
-          case '/': if(bb[0] == '/' && state_comments == false) {//ADDED  STATE, SO //always switches on the comment, but not off. CR/LF cancels it
-                      state_comments = true;           // Switch comment state on
-                      state_commands = false;
-                      state_quotes   = false;
-                      commandnumber[0]=0;
-                      #ifdef PC_BUILD_VERBOSE0
-                        #ifdef PC_BUILD
-                          printf("##++ Start Comments\n");
+            state_comments=false;
+          } else
+          switch(aa[0]) {
+            case '/': if(bb[0] == '/' && state_comments == false) {//ADDED  STATE, SO //always switches on the comment, but not off. CR/LF cancels it
+                        state_comments = true;           // Switch comment state on
+                        state_commands = false;
+                        state_quotes   = false;
+                        commandnumber[0]=0;
+                        #ifdef PC_BUILD_VERBOSE0
+                          #ifdef PC_BUILD
+                            printf("##++ Start Comments\n");
+                          #endif
                         #endif
-                      #endif
-                    }
-                     break;
-          case 34: if(!state_comments && !state_commands) {   // " Toggle quote state
-                       state_quotes   = !state_quotes;
-                     }
-                     break;
+                      }
+                       break;
+            case 34: if(!state_comments && !state_commands) {   // " Toggle quote state
+                         state_quotes   = !state_quotes;
+                       }
+                       break;
 
-          case 13: //cr
-          case 10: //lf
-          case 8 : //tab
-          case ',': //,
-          case ' ': 
-//print_linestr(commandnumber,false);
-                   //printf("@@@ %s\n",commandnumber);
-                   if(state_commands){
-                      state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
-                      #ifdef PC_BUILD_VERBOSE0
-                        #ifdef PC_BUILD
-                          printf("\nCommand/number detected:(tempjm=%d)(gotoinprogress=%d) %45s ",temporaryInformation,gotoinprogress,commandnumber);
+            case 13: //cr
+            case 10: //lf
+            case 8 : //tab
+            case ',': //,
+            case ' ': 
+  //print_linestr(commandnumber,false);
+                     //printf("@@@ %s\n",commandnumber);
+                     if(state_commands){
+                        state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
+                        #ifdef PC_BUILD_VERBOSE0
+                          #ifdef PC_BUILD
+                            printf("\nCommand/number detected:(tempjm=%d)(gotoinprogress=%d) %45s ",temporaryInformation,gotoinprogress,commandnumber);
+                          #endif
                         #endif
-                      #endif
-//print_linestr(commandnumber,false);
-                      
-                      //DSZ:
-                      if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformation == TI_FALSE)))) {     //If DEC results in 0, then 'true'.    It is now the command that may or may not be skipped
-                          //......IS NOT DSZ.... OR               DSZ    with REG NOT ZERO
-                          go = (temporaryInformation == TI_FALSE); //As per GTO_SZ ---- REGISTER<>0, then go
-                          //printf("   DSZ/ISZ temporaryInformation = %5d\n",temporaryInformation);
-                          gotoinprogress = 1;                      //As per GTO_SZ
-                          commandnumber[0]=0;                      //As per GTO_SZ
-                      } else
+  //print_linestr(commandnumber,false);
+                        
+                        //DSZ:
+                        if(!(gotoinprogress != 11 || (gotoinprogress == 11 && (temporaryInformation == TI_FALSE)))) {     //If DEC results in 0, then 'true'.    It is now the command that may or may not be skipped
+                            //......IS NOT DSZ.... OR               DSZ    with REG NOT ZERO
+                            go = (temporaryInformation == TI_FALSE); //As per GTO_SZ ---- REGISTER<>0, then go
+                            //printf("   DSZ/ISZ temporaryInformation = %5d\n",temporaryInformation);
+                            gotoinprogress = 1;                      //As per GTO_SZ
+                            commandnumber[0]=0;                      //As per GTO_SZ
+                        } else
 
 
-// Unlimited GTO                                      GTO M1
-// 4 Labels M1, M2, M3 & M4                           XEQLBL M1
-// Unlimited DSZ and ISZ                              DSZ 00
-// Non-nested subroutine GSB M1..M4; RTN              GSB M01     RTN
-// END reacts to labelling parse and execution parse  END
-// RETURN reacts to execution parse only              RETURN
+  // Unlimited GTO                                      GTO M1
+  // 4 Labels M1, M2, M3 & M4                           XEQLBL M1
+  // Unlimited DSZ and ISZ                              DSZ 00
+  // Non-nested subroutine GSB M1..M4; RTN              GSB M01     RTN
+  // END reacts to labelling parse and execution parse  END
+  // RETURN reacts to execution parse only              RETURN
 
-                      if(checkindexes(&commno, commandnumber, exec)) {
-                      	sprintf(commandnumber,"%d", commno);
-				                #ifdef PC_BUILD_VERBOSE0
-				                  #ifdef PC_BUILD
-                            printf("## no:%i",commno);
-				                  #endif
-				                #endif
-                      } else
-                      if (strcompare(commandnumber,"DSZ"    )) {sprintf(commandnumber,"%d", ITM_DEC); gotoinprogress = 9;}      else //EXPECTING FOLLOWING OPERAND "nn"
-                       if (strcompare(commandnumber,"ISZ"   )) {sprintf(commandnumber,"%d", ITM_INC); gotoinprogress = 9;}       else //EXPECTING FOLLOWING OPERAND "nn"
-                        if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                                      else //EXPECTING FOLLOWING OPERAND Mn
-                          if (strcompare(commandnumber,"XEQC43"))   {starttoken = 1; }                                             else //EXPECTING FOLLOWING OPERAND Mn
-                           if (strcompare(commandnumber,"XEQLBL"))    {
-                               #if (VERBOSE_LEVEL > 0)
-                                 print_linestr("->XEQLBL",false);
-                               #endif
-                               xeqlblinprogress =  1; 
-                               starttoken = 1;
-                            } else //EXPECTING 2 OPERANDS nn XXXXXX
-                             if (strcompare(commandnumber,"GTO"   ))    {
-                                  #ifdef PC_BUILD
-                                    printf("   >>> Loop GTO Jump %d:go\n",loopnumber++);
-                                  #endif
-	                                if(exec) {
-	                              	  go = true; 
-	                              	  gotoinprogress = 1;
-	                                  force_refresh();
-	                                }
-                            } else
-                             if (strcompare(commandnumber,"GSB"   ))    {
-                                  #ifdef PC_BUILD
-                                    printf("   >>> Sub  GSB Jump %d\n",loopnumber++);
-                                  #endif
-                                  if(exec) {
-                                    go = true; 
-                                    gotoinprogress = 1; 
-                                    ix_m = ix;
-                                    force_refresh();
+                        if(checkindexes(&commno, commandnumber, exec)) {
+                        	sprintf(commandnumber,"%d", commno);
+  				                #ifdef PC_BUILD_VERBOSE0
+  				                  #ifdef PC_BUILD
+                              printf("## no:%i",commno);
+  				                  #endif
+  				                #endif
+                        } else
+                        if (strcompare(commandnumber,"DSZ"    )) {sprintf(commandnumber,"%d", ITM_DEC); gotoinprogress = 9;}      else //EXPECTING FOLLOWING OPERAND "nn"
+                         if (strcompare(commandnumber,"ISZ"   )) {sprintf(commandnumber,"%d", ITM_INC); gotoinprogress = 9;}       else //EXPECTING FOLLOWING OPERAND "nn"
+                          if (strcompare(commandnumber,"LBL"))       {xeqlblinprogress = 10; }                                      else //EXPECTING FOLLOWING OPERAND Mn
+                            if (strcompare(commandnumber,"XEQC43"))   {starttoken = 1; }                                             else //EXPECTING FOLLOWING OPERAND Mn
+                             if (strcompare(commandnumber,"XEQLBL"))    {
+                                 #if (VERBOSE_LEVEL > 0)
+                                   print_linestr("->XEQLBL",false);
+                                 #endif
+                                 xeqlblinprogress =  1; 
+                                 starttoken = 1;
+                              } else //EXPECTING 2 OPERANDS nn XXXXXX
+                               if (strcompare(commandnumber,"GTO"   ))    {
                                     #ifdef PC_BUILD
-                                      printf("   >>> Sub  GSB Jump %d:go storing return address %d\n",loopnumber++, ix_m);
+                                      printf("   >>> Loop GTO Jump %d:go\n",loopnumber++);
                                     #endif
-                                  }
-                             } else
-                              if (strcompare(commandnumber,"RTN"))       {
-                                  if(exec) {
-                                    ix = ix_m+2; 
-                                    ix_m = 0;
-                                    force_refresh();
+  	                                if(exec) {
+  	                              	  go = true; 
+  	                              	  gotoinprogress = 1;
+  	                                  force_refresh();
+  	                                }
+                              } else
+                               if (strcompare(commandnumber,"GSB"   ))    {
                                     #ifdef PC_BUILD
-                                      printf("   >>> Sub  RTN to return address %d\n", ix);
+                                      printf("   >>> Sub  GSB Jump %d\n",loopnumber++);
                                     #endif
-                                  }
-                             } else
-                               if (strcompare(commandnumber,"GTO_SZ"))    {
-                                   if(exec) {
-                                     go = (temporaryInformation == TI_FALSE); 
-                                     gotoinprogress = 1; 
-                                   }
+                                    if(exec) {
+                                      go = true; 
+                                      gotoinprogress = 1; 
+                                      ix_m = ix;
+                                      force_refresh();
+                                      #ifdef PC_BUILD
+                                        printf("   >>> Sub  GSB Jump %d:go storing return address %d\n",loopnumber++, ix_m);
+                                      #endif
+                                    }
                                } else
-                                 if (strcompare(commandnumber,"END"))       {
-                                    ix = stringByteLength(inputstring)-2;
-                                  } else
-                                    if (strcompare(commandnumber,"RETURN"))    {
-                                        if(exec) {
-                                          ix = stringByteLength(inputstring)-2;
-                                        }
+                                if (strcompare(commandnumber,"RTN"))       {
+                                    if(exec) {
+                                      ix = ix_m+2; 
+                                      ix_m = 0;
+                                      force_refresh();
+                                      #ifdef PC_BUILD
+                                        printf("   >>> Sub  RTN to return address %d\n", ix);
+                                      #endif
+                                    }
+                               } else
+                                 if (strcompare(commandnumber,"GTO_SZ"))    {
+                                     if(exec) {
+                                       go = (temporaryInformation == TI_FALSE); 
+                                       gotoinprogress = 1; 
+                                     }
+                                 } else
+                                   if (strcompare(commandnumber,"END"))       {
+                                      ix = stringByteLength(inputstring)-2;
                                     } else
-//         END ELSE
-                                   { 
-                                     ii = 0;
-                                     while(commandnumber[ii]!=0 && ((commandnumber[ii]<='9' && commandnumber[ii]>='0') || commandnumber[ii]>='.' || commandnumber[ii]>='E' ) ) {
-                                       ii++;
-                                     }
-                                     if(commandnumber[ii]==0 && (gotoinprogress == 0 || gotoinprogress == 10) && xeqlblinprogress == 0 ) {
-                                       //printf("   Fell thru, i.e. number %s, gotoinprogress %d\n",commandnumber,gotoinprogress);   // at this stage there SHOULD be a number (not checked) coming out at this point, from the ELSE, it is a number from the text file, therefore literal mnumbers
-                                                                 // prepare to break out of this state
-                                                                 // and set flags as if in direct character (quotes) state
-                                       if (exec) {
-                                         sendkeys(commandnumber);
-                                         //printf("   sent-->a|%s|\n",commandnumber);
+                                      if (strcompare(commandnumber,"RETURN"))    {
+                                          if(exec) {
+                                            ix = stringByteLength(inputstring)-2;
+                                          }
+                                      } else
+  //         END ELSE
+                                     { 
+                                       ii = 0;
+                                       while(commandnumber[ii]!=0 && ((commandnumber[ii]<='9' && commandnumber[ii]>='0') || commandnumber[ii]>='.' || commandnumber[ii]>='E' ) ) {
+                                         ii++;
                                        }
-                                       commandnumber[0]=0;
-                                       if(gotoinprogress == 10) {gotoinprogress = 11;} //if the digits of STO or DSZ
-                                       break;
+                                       if(commandnumber[ii]==0 && (gotoinprogress == 0 || gotoinprogress == 10) && xeqlblinprogress == 0 ) {
+                                         //printf("   Fell thru, i.e. number %s, gotoinprogress %d\n",commandnumber,gotoinprogress);   // at this stage there SHOULD be a number (not checked) coming out at this point, from the ELSE, it is a number from the text file, therefore literal mnumbers
+                                                                   // prepare to break out of this state
+                                                                   // and set flags as if in direct character (quotes) state
+                                         if (exec) {
+                                           sendkeys(commandnumber);
+                                           //printf("   sent-->a|%s|\n",commandnumber);
+                                         }
+                                         commandnumber[0]=0;
+                                         if(gotoinprogress == 10) {gotoinprogress = 11;} //if the digits of STO or DSZ
+                                         break;
+                                       }
                                      }
-                                   }
-        //v
+          //v
 
-                      if(starttoken == 0) {                  //if not started with XEQLBL or XEQC43, immediately abandon program mode
-                        goto exec_exit;
-                      }
-                      
-                      //printf("   gotoinprogress = %5d; xeqlblinprogress = %5d; commandnumber = %10s\n",gotoinprogress,xeqlblinprogress,commandnumber);
-
-
-                      temporaryInformation   = TI_NO_INFO;   //Cancel after go was determined.
-                      switch(gotoinprogress) {
-                        case 1:                  //GOTO IN PROGRESS: got command GOTO. If arriving from DSZ with no label, just pass around and skip to 2
-                          gotoinprogress = 2;
-                          commandnumber[0]=0;
-                        break;
-
-                        case 2:                  //GOTO IN PROGRESS: if arriving from DSZ / 1, witho9ut M1-M4, waste the commandd, zero, and pass around
-                          if(strcompare(commandnumber,"M1") && exec && go && (ix_m1 !=0)) ix = ix_m1; else
-                          if(strcompare(commandnumber,"M2") && exec && go && (ix_m2 !=0)) ix = ix_m2; else 
-                          if(strcompare(commandnumber,"M3") && exec && go && (ix_m3 !=0)) ix = ix_m3; else
-                          if(strcompare(commandnumber,"M4") && exec && go && (ix_m4 !=0)) ix = ix_m4;
-                          gotoinprogress = 0;
-                          commandnumber[0]=0;   //Processed
-                          go = false;
-                        break;
-
-                        case 13:                  //GOTO IN PROGRESS: eat one word
-                          gotoinprogress = 0;
-                          commandnumber[0]=0;
-                        break;
+                        if(starttoken == 0) {                  //if not started with XEQLBL or XEQC43, immediately abandon program mode
+                          goto exec_exit;
+                        }
+                        
+                        //printf("   gotoinprogress = %5d; xeqlblinprogress = %5d; commandnumber = %10s\n",gotoinprogress,xeqlblinprogress,commandnumber);
 
 
-                        default:;
-                      }
+                        temporaryInformation   = TI_NO_INFO;   //Cancel after go was determined.
+                        switch(gotoinprogress) {
+                          case 1:                  //GOTO IN PROGRESS: got command GOTO. If arriving from DSZ with no label, just pass around and skip to 2
+                            gotoinprogress = 2;
+                            commandnumber[0]=0;
+                          break;
 
-
-                      switch(xeqlblinprogress) {
-                        case 1:                  //XEQMLABEL IN PROGRESS: got command XEQLBL
-                          xeqlblinprogress = 2;
-                          commandnumber[0]=0;
-                        break;
-
-                        case 2:                  //XEQMLABEL IN PROGRESS: get softkeynumber 01 - 18
-                          no = atoi(commandnumber);
-                          if(no>=1 && no <=18) {
-                            xeqlblinprogress = 3;
+                          case 2:                  //GOTO IN PROGRESS: if arriving from DSZ / 1, witho9ut M1-M4, waste the commandd, zero, and pass around
+                            if(strcompare(commandnumber,"M1") && exec && go && (ix_m1 !=0)) ix = ix_m1; else
+                            if(strcompare(commandnumber,"M2") && exec && go && (ix_m2 !=0)) ix = ix_m2; else 
+                            if(strcompare(commandnumber,"M3") && exec && go && (ix_m3 !=0)) ix = ix_m3; else
+                            if(strcompare(commandnumber,"M4") && exec && go && (ix_m4 !=0)) ix = ix_m4;
+                            gotoinprogress = 0;
                             commandnumber[0]=0;   //Processed
-                          } 
-                          else {
-                            xeqlblinprogress = 0;
-                            commandnumber[0]=0;   //Processed
-                          }
-                        break;
+                            go = false;
+                          break;
 
-                        case 3:                  //XEQMLABEL IN PROGRESS: get label
-                          if (no>=1 && no<=18) {
-                            char tmpp[commandnumberl];
-                            strcpy(tmpp,commandnumber);
-                            tmpp[8-1]=0;         //Limit to length of indexOfItemsXEQM
-                            //printf(">>> Exec:%d no:%d ComndNo:%s tmpp:%s>>XEQM:%s\n",exec, no,commandnumber, tmpp,indexOfItemsXEQM + (no-1)*8);
-                            if(!exec) {
-                              strcpy(indexOfItemsXEQM + (no-1)*8, tmpp);        // At Exec time, the XEQM label is changed to the command number. So the re-allocation of the name can only happen in the !exec state
-                              if(namescan) {
-                                //printf("\n### Namescan end %s\n",tmpp);
-                                goto exec_exit; //If in name scan mode, only need to process string up to here
+                          case 13:                  //GOTO IN PROGRESS: eat one word
+                            gotoinprogress = 0;
+                            commandnumber[0]=0;
+                          break;
+
+
+                          default:;
+                        }
+
+
+                        switch(xeqlblinprogress) {
+                          case 1:                  //XEQMLABEL IN PROGRESS: got command XEQLBL
+                            xeqlblinprogress = 2;
+                            commandnumber[0]=0;
+                          break;
+
+                          case 2:                  //XEQMLABEL IN PROGRESS: get softkeynumber 01 - 18
+                            no = atoi(commandnumber);
+                            if(no>=1 && no <=18) {
+                              xeqlblinprogress = 3;
+                              commandnumber[0]=0;   //Processed
+                            } 
+                            else {
+                              xeqlblinprogress = 0;
+                              commandnumber[0]=0;   //Processed
+                            }
+                          break;
+
+                          case 3:                  //XEQMLABEL IN PROGRESS: get label
+                            if (no>=1 && no<=18) {
+                              char tmpp[commandnumberl];
+                              strcpy(tmpp,commandnumber);
+                              tmpp[8-1]=0;         //Limit to length of indexOfItemsXEQM
+                              //printf(">>> Exec:%d no:%d ComndNo:%s tmpp:%s>>XEQM:%s\n",exec, no,commandnumber, tmpp,indexOfItemsXEQM + (no-1)*8);
+                              if(!exec) {
+                                strcpy(indexOfItemsXEQM + (no-1)*8, tmpp);        // At Exec time, the XEQM label is changed to the command number. So the re-allocation of the name can only happen in the !exec state
+                                if(namescan) {
+                                  //printf("\n### Namescan end %s\n",tmpp);
+                                  goto exec_exit; //If in name scan mode, only need to process string up to here
+                                }
                               }
+                              xeqlblinprogress = 0;
+                              commandnumber[0]=0;  //Processed
+
+                              #ifndef TESTSUITE_BUILD
+  //JMXX                            showSoftmenuCurrentPart(); //Redisplay because softkey content changed
+                              #endif
                             }
+                          break;
+
+                          case 10:                  //LABEL IN PROGRESS: got command XEQLBL
+                            xeqlblinprogress = 11;
+                            commandnumber[0]=0;
+                          break;
+
+                          case 11:                  //LABEL IN PROGRESS: get label M1-M4
+                            //printf("LABEL %s\n",commandnumber);
+                            if(strcompare(commandnumber,"M1")) ix_m1 = ix; else
+                            if(strcompare(commandnumber,"M2")) ix_m2 = ix; else
+                            if(strcompare(commandnumber,"M3")) ix_m3 = ix; else
+                            if(strcompare(commandnumber,"M4")) ix_m4 = ix;
                             xeqlblinprogress = 0;
-                            commandnumber[0]=0;  //Processed
+                            commandnumber[0]=0;   //Processed
+                            invert_Pixel(indic_x, indic_y-1);
+                          break;
+  //HERE DEFAULT !!
+  //NOT IN PROGRESS                        
+                          default:                 //NOT IN PROGRESS
+                            no = atoi(commandnumber);       //Will force all unknown commands to have no number, and invalid command and RETURN MARK etc. to 0
+                            //printf("   Command send %s EXEC=%d no=%d ",commandnumber,exec,no);
+                            if(no > LAST_ITEM-1) {no = 0;}
+                            if(no!=0 && exec) {
+                              invert_Pixel(indic_x++, indic_y);
+                              if(indic_x==SCREEN_WIDTH) {indic_x=0;indic_y--;indic_y--;}
 
-                            #ifndef TESTSUITE_BUILD
-//JMXX                            showSoftmenuCurrentPart(); //Redisplay because softkey content changed
-                            #endif
-                          }
-                        break;
-
-                        case 10:                  //LABEL IN PROGRESS: got command XEQLBL
-                          xeqlblinprogress = 11;
-                          commandnumber[0]=0;
-                        break;
-
-                        case 11:                  //LABEL IN PROGRESS: get label M1-M4
-                          //printf("LABEL %s\n",commandnumber);
-                          if(strcompare(commandnumber,"M1")) ix_m1 = ix; else
-                          if(strcompare(commandnumber,"M2")) ix_m2 = ix; else
-                          if(strcompare(commandnumber,"M3")) ix_m3 = ix; else
-                          if(strcompare(commandnumber,"M4")) ix_m4 = ix;
-                          xeqlblinprogress = 0;
-                          commandnumber[0]=0;   //Processed
-                          invert_Pixel(indic_x, indic_y-1);
-                        break;
-//HERE DEFAULT !!
-//NOT IN PROGRESS                        
-                        default:                 //NOT IN PROGRESS
-                          no = atoi(commandnumber);       //Will force all unknown commands to have no number, and invalid command and RETURN MARK etc. to 0
-                          //printf("   Command send %s EXEC=%d no=%d ",commandnumber,exec,no);
-                          if(no > LAST_ITEM-1) {no = 0;}
-                          if(no!=0 && exec) {
-                            invert_Pixel(indic_x++, indic_y);
-                            if(indic_x==SCREEN_WIDTH) {indic_x=0;indic_y--;indic_y--;}
-
-                            if(exec) {
-                              runkey(no); 
-                              //printf("   -->%d sent ",no);
-                            } else {
-                              //printf("   -->%d not sent ",no);
+                              if(exec) {
+                                runkey(no); 
+                                //printf("   -->%d sent ",no);
+                              } else {
+                                //printf("   -->%d not sent ",no);
+                              }
+                              //printf(">>> %d\n",temporaryInformation);
+                              if(gotoinprogress == 9 ) {gotoinprogress = 10;}
                             }
-                            //printf(">>> %d\n",temporaryInformation);
-                            if(gotoinprogress == 9 ) {gotoinprogress = 10;}
-                          }
-                          else {
-                            //printf("Skip execution |%s|",commandnumber);
-                          }
-                          //printf("#\n");
-                          commandnumber[0]=0;   //Processed
-                        break;
+                            else {
+                              //printf("Skip execution |%s|",commandnumber);
+                            }
+                            //printf("#\n");
+                            commandnumber[0]=0;   //Processed
+                          break;
+                        }
                       }
-                    }
-                    break;
-          default:;           //ignore all other characters
+                      break;
+            default:;           //ignore all other characters
+          }
+          if(state_quotes) {
+            if (exec) {
+              //printf("   sent-->b|%s|\n",aa);
+              sendkeys(aa);} //else printf("Skip sending |%s|",aa);
+          }
+          else {
+            if(state_commands && stringByteLength(commandnumber) < commandnumberl-1) {
+              strcat(commandnumber,aa);
+              //printf("#%s",aa);
+            }   // accumulate string
+          }
+          ix++;
         }
-        if(state_quotes) {
-          if (exec) {
-            //printf("   sent-->b|%s|\n",aa);
-            sendkeys(aa);} //else printf("Skip sending |%s|",aa);
-        }
-        else {
-          if(state_commands && stringByteLength(commandnumber) < commandnumberl-1) {
-            strcat(commandnumber,aa);
-            //printf("#%s",aa);
-          }   // accumulate string
-        }
-        ix++;
-      }
 
-    } //while
+      } //while
 
-    gotlabels = true;                              //allow to run only once, unless
-    if(!exec) exec = exec1; else exec = false;     //exec must run, and ensure it runs only once.
-  }
-  exec_exit:
-  exec = false;     //exec must run, and ensure it runs only once.
-#endif //TESTSUITE_BUILD
-	running_program_jm = false;
-	#ifdef PC_BUILD_VERBOSE0
-	  #ifdef PC_BUILD
-		   	printf("##++ END Exiting\n");
-	  #endif
-	#endif
-	return;                              
+      gotlabels = true;                              //allow to run only once, unless
+      if(!exec) exec = exec1; else exec = false;     //exec must run, and ensure it runs only once.
+    }
+    exec_exit:
+    exec = false;     //exec must run, and ensure it runs only once.
+  #endif //TESTSUITE_BUILD
+  	running_program_jm = false;
+  	#ifdef PC_BUILD_VERBOSE0
+  	  #ifdef PC_BUILD
+  		   	printf("##++ END Exiting\n");
+  	  #endif
+  	#endif
+  	return;                              
+#endif //SAVE_SPACE_DM42_2
 }
 
 
@@ -1299,6 +1303,7 @@ void replaceFF(char* FF, char* line2) {
 }
 
 void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec, bool_t scanning) {
+#ifndef SAVE_SPACE_DM42_2
 #ifndef TESTSUITE_BUILD
                                             //Read in XEQMINDEX.TXT file, with default XEQMnn file name replacements
   line1[0]=0;                               //Clear incoming/outgoing string data
@@ -1433,6 +1438,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec, bool_t scan
   #endif
 
 #endif
+#endif //SAVE_SPACE_DM42_2
 }
 
 

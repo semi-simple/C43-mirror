@@ -24,6 +24,7 @@
 
 
 
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2116,8 +2117,9 @@
 #define ITM_STATDEM105                2043
 #define ITM_STATDEM107                2044
 #define ITM_STATDEM109                2045
+#define ITM_USER_SNAP                 2046
 
-#define LAST_ITEM                     2046   //JM
+#define LAST_ITEM                     2047   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

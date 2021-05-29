@@ -2635,6 +2635,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             lineWidth = w;
             showString(tmpString, &numericFont, SCREEN_WIDTH - w - 2, baseY, vmNormal, false, true);
           }
+
+          if(temporaryInformation == TI_INACCURATE && regist == REGISTER_X) {
+            showString("This result may be inaccurate", &standardFont, 1, Y_POSITION_OF_ERR_LINE, vmNormal, true, true);
+          }
         }
 
         else if(getRegisterDataType(regist) == dtComplex34Matrix) {
@@ -2652,6 +2656,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             w = stringWidth(tmpString, &numericFont, false, true);
             lineWidth = w;
             showString(tmpString, &numericFont, SCREEN_WIDTH - w - 2, baseY, vmNormal, false, true);
+          }
+
+          if(temporaryInformation == TI_INACCURATE && regist == REGISTER_X) {
+            showString("This result may be inaccurate", &standardFont, 1, Y_POSITION_OF_ERR_LINE, vmNormal, true, true);
           }
         }
 

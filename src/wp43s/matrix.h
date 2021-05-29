@@ -181,7 +181,7 @@ void       fnEditLinearEquationMatrixX    (uint16_t unusedParamButMandatory);
 
 /**
  * QR decomposition. Square matrices only.
- * Returns unitary Q in Y and upper triangular R in X.
+ * Returns unitary matrix Q in Y and upper triangular matrix R in X.
  *
  * \param[in] unusedParamButMandatory
  */

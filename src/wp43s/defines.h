@@ -45,8 +45,7 @@
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
   #define SAVE_SPACE_DM42 //STAT DEMOS 0,1,2; 
-//  #define SAVE_SPACE_DM42_1 //STAT DEMOS 101-105-107
-  #undef  SAVE_SPACE_DM42_1    //switch off memoery saving options
+  #define SAVE_SPACE_DM42_1 //STAT DEMOS 101-105-107
   #define SAVE_SPACE_DM42_2 //XEQM
   #define SAVE_SPACE_DM42_3 //SOLVER
   #define SAVE_SPACE_DM42_4 //XY GRAPHDEMOS

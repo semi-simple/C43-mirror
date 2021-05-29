@@ -223,6 +223,7 @@ typedef enum {
 #define US_ENABLED                         ( 0 << 2) // The command saves the stack, the statistical sums, and the system flags for later UNDO
 #define US_CANCEL                          ( 1 << 2) // The command cancels the last UNDO data
 #define US_UNCHANGED                       ( 2 << 2) // The command leaves the existing UNDO data as is
+#define US_ENABL_XEQ                       ( 3 << 2) // Like US_STATUS, but if there is not enough memory for UNDO, deletes UNDO data then continue
 
 // Item category (4 bits)
 #define CAT_STATUS                            0x00f0

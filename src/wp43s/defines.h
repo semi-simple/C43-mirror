@@ -35,6 +35,8 @@
   #undef SAVE_SPACE_DM42_3
   #undef SAVE_SPACE_DM42_4
   #undef SAVE_SPACE_DM42_5
+  #undef SAVE_SPACE_DM42_6
+  #undef SAVE_SPACE_DM42_7
   //Key layout option
   #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
   #undef  SWAP_TO_L42_ON_SIM
@@ -44,12 +46,14 @@
 
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-  #define SAVE_SPACE_DM42 //STAT DEMOS 0,1,2; 
-  #define SAVE_SPACE_DM42_1 //STAT DEMOS 101-105-107
+  #define SAVE_SPACE_DM42   //Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
+  #define SAVE_SPACE_DM42_1 //STAT DEMOS 105-107-109
   #define SAVE_SPACE_DM42_2 //XEQM
   #define SAVE_SPACE_DM42_3 //SOLVER
   #define SAVE_SPACE_DM42_4 //XY GRAPHDEMOS
-  #define SAVE_SPACE_DM42_5 //fnShow
+  #define SAVE_SPACE_DM42_5 //fnShow (old)
+  #define SAVE_SPACE_DM42_6 //ELEC functions
+  #undef  SAVE_SPACE_DM42_7 //KEYS USER_DM42
 //  #undef  SAVE_SPACE_DM42          //switch off memoery saving options
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
@@ -1067,7 +1071,7 @@ typedef enum {
 #endif
 
 #ifdef DMCP_BUILD
-  #define TMP_STR_LENGTH     3000 //2560 //dr - remove #include <dmcp.h> again - AUX_BUF_SIZE
+  #define TMP_STR_LENGTH     2560 //2560 //dr - remove #include <dmcp.h> again - AUX_BUF_SIZE
 #else // !DMCP_BUILD
   #define TMP_STR_LENGTH     3000 //2560 //JMMAX ORG:2560
 #endif // DMCP_BUILD

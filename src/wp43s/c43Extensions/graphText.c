@@ -396,6 +396,14 @@ int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename
       print_inlinestr(line1,true);
     #endif
 
+    if(stringByteLength(line1) >= TMP_STR_LENGTH-1) {
+      strcpy(line1, fallback);
+      #if (VERBOSE_LEVEL >= 1) 
+        print_inlinestr("ERROR too long file using fallback",true);
+      #endif
+      return 1;
+    }
+
     return 0;
   }
 
@@ -617,6 +625,16 @@ int16_t import_string_from_filename(char *line1,  char *dirname,   char *filenam
       printf("Loaded %s |%s|\n",dirfile,line1);
     #endif
   #endif
+
+
+  if(stringByteLength(line1) >= TMP_STR_LENGTH-1) {
+    strcpy(line1, fallback);
+    #if (VERBOSE_LEVEL >= 1) 
+      print_inlinestr("ERROR too long file using fallback",true);
+    #endif
+    printf("ERROR too long file using fallback\n");
+    return 1;
+  }
 
 return 0;
 }

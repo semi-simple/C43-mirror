@@ -67,7 +67,7 @@
     strcpy(tmp,comment);
     strcat(tmp,"                                                                                                                                                                ");
     tmp[130]=0;
-    printf("....%s csalcMode=%4d last_CM=%4d tam.mode=%5d catalog=%5d Id=%4d Name=%8s F=%d G=%d \n",tmp, calcMode, last_CM, tam.mode, catalog, softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName,shiftF,shiftG);
+    printf("....%s calcMode=%4d last_CM=%4d tam.mode=%5d catalog=%5d Id=%4d Name=%8s F=%d G=%d \n",tmp, calcMode, last_CM, tam.mode, catalog, softmenuStack[0].softmenuId, indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemSoftmenuName,shiftF,shiftG);
   //  printf("....%s\n",tmp);  
   #endif  
   }
@@ -1199,53 +1199,28 @@ void fnUserJM(uint16_t jmUser) {
      fnSetFlag(FLAG_USER);
     #endif //SAVE_SPACE_DM42
     break;
-    
-    
+
+
 
   case USER_SHIFTS:                                             //USER_SHIFTS 25          //JM Sectioon to be put on a menu
-  
-    fnUserJM(USER_C43);
-  
-    kbd_usr[0].primary     = ITM_USERMODE;
-    kbd_usr[9].primary     = -MNU_TRI;
-    kbd_usr[9].fShifted    = ITM_USERMODE;
-       //kbd_usr[9].gShifted    = ITM_RTN;
-       //kbd_usr[9].fShifted    = ITM_NULL;
-    kbd_usr[10].primary    = ITM_SHIFTf;
-    kbd_usr[10].fShifted   = ITM_NULL;
-    kbd_usr[10].gShifted   = ITM_NULL;
-    kbd_usr[11].primary    = ITM_SHIFTg;
-    kbd_usr[11].fShifted   = ITM_NULL;
-    kbd_usr[11].gShifted   = ITM_NULL;
-    Norm_Key_00_VAR        = ITM_USERMODE;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
+    #ifndef SAVE_SPACE_DM42_7
+      fnUserJM(USER_C43);  
+      kbd_usr[0].primary     = ITM_USERMODE;
+      kbd_usr[9].primary     = -MNU_TRI;
+      kbd_usr[9].fShifted    = ITM_USERMODE;
+         //kbd_usr[9].gShifted    = ITM_RTN;
+         //kbd_usr[9].fShifted    = ITM_NULL;
+      kbd_usr[10].primary    = ITM_SHIFTf;
+      kbd_usr[10].fShifted   = ITM_NULL;
+      kbd_usr[10].gShifted   = ITM_NULL;
+      kbd_usr[11].primary    = ITM_SHIFTg;
+      kbd_usr[11].fShifted   = ITM_NULL;
+      kbd_usr[11].gShifted   = ITM_NULL;
+      Norm_Key_00_VAR        = ITM_USERMODE;
+      fnRefreshState();                                 //drJM
+      fnSetFlag(FLAG_USER);
+    #endif
     break;
-
-  //LEFT SHIFTS Not used, and disabled from KEYS menu
-  case USER_SHIFTS2:                                             //USER_SHIFTS 25          //JM Sectioon to be put on a menu
-    kbd_usr[0].primary     = ITM_USERMODE;
-    kbd_usr[9].primary     = -MNU_TRI;
-    kbd_usr[9].fShifted    = ITM_USERMODE;
-
-    kbd_usr[10].primary    = ITM_STO;
-    kbd_usr[10].fShifted   = ITM_MAGNITUDE;
-    kbd_usr[10].gShifted   = ITM_ANGLE;
-    kbd_usr[11].primary    = ITM_RCL;
-    kbd_usr[11].fShifted   = ITM_PC;
-    kbd_usr[11].gShifted   = ITM_DELTAPC;
-
-    kbd_usr[6].primary    = ITM_SHIFTf;
-    kbd_usr[6].fShifted   = ITM_NULL;
-    kbd_usr[6].gShifted   = ITM_NULL;
-    kbd_usr[7].primary    = ITM_SHIFTg;
-    kbd_usr[7].fShifted   = ITM_NULL;
-    kbd_usr[7].gShifted   = ITM_NULL;
-    Norm_Key_00_VAR        = ITM_USERMODE;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
 
 
   case USER_SNAP:                                              //USER_DEFAULTS FOR USER: E+ E+
@@ -1352,7 +1327,7 @@ void fnKEYSELECT(void) {                                        //JM ASSIGN - RE
     JM_ASN_MODE = 0;
     #ifndef TESTSUITE_BUILD
         clearScreen_old(false,true,false);
-        showString("Abandoned or illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
+        showString("Illegal function", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(REGISTER_Y - REGISTER_X), vmNormal, true, true);
     #endif
   }
   else {

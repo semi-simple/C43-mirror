@@ -467,13 +467,15 @@ TO_QSPI const int16_t menu_ASN_U[]       = { ITM_USER_ALPHA,                ITM_
 
 #ifdef SAVE_SPACE_DM42_7
   #define CC_DM42  ITM_NULL
+  #define CC_USER_SHIFTS ITM_NULL
 #else
   #define CC_DM42  ITM_USER_DM42
+  #define CC_USER_SHIFTS ITM_USER_SHIFTS
 #endif                                             
 
 
 TO_QSPI const int16_t menu_ASN[]         = { ITM_USER_DEFAULTS,             ITM_USER_COMPLEX,           CC_C43,                   CC_V43,                CC_DM42,                    ITM_USER_RESET,         /*ITM_JM_ASN*/
-                                             ITM_NULL,                      ITM_NULL,                   ITM_USER_SHIFTS,          CC_V43M,               CC_43S,                     ITM_JM_SEEK,
+                                             ITM_NULL,                      ITM_NULL,                   CC_USER_SHIFTS,           CC_V43M,               CC_43S,                     ITM_JM_SEEK,
                                              -MNU_ASN_U,                    ITM_ASSIGN,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                   -MNU_ASN_N,
                                                                           
                                              USER_PRIM00U,                  USER_PRIM01U,               USER_PRIM02U,             USER_PRIM03U,          USER_PRIM04U,               USER_PRIM05U,  //JM USER
@@ -1102,7 +1104,7 @@ void JM_LINE2(uint32_t xx, uint32_t yy) {                          // To draw th
     }
   }
 }
-#endif
+#endif //JM_LINE2_DRAW
 
 
 #define RB_EXTRA_BORDER
@@ -1113,18 +1115,18 @@ void JM_LINE2(uint32_t xx, uint32_t yy) {                          // To draw th
 void rbColumnCcccccc(uint32_t xx, uint32_t yy) {
   lcd_fill_rect(xx,yy+2,1,7,  0);
 }
-#endif
+#endif //RB_EXTRA_BORDER
 
 
 
 void rbColumnCcSssssCc(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+8,1,2,  0);
-#endif
+#endif //RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+3,1,5,  0xFF);
 #ifdef RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+1,1,1,  0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1132,11 +1134,11 @@ void rbColumnCcSssssCc(uint32_t xx, uint32_t yy) {
 void rbColumnCcSssssssCc(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+9,1,2,  0);
-#endif
+#endif //RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+2,1,7,  0xFF);
 #ifdef RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy,1,2,  0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1144,13 +1146,13 @@ void rbColumnCcSssssssCc(uint32_t xx, uint32_t yy) {
 void rbColumnCSssCccSssC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+10);
-#endif
+#endif //RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+7,1,3,  0xFF);
   lcd_fill_rect(xx,yy+4,1,3,  0);
   lcd_fill_rect(xx,yy+1,1,3,  0xFF);
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1158,7 +1160,7 @@ void rbColumnCSssCccSssC(uint32_t xx, uint32_t yy) {
 void rbColumnCSsCSssCSsC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+10);
-#endif
+#endif //RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+8,1,2,  0xFF);
   setWhitePixel (xx,yy+7);
   lcd_fill_rect(xx,yy+4,1,3,  0xFF);
@@ -1166,7 +1168,7 @@ void rbColumnCSsCSssCSsC(uint32_t xx, uint32_t yy) {
   lcd_fill_rect(xx,yy+1,1,2,  0xFF);
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1174,15 +1176,15 @@ void rbColumnCSsCSssCSsC(uint32_t xx, uint32_t yy) {
 void rbColumnCcSsNnnSsCc(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+9,1,2,  0);
-#endif
+#endif //RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+7,1,2,  0xFF);
 #ifdef RB_CLEAR_CENTER
   lcd_fill_rect(xx,yy+4,1,3,  0);
-#endif
+#endif //RB_CLEAR_CENTER
   lcd_fill_rect(xx,yy+2,1,2,  0xFF);
 #ifdef RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+0,1,2,  0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1190,15 +1192,15 @@ void rbColumnCcSsNnnSsCc(uint32_t xx, uint32_t yy) {
 void rbColumnCSsNnnnnSsC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+10);
-#endif
+#endif //RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+8,1,2,  0xFF);
 #ifdef RB_CLEAR_CENTER
   lcd_fill_rect(xx,yy+3,1,5,  0);
-#endif
+#endif //RB_CLEAR_CENTER
   lcd_fill_rect(xx,yy+1,1,2,  0xFF);
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+0);
-#endif
+#endif //RB_EXTRA_BORDERf
 }
 
 
@@ -1206,15 +1208,15 @@ void rbColumnCSsNnnnnSsC(uint32_t xx, uint32_t yy) {
 void rbColumnCSNnnnnnnSC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+10);
-#endif
+#endif //RB_EXTRA_BORDER
   setBlackPixel (xx,yy+9);
 #ifdef RB_CLEAR_CENTER
   lcd_fill_rect(xx,yy+2,1,7,  0);
-#endif
+#endif //RB_CLEAR_CENTER
   setBlackPixel (xx,yy+1);
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1230,11 +1232,11 @@ void cbColumnCcccccccccc(uint32_t xx, uint32_t yy) {
 void cbColumnCSssssssssC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+10);
-#endif
+#endif //RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+1,1,9,  0xFF);
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1242,13 +1244,13 @@ void cbColumnCSssssssssC(uint32_t xx, uint32_t yy) {
 void cbColumnCSsCccccSsC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+10);
-#endif
+#endif //RB_EXTRA_BORDER
   lcd_fill_rect(xx,yy+8,1,2,  0xFF);
   lcd_fill_rect(xx,yy+3,1,5,  0);
   lcd_fill_rect(xx,yy+1,1,2,  0xFF);
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1256,15 +1258,15 @@ void cbColumnCSsCccccSsC(uint32_t xx, uint32_t yy) {
 void cbColumnCSNnnnnnnSC(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+10);
-#endif
+#endif //RB_EXTRA_BORDER
   setBlackPixel (xx,yy+9);
 #ifdef RB_CLEAR_CENTER
   lcd_fill_rect(xx,yy+2,1,7,  0);
-#endif
+#endif //RB_CLEAR_CENTER
   setBlackPixel (xx,yy+1);
 #ifdef RB_EXTRA_BORDER
   setWhitePixel (xx,yy+0);
-#endif
+#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1292,7 +1294,7 @@ void RB_CHECKED(uint32_t xx, uint32_t yy) {
 void RB_UNCHECKED(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   rbColumnCcccccc(xx+0, yy);
-#endif
+#endif //RB_EXTRA_BORDER
   rbColumnCcSssssCc(xx+1, yy);
   rbColumnCcSsNnnSsCc(xx+2, yy);
   rbColumnCSsNnnnnSsC(xx+3, yy);
@@ -1304,7 +1306,7 @@ void RB_UNCHECKED(uint32_t xx, uint32_t yy) {
   rbColumnCcSssssCc(xx+9, yy);
 //#ifdef RB_EXTRA_BORDER
 //  rbColumnCcccccc(xx+10, yy);
-//#endif
+//#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1312,7 +1314,7 @@ void RB_UNCHECKED(uint32_t xx, uint32_t yy) {
 void CB_CHECKED(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
   cbColumnCcccccccccc(xx+0, yy);
-#endif
+#endif //RB_EXTRA_BORDER
   cbColumnCSssssssssC(xx+1, yy);
   cbColumnCSssssssssC(xx+2, yy);
   cbColumnCSsCccccSsC(xx+3, yy);
@@ -1324,7 +1326,7 @@ void CB_CHECKED(uint32_t xx, uint32_t yy) {
   cbColumnCSssssssssC(xx+9, yy);
 //#ifdef RB_EXTRA_BORDER
 //  cbColumnCcccccccccc(xx+10, yy);
-//#endif
+//#endif //RB_EXTRA_BORDER
 }
 
 
@@ -1344,7 +1346,7 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
   cbColumnCSssssssssC(xx+9, yy);
 //#ifdef RB_EXTRA_BORDER
 //  cbColumnCcccccccccc(xx+10, yy);
-//#endif
+//#endif //RB_EXTRA_BORDER
 }
 //^^
 
@@ -1447,7 +1449,7 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
       JM_LINE2(x2, y2);
     }
   }
-#endif
+#endif //JM_LINE2_DRAW
 
   //vv EXTRA DRAWINGS FOR RADIO_BUTTON AND CHECK_BOX
   if(showCb >= 0) {

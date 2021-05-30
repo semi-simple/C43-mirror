@@ -25,7 +25,6 @@
 
 
 
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1963,7 +1962,7 @@
 #define ITM_USER_USER                 1888
 #define ITM_USER_SIGMAPLUS            1889
 #define ITM_USER_V43MIN               1890
-#define ITM_USER_SHIFTS2              1891
+#define ITM_1891                      1891
 #define ITM_USER_HOME                 1892
 #define ITM_USER_WP43S                1893
 #define ITM_USER_DM42                 1894

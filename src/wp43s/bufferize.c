@@ -1143,7 +1143,9 @@
     }
 
     else {
-      closeNim();
+      if(item != -MNU_INTS && item != -MNU_BITS) {
+        closeNim();
+      }
       if(calcMode != CM_NIM) {
         if(item == ITM_CONSTpi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
           setSystemFlag(FLAG_ASLIFT);

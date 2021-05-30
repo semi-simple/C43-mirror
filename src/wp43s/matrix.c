@@ -399,16 +399,24 @@ static void initSimEqValue(calcRegister_t regist, uint16_t rows, uint16_t cols) 
   else if(getRegisterDataType(regist) == dtReal34Matrix && (REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows != rows || REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns != cols)) {
     real34Matrix_t matrix;
     convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
-    realMatrixRedim(&matrix, rows, cols);
-    convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
-    realMatrixFree(&matrix);
+    if(lastErrorCode == ERROR_NONE) {
+      realMatrixRedim(&matrix, rows, cols);
+      if(lastErrorCode == ERROR_NONE) {
+        convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
+      }
+      realMatrixFree(&matrix);
+    }
   }
   else if(getRegisterDataType(regist) == dtComplex34Matrix && (REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows != rows || REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns != cols)) {
     complex34Matrix_t matrix;
     convertComplex34MatrixRegisterToComplex34Matrix(regist, &matrix);
-    complexMatrixRedim(&matrix, rows, cols);
-    convertComplex34MatrixToComplex34MatrixRegister(&matrix, regist);
-    complexMatrixFree(&matrix);
+    if(lastErrorCode == ERROR_NONE) {
+      complexMatrixRedim(&matrix, rows, cols);
+      if(lastErrorCode == ERROR_NONE) {
+        convertComplex34MatrixToComplex34MatrixRegister(&matrix, regist);
+      }
+      complexMatrixFree(&matrix);
+    }
   }
 }
 #endif // TESTSUITE_BUILD
@@ -661,17 +669,25 @@ void fnSetMatrixDimensions(uint16_t regist) {
     real34Matrix_t matrix;
 
     convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
-    realMatrixRedim(&matrix, y, x);
-    convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
-    realMatrixFree(&matrix);
+    if(lastErrorCode == ERROR_NONE) {
+      realMatrixRedim(&matrix, y, x);
+      if(lastErrorCode == ERROR_NONE) {
+        convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
+      }
+      realMatrixFree(&matrix);
+    }
   }
   else if(getRegisterDataType(regist) == dtComplex34Matrix) {
     complex34Matrix_t matrix;
 
     convertComplex34MatrixRegisterToComplex34Matrix(regist, &matrix);
-    complexMatrixRedim(&matrix, y, x);
-    convertComplex34MatrixToComplex34MatrixRegister(&matrix, regist);
-    complexMatrixFree(&matrix);
+    if(lastErrorCode == ERROR_NONE) {
+      complexMatrixRedim(&matrix, y, x);
+      if(lastErrorCode == ERROR_NONE) {
+        convertComplex34MatrixToComplex34MatrixRegister(&matrix, regist);
+      }
+      complexMatrixFree(&matrix);
+    }
   }
   else {
     real34Matrix_t matrix;
@@ -1286,11 +1302,17 @@ void fnSwapRows(uint16_t unusedParamButMandatory) {
 void fnSimultaneousLinearEquation(uint16_t numberOfUnknowns) {
 #ifndef TESTSUITE_BUILD
   initSimEqValue(findOrAllocateNamedVariable("Mat_A"), numberOfUnknowns, numberOfUnknowns);
-  initSimEqValue(findOrAllocateNamedVariable("Mat_B"), numberOfUnknowns, 1);
-  initSimEqValue(findOrAllocateNamedVariable("Mat_X"), numberOfUnknowns, 1);
-  showSoftmenu(-MNU_SIMQ);
-  showSoftmenu(-MNU_TAM);
-  numberOfTamMenusToPop = 1;
+  if(lastErrorCode == ERROR_NONE) {
+    initSimEqValue(findOrAllocateNamedVariable("Mat_B"), numberOfUnknowns, 1);
+    if(lastErrorCode == ERROR_NONE) {
+      initSimEqValue(findOrAllocateNamedVariable("Mat_X"), numberOfUnknowns, 1);
+      if(lastErrorCode == ERROR_NONE) {
+        showSoftmenu(-MNU_SIMQ);
+        showSoftmenu(-MNU_TAM);
+        numberOfTamMenusToPop = 1;
+      }
+    }
+  }
 #endif // TESTSUITE_BUILD
 }
 

@@ -828,8 +828,12 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
             liftStack();
             liftStack();
             convertReal34MatrixToReal34MatrixRegister(&x, REGISTER_Z);
-            convertReal34MatrixToReal34MatrixRegister(&l, REGISTER_Y);
-            convertReal34MatrixToReal34MatrixRegister(&u, REGISTER_X);
+            if(lastErrorCode == ERROR_NONE) {
+              convertReal34MatrixToReal34MatrixRegister(&l, REGISTER_Y);
+              if(lastErrorCode == ERROR_NONE) {
+                convertReal34MatrixToReal34MatrixRegister(&u, REGISTER_X);
+              }
+            }
             setSystemFlag(FLAG_ASLIFT);
             realMatrixFree(&u);
           }
@@ -883,21 +887,28 @@ void fnLuDecomposition(uint16_t unusedParamButMandatory) {
               }
             }
             realMatrixIdentity(&pivot, l.header.matrixColumns);
-            for(uint16_t i = 0; i < l.header.matrixColumns; ++i) {
-              realMatrixSwapRows(&pivot, &pivot, i, p[i]);
+            if(lastErrorCode == ERROR_NONE) {
+              for(uint16_t i = 0; i < l.header.matrixColumns; ++i) {
+                realMatrixSwapRows(&pivot, &pivot, i, p[i]);
+              }
+              transposeRealMatrix(&pivot, &pivot);
+              liftStack();
+              liftStack();
+              setSystemFlag(FLAG_ASLIFT);
+              convertReal34MatrixToReal34MatrixRegister(&pivot, REGISTER_Z);
+              if(lastErrorCode == ERROR_NONE) {
+                convertComplex34MatrixToComplex34MatrixRegister(&l, REGISTER_Y);
+                if(lastErrorCode == ERROR_NONE) {
+                  convertComplex34MatrixToComplex34MatrixRegister(&u, REGISTER_X);
+                }
+              }
+              realMatrixFree(&pivot);
             }
-            transposeRealMatrix(&pivot, &pivot);
-            liftStack();
-            liftStack();
-            setSystemFlag(FLAG_ASLIFT);
-            convertReal34MatrixToReal34MatrixRegister(&pivot, REGISTER_Z);
-            convertComplex34MatrixToComplex34MatrixRegister(&l, REGISTER_Y);
-            convertComplex34MatrixToComplex34MatrixRegister(&u, REGISTER_X);
+            else lastErrorCode = ERROR_RAM_FULL;
             complexMatrixFree(&u);
           }
           else lastErrorCode = ERROR_RAM_FULL;
           complexMatrixFree(&l);
-          realMatrixFree(&pivot);
         }
         else {
           displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
@@ -3723,14 +3734,16 @@ void divideRealMatrices(const real34Matrix_t *y, const real34Matrix_t *x, real34
   }
 
   WP34S_matrix_inverse(x, &invX);
-  if(invX.matrixElements == NULL) {
+  if(lastErrorCode == ERROR_NONE && invX.matrixElements) {
+    multiplyRealMatrices(y, &invX, res);
+  }
+  else {
     if(y != res && x != res) {
       res->matrixElements = NULL; // Singular matrix
       res->header.matrixRows = res->header.matrixColumns = 0;
     }
-    return;
   }
-  multiplyRealMatrices(y, &invX, res);
+  realMatrixFree(&invX);
 }
 
 void divideComplexMatrix(const complex34Matrix_t *matrix, const real34_t *xr, const real34_t *xi, complex34Matrix_t *res) {
@@ -3768,14 +3781,16 @@ void divideComplexMatrices(const complex34Matrix_t *y, const complex34Matrix_t *
   }
 
   complex_matrix_inverse(x, &invX);
-  if(invX.matrixElements == NULL) {
+  if(lastErrorCode == ERROR_NONE && invX.matrixElements) {
+    multiplyComplexMatrices(y, &invX, res);
+  }
+  else {
     if(y != res && x != res) {
       res->matrixElements = NULL; // Singular matrix
       res->header.matrixRows = res->header.matrixColumns = 0;
     }
-    return;
   }
-  multiplyComplexMatrices(y, &invX, res);
+  complexMatrixFree(&invX);
 }
 
 
@@ -3817,6 +3832,10 @@ void WP34S_matrix_linear_eqn(const real34Matrix_t *a, const real34Matrix_t *b, r
   /* Everything is happy so far -- decompose */
   if((pivots = allocWp43s(TO_BLOCKS(sizeof(uint16_t) * n)))) {
     WP34S_LU_decomposition(a, &mat, pivots);
+    if(lastErrorCode != ERROR_NONE) {
+      freeWp43s(&pivots, TO_BLOCKS(sizeof(uint16_t) * n));
+      return;
+    }
     if(!mat.matrixElements) {
       freeWp43s(&pivots, TO_BLOCKS(sizeof(uint16_t) * n));
       displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
@@ -3889,6 +3908,10 @@ void complex_matrix_linear_eqn(const complex34Matrix_t *a, const complex34Matrix
   /* Everything is happy so far -- decompose */
   if((pivots = allocWp43s(TO_BLOCKS(sizeof(uint16_t) * n)))) {
     complex_LU_decomposition(a, &mat, pivots);
+    if(lastErrorCode != ERROR_NONE) {
+      freeWp43s(&pivots, TO_BLOCKS(sizeof(uint16_t) * n));
+      return;
+    }
     if(!mat.matrixElements) {
       freeWp43s(&pivots, TO_BLOCKS(sizeof(uint16_t) * n));
       displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
@@ -3952,6 +3975,9 @@ void complex_matrix_linear_eqn(const complex34Matrix_t *a, const complex34Matrix
   }
 
   complex_matrix_inverse(a, &inv_a);
+  if(lastErrorCode != ERROR_NONE) {
+    return;
+  }
   if(!inv_a.matrixElements) {
     displayCalcErrorMessage(ERROR_SINGULAR_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)

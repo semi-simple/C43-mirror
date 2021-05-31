@@ -429,30 +429,19 @@ void clearScreenPixels(void) {
 
 #ifndef TESTSUITE_BUILD
 void plotcross(uint16_t xn, uint8_t yn) {              // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-  placePixel(xn,yn);                                   //   PLOT a cross
-  placePixel(xn-1,yn-1);
-  placePixel(xn-1,yn+1);
-  placePixel(xn+1,yn-1);
-  placePixel(xn+1,yn+1);
-  placePixel(xn-2,yn-2);
-  placePixel(xn-2,yn+2);
-  placePixel(xn+2,yn-2);
-  placePixel(xn+2,yn+2);
+  plotline(xn-2,yn-2,xn+2,yn+2);                       //   PLOT a cross
+  plotline(xn-2,yn+2,xn+2,yn-2);
 }
 
 
 void plotbox(uint16_t xn, uint8_t yn) {                // Plots line from xo,yo to xn,yn; uses temporary x1,y1
-  placePixel(xn-2,yn-2);                               //   PLOT a box
-  placePixel(xn-2,yn-1);
+  plotline(xn-2,yn-2,xn-2,yn-1);                       //   PLOT a box
   placePixel(xn-1,yn-2);
-  placePixel(xn-2,yn+2);
-  placePixel(xn-2,yn+1);
+  plotline(xn-2,yn+2,xn-2,yn+1);
   placePixel(xn-1,yn+2);
-  placePixel(xn+2,yn-2);
-  placePixel(xn+1,yn-2);
+  plotline(xn+2,yn-2,xn+1,yn-2);
   placePixel(xn+2,yn-1);
-  placePixel(xn+2,yn+2);
-  placePixel(xn+2,yn+1);
+  plotline(xn+2,yn+2,xn+2,yn+1);
   placePixel(xn+1,yn+2);
 }
 

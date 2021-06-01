@@ -141,7 +141,9 @@ void dblDivide(bool_t remainder_mode) {
   }
 
   fnDropY(NOPARAM);
-  fnDropY(NOPARAM);
+  if(lastErrorCode == ERROR_NONE) {
+    fnDropY(NOPARAM);
+  }
   goto cleanup;
 
 quotient_overflow:

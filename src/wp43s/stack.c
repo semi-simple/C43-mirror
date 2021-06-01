@@ -76,8 +76,14 @@ void fnDropY(uint16_t unusedButMandatoryParameter) {
   }
 
   uint16_t sizeInBlocks = getRegisterFullSize(getStackTop());
-  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBlocks));
-  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), TO_BYTES(sizeInBlocks));
+  void *dataPtr = allocWp43s(sizeInBlocks);
+  if(dataPtr) {
+    setRegisterDataPointer(getStackTop() - 1, dataPtr);
+    xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), TO_BYTES(sizeInBlocks));
+  }
+  else {
+    lastErrorCode = ERROR_RAM_FULL;
+  }
 }
 
 

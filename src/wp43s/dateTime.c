@@ -688,13 +688,17 @@ void fnToDate(uint16_t unusedButMandatoryParameter) {
 
   // valid date
   fnDropY(NOPARAM);
-  fnDropY(NOPARAM);
-  composeJulianDay(&y, &m, &d, &j);
-  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
-  julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
+  if(lastErrorCode == ERROR_NONE) {
+    fnDropY(NOPARAM);
+    if(lastErrorCode == ERROR_NONE) {
+      composeJulianDay(&y, &m, &d, &j);
+      reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
+      julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
 
-  // check range
-  checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+      // check range
+      checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+  }
   if(lastErrorCode != 0) undo();
 }
 

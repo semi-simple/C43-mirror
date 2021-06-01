@@ -107,7 +107,9 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
     }
 
     fnDropY(NOPARAM);
-    setSystemFlag(FLAG_ASLIFT);
+    if(lastErrorCode == ERROR_NONE) {
+      setSystemFlag(FLAG_ASLIFT);
+    }
   }
 #ifndef TESTSUITE_BUILD
   else if(dataTypeX == dtReal34Matrix && dataTypeY == dtReal34Matrix) {
@@ -164,7 +166,9 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
 
     realMatrixFree(&iMat);
     fnDropY(NOPARAM);
-    setSystemFlag(FLAG_ASLIFT);
+    if(lastErrorCode == ERROR_NONE) {
+      setSystemFlag(FLAG_ASLIFT);
+    }
   }
 #endif // TESTSUITE_BUILD
   else {

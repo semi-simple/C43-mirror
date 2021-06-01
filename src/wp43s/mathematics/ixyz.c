@@ -61,7 +61,9 @@ void fnIxyz(uint16_t unusedButMandatoryParameter) {
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
       fnDropY(NOPARAM);
-      fnDropY(NOPARAM);
+      if(lastErrorCode == ERROR_NONE) {
+        fnDropY(NOPARAM);
+      }
     }
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);

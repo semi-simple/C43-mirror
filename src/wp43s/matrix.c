@@ -199,16 +199,18 @@ static bool_t getMatrixReal(real34Matrix_t *matrix) {
   if(realIsPositive(&rx) && realIsPositive(&ry) && realCompareLessEqual(&rx, &rcols) && realCompareLessEqual(&ry, &rrows)) {
     real34Matrix_t mat;
     fnDropY(NOPARAM);
-    if(realMatrixInit(&mat, a, b)) {
-      for(r = 0; r < a; ++r)
-        for(c = 0; c < b; ++c)
-          real34Copy(&matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j], &mat.matrixElements[r * b + c]);
-      convertReal34MatrixToReal34MatrixRegister(&mat, REGISTER_X);
-      realMatrixFree(&mat);
-    }
-    else {
-      lastErrorCode = ERROR_RAM_FULL;
-      return false;
+    if(lastErrorCode == ERROR_NONE) {
+      if(realMatrixInit(&mat, a, b)) {
+        for(r = 0; r < a; ++r)
+          for(c = 0; c < b; ++c)
+            real34Copy(&matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j], &mat.matrixElements[r * b + c]);
+        convertReal34MatrixToReal34MatrixRegister(&mat, REGISTER_X);
+        realMatrixFree(&mat);
+      }
+      else {
+        lastErrorCode = ERROR_RAM_FULL;
+        return false;
+      }
     }
   }
   else {
@@ -240,14 +242,16 @@ static bool_t getMatrixComplex(complex34Matrix_t *matrix) {
   if(realIsPositive(&rx) && realIsPositive(&ry) && realCompareLessEqual(&rx, &rcols) && realCompareLessEqual(&ry, &rrows)) {
     complex34Matrix_t mat;
     fnDropY(NOPARAM);
-    if(complexMatrixInit(&mat, a, b)) {
-      for(r = 0; r < a; ++r)
-        for(c = 0; c < b; ++c)
-          complex34Copy(&matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j], &mat.matrixElements[r * b + c]);
-      convertComplex34MatrixToComplex34MatrixRegister(&mat, REGISTER_X);
-      complexMatrixFree(&mat);
+    if(lastErrorCode == ERROR_NONE) {
+      if(complexMatrixInit(&mat, a, b)) {
+        for(r = 0; r < a; ++r)
+          for(c = 0; c < b; ++c)
+            complex34Copy(&matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j], &mat.matrixElements[r * b + c]);
+        convertComplex34MatrixToComplex34MatrixRegister(&mat, REGISTER_X);
+        complexMatrixFree(&mat);
+      }
+      else lastErrorCode = ERROR_RAM_FULL;
     }
-    else lastErrorCode = ERROR_RAM_FULL;
   }
   else {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);

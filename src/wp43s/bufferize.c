@@ -725,7 +725,7 @@ void kill_ASB_icon(void) {
             strcat(aimBuffer, "."); // no break here
             #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
           case NP_REAL_FLOAT_PART :
             strcat(aimBuffer, "e+");
             exponentSignLocation = strlen(aimBuffer) - 1;
@@ -738,7 +738,7 @@ void kill_ASB_icon(void) {
             strcat(aimBuffer, "."); // no break here
             #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
           case NP_COMPLEX_FLOAT_PART :
             strcat(aimBuffer, "e+");
             imaginaryExponentSignLocation = strlen(aimBuffer) - 1;
@@ -852,7 +852,7 @@ void kill_ASB_icon(void) {
             strcat(aimBuffer, "."); // no break here
             #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
 
           case NP_REAL_FLOAT_PART :
             imaginaryMantissaSignLocation = strlen(aimBuffer);
@@ -1280,7 +1280,10 @@ void kill_ASB_icon(void) {
         case ITM_SQUAREROOTX :  //closeNim moved to keyboard.c / btnkeyrelease, as .ms is on longpress underneath sqrt
         case ITM_HASH_JM :      //closeNim simply not needed
           break;
-        default : closeNim();
+        default : 
+          if(item != -MNU_INTS && item != -MNU_BITS) {
+            closeNim();
+          }
       }
       if(calcMode != CM_NIM) {
         if(item == ITM_CONSTpi || (item >= 0 && indexOfItems[item].func == fnConstant)) {

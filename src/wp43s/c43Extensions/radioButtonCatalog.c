@@ -47,20 +47,6 @@ TO_QSPI const radiocb_t indexOfRadioCbEepromItems[] = {
 /* 1960 */  { ITM_CPXI,             CU_I,                   RB_CU },  //fnSetSetJM          /*   96 */ //fnComplexUnit
 /* 1961 */  { ITM_CPXJ,             CU_J,                   RB_CU },  //fnSetSetJM          /*   97 */ //fnComplexUnit
 
-#ifdef XXXXX
-/*  308 */  { ITM_LINF,             CF_LINEAR_FITTING       RB_CF },  //fnCurveFitting
-/*  161 */  { ITM_EXPF,             CF_EXPONENTIAL_FITTING  RB_CF },  //fnCurveFitting
-/*  325 */  { ITM_LOGF,             CF_LOGARITHMIC_FITTING  RB_CF },  //fnCurveFitting
-/*  466 */  { ITM_POWERF,           CF_POWER_FITTING        RB_CF },  //fnCurveFitting
-/* 1566 */  { ITM_ROOTF,            CF_ROOT_FITTING         RB_CF },  //fnCurveFitting
-/* 1565 */  { ITM_HYPF,             CF_HYPERBOLIC_FITTING   RB_CF },  //fnCurveFitting
-/* 1564 */  { ITM_PARABF,           CF_PARABOLIC_FITTING    RB_CF },  //fnCurveFitting
-/* 1563 */  { ITM_CAUCHF,           CF_CAUCHY_FITTING       RB_CF },  //fnCurveFitting
-/* 1562 */  { ITM_GAUSSF,           CF_GAUSS_FITTING        RB_CF },  //fnCurveFitting
-/*  438 */  { ITM_ORTHOF,           CF_ORTHOGONAL_FITTING   RB_CF },  //fnCurveFitting
-#endif
-
-
 /*  136 */  { ITM_DMY,              DF_DMY,                 RB_DF },  //fnSetDateFormat
 /*  383 */  { ITM_MDY,              DF_MDY,                 RB_DF },  //fnSetDateFormat
 /*  700 */  { ITM_YMD,              DF_YMD,                 RB_DF },  //fnSetDateFormat
@@ -103,6 +89,18 @@ TO_QSPI const radiocb_t indexOfRadioCbEepromItems[] = {
 /* 1893 */  { ITM_U_KEY_MM,         -MNU_MyMenu,            RB_SA },  //fnSigmaAssign
 /*      */  { ITM_DENANY,           DM_ANY,                 CB_JC },  //  --fnDenMode
 /*      */  { ITM_DENFIX,           DM_FIX,                 CB_JC },  //  --fnDenMode
+
+/*  308 */  { ITM_LINF,             JC_LINEAR_FITTING       ,CB_JC },  //fnCurveFitting
+/*  161 */  { ITM_EXPF,             JC_EXPONENTIAL_FITTING  ,CB_JC },  //fnCurveFitting
+/*  325 */  { ITM_LOGF,             JC_LOGARITHMIC_FITTING  ,CB_JC },  //fnCurveFitting
+/*  466 */  { ITM_POWERF,           JC_POWER_FITTING        ,CB_JC },  //fnCurveFitting
+/* 1566 */  { ITM_ROOTF,            JC_ROOT_FITTING         ,CB_JC },  //fnCurveFitting
+/* 1565 */  { ITM_HYPF,             JC_HYPERBOLIC_FITTING   ,CB_JC },  //fnCurveFitting
+/* 1564 */  { ITM_PARABF,           JC_PARABOLIC_FITTING    ,CB_JC },  //fnCurveFitting
+/* 1563 */  { ITM_CAUCHF,           JC_CAUCHY_FITTING       ,CB_JC },  //fnCurveFitting
+/* 1562 */  { ITM_GAUSSF,           JC_GAUSS_FITTING        ,CB_JC },  //fnCurveFitting
+/*  438 */  { ITM_ORTHOF,           JC_ORTHOGONAL_FITTING   ,CB_JC },  //fnCurveFitting
+
 /* 1744 */  { ITM_BASE_AHOME,       JC_BASE_AHOME,          CB_JC },  //fnSetSetJM
 /* 1742 */  { ITM_BASE_HOME,        JC_BASE_HOME,           CB_JC },  //fnSetSetJM
 /* 1695 */  { ITM_CB_CPXRES,        JC_BCR,                 CB_JC },  //fnSetSetJM
@@ -175,12 +173,6 @@ int8_t fnCbIsSet(int16_t item) {
         else {                          rb_param = CU_I;  }
       }
       break;
-#ifdef XXXXX
-      case RB_CF: {
-        rb_param = curveFitting;
-      }
-      break;
-#endif
 
       case RB_DF: {
         if(getSystemFlag(FLAG_YMD)) {       rb_param = DF_YMD;  }
@@ -257,6 +249,22 @@ int8_t fnCbIsSet(int16_t item) {
         is_cb = true;
 
         switch(indexOfRadioCbEepromItems[i].param) {
+
+
+
+        case JC_LINEAR_FITTING      : {  cb_param = (lrSelection & CF_LINEAR_FITTING     ) == CF_LINEAR_FITTING      ; } break;
+        case JC_EXPONENTIAL_FITTING : {  cb_param = (lrSelection & CF_EXPONENTIAL_FITTING) == CF_EXPONENTIAL_FITTING ; } break;
+        case JC_LOGARITHMIC_FITTING : {  cb_param = (lrSelection & CF_LOGARITHMIC_FITTING) == CF_LOGARITHMIC_FITTING ; } break;
+        case JC_POWER_FITTING       : {  cb_param = (lrSelection & CF_POWER_FITTING      ) == CF_POWER_FITTING       ; } break;
+        case JC_ROOT_FITTING        : {  cb_param = (lrSelection & CF_ROOT_FITTING       ) == CF_ROOT_FITTING        ; } break;
+        case JC_HYPERBOLIC_FITTING  : {  cb_param = (lrSelection & CF_HYPERBOLIC_FITTING ) == CF_HYPERBOLIC_FITTING  ; } break;
+        case JC_PARABOLIC_FITTING   : {  cb_param = (lrSelection & CF_PARABOLIC_FITTING  ) == CF_PARABOLIC_FITTING   ; } break;
+        case JC_CAUCHY_FITTING      : {  cb_param = (lrSelection & CF_CAUCHY_FITTING     ) == CF_CAUCHY_FITTING      ; } break;
+        case JC_GAUSS_FITTING       : {  cb_param = (lrSelection & CF_GAUSS_FITTING      ) == CF_GAUSS_FITTING       ; } break;
+        case JC_ORTHOGONAL_FITTING  : {  cb_param = (lrSelection & CF_ORTHOGONAL_FITTING ) == CF_ORTHOGONAL_FITTING  ; } break;
+
+
+
         case JC_BASE_AHOME: {
           cb_param = SH_BASE_AHOME;
         }
@@ -440,6 +448,7 @@ int8_t fnCbIsSet(int16_t item) {
       }
 
       if(is_cb) {
+        //printf("^^^^*** %d %d\n",indexOfRadioCbEepromItems[i].param, cb_param);
         result = cb_param ? CB_TRUE : CB_FALSE;
       }
       else {
@@ -534,6 +543,10 @@ int16_t fnItemShowValue(int16_t item) {
   case ITM_RNG:     //
     result = exponentLimit;
     break;
+
+//  case ITM_BESTF:     //
+//    result = (~lrSelection) & 0x1FF;
+//    break;
 
   case ITM_RM:      //
     result = roundingMode;

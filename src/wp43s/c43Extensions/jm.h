@@ -243,6 +243,16 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 #define JC_NL                  53
 #define JC_UC                  54
 
+#define JC_LINEAR_FITTING      55
+#define JC_EXPONENTIAL_FITTING 56
+#define JC_LOGARITHMIC_FITTING 57
+#define JC_POWER_FITTING       58
+#define JC_ROOT_FITTING        59
+#define JC_HYPERBOLIC_FITTING  60
+#define JC_PARABOLIC_FITTING   61
+#define JC_CAUCHY_FITTING      62
+#define JC_GAUSS_FITTING       63
+#define JC_ORTHOGONAL_FITTING  64
 
 
 #ifdef PC_BUILD

@@ -4142,6 +4142,9 @@ static void sortEigenvalues(real_t *eig, uint16_t size, uint16_t begin_a, uint16
   if(size < 2) { // ... trivial
     return;
   }
+  else if(begin_a == end_b) { // ... trivial
+    return;
+  }
   else if(size == 2) { // simply compare
     realRectangularToPolar(eig,     eig + 1, eig + 2, eig + 3, realContext);
     realRectangularToPolar(eig + 6, eig + 7, eig + 4, eig + 5, realContext);
@@ -4154,8 +4157,8 @@ static void sortEigenvalues(real_t *eig, uint16_t size, uint16_t begin_a, uint16
   }
   else {
     uint16_t a = begin_a, b = begin_b;
-    if(end_a - begin_a > 1) sortEigenvalues(eig, size, begin_a, (begin_a + end_a + 2) / 2, end_a, realContext);
-    if(end_b - begin_b > 1) sortEigenvalues(eig, size, begin_b, (begin_b + end_b + 2) / 2, end_b, realContext);
+    sortEigenvalues(eig, size, begin_a, (begin_a + end_a + 2) / 2, end_a, realContext);
+    sortEigenvalues(eig, size, begin_b, (begin_b + end_b + 2) / 2, end_b, realContext);
     for(uint16_t i = begin_a; i <= end_b; i++) {
       realRectangularToPolar(eig + (i * size + i) * 2, eig + (i * size + i) * 2 + 1, eig + (i * size + (i + 1) % size) * 2, eig + (i * size + (i + 1) % size) * 2 + 1, realContext);
       realZero(eig + (i * size + (i + 1) % size) * 2 + 1);

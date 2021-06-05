@@ -456,6 +456,8 @@ void setRegisterTag(calcRegister_t regist, uint32_t tag) {
 
 
 void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
+  dataBlock_t *oldSubroutineLevelData = currentSubroutineLevelData;
+
   if(numberOfRegistersToAllocate > 99) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -468,46 +470,64 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
   uint16_t r;
   if(currentLocalFlags == NULL) {
     // 1st allocation of local registers in this level of subroutine
-    currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 3, 4 + numberOfRegistersToAllocate);
-    currentLocalFlags = currentSubroutineLevelData + 3;
-    currentLocalFlags->localFlags = 0;
-    currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
-    currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
-    currentNumberOfLocalFlags = NUMBER_OF_LOCAL_FLAGS;
-
-    // All the new local registers are real34s initialized to 0.0
-    for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-      setRegisterDataType(r, dtReal34, amNone);
-      setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
-      real34Zero(REGISTER_REAL34_DATA(r));
-    }
-  }
-  else if(numberOfRegistersToAllocate != currentNumberOfLocalRegisters) {
-    // The number of allocated local registers changes
-    if(numberOfRegistersToAllocate > currentNumberOfLocalRegisters) {
-      uint8_t oldNumberOfLocalRegisters = currentNumberOfLocalRegisters;
-      currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 4 + currentNumberOfLocalRegisters, 4 + numberOfRegistersToAllocate);
+    if((currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 3, 4 + numberOfRegistersToAllocate))) {
       currentLocalFlags = currentSubroutineLevelData + 3;
+      currentLocalFlags->localFlags = 0;
       currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
       currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
+      currentNumberOfLocalFlags = NUMBER_OF_LOCAL_FLAGS;
 
       // All the new local registers are real34s initialized to 0.0
-      for(r=FIRST_LOCAL_REGISTER+oldNumberOfLocalRegisters; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
+      for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
         setRegisterDataType(r, dtReal34, amNone);
         setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
         real34Zero(REGISTER_REAL34_DATA(r));
       }
     }
     else {
-      // free memory allocated to the data of the deleted local registers
-      for(r=numberOfRegistersToAllocate; r<currentNumberOfLocalRegisters; r++) {
-        freeRegisterData(FIRST_LOCAL_REGISTER + r);
-      }
+      currentSubroutineLevelData = oldSubroutineLevelData;
+      lastErrorCode = ERROR_RAM_FULL;
+      return;
+    }
+  }
+  else if(numberOfRegistersToAllocate != currentNumberOfLocalRegisters) {
+    // The number of allocated local registers changes
+    if(numberOfRegistersToAllocate > currentNumberOfLocalRegisters) {
+      uint8_t oldNumberOfLocalRegisters = currentNumberOfLocalRegisters;
+      if((currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 4 + currentNumberOfLocalRegisters, 4 + numberOfRegistersToAllocate))) {
+        currentLocalFlags = currentSubroutineLevelData + 3;
+        currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
+        currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
 
-      currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 4 + currentNumberOfLocalRegisters, 4 + numberOfRegistersToAllocate);
-      currentLocalFlags = currentSubroutineLevelData + 3;
-      currentLocalRegisters = (numberOfRegistersToAllocate == 0 ? NULL : (registerHeader_t *)(currentSubroutineLevelData + 4));
-      currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
+        // All the new local registers are real34s initialized to 0.0
+        for(r=FIRST_LOCAL_REGISTER+oldNumberOfLocalRegisters; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
+          setRegisterDataType(r, dtReal34, amNone);
+          setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
+          real34Zero(REGISTER_REAL34_DATA(r));
+        }
+      }
+      else {
+        currentSubroutineLevelData = oldSubroutineLevelData;
+        lastErrorCode = ERROR_RAM_FULL;
+        return;
+      }
+    }
+    else {
+      if((currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 4 + currentNumberOfLocalRegisters, 4 + numberOfRegistersToAllocate))) {
+        // free memory allocated to the data of the deleted local registers
+        for(r=numberOfRegistersToAllocate; r<currentNumberOfLocalRegisters; r++) {
+          freeRegisterData(FIRST_LOCAL_REGISTER + r);
+        }
+
+        currentLocalFlags = currentSubroutineLevelData + 3;
+        currentLocalRegisters = (numberOfRegistersToAllocate == 0 ? NULL : (registerHeader_t *)(currentSubroutineLevelData + 4));
+        currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
+      }
+      else {
+        currentSubroutineLevelData = oldSubroutineLevelData;
+        lastErrorCode = ERROR_RAM_FULL;
+        return;
+      }
     }
   }
   else {

@@ -557,10 +557,15 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
   }
 
   if(numberOfNamedVariables == 0) { // First named variable
-    allNamedVariables = allocWp43s(TO_BLOCKS(sizeof(namedVariableHeader_t)));
-    numberOfNamedVariables = 1;
+    if((allNamedVariables = allocWp43s(TO_BLOCKS(sizeof(namedVariableHeader_t))))) {
+      numberOfNamedVariables = 1;
 
-    regist = 0;
+      regist = 0;
+    }
+    else { // unlikely but possible
+      lastErrorCode = ERROR_RAM_FULL;
+      return;
+    }
   }
   else {
     regist = numberOfNamedVariables;
@@ -572,8 +577,15 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
       return;
     }
 
-    allNamedVariables = reallocWp43s(allNamedVariables, TO_BLOCKS(sizeof(namedVariableHeader_t) * numberOfNamedVariables), TO_BLOCKS(sizeof(namedVariableHeader_t) * (numberOfNamedVariables + 1)));
-    numberOfNamedVariables++;
+    namedVariableHeader_t *origNamedVariables = allNamedVariables;
+    if((allNamedVariables = reallocWp43s(allNamedVariables, TO_BLOCKS(sizeof(namedVariableHeader_t) * numberOfNamedVariables), TO_BLOCKS(sizeof(namedVariableHeader_t) * (numberOfNamedVariables + 1))))) {
+      numberOfNamedVariables++;
+    }
+    else {
+      allNamedVariables = origNamedVariables;
+      lastErrorCode = ERROR_RAM_FULL;
+      return;
+    }
   }
 
   len = stringByteLength(variableName);
@@ -615,10 +627,18 @@ calcRegister_t findOrAllocateNamedVariable(const char *variableName) {
   regist = findNamedVariable(variableName);
   if(regist == INVALID_VARIABLE && numberOfNamedVariables <= (LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE)) {
     allocateNamedVariable(variableName, dtReal34, REAL34_SIZE);
-    // New variables are zero by default - although this might be immediately overridden, it might require an
-    // initial value, such as when STO+
-    regist = FIRST_NAMED_VARIABLE + numberOfNamedVariables - 1;
-    real34Zero(REGISTER_REAL34_DATA(regist));
+    if(lastErrorCode == ERROR_NONE) {
+      // New variables are zero by default - although this might be immediately overridden, it might require an
+      // initial value, such as when STO+
+      regist = FIRST_NAMED_VARIABLE + numberOfNamedVariables - 1;
+      real34Zero(REGISTER_REAL34_DATA(regist));
+    }
+    else {
+      // Failed attempt to allocate a new named variable: there is not enough memory.
+      // It is impossible to reach the limitation of number of named variables.
+      lastErrorCode = ERROR_RAM_FULL;
+      return INVALID_VARIABLE;
+    }
   }
   return regist;
 }

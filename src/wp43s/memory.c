@@ -67,12 +67,21 @@ void *allocWp43s(size_t sizeInBlocks) {
     //if(debugMemAllocation) printf("allocWp43s\n");
   #endif // !DMCP_BUILD
 
-  wp43sMemInBlocks += sizeInBlocks;
+  //wp43sMemInBlocks += sizeInBlocks;
 
   #ifndef DMCP_BUILD
     //if(debugMemAllocation) printf("WP43S claims %6" PRIu64 " blocks\n", sizeInBlocks);
   #endif // !DMCP_BUILD
-  return wp43sAllocate(sizeInBlocks);
+  //return wp43sAllocate(sizeInBlocks);
+
+  void *allocated = wp43sAllocate(sizeInBlocks);
+  if(allocated) {
+    wp43sMemInBlocks += sizeInBlocks;
+    return allocated;
+  }
+  else {
+    return NULL;
+  }
 }
 
 void *reallocWp43s(void *pcMemPtr, size_t oldSizeInBlocks, size_t newSizeInBlocks) {

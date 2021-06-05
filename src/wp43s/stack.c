@@ -118,9 +118,9 @@ void fnDisplayStack(uint16_t numberOfStackLines) {
 
 void fnSwapX(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER_1);
-    copySourceRegisterToDestRegister(regist, REGISTER_X);
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
+    registerHeader_t savedRegisterHeader = globalRegister[REGISTER_X];
+    globalRegister[REGISTER_X] = globalRegister[regist];
+    globalRegister[regist] = savedRegisterHeader;
   }
 
   #ifdef PC_BUILD
@@ -135,9 +135,9 @@ void fnSwapX(uint16_t regist) {
 
 void fnSwapY(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER_1);
-    copySourceRegisterToDestRegister(regist, REGISTER_Y);
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
+    registerHeader_t savedRegisterHeader = globalRegister[REGISTER_Y];
+    globalRegister[REGISTER_Y] = globalRegister[regist];
+    globalRegister[regist] = savedRegisterHeader;
   }
 
   #ifdef PC_BUILD
@@ -151,9 +151,9 @@ void fnSwapY(uint16_t regist) {
 
 void fnSwapZ(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER_1);
-    copySourceRegisterToDestRegister(regist, REGISTER_Z);
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
+    registerHeader_t savedRegisterHeader = globalRegister[REGISTER_Z];
+    globalRegister[REGISTER_Z] = globalRegister[regist];
+    globalRegister[regist] = savedRegisterHeader;
   }
 
   #ifdef PC_BUILD
@@ -167,9 +167,9 @@ void fnSwapZ(uint16_t regist) {
 
 void fnSwapT(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER_1);
-    copySourceRegisterToDestRegister(regist, REGISTER_T);
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
+    registerHeader_t savedRegisterHeader = globalRegister[REGISTER_T];
+    globalRegister[REGISTER_T] = globalRegister[regist];
+    globalRegister[regist] = savedRegisterHeader;
   }
 
   #ifdef PC_BUILD

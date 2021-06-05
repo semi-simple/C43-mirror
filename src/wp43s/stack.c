@@ -206,8 +206,14 @@ void fnFillStack(uint16_t unusedButMandatoryParameter) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX, tag);
     void *newDataPointer = allocWp43s(dataSizeXinBlocks);
-    setRegisterDataPointer(i, newDataPointer);
-    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), TO_BYTES(dataSizeXinBlocks));
+    if(newDataPointer) {
+      setRegisterDataPointer(i, newDataPointer);
+      xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), TO_BYTES(dataSizeXinBlocks));
+    }
+    else {
+      lastErrorCode = ERROR_RAM_FULL;
+      return;
+    }
   }
 }
 

@@ -89,12 +89,21 @@ void *reallocWp43s(void *pcMemPtr, size_t oldSizeInBlocks, size_t newSizeInBlock
     //if(debugMemAllocation) printf("reallocWp43s\n");
   #endif // !DMCP_BUILD
 
-  wp43sMemInBlocks += newSizeInBlocks - oldSizeInBlocks;
+  //wp43sMemInBlocks += newSizeInBlocks - oldSizeInBlocks;
 
   #ifndef DMCP_BUILD
     //if(debugMemAllocation) printf("WP43S claimed %6" PRIu64 " blocks, freed %6" PRIu64 " blocks and holds now %6" PRIu64 " blocks\n", (uint64_t)newSizeInBlocks, (uint64_t)oldSizeInBlocks, (uint64_t)wp43sMemInBlocks);
   #endif // !DMCP_BUILD
-  return wp43sReallocate(pcMemPtr, oldSizeInBlocks, newSizeInBlocks);
+  //return wp43sReallocate(pcMemPtr, oldSizeInBlocks, newSizeInBlocks);
+
+  void *allocated = wp43sReallocate(pcMemPtr, oldSizeInBlocks, newSizeInBlocks);
+  if(allocated) {
+    wp43sMemInBlocks += newSizeInBlocks - oldSizeInBlocks;
+    return allocated;
+  }
+  else {
+    return NULL;
+  }
 }
 
 void freeWp43s(void *pcMemPtr, size_t sizeInBlocks) {
@@ -238,11 +247,15 @@ void *wp43sReallocate(void *pcMemPtr, size_t oldSizeInBlocks, size_t newSizeInBl
     //printf("Allocating %zd bytes and freeing %zd blocks\n", newSizeInBlocks, oldSizeInBlocks);
   #endif // !DMCP_BUILD
 
-  newMemPtr = wp43sAllocate(newSizeInBlocks);
-  xcopy(newMemPtr, pcMemPtr, TO_BYTES(min(newSizeInBlocks, oldSizeInBlocks)));
-  wp43sFree(pcMemPtr, oldSizeInBlocks);
+  if((newMemPtr = wp43sAllocate(newSizeInBlocks))) {
+    xcopy(newMemPtr, pcMemPtr, TO_BYTES(min(newSizeInBlocks, oldSizeInBlocks)));
+    wp43sFree(pcMemPtr, oldSizeInBlocks);
 
-  return newMemPtr;
+    return newMemPtr;
+  }
+  else { // not enough memory!
+    return NULL;
+  }
 }
 
 void wp43sFree(void *pcMemPtr, size_t sizeInBlocks) {

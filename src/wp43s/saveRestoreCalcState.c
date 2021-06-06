@@ -1207,10 +1207,12 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
 
     for(i=0; i<numberOfRegs; i++) {
       readLine(stream, tmpString); // statistical sum
-      if(loadMode == LM_ALL || loadMode == LM_SUMS) {
-        stringToReal(tmpString, (real_t *)(statisticalSumsPointer + REAL_SIZE * i), &ctxtReal75);
+      if(statisticalSumsPointer) { // likely
+        if(loadMode == LM_ALL || loadMode == LM_SUMS) {
+          stringToReal(tmpString, (real_t *)(statisticalSumsPointer + REAL_SIZE * i), &ctxtReal75);
+        }
       }
-    }    
+    }
   }
 
   else if(strcmp(tmpString, "SYSTEM_FLAGS") == 0) {

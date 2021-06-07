@@ -479,9 +479,25 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real34s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-        setRegisterDataType(r, dtReal34, amNone);
-        setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
-        real34Zero(REGISTER_REAL34_DATA(r));
+        void *newMem = allocWp43s(REAL34_SIZE);
+        if(newMem) {
+          setRegisterDataType(r, dtReal34, amNone);
+          setRegisterDataPointer(r, newMem);
+          real34Zero(REGISTER_REAL34_DATA(r));
+        }
+        else {
+          // Not enough memory (!)
+          for(uint16_t rr = FIRST_LOCAL_REGISTER; rr < r; r++) {
+            freeRegisterData(FIRST_LOCAL_REGISTER + rr);
+          }
+          reallocWp43s(currentSubroutineLevelData, 4 + numberOfRegistersToAllocate, 3);
+          currentLocalFlags = NULL;
+          currentLocalRegisters = NULL;
+          currentNumberOfLocalRegisters = 0;
+          currentNumberOfLocalFlags = NUMBER_OF_LOCAL_FLAGS;
+          lastErrorCode = ERROR_RAM_FULL;
+          return;
+        }
       }
     }
     else {
@@ -501,9 +517,24 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
         // All the new local registers are real34s initialized to 0.0
         for(r=FIRST_LOCAL_REGISTER+oldNumberOfLocalRegisters; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
-          setRegisterDataType(r, dtReal34, amNone);
-          setRegisterDataPointer(r, allocWp43s(REAL34_SIZE));
-          real34Zero(REGISTER_REAL34_DATA(r));
+          void *newMem = allocWp43s(REAL34_SIZE);
+          if(newMem) {
+            setRegisterDataType(r, dtReal34, amNone);
+            setRegisterDataPointer(r, newMem);
+            real34Zero(REGISTER_REAL34_DATA(r));
+          }
+          else {
+            // Not enough memory (!)
+            for(uint16_t rr = FIRST_LOCAL_REGISTER; rr < r; r++) {
+              freeRegisterData(FIRST_LOCAL_REGISTER + rr);
+            }
+            reallocWp43s(currentSubroutineLevelData, 4 + numberOfRegistersToAllocate, 4 + currentNumberOfLocalRegisters);
+            currentLocalFlags = currentSubroutineLevelData + 3;
+            currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
+            currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
+            lastErrorCode = ERROR_RAM_FULL;
+            return;
+          }
         }
       }
       else {

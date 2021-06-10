@@ -293,7 +293,12 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
 
   /**
    * Redimentions the matrix at given register.
+   * Shrinking the matrix is in situ while enlarging the matrix is not.
+   * The elements are preserved as many as possible.
    *
+   * \warning This function invalidates variables assosiated by \link linkToRealMatrixRegister() \endlink/\link linkToComplexMatrixRegister() \endlink
+   *          if you are making the matrix larger.
+   * \warning Redo \link linkToRealMatrixRegister() \endlink/\link linkToComplexMatrixRegister() \endlink to use the variables again.
    * \param[in] regist
    * \param[in] rows
    * \param[in] cols
@@ -307,7 +312,7 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
    * \param[in] name
    * \param[in] rows
    * \param[in] cols
-   * \return register ID where the allocated matrix lies. INVALID_VARIABLE if allocation failed.
+   * \return register ID where the allocated matrix lies. \c INVALID_VARIABLE if allocation failed.
    */
   calcRegister_t allocateNamedMatrix      (const char *name, uint16_t rows, uint16_t cols);
 

@@ -621,7 +621,7 @@ void fnSetMatrixDimensions(uint16_t regist) {
 
   if(!getDimensionArg(&y, &x)) {
   }
-  else if(initMatrixRegister(regist, y, x, false)) {
+  else if(redimMatrixRegister(regist, y, x)) {
   }
   else {
     displayCalcErrorMessage(ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
@@ -2443,18 +2443,26 @@ bool_t redimMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols) 
     return false;
   }
   else if(getRegisterDataType(regist) == dtReal34Matrix) {
-    if(origRows == rows && origCols == cols) {
+    const size_t oldSize = (origRows * origCols) * REAL34_SIZE;
+    const size_t newSize = (rows     * cols    ) * REAL34_SIZE;
+    if(oldSize >= newSize) {
+      if(oldSize > newSize)
+        freeWp43s(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + rows * cols, oldSize - newSize);
+      REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows    = rows;
+      REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns = cols;
       return true;
     }
     else {
-      const size_t neededSize = (rows * cols) * REAL34_SIZE;
       real34Matrix_t newMatrix;
       convertReal34MatrixRegisterToReal34Matrix(regist, &newMatrix);
       if(lastErrorCode == ERROR_NONE) {
-        reallocateRegister(regist, dtReal34Matrix, neededSize, amNone);
+        reallocateRegister(regist, dtReal34Matrix, newSize, amNone);
         if(lastErrorCode == ERROR_NONE) {
-          for(uint16_t i = 0; i < min(origRows * origCols, rows * cols); ++i) {
+          for(uint16_t i = 0; i < origRows * origCols; ++i) {
             real34Copy(newMatrix.matrixElements + i, REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i);
+          }
+          for(uint16_t i = origRows * origCols; i < rows * cols; ++i) {
+            real34Zero(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i);
           }
           realMatrixFree(&newMatrix);
           return true;
@@ -2468,18 +2476,27 @@ bool_t redimMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols) 
     }
   }
   else if(getRegisterDataType(regist) == dtComplex34Matrix) {
-    if(origRows == rows && origCols == cols) {
+    const size_t oldSize = (origRows * origCols) * COMPLEX34_SIZE;
+    const size_t newSize = (rows     * cols    ) * COMPLEX34_SIZE;
+    if(oldSize >= newSize) {
+      if(oldSize > newSize)
+        freeWp43s(REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + rows * cols, oldSize - newSize);
+      REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows    = rows;
+      REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns = cols;
       return true;
     }
     else {
-      const size_t neededSize = (rows * cols) * COMPLEX34_SIZE;
       complex34Matrix_t newMatrix;
       convertComplex34MatrixRegisterToComplex34Matrix(regist, &newMatrix);
       if(lastErrorCode == ERROR_NONE) {
-        reallocateRegister(regist, dtComplex34Matrix, neededSize, amNone);
+        reallocateRegister(regist, dtComplex34Matrix, newSize, amNone);
         if(lastErrorCode == ERROR_NONE) {
-          for(uint16_t i = 0; i < min(origRows * origCols, rows * cols); ++i) {
+          for(uint16_t i = 0; i < origRows * origCols; ++i) {
             complex34Copy(newMatrix.matrixElements + i, REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + i);
+          }
+          for(uint16_t i = origRows * origCols; i < rows * cols; ++i) {
+            real34Zero(VARIABLE_REAL34_DATA(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i));
+            real34Zero(VARIABLE_IMAG34_DATA(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i));
           }
           complexMatrixFree(&newMatrix);
           return true;

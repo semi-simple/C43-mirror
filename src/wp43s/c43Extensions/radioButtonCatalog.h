@@ -66,6 +66,7 @@ char*    figlabel              (const char* label, int16_t showValue);
 #define RB_ID   '?' // InputDefault
 #define CB_JC   'A' // CheckBox 
 #define RB_HX   'B' // BASE
+#define RB_NM   'C' // NORMALMODE
 //??? #define RB_AM2  'C' // AngularMode
 //??? #define RB_ZM   'D' // AngularMode
 

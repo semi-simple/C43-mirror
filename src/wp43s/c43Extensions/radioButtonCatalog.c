@@ -81,12 +81,18 @@ TO_QSPI const radiocb_t indexOfRadioCbEepromItems[] = {
 /* 1968 */  { ITM_SSIZE8,           SS_8,                   RB_SS },  //fnSetSetJM          /*  584 */ //fnStackSize
 /* 1958 */  { ITM_CLK12,            TF_H12,                 RB_TF },  //fnSetSetJM          /*   75 */ //fnTimeFormat
 /* 1959 */  { ITM_CLK24,            TF_H24,                 RB_TF },  //fnSetSetJM          /*   76 */ //fnTimeFormat
-/* 1899 */  { ITM_U_KEY_ALPHA,      ITM_AIM,                RB_SA },  //fnSigmaAssign
-/* 1897 */  { ITM_U_KEY_PRGM,       ITM_PR,                 RB_SA },  //fnSigmaAssign
-/* 1895 */  { ITM_U_KEY_SIGMA,      ITM_SIGMAPLUS,          RB_SA },  //fnSigmaAssign
-/* 1891 */  { ITM_U_KEY_CC,         ITM_CC,                 RB_SA },  //fnSigmaAssign
-/* 1889 */  { ITM_U_KEY_USER,       ITM_USERMODE,           RB_SA },  //fnSigmaAssign
-/* 1893 */  { ITM_U_KEY_MM,         -MNU_MyMenu,            RB_SA },  //fnSigmaAssign
+
+/* 1899 */  { ITM_N_KEY_ALPHA,      ITM_AIM,                RB_SA },  //fnSigmaAssign
+/* 1891 */  { ITM_N_KEY_CC,         ITM_CC,                 RB_SA },  //fnSigmaAssign
+/*      */  { ITM_N_KEY_GSH,        ITM_SHIFTg,             RB_SA },  //fnSigmaAssign
+/* 1893 */  { ITM_N_KEY_MM,         -MNU_MyMenu,            RB_SA },  //fnSigmaAssign
+/*      */  { ITM_N_KEY_DRG,        ITM_DRG,                RB_SA },  //fnSigmaAssign
+/* 1897 */  { ITM_N_KEY_PRGM,       ITM_PR,                 RB_SA },  //fnSigmaAssign
+/* 1889 */  { ITM_N_KEY_USER,       ITM_USERMODE,           RB_SA },  //fnSigmaAssign
+/*      */  { ITM_N_KEY_HOME,       -MNU_HOME,              RB_SA },  //fnSigmaAssign
+/* 1895 */  { ITM_N_KEY_SIGMA,      ITM_SIGMAPLUS,          RB_SA },  //fnSigmaAssign
+/*      */  { ITM_N_KEY_SNAP,       ITM_SNAP,               RB_SA },  //fnSigmaAssign
+
 /*      */  { ITM_DENANY,           DM_ANY,                 CB_JC },  //  --fnDenMode
 /*      */  { ITM_DENFIX,           DM_FIX,                 CB_JC },  //  --fnDenMode
 

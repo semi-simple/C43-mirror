@@ -53,7 +53,7 @@
   #define SAVE_SPACE_DM42_4 //XY GRAPHDEMOS
   #define SAVE_SPACE_DM42_5 //fnShow (old)
   #define SAVE_SPACE_DM42_6 //ELEC functions
-  #define SAVE_SPACE_DM42_7 //KEYS USER_DM42; USER_SHIFTS
+  #define SAVE_SPACE_DM42_7 //KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
 //  #undef  SAVE_SPACE_DM42          //switch off memoery saving options
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42

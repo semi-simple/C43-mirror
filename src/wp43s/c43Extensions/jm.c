@@ -856,6 +856,13 @@ void fnUserJM(uint16_t jmUser) {
     break;
 
 
+  case USER_COPY:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
+    kbd_usr[0].primary     = Norm_Key_00_VAR;
+    fnRefreshState();                                 //drJM
+    fnSetFlag(FLAG_USER);
+    break;
+
+
 #if defined (JM_LAYOUT_1A)  && !defined (TESTSUITE_BUILD)                          //JM LAYOUT 1A.
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
     kbd_usr[12].fShifted   = ITM_CC;                            //JM Changed CPX menu therefore USER MODE changes
@@ -866,14 +873,8 @@ void fnUserJM(uint16_t jmUser) {
     fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
-
-  case USER_CC:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
-    kbd_usr[0].primary     = ITM_CC;
-    Norm_Key_00_VAR        = ITM_CC;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
 #endif
+
 
 #if defined (JM_LAYOUT_2_DM42_STRICT) && !defined (TESTSUITE_BUILD)              //JM LAYOUT 42
   case USER_COMPLEX:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
@@ -882,13 +883,6 @@ void fnUserJM(uint16_t jmUser) {
     kbd_usr[0].fShifted    = ITM_RI;
     kbd_usr[0].gShifted    = ITM_IP;
     Norm_Key_00_VAR        = -MNU_MyMenu;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_CC:                                            //USER_COMPLEX FOR USER: U^ ENTER^ CC
-    kbd_usr[0].primary     = ITM_CC;
-    Norm_Key_00_VAR        = ITM_CC;
     fnRefreshState();                                 //drJM
     fnSetFlag(FLAG_USER);
     break;
@@ -1222,71 +1216,6 @@ void fnUserJM(uint16_t jmUser) {
     #endif
     break;
 
-
-  case USER_SNAP:                                              //USER_DEFAULTS FOR USER: E+ E+
-    kbd_usr[0].primary     = ITM_SNAP;
-    Norm_Key_00_VAR        = ITM_SNAP;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_DRG:                                              //USER_DEFAULTS FOR USER: E+ E+
-    kbd_usr[0].primary     = ITM_DRG;
-    Norm_Key_00_VAR        = ITM_DRG;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_SIGMAPLUS:                                              //USER_DEFAULTS FOR USER: E+ E+
-    kbd_usr[0].primary     = ITM_SIGMAPLUS;
-    Norm_Key_00_VAR        = ITM_SIGMAPLUS;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_PRGM:                                              //USER_DEFAULTS FOR USER: E+ PRGM
-    kbd_usr[0].primary     = ITM_PR;
-    Norm_Key_00_VAR        = ITM_PR;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_USER:                                              //USER_DEFAULTS FOR USER: E+ USER
-    kbd_usr[0].primary     = ITM_USERMODE;
-    Norm_Key_00_VAR        = ITM_USERMODE;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_HOME:                                              //USER_DEFAULTS FOR USER: E+ USER
-    kbd_usr[0].primary     = -MNU_HOME;
-    Norm_Key_00_VAR        = -MNU_HOME;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_ALPHA:                                              //USER_DEFAULTS FOR USER: E+ ALPHA
-    kbd_usr[0].primary     = ITM_AIM;
-    Norm_Key_00_VAR        = ITM_AIM;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_MYM:                                              //USER_DEFAULTS FOR USER: E+ MYM
-    kbd_usr[0].primary     = -MNU_MyMenu;
-    Norm_Key_00_VAR        = -MNU_MyMenu;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
-
-  case USER_GSHFT:                                           //USER_DEFAULTS FOR USER: E+ SHIFT G
-    kbd_usr[0].primary     = ITM_SHIFTg;
-    kbd_usr[0].gShifted    = ITM_NULL;
-    kbd_usr[0].fShifted    = ITM_NULL;
-    Norm_Key_00_VAR        = ITM_SHIFTg;
-    fnRefreshState();                                 //drJM
-    fnSetFlag(FLAG_USER);
-    break;
 
   case USER_RESET:                                              //USER_RESET 26
     xcopy(kbd_usr, kbd_std, sizeof(kbd_std));

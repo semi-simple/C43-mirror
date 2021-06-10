@@ -85,7 +85,7 @@ static bool_t getDimensionArg(uint32_t *rows, uint32_t *cols) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "invalid data type %s and %s", getRegisterDataTypeName(REGISTER_Y, true, false), getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+        moreInfoOnError("In function getDimensionArg:", errorMessage, NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return false;
   }
@@ -100,7 +100,7 @@ static bool_t getDimensionArg(uint32_t *rows, uint32_t *cols) {
       char strbuf[32];
       longIntegerToAllocatedString(tmp_lgInt, strbuf, 32);
       sprintf(errorMessage, "invalid number of columns");
-      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function getDimensionArg:", errorMessage, NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
@@ -116,7 +116,7 @@ static bool_t getDimensionArg(uint32_t *rows, uint32_t *cols) {
       char strbuf[32];
       longIntegerToAllocatedString(tmp_lgInt, strbuf, 32);
       sprintf(errorMessage, "invalid number of rows");
-      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+      moreInfoOnError("In function getDimensionArg:", errorMessage, NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return false;
   }
@@ -388,41 +388,6 @@ static bool_t incJComplex(complex34Matrix_t *matrix) {
 static bool_t decJComplex(complex34Matrix_t *matrix) {
   return decJReal((real34Matrix_t *)matrix);
 }
-
-
-
-static void initSimEqValue(calcRegister_t regist, uint16_t rows, uint16_t cols) {
-  if(getRegisterDataType(regist) != dtReal34Matrix && getRegisterDataType(regist) != dtComplex34Matrix) {
-    real34Matrix_t matrix;
-    if(realMatrixInit(&matrix, rows, cols)) {
-      convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
-      realMatrixFree(&matrix);
-    }
-    else lastErrorCode = ERROR_RAM_FULL;
-  }
-  else if(getRegisterDataType(regist) == dtReal34Matrix && (REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows != rows || REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns != cols)) {
-    real34Matrix_t matrix;
-    convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
-    if(lastErrorCode == ERROR_NONE) {
-      realMatrixRedim(&matrix, rows, cols);
-      if(lastErrorCode == ERROR_NONE) {
-        convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
-      }
-      realMatrixFree(&matrix);
-    }
-  }
-  else if(getRegisterDataType(regist) == dtComplex34Matrix && (REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows != rows || REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns != cols)) {
-    complex34Matrix_t matrix;
-    convertComplex34MatrixRegisterToComplex34Matrix(regist, &matrix);
-    if(lastErrorCode == ERROR_NONE) {
-      complexMatrixRedim(&matrix, rows, cols);
-      if(lastErrorCode == ERROR_NONE) {
-        convertComplex34MatrixToComplex34MatrixRegister(&matrix, regist);
-      }
-      complexMatrixFree(&matrix);
-    }
-  }
-}
 #endif // TESTSUITE_BUILD
 
 
@@ -430,36 +395,23 @@ static void initSimEqValue(calcRegister_t regist, uint16_t rows, uint16_t cols) 
 void fnNewMatrix(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
   uint32_t rows, cols;
-  real34Matrix_t matrix;
 
   if(!getDimensionArg(&rows, &cols)) return;
 
   if(!saveLastX()) return;
 
   //Initialize Memory for Matrix
-  if(realMatrixInit(&matrix, rows, cols)) {
-    if(matrix.matrixElements == NULL) {
-      displayCalcErrorMessage(ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "Not enough memory for a %" PRIu32 STD_CROSS "%" PRIu32 " matrix", rows, cols);
-        moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
-      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-      return;
-    }
-
-    //Drop X_Register and Y_Register
-    convertReal34MatrixToReal34MatrixRegister(&matrix, REGISTER_X);
-
-    if(lastErrorCode == ERROR_NONE) {
-      setSystemFlag(FLAG_ASLIFT);
-    }
-    else if(lastErrorCode == ERROR_RAM_FULL) {
-      lastErrorCode = ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX;
-    }
-
-    realMatrixFree(&matrix);
+  if(initMatrixRegister(REGISTER_X, rows, cols, false)) {
+    setSystemFlag(FLAG_ASLIFT);
   }
-  else lastErrorCode = ERROR_RAM_FULL;
+  else {
+    displayCalcErrorMessage(ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Not enough memory for a %" PRIu32 STD_CROSS "%" PRIu32 " matrix", rows, cols);
+      moreInfoOnError("In function fnNewMatrix:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
 
   adjustResult(REGISTER_X, true, false, REGISTER_X, REGISTER_Y, -1);
 #endif // TESTSUITE_BUILD
@@ -669,49 +621,15 @@ void fnSetMatrixDimensions(uint16_t regist) {
 
   if(!getDimensionArg(&y, &x)) {
   }
-  else if(getRegisterDataType(regist) == dtReal34Matrix) {
-    real34Matrix_t matrix;
-
-    convertReal34MatrixRegisterToReal34Matrix(regist, &matrix);
-    if(lastErrorCode == ERROR_NONE) {
-      realMatrixRedim(&matrix, y, x);
-      if(lastErrorCode == ERROR_NONE) {
-        convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
-      }
-      realMatrixFree(&matrix);
-    }
-  }
-  else if(getRegisterDataType(regist) == dtComplex34Matrix) {
-    complex34Matrix_t matrix;
-
-    convertComplex34MatrixRegisterToComplex34Matrix(regist, &matrix);
-    if(lastErrorCode == ERROR_NONE) {
-      complexMatrixRedim(&matrix, y, x);
-      if(lastErrorCode == ERROR_NONE) {
-        convertComplex34MatrixToComplex34MatrixRegister(&matrix, regist);
-      }
-      complexMatrixFree(&matrix);
-    }
+  else if(initMatrixRegister(regist, y, x, false)) {
   }
   else {
-    real34Matrix_t matrix;
-
-    if(realMatrixInit(&matrix, y, x)) {
-      if(matrix.matrixElements == NULL) {
-        displayCalcErrorMessage(ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          sprintf(errorMessage, "Not enough memory for a %" PRIu32 STD_CROSS "%" PRIu32 " matrix", y, x);
-          moreInfoOnError("In function fnSetMatrixDimensions:", errorMessage, NULL, NULL);
-        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-        return;
-      }
-
-      convertReal34MatrixToReal34MatrixRegister(&matrix, regist);
-      if(lastErrorCode == ERROR_RAM_FULL)
-        lastErrorCode = ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX;
-      realMatrixFree(&matrix);
-    }
-    else lastErrorCode = ERROR_RAM_FULL;
+    displayCalcErrorMessage(ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Not enough memory for a %" PRIu32 STD_CROSS "%" PRIu32 " matrix", y, x);
+      moreInfoOnError("In function fnSetMatrixDimensions:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
   }
 #endif // TESTSUITE_BUILD
 }
@@ -1316,12 +1234,9 @@ void fnSwapRows(uint16_t unusedParamButMandatory) {
 
 void fnSimultaneousLinearEquation(uint16_t numberOfUnknowns) {
 #ifndef TESTSUITE_BUILD
-  initSimEqValue(findOrAllocateNamedVariable("Mat_A"), numberOfUnknowns, numberOfUnknowns);
-  if(lastErrorCode == ERROR_NONE) {
-    initSimEqValue(findOrAllocateNamedVariable("Mat_B"), numberOfUnknowns, 1);
-    if(lastErrorCode == ERROR_NONE) {
-      initSimEqValue(findOrAllocateNamedVariable("Mat_X"), numberOfUnknowns, 1);
-      if(lastErrorCode == ERROR_NONE) {
+  if(allocateNamedMatrix("Mat_A", numberOfUnknowns, numberOfUnknowns) != INVALID_VARIABLE) {
+    if(allocateNamedMatrix("Mat_B", numberOfUnknowns, 1) != INVALID_VARIABLE) {
+      if(allocateNamedMatrix("Mat_X", numberOfUnknowns, 1) != INVALID_VARIABLE) {
         showSoftmenu(-MNU_SIMQ);
         showSoftmenu(-MNU_TAM);
         numberOfTamMenusToPop = 1;
@@ -2491,6 +2406,102 @@ void getMatrixFromRegister(calcRegister_t regist) {
   }
 
 }
+
+
+
+bool_t initMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols, bool_t complex) {
+  const size_t neededSize = (rows * cols) * (complex ? COMPLEX34_SIZE : REAL34_SIZE);
+  reallocateRegister(regist, complex ? dtComplex34Matrix : dtReal34Matrix, neededSize, amNone);
+  if(lastErrorCode == ERROR_NONE) {
+    // REGISTER_COMPLEX34_MATRIX_DBLOCK is same as REGISTER_REAL34_MATRIX_DBLOCK
+    REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows    = rows;
+    REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns = cols;
+    if(complex) {
+      for(uint16_t i = 0; i < rows * cols; ++i) {
+        real34Zero(VARIABLE_REAL34_DATA(REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + i));
+        real34Zero(VARIABLE_REAL34_DATA(REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + i));
+      }
+    }
+    else {
+      for(uint16_t i = 0; i < rows * cols; ++i) {
+        real34Zero(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i);
+      }
+    }
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+bool_t redimMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols) {
+  const uint16_t origRows = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows, origCols = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns;
+  if(getRegisterDataType(regist) == dtReal34Matrix) {
+    if(origRows == rows && origCols == cols) {
+      return true;
+    }
+    else {
+      const size_t neededSize = (rows * cols) * REAL34_SIZE;
+      real34Matrix_t newMatrix;
+      convertReal34MatrixRegisterToReal34Matrix(regist, &newMatrix);
+      if(lastErrorCode == ERROR_NONE) {
+        reallocateRegister(regist, dtReal34Matrix, neededSize, amNone);
+        if(lastErrorCode == ERROR_NONE) {
+          for(uint16_t i = 0; i < min(origRows * origCols, rows * cols); ++i) {
+            real34Copy(newMatrix.matrixElements + i, REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i);
+          }
+          realMatrixFree(&newMatrix);
+          return true;
+        }
+        else {
+          realMatrixFree(&newMatrix);
+          return false;
+        }
+      }
+      else return false;
+    }
+  }
+  else if(getRegisterDataType(regist) == dtComplex34Matrix) {
+    if(origRows == rows && origCols == cols) {
+      return true;
+    }
+    else {
+      const size_t neededSize = (rows * cols) * COMPLEX34_SIZE;
+      complex34Matrix_t newMatrix;
+      convertComplex34MatrixRegisterToComplex34Matrix(regist, &newMatrix);
+      if(lastErrorCode == ERROR_NONE) {
+        reallocateRegister(regist, dtComplex34Matrix, neededSize, amNone);
+        if(lastErrorCode == ERROR_NONE) {
+          for(uint16_t i = 0; i < min(origRows * origCols, rows * cols); ++i) {
+            complex34Copy(newMatrix.matrixElements + i, REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + i);
+          }
+          complexMatrixFree(&newMatrix);
+          return true;
+        }
+        else {
+          complexMatrixFree(&newMatrix);
+          return false;
+        }
+      }
+      else return false;
+    }
+  }
+  else return initMatrixRegister(regist, rows, cols, false);
+}
+
+calcRegister_t allocateNamedMatrix(const char *name, uint16_t rows, uint16_t cols) {
+  const calcRegister_t regist = findOrAllocateNamedVariable(name);
+  if(regist == INVALID_VARIABLE) {
+    return INVALID_VARIABLE;
+  }
+  else if(redimMatrixRegister(regist, rows, cols)) {
+    return regist;
+  }
+  else {
+    return INVALID_VARIABLE;
+  }
+}
+
 
 //Row of Matrix
 int16_t getIRegisterAsInt(bool_t asArrayPointer) {

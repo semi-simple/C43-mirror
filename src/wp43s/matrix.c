@@ -2412,7 +2412,10 @@ void getMatrixFromRegister(calcRegister_t regist) {
 bool_t initMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols, bool_t complex) {
   const size_t neededSize = (rows * cols) * (complex ? COMPLEX34_SIZE : REAL34_SIZE);
   reallocateRegister(regist, complex ? dtComplex34Matrix : dtReal34Matrix, neededSize, amNone);
-  if(lastErrorCode == ERROR_NONE) {
+  if(regist == INVALID_VARIABLE) {
+    return false;
+  }
+  else if(lastErrorCode == ERROR_NONE) {
     // REGISTER_COMPLEX34_MATRIX_DBLOCK is same as REGISTER_REAL34_MATRIX_DBLOCK
     REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows    = rows;
     REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns = cols;
@@ -2436,7 +2439,10 @@ bool_t initMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols, b
 
 bool_t redimMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols) {
   const uint16_t origRows = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows, origCols = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns;
-  if(getRegisterDataType(regist) == dtReal34Matrix) {
+  if(regist == INVALID_VARIABLE) {
+    return false;
+  }
+  else if(getRegisterDataType(regist) == dtReal34Matrix) {
     if(origRows == rows && origCols == cols) {
       return true;
     }
@@ -2502,6 +2508,16 @@ calcRegister_t allocateNamedMatrix(const char *name, uint16_t rows, uint16_t col
   }
 }
 
+bool_t appendRowAtMatrixRegister(calcRegister_t regist) {
+  const uint16_t rows = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows, cols = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns;
+  if(regist == INVALID_VARIABLE) {
+    return false;
+  }
+  else if(getRegisterDataType(regist) == dtReal34Matrix || getRegisterDataType(regist) == dtComplex34Matrix) {
+    return redimMatrixRegister(regist, rows + 1, cols);
+  }
+  else return false;
+}
 
 //Row of Matrix
 int16_t getIRegisterAsInt(bool_t asArrayPointer) {

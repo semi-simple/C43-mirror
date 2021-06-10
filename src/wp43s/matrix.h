@@ -311,6 +311,17 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
    */
   calcRegister_t allocateNamedMatrix      (const char *name, uint16_t rows, uint16_t cols);
 
+  /**
+   * Appends a row to the matrix at given register.
+   * For named matrix, use together with findNamedVariable().
+   *
+   * \warning This function invalidates variables assosiated by \link linkToRealMatrixRegister() \endlink/\link linkToComplexMatrixRegister() \endlink.
+   * \warning Redo \link linkToRealMatrixRegister() \endlink/\link linkToComplexMatrixRegister() \endlink to use the variables again.
+   * \param[in] regist
+   * \return true if succeeded, false otherwise
+   */
+  bool_t   appendRowAtMatrixRegister      (calcRegister_t regist);
+
   int16_t  getIRegisterAsInt              (bool_t asArrayPointer);
   int16_t  getJRegisterAsInt              (bool_t asArrayPointer);
   void     setIRegisterAsInt              (bool_t asArrayPointer, int16_t toStore);

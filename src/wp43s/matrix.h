@@ -204,8 +204,9 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
    * \param[out] matrix
    * \param[in] rows
    * \param[in] cols
+   * \return true if succeeded, false otherwise
    */
-  void     realMatrixInit                 (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);
+  bool_t   realMatrixInit                 (real34Matrix_t *matrix, uint16_t rows, uint16_t cols);
   /**
    * Free a real matrix.
    *
@@ -231,8 +232,9 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
    * \param[out] matrix
    * \param[in] rows
    * \param[in] cols
+   * \return true if succeeded, false otherwise
    */
-  void     complexMatrixInit              (complex34Matrix_t *matrix, uint16_t rows, uint16_t cols);
+  bool_t   complexMatrixInit              (complex34Matrix_t *matrix, uint16_t rows, uint16_t cols);
   /**
    * Free a complex matrix.
    *

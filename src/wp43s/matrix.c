@@ -200,12 +200,11 @@ static bool_t getMatrixReal(real34Matrix_t *matrix) {
     real34Matrix_t mat;
     fnDropY(NOPARAM);
     if(lastErrorCode == ERROR_NONE) {
-      if(realMatrixInit(&mat, a, b)) {
+      if(initMatrixRegister(REGISTER_X, a, b, false)) {
+        linkToRealMatrixRegister(REGISTER_X, &mat);
         for(r = 0; r < a; ++r)
           for(c = 0; c < b; ++c)
             real34Copy(&matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j], &mat.matrixElements[r * b + c]);
-        convertReal34MatrixToReal34MatrixRegister(&mat, REGISTER_X);
-        realMatrixFree(&mat);
       }
       else {
         lastErrorCode = ERROR_RAM_FULL;
@@ -243,12 +242,11 @@ static bool_t getMatrixComplex(complex34Matrix_t *matrix) {
     complex34Matrix_t mat;
     fnDropY(NOPARAM);
     if(lastErrorCode == ERROR_NONE) {
-      if(complexMatrixInit(&mat, a, b)) {
+      if(initMatrixRegister(REGISTER_X, a, b, true)) {
+        linkToComplexMatrixRegister(REGISTER_X, &mat);
         for(r = 0; r < a; ++r)
           for(c = 0; c < b; ++c)
             complex34Copy(&matrix->matrixElements[(r + i) * matrix->header.matrixColumns + c + j], &mat.matrixElements[r * b + c]);
-        convertComplex34MatrixToComplex34MatrixRegister(&mat, REGISTER_X);
-        complexMatrixFree(&mat);
       }
       else lastErrorCode = ERROR_RAM_FULL;
     }
@@ -677,20 +675,20 @@ void fnTranspose(uint16_t unusedButMandatoryParameter) {
   if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
-    real34Matrix_t x, res;
+    real34Matrix_t x;
 
     linkToRealMatrixRegister(REGISTER_X, &x);
-    transposeRealMatrix(&x, &res);
-    if(res.matrixElements)
-      convertReal34MatrixToReal34MatrixRegister(&res, REGISTER_X);
+    transposeRealMatrix(&x, &x);
+    REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixRows    = x.header.matrixRows;
+    REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixColumns = x.header.matrixColumns;
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
-    complex34Matrix_t x, res;
+    complex34Matrix_t x;
 
     linkToComplexMatrixRegister(REGISTER_X, &x);
-    transposeComplexMatrix(&x, &res);
-    if(res.matrixElements)
-      convertComplex34MatrixToComplex34MatrixRegister(&res, REGISTER_X);
+    transposeComplexMatrix(&x, &x);
+    REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixRows    = x.header.matrixRows;
+    REGISTER_REAL34_MATRIX_DBLOCK(REGISTER_X)->matrixColumns = x.header.matrixColumns;
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -2802,14 +2800,28 @@ void transposeComplexMatrix(const complex34Matrix_t *matrix, complex34Matrix_t *
   const uint16_t cols = matrix->header.matrixColumns;
   int32_t i, j;
 
-  if(complexMatrixInit(res, cols, rows)) {
-    for(i = 0; i < rows; ++i) {
-      for(j = 0; j < cols; ++j) {
-        complex34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+  if(matrix != res) {
+    if(complexMatrixInit(res, cols, rows)) {
+      for(i = 0; i < rows; ++i) {
+        for(j = 0; j < cols; ++j) {
+          complex34Copy(&matrix->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+        }
       }
     }
+    else lastErrorCode = ERROR_RAM_FULL;
   }
-  else lastErrorCode = ERROR_RAM_FULL;
+  else {
+    complex34_t tmp;
+    for(i = 0; i < rows; ++i) {
+      for(j = i + 1; j < cols; ++j) {
+        complex34Copy(&res->matrixElements[j * rows + i], &tmp);
+        complex34Copy(&res->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+        complex34Copy(&tmp,                               &res->matrixElements[i * cols + j]);
+      }
+    }
+    res->header.matrixRows    = cols;
+    res->header.matrixColumns = rows;
+  }
 }
 
 

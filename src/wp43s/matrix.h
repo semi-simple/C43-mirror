@@ -280,6 +280,53 @@ void       fnEigenvectors                 (uint16_t unusedParamButMandatory);
 
   void     getMatrixFromRegister          (calcRegister_t regist);
 
+  /**
+   * Creates a zero matrix at given register.
+   *
+   * \param[in] regist
+   * \param[in] rows
+   * \param[in] cols
+   * \param[in] complex  true for complex matrix, false for real matrix.
+   * \return true if succeeded, false otherwise
+   */
+  bool_t   initMatrixRegister             (calcRegister_t regist, uint16_t rows, uint16_t cols, bool_t complex);
+
+  /**
+   * Redimentions the matrix at given register.
+   * Shrinking the matrix is in situ while enlarging the matrix is not.
+   * The elements are preserved as many as possible.
+   *
+   * \warning This function invalidates variables assosiated by \link linkToRealMatrixRegister() \endlink/\link linkToComplexMatrixRegister() \endlink
+   *          if you are making the matrix larger.
+   * \warning Redo \link linkToRealMatrixRegister() \endlink/\link linkToComplexMatrixRegister() \endlink to use the variables again.
+   * \param[in] regist
+   * \param[in] rows
+   * \param[in] cols
+   * \return true if succeeded, false otherwise
+   */
+  bool_t   redimMatrixRegister            (calcRegister_t regist, uint16_t rows, uint16_t cols);
+
+  /**
+   * Allocates a named matrix. Redimentions if the matrix already existed.
+   *
+   * \param[in] name
+   * \param[in] rows
+   * \param[in] cols
+   * \return register ID where the allocated matrix lies. \c INVALID_VARIABLE if allocation failed.
+   */
+  calcRegister_t allocateNamedMatrix      (const char *name, uint16_t rows, uint16_t cols);
+
+  /**
+   * Appends a row to the matrix at given register.
+   * For named matrix, use together with findNamedVariable().
+   *
+   * \warning This function invalidates variables assosiated by \link linkToRealMatrixRegister() \endlink/\link linkToComplexMatrixRegister() \endlink.
+   * \warning Redo \link linkToRealMatrixRegister() \endlink/\link linkToComplexMatrixRegister() \endlink to use the variables again.
+   * \param[in] regist
+   * \return true if succeeded, false otherwise
+   */
+  bool_t   appendRowAtMatrixRegister      (calcRegister_t regist);
+
   int16_t  getIRegisterAsInt              (bool_t asArrayPointer);
   int16_t  getJRegisterAsInt              (bool_t asArrayPointer);
   void     setIRegisterAsInt              (bool_t asArrayPointer, int16_t toStore);

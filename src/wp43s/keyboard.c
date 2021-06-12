@@ -830,7 +830,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         if(lastErrorCode != 0) {
           lastErrorCode = 0;
         }
-        popSoftmenu();
+        else {
+          popSoftmenu();
+        }
         break;
 
       case CM_AIM:

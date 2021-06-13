@@ -120,15 +120,20 @@ void magnitudeReal(void) {
 
 
 void magnitudeCplx(void) {
-  real_t a, b;
+  real_t a, b, c;
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &a);
   real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &b);
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
 
-  realMultiply(&a, &a, &a, &ctxtReal39);
-  realFMA(&b, &b, &a, &a, &ctxtReal39);
-  realSquareRoot(&a, &a, &ctxtReal39);
+  complexMagnitude(&a, &b, &c);
 
-  realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
 }
+
+void complexMagnitude(const real_t *a, const real_t *b, real_t *c) {
+  realMultiply(a, a, c, &ctxtReal39);
+  realFMA(b, b, a, c, &ctxtReal39);
+  realSquareRoot(c, c, &ctxtReal39);
+}
+

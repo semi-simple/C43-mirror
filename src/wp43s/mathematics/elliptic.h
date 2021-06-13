@@ -15,28 +15,15 @@
  */
 
 /********************************************//**
- * \file magnitude.h
+ * \file elliptic.h
  ***********************************************/
-#ifndef MAGNITUDE_H
-#define MAGNITUDE_H
+#ifndef ELLIPTIC_H
+#define ELLIPTIC_H
 
-#include "defines.h"
-#include "realType.h"
 #include <stdint.h>
 
-void fnMagnitude   (uint16_t unusedButMandatoryParameter);
-#if (EXTRA_INFO_ON_CALC_ERROR == 1)
-void magnitudeError(void);
-#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
-#define magnitudeError typeError
-#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-void magnitudeLonI (void);
-void magnitudeRema (void);
-void magnitudeCxma (void);
-void magnitudeShoI (void);
-void magnitudeReal (void);
-void magnitudeCplx (void);
+void fnJacobiSn(uint16_t unusedButMandatoryParameter);
+void fnJacobiCn(uint16_t unusedButMandatoryParameter);
+void fnJacobiDn(uint16_t unusedButMandatoryParameter);
 
-void complexMagnitude(const real_t *a, const real_t *b, real_t *c);
-
-#endif // MAGNITUDE_H
+#endif // ELLIPTIC_H

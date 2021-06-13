@@ -448,6 +448,8 @@ void generateAllConstants(void) {
   generateConstantArray("1e8",           "+1.000000000000000000000000000000000000000000000000000000e+08"); // cnst180
   generateConstantArray("1e9",           "+1.000000000000000000000000000000000000000000000000000000e+09"); // cnst181
   generateConstantArray("2p32",          "+4.294967296000000000000000000000000000000000000000000000e+09"); // cnst182
+  generateConstantArray("1e32",          "+1.000000000000000000000000000000000000000000000000000000e+32"); // cnst183
+  generateConstantArray("1e_32",         "+1.000000000000000000000000000000000000000000000000000000e-32"); // cnst184  if the number of constants changes: don't forget to update NUMBER_OF_CONSTANTS_* in defines.h
 
   // Lanczos's coefficients calculated for N=22 and G=22.61891 using Toth's program: https://www.vttoth.com/CMS/projects/41
   // source: https://www.vttoth.com/FILES/lanczos.tgz

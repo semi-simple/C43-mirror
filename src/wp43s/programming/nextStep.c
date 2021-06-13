@@ -967,6 +967,9 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_M1X:            //  1679
         case ITM_XMOD:           //  1680
         case ITM_toDATE:         //  1681
+        case ITM_sn:             //  1682
+        case ITM_cn:             //  1682
+        case ITM_dn:             //  1682
         case ITM_toHR:           //  1685
         case ITM_toHMS:          //  1686
         case ITM_toINT:          //  1687

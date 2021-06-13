@@ -37,6 +37,6 @@ void magnitudeShoI (void);
 void magnitudeReal (void);
 void magnitudeCplx (void);
 
-void complexMagnitude(const real_t *a, const real_t *b, real_t *c);
+void complexMagnitude(const real_t *a, const real_t *b, real_t *c, realContext_t *realContext);
 
 #endif // MAGNITUDE_H

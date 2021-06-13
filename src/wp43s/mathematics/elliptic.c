@@ -109,7 +109,7 @@ static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t 
     realAdd(&r, mu(n), &b, &ctxtReal39);
     realDivide(&a, &b, d(n), &ctxtReal39);
   }
-  complexMagnitude(const_1, c(0), &f);
+  complexMagnitude(const_1, c(0), &f, &ctxtReal39);
   if (realIsNegative(&e)) {
     realSubtract(const_1, m, &a, &ctxtReal39);
     realSquareRoot(&a, &g, &ctxtReal39);

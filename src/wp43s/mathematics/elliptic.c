@@ -57,7 +57,7 @@ static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t 
     return;
   }
   if (realCompareLessThan(&a, const_1e_32)) {
-    WP34S_Cvt2RadSinCosTan(&a, amRadian, sn, cn, NULL, &ctxtReal39);
+    WP34S_Cvt2RadSinCosTan(u, amRadian, sn, cn, NULL, &ctxtReal39);
     realCopy(const_1, dn);
     return;
   }
@@ -79,8 +79,8 @@ static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t 
     realAdd(&b, &b, &a, &ctxtReal39);
     realSubtract(mu(n), nu(n), &e, &ctxtReal39);
     realCopyAbs(&e, &f);
-    if (realCompareGreaterThan(&a, &f))
-      break;
+    //if (realCompareGreaterThan(&a, &f))
+    //  break;
     realMultiply(&g, const_1on2, mu(n+1), &ctxtReal39);
     realMultiply(mu(n), nu(n), &a, &ctxtReal39);
     realSquareRoot(&a, nu(n+1), &ctxtReal39);
@@ -92,10 +92,16 @@ static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t 
   realMultiply(u, mu(n), &a, &ctxtReal39);
   WP34S_Cvt2RadSinCosTan(&a, amRadian, &sin_umu, &cos_umu, NULL, &ctxtReal39);
   realCopyAbs(&cos_umu, &b);
-  if (realCompareAbsLessThan(&sin_umu, &b))
-    realDivide(&sin_umu, &cos_umu, &t, &ctxtReal39);
-  else
+  //if (realCompareAbsLessThan(&sin_umu, &b))
+  //  realDivide(&sin_umu, &cos_umu, &t, &ctxtReal39);
+  //else
     realDivide(&cos_umu, &sin_umu, &t, &ctxtReal39);
+  if(realIsZero(&sin_umu)) {
+    realCopy(const_0, sn);
+    realCopy(const_1, cn);
+    realCopy(const_1, dn);
+    return;
+  }
 
   realMultiply(mu(n), &t, c(n), &ctxtReal39);
   realCopy(const_1, d(n));
@@ -253,6 +259,8 @@ void fnJacobiCn(uint16_t unusedButMandatoryParameter) {
   if (!jacobi_check_inputs(&kReal, &kImag, &uReal, &uImag, &realInput))
     return;
 
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+
   if (realInput) {
     calc_real_elliptic(NULL, &rReal, NULL, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
@@ -279,6 +287,8 @@ void fnJacobiCn(uint16_t unusedButMandatoryParameter) {
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
   }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
 
 void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
@@ -290,6 +300,8 @@ void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
 
   if (!jacobi_check_inputs(&kReal, &kImag, &uReal, &uImag, &realInput))
     return;
+
+  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if (realInput) {
     calc_real_elliptic(NULL, NULL, &rReal, &uReal, &kReal);
@@ -319,4 +331,6 @@ void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
   }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }

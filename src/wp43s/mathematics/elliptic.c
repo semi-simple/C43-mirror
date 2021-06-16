@@ -157,6 +157,27 @@ static void elliptic_setup(real_t *r,
 	realDivide(const_1, &a, r, &ctxtReal39);
 }
 
+static void elliptic_setup_cpx_real(real_t *r,
+                                    real_t *snuk, real_t *cnuk, real_t *dnuk,
+                                    real_t *snvki, real_t *cnvki, real_t *dnvki,
+                                    const real_t *u, const real_t *v,
+                                    const real_t *k, real_t *ki) {
+  realMultiply(k, k, r, &ctxtReal39);
+  realSubtract(const_1, r, ki, &ctxtReal39);
+
+  calc_real_elliptic(snuk, cnuk, dnuk, u, r);
+  calc_real_elliptic(snvki, cnvki, dnvki, v, ki);
+
+  realSquareRoot(ki, ki, &ctxtReal39);
+
+  realMultiply(k, k, r, &ctxtReal39);
+  realMultiply(r, snuk, r, &ctxtReal39);
+  realMultiply(r, snuk, r, &ctxtReal39);
+  realMultiply(r, snvki, r, &ctxtReal39);
+  realMultiply(r, snvki, r, &ctxtReal39);
+  realFMA(cnvki, cnvki, r, r, &ctxtReal39);
+}
+
 static int jacobi_check_inputs(real_t *kReal, real_t *kImag,
                                real_t *uReal, real_t *uImag, bool_t *realInput)
 {
@@ -225,6 +246,28 @@ void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
     calc_real_elliptic(&rReal, NULL, NULL, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  } else if (realIsZero(&kImag)) {
+    // SN(u + i v, k) = sn(u, k) . dn(v, ki) / denom
+    //                  + i . cn(u, k) . dn(u, k) . sn(v, ki) . cn(v, ki) / denom
+    // where
+    //    denom = cn(v, ki)^2 + k^2 * dn(u, k)^2 * sn(v, ki)^2 and
+    //    ki    = sqrt(1 - k^2)
+
+    elliptic_setup_cpx_real(&denom, &snuk, &cnuk, &dnuk,
+                            &snvki, &cnvki, &dnvki,
+                            &uReal, &uImag, &kReal, &kImag);
+
+    realMultiply(&snuk, &dnvki, &a, &ctxtReal39);
+    realDivide(&a, &denom, &rReal, &ctxtReal39);
+
+    realMultiply(&cnuk, &dnuk, &a, &ctxtReal39);
+    realMultiply(&a, &snvki, &b, &ctxtReal39);
+    realMultiply(&b, &cnvki, &a, &ctxtReal39);
+    realDivide(&a, &denom, &rImag, &ctxtReal39);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
   } else {
     // SN(u + i v, k + i ki) = sn(u, k) . dn(v, ki) / denom
     //                         + i . cn(u, k) . dn(u, k) . sn(v, ki) . cn(v, ki) / denom
@@ -267,6 +310,29 @@ void fnJacobiCn(uint16_t unusedButMandatoryParameter) {
     calc_real_elliptic(NULL, &rReal, NULL, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  } else if (realIsZero(&kImag)) {
+    // CN(u + i v, k) = cn(u, k) . cn(v, ki) / denom
+    //                  - i . sn(u, k) . dn(u, k) . sn(v, ki) . dn(v, ki) / denom
+    // where
+    //    denom = cn(v, ki)^2 + k^2 * dn(u, k)^2 * sn(v, ki)^2 and
+    //    ki    = sqrt(1 - k^2)
+
+    elliptic_setup_cpx_real(&denom, &snuk, &cnuk, &dnuk,
+                            &snvki, &cnvki, &dnvki,
+                            &uReal, &uImag, &kReal, &kImag);
+
+    realMultiply(&cnuk, &cnvki, &a, &ctxtReal39);
+    realDivide(&a, &denom, &rReal, &ctxtReal39);
+
+    realMultiply(&snuk, &dnuk, &a, &ctxtReal39);
+    realMultiply(&a, &snvki, &b, &ctxtReal39);
+    realMultiply(&b, &dnvki, &a, &ctxtReal39);
+    realDivide(&a, &denom, &b, &ctxtReal39);
+    realMinus(&b, &rImag, &ctxtReal39);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
   } else {
     // CN(u + i v, k + i ki) = cn(u, k) . cn(v, ki) / denom
     //                         - i . sn(u, k) . dn(u, k) . sn(v, ki) . dn(v, ki) / denom
@@ -310,6 +376,31 @@ void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
     calc_real_elliptic(NULL, NULL, &rReal, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+  } else if (realIsZero(&kImag)) {
+    // DN(u + i v, k) = dn(u, k) . cn(v, ki) . dn(v, ki) / denom
+    //                  - i . k^2 . sn(u, k) . cn(u, k) . sn(v, ki) / denom
+    // where
+    //    denom = cn(v, ki)^2 + k^2 * dn(u, k)^2 * sn(v, ki)^2 and
+    //    ki    = sqrt(1 - k^2)
+
+    elliptic_setup_cpx_real(&denom, &snuk, &cnuk, &dnuk,
+                            &snvki, &cnvki, &dnvki,
+                            &uReal, &uImag, &kReal, &kImag);
+
+    realMultiply(&dnuk, &cnvki, &a, &ctxtReal39);
+    realMultiply(&a, &dnvki, &b, &ctxtReal39);
+    realDivide(&b, &denom, &rReal, &ctxtReal39);
+
+    realMultiply(&kReal, &kReal, &a, &ctxtReal39);
+    realMinus(&a, &b, &ctxtReal39);
+    realMultiply(&b, &snuk, &a, &ctxtReal39);
+    realMultiply(&a, &cnuk, &b, &ctxtReal39);
+    realMultiply(&b, &snvki, &a, &ctxtReal39);
+    realDivide(&a, &denom, &rImag, &ctxtReal39);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
   } else {
     // DN(a + i b, c + i d) = dn(u, k) . cn(v, ki) . dn(v, ki) / denom
     //                        - i . k^2 . sn(u, k) . cn(u, k) . sn(v, ki) / denom

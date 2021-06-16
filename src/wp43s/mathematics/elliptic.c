@@ -221,6 +221,7 @@ void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if (realInput) {
+    realMultiply(&kReal, &kReal, &kReal, &ctxtReal39);
     calc_real_elliptic(&rReal, NULL, NULL, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -262,6 +263,7 @@ void fnJacobiCn(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if (realInput) {
+    realMultiply(&kReal, &kReal, &kReal, &ctxtReal39);
     calc_real_elliptic(NULL, &rReal, NULL, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -304,6 +306,7 @@ void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
 
   if (realInput) {
+    realMultiply(&kReal, &kReal, &kReal, &ctxtReal39);
     calc_real_elliptic(NULL, NULL, &rReal, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));

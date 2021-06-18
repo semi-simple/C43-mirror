@@ -698,7 +698,7 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 10) {                                         //e^theta.j j
     saveForUndo();
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);   // STO TMP
+    if(!saveLastX()) return;                                    // STO TMP
     fn_cnst_op_j(0);
     fnMultiply(0);                                              // * aa
     fnExp(0);

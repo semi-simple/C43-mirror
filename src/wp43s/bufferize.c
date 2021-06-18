@@ -1002,11 +1002,25 @@ void kill_ASB_icon(void) {
           setSystemFlag(FLAG_ASLIFT);
           if(item == ITM_EXIT1) {
             saveForUndo();
+            if(lastErrorCode == ERROR_RAM_FULL) {
+              lastErrorCode = 0;
+              temporaryInformation = TI_UNDO_DISABLED;
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                moreInfoOnError("In function addItemToNimBuffer:", "there is not enough memory to save for undo!", NULL, NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            }
           }
           return;
         }
         if(item == ITM_EXIT1) {
           saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) {
+            lastErrorCode = 0;
+            temporaryInformation = TI_UNDO_DISABLED;
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              moreInfoOnError("In function addItemToNimBuffer:", "there is not enough memory to save for undo!", NULL, NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+          }
         }
         break;
 

@@ -143,12 +143,14 @@ void statGraphReset(void){
 void graph_setupmemory(void) {
   int i;
   if(telltale != MEM_INITIALIZED) {
-    gr_x = (float*)malloc(LIM * sizeof(float)); 
-    memset(gr_x, 0,         LIM * sizeof(float));
-    gr_y = (float*)malloc(LIM * sizeof(float)); 
-    memset(gr_y, 0,         LIM * sizeof(float));
-    telltale = MEM_INITIALIZED;
-    ix_count = 0;
+    if((gr_x = (float*)malloc(LIM * sizeof(float)))) {
+      memset(gr_x, 0,         LIM * sizeof(float));
+      if((gr_y = (float*)malloc(LIM * sizeof(float)))) {
+        memset(gr_y, 0,         LIM * sizeof(float));
+        telltale = MEM_INITIALIZED;
+        ix_count = 0;
+      }
+    }
   }
   if ((telltale != MEM_INITIALIZED) || (gr_x == NULL || gr_y == NULL)) { 
   #ifdef PC_BUILD

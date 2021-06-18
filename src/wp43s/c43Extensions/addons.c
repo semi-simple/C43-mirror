@@ -1033,19 +1033,19 @@ void notSexa(void) {
 
 
 void fnHrDeg(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
   if(getRegisterAngularMode(REGISTER_X) == amDMS && getRegisterDataType(REGISTER_X) == dtReal34)  dms34ToReal34(0);
   else if(getRegisterDataType(REGISTER_X) == dtTime)  timeToReal34(0); 
   else                                                notSexa();
 }
 void fnMinute(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
   if(getRegisterAngularMode(REGISTER_X) == amDMS && getRegisterDataType(REGISTER_X) == dtReal34)  dms34ToReal34(1);
   else if(getRegisterDataType(REGISTER_X) == dtTime)  timeToReal34(1);
   else                                                notSexa();
 }
 void fnSecond(uint16_t unusedButMandatoryParameter){
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
   if(getRegisterAngularMode(REGISTER_X) == amDMS && getRegisterDataType(REGISTER_X) == dtReal34)  dms34ToReal34(2);
   else if(getRegisterDataType(REGISTER_X) == dtTime)  timeToReal34(2);
   else                                                notSexa();
@@ -1053,7 +1053,7 @@ void fnSecond(uint16_t unusedButMandatoryParameter){
 
 void fnTimeTo(uint16_t unusedButMandatoryParameter) {
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterAngularMode(REGISTER_X) == amDMS && getRegisterDataType(REGISTER_X) == dtReal34) {
     dms34ToReal34(0);
@@ -1125,7 +1125,7 @@ void fnToTime(uint16_t unusedButMandatoryParameter) {
   calcRegister_t r[3] = {REGISTER_Z, REGISTER_Y, REGISTER_X};
   uint_fast8_t i;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   part[0] = &hr;
   part[1] = &m;

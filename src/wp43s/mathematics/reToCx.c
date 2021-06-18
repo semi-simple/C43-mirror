@@ -54,7 +54,7 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
   if(    (dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
       && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
 
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     fnSetFlag(FLAG_CPXRES);
     fnRefreshState();                                 //drJM
 
@@ -109,7 +109,9 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
     }
 
     fnDropY(NOPARAM);
-    setSystemFlag(FLAG_ASLIFT);
+    if(lastErrorCode == ERROR_NONE) {
+      setSystemFlag(FLAG_ASLIFT);
+    }
   }
 #ifndef TESTSUITE_BUILD
   else if(dataTypeX == dtReal34Matrix && dataTypeY == dtReal34Matrix) {
@@ -120,37 +122,39 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
     convertReal34MatrixRegisterToReal34Matrix(REGISTER_X, &iMat);
 
     if(rMat.header.matrixRows == iMat.header.matrixRows && rMat.header.matrixColumns == iMat.header.matrixColumns) {
-      complexMatrixInit(&cMat, rMat.header.matrixRows, rMat.header.matrixColumns);
-      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
-      fnSetFlag(FLAG_CPXRES);
+      if(complexMatrixInit(&cMat, rMat.header.matrixRows, rMat.header.matrixColumns)) {
+        if(!saveLastX()) return;
+        fnSetFlag(FLAG_CPXRES);
 
-      for(uint16_t i = 0; i < rMat.header.matrixRows * rMat.header.matrixColumns; ++i) {
-        real34Copy(&rMat.matrixElements[i], VARIABLE_REAL34_DATA(&cMat.matrixElements[i]));
-        real34Copy(&iMat.matrixElements[i], VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]));
+        for(uint16_t i = 0; i < rMat.header.matrixRows * rMat.header.matrixColumns; ++i) {
+          real34Copy(&rMat.matrixElements[i], VARIABLE_REAL34_DATA(&cMat.matrixElements[i]));
+          real34Copy(&iMat.matrixElements[i], VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]));
 
-        if(getSystemFlag(FLAG_POLAR)) { // polar mode
-          if(real34CompareEqual(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), const34_0)) {
-            real34Zero(VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]));
-          }
-          else {
-            real_t magnitude, theta;
-
-            real34ToReal(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), &magnitude);
-            real34ToReal(VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]), &theta);
-            convertAngleFromTo(&theta, currentAngularMode, amRadian, &ctxtReal39);
-            if(realCompareLessThan(&magnitude, const_0)) {
-              realSetPositiveSign(&magnitude);
-              realAdd(&theta, const_pi, &theta, &ctxtReal39);
-              WP34S_Mod(&theta, const1071_2pi, &theta, &ctxtReal39);
+          if(getSystemFlag(FLAG_POLAR)) { // polar mode
+            if(real34CompareEqual(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), const34_0)) {
+              real34Zero(VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]));
             }
-            realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39); // theta in radian
-            realToReal34(&magnitude, VARIABLE_REAL34_DATA(&cMat.matrixElements[i]));
-            realToReal34(&theta,     VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]));
+            else {
+              real_t magnitude, theta;
+
+              real34ToReal(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), &magnitude);
+              real34ToReal(VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]), &theta);
+              convertAngleFromTo(&theta, currentAngularMode, amRadian, &ctxtReal39);
+              if(realCompareLessThan(&magnitude, const_0)) {
+                realSetPositiveSign(&magnitude);
+                realAdd(&theta, const_pi, &theta, &ctxtReal39);
+                WP34S_Mod(&theta, const1071_2pi, &theta, &ctxtReal39);
+              }
+              realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39); // theta in radian
+              realToReal34(&magnitude, VARIABLE_REAL34_DATA(&cMat.matrixElements[i]));
+              realToReal34(&theta,     VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]));
+            }
           }
         }
+        convertComplex34MatrixToComplex34MatrixRegister(&cMat, REGISTER_X);
+        complexMatrixFree(&cMat);
       }
-      convertComplex34MatrixToComplex34MatrixRegister(&cMat, REGISTER_X);
-      complexMatrixFree(&cMat);
+      else lastErrorCode = ERROR_RAM_FULL;
     }
     else {
       displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
@@ -164,7 +168,9 @@ void fnReToCx(uint16_t unusedButMandatoryParameter) {
 
     realMatrixFree(&iMat);
     fnDropY(NOPARAM);
-    setSystemFlag(FLAG_ASLIFT);
+    if(lastErrorCode == ERROR_NONE) {
+      setSystemFlag(FLAG_ASLIFT);
+    }
   }
 #endif // TESTSUITE_BUILD
   else {

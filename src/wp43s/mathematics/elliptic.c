@@ -33,9 +33,8 @@
 
 #define ELLIPTIC_N	16
 
-static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t *u, const real_t *m) {
+static void _calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t *u, const real_t *m) {
   real_t a, b, e, f, g;
-  real_t s_n, c_n, d_n;
   real_t MU[ELLIPTIC_N], NU[ELLIPTIC_N], C[ELLIPTIC_N], D[ELLIPTIC_N];
   real_t sin_umu, cos_umu, t, r;
   int n = 0;
@@ -45,18 +44,13 @@ static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t 
 #define c(n)	(C + (n))
 #define d(n)	(D + (n))
 
-  if (sn == NULL) sn = &s_n;
-  if (cn == NULL) cn = &c_n;
-  if (dn == NULL) dn = &d_n;
-
-  realCopyAbs(m, &a);
-  if (realCompareLessThan(const_1, &a)) {
+  if (realIsNegative(m) || realCompareLessThan(const_1, m)) {
     realCopy(const_NaN, sn);
     realCopy(const_NaN, cn);
     realCopy(const_NaN, dn);
     return;
   }
-  if (realCompareLessThan(&a, const_1e_32)) {
+  if (realCompareLessThan(m, const_1e_32)) {
     WP34S_Cvt2RadSinCosTan(u, amRadian, sn, cn, NULL, &ctxtReal39);
     realCopy(const_1, dn);
     return;
@@ -139,6 +133,26 @@ static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t 
 #undef nu
 #undef c
 #undef d
+}
+
+static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t *u, const real_t *m) {
+  real_t s_n, c_n, d_n;
+
+  if (sn == NULL) sn = &s_n;
+  if (cn == NULL) cn = &c_n;
+  if (dn == NULL) dn = &d_n;
+
+  if(realCompareLessThan(const_1, m)) {
+    real_t k, uk, m_1;
+    realSquareRoot(m, &k, &ctxtReal39);
+    realMultiply(&k, u, &uk, &ctxtReal39);
+    realDivide(const_1, m, &m_1, &ctxtReal39);
+    _calc_real_elliptic(sn, dn, cn, &uk, &m_1);
+    realDivide(sn, &k, sn, &ctxtReal39);
+  }
+  else {
+    _calc_real_elliptic(sn, cn, dn, u, m);
+  }
 }
 
 static void elliptic_setup(real_t *r,

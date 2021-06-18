@@ -998,6 +998,10 @@
         showString("Backup restored", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
       }
 
+      else if(temporaryInformation == TI_UNDO_DISABLED && regist == REGISTER_X) {
+        showString("Not enough memory for undo", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
       else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_T) { // L1
         w = stringWidth(tmpString, &standardFont, true, true);
         showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + 21*0, vmNormal, true, true);

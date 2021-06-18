@@ -481,33 +481,24 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
     // All the new local registers are real34s initialized to 0.0
     for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
+      bool_t isMemIssue = false; 
+
       if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                 //JM defaults JMZERO
         void *newMem = allocWp43s(REAL34_SIZE);
         if(newMem) {
           setRegisterDataType(r, dtReal34, amNone);
           setRegisterDataPointer(r, newMem);
           real34Zero(REGISTER_REAL34_DATA(r));
-        }
-        else {
-          // Not enough memory (!)
-          for(uint16_t rr = FIRST_LOCAL_REGISTER; rr < r; rr++) {
-            freeRegisterData(FIRST_LOCAL_REGISTER + rr);
-          }
-          reallocWp43s(currentSubroutineLevelData, 4 + numberOfRegistersToAllocate, 3);
-          currentLocalFlags = NULL;
-          currentLocalRegisters = NULL;
-          currentNumberOfLocalRegisters = 0;
-          currentNumberOfLocalFlags = NUMBER_OF_LOCAL_FLAGS;
-          lastErrorCode = ERROR_RAM_FULL;
-          return;
-        }
+        } else isMemIssue = true;
       }
-
       else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                //JM defaults vv
-        setRegisterDataType(r, dtComplex34, amNone);
-        setRegisterDataPointer(r, allocWp43s(TO_BYTES(COMPLEX34_SIZE)));
-        real34Zero(REGISTER_REAL34_DATA(r));
-        real34Zero(REGISTER_IMAG34_DATA(r));
+        void *newMem = allocWp43s(TO_BYTES(COMPLEX34_SIZE));
+        if(newMem) {
+          setRegisterDataType(r, dtComplex34, amNone);
+          setRegisterDataPointer(r, newMem);
+          real34Zero(REGISTER_REAL34_DATA(r));
+          real34Zero(REGISTER_IMAG34_DATA(r));
+        } else isMemIssue = true;
       }                                                   //JM defaults ^^
       else if(lastIntegerBase !=0 || Input_Default == ID_SI) {                   //JM defaults vv
         longInteger_t lgInt;
@@ -525,6 +516,22 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
         convertLongIntegerToLongIntegerRegister(lgInt, r);
         longIntegerFree(lgInt);
       }                                                   //JM defaults ^^
+
+      if(isMemIssue) {
+        // Not enough memory (!)
+        for(uint16_t rr = FIRST_LOCAL_REGISTER; rr < r; rr++) {
+          freeRegisterData(FIRST_LOCAL_REGISTER + rr);
+        }
+        reallocWp43s(currentSubroutineLevelData, 4 + numberOfRegistersToAllocate, 3);
+        currentLocalFlags = NULL;
+        currentLocalRegisters = NULL;
+        currentNumberOfLocalRegisters = 0;
+        currentNumberOfLocalFlags = NUMBER_OF_LOCAL_FLAGS;
+        lastErrorCode = ERROR_RAM_FULL;
+        return;
+      }
+
+
     }                                                   //JM defaults ^^
 
 
@@ -549,32 +556,24 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
       // All the new local registers are real34s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER+oldNumberOfLocalRegisters; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
+        bool_t isMemIssue = false;
+
         if((lastIntegerBase == 0) && (Input_Default == ID_43S || Input_Default == ID_DP)) {                 //JM defaults JMZERO
           void *newMem = allocWp43s(REAL34_SIZE);
           if(newMem) {
             setRegisterDataType(r, dtReal34, amNone);
             setRegisterDataPointer(r, newMem);
             real34Zero(REGISTER_REAL34_DATA(r));
-          }
-          else {
-            // Not enough memory (!)
-            for(uint16_t rr = FIRST_LOCAL_REGISTER + oldNumberOfLocalRegisters; rr < r; rr++) {
-              freeRegisterData(FIRST_LOCAL_REGISTER + rr);
-            }
-            reallocWp43s(currentSubroutineLevelData, 4 + numberOfRegistersToAllocate, 4 + currentNumberOfLocalRegisters);
-            currentLocalFlags = currentSubroutineLevelData + 3;
-            currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
-            currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
-            lastErrorCode = ERROR_RAM_FULL;
-            return;
-          }
+          } else isMemIssue = true;
         }
-
         else if((lastIntegerBase == 0) && (Input_Default == ID_CPXDP)) {                //JM defaults vv
-          setRegisterDataType(r, dtComplex34, amNone);
-          setRegisterDataPointer(r, allocWp43s(TO_BYTES(COMPLEX34_SIZE)));
-          real34Zero(REGISTER_REAL34_DATA(r));
-          real34Zero(REGISTER_IMAG34_DATA(r));
+          void *newMem = allocWp43s(TO_BYTES(COMPLEX34_SIZE));
+          if(newMem) {
+            setRegisterDataType(r, dtComplex34, amNone);
+            setRegisterDataPointer(r, allocWp43s(TO_BYTES(COMPLEX34_SIZE)));
+            real34Zero(REGISTER_REAL34_DATA(r));
+            real34Zero(REGISTER_IMAG34_DATA(r));
+          } else isMemIssue = true;
         }                                                   //JM defaults ^^
         else if(lastIntegerBase !=0 || Input_Default == ID_SI) {                   //JM defaults vv
           longInteger_t lgInt;
@@ -593,7 +592,21 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
           longIntegerFree(lgInt);
         }                                                   //JM defaults ^^
 
+      if(isMemIssue) {
+            // Not enough memory (!)
+            for(uint16_t rr = FIRST_LOCAL_REGISTER + oldNumberOfLocalRegisters; rr < r; rr++) {
+              freeRegisterData(FIRST_LOCAL_REGISTER + rr);
+            }
+            reallocWp43s(currentSubroutineLevelData, 4 + numberOfRegistersToAllocate, 4 + currentNumberOfLocalRegisters);
+            currentLocalFlags = currentSubroutineLevelData + 3;
+            currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
+            currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
+            lastErrorCode = ERROR_RAM_FULL;
+            return;
+          }
 
+
+      }
 
         currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
       }
@@ -601,11 +614,6 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
         currentSubroutineLevelData = oldSubroutineLevelData;
         lastErrorCode = ERROR_RAM_FULL;
         return;
-
-
-
-
-
       }
     }
     else {

@@ -150,6 +150,20 @@ static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t 
     _calc_real_elliptic(sn, dn, cn, &uk, &m_1);
     realDivide(sn, &k, sn, &ctxtReal39);
   }
+  else if(realIsNegative(m)) {
+    real_t mu, mu1, v, s, c, d;
+    realSubtract(const_1, m, &mu1, &ctxtReal39);
+    realDivide(const_1, &mu1, &mu1, &ctxtReal39);
+    realMultiply(&mu1, m, &mu, &ctxtReal39);
+    realChangeSign(&mu);
+    realSquareRoot(&mu1, &mu1, &ctxtReal39);
+    realDivide(u, &mu1, &v, &ctxtReal39);
+    _calc_real_elliptic(&s, &c, &d, &v, &mu);
+    realDivide(&s, &d, sn, &ctxtReal39);
+    realDivide(&c, &d, cn, &ctxtReal39);
+    realDivide(const_1, &d, dn, &ctxtReal39);
+    realMultiply(sn, &mu1, sn, &ctxtReal39);
+  }
   else {
     _calc_real_elliptic(sn, cn, dn, u, m);
   }
@@ -177,6 +191,7 @@ static void elliptic_setup_cpx_real(real_t *r,
                                     const real_t *u, const real_t *v,
                                     const real_t *k, real_t *ki) {
   realMultiply(k, k, r, &ctxtReal39);
+  if(!realIsZero(ki)) realSetNegativeSign(r);
   realSubtract(const_1, r, ki, &ctxtReal39);
 
   calc_real_elliptic(snuk, cnuk, dnuk, u, r);
@@ -260,13 +275,21 @@ void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
     calc_real_elliptic(&rReal, NULL, NULL, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  } else if (realIsZero(&kImag)) {
+  } else if (realIsZero(&uImag) && realIsZero(&kReal)) {
+    realMultiply(&kImag, &kImag, &kReal, &ctxtReal39);
+    realSetNegativeSign(&kReal);
+    calc_real_elliptic(&rReal, NULL, NULL, &uReal, &kReal);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(const34_0, REGISTER_IMAG34_DATA(REGISTER_X));
+  } else if (realIsZero(&kReal) || realIsZero(&kImag)) {
     // SN(u + i v, k) = sn(u, k) . dn(v, ki) / denom
     //                  + i . cn(u, k) . dn(u, k) . sn(v, ki) . cn(v, ki) / denom
     // where
     //    denom = cn(v, ki)^2 + k^2 * dn(u, k)^2 * sn(v, ki)^2 and
     //    ki    = sqrt(1 - k^2)
 
+    if(!realIsZero(&kImag)) realCopy(&kImag, &kReal);
     elliptic_setup_cpx_real(&denom, &snuk, &cnuk, &dnuk,
                             &snvki, &cnvki, &dnvki,
                             &uReal, &uImag, &kReal, &kImag);
@@ -324,13 +347,21 @@ void fnJacobiCn(uint16_t unusedButMandatoryParameter) {
     calc_real_elliptic(NULL, &rReal, NULL, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  } else if (realIsZero(&kImag)) {
+  } else if (realIsZero(&uImag) && realIsZero(&kReal)) {
+    realMultiply(&kImag, &kImag, &kReal, &ctxtReal39);
+    realSetNegativeSign(&kReal);
+    calc_real_elliptic(NULL, &rReal, NULL, &uReal, &kReal);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(const34_0, REGISTER_IMAG34_DATA(REGISTER_X));
+  } else if (realIsZero(&kReal) || realIsZero(&kImag)) {
     // CN(u + i v, k) = cn(u, k) . cn(v, ki) / denom
     //                  - i . sn(u, k) . dn(u, k) . sn(v, ki) . dn(v, ki) / denom
     // where
     //    denom = cn(v, ki)^2 + k^2 * dn(u, k)^2 * sn(v, ki)^2 and
     //    ki    = sqrt(1 - k^2)
 
+    if(!realIsZero(&kImag)) realCopy(&kImag, &kReal);
     elliptic_setup_cpx_real(&denom, &snuk, &cnuk, &dnuk,
                             &snvki, &cnvki, &dnvki,
                             &uReal, &uImag, &kReal, &kImag);
@@ -390,13 +421,21 @@ void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
     calc_real_elliptic(NULL, NULL, &rReal, &uReal, &kReal);
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
-  } else if (realIsZero(&kImag)) {
+  } else if (realIsZero(&uImag) && realIsZero(&kReal)) {
+    realMultiply(&kImag, &kImag, &kReal, &ctxtReal39);
+    realSetNegativeSign(&kReal);
+    calc_real_elliptic(NULL, NULL, &rReal, &uReal, &kReal);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(const34_0, REGISTER_IMAG34_DATA(REGISTER_X));
+  } else if (realIsZero(&kReal) || realIsZero(&kImag)) {
     // DN(u + i v, k) = dn(u, k) . cn(v, ki) . dn(v, ki) / denom
     //                  - i . k^2 . sn(u, k) . cn(u, k) . sn(v, ki) / denom
     // where
     //    denom = cn(v, ki)^2 + k^2 * dn(u, k)^2 * sn(v, ki)^2 and
     //    ki    = sqrt(1 - k^2)
 
+    if(!realIsZero(&kImag)) realCopy(&kImag, &kReal);
     elliptic_setup_cpx_real(&denom, &snuk, &cnuk, &dnuk,
                             &snvki, &cnvki, &dnvki,
                             &uReal, &uImag, &kReal, &kImag);

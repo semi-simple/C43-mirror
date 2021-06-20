@@ -260,6 +260,8 @@ void saveForUndo(void) {
     goto failed;
   }
 
+  lrSelectionUndo = lrSelection;  
+  //printf(">>>Storing for UNDO lrSelectionUndo = %i \n",lrSelection);
   if(statisticalSumsPointer == NULL) { // There are no statistical sums to save for undo
     if(savedStatisticalSumsPointer != NULL) {
       freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
@@ -267,7 +269,6 @@ void saveForUndo(void) {
     }
   }
   else { // There are statistical sums to save for undo
-    lrSelectionUndo = lrSelection;
     lrChosenUndo = lrChosen;
     if(savedStatisticalSumsPointer == NULL) {
       savedStatisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
@@ -308,6 +309,8 @@ void undo(void) {
 
   copySourceRegisterToDestRegister(SAVED_REGISTER_L, REGISTER_L);
 
+  //printf(">>>UNDOING lrSelection was %i becomes %i\n",lrSelection,lrSelectionUndo);
+  lrSelection = lrSelectionUndo;
   if(savedStatisticalSumsPointer == NULL) { // There are no statistical sums to restore
     if(statisticalSumsPointer != NULL) {
       freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
@@ -316,7 +319,6 @@ void undo(void) {
     }
   }
   else { // There are statistical sums to restore
-    lrSelection = lrSelectionUndo;
     lrChosen = lrChosenUndo;
     if(statisticalSumsPointer == NULL) {
       statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);

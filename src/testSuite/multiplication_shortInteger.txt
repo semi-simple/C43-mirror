@@ -13,13 +13,13 @@ Func: fnMultiply
 
 ;==================================================================
 ; Short Integer x Long Integer      see in multiplication_longInteger.txt
-; Short Integer x Real16            see in multiplication_real16.txt
-; Short Integer x Complex16         see in multiplication_complex16.txt
+; Short Integer x Real              see in multiplication_real.txt
+; Short Integer x Complex           see in multiplication_complex16.txt
 ; Short Integer x Time              see in multiplication_time.txt
 ; Short Integer x Date              see in multiplication_date.txt
 ; Short Integer x String            see in multiplication_string.txt
-; Short Integer x Real16 Matrix     see in multiplication_real16Matrix.txt
-; Short Integer x Complex16 Matrix  see in multiplication_complex16Matrix.txt
+; Short Integer x Real Matrix       see in multiplication_realMatrix.txt
+; Short Integer x Complex Matrix    see in multiplication_complexMatrix.txt
 ;==================================================================
 
 
@@ -33,7 +33,7 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"10000#2" RX=ShoI:"200640#10"
 
 
 ;=======================================
-; Short Integer x Real34 --> Real34
+; Short Integer x Real --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=ShoI:"45247#8" RX=Real:"123456" ;RY=19111
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"123456" RX=Real:"2359367616"
@@ -114,7 +114,7 @@ In:  AM=MULTPI FL_CPXRES=0 FL_ASLIFT=0 RY=ShoI:"2#13" RX=Real:"3.453099789":MULT
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"3.453099789":MULTPI RX=Real:"6.906199578":MULTPI
 
 ;=======================================
-; Real34 x Short Integer --> Real34
+; Real x Short Integer --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Real:"123456" RX=ShoI:"45247#8" ;RX=19111
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"45247#8" RX=Real:"2359367616"
@@ -197,13 +197,13 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"2#13" RX=Real:"6.906199578":MULTPI
 
 
 ;=======================================
-; Short Integer x Complex34 --> Complex34
+; Short Integer x Complex --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 RY=ShoI:"12540#10" RX=Cplx:"123.456 i -6.78"
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"123.456 i -6.78" RX=Cplx:"1548138.24 i -85021.2"
 
 ;=======================================
-; Complex34 x Short Integer --> Complex34
+; Complex x Short Integer --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Cplx:"123456 i -546" RX=ShoI:"45247#8" ;RX=19111
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"45247#8" RX=Cplx:"2359367616 i -10434606"

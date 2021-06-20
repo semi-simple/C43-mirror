@@ -13,13 +13,13 @@ Func: fnAdd
 
 ;==================================================================
 ; Short Integer + Long Integer      see in addition_longInteger.txt
-; Short Integer + Real16            see in addition_real16.txt
-; Short Integer + Complex16         see in addition_complex16.txt
+; Short Integer + Real              see in addition_real.txt
+; Short Integer + Complex           see in addition_complex.txt
 ; Short Integer + Time              see in addition_time.txt
 ; Short Integer + Date              see in addition_date.txt
 ; Short Integer + String            see in addition_string.txt
-; Short Integer + Real16 Matrix     see in addition_real16Matrix.txt
-; Short Integer + Complex16 Matrix  see in addition_complex16Matrix.txt
+; Short Integer + Real Matrix       see in addition_realMatrix.txt
+; Short Integer + Complex Matrix    see in addition_complexMatrix.txt
 ;==================================================================
 
 
@@ -33,7 +33,7 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"10000#2" RX=ShoI:"12556#10"
 
 
 ;=======================================
-; Short Integer + Real34 --> Real34
+; Short Integer + Real --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=ShoI:"45247#8" RX=Real:"123456" ;RY=19111
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"123456" RX=Real:"142567"
@@ -114,7 +114,7 @@ In:  AM=MULTPI FL_CPXRES=0 FL_ASLIFT=0 RY=ShoI:"2#13" RX=Real:"3.453099789":MULT
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"3.453099789":MULTPI RX=Real:"5.453099789":MULTPI
 
 ;=======================================
-; Real34 + Short Integer --> Real34
+; Real + Short Integer --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Real:"123456" RX=ShoI:"45247#8" ;RX=19111
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"45247#8" RX=Real:"142567"

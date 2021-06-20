@@ -13,8 +13,8 @@ Func: fnAdd
 
 ;==================================================================
 ; String + Long Integer  see in addition_longInteger.txt
-; String + Real16        see in addition_real16.txt
-; String + Complex16     see in addition_complex16.txt
+; String + Real          see in addition_real.txt
+; String + Complex       see in addition_complex.txt
 ; String + Time          see in addition_time.txt
 ; String + Date          see in addition_date.txt
 ;==================================================================
@@ -30,21 +30,21 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Stri:"WP43S!" RX=Stri:"String test WP43S!"
 
 
 ;=======================================
-; String + Real16 Matrix
+; String + Real Matrix
 ;=======================================
 
 ;=======================================
-; Real16 Matrix + String
+; Real Matrix + String
 ;=======================================
 
 
 
 ;=======================================
-; String + Complex16 Matrix
+; String + Complex Matrix
 ;=======================================
 
 ;=======================================
-; Complex16 Matrix + String
+; Complex Matrix + String
 ;=======================================
 
 

@@ -13,8 +13,8 @@ Func: fnAdd
 
 ;==================================================================
 ; Date + Long Integer  see in addition_longInteger.txt
-; Date + Real16        see in addition_real16.txt
-; Date + Complex16     see in addition_complex16.txt
+; Date + Real          see in addition_real.txt
+; Date + Complex       see in addition_complex.txt
 ; Date + Time          see in addition_time.txt
 ;==================================================================
 
@@ -37,21 +37,21 @@ Func: fnAdd
 
 
 ;=======================================
-; Date + Real16 Matrix
+; Date + Real Matrix
 ;=======================================
 
 ;=======================================
-; Real16 Matrix + Date
+; Real Matrix + Date
 ;=======================================
 
 
 
 ;=======================================
-; Date + Complex16 Matrix
+; Date + Complex Matrix
 ;=======================================
 
 ;=======================================
-; Complex16 Matrix + Date
+; Complex Matrix + Date
 ;=======================================
 
 

@@ -598,6 +598,7 @@ typedef enum {
 #define CF_CAUCHY_FITTING                        128
 #define CF_GAUSS_FITTING                         256
 #define CF_ORTHOGONAL_FITTING                    512
+#define CF_RESET                                   0
 
 // Curve fitting excluding all other curve fitting bits, 10 bits
 #define CF_LINEAR_FITTING_EX                     (~CF_LINEAR_FITTING) & 0x01FF

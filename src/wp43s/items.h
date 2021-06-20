@@ -23,6 +23,7 @@
 #include <stdint.h>
 
 
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1361,7 +1362,7 @@
 #define ITM_PARABF                    1305
 #define ITM_HYPF                      1306
 #define ITM_ROOTF                     1307
-#define ITM_1308                      1308
+#define ITM_RSTF                      1308
 #define ITM_1309                      1309
 #define ITM_1310                      1310
 #define ITM_1311                      1311

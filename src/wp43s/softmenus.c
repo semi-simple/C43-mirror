@@ -239,11 +239,16 @@ TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_
                                              ITM_CLSIGMA,                   ITM_XG,                     ITM_SCATTFACT,            ITM_SCATTFACTp,        ITM_SCATTFACTm,              ITM_NULL,
                                              ITM_LR,                        ITM_CORR,                   ITM_SXY,                  ITM_COV,               ITM_XCIRC,                   ITM_YCIRC,
                                              ITM_SA,                        ITM_XH,                     ITM_XRMS,                 ITM_XMAX,              ITM_XMIN,                    ITM_NULL,
-                                             ITM_PLOT_LRALL,                ITM_PLOT_LR,                ITM_LISTXY,               ITM_PLOT_XY,           ITM_PLOTRST,                  ITM_PLOT,
+                                             ITM_PLOT_LR,                   ITM_NULL,                   ITM_LISTXY,               ITM_PLOT_XY,           ITM_NULL,                    ITM_PLOT,
 
-                                             ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                    ITM_ORTHOF,
-                                             ITM_PARABF,                    ITM_HYPF,                   ITM_ROOTF,                ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_GAUSSF,                    ITM_CAUCHF,                 ITM_NULL,                 ITM_BESTF,             ITM_PLOT_LR,                 ITM_LR,
+//                                             ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_ORTHOF,                  ITM_NULL,
+  //                                           ITM_PARABF,                    ITM_HYPF,                   ITM_ROOTF,                ITM_NULL,              ITM_NULL,                    ITM_PLOT_LR,
+    //                                         ITM_GAUSSF,                    ITM_CAUCHF,                 ITM_NULL,                 ITM_BESTF,             ITM_NULL,                    ITM_LR,
+
+                                             ITM_LINF,                      ITM_EXPF,                  ITM_LOGF,                  ITM_POWERF,            ITM_ROOTF,                   ITM_PLOT_LRALL,
+                                             ITM_HYPF,                      ITM_PARABF,                ITM_CAUCHF,                ITM_GAUSSF,            ITM_ORTHOF,                  ITM_PLOT_LR,
+                                             ITM_RSTF,                      ITM_BESTF,                 ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_LR,
+
                 
                                              ITM_D0,                        ITM_D1,                     ITM_D2,                   ITM_D3,                ITM_D4,                      ITM_D5                        };
 
@@ -260,7 +265,7 @@ TO_QSPI const int16_t menu_PLOT_STAT[]   = {
 
 TO_QSPI const int16_t menu_PLOT_LR[]   = {
                                              ITM_PLOT_NXT,                  ITM_PLOTZOOM,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_PLOT_REV,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_PLOT_REV,                  ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 
@@ -739,7 +744,10 @@ TO_QSPI const int16_t menu_PLOT[]        = { ITM_PLOT_XY,                   ITM_
 
                                              ITM_DEMO2,                     ITM_SLV2,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
                                              ITM_DEMO3,                     ITM_SLV3,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,                           //JM GRAPH
-                                             ITM_PZOOMX,                    ITM_PZOOMY,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                        };  //JM GRAPH
+                                             ITM_PZOOMX,                    ITM_PZOOMY,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+
+                                             ITM_PLOTRST,                   ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL};                           //JM GRAPH
+
 
 
 TO_QSPI const int16_t menu_ALPHA[]       = { ITM_T_UP_ARROW,                ITM_T_DOWN_ARROW,           ITM_T_LLEFT_ARROW,        ITM_T_RRIGHT_ARROW,    ITM_T_LEFT_ARROW,            ITM_T_RIGHT_ARROW, 
@@ -1311,6 +1319,7 @@ void RB_UNCHECKED(uint32_t xx, uint32_t yy) {
 
 void CB_CHECKED(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
+  lcd_fill_rect(xx,yy-1,10,11,0);
   cbColumnCcccccccccc(xx+0, yy);
 #endif //RB_EXTRA_BORDER
   cbColumnCSssssssssC(xx+1, yy);
@@ -1331,6 +1340,7 @@ void CB_CHECKED(uint32_t xx, uint32_t yy) {
 
 void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
 #ifdef RB_EXTRA_BORDER
+  lcd_fill_rect(xx,yy-1,10,11,0);
   cbColumnCcccccccccc(xx+0, yy);
 #endif
   cbColumnCSssssssssC(xx+1, yy);

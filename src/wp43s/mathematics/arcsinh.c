@@ -67,7 +67,7 @@ void arcsinhError(void) {
  * \return void
  ***********************************************/
 void fnArcsinh(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   arcsinh[getRegisterDataType(REGISTER_X)]();
 
@@ -101,7 +101,7 @@ void arcsinhRema(void) {
 
 
 void arcsinhCxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(arcsinhCplx);
 }
 
 

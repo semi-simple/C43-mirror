@@ -66,7 +66,7 @@ void cubeError(void) {
  * \return void
  ***********************************************/
 void fnCube(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   cube[getRegisterDataType(REGISTER_X)]();
 
@@ -96,7 +96,7 @@ void cubeRema(void) {
 
 
 void cubeCxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(cubeCplx);
 }
 
 

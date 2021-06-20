@@ -66,7 +66,7 @@ void squareError(void) {
  * \return void
  ***********************************************/
 void fnSquare(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   square[getRegisterDataType(REGISTER_X)]();
 
@@ -93,7 +93,7 @@ void squareRema(void) {
 
 
 void squareCxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(squareCplx);
 }
 
 

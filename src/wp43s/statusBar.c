@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file statusbar.c Status bar management
- ***********************************************/
-
 #include "statusBar.h"
 
 #include "bufferize.h"
@@ -25,31 +21,24 @@
 #include "flags.h"
 #include "fonts.h"
 #include "gui.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "screen.h"
 #include <string.h>
-
 
 #include "wp43s.h"
 
 
 
 #ifndef TESTSUITE_BUILD
-  /********************************************//**
-   * \brief Refreshes the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void refreshStatusBar(void) {
     #if (DEBUG_INSTEAD_STATUS_BAR == 1)
       sprintf(tmpString, "%s%d %s/%s  mnu:%s fi:%d", catalog ? "asm:" : "", catalog, tam.mode ? "/tam" : "", getCalcModeName(calcMode),indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemCatalogName, softmenuStack[0].firstItem);
       showString(tmpString, &standardFont, X_DATE, 0, vmNormal, true, true);
     #else // DEBUG_INSTEAD_STATUS_BAR != 1
-      if(calcMode == CM_PLOT_STAT) lcd_fill_rect(0, 0, 158, 20, 0);
+      if(calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH) lcd_fill_rect(0, 0, 158, 20, 0);
       showDateTime();
       showHideHourGlass();
-      if(calcMode == CM_PLOT_STAT) return;    // With graph displayed, only update the time, as the other items are clashing with the graph display screen
+      if(calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH) return;    // With graph displayed, only update the time, as the other items are clashing with the graph display screen
       showRealComplexResult();
       showComplexMode();
       showAngularMode();
@@ -78,18 +67,12 @@
 
 
 
-  /********************************************//**
-   * \brief Displays date and time in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showDateTime(void) {
     lcd_fill_rect(0, 0, X_REAL_COMPLEX, 20, LCD_SET_VALUE);
 
     getDateString(dateTimeString);
     uint32_t x = showString(dateTimeString, &standardFont, X_DATE, 0, vmNormal, true, true);
-    x = showGlyph(getSystemFlag(FLAG_TDM24) ? STD_SPACE_FIGURE : STD_SPACE_3_PER_EM, &standardFont, x, 0, vmNormal, true, true); // is 0+0+8 pixel wide
+    x = showGlyph(getSystemFlag(FLAG_TDM24) ? " " : STD_SPACE_3_PER_EM, &standardFont, x, 0, vmNormal, true, true); // is 0+0+8 pixel wide
 
     getTimeString(dateTimeString);
     showString(dateTimeString, &standardFont, x, 0, vmNormal, true, false);
@@ -97,12 +80,6 @@
 
 
 
-  /********************************************//**
-   * \brief Displays the complex result mode C or R in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showRealComplexResult(void) {
     if(getSystemFlag(FLAG_CPXRES)) {
       showGlyph(STD_COMPLEX_C, &standardFont, X_REAL_COMPLEX, 0, vmNormal, true, false); // Complex C is 0+8+3 pixel wide
@@ -114,12 +91,6 @@
 
 
 
-  /********************************************//**
-   * \brief Displays the complex mode rectangular or polar in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showComplexMode(void) {
     if(getSystemFlag(FLAG_POLAR)) { // polar mode
      showGlyph(STD_SUN,           &standardFont, X_COMPLEX_MODE, 0, vmNormal, true, true); // Sun         is 0+12+2 pixel wide
@@ -131,13 +102,6 @@
 
 
 
-  /********************************************//**
-   * \brief Displays the angular mode in the status bar
-   *
-   * \param void
-   * \return void
-   *
-   ***********************************************/
   void showAngularMode(void) {
     uint32_t x = 0;
 
@@ -165,13 +129,7 @@
 
 
 
-/********************************************//**
- * \brief Displays the faction mode in the status bar
- *
- * \param void
- * \return void
- ***********************************************/
-    void conv(char * str20, char * str40) {
+     void conv(char * str20, char * str40) {
       str40[0]=0;
       int16_t x = 0;
       int16_t y = 0;
@@ -220,16 +178,16 @@ void showFracMode(void) {
     }
     return;
   }                                                                                //JM^^
-
-
-  if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {
-    showString("/max", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
-  }
-  else {
-    if((getSystemFlag(FLAG_DENANY) && denMax != MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
-      sprintf(errorMessage, "/%" PRIu32, denMax);
-      x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
+    if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {
+      showString("/max", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
     }
+    else {
+      uint32_t x = 0;
+
+      if((getSystemFlag(FLAG_DENANY) && denMax != MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
+        sprintf(errorMessage, "/%" PRIu32, denMax);
+        x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
+      }
 
       if(!getSystemFlag(FLAG_DENANY)) {
         if(getSystemFlag(FLAG_DENFIX)) {
@@ -244,15 +202,9 @@ void showFracMode(void) {
 
 
 
-  /********************************************//**
-   * \brief Displays the integer mode icon in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showIntegerMode(void) {
     if(shortIntegerWordSize <= 9) {
-      sprintf(errorMessage, STD_SPACE_FIGURE "%" PRIu8 ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
+      sprintf(errorMessage, " %" PRIu8 ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
     }
     else {
       sprintf(errorMessage, "%" PRIu8 ":%c", shortIntegerWordSize, shortIntegerMode==SIM_1COMPL?'1':(shortIntegerMode==SIM_2COMPL?'2':(shortIntegerMode==SIM_UNSIGN?'u':(shortIntegerMode==SIM_SIGNMT?'s':'?'))));
@@ -263,12 +215,6 @@ void showFracMode(void) {
 
 
 
-  /********************************************//**
-   * \brief Displays the matrix mode icon in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showMatrixMode(void) {
     if(getSystemFlag(FLAG_GROW)) {
       sprintf(errorMessage, "grow");
@@ -282,12 +228,6 @@ void showFracMode(void) {
 
 
 
-  /********************************************//**
-   * \brief Displays the overflow flag and the carry flag
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showOverflowCarry(void) {
     showGlyph(STD_OVERFLOW_CARRY, &standardFont, X_OVERFLOW_CARRY, 0, vmNormal, true, false); // STD_OVERFLOW_CARRY is 0+6+3 pixel wide
 
@@ -302,12 +242,6 @@ void showFracMode(void) {
 
 
 
-  /********************************************//**
-   * \brief Shows or hides the alpha mode
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showHideAlphaMode(void) {
     int status=0;
     if(calcMode == CM_AIM || catalog || (tam.mode != 0 && tam.alpha)) {
@@ -373,26 +307,14 @@ void showFracMode(void) {
 
 
 
-  /********************************************//**
-   * \brief Shows or hides the hourglass icon in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showHideHourGlass(void) {
     if(hourGlassIconEnabled) {
-      showGlyph(STD_HOURGLASS, &standardFont, calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
+      showGlyph(STD_HOURGLASS, &standardFont, (calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH) ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
     }
   }
 
 
 
-  /********************************************//**
-   * \brief Shows or hides the program begin icon in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showHidePgmBegin(void) {
     if(currentStep == beginOfCurrentProgram) {
       showGlyph(STD_PGM_BEGIN, &standardFont, X_PROGRAM_BEGIN, 0, vmNormal, true, false); // is 0+10+3 pixel wide
@@ -401,12 +323,6 @@ void showFracMode(void) {
 
 
 
-  /********************************************//**
-   * \brief Shows or hides the watch icon in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showHideWatch(void) {
     if(watchIconEnabled) {
       showGlyph(STD_WATCH,                    &standardFont, X_WATCH, 0, vmNormal, true, false); // is 0+13+1 pixel wide
@@ -415,12 +331,6 @@ void showFracMode(void) {
 
 
 
-  /********************************************//**
-   * \brief Shows or hides the serial I/O icon in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showHideSerialIO(void) {
     if(serialIOIconEnabled) {
       showGlyph(STD_SERIAL_IO, &standardFont, X_SERIAL_IO, 0, vmNormal, true, false); // is 0+8+3 pixel wide
@@ -429,12 +339,6 @@ void showFracMode(void) {
 
 
 
-  /********************************************//**
-   * \brief Shows or hides the printer icon in the status bar
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void showHidePrinter(void) {
     if(printerIconEnabled) {
       showGlyph(STD_PRINTER,   &standardFont, X_PRINTER, 0, vmNormal, true, false); // is 0+12+3 pixel wide
@@ -456,12 +360,6 @@ void showHideASB(void) {                     //JMvv
 
 
 
-/********************************************//**
- * \brief Shows or hides the user mode icon in the status bar
- *
- * \param void
- * \return void
- ***********************************************/
 void showHideUserMode(void) {
   if(getSystemFlag(FLAG_USER)) {
     showGlyph(STD_USER_MODE, &standardFont, X_USER_MODE, 0, vmNormal, false, false); // STD_USER_MODE is 0+12+2 pixel wide
@@ -474,12 +372,6 @@ void showHideUserMode(void) {
 
 
   #ifdef DMCP_BUILD
-    /********************************************//**
-     * \brief Shows or hides the USB or low battery icon in the status bar
-     *
-     * \param void
-     * \return void
-     ***********************************************/
     void showHideUsbLowBattery(void) {
       if(getSystemFlag(FLAG_USB)) {
         showGlyph(STD_USB, &standardFont, X_BATTERY, 0, vmNormal, true, false); // is 0+9+2 pixel wide
@@ -495,12 +387,6 @@ void showHideUserMode(void) {
 
 
   #ifndef DMCP_BUILD
-    /********************************************//**
-     * \brief Shows or hides the USB icon in the status bar
-     *
-     * \param void
-     * \return void
-     ***********************************************/
     void showHideStackLift(void) {
       if(getSystemFlag(FLAG_ASLIFT)) {
         // Draw S

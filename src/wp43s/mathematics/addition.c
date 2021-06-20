@@ -78,7 +78,7 @@ void addError(void) {
  * \return void
  ***********************************************/
 void fnAdd(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   addition[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -635,7 +635,29 @@ void addStriRema(void) {
  * \return void
  ***********************************************/
 void addStriCxma(void) {
-  fnToBeCoded();
+  int16_t len1, len2;
+
+  complex34MatrixToDisplayString(REGISTER_X, tmpString);
+
+  if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
+    displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "the resulting string would be %d (Y %d + X %d) characters long. Maximum is %d",
+                                                           stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString),
+                                                                 stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)),
+                                                                        stringGlyphLength(tmpString),  MAX_NUMBER_OF_GLYPHS_IN_STRING);
+      moreInfoOnError("In function addStriCxma:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else {
+    len1 = stringByteLength(REGISTER_STRING_DATA(REGISTER_Y));
+    len2 = stringByteLength(tmpString) + 1;
+
+    reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len1 + len2), amNone);
+
+    xcopy(REGISTER_STRING_DATA(REGISTER_X)       , REGISTER_STRING_DATA(REGISTER_Y), len1);
+    xcopy(REGISTER_STRING_DATA(REGISTER_X) + len1, tmpString,                        len2);
+  }
 }
 
 
@@ -683,7 +705,7 @@ void addStriShoI(void) {
 void addStriReal(void) {
   int16_t len1, len2;
 
-  real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &standardFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION);
+  real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_X), getRegisterAngularMode(REGISTER_X), tmpString, &standardFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION, true);
 
   if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
@@ -717,7 +739,7 @@ void addStriReal(void) {
 void addStriCplx(void) {
   int16_t len1, len2;
 
-  complex34ToDisplayString(REGISTER_COMPLEX34_DATA(REGISTER_X), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION);
+  complex34ToDisplayString(REGISTER_COMPLEX34_DATA(REGISTER_X), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION, true);
 
   if(stringGlyphLength(REGISTER_STRING_DATA(REGISTER_Y)) + stringGlyphLength(tmpString) > MAX_NUMBER_OF_GLYPHS_IN_STRING) {
     displayCalcErrorMessage(ERROR_STRING_WOULD_BE_TOO_LONG, ERR_REGISTER_LINE, REGISTER_X);
@@ -786,7 +808,10 @@ void addRemaRema(void) {
  * \return void
  ***********************************************/
 void addRemaCxma(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
+  addCxmaCxma();
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -798,7 +823,10 @@ void addRemaCxma(void) {
  * \return void
  ***********************************************/
 void addCxmaRema(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_X, REGISTER_X);
+  addCxmaCxma();
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -814,7 +842,28 @@ void addCxmaRema(void) {
  * \return void
  ***********************************************/
 void addCxmaCxma(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  complex34Matrix_t y, x;
+
+  linkToComplexMatrixRegister(REGISTER_Y, &y);
+  convertComplex34MatrixRegisterToComplex34Matrix(REGISTER_X, &x);
+
+  addComplexMatrices(&y, &x, &x);
+  if(x.matrixElements) {
+    convertComplex34MatrixToComplex34MatrixRegister(&x, REGISTER_X);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot add %d" STD_CROSS "%d-matrix to %d" STD_CROSS "%d-matrix",
+              x.header.matrixRows, x.header.matrixColumns,
+              y.header.matrixRows, y.header.matrixColumns);
+      moreInfoOnError("In function addRemaRema:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+
+  complexMatrixFree(&x);
+#endif // TESTSUITE_BUILD
 }
 
 

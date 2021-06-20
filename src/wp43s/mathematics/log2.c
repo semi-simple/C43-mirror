@@ -69,7 +69,7 @@ void log2Error(void) {
  * \return void
  ***********************************************/
 void fnLog2(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   logBase2[getRegisterDataType(REGISTER_X)]();
 
@@ -145,7 +145,7 @@ void log2Rema(void) {
 
 
 void log2Cxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(log2Cplx);
 }
 
 

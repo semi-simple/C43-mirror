@@ -67,7 +67,7 @@ void invertError(void) {
  * \return void
  ***********************************************/
 void fnInvert(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   invert[getRegisterDataType(REGISTER_X)]();
 
@@ -135,7 +135,7 @@ void invertRema(void) {
 
 
 void invertCxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(invertCplx);
 }
 
 

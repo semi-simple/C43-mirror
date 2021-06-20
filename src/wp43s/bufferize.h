@@ -14,7 +14,7 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file bufferize.h
  ***********************************************/
 #ifndef BUFFERIZE_H
@@ -22,6 +22,7 @@
 
 #include "typeDefinitions.h"
 #include <stdint.h>
+#include "realType.h"
 
 #ifndef TESTSUITE_BUILD
   void    fnAim                    (uint16_t unusedButMandatoryParameter);
@@ -33,6 +34,8 @@
 
   void    addItemToBuffer          (uint16_t item);
   void    addItemToNimBuffer       (int16_t item);
+  void    closeNimWithFraction     (real34_t *dest);
+  void    closeNimWithComplex      (real34_t *dest_r, real34_t *dest_i);
   void    closeNim                 (void);
   void    closeAim                 (void);
   void    nimBufferToDisplayBuffer (const char *buffer, char *displayBuffer);

@@ -14,13 +14,9 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file bufferize.c
- ***********************************************/
-
 #include "bufferize.h"
 
-#include "addons.h"
+#include "c43Extensions/addons.h"
 #include "charString.h"
 #include "constantPointers.h"
 #include "constants.h"
@@ -33,13 +29,13 @@
 #include "fonts.h"
 #include "gui.h"
 #include "items.h"
-#include "jm.h"
-#include "keyboardTweak.h"
+#include "c43Extensions/jm.h"
+#include "c43Extensions/keyboardTweak.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toRect.h"
 #include "mathematics/wp34s.h"
 #include "matrix.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "saveRestoreCalcState.h"
@@ -289,12 +285,6 @@ void kill_ASB_icon(void) {
 
 
 
-  /********************************************//**
-   * \brief Adds an item to the alpha buffer
-   *
-   * \param[in] item uint16_t
-   * \return void
-   ***********************************************/
   void addItemToBuffer(uint16_t item) {
 
     #ifdef PC_BUILD
@@ -733,9 +723,9 @@ void kill_ASB_icon(void) {
         switch(nimNumberPart) {
           case NP_INT_10 :
             strcat(aimBuffer, "."); // no break here
-            #ifndef __APPLE__
+            #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
           case NP_REAL_FLOAT_PART :
             strcat(aimBuffer, "e+");
             exponentSignLocation = strlen(aimBuffer) - 1;
@@ -746,9 +736,9 @@ void kill_ASB_icon(void) {
 
           case NP_COMPLEX_INT_PART :
             strcat(aimBuffer, "."); // no break here
-            #ifndef __APPLE__
+            #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
           case NP_COMPLEX_FLOAT_PART :
             strcat(aimBuffer, "e+");
             imaginaryExponentSignLocation = strlen(aimBuffer) - 1;
@@ -860,9 +850,9 @@ void kill_ASB_icon(void) {
 
           case NP_INT_10 :
             strcat(aimBuffer, "."); // no break here
-            #ifndef __APPLE__
+            #ifndef OSX
               __attribute__ ((fallthrough));
-            #endif // !__APPLE__
+            #endif // !OSX
 
           case NP_REAL_FLOAT_PART :
             imaginaryMantissaSignLocation = strlen(aimBuffer);
@@ -1012,11 +1002,25 @@ void kill_ASB_icon(void) {
           setSystemFlag(FLAG_ASLIFT);
           if(item == ITM_EXIT1) {
             saveForUndo();
+            if(lastErrorCode == ERROR_RAM_FULL) {
+              lastErrorCode = 0;
+              temporaryInformation = TI_UNDO_DISABLED;
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                moreInfoOnError("In function addItemToNimBuffer:", "there is not enough memory to save for undo!", NULL, NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            }
           }
           return;
         }
         if(item == ITM_EXIT1) {
           saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) {
+            lastErrorCode = 0;
+            temporaryInformation = TI_UNDO_DISABLED;
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              moreInfoOnError("In function addItemToNimBuffer:", "there is not enough memory to save for undo!", NULL, NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+          }
         }
         break;
 
@@ -1290,7 +1294,10 @@ void kill_ASB_icon(void) {
         case ITM_SQUAREROOTX :  //closeNim moved to keyboard.c / btnkeyrelease, as .ms is on longpress underneath sqrt
         case ITM_HASH_JM :      //closeNim simply not needed
           break;
-        default : closeNim();
+        default : 
+          if(item != -MNU_INTS && item != -MNU_BITS) {
+            closeNim();
+          }
       }
       if(calcMode != CM_NIM) {
         if(item == ITM_CONSTpi || (item >= 0 && indexOfItems[item].func == fnConstant)) {
@@ -1406,6 +1413,129 @@ void kill_ASB_icon(void) {
   }
 
 
+
+  void closeNimWithFraction(real34_t *dest) {
+    int16_t i, posSpace, posSlash, lg;
+    int32_t integer, numer, denom;
+    real34_t temp;
+
+    // Set Fraction mode
+    if(!getSystemFlag(FLAG_FRACT)) {
+      setSystemFlag(FLAG_FRACT);
+    }
+
+    lg = strlen(aimBuffer);
+
+    posSpace = 0;
+    for(i=2; i<lg; i++) {
+      if(aimBuffer[i] == ' ') {
+        posSpace = i;
+        break;
+      }
+    }
+
+    for(i=1; i<posSpace; i++) {
+      if(aimBuffer[i]<'0' || aimBuffer[i]>'9') { // This should never happen
+        displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function parseNimString:", "there is a non numeric character in the integer part of the fraction!", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
+      }
+    }
+
+    posSlash = 0;
+    for(i=posSpace+2; i<lg; i++) {
+      if(aimBuffer[i] == '/') {
+        posSlash = i;
+        break;
+      }
+    }
+
+    for(i=posSpace+1; i<posSlash; i++) {
+      if(aimBuffer[i]<'0' || aimBuffer[i]>'9') { // This should never happen
+       displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+         moreInfoOnError("In function parseNimString:", "there is a non numeric character in the numerator part of the fraction!", NULL, NULL);
+       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+       return;
+      }
+    }
+
+    for(i=posSlash+1; i<lg; i++) {
+      if(aimBuffer[i]<'0' || aimBuffer[i]>'9') {
+        displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function parseNimString:", "there is a non numeric character in the denominator part of the fraction!", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
+      }
+    }
+
+    aimBuffer[posSpace] = 0;
+    aimBuffer[posSlash] = 0;
+    integer = stringToInt32(aimBuffer + 1);
+    numer   = stringToInt32(aimBuffer + posSpace + 1);
+    denom   = stringToInt32(aimBuffer + posSlash + 1);
+
+    if(denom == 0 && !getSystemFlag(FLAG_SPCRES)) {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function parseNimString:", "the denominator of the fraction should not be 0!", "Unless D flag (Danger) is set.", NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+    }
+
+    int32ToReal34(numer, dest);
+    int32ToReal34(denom, &temp);
+    real34Divide(dest, &temp, dest);
+    int32ToReal34(integer, &temp);
+    real34Add(dest, &temp, dest);
+    if(aimBuffer[0] == '-') {
+      real34SetNegativeSign(dest);
+    }
+  }
+
+  void closeNimWithComplex(real34_t *dest_r, real34_t *dest_i) {
+    int16_t imaginarySign;
+
+    if(aimBuffer[imaginaryMantissaSignLocation] == '+') {
+      imaginarySign = 1;
+    }
+    else {
+      imaginarySign = -1;
+    }
+    aimBuffer[imaginaryMantissaSignLocation] = 0;
+
+    stringToReal34(aimBuffer, dest_r);
+
+    stringToReal34(aimBuffer + imaginaryMantissaSignLocation + 2, dest_i);
+    if(imaginarySign == -1) {
+      real34SetNegativeSign(dest_i);
+    }
+
+    if(getSystemFlag(FLAG_POLAR)) { // polar mode
+      if(real34CompareEqual(dest_r, const34_0)) {
+        real34Zero(dest_i);
+      }
+      else {
+        real_t magnitude, theta;
+
+        real34ToReal(dest_r, &magnitude);
+        real34ToReal(dest_i, &theta);
+        convertAngleFromTo(&theta, currentAngularMode, amRadian, &ctxtReal39);
+        if(realCompareLessThan(&magnitude, const_0)) {
+          realSetPositiveSign(&magnitude);
+          realAdd(&theta, const_pi, &theta, &ctxtReal39);
+          WP34S_Mod(&theta, const1071_2pi, &theta, &ctxtReal39);
+        }
+        realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39); // theta in radian
+        realToReal34(&magnitude, dest_r);
+        realToReal34(&theta,     dest_i);
+      }
+    }
+    fnSetFlag(FLAG_CPXRES);
+  }
 
   void closeNim(void) {
   //printf("closeNim\n");
@@ -1627,128 +1757,12 @@ if(!eRPN)    setSystemFlag(FLAG_ASLIFT);
 
           }
           else if(nimNumberPart == NP_FRACTION_DENOMINATOR) {
-            int16_t i, posSpace, posSlash, lg;
-            int32_t integer, numer, denom;
-            real34_t temp;
-
-            // Set Fraction mode
-            if(!getSystemFlag(FLAG_FRACT)) {
-              setSystemFlag(FLAG_FRACT);
-            }
-
-            lg = strlen(aimBuffer);
-
-            posSpace = 0;
-            for(i=2; i<lg; i++) {
-              if(aimBuffer[i] == ' ') {
-                posSpace = i;
-                break;
-              }
-            }
-
-            for(i=1; i<posSpace; i++) {
-              if(aimBuffer[i]<'0' || aimBuffer[i]>'9') { // This should never happen
-                displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-                #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                  moreInfoOnError("In function parseNimString:", "there is a non numeric character in the integer part of the fraction!", NULL, NULL);
-                #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-                return;
-              }
-            }
-
-            posSlash = 0;
-            for(i=posSpace+2; i<lg; i++) {
-              if(aimBuffer[i] == '/') {
-                posSlash = i;
-                break;
-              }
-            }
-
-            for(i=posSpace+1; i<posSlash; i++) {
-              if(aimBuffer[i]<'0' || aimBuffer[i]>'9') { // This should never happen
-               displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-               #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                 moreInfoOnError("In function parseNimString:", "there is a non numeric character in the numerator part of the fraction!", NULL, NULL);
-               #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-               return;
-              }
-            }
-
-            for(i=posSlash+1; i<lg; i++) {
-              if(aimBuffer[i]<'0' || aimBuffer[i]>'9') {
-                displayCalcErrorMessage(ERROR_BAD_INPUT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-                #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                  moreInfoOnError("In function parseNimString:", "there is a non numeric character in the denominator part of the fraction!", NULL, NULL);
-                #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-                return;
-              }
-            }
-
-            aimBuffer[posSpace] = 0;
-            aimBuffer[posSlash] = 0;
-            integer = stringToInt32(aimBuffer + 1);
-            numer   = stringToInt32(aimBuffer + posSpace + 1);
-            denom   = stringToInt32(aimBuffer + posSlash + 1);
-
-            if(denom == 0 && !getSystemFlag(FLAG_SPCRES)) {
-              displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                moreInfoOnError("In function parseNimString:", "the denominator of the fraction should not be 0!", "Unless D flag (Danger) is set.", NULL);
-              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-              return;
-            }
-
             reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-            int32ToReal34(numer, REGISTER_REAL34_DATA(REGISTER_X));
-            int32ToReal34(denom, &temp);
-            real34Divide(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
-            int32ToReal34(integer, &temp);
-            real34Add(REGISTER_REAL34_DATA(REGISTER_X), &temp, REGISTER_REAL34_DATA(REGISTER_X));
-            if(aimBuffer[0] == '-') {
-              real34SetNegativeSign(REGISTER_REAL34_DATA(REGISTER_X));
-            }
+            closeNimWithFraction(REGISTER_REAL34_DATA(REGISTER_X));
           }
           else if(nimNumberPart == NP_COMPLEX_INT_PART || nimNumberPart == NP_COMPLEX_FLOAT_PART || nimNumberPart == NP_COMPLEX_EXPONENT) {
-            int16_t imaginarySign;
-
-            if(aimBuffer[imaginaryMantissaSignLocation] == '+') {
-              imaginarySign = 1;
-            }
-            else {
-              imaginarySign = -1;
-            }
-            aimBuffer[imaginaryMantissaSignLocation] = 0;
-
             reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
-            stringToReal34(aimBuffer, REGISTER_REAL34_DATA(REGISTER_X));
-
-            stringToReal34(aimBuffer + imaginaryMantissaSignLocation + 2, REGISTER_IMAG34_DATA(REGISTER_X));
-            if(imaginarySign == -1) {
-              real34SetNegativeSign(REGISTER_IMAG34_DATA(REGISTER_X));
-            }
-
-            if(getSystemFlag(FLAG_POLAR)) { // polar mode
-              if(real34CompareEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_0)) {
-                real34Zero(REGISTER_IMAG34_DATA(REGISTER_X));
-              }
-              else {
-                real_t magnitude, theta;
-
-                real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &magnitude);
-                real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &theta);
-                convertAngleFromTo(&theta, currentAngularMode, amRadian, &ctxtReal39);
-                if(realCompareLessThan(&magnitude, const_0)) {
-                  realSetPositiveSign(&magnitude);
-                  realAdd(&theta, const_pi, &theta, &ctxtReal39);
-                  WP34S_Mod(&theta, const1071_2pi, &theta, &ctxtReal39);
-                }
-                realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39); // theta in radian
-                realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
-                realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
-              }
-            }
-            fnSetFlag(FLAG_CPXRES);
-            fnRefreshState();                                 //drJM
+            closeNimWithComplex(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_IMAG34_DATA(REGISTER_X));
           }
           else {
             sprintf(errorMessage, "In function closeNIM: %d is an unexpected nimNumberPart value!", nimNumberPart);

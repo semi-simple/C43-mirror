@@ -69,7 +69,7 @@ void m1PowError(void) {
  * \return void
  ***********************************************/
 void fnM1Pow(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   m1Pow[getRegisterDataType(REGISTER_X)]();
 
@@ -110,7 +110,7 @@ void m1PowRema(void) {
 
 
 void m1PowCxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(m1PowCplx);
 }
 
 

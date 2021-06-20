@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file stack.c Stack managenent
- ***********************************************/
-
 #include "stack.h"
 
 #include "charString.h"
@@ -29,25 +25,12 @@
 
 #include "wp43s.h"
 
-/********************************************//**
- * \brief Clears X and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnClX(uint16_t unusedButMandatoryParameter) {
   clearRegister(REGISTER_X);
 }
 
 
 
-/********************************************//**
- * \brief Clears the stack and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- *
- ***********************************************/
 void fnClearStack(uint16_t unusedButMandatoryParameter) {
   for(calcRegister_t regist=REGISTER_X; regist<=getStackTop(); regist++) {
     clearRegister(regist);
@@ -56,12 +39,6 @@ void fnClearStack(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Drops X from the stack and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnDrop(uint16_t unusedButMandatoryParameter) {
   freeRegisterData(REGISTER_X);
   for(calcRegister_t regist=REGISTER_X; regist<getStackTop(); regist++) {
@@ -75,14 +52,6 @@ void fnDrop(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Lifts the stack if allowed and reallocates
- * the X register
- *
- * \param[in] dataType uint32_t Data type of the new X register
- * \param[in] numBytes uint32_t Number of bytes allocated to the new X register
- * \return void
- ***********************************************/
 void liftStack(void) {
   if(getSystemFlag(FLAG_ASLIFT)) {
     freeRegisterData(getStackTop());
@@ -100,12 +69,6 @@ void liftStack(void) {
 
 
 
-/********************************************//**
- * \brief Drops Y from the stack and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnDropY(uint16_t unusedButMandatoryParameter) {
   freeRegisterData(REGISTER_Y);
   for(uint16_t i=REGISTER_Y; i<getStackTop(); i++) {
@@ -113,18 +76,18 @@ void fnDropY(uint16_t unusedButMandatoryParameter) {
   }
 
   uint16_t sizeInBlocks = getRegisterFullSize(getStackTop());
-  setRegisterDataPointer(getStackTop() - 1, allocWp43s(sizeInBlocks));
-  xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), TO_BYTES(sizeInBlocks));
+  void *dataPtr = allocWp43s(sizeInBlocks);
+  if(dataPtr) {
+    setRegisterDataPointer(getStackTop() - 1, dataPtr);
+    xcopy(REGISTER_DATA(getStackTop() - 1), REGISTER_DATA(getStackTop()), TO_BYTES(sizeInBlocks));
+  }
+  else {
+    lastErrorCode = ERROR_RAM_FULL;
+  }
 }
 
 
 
-/********************************************//**
- * \brief Rolls the stack up and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnRollUp(uint16_t unusedButMandatoryParameter) {
   registerHeader_t savedRegisterHeader = globalRegister[getStackTop()];
 
@@ -136,12 +99,6 @@ void fnRollUp(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Rolls the stack down and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnRollDown(uint16_t unusedButMandatoryParameter) {
   registerHeader_t savedRegisterHeader = globalRegister[REGISTER_X];
 
@@ -153,12 +110,6 @@ void fnRollDown(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the number of stack registers displayed
- *
- * \param[in] numberOfStackLines uint16_t
- * \return void
- ***********************************************/
 void fnDisplayStack(uint16_t numberOfStackLines) {
   displayStack = numberOfStackLines;
 }
@@ -168,17 +119,11 @@ void fnShoiXRepeats(uint16_t numberOfRepeats) {           //JM SHOIDISP
 }
 
 
-/********************************************//**
- * \brief Swaps X with the target register
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnSwapX(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_X, TEMP_REGISTER_1);
-    copySourceRegisterToDestRegister(regist, REGISTER_X);
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
+    registerHeader_t savedRegisterHeader = globalRegister[REGISTER_X];
+    globalRegister[REGISTER_X] = globalRegister[regist];
+    globalRegister[regist] = savedRegisterHeader;
   }
 
   #ifdef PC_BUILD
@@ -191,17 +136,11 @@ void fnSwapX(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Swaps Y with the target register
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnSwapY(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Y, TEMP_REGISTER_1);
-    copySourceRegisterToDestRegister(regist, REGISTER_Y);
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
+    registerHeader_t savedRegisterHeader = globalRegister[REGISTER_Y];
+    globalRegister[REGISTER_Y] = globalRegister[regist];
+    globalRegister[regist] = savedRegisterHeader;
   }
 
   #ifdef PC_BUILD
@@ -213,17 +152,11 @@ void fnSwapY(uint16_t regist) {
 }
 
 
-/********************************************//**
- * \brief Swaps Z with the target register
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnSwapZ(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_Z, TEMP_REGISTER_1);
-    copySourceRegisterToDestRegister(regist, REGISTER_Z);
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
+    registerHeader_t savedRegisterHeader = globalRegister[REGISTER_Z];
+    globalRegister[REGISTER_Z] = globalRegister[regist];
+    globalRegister[regist] = savedRegisterHeader;
   }
 
   #ifdef PC_BUILD
@@ -235,17 +168,11 @@ void fnSwapZ(uint16_t regist) {
 }
 
 
-/********************************************//**
- * \brief Swaps T with the target register
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnSwapT(uint16_t regist) {
   if(regist < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
-    copySourceRegisterToDestRegister(REGISTER_T, TEMP_REGISTER_1);
-    copySourceRegisterToDestRegister(regist, REGISTER_T);
-    copySourceRegisterToDestRegister(TEMP_REGISTER_1, regist);
+    registerHeader_t savedRegisterHeader = globalRegister[REGISTER_T];
+    globalRegister[REGISTER_T] = globalRegister[regist];
+    globalRegister[regist] = savedRegisterHeader;
   }
 
   #ifdef PC_BUILD
@@ -257,12 +184,6 @@ void fnSwapT(uint16_t regist) {
 }
 
 
-/********************************************//**
- * \brief Swaps X and Y and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnSwapXY(uint16_t unusedButMandatoryParameter) {
   registerHeader_t savedRegisterHeader = globalRegister[REGISTER_X];
 
@@ -270,19 +191,6 @@ void fnSwapXY(uint16_t unusedButMandatoryParameter) {
   globalRegister[REGISTER_Y] = savedRegisterHeader;
 }
 
-/********************************************//**
- * \brief Shuffles the registers and and refreshes the stack.
- * the Shuffle order determined from the parameter with each
- * consecutive two bits indicating the number above the X
- * register
- *
- * For example
- * - 11100100 indicates X, Y, Z, T
- * - 10110001 indicates Z, T, X, Y
- *
- * \param[in] regist_order uint16_t
- * \return void
- ***********************************************/
 void fnShuffle(uint16_t regist_order) {
   for(int i=0; i<4; i++) {
     uint16_t regist_offset = (regist_order >> (i*2)) & 3;
@@ -292,12 +200,6 @@ void fnShuffle(uint16_t regist_order) {
 
 
 
-/********************************************//**
- * \brief Fills the stack with the value of X and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnFillStack(uint16_t unusedButMandatoryParameter) {
   uint16_t dataTypeX         = getRegisterDataType(REGISTER_X);
   uint16_t dataSizeXinBlocks = getRegisterFullSize(REGISTER_X);
@@ -307,19 +209,19 @@ void fnFillStack(uint16_t unusedButMandatoryParameter) {
     freeRegisterData(i);
     setRegisterDataType(i, dataTypeX, tag);
     void *newDataPointer = allocWp43s(dataSizeXinBlocks);
-    setRegisterDataPointer(i, newDataPointer);
-    xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), TO_BYTES(dataSizeXinBlocks));
+    if(newDataPointer) {
+      setRegisterDataPointer(i, newDataPointer);
+      xcopy(newDataPointer, REGISTER_DATA(REGISTER_X), TO_BYTES(dataSizeXinBlocks));
+    }
+    else {
+      lastErrorCode = ERROR_RAM_FULL;
+      return;
+    }
   }
 }
 
 
 
-/********************************************//**
- * \brief Sets X to the stack size and refreshes the stack
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnGetStackSize(uint16_t unusedButMandatoryParameter) {
   longInteger_t stack;
 
@@ -342,10 +244,24 @@ void saveForUndo(void) {
 
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(regist, SAVED_REGISTER_X - REGISTER_X + regist);
+    if(lastErrorCode == ERROR_RAM_FULL) {
+#ifdef PC_BUILD
+      printf("In function saveForUndo: not enough space for saving register #%" PRId16 "!\n", regist); fflush(stdout);
+#endif // PC_BUILD
+      goto failed;
+    }
   }
 
   copySourceRegisterToDestRegister(REGISTER_L, SAVED_REGISTER_L);
+  if(lastErrorCode == ERROR_RAM_FULL) {
+#ifdef PC_BUILD
+    printf("In function saveForUndo: not enough space for saving register L!\n"); fflush(stdout);
+#endif // PC_BUILD
+    goto failed;
+  }
 
+  lrSelectionUndo = lrSelection;  
+  //printf(">>>Storing for UNDO lrSelectionUndo = %i \n",lrSelection);
   if(statisticalSumsPointer == NULL) { // There are no statistical sums to save for undo
     if(savedStatisticalSumsPointer != NULL) {
       freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
@@ -353,6 +269,7 @@ void saveForUndo(void) {
     }
   }
   else { // There are statistical sums to save for undo
+    lrChosenUndo = lrChosen;
     if(savedStatisticalSumsPointer == NULL) {
       savedStatisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
@@ -360,6 +277,16 @@ void saveForUndo(void) {
   }
 
   thereIsSomethingToUndo = true;
+  return;
+
+failed:
+  for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
+    clearRegister(SAVED_REGISTER_X - REGISTER_X + regist);
+  }
+  clearRegister(SAVED_REGISTER_L);
+  thereIsSomethingToUndo = false;
+  lastErrorCode = ERROR_RAM_FULL;
+  return;
 }
 
 
@@ -382,13 +309,17 @@ void undo(void) {
 
   copySourceRegisterToDestRegister(SAVED_REGISTER_L, REGISTER_L);
 
+  //printf(">>>UNDOING lrSelection was %i becomes %i\n",lrSelection,lrSelectionUndo);
+  lrSelection = lrSelectionUndo;
   if(savedStatisticalSumsPointer == NULL) { // There are no statistical sums to restore
     if(statisticalSumsPointer != NULL) {
       freeWp43s(statisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
       statisticalSumsPointer = NULL;
+      lrChosen = 0;
     }
   }
   else { // There are statistical sums to restore
+    lrChosen = lrChosenUndo;
     if(statisticalSumsPointer == NULL) {
       statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }

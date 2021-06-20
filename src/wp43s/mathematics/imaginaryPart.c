@@ -24,6 +24,8 @@
 #include "debug.h"
 #include "error.h"
 #include "items.h"
+#include "matrix.h"
+#include "registerValueConversions.h"
 #include "registers.h"
 
 #include "wp43s.h"
@@ -62,14 +64,28 @@ void imagPartError(void) {
  * \return void
  ***********************************************/
 void fnImaginaryPart(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
   imagPart[getRegisterDataType(REGISTER_X)]();
 }
 
 
 
 void imagPartCxma(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  complex34Matrix_t cMat;
+  real34Matrix_t rMat;
+
+  linkToComplexMatrixRegister(REGISTER_X, &cMat);
+  if(realMatrixInit(&rMat, cMat.header.matrixRows, cMat.header.matrixColumns)) {
+    for(uint16_t i = 0; i < cMat.header.matrixRows * cMat.header.matrixColumns; ++i) {
+      real34Copy(VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]), &rMat.matrixElements[i]);
+    }
+
+    convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X); // cMat invalidates here
+    realMatrixFree(&rMat);
+  }
+  else lastErrorCode = ERROR_RAM_FULL;
+#endif // TESTSUITE_BUILD
 }
 
 

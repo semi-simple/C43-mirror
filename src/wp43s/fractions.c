@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file fractions.c
- ***********************************************/
-
 #include "fractions.h"
 
 #include "constantPointers.h"
@@ -34,7 +30,7 @@
 void fnDenMax(uint16_t unusedButMandatoryParameter) {
   real_t reX;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getRegisterDataType(REGISTER_X) == dtReal34) {
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &reX);

@@ -233,7 +233,6 @@ agm
 decomp
 ;             jmhold
 
-matrix
 dot
 cross
 

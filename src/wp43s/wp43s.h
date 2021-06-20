@@ -14,9 +14,9 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file wp43s.h
- ***********************************************/
+ */
 
 #ifndef WP43S_H
 #define WP43S_H
@@ -24,14 +24,14 @@
   #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 
-  #if (__linux__ == 1)
+  #ifdef LINUX
     #include <math.h>
-  #endif // (__linux__ == 1)
+  #endif // LINUX
 
-  #ifdef __APPLE__
+  #ifdef OSX
     // needed by chdir
     #include <unistd.h>
-  #endif // __APPLE__
+  #endif // OSX
 
   #ifdef PC_BUILD
     #include <glib.h>
@@ -39,9 +39,9 @@
     #include <gdk/gdk.h>
   #endif // PC_BUILD
 
-  #ifdef __MINGW64__
+  #ifdef WIN32
     #include <locale.h>
-  #endif // __MINGW64__
+  #endif // WIN32
 
   #ifdef DMCP_BUILD
     #define DBG_PRINT
@@ -55,64 +55,9 @@
     #include <dmcp.h>
   #endif // DMCP_BUILD
 
-  #include "decNumberWrappers.h"
   #include "mathematics/pcg_basic.h"
+  #include "realType.h"
   #include "typeDefinitions.h"
-
-/*
-  #include "assign.h"
-  #include "ui/tam.h"
-  #include "bufferize.h"
-  #include "browsers/browsers.h"
-  #include "config.h"
-  #include "conversionAngles.h"
-  #include "conversionUnits.h"
-  #include "curveFitting.h"
-  #include "dateTime.h"
-  #include "constants.h"
-  #include "debug.h"
-  #include "error.h"
-  #include "flags.h"
-  #include "fractions.h"
-  #include "fonts.h"
-  #include "charString.h" // must be after font.h
-  #include "display.h"    // must be after font.h
-  #include "distributions/distributions.h"
-  #include "gui.h"
-  #include "integers.h"
-  #include "items.h"
-  #include "keyboard.h"
-  #include "logicalOps/logicalOps.h"
-  #include "mathematics/mathematics.h"
-  #include "memory.h"
-  #include "programming/programming.h"
-  #include "plotstat.h"
-  #include "recall.h"
-  #include "registers.h"
-  #include "registerValueConversions.h"
-  #include "saveRestoreCalcState.h"
-  #include "screen.h"
-  #include "softmenus.h"
-  #include "sort.h"
-  #include "stack.h"
-  #include "stats.h"
-  #include "statusBar.h"
-  #include "store.h"
-  #include "stringFuncs.h"
-  #include "timer.h"
-  #include "jm_graph.h"                   //JM include 
-  #include "graphs.h"                     //JM include 
-  #include "jm.h"                         //JM include
-  #include "addons.h"                     //JM include
-  #include "graphText.h"                  //JM include
-  #include "textfiles.h"                  //JM include
-  #include "xeqm.h"                       //JM include
-  #include "keyboardTweak.h"              //dr
-  #include "radioButtonCatalog.h"         //dr
-  #ifdef INLINE_TEST                      //vv dr
-    #include "inlineTest.h"
-  #endif                                  //^^
-*/
 
   // Variables for the simulator
   #if defined(PC_BUILD) || defined (TESTSUITE_BUILD)
@@ -146,7 +91,7 @@
   extern const font_t                   *fontForShortInteger;
   extern const font_t                   *cursorFont;
   extern const char                      digits[17];
-  extern real34Matrix_t                  openMatrixMIMPointer;
+  extern any34Matrix_t                   openMatrixMIMPointer;
   extern uint16_t                        matrixIndex;
   extern void                            (* const addition[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
   extern void                            (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void);
@@ -315,10 +260,13 @@
   extern uint16_t               currentLocalStepNumber;
   extern uint16_t               currentProgramNumber;
   extern uint16_t               lrSelection;
+  extern uint16_t               lrSelectionUndo;
   extern uint16_t               lrChosen;
+  extern uint16_t               lrChosenUndo;
   extern uint16_t               lastPlotMode;
   extern uint16_t               plotSelection;
-  
+  //extern uint16_t               largeur; // For the real34 width test
+
   extern int32_t                numberOfFreeMemoryRegions;
   extern int32_t                lgCatalogSelection;
 

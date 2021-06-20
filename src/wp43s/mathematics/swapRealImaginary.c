@@ -25,6 +25,7 @@
 #include "error.h"
 #include "fonts.h"
 #include "items.h"
+#include "matrix.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 
@@ -64,14 +65,25 @@ void swapReImError(void) {
  * \return void
  ***********************************************/
 void fnSwapRealImaginary(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
   swapReIm[getRegisterDataType(REGISTER_X)]();
 }
 
 
 
 void swapReImCxma(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  complex34Matrix_t cMat;
+  real34_t tmp;
+
+  linkToComplexMatrixRegister(REGISTER_X, &cMat);
+
+  for(uint16_t i = 0; i < cMat.header.matrixRows * cMat.header.matrixColumns; ++i) {
+    real34Copy(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), &tmp);
+    real34Copy(VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]), VARIABLE_REAL34_DATA(&cMat.matrixElements[i]));
+    real34Copy(&tmp                                         , VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]));
+  }
+#endif // TESTSUITE_BUILD
 }
 
 

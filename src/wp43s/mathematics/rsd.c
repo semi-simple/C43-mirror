@@ -111,7 +111,7 @@ void rsdError(uint16_t unusedButMandatoryParameter) {
  * \return void
  ***********************************************/
 void fnRsd(uint16_t digits) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   Rsd[getRegisterDataType(REGISTER_X)](digits);
 
@@ -194,7 +194,7 @@ void rsdRema(uint16_t digits) {
 
 
 void rsdCxma(uint16_t digits) {
-  fnToBeCoded();
+  elementwiseCxma_UInt16(rsdCplx, digits);
 }
 
 

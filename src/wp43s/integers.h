@@ -14,13 +14,13 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file integers.h
- ***********************************************/
+ */
 #ifndef INTEGERS_H
 #define INTEGERS_H
 
-#include "gmpWrappers.h"
+#include "longIntegerType.h"
 #include <stdint.h>
 
 void     fnChangeBase                (uint16_t base);

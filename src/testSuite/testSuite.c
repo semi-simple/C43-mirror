@@ -20,7 +20,8 @@
 
 #include "testSuite.h"
 
-#include "addons.h"
+#include "c43Extensions/addons.h"
+#include "bufferize.h"
 #include "charString.h"
 #include "config.h"
 #include "constants.h"
@@ -36,6 +37,7 @@
 #include "items.h"
 #include "logicalOps/logicalOps.h"
 #include "mathematics/mathematics.h"
+#include "memory.h"
 #include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -44,6 +46,7 @@
 #include "stats.h"
 #include "store.h"
 #include <string.h>
+#include <libgen.h>
 
 #include "wp43s.h"
 
@@ -58,7 +61,7 @@ extern const int16_t menu_alpha_INTL[];
 extern const int16_t menu_alpha_intl[];
 extern const int16_t menu_REGIST[];
 extern const softmenu_t softmenu[];
-char line[100000], lastInParameters[10000], fileName[1000], filePath[1000], filePathName[2000], registerExpectedAndValue[1000], realString[1000];
+char line[100000], lastInParameters[10000], fileName[1000], *filePath, filePathName[2000], registerExpectedAndValue[1000], realString[1000];
 int32_t lineNumber, numTestsFile, numTestsTotal, failedTests;
 int32_t functionIndex, funcType, correctSignificantDigits;
 void (*funcNoParam)(uint16_t);
@@ -2335,18 +2338,17 @@ void checkCatalogsSorting(void) {
 
 
 
-int processTests(void) {
+int processTests(const char *listPath) {
   FILE *fileList;
+  char *listPathDup = strdup(listPath);
+  filePath = dirname(listPathDup);
 
   checkCatalogsSorting();
 
   numTestsTotal = 0;
   failedTests = 0;
 
-  strcpy(filePath, "src/testSuite"); // without trailing /
-
-  sprintf(filePathName, "%s/testSuiteList.txt", filePath);
-  fileList = fopen(filePathName, "rb");
+  fileList = fopen(listPath, "rb");
   if(fileList == NULL) {
     printf("Cannot open file testSuiteList.txt!\n");
     exit(-1);
@@ -2372,5 +2374,48 @@ int processTests(void) {
   printf("* %6d TEST%c FAILED              *\n", failedTests, failedTests == 1 ? ' ' : 'S');
   printf("************************************\n");
 
-  return numTestsTotal > 0;
+  free(listPathDup);
+
+  return failedTests > 0;
+}
+
+int main(int argc, char* argv[]) {
+  int exitCode;
+
+  if(argc < 2) {
+    printf("Usage: testSuite <list file>\n");
+    return 1;
+  }
+
+  wp43sMemInBlocks = 0;
+  gmpMemInBytes = 0;
+  mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
+
+  fnReset(CONFIRMED);
+
+  /*
+  longInteger_t li;
+  longIntegerInit(li);
+  uIntToLongInteger(1, li);
+  convertLongIntegerToLongIntegerRegister(li, REGISTER_Z);
+  uIntToLongInteger(2, li);
+  convertLongIntegerToLongIntegerRegister(li, REGISTER_Y);
+  uIntToLongInteger(2203, li);
+  convertLongIntegerToLongIntegerRegister(li, REGISTER_X);
+  fnPower(NOPARAM);
+  fnSwapXY(NOPARAM);
+  fnSubtract(NOPARAM);
+  printf("a\n");
+  fnIsPrime(NOPARAM);
+  printf("b\n");
+  longIntegerFree(li);
+  return 0;
+  */
+
+
+  exitCode = processTests(argv[1]);
+  printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
+  debugMemory("End of testsuite");
+
+  return exitCode;
 }

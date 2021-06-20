@@ -27,13 +27,7 @@
 
 #include "defines.h"
 
-#if (IBM_DECIMAL == 1)
- #include "decimal128.h"
- #include "decimal64.h"
- #include "decDouble.h"
- #include "decQuad.h"
- #include "decNumberWrappers.h"
-#endif // (IBM_DECIMAL == 1)
+#include "realType.h"
 
 realContext_t ctxtReal34, ctxtReal39, ctxtReal51, ctxtReal1071;
 
@@ -66,7 +60,9 @@ void *xcopy(void *dest, const void *source, int n) {
 void generateConstantArray(char *name, char *value) {
   real39_t real39;
 
+#ifdef DEBUG
   printf("generateConstantArray: %-10.10s = %s\n", name, value);
+#endif
 
   memset(&real39, 0, sizeof(real39_t));
   stringToReal(value, (real_t *)&real39, &ctxtReal39);
@@ -107,7 +103,9 @@ void generateConstantArray(char *name, char *value) {
 void generateConstantArray34(char *name, char *value) {
   real34_t real34;
 
+#ifdef DEBUG
   printf("generateConstantArray34: %-10.10s = %s\n", name, value);
+#endif
 
   memset(&real34, 0, sizeof(real34_t));
   stringToReal34(value, &real34);
@@ -143,7 +141,9 @@ void generateConstantArray34(char *name, char *value) {
 void generateConstantArray51(char *name, char *value) {
   real51_t real51;
 
+#ifdef DEBUG
   printf("generateConstantArray51: %-10.10s = %s\n", name, value);
+#endif
 
   memset(&real51, 0, sizeof(real51_t));
   stringToReal(value, (real_t *)&real51, &ctxtReal51);
@@ -179,7 +179,9 @@ void generateConstantArray51(char *name, char *value) {
 void generateConstantArray1071(char *name, char *value) {
   real1071_t real1071;
 
+#ifdef DEBUG
   printf("generateConstantArray1071: %-9.9s = %s\n", name, value);
+#endif
 
   memset(&real1071, 0, sizeof(real1071_t));
   stringToReal(value, (real_t *)&real1071, &ctxtReal1071);
@@ -732,11 +734,6 @@ void generateAllConstants(void) {
 
 
 int main(int argc, char* argv[]) {
-  #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no longer in the correct directory! Why?
-    (*strstr(argv[0], "/bin/")) = 0;
-    chdir(argv[0]);
-  #endif // CODEBLOCKS_OVER_SCORE
-
   if(argc < 3) {
     printf("Usage: generateConstants <c file> <h file>\n");
     return 1;
@@ -798,7 +795,7 @@ int main(int argc, char* argv[]) {
   fprintf(constantsH, "#ifndef CONSTANTPOINTERS_H\n");
   fprintf(constantsH, "#define CONSTANTPOINTERS_H\n\n");
 
-  fprintf(constantsH, "#include \"decNumberWrappers.h\"\n");
+  fprintf(constantsH, "#include \"realType.h\"\n");
   fprintf(constantsH, "#include <stdint.h>\n\n");
 
   fprintf(constantsH, "%s", defines);

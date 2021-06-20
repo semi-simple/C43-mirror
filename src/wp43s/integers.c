@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file integers.c
- ***********************************************/
-
 #include "integers.h"
 
 #include "constantPointers.h"
@@ -27,7 +23,7 @@
 #include "flags.h"
 #include "fonts.h"
 #include "mathematics/wp34s.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 

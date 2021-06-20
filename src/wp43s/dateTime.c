@@ -464,7 +464,7 @@ void checkTimeRange(const real34_t *time34) {
 void fnJulianToDate(uint16_t unusedButMandatoryParameter) {
   real34_t date;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
@@ -491,7 +491,7 @@ void fnJulianToDate(uint16_t unusedButMandatoryParameter) {
 void fnDateToJulian(uint16_t unusedButMandatoryParameter) {
   real34_t jd34;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(checkDateArgument(REGISTER_X, &jd34)) {
     convertReal34ToLongIntegerRegister(&jd34, REGISTER_X, DEC_ROUND_FLOOR);
@@ -542,7 +542,7 @@ void fnGetFirstGregorianDay(uint16_t unusedButMandatoryParameter) {
 }
 
 void fnXToDate(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtDate:
@@ -572,7 +572,7 @@ void fnXToDate(uint16_t unusedButMandatoryParameter) {
 void fnYear(uint16_t unusedButMandatoryParameter) {
   real34_t y, m, d, j;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(checkDateArgument(REGISTER_X, &j)) {
     decomposeJulianDay(&j, &y, &m, &d);
@@ -583,7 +583,7 @@ void fnYear(uint16_t unusedButMandatoryParameter) {
 void fnMonth(uint16_t unusedButMandatoryParameter) {
   real34_t y, m, d, j;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(checkDateArgument(REGISTER_X, &j)) {
     decomposeJulianDay(&j, &y, &m, &d);
@@ -594,7 +594,7 @@ void fnMonth(uint16_t unusedButMandatoryParameter) {
 void fnDay(uint16_t unusedButMandatoryParameter) {
   real34_t y, m, d, j;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(checkDateArgument(REGISTER_X, &j)) {
     decomposeJulianDay(&j, &y, &m, &d);
@@ -606,7 +606,7 @@ void fnWday(uint16_t unusedButMandatoryParameter) {
   const uint32_t dayOfWeek = getDayOfWeek(REGISTER_X);
   longInteger_t result;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(dayOfWeek != 0) {
     longIntegerInit(result);
@@ -620,7 +620,7 @@ void fnWday(uint16_t unusedButMandatoryParameter) {
 void fnDateTo(uint16_t unusedButMandatoryParameter) {
   real34_t y, m, d, j;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(checkDateArgument(REGISTER_X, &j)) {
     liftStack();
@@ -638,16 +638,22 @@ void fnToDate(uint16_t unusedButMandatoryParameter) {
   calcRegister_t r[3] = {REGISTER_Z, REGISTER_Y, REGISTER_X};
   int32_t i;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(getSystemFlag(FLAG_DMY)) {
-    part[0] = &d; part[1] = &m; part[2] = &y;
+    part[0] = &d;
+    part[1] = &m;
+    part[2] = &y;
   }
   else if(getSystemFlag(FLAG_MDY)) {
-    part[0] = &m; part[1] = &d; part[2] = &y;
+    part[0] = &m;
+    part[1] = &d;
+    part[2] = &y;
   }
   else {
-    part[0] = &y; part[1] = &m; part[2] = &d;
+    part[0] = &y;
+    part[1] = &m;
+    part[2] = &d;
   }
 
   for(i = 0; i < 3; ++i) {
@@ -683,19 +689,23 @@ void fnToDate(uint16_t unusedButMandatoryParameter) {
 
   // valid date
   fnDropY(NOPARAM);
-  fnDropY(NOPARAM);
-  composeJulianDay(&y, &m, &d, &j);
-  reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
-  julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
+  if(lastErrorCode == ERROR_NONE) {
+    fnDropY(NOPARAM);
+    if(lastErrorCode == ERROR_NONE) {
+      composeJulianDay(&y, &m, &d, &j);
+      reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
+      julianDayToInternalDate(&j, REGISTER_REAL34_DATA(REGISTER_X));
 
-  // check range
-  checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+      // check range
+      checkDateRange(REGISTER_REAL34_DATA(REGISTER_X));
+    }
+  }
   if(lastErrorCode != 0) undo();
 }
 
 
 void fnToHr(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtTime:
@@ -721,7 +731,7 @@ void fnToHms(uint16_t unusedButMandatoryParameter) {
       break;
 
     default:                             //JM ^^
-      copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+      if(!saveLastX()) return;
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger :

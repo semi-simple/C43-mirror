@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file keyboard.c Keyboard management
- ***********************************************/
-
 #include "keyboard.h"
 
 #include "bufferize.h"
@@ -30,8 +26,8 @@
 #include "gui.h"
 #include "items.h"
 #include "matrix.h"
-#include "jm.h"
-#include "keyboardTweak.h"
+#include "c43Extensions/jm.h"
+#include "c43Extensions/keyboardTweak.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
@@ -115,13 +111,6 @@
 
 
 
-  /********************************************//**
-   * \brief Simulate a function key click.
-   *
-   * \param notUsed GtkWidget* The button to pass to btnFnPressed and btnFnReleased
-   * \param data gpointer String containing the key ID
-   * \return void
-   ***********************************************/
   #ifdef PC_BUILD
     void btnFnClicked(GtkWidget *notUsed, gpointer data) {
   #endif
@@ -151,13 +140,6 @@
 bool_t lastshiftF = false;
 bool_t lastshiftG = false;
 
-  /********************************************//**
-   * \brief A calc function key was pressed
-   *
-   * \param notUsed GtkWidget*
-   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
-   * \return void
-   ***********************************************/
   #ifdef PC_BUILD
     void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
       if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // double click
@@ -211,13 +193,6 @@ bool_t lastshiftG = false;
 
 
 
-  /********************************************//**
-   * \brief A calc function key was released
-   *
-   * \param notUsed GtkWidget*
-   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
-   * \return void
-   ***********************************************/
   #ifdef PC_BUILD
     void btnFnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
   #endif // PC_BUILD
@@ -375,8 +350,8 @@ bool_t lastshiftG = false;
       return ITM_NOP;
     }
 
-    // Shift g pressed and shift f not active
-    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
+    // Shift g pressed and JM REMOVED shift f not active
+    else if(key->primary == ITM_SHIFTg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {
       temporaryInformation = TI_NO_INFO;
       lastErrorCode = 0;
 
@@ -437,7 +412,7 @@ bool_t lastshiftG = false;
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH || calcMode == CM_LISTXY) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -474,13 +449,6 @@ bool_t lastshiftG = false;
 
 
 
-  /********************************************//**
-   * \brief Simulate a button click.
-   *
-   * \param notUsed GtkWidget* The button to pass to btnPressed and btnReleased
-   * \param data gpointer String containing the key ID
-   * \return void
-   ***********************************************/
   #ifdef PC_BUILD
     void btnClicked(GtkWidget *notUsed, gpointer data) {
       GdkEvent mouseButton;
@@ -606,13 +574,6 @@ bool_t lastshiftG = false;
 
 
 
-  /********************************************//**
-   * \brief A calc button was released
-   *
-   * \param notUsed GtkWidget*
-   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
-   * \return void
-   ***********************************************/
   #ifdef PC_BUILD
     void btnReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
       jm_show_calc_state("##### keyboard.c: btnReleased begin");
@@ -799,13 +760,6 @@ bool_t lowercaseselected;
 
 
 
-  /********************************************//**
-   * \brief A calc button was pressed
-   *
-   * \param w GtkWidget*
-   * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
-   * \return void
-   ***********************************************/
   void processKeyAction(int16_t item) {
     keyActionProcessed = false;
     lowercaseselected = ((alphaCase == AC_LOWER && !lastshiftF) || (alphaCase == AC_UPPER && lastshiftF /*&& !numLock*/)); //JM remove last !numlock if you want the shift, during numlock, to produce lower case
@@ -816,6 +770,8 @@ bool_t lowercaseselected;
 
     temporaryInformation = TI_NO_INFO;
 
+    //longInteger_t lgInt; // For the real34 width test
+    //longIntegerInit(lgInt); // For the real34 width test
     switch(item) {
       case ITM_BACKSPACE:
 //        keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
@@ -1114,7 +1070,9 @@ bool_t lowercaseselected;
             case CM_LISTXY:                     //JM VV
             case CM_GRAPH:
                 if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
-                  calcMode = previousCalcMode;
+//                  calcMode = previousCalcMode;
+                fnPlotClose(0);
+
                 }
                 keyActionProcessed = true;
                 break;                            //JM ^^
@@ -1251,12 +1209,6 @@ static void menuUp(void) {
 #endif // TESTSUITE_BUILD
 
 
-/********************************************//**
- * \brief Processing ENTER key
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
   #ifndef TESTSUITE_BUILD
@@ -1265,10 +1217,13 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         if( !eRPN ) {                                    //JM NEWERPN
         setSystemFlag(FLAG_ASLIFT);
         saveForUndo();
+        if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
 
         liftStack();
+        if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
         //printf("ERPN--1\n");
+        if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         clearSystemFlag(FLAG_ASLIFT);
       }                                               //JM NEWERPN vv
       else {
@@ -1277,6 +1232,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
          liftStack();
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           //printf("ERPN--2\n");
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         }   
       clearSystemFlag(FLAG_ASLIFT);                   //JM NEWERPN (COMMENT: THESE ARE NOT NEEDED AS IT GET OVERWRITTEN BY RUNFN)
       }                                               //JM NEWERPN ^^
@@ -1302,13 +1258,17 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           if( !eRPN ) {                                    //JM NEWERPN
             setSystemFlag(FLAG_ASLIFT);
             saveForUndo();
+            if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
             liftStack();
+            if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
             clearSystemFlag(FLAG_ASLIFT);
 
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+            if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
             aimBuffer[0] = 0;
           } else {
-//              saveForUndo();
+//            saveForUndo();
+//            if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
               setSystemFlag(FLAG_ASLIFT);
               aimBuffer[0] = 0;
           }
@@ -1326,17 +1286,23 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         if(calcMode != CM_NIM && lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
           saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
           liftStack();
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
           clearSystemFlag(FLAG_ASLIFT);
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         }
       } else {
         if(getSystemFlag(FLAG_ASLIFT)) {
         if(calcMode != CM_NIM && lastErrorCode == 0) {
             saveForUndo();
+            if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
             liftStack();
+            if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
             clearSystemFlag(FLAG_ASLIFT);
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+            if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
           }
         }
       }                                                //JM NEWERPN ^^
@@ -1361,17 +1327,21 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "In function fnKeyEnter: unexpected calcMode value (%" PRIu8 ") while processing key ENTER!", calcMode);
         displayBugScreen(errorMessage);
     }
+    return;
+
+undo_disabled:
+    temporaryInformation = TI_UNDO_DISABLED;
+    return;
+
+ram_full:
+    displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    fnUndo(NOPARAM);
+    return;
   #endif // !TESTSUITE_BUILD
 }
 
 
 
-/********************************************//**
- * \brief Processing EXIT key
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   int16_t tmp1 = softmenu[softmenuStack[0].softmenuId].menuItem;            //JM
@@ -1411,7 +1381,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         if(lastErrorCode != 0) {
           lastErrorCode = 0;
         }
-        popSoftmenu();
+        else {                //jm: this is where 43S cleared an error
+          popSoftmenu();
+        }
         break;
 
       case CM_AIM:
@@ -1424,6 +1396,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         if(running_program_jm || softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
           closeAim();
           saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
         }
         else {
           popSoftmenu();
@@ -1450,6 +1423,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         leavePem();
         calcModeNormal();
         saveForUndo();
+        if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
         break;
 
       case CM_REGISTER_BROWSER:
@@ -1459,10 +1433,19 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         calcMode = previousCalcMode;
         break;
 
-    case CM_BUG_ON_SCREEN:
-    case CM_LISTXY:                     //JM
+      case CM_BUG_ON_SCREEN:
+        calcMode = previousCalcMode;
+        break;
+
+
+    case CM_GRAPH:                      //JM vv
+    case CM_LISTXY:                    
       calcMode = previousCalcMode;
-      break;
+      softmenuStack[0].firstItem = 0;
+      fnUndo(0);
+      break;                              //JM ^^
+
+
 
       case CM_PLOT_STAT:
         lastPlotMode = PLOT_NOTHING;
@@ -1472,23 +1455,24 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         popSoftmenu();
         break;
 
-    case CM_GRAPH:                      //JM vv
-      calcMode = previousCalcMode;
-      softmenuStack[0].firstItem = 0;
-      break;                            //JM ^^
-
-    case CM_CONFIRMATION:
-      calcMode = previousCalcMode;
-      temporaryInformation = TI_NO_INFO;
-      break;
+      case CM_CONFIRMATION:
+        calcMode = previousCalcMode;
+        temporaryInformation = TI_NO_INFO;
+        break;
 
       default:
         sprintf(errorMessage, "In function fnKeyExit: unexpected calcMode value (%" PRIu8 ") while processing key EXIT!", calcMode);
         displayBugScreen(errorMessage);
     }
 
-      last_CM = 253; //Force redraw   //JMvvv Show effect of Exit immediately
-      refreshScreen();                //JM^^^
+    last_CM = 253; //Force redraw   //JMvvv Show effect of Exit immediately
+    refreshScreen();                //JM^^^
+    return;
+
+
+undo_disabled:
+    temporaryInformation = TI_UNDO_DISABLED;
+    return;
 
   #endif // !TESTSUITE_BUILD
 }
@@ -1513,20 +1497,26 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
       dataTypeX = getRegisterDataType(REGISTER_X);
       dataTypeY = getRegisterDataType(REGISTER_Y);
 
-      if(   (dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
-         && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
-        runFunction(ITM_REtoCX);
-      }
-      else if(dataTypeX == dtComplex34) {
-        runFunction(ITM_CXtoRE);
-      }
-      else {
-        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
-          moreInfoOnError("In function fnKeyCC:", errorMessage, NULL, NULL);
-        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-      }
+        if(   (dataTypeX == dtReal34 || dataTypeX == dtLongInteger)
+           && (dataTypeY == dtReal34 || dataTypeY == dtLongInteger)) {
+          runFunction(ITM_REtoCX);
+        }
+        else if(dataTypeX == dtComplex34) {
+          runFunction(ITM_CXtoRE);
+        }
+        else if(dataTypeX == dtReal34Matrix && dataTypeY == dtReal34Matrix) {
+          runFunction(ITM_REtoCX);
+        }
+        else if(dataTypeX == dtComplex34Matrix) {
+          runFunction(ITM_CXtoRE);
+        }
+        else {
+          displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            sprintf(errorMessage, "You cannot use CC with %s in X and %s in Y!", getDataTypeName(getRegisterDataType(REGISTER_X), true, false), getDataTypeName(getRegisterDataType(REGISTER_Y), true, false));
+            moreInfoOnError("In function fnKeyCC:", errorMessage, NULL, NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        }
       return;                            //JM
   }
 
@@ -1534,6 +1524,10 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
     case CM_NIM:
       addItemToNimBuffer(ITM_CC);
       break;
+
+      case CM_MIM:
+        mimAddNumber(ITM_CC);
+        break;
 
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
@@ -1552,12 +1546,6 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
 
 
 
-/********************************************//**
- * \brief Processing BACKSPACE key
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
     uint16_t lg;
@@ -1659,12 +1647,6 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Processing UP key
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnKeyUp(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
 
@@ -1767,6 +1749,9 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         ListXYposition += 10;
         break;                            //JM ^^
           
+      case CM_MIM:
+        break;
+
       default:
         sprintf(errorMessage, "In function fnKeyUp: unexpected calcMode value (%" PRIu8 ") while processing key UP!", calcMode);
         displayBugScreen(errorMessage);
@@ -1776,12 +1761,6 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Processing DOWN key
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnKeyDown(uint16_t unusedButMandatoryParameter) {
   doRefreshSoftMenu = true;     //dr
 
@@ -1882,21 +1861,18 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       ListXYposition -= 10;
       break;                            //JM ^^
           
-    default:
-      sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" PRIu8 ") while processing key DOWN!", calcMode);
-      displayBugScreen(errorMessage);
-  }
-  #endif // TESTSUITE_BUILD
+      case CM_MIM:
+        break;
+
+      default:
+        sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" PRIu8 ") while processing key DOWN!", calcMode);
+        displayBugScreen(errorMessage);
+    }
+  #endif // !TESTSUITE_BUILD
 }
 
 
 
-/********************************************//**
- * \brief Processing .d key
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
     switch(calcMode) {
@@ -1917,6 +1893,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_MIM:
       case CM_LISTXY:                     //JM
       case CM_GRAPH:                      //JM
       break;

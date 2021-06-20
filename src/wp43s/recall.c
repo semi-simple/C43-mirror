@@ -14,17 +14,13 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file recall.c
- ***********************************************/
-
 #include "recall.h"
 
 #include "charString.h"
 #include "debug.h"
 #include "error.h"
 #include "flags.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "mathematics/compare.h"
 #include "matrix.h"
 #include "memory.h"
@@ -33,6 +29,7 @@
 #include "registers.h"
 #include "stack.h"
 #include "store.h"
+#include "typeDefinitions.h"
 
 #include "wp43s.h"
 
@@ -48,16 +45,20 @@ static bool_t recallElementReal(real34Matrix_t *matrix) {
   real34Copy(&matrix->matrixElements[i * matrix->header.matrixColumns + j], REGISTER_REAL34_DATA(REGISTER_X));
   return false;
 }
+
+static bool_t recallElementComplex(complex34Matrix_t *matrix) {
+  const int16_t i = getIRegisterAsInt(true);
+  const int16_t j = getJRegisterAsInt(true);
+
+  liftStack();
+  reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+  complex34Copy(&matrix->matrixElements[i * matrix->header.matrixColumns + j], REGISTER_COMPLEX34_DATA(REGISTER_X));
+  return false;
+}
 #endif // TESTSUITE_BUILD
 
 
 
-/********************************************//**
- * \brief Recalls a register in X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecall(uint16_t regist) {
   if(regInRange(regist)) {
     if(REGISTER_X <= regist && regist <= getStackTop()) {
@@ -77,27 +78,15 @@ void fnRecall(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Recalls register L in X
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnLastX(uint16_t unusedButMandatoryParameter) {
   fnRecall(REGISTER_L);
 }
 
 
 
-/********************************************//**
- * \brief Adds a register to X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallAdd(uint16_t regist) {
   if(regInRange(regist)) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
     if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
@@ -114,15 +103,9 @@ void fnRecallAdd(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Subtracts a register from X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallSub(uint16_t regist) {
   if(regInRange(regist)) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
     if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
@@ -139,15 +122,9 @@ void fnRecallSub(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Multiplies X by a register
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallMult(uint16_t regist) {
   if(regInRange(regist)) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
     if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
@@ -164,15 +141,9 @@ void fnRecallMult(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Divides X by a register
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallDiv(uint16_t regist) {
   if(regInRange(regist)) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     copySourceRegisterToDestRegister(REGISTER_X, REGISTER_Y);
     copySourceRegisterToDestRegister(regist, REGISTER_X);
     if(getRegisterDataType(REGISTER_X) == dtShortInteger) {
@@ -189,42 +160,24 @@ void fnRecallDiv(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Keeps in X min(X, register)
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallMin(uint16_t regist) {
   if(regInRange(regist)) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     registerMin(REGISTER_X, regist, REGISTER_X);
   }
 }
 
 
 
-/********************************************//**
- * \brief Keeps in X max(X, register)
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallMax(uint16_t regist) {
   if(regInRange(regist)) {
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
     registerMax(REGISTER_X, regist, REGISTER_X);
   }
 }
 
 
 
-/********************************************//**
- * \brief Recalls a configuration
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallConfig(uint16_t regist) {
   if(getRegisterDataType(regist) == dtConfig) {
     dtConfigDescriptor_t *configToRecall = REGISTER_CONFIG_DATA(regist);
@@ -236,6 +189,8 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(displayFormatDigits);
     recallFromDtConfigDescriptor(groupingGap);
     recallFromDtConfigDescriptor(currentAngularMode);
+    recallFromDtConfigDescriptor(lrSelection);
+    recallFromDtConfigDescriptor(lrChosen);
     recallFromDtConfigDescriptor(denMax);
     recallFromDtConfigDescriptor(displayStack);
     recallFromDtConfigDescriptor(firstGregorianDay);
@@ -262,12 +217,13 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(graph_ymin);        
     recallFromDtConfigDescriptor(graph_ymax);        
     recallFromDtConfigDescriptor(graph_dx);          
-    recallFromDtConfigDescriptor(graph_dy);          
+    recallFromDtConfigDescriptor(graph_dy);
+    recallFromDtConfigDescriptor(roundedTicks);
     recallFromDtConfigDescriptor(extentx);
     recallFromDtConfigDescriptor(extenty);
-    recallFromDtConfigDescriptor(jm_VECT);
-    recallFromDtConfigDescriptor(jm_NVECT);
-    recallFromDtConfigDescriptor(jm_SCALE);
+    recallFromDtConfigDescriptor(PLOT_VECT);
+    recallFromDtConfigDescriptor(PLOT_NVECT);
+    recallFromDtConfigDescriptor(PLOT_SCALE);
     recallFromDtConfigDescriptor(Aspect_Square);          
     recallFromDtConfigDescriptor(PLOT_LINE);          
     recallFromDtConfigDescriptor(PLOT_CROSS);          
@@ -300,12 +256,6 @@ void fnRecallConfig(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Recalls a stack
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallStack(uint16_t regist) {
   uint16_t size = getSystemFlag(FLAG_SSIZE8) ? 8 : 4;
 
@@ -319,7 +269,7 @@ void fnRecallStack(uint16_t regist) {
   else {
     int i;
 
-    copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+    if(!saveLastX()) return;
 
     for(i=0; i<size; i++) {
       copySourceRegisterToDestRegister(regist + i, REGISTER_X + i);
@@ -333,32 +283,20 @@ void fnRecallStack(uint16_t regist) {
 
 
 
-/********************************************//**
- * \brief Recalls the matrix element I,J in X
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallElement(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
-  callByIndexedMatrix(recallElementReal, NULL);
+  callByIndexedMatrix(recallElementReal, recallElementComplex);
 #endif // TESTSUITE_BUILD
 }
 
 
 
-/********************************************//**
- * \brief Recalls the indexes I and J in X and Y
- *
- * \param[in] regist uint16_t
- * \return void
- ***********************************************/
 void fnRecallIJ(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   longInteger_t zero;
   longIntegerInit(zero);
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   liftStack();
   liftStack();

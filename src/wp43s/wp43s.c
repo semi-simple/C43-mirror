@@ -14,26 +14,20 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file wp43s.c
- ***********************************************/
-
 #include "wp43s.h"
 
 #include "config.h"
-#include "gmpWrappers.h"
-#include "gui.h"
 #include "items.h"
 #include "keyboard.h"
+#include "longIntegerType.h"
 #include "memory.h"
 #include "screen.h"
-//??? #include "typeDefinitions.h"
 
 //#define JMSHOWCODES
 
 #if defined(DMCP_BUILD)
-#include "keyboardTweak.h"
-#include "jm.h"
+  #include "c43Extensions/keyboardTweak.h"
+  #include "c43Extensions/jm.h"
 #endif
 
 
@@ -174,24 +168,6 @@ float                 graph_xmin;                              //JM Graph
 float                 graph_xmax;                              //JM Graph
 float                 graph_ymin;                              //JM Graph
 float                 graph_ymax;                              //JM Graph
-// float                 graph_dx;                                //JM Graph
-// float                 graph_dy;                                //JM Graph
-// bool_t                extentx;                                 //JM Graph
-// bool_t                extenty;                                 //JM Graph
-// bool_t                jm_VECT;                                 //JM GRAPH
-// bool_t                jm_NVECT;                                //JM GRAPH
-// bool_t                jm_SCALE;                                //JM GRAPH
-// bool_t                Aspect_Square;                           //JM GRAPH
-// bool_t                PLOT_LINE;                               //JM GRAPH
-// bool_t                PLOT_CROSS;                              //JM GRAPH
-// bool_t                PLOT_BOX;                                //JM GRAPH
-// bool_t                PLOT_INTG;                               //JM GRAPH
-// bool_t                PLOT_DIFF;                               //JM GRAPH
-// bool_t                PLOT_RMS;                                //JM GRAPH
-// bool_t                PLOT_SHADE;                              //JM GRAPH
-// bool_t                PLOT_AXIS;                               //JM GRAPH
-// int8_t                PLOT_ZMX;                                //JM GRAPH
-// int8_t                PLOT_ZMY;                                //JM GRAPH
 uint8_t               lastSetAngularMode;
 bool_t                AlphaSelectionBufferTimerRunning;        //JM
 #ifdef INLINE_TEST                                             //vv dr
@@ -242,9 +218,12 @@ uint16_t               numberOfNamedVariables;
 uint16_t               currentLocalStepNumber;
 uint16_t               currentProgramNumber;
 uint16_t               lrSelection;
+uint16_t               lrSelectionUndo;
 uint16_t               lrChosen;
+uint16_t               lrChosenUndo;
 uint16_t               lastPlotMode;
 uint16_t               plotSelection;
+//uint16_t               largeur=400; // For the real34 width test
 
 int32_t                numberOfFreeMemoryRegions;
 int32_t                lgCatalogSelection;
@@ -280,7 +259,6 @@ size_t                 wp43sMemInBlocks;
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 #endif // DMCP_BUILD
 
-
 #ifdef DMCP_BUILD
   void program_main(void) {
     int key = 0;
@@ -303,7 +281,6 @@ size_t                 wp43sMemInBlocks;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   lcd_clear_buf();
-
 #ifdef NOKEYMAP
   lcd_putsAt(t24, 4, "Press the bottom left key."); lcd_refresh();           //vv dr - no keymap is used
   while(key != 33 && key != 37) {
@@ -319,8 +296,6 @@ size_t                 wp43sMemInBlocks;
 
   lcd_clear_buf();                                             //^^
 #endif //NOKEYMAP
-
-
   fnReset(CONFIRMED);
   refreshScreen();
 
@@ -775,64 +750,3 @@ size_t                 wp43sMemInBlocks;
   }
 }
 #endif // DMCP_BUILD
-
-#ifdef TESTSUITE_BUILD
-  #include "testSuite.h"
-
-  int main(int argc, char* argv[]) {
-    int exitCode;
-
-    #ifdef CODEBLOCKS_OVER_SCORE // Since December 27th 2020 when running in code::blocks, we are no longer in the correct directory! Why?
-      (*strstr(argv[0], "/bin/")) = 0;
-      chdir(argv[0]);
-    #endif // CODEBLOCKS_OVER_SCORE
-
-    #ifdef __APPLE__
-      // we take the directory where the application is as the root for this application.
-      // in argv[0] is the application itself. We strip the name of the app by searching for the last '/':
-      if(argc>=1) {
-        char *curdir = malloc(1000);
-        // find last /:
-        char *s = strrchr(argv[0], '/');
-        if(s != 0) {
-          // take the directory before the appname:
-          strncpy(curdir, argv[0], s-argv[0]);
-          chdir(curdir);
-          free(curdir);
-        }
-      }
-    #endif // __APPLE__
-
-    wp43sMemInBlocks = 0;
-    gmpMemInBytes = 0;
-    mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
-
-    fnReset(CONFIRMED);
-
-    /*
-    longInteger_t li;
-    longIntegerInit(li);
-    uIntToLongInteger(1, li);
-    convertLongIntegerToLongIntegerRegister(li, REGISTER_Z);
-    uIntToLongInteger(2, li);
-    convertLongIntegerToLongIntegerRegister(li, REGISTER_Y);
-    uIntToLongInteger(2203, li);
-    convertLongIntegerToLongIntegerRegister(li, REGISTER_X);
-    fnPower(NOPARAM);
-    fnSwapXY(NOPARAM);
-    fnSubtract(NOPARAM);
-    printf("a\n");
-    fnIsPrime(NOPARAM);
-    printf("b\n");
-    longIntegerFree(li);
-    return 0;
-    */
-
-
-    exitCode = processTests();
-    printf("The memory owned by GMP should be 0 bytes. Else report a bug please!\n");
-    debugMemory("End of testsuite");
-
-    return exitCode;
-  }
-#endif // TESTSUITE_BUILD

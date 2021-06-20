@@ -67,7 +67,7 @@ void expM1Error(void) {
  * \return void
  ***********************************************/
 void fnExpM1(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   ExpM1[getRegisterDataType(REGISTER_X)]();
 
@@ -135,7 +135,7 @@ void expM1Rema(void) {
 
 
 void expM1Cxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(expM1Cplx);
 }
 
 

@@ -23,6 +23,8 @@
 #include "debug.h"
 #include "error.h"
 #include "items.h"
+#include "matrix.h"
+#include "registerValueConversions.h"
 #include "registers.h"
 
 #include "wp43s.h"
@@ -61,14 +63,28 @@ void realPartError(void) {
  * \return void
  ***********************************************/
 void fnRealPart(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
   realPart[getRegisterDataType(REGISTER_X)]();
 }
 
 
 
 void realPartCxma(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  complex34Matrix_t cMat;
+  real34Matrix_t rMat;
+
+  linkToComplexMatrixRegister(REGISTER_X, &cMat);
+  if(realMatrixInit(&rMat, cMat.header.matrixRows, cMat.header.matrixColumns)) {
+    for(uint16_t i = 0; i < cMat.header.matrixRows * cMat.header.matrixColumns; ++i) {
+      real34Copy(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), &rMat.matrixElements[i]);
+    }
+
+    convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X); // cMat invalidates here
+    realMatrixFree(&rMat);
+  }
+  else lastErrorCode = ERROR_RAM_FULL;
+#endif // TESTSUITE_BUILD
 }
 
 

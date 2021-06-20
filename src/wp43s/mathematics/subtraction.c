@@ -26,7 +26,7 @@
 #include "fonts.h"
 #include "integers.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "mathematics/addition.h"
 #include "matrix.h"
 #include "registers.h"
@@ -43,7 +43,7 @@ TO_QSPI void (* const subtraction[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMBER_
 /*  2 Real34        */ {subLonIReal, subRealReal, subCplxReal, subTimeReal, subDateReal, subError, subError,    subError,    subShoIReal,  subError},
 /*  3 Complex34     */ {subLonICplx, subRealCplx, subCplxCplx, subError,    subError,    subError, subError,    subError,    subShoICplx,  subError},
 /*  4 Time          */ {subLonITime, subRealTime, subError,    subTimeTime, subError,    subError, subError,    subError,    subError,     subError},
-/*  5 Date          */ {subLonIDate, subError,    subError,    subError,    subDateDate, subError, subError,    subError,    subError,     subError},
+/*  5 Date          */ {subError,    subError,    subError,    subError,    subDateDate, subError, subError,    subError,    subError,     subError},
 /*  6 String        */ {subError,    subError,    subError,    subError,    subError,    subError, subError,    subError,    subError,     subError},
 /*  7 Real34 mat    */ {subError,    subError,    subError,    subError,    subError,    subError, subRemaRema, subCxmaRema, subError,     subError},
 /*  8 Complex34 mat */ {subError,    subError,    subError,    subError,    subError,    subError, subRemaCxma, subCxmaCxma, subError,     subError},
@@ -78,7 +78,7 @@ void subError(void) {
  * \return void
  ***********************************************/
 void fnSubtract(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   subtraction[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -137,18 +137,6 @@ void subLonITime(void) {
 void subTimeLonI(void) {
   convertLongIntegerRegisterToTimeRegister(REGISTER_X, REGISTER_X);
   real34Subtract(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
-}
-
-
-
-/********************************************//**
- * \brief Y(long integer) - X(date) ==> X(date)
- *
- * \param void
- * \return void
- ***********************************************/
-void subLonIDate(void) {
-  fnToBeCoded();
 }
 
 
@@ -479,7 +467,10 @@ void subRemaRema(void) {
  * \return void
  ***********************************************/
 void subRemaCxma(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
+  subCxmaCxma();
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -491,7 +482,10 @@ void subRemaCxma(void) {
  * \return void
  ***********************************************/
 void subCxmaRema(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_X, REGISTER_X);
+  subCxmaCxma();
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -507,7 +501,28 @@ void subCxmaRema(void) {
  * \return void
  ***********************************************/
 void subCxmaCxma(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  complex34Matrix_t y, x;
+
+  linkToComplexMatrixRegister(REGISTER_Y, &y);
+  convertComplex34MatrixRegisterToComplex34Matrix(REGISTER_X, &x);
+
+  subtractComplexMatrices(&y, &x, &x);
+  if(x.matrixElements) {
+    convertComplex34MatrixToComplex34MatrixRegister(&x, REGISTER_X);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot add %d" STD_CROSS "%d-matrix to %d" STD_CROSS "%d-matrix",
+              x.header.matrixRows, x.header.matrixColumns,
+              y.header.matrixRows, y.header.matrixColumns);
+      moreInfoOnError("In function addRemaRema:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+
+  complexMatrixFree(&x);
+#endif // TESTSUITE_BUILD
 }
 
 

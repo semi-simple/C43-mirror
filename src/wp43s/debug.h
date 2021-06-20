@@ -16,7 +16,8 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include "decNumberWrappers.h"
+#include "defines.h"
+#include "realType.h"
 #include "typeDefinitions.h"
 #include <stdint.h>
 #ifdef PC_BUILD

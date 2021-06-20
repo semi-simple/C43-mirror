@@ -70,7 +70,7 @@ void sincError(void) {
  * \return void
  ***********************************************/
 void fnSinc(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   Sinc[getRegisterDataType(REGISTER_X)]();
 
@@ -139,7 +139,7 @@ void sincRema(void) {
 
 
 void sincCxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(sincCplx);
 }
 
 

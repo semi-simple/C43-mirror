@@ -20,8 +20,9 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-//??? #include "flags.h"
-//??? #include "defines.h"
+//??? #ifdef DMCP_BUILD
+//???   #include <dmcp.h>
+//??? #endif // DMCP_BUILD
 
 //*********************************
 // JM VARIOUS OPTIONS
@@ -29,6 +30,13 @@
 
 #ifdef PC_BUILD
   #undef SAVE_SPACE_DM42
+  #undef SAVE_SPACE_DM42_1
+  #undef SAVE_SPACE_DM42_2
+  #undef SAVE_SPACE_DM42_3
+  #undef SAVE_SPACE_DM42_4
+  #undef SAVE_SPACE_DM42_5
+  #undef SAVE_SPACE_DM42_6
+  #undef SAVE_SPACE_DM42_7
   //Key layout option
   #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
   #undef  SWAP_TO_L42_ON_SIM
@@ -38,8 +46,15 @@
 
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-  #define SAVE_SPACE_DM42
-  #undef  SAVE_SPACE_DM42          //switch off memoery saving options
+  #define SAVE_SPACE_DM42   //Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
+  #define SAVE_SPACE_DM42_1 //STAT DEMOS 105-107-109
+  #undef  SAVE_SPACE_DM42_2 //XEQM
+  #define SAVE_SPACE_DM42_3 //SOLVER
+  #define SAVE_SPACE_DM42_4 //XY GRAPHDEMOS
+  #define SAVE_SPACE_DM42_5 //fnShow (old)
+  #define SAVE_SPACE_DM42_6 //ELEC functions
+  #define SAVE_SPACE_DM42_7 //KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
+//  #undef  SAVE_SPACE_DM42          //switch off memoery saving options
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
   //#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
@@ -67,7 +82,7 @@
 #undef  VERBOSE_SCREEN
 
 #define INLINE_TEST                     //vv dr
-#undef INLINE_TEST                    //^^
+//#undef INLINE_TEST                    //^^
 
 
 
@@ -124,7 +139,6 @@
 #define DEBUG_PANEL                      0 //1 JM Showing registers, local registers, saved stack registers, flags, statistical sums, ... in a debug panel
 #define DEBUG_REGISTER_L                 0 //1 JM Showing register L content on the PC GUI
 #define SHOW_MEMORY_STATUS               0 //1 JM Showing the memory status on the PC GUI
-#define LIBGMP                           1 // Use GMP for the big integers
 #define MMHG_PA_133_3224                 0 //1 JM mmHg to Pa conversion coefficient is 133.3224 an not 133.322387415
 #define FN_KEY_TIMEOUT_TO_NOP            0 // Set to 1 if you want the 6 function keys to timeout
 #define MAX_LONG_INTEGER_SIZE_IN_BITS    3328 //JMMAX 9965   // 43S:3328 //JMMAX // 1001 decimal digits: 3328 ≃ log2(10^1001)
@@ -142,7 +156,6 @@
 
 #define SHORT_INTEGER_SIZE               2 // 2 blocks = 8 bytes = 64 bits
 
-#define IBM_DECIMAL                      1 // Use the IBM decNumber library for the floating point data type
 #define DECNUMDIGITS                    75 // Default number of digits used in the decNumber library
 
 #define SCREEN_800X480                   1 // Set to 0 if you want a keyboard in addition to the screen on Raspberry pi
@@ -152,7 +165,7 @@
 #endif // RASPBERRY
 
 
-#if __linux__ == 1
+#ifdef LINUX
   #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
 #endif // __linux__ == 1
 
@@ -171,7 +184,7 @@
   #define STATDEBUG_VERBOSE
 #endif
 
-	
+
 
 //*************************
 //* Other defines         *
@@ -236,8 +249,9 @@
 #define ERROR_UNDEF_SOURCE_VAR                    36
 #define ERROR_WRITE_PROTECTED_VAR                 37
 #define ERROR_BAD_INPUT                           38 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX    39
 
-#define NUMBER_OF_ERROR_CODES                     39
+#define NUMBER_OF_ERROR_CODES                     40
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
@@ -304,9 +318,11 @@
 #define FLAG_USB                              0xc028
 #define NUMBER_OF_SYSTEM_FLAGS                    41
 
-#define LI_ZERO                                    0 // Long integer sign 0
-#define LI_NEGATIVE                                1 // Long integer sign -
-#define LI_POSITIVE                                2 // Long integer sign +
+typedef enum {
+  LI_ZERO     = 0, // Long integer sign 0
+  LI_NEGATIVE = 1, // Long integer sign -
+  LI_POSITIVE = 2  // Long integer sign +
+} longIntegerSign_t;
 
 
 #ifdef PC_BUILD
@@ -365,6 +381,7 @@
 #define US_ENABLED                         ( 0 << 2) // The command saves the stack, the statistical sums, and the system flags for later UNDO
 #define US_CANCEL                          ( 1 << 2) // The command cancels the last UNDO data
 #define US_UNCHANGED                       ( 2 << 2) // The command leaves the existing UNDO data as is
+#define US_ENABL_XEQ                       ( 3 << 2) // Like US_STATUS, but if there is not enough memory for UNDO, deletes UNDO data then continue
 
 // Item category (4 bits)
 #define CAT_STATUS                            0x00f0
@@ -525,11 +542,11 @@
 
 
 #ifdef PC_BUILD
-  #if (__linux__ == 1)
+  #ifdef LINUX
     #define LINEBREAK                           "\n"
-  #elif defined(__MINGW64__)
+  #elif defined(WIN32)
     #define LINEBREAK                         "\n\r"
-  #elif defined(__APPLE__)
+  #elif defined(OSX)
     #define LINEBREAK                         "\r\n"
   #else // Unsupported OS
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
@@ -581,18 +598,19 @@
 #define CF_CAUCHY_FITTING                        128
 #define CF_GAUSS_FITTING                         256
 #define CF_ORTHOGONAL_FITTING                    512
+#define CF_RESET                                   0
 
 // Curve fitting excluding all other curve fitting bits, 10 bits
 #define CF_LINEAR_FITTING_EX                     (~CF_LINEAR_FITTING) & 0x01FF
-#define CF_EXPONENTIAL_FITTING_EX                (~CF_EXPONENTIAL_FITTING) & 0x01FF     
+#define CF_EXPONENTIAL_FITTING_EX                (~CF_EXPONENTIAL_FITTING) & 0x01FF
 #define CF_LOGARITHMIC_FITTING_EX                (~CF_LOGARITHMIC_FITTING) & 0x01FF
-#define CF_POWER_FITTING_EX                      (~CF_POWER_FITTING) & 0x03FF 
-#define CF_ROOT_FITTING_EX                       (~CF_ROOT_FITTING) & 0x01FF      
-#define CF_HYPERBOLIC_FITTING_EX                 (~CF_HYPERBOLIC_FITTING) & 0x01FF      
-#define CF_PARABOLIC_FITTING_EX                  (~CF_PARABOLIC_FITTING) & 0x01FF     
-#define CF_CAUCHY_FITTING_EX                     (~CF_CAUCHY_FITTING) & 0x01FF  
-#define CF_GAUSS_FITTING_EX                      (~CF_GAUSS_FITTING) & 0x01FF 
-#define CF_ORTHOGONAL_FITTING_EX                 (~CF_ORTHOGONAL_FITTING) & 0x01FF       
+#define CF_POWER_FITTING_EX                      (~CF_POWER_FITTING) & 0x03FF
+#define CF_ROOT_FITTING_EX                       (~CF_ROOT_FITTING) & 0x01FF
+#define CF_HYPERBOLIC_FITTING_EX                 (~CF_HYPERBOLIC_FITTING) & 0x01FF
+#define CF_PARABOLIC_FITTING_EX                  (~CF_PARABOLIC_FITTING) & 0x01FF
+#define CF_CAUCHY_FITTING_EX                     (~CF_CAUCHY_FITTING) & 0x01FF
+#define CF_GAUSS_FITTING_EX                      (~CF_GAUSS_FITTING) & 0x01FF
+#define CF_ORTHOGONAL_FITTING_EX                 (~CF_ORTHOGONAL_FITTING) & 0x01FF
 
 // Plot curve fitting 3 bits
 #define PLOT_ORTHOF                                0
@@ -706,6 +724,8 @@
 #define TI_CALCX2                                 41
 #define TI_STATISTIC_LR                           42
 #define TI_SA                                     43
+#define TI_INACCURATE                             44
+#define TI_UNDO_DISABLED                          45
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -987,7 +1007,7 @@
 #endif // defined(OS32BIT) && defined(OS64BIT)
 
 #ifdef PC_BUILD
-  #ifdef __MINGW64__ // No DEBUG_PANEL mode for Windows
+  #ifdef WIN32 // No DEBUG_PANEL mode for Windows
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
   #endif // __MINGW64__
@@ -1016,8 +1036,8 @@
  #endif // defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
 
 #if defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
-  #undef  JM_LAYOUT_1A
-  #undef  JM_LAYOUT_2_DM42_STRICT    //DM42 compatible layout
+    #undef  JM_LAYOUT_1A
+    #undef  JM_LAYOUT_2_DM42_STRICT     //DM42 compatible layout
 
     #undef  PC_BUILD
     #undef  DMCP_BUILD
@@ -1035,7 +1055,7 @@
     #define registerBrowser fnNop
     #define flagBrowser     fnNop
     #define fontBrowser     fnNop
-    #define flagBrowser_old fnNop      //JM
+    #define flagBrowser_old fnNop       //JM
     #define refreshRegisterLine(a)  {}
     #define displayBugScreen(a)     { printf("\n-----------------------------------------------------------------------\n"); printf("%s\n", a); printf("\n-----------------------------------------------------------------------\n");}
     #define showHideHourGlass()     {}
@@ -1043,14 +1063,18 @@
     #define refreshLcd(a)           {}
     #define initFontBrowser()       {}
 
-  #define JM_LAYOUT_1A               //JM Preferred layout
+    #define JM_LAYOUT_1A                //JM Preferred layout
   #endif // defined(TESTSUITE_BUILD) && !defined(GENERATE_CATALOGS)
 
 /* Turn off -Wunused-result for a specific function call */
-#define ignore_result(M) if(1==((uint64_t)M)){;}
+#ifdef OS32BIT
+  #define ignore_result(M) if(1==((uint32_t)M)){;}
+#else
+  #define ignore_result(M) if(1==((uint64_t)M)){;}
+#endif
 
 #ifdef DMCP_BUILD
-  #define TMP_STR_LENGTH       (5*512)  //dr temporary change to be abele to compile //AUX_BUF_SIZE
+  #define TMP_STR_LENGTH     2560 //2560 //dr - remove #include <dmcp.h> again - AUX_BUF_SIZE
 #else // !DMCP_BUILD
   #define TMP_STR_LENGTH     3000 //2560 //JMMAX ORG:2560
 #endif // DMCP_BUILD

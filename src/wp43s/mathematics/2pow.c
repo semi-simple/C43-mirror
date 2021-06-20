@@ -67,7 +67,7 @@ void twoPowError(void) {
  * \return void
  ***********************************************/
 void fn2Pow(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   twoPow[getRegisterDataType(REGISTER_X)]();
 
@@ -137,7 +137,7 @@ void twoPowRema(void) {
 
 
 void twoPowCxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(twoPowCplx);
 }
 
 

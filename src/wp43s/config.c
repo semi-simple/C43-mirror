@@ -31,13 +31,13 @@
 #include "fractions.h"
 #include "gui.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "keyboard.h"
 #include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
-#include "radioButtonCatalog.h"
+#include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
@@ -49,6 +49,7 @@
 #include <string.h>
 
 #include "wp43s.h"
+
 
 
 /********************************************//**
@@ -812,7 +813,9 @@ void fnReset(uint16_t confirmation) {
     statisticalSumsPointer = NULL;
     savedStatisticalSumsPointer = NULL;
     lrSelection = CF_LINEAR_FITTING;
+    lrSelectionUndo = lrSelection;
     lrChosen    = 0;
+    lrChosenUndo = 0;
     lastPlotMode = PLOT_NOTHING;
     plotSelection = 0;
 
@@ -1005,7 +1008,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_105"
+#define VERSION1 "_106d"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2

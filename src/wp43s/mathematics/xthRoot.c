@@ -33,6 +33,7 @@
 #include "mathematics/toPolar.h"
 #include "mathematics/toRect.h"
 #include "mathematics/wp34s.h"
+#include "matrix.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 
@@ -81,7 +82,7 @@ void xthRootError(void) {
  * \return void
  ***********************************************/
 void fnXthRoot(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   xthRoot[getRegisterDataType(REGISTER_X)][getRegisterDataType(REGISTER_Y)]();
 
@@ -159,7 +160,7 @@ void xthRootReal(real_t *yy, real_t *xx, realContext_t *realContext) {
   telltale = 0;
   if(getSystemFlag(FLAG_SPCRES)) {
     //0
-    if(   ((real34IsZero(&y)                          && (realCompareGreaterEqual(&x, const_0) || (realIsInfinite(&x) && realIsPositive(&x)))))
+    if(   ((realIsZero(&y)                            && (realCompareGreaterEqual(&x, const_0) || (realIsInfinite(&x) && realIsPositive(&x)))))
        || ((realIsInfinite(&y) && realIsPositive(&y)) && (realCompareLessThan(&x, const_0) && (!realIsInfinite(&x))))
       ) {
       telltale += 1;
@@ -513,7 +514,7 @@ void xthRootCplxLonI(void) {
  * \return void
  ***********************************************/
 void xthRootRemaLonI(void) {
-  fnToBeCoded();
+  elementwiseRemaLonI(xthRootRealLonI);
 }
 
 
@@ -525,7 +526,7 @@ void xthRootRemaLonI(void) {
  * \return void
  ***********************************************/
 void xthRootRemaShoI(void) {
-  fnToBeCoded();
+  elementwiseRemaShoI(xthRootRealShoI);
 }
 
 
@@ -537,7 +538,7 @@ void xthRootRemaShoI(void) {
  * \return void
  ***********************************************/
 void xthRootRemaReal(void) {
-  fnToBeCoded();
+  elementwiseRemaReal(xthRootRealReal);
 }
 
 
@@ -549,7 +550,10 @@ void xthRootRemaReal(void) {
  * \return void
  ***********************************************/
 void xthRootRemaCplx(void) {
-  fnToBeCoded();
+#ifndef TESTSUITE_BUILD
+  convertReal34MatrixRegisterToComplex34MatrixRegister(REGISTER_Y, REGISTER_Y);
+  xthRootCxmaCplx();
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -565,7 +569,7 @@ void xthRootRemaCplx(void) {
  * \return void
  ***********************************************/
 void xthRootCxmaLonI(void) {
-  fnToBeCoded();
+  elementwiseCxmaLonI(xthRootCplxLonI);
 }
 
 
@@ -577,7 +581,7 @@ void xthRootCxmaLonI(void) {
  * \return void
  ***********************************************/
 void xthRootCxmaShoI(void) {
-  fnToBeCoded();
+  elementwiseCxmaShoI(xthRootCplxShoI);
 }
 
 
@@ -589,7 +593,7 @@ void xthRootCxmaShoI(void) {
  * \return void
  ***********************************************/
 void xthRootCxmaReal(void) {
-  fnToBeCoded();
+  elementwiseCxmaReal(xthRootCplxReal);
 }
 
 
@@ -601,7 +605,7 @@ void xthRootCxmaReal(void) {
  * \return void
  ***********************************************/
 void xthRootCxmaCplx(void) {
-  fnToBeCoded();
+  elementwiseCxmaCplx(xthRootCplxCplx);
 }
 
 

@@ -1524,7 +1524,7 @@ void debugNIM(void) {
 
 
 
-#if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1) || (DEBUG_STAT >= 1)
+#if (DEBUG_PANEL == 1) || (DEBUG_REGISTER_L == 1)
   /********************************************//**
    * \brief Formats a real34 for the debug window
    *

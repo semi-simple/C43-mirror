@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file gui.c
- ***********************************************/
-
 #include "gui.h"
 
 #include "bufferize.h"
@@ -26,9 +22,9 @@
 #include "error.h"
 #include "flags.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "keyboard.h"
-#include "keyboardTweak.h"
+#include "c43Extensions/keyboardTweak.h"
 #include "matrix.h"
 #include "registers.h"
 #include "saveRestoreCalcState.h"
@@ -37,7 +33,6 @@
 #include "statusBar.h"
 #include "softmenus.h"
 #include <string.h>
-#include "typeDefinitions.h"
 
 #include "wp43s.h"
 
@@ -1006,13 +1001,8 @@ return FALSE;
 
 #ifdef PC_BUILD
   #if (SCREEN_800X480 == 0)
-    /********************************************//**
-     * \brief Reads the CSS file to configure the calc's GUI style
-     *
-     * \param void
-     * \return void
-     ***********************************************/
-    void prepareCssData(void) {
+    /* Reads the CSS file to configure the calc's GUI style. */
+    static void prepareCssData(void) {
       FILE *cssFile;
       char *toReplace, *replaceWith, needle[100], newNeedle[100];
       int  fileLg;
@@ -4209,11 +4199,17 @@ void setupUI(void) {
     shiftF = false;
     shiftG = false;
 
-    if(openMatrixMIMPointer.matrixElements) {
-      realMatrixFree(&openMatrixMIMPointer);
-    }
-
     #ifdef PC_BUILD
+      if(matrixIndex != INVALID_VARIABLE) {
+        if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
+          if(openMatrixMIMPointer.realMatrix.matrixElements)
+          realMatrixFree(&openMatrixMIMPointer.realMatrix);
+        }
+        else if(getRegisterDataType(matrixIndex) == dtComplex34Matrix) {
+          if(openMatrixMIMPointer.complexMatrix.matrixElements)
+          complexMatrixFree(&openMatrixMIMPointer.complexMatrix);
+        }
+      }
       saveCalc();
       gtk_main_quit();
     #endif // PC_BUILD
@@ -4225,12 +4221,6 @@ void setupUI(void) {
 
 
 
-  /********************************************//**
-   * \brief Sets the calc mode to normal
-   *
-   * \param void
-   * \return void
-   ***********************************************/
   void calcModeNormal(void) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### calcModeNormal"); jm_show_comment(tmp);
@@ -4252,12 +4242,6 @@ void setupUI(void) {
 
 
 
-  /********************************************//**
-   * \brief Sets the calc mode to alpha input mode
-   *
-   * \param[in] unusedButMandatoryParameter uint16_t
-   * \return void
-   ***********************************************/
   void calcModeAim(uint16_t unusedButMandatoryParameter) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### calcModeAim"); jm_show_comment(tmp);
@@ -4299,11 +4283,6 @@ if(!tam.mode) {
 
 
 
-  /********************************************//**
-   * \brief Sets the calc mode to alpha selection menu if needed
-   *
-   * \return void
-   ***********************************************/
   void enterAsmModeIfMenuIsACatalog(int16_t id) {
     switch(-id) {
       case MNU_FCNS:      catalog = CATALOG_FCNS;    break;
@@ -4350,11 +4329,6 @@ if(!tam.mode) {
 
 
 
-  /********************************************//**
-   * \brief Leaves the alpha selection mode
-   *
-   * \return void
-   ***********************************************/
   void leaveAsmMode(void) {
     catalog = CATALOG_NONE;
 
@@ -4373,17 +4347,18 @@ if(!tam.mode) {
 
 
 
-  /********************************************//**
-   * \brief Sets the calc mode to number input mode
-   *
-   * \param[in] unusedButMandatoryParameter uint16_t
-   * \return void
-   ***********************************************/
   void calcModeNim(uint16_t unusedButMandatoryParameter) {
     #ifdef PC_BUILD
       char tmp[200]; sprintf(tmp,"^^^^### calcModeNim"); jm_show_comment(tmp);
     #endif //PC_BUILD
     saveForUndo();
+    if(lastErrorCode == ERROR_RAM_FULL) {
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function calcModeNim:", "there is not enough memory to save for undo!", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+    }
 
     calcMode = CM_NIM;
     clearSystemFlag(FLAG_ALPHA);
@@ -4399,13 +4374,27 @@ if(!tam.mode) {
     cursorEnabled = true;
     cursorFont = &numericFont;
   }
+
+
   void refreshModeGui(void) {  //JM Added here to force icon update in Gui
+  #ifdef PC_BUILD
+    if((calcMode == CM_AIM) && !tam.mode) calcModeAimGui();
+  #endif
+
+
+
     #ifdef PC_BUILD
-      if     (calcMode == CM_NORMAL || calcMode == CM_PEM) calcModeNormalGui();
-      else if(calcMode == CM_AIM) calcModeAimGui();
-      else if(tam.mode) calcModeTamGui();
+      if     ((calcMode == CM_NORMAL || calcMode == CM_PEM) && !tam.mode) calcModeNormalGui();
+    #endif
+
+/*
+    #ifdef PC_BUILD
+      if     ((calcMode == CM_NORMAL || calcMode == CM_PEM) && !tam.mode) calcModeNormalGui();
+      else if((calcMode == CM_AIM) && !tam.mode) calcModeAimGui();
+      else if(tam.mode && !(calcMode == CM_AIM)) calcModeTamGui();
       else if(catalog) calcModeAimGui();
     #endif
+*/
   }
 
 #endif // !TESTSUITE_BUILD

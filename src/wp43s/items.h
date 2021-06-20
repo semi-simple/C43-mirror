@@ -14,14 +14,13 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
+/**
  * \file items.h
  ***********************************************/
 #ifndef ITEMS_H
 #define ITEMS_H
 
 #include <stdint.h>
-
 
 
 
@@ -1363,7 +1362,7 @@
 #define ITM_PARABF                    1305
 #define ITM_HYPF                      1306
 #define ITM_ROOTF                     1307
-#define ITM_1308                      1308
+#define ITM_RSTF                      1308
 #define ITM_1309                      1309
 #define ITM_1310                      1310
 #define ITM_1311                      1311
@@ -1379,14 +1378,12 @@
 #define MNU_CATALOG                   1318
 #define MNU_CHARS                     1319
 #define MNU_CLK                       1320
-
 #define MNU_CLR                       1321
 #define MNU_CONST                     1322
 #define MNU_CPX                       1323
 #define MNU_CPXS                      1324
 #define MNU_DATES                     1325
-
-#define MNU_DSP                       1326
+#define MNU_DISP                      1326
 #define MNU_EQN                       1327
 #define MNU_EXP                       1328
 #define MNU_CONVE                     1329
@@ -1464,7 +1461,6 @@
 #define MNU_1401                      1401
 #define MNU_1402                      1402
 #define MNU_1403                      1403
-
 
 
 #define ITM_1COMPL                    1404
@@ -1636,7 +1632,7 @@
 #define ITM_REexIM                    1570
 #define ITM_RM                        1571
 #define ITM_RMQ                       1572
-#define ITM_1573                      1573
+#define ITM_DSP                       1573
 #define ITM_RNORM                     1574
 #define ITM_EX1                       1575
 #define ITM_ROUNDI                    1576
@@ -1709,7 +1705,7 @@
 #define ITM_XCIRC                     1643
 #define ITM_XtoDATE                   1644
 #define ITM_XtoALPHA                  1645
-#define ITM_1646                      1646
+#define ITM_M_QR                      1646
 #define ITM_YEAR                      1647
 #define ITM_YCIRC                     1648
 #define ITM_YMD                       1649
@@ -1745,9 +1741,9 @@
 #define ITM_M1X                       1679
 #define ITM_XMOD                      1680
 #define ITM_toDATE                    1681
-#define ITM_1682                      1682
-#define ITM_1683                      1683
-#define ITM_1684                      1684
+#define ITM_sn                        1682
+#define ITM_cn                        1683
+#define ITM_dn                        1684
 #define ITM_toHR                      1685
 #define ITM_toHMS                     1686
 #define ITM_toINT                     1687
@@ -1791,9 +1787,9 @@
 #define ITM_UNDO                      1723
 #define ITM_PR                        1724
 #define ITM_RS                        1725
-#define ITM_1726                      1726
-#define ITM_1727                      1727
-#define ITM_1728                      1728
+#define ITM_Kk                        1726
+#define ITM_Ek                        1727
+#define ITM_PInk                      1728
 #define ITM_USERMODE                  1729
 #define ITM_CC                        1730
 #define ITM_SHIFTf                    1731
@@ -1946,182 +1942,177 @@
 #define ITM_USER_COMPLEX              1869
 #define ITM_USER_SHIFTS               1870
 #define ITM_USER_RESET                1871
-#define ITM_U_KEY_USER                1872
-#define ITM_U_KEY_CC                  1873
-#define ITM_U_KEY_MM                  1874
-#define ITM_U_KEY_SIGMA               1875
-#define ITM_U_KEY_PRGM                1876
-#define ITM_U_KEY_ALPHA               1877
-#define ITM_SH_NORM_E                 1878
-#define ITM_JM_ASN                    1879
-#define ITM_JM_SEEK                   1880
-#define ITM_INP_DEF_43S               1881
-#define ITM_XXEQ                      1882
-#define ITM_USER_ALPHA                1883
-#define ITM_USER_GSHFT                1884
-#define ITM_USER_CC                   1885
-#define ITM_USER_MYM                  1886
-#define ITM_USER_PRGM                 1887
-#define ITM_USER_USER                 1888
-#define ITM_USER_SIGMAPLUS            1889
-#define ITM_USER_V43MIN               1890
-#define ITM_USER_SHIFTS2              1891
-#define ITM_USER_HOME                 1892
-#define ITM_USER_WP43S                1893
-#define ITM_USER_DM42                 1894
-#define ITM_USER_C43                  1895
-#define ITM_GET_NORM_E                1896
-#define ITM_RESERVE                   1897
-#define MNU_ASN_N                     1898
-#define MNU_HOME                      1899
-#define MNU_ALPHA                     1900
-#define MNU_BASE                      1901
-#define MNU_XEQ                       1902
-#define MNU_EE                        1903
-#define ITM_T_UP_ARROW                1904
-#define MNU_ASN                       1905
-#define ITM_T_DOWN_ARROW              1906
-#define ITM_T_HOME                    1907
-#define ITM_T_END                     1908
-#define MNU_ASN_U                     1909
-#define MNU_T_EDIT                    1910
-#define MNU_XXEQ                      1911
-#define ITM_RNG                       1912
-#define ITM_FLGSV                     1913
-#define ITM_CPXI                      1914
-#define ITM_CPXJ                      1915
-#define ITM_SSIZE4                    1916
-#define ITM_SSIZE8                    1917
-#define ITM_CB_SPCRES                 1918
-#define ITM_CFG                       1919
-#define ITM_CLK12                     1920
-#define ITM_CLK24                     1921
-#define ITM_MULTCR                    1922
-#define ITM_MULTDOT                   1923
-#define ITM_POLAR                     1924
-#define ITM_RDXCOM                    1925
-#define ITM_RDXPER                    1926
-#define ITM_RECT                      1927
-#define ITM_SCIOVR                    1928
-#define ITM_ENGOVR                    1929
-#define ITM_T_LEFT_ARROW              1930
-#define ITM_T_RIGHT_ARROW             1931
-#define ITM_T_LLEFT_ARROW             1932
-#define ITM_T_RRIGHT_ARROW            1933
-#define ITM_XNEW                      1934
-#define ITM_XEDIT                     1935
-#define ITM_ms                        1936
-#define ITM_DEG2                      1937
-#define ITM_DMS2                      1938
-#define ITM_GRAD2                     1939
-#define ITM_MULPI2                    1940
-#define ITM_RAD2                      1941
-#define ITM_HMS2                      1942
-#define USER_PRIM00U                  1943
-#define USER_SFTf00U                  1944
-#define USER_SFTg00U                  1945
-#define USER_PRIM01U                  1946
-#define USER_SFTf01U                  1947
-#define USER_SFTg01U                  1948
-#define USER_PRIM02U                  1949
-#define USER_SFTf02U                  1950
-#define USER_SFTg02U                  1951
-#define USER_PRIM03U                  1952
-#define USER_SFTf03U                  1953
-#define USER_SFTg03U                  1954
-#define USER_PRIM04U                  1955
-#define USER_SFTf04U                  1956
-#define USER_SFTg04U                  1957
-#define USER_PRIM05U                  1958
-#define USER_SFTf05U                  1959
-#define USER_SFTg05U                  1960
-#define ITM_X_P1                      1961
-#define ITM_X_P2                      1962
-#define ITM_X_P3                      1963
-#define ITM_X_P4                      1964
-#define ITM_X_P5                      1965
-#define ITM_X_P6                      1966
-#define ITM_X_f1                      1967
-#define ITM_X_f2                      1968
-#define ITM_X_f3                      1969
-#define ITM_X_f4                      1970
-#define ITM_X_f5                      1971
-#define ITM_X_f6                      1972
-#define ITM_X_g1                      1973
-#define ITM_X_g2                      1974
-#define ITM_X_g3                      1975
-#define ITM_X_g4                      1976
-#define ITM_X_g5                      1977
-#define ITM_X_g6                      1978
-#define ITM_XSAVE                     1979
-#define ITM_XLOAD                     1980
-#define ITM_FB00                      1981
-#define ITM_FB01                      1982
-#define ITM_FB02                      1983
-#define ITM_FB03                      1984
-#define ITM_S06                       1985
-#define ITM_S08                       1986
-#define ITM_S16                       1987
-#define ITM_S32                       1988
-#define ITM_S64                       1989
-#define ITM_U06                       1990
-#define ITM_U08                       1991
-#define ITM_U16                       1992
-#define ITM_U32                       1993
-#define ITM_U64                       1994
-#define ITM_SL1                       1995
-#define ITM_SR1                       1996
-#define ITM_RL1                       1997
-#define ITM_RR1                       1998
-#define ITM_FWORD                     1999
-#define ITM_FBYTE                     2000
-#define ITM_CLAIM                     2001
-#define ITM_SHOIREP                   2002
-#define ITM_SCALE                     2003
-#define ITM_PLOTLS                    2004
-#define ITM_PLINE                     2005
-#define ITM_PCROS                     2006
-#define ITM_PBOX                      2007
-#define ITM_VECT                      2008
-#define ITM_NVECT                     2009
-#define ITM_EXTX                      2010
-#define ITM_EXTY                      2011
-#define ITM_SLV2                      2012
-#define ITM_SLV3                      2013
-#define ITM_DEMO1                     2014
-#define ITM_DEMO2                     2015
-#define ITM_DEMO3                     2016
-#define ITM_DEMO4                     2017
-#define ITM_DEMO5                     2018
-#define ITM_DEMO6                     2019
-#define ITM_INTG                      2020
-#define ITM_DIFF                      2021
-#define ITM_RMS                       2022
-#define ITM_SHADE                     2023
-#define MNU_PLOT                      2024
-#define CHR_num                       2025
-#define CHR_numL                      2026
-#define CHR_numU                      2027
-#define ITM_EEXCHR                    2028
-#define ITM_CLGRF                     2029
-#define ITM_PZOOMX                    2030
-#define ITM_PZOOMY                    2031
-#define ITM_XSOLV                     2032
-#define ITM_XPLOT                     2033
-#define ITM_XDEMO                     2034
-#define ITM_PRN                       2035
-#define ITM_PLOT_XY                   2036
-#define ITM_USER_DRG                  2037
-#define ITM_2038                      2038
-#define ITM_PLOTRST                   2039
-#define ITM_STATDEMO0                 2040
-#define ITM_STATDEMO1                 2041
-#define ITM_STATDEMO2                 2042
-#define ITM_STATDEM105                2043
-#define ITM_STATDEM107                2044
-#define ITM_STATDEM109                2045
+#define ITM_N_KEY_ALPHA               1872
+#define ITM_N_KEY_CC                  1873
+#define ITM_N_KEY_GSH                 1874
+#define ITM_N_KEY_MM                  1875
+#define ITM_N_KEY_DRG                 1876
+#define ITM_N_KEY_PRGM                1877
+#define ITM_N_KEY_USER                1878
+#define ITM_N_KEY_HOME                1879
+#define ITM_N_KEY_SIGMA               1880
+#define ITM_N_KEY_SNAP                1881
+#define ITM_SH_NORM_E                 1882
+#define ITM_JM_ASN                    1883
+#define ITM_JM_SEEK                   1884
+#define ITM_INP_DEF_43S               1885
+#define ITM_XXEQ                      1886
+#define ITM_USER_V43MIN               1887
+#define ITM_USER_COPY                 1888
+#define ITM_USER_WP43S                1889
+#define ITM_USER_DM42                 1890
+#define ITM_USER_C43                  1891
+#define ITM_GET_NORM_E                1892
+#define ITM_RESERVE                   1893
+#define MNU_ASN_N                     1894
+#define MNU_HOME                      1895
+#define MNU_ALPHA                     1896
+#define MNU_BASE                      1897
+#define MNU_XEQ                       1898
+#define MNU_EE                        1899
+#define ITM_T_UP_ARROW                1900
+#define MNU_ASN                       1901
+#define ITM_T_DOWN_ARROW              1902
+#define ITM_T_HOME                    1903
+#define ITM_T_END                     1904
+#define ITM_1905                      1905
+#define MNU_T_EDIT                    1906
+#define MNU_XXEQ                      1907
+#define ITM_RNG                       1908
+#define ITM_FLGSV                     1909
+#define ITM_CPXI                      1910
+#define ITM_CPXJ                      1911
+#define ITM_SSIZE4                    1912
+#define ITM_SSIZE8                    1913
+#define ITM_CB_SPCRES                 1914
+#define ITM_CFG                       1915
+#define ITM_CLK12                     1916
+#define ITM_CLK24                     1917
+#define ITM_MULTCR                    1918
+#define ITM_MULTDOT                   1919
+#define ITM_POLAR                     1920
+#define ITM_RDXCOM                    1921
+#define ITM_RDXPER                    1922
+#define ITM_RECT                      1923
+#define ITM_SCIOVR                    1924
+#define ITM_ENGOVR                    1925
+#define ITM_T_LEFT_ARROW              1926
+#define ITM_T_RIGHT_ARROW             1927
+#define ITM_T_LLEFT_ARROW             1928
+#define ITM_T_RRIGHT_ARROW            1929
+#define ITM_XNEW                      1930
+#define ITM_XEDIT                     1931
+#define ITM_ms                        1932
+#define ITM_DEG2                      1933
+#define ITM_DMS2                      1934
+#define ITM_GRAD2                     1935
+#define ITM_MULPI2                    1936
+#define ITM_RAD2                      1937
+#define ITM_HMS2                      1938
+#define USER_PRIM00U                  1939
+#define USER_SFTf00U                  1940
+#define USER_SFTg00U                  1941
+#define USER_PRIM01U                  1942
+#define USER_SFTf01U                  1943
+#define USER_SFTg01U                  1944
+#define USER_PRIM02U                  1945
+#define USER_SFTf02U                  1946
+#define USER_SFTg02U                  1947
+#define USER_PRIM03U                  1948
+#define USER_SFTf03U                  1949
+#define USER_SFTg03U                  1950
+#define USER_PRIM04U                  1951
+#define USER_SFTf04U                  1952
+#define USER_SFTg04U                  1953
+#define USER_PRIM05U                  1954
+#define USER_SFTf05U                  1955
+#define USER_SFTg05U                  1956
+#define ITM_X_P1                      1957
+#define ITM_X_P2                      1958
+#define ITM_X_P3                      1959
+#define ITM_X_P4                      1960
+#define ITM_X_P5                      1961
+#define ITM_X_P6                      1962
+#define ITM_X_f1                      1963
+#define ITM_X_f2                      1964
+#define ITM_X_f3                      1965
+#define ITM_X_f4                      1966
+#define ITM_X_f5                      1967
+#define ITM_X_f6                      1968
+#define ITM_X_g1                      1969
+#define ITM_X_g2                      1970
+#define ITM_X_g3                      1971
+#define ITM_X_g4                      1972
+#define ITM_X_g5                      1973
+#define ITM_X_g6                      1974
+#define ITM_XSAVE                     1975
+#define ITM_XLOAD                     1976
+#define ITM_FB00                      1977
+#define ITM_FB01                      1978
+#define ITM_FB02                      1979
+#define ITM_FB03                      1980
+#define ITM_S06                       1981
+#define ITM_S08                       1982
+#define ITM_S16                       1983
+#define ITM_S32                       1984
+#define ITM_S64                       1985
+#define ITM_U06                       1986
+#define ITM_U08                       1987
+#define ITM_U16                       1988
+#define ITM_U32                       1989
+#define ITM_U64                       1990
+#define ITM_SL1                       1991
+#define ITM_SR1                       1992
+#define ITM_RL1                       1993
+#define ITM_RR1                       1994
+#define ITM_FWORD                     1995
+#define ITM_FBYTE                     1996
+#define ITM_CLAIM                     1997
+#define ITM_SHOIREP                   1998
+#define ITM_SCALE                     1999
+#define ITM_PLOTLS                    2000
+#define ITM_PLINE                     2001
+#define ITM_PCROS                     2002
+#define ITM_PBOX                      2003
+#define ITM_VECT                      2004
+#define ITM_NVECT                     2005
+#define ITM_EXTX                      2006
+#define ITM_EXTY                      2007
+#define ITM_SLV2                      2008
+#define ITM_SLV3                      2009
+#define ITM_DEMO1                     2010
+#define ITM_DEMO2                     2011
+#define ITM_DEMO3                     2012
+#define ITM_DEMO4                     2013
+#define ITM_DEMO5                     2014
+#define ITM_DEMO6                     2015
+#define ITM_INTG                      2016
+#define ITM_DIFF                      2017
+#define ITM_RMS                       2018
+#define ITM_SHADE                     2019
+#define MNU_PLOT                      2020
+#define CHR_num                       2021
+#define CHR_numL                      2022
+#define CHR_numU                      2023
+#define ITM_EEXCHR                    2024
+#define ITM_CLGRF                     2025
+#define ITM_PZOOMX                    2026
+#define ITM_PZOOMY                    2027
+#define ITM_XSOLV                     2028
+#define ITM_XPLOT                     2029
+#define ITM_XDEMO                     2030
+#define ITM_PRN                       2031
+#define ITM_PLOT_XY                   2032
+#define ITM_2033                      2033
+#define ITM_PLOTRST                   2034
+#define ITM_STATDEMO0                 2035
+#define ITM_STATDEMO1                 2036
+#define ITM_STATDEMO2                 2037
+#define ITM_STATDEM105                2038
+#define ITM_STATDEM107                2039
+#define ITM_STATDEM109                2040
 
-#define LAST_ITEM                     2046   //JM
+#define LAST_ITEM                     2041   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL
@@ -2129,9 +2120,29 @@
 #define ITM_PROD_SIGN                 9999 // Multiplication sign × or ·
 
 void reallyRunFunction(int16_t func, uint16_t param);
+/**
+ * Runs a function.
+ *
+ * \param[in] func Index in the indexOfItems area of the function to run
+ */
 void runFunction      (int16_t func);
-void fnToBeCoded      (void);
+///**
+// * Dummy function for a function (part of an item) to be coded.
+// *
+// * \param[in] unusedButMandatoryParameter
+// */
+//void fnToBeCoded      (void);
+/**
+ * Dummy function for an item to be coded.
+ *
+ * \param[in] unusedButMandatoryParameter
+ */
 void itemToBeCoded    (uint16_t unusedButMandatoryParameter);
+/**
+ * No OPeration.
+ *
+ * \param[in] unusedButMandatoryParameter
+ */
 void fnNop            (uint16_t unusedButMandatoryParameter);
 
 #endif // ITEMS_H

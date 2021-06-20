@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file saveRestoreCalcState.c
- ***********************************************/
-
 #include "saveRestoreCalcState.h"
 
 #include "charString.h"
@@ -27,7 +23,7 @@
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
-#include "jm.h"
+#include "c43Extensions/jm.h"
 #include "matrix.h"
 #include "memory.h"
 #include "plotstat.h"
@@ -40,7 +36,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         55  // Added x_min
+#define BACKUP_VERSION         56  // Added roundedTicks
 #define START_REGISTER_VALUE 1522
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -211,17 +207,20 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
     save(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
     save(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+    save(&lrSelectionUndo,                    sizeof(lrSelectionUndo),                    BACKUP);
     save(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
+    save(&lrChosenUndo,                       sizeof(lrChosenUndo),                       BACKUP);
     save(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
     save(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
     save(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
     save(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
+    save(&roundedTicks,                       sizeof(roundedTicks),                       BACKUP);
     save(&extentx,                            sizeof(extentx),                            BACKUP);
     save(&extenty,                            sizeof(extenty),                            BACKUP);
-    save(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
-    save(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
-    save(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+    save(&PLOT_VECT,                          sizeof(PLOT_VECT),                          BACKUP);
+    save(&PLOT_NVECT,                         sizeof(PLOT_NVECT),                         BACKUP);
+    save(&PLOT_SCALE,                         sizeof(PLOT_SCALE),                         BACKUP);
     save(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
     save(&PLOT_LINE,                          sizeof(PLOT_LINE),                          BACKUP);
     save(&PLOT_CROSS,                         sizeof(PLOT_CROSS),                         BACKUP);
@@ -243,8 +242,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&y_max,                              sizeof(y_max),                              BACKUP);
     save(&xzero,                              sizeof(xzero),                              BACKUP);
     save(&yzero,                              sizeof(yzero),                              BACKUP);
-    save(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
-    save(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
+    save(gr_x,                                LIM*sizeof(float),                        BACKUP);
+    save(gr_y,                                LIM*sizeof(float),                        BACKUP);
     save(&telltale,                           sizeof(telltale),                           BACKUP);
     save(&ix_count,                           sizeof(ix_count),                           BACKUP);
     save(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
@@ -441,17 +440,20 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&programListEnd,                     sizeof(programListEnd),                     BACKUP);
       restore(&numberOfTamMenusToPop,              sizeof(numberOfTamMenusToPop),              BACKUP);
       restore(&lrSelection,                        sizeof(lrSelection),                        BACKUP);
+      restore(&lrSelectionUndo,                    sizeof(lrSelectionUndo),                    BACKUP);
       restore(&lrChosen,                           sizeof(lrChosen),                           BACKUP);
+      restore(&lrChosenUndo,                       sizeof(lrChosenUndo),                       BACKUP);
       restore(&lastPlotMode,                       sizeof(lastPlotMode),                       BACKUP);
       restore(&plotSelection,                      sizeof(plotSelection),                      BACKUP);
 
       restore(&graph_dx,                           sizeof(graph_dx),                           BACKUP);
       restore(&graph_dy,                           sizeof(graph_dy),                           BACKUP);
+      restore(&roundedTicks,                       sizeof(roundedTicks),                       BACKUP);
       restore(&extentx,                            sizeof(extentx),                            BACKUP);
       restore(&extenty,                            sizeof(extenty),                            BACKUP);
-      restore(&jm_VECT,                            sizeof(jm_VECT),                            BACKUP);
-      restore(&jm_NVECT,                           sizeof(jm_NVECT),                           BACKUP);
-      restore(&jm_SCALE,                           sizeof(jm_SCALE),                           BACKUP);
+      restore(&PLOT_VECT,                          sizeof(PLOT_VECT),                          BACKUP);
+      restore(&PLOT_NVECT,                         sizeof(PLOT_NVECT),                         BACKUP);
+      restore(&PLOT_SCALE,                         sizeof(PLOT_SCALE),                         BACKUP);
       restore(&Aspect_Square,                      sizeof(Aspect_Square),                      BACKUP);
       restore(&PLOT_LINE,                          sizeof(PLOT_LINE),                          BACKUP);
       restore(&PLOT_CROSS,                         sizeof(PLOT_CROSS),                         BACKUP);
@@ -473,8 +475,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&y_max,                              sizeof(y_max),                              BACKUP);
       restore(&xzero,                              sizeof(xzero),                              BACKUP);
       restore(&yzero,                              sizeof(yzero),                              BACKUP);
-      restore(gr_x,                                LIM*sizeof(graphtype),                      BACKUP);
-      restore(gr_y,                                LIM*sizeof(graphtype),                      BACKUP);
+      restore(gr_x,                                LIM*sizeof(float),                        BACKUP);
+      restore(gr_y,                                LIM*sizeof(float),                        BACKUP);
       restore(&telltale,                           sizeof(telltale),                           BACKUP);
       restore(&ix_count,                           sizeof(ix_count),                           BACKUP);
       restore(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
@@ -640,6 +642,28 @@ static void registerToSaveString(calcRegister_t regist) {
       strcpy(aimBuffer, "Cplx");
       break;
 
+    case dtTime:
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpRegisterString);
+      strcpy(aimBuffer, "Time");
+      break;
+
+    case dtDate:
+      real34ToString(REGISTER_REAL34_DATA(regist), tmpRegisterString);
+      strcpy(aimBuffer, "Date");
+      break;
+
+#ifndef TESTSUITE_BUILD
+    case dtReal34Matrix:
+      sprintf(tmpRegisterString, "%" PRIu16 " %" PRIu16, REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows, REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns);
+      strcpy(aimBuffer, "Rema");
+      break;
+
+    case dtComplex34Matrix:
+      sprintf(tmpRegisterString, "%" PRIu16 " %" PRIu16, REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows, REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns);
+      strcpy(aimBuffer, "Cxma");
+      break;
+#endif // TESTSUITE_BUILD
+
     case dtConfig:
       for(str=tmpRegisterString, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
         sprintf(str, "%02X", *cfg);
@@ -651,6 +675,28 @@ static void registerToSaveString(calcRegister_t regist) {
       strcpy(tmpRegisterString, "???");
       strcpy(aimBuffer, "????");
   }
+}
+
+
+static void saveMatrixElements(calcRegister_t regist, void *stream) {
+#ifndef TESTSUITE_BUILD
+  if(getRegisterDataType(regist) == dtReal34Matrix) {
+    for(uint32_t element = 0; element < REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows * REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns; ++element) {
+      real34ToString(REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + element, tmpString);
+      strcat(tmpString, "\n");
+      save(tmpString, strlen(tmpString), stream);
+    }
+  }
+  else if(getRegisterDataType(regist) == dtComplex34Matrix) {
+    for(uint32_t element = 0; element < REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows * REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns; ++element) {
+      real34ToString(VARIABLE_REAL34_DATA(REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + element), tmpString);
+      strcat(tmpString, " ");
+      real34ToString(VARIABLE_IMAG34_DATA(REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + element), tmpString + strlen(tmpString));
+      strcat(tmpString, "\n");
+      save(tmpString, strlen(tmpString), stream);
+    }
+  }
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -686,6 +732,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     registerToSaveString(regist);
     sprintf(tmpString, "R%03" PRId16 "\n%s\n%s\n", regist, aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
+    saveMatrixElements(regist, BACKUP);
   }
 
   // Global flags
@@ -708,6 +755,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     registerToSaveString(FIRST_LOCAL_REGISTER + i);
     sprintf(tmpString, "R.%02" PRIu32 "\n%s\n%s\n", i, aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
+    saveMatrixElements(FIRST_LOCAL_REGISTER + i, BACKUP);
   }
 
   // Local flags
@@ -723,6 +771,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     registerToSaveString(FIRST_NAMED_VARIABLE + i);
     sprintf(tmpString, "%s\n%s\n%s\n", "name", aimBuffer, tmpRegisterString);
     save(tmpString, strlen(tmpString), BACKUP);
+    saveMatrixElements(FIRST_NAMED_VARIABLE + i, BACKUP);
   }
 
   // Statistical sums
@@ -775,7 +824,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   }
 
   // Other configuration stuff
-  sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n14\n");
+  sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n15\n");
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "firstGregorianDay\n%" PRIu32 "\n", firstGregorianDay);
   save(tmpString, strlen(tmpString), BACKUP);
@@ -793,7 +842,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "significantDigits\n%" PRIu8 "\n", significantDigits);
   save(tmpString, strlen(tmpString), BACKUP);
-  sprintf(tmpString, "currentAngularMode\n%" PRIu8 "\n", currentAngularMode);
+  sprintf(tmpString, "currentAngularMode\n%" PRIu8 "\n", (uint8_t)currentAngularMode);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "groupingGap\n%" PRIu8 "\n", groupingGap);
   save(tmpString, strlen(tmpString), BACKUP);
@@ -805,13 +854,15 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "exponentLimit\n%" PRId16 "\n", exponentLimit);
   save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "notBestF\n%" PRIu16 "\n", lrSelection);
+  save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "displayStackSHOIDISP\n%" PRIu8 "\n", displayStackSHOIDISP);   //JM
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "lastSetAngularMode\n%" PRIu8 "\n", lastSetAngularMode);               //JM
   save(tmpString, strlen(tmpString), BACKUP);
 
 
-  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
+  // Graph memory                                  //vv GRAPH MEMORY RESTORE
   sprintf(tmpString, "STAT_GRAPH_DATA\n%u\n",LIM*2+2);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "%u\n",ix_count);
@@ -824,7 +875,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     sprintf(tmpString, "%E\n",gr_y[i]);
     save(tmpString, strlen(tmpString), BACKUP);
   }
-  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
+  // Graph memory                                  //^^ GRAPH MEMORY RESTORE
 
 
 
@@ -973,6 +1024,16 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
     stringToReal34(value, REGISTER_REAL34_DATA(regist));
   }
 
+  else if(strcmp(type, "Time") == 0) {
+    reallocateRegister(regist, dtTime, REAL34_SIZE, amNone);
+    stringToReal34(value, REGISTER_REAL34_DATA(regist));
+  }
+
+  else if(strcmp(type, "Date") == 0) {
+    reallocateRegister(regist, dtDate, REAL34_SIZE, amNone);
+    stringToReal34(value, REGISTER_REAL34_DATA(regist));
+  }
+
   else if(strcmp(type, "LonI") == 0) {
     longInteger_t lgInt;
 
@@ -1013,6 +1074,36 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
     stringToReal34(imaginaryPart, REGISTER_IMAG34_DATA(regist));
   }
 
+#ifndef TESTSUITE_BUILD
+  else if(strcmp(type, "Rema") == 0) {
+    char *numOfCols;
+    uint16_t rows, cols;
+
+    numOfCols = value;
+    while(*numOfCols != ' ') numOfCols++;
+    *(numOfCols++) = 0;
+    rows = stringToUint16(value);
+    cols = stringToUint16(numOfCols);
+    reallocateRegister(regist, dtReal34Matrix, REAL34_SIZE * rows * cols, amNone);
+    REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows = rows;
+    REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns = cols;
+  }
+
+  else if(strcmp(type, "Cxma") == 0) {
+    char *numOfCols;
+    uint16_t rows, cols;
+
+    numOfCols = value;
+    while(*numOfCols != ' ') numOfCols++;
+    *(numOfCols++) = 0;
+    rows = stringToUint16(value);
+    cols = stringToUint16(numOfCols);
+    reallocateRegister(regist, dtComplex34Matrix, COMPLEX34_SIZE * rows * cols, amNone);
+    REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows = rows;
+    REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns = cols;
+  }
+#endif // TESTSUITE_BUILD
+
   else if(strcmp(type, "Conf") == 0) {
     char *cfg;
 
@@ -1026,6 +1117,61 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
     sprintf(errorMessage, "In function restoreRegister: Date type %s is to be coded!", type);
     displayBugScreen(errorMessage);
   }
+}
+
+
+static void restoreMatrixData(calcRegister_t regist, void *stream) {
+#ifndef TESTSUITE_BUILD
+  uint16_t rows, cols;
+  uint32_t i;
+
+  if(getRegisterDataType(regist) == dtReal34Matrix) {
+    rows = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows;
+    cols = REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns;
+
+    for(i = 0; i < rows * cols; ++i) {
+      readLine(stream, tmpString);
+      stringToReal34(tmpString, REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i);
+    }
+  }
+
+  if(getRegisterDataType(regist) == dtComplex34Matrix) {
+    rows = REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows;
+    cols = REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns;
+
+    for(i = 0; i < rows * cols; ++i) {
+      char *imaginaryPart;
+
+      readLine(stream, tmpString);
+      imaginaryPart = tmpString;
+      while(*imaginaryPart != ' ') imaginaryPart++;
+      *(imaginaryPart++) = 0;
+      stringToReal34(tmpString,     VARIABLE_REAL34_DATA(REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + i));
+      stringToReal34(imaginaryPart, VARIABLE_IMAG34_DATA(REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + i));
+    }
+  }
+#endif // TESTSUITE_BUILD
+}
+
+
+static void skipMatrixData(char *type, char *value, void *stream) {
+#ifndef TESTSUITE_BUILD
+  uint16_t rows, cols;
+  uint32_t i;
+  char *numOfCols;
+
+  if(strcmp(type, "Rema") == 0 || strcmp(type, "Cxma") == 0) {
+    numOfCols = value;
+    while(*numOfCols != ' ') numOfCols++;
+    *(numOfCols++) = 0;
+    rows = stringToUint16(value);
+    cols = stringToUint16(numOfCols);
+
+    for(i = 0; i < rows * cols; ++i) {
+      readLine(stream, tmpString);
+    }
+  }
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -1048,6 +1194,10 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
 
       if(loadMode == LM_ALL || (loadMode == LM_REGISTERS && regist < REGISTER_X)) {
         restoreRegister(regist, aimBuffer, tmpString);
+        restoreMatrixData(regist, stream);
+      }
+      else {
+        skipMatrixData(aimBuffer, tmpString, stream);
       }
     }
   }
@@ -1091,22 +1241,28 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       allocateLocalRegisters(numberOfRegs);
     }
 
-    for(i=0; i<numberOfRegs; i++) {
-      readLine(stream, tmpString); // Register number
-      regist = stringToInt16(tmpString + 2) + FIRST_LOCAL_REGISTER;
-      readLine(stream, aimBuffer); // Register data type
-      readLine(stream, tmpString); // Register value
+    if((loadMode != LM_ALL && loadMode != LM_REGISTERS) || lastErrorCode == ERROR_NONE) {
+      for(i=0; i<numberOfRegs; i++) {
+        readLine(stream, tmpString); // Register number
+        regist = stringToInt16(tmpString + 2) + FIRST_LOCAL_REGISTER;
+        readLine(stream, aimBuffer); // Register data type
+        readLine(stream, tmpString); // Register value
 
-      if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-        restoreRegister(regist, aimBuffer, tmpString);
+        if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
+          restoreRegister(regist, aimBuffer, tmpString);
+          restoreMatrixData(regist, stream);
+        }
+        else {
+          skipMatrixData(aimBuffer, tmpString, stream);
+        }
       }
-    }
 
-    if(numberOfRegs > 0) {
-      readLine(stream, tmpString); // LOCAL_FLAGS
-      readLine(stream, tmpString); // LOCAL_FLAGS
-      if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-        currentLocalFlags->localFlags = stringToUint32(tmpString);
+      if(numberOfRegs > 0) {
+        readLine(stream, tmpString); // LOCAL_FLAGS
+        readLine(stream, tmpString); // LOCAL_FLAGS
+        if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
+          currentLocalFlags->localFlags = stringToUint32(tmpString);
+        }
       }
     }
   }
@@ -1124,6 +1280,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         //printf("%s = ", aimBuffer);
         //printf("%s\n", tmpString);
       }
+      skipMatrixData(aimBuffer, tmpString, stream);
     }
   }
 
@@ -1136,8 +1293,10 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
 
     for(i=0; i<numberOfRegs; i++) {
       readLine(stream, tmpString); // statistical sum
-      if(loadMode == LM_ALL || loadMode == LM_SUMS) {
-        stringToReal(tmpString, (real_t *)(statisticalSumsPointer + REAL_SIZE * i), &ctxtReal75);
+      if(statisticalSumsPointer) { // likely
+        if(loadMode == LM_ALL || loadMode == LM_SUMS) {
+          stringToReal(tmpString, (real_t *)(statisticalSumsPointer + REAL_SIZE * i), &ctxtReal75);
+        }
       }
     }
   }
@@ -1292,6 +1451,9 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
         else if(strcmp(aimBuffer, "exponentLimit") == 0) {
           exponentLimit = stringToInt16(tmpString);
         }
+        else if(strcmp(aimBuffer, "notBestF") == 0) {
+          lrSelection = stringToUint16(tmpString);
+        }
         else if(strcmp(aimBuffer, "displayStackSHOIDISP") == 0) {         //JM SHOIDISP
           displayStackSHOIDISP = stringToUint8(tmpString);
         }
@@ -1302,7 +1464,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
     }
   }
 
-  // Graph memory //JM                                  //JMvv GRAPH MEMORY RESTORE
+  // Graph memory                                  //vv GRAPH MEMORY RESTORE
   else if(strcmp(tmpString, "STAT_GRAPH_DATA") == 0) {
     char* end;
     readLine(stream, tmpString); // Number of params
@@ -1320,8 +1482,7 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       //printf("^^^^### %u %f %f \n",i,gr_x[i],gr_y[i]);
     }
   }
-  // Graph memory //JM                                  //JM^^ GRAPH MEMORY RESTORE
-
+  // Graph memory                                  //^^ GRAPH MEMORY RESTORE
 
 }
 

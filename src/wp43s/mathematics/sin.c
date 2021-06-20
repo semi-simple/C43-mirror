@@ -66,7 +66,7 @@ void sinError(void) {
  * \return void
  ***********************************************/
 void fnSin(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   Sin[getRegisterDataType(REGISTER_X)]();
 
@@ -107,7 +107,7 @@ void sinRema(void) {
 
 
 void sinCxma(void) {
-  fnToBeCoded();
+  elementwiseCxma(sinCplx);
 }
 
 

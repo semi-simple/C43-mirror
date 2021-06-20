@@ -14,10 +14,6 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/****************************************************//**
- * \file stringFuncs.c
- *******************************************************/
-
 #include "stringFuncs.h"
 
 #include "charString.h"
@@ -208,7 +204,7 @@ void fnAlphaPos(uint16_t regist) {
     return;
   }
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   longIntegerInit(lgInt);
   ptrTarget = REGISTER_STRING_DATA(REGISTER_X);
@@ -299,7 +295,7 @@ void fnAlphaRR(uint16_t regist) {
   steps = longIntegerModuloUInt(lgInt, stringGlyphLen);
   longIntegerFree(lgInt);
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(steps > 0) {
     for(glyphPointer=0, steps=stringGlyphLen-steps; steps > 0; steps--) {
@@ -378,7 +374,7 @@ void fnAlphaRL(uint16_t regist) {
   steps = longIntegerModuloUInt(lgInt, stringGlyphLen);
   longIntegerFree(lgInt);
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(steps > 0) {
     for(glyphPointer=0; steps > 0; steps--) {
@@ -455,7 +451,7 @@ void fnAlphaSR(uint16_t regist) {
   longIntegerToInt(lgInt, steps);
   longIntegerFree(lgInt);
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(steps > 0) {
     for(glyphPointer=0, steps=stringGlyphLen-steps; steps > 0; steps--) {
@@ -529,7 +525,7 @@ void fnAlphaSL(uint16_t regist) {
   longIntegerToInt(lgInt, steps);
   longIntegerFree(lgInt);
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if(steps > 0) {
     for(glyphPointer=0; steps > 0; steps--) {

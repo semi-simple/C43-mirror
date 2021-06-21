@@ -11,7 +11,7 @@ Func: fnArcsinh
 ;TODO arcsinh(1e-50)
 
 ;=======================================
-; arcsinh(Long Integer) --> Real34
+; arcsinh(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"-2"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"-2" RX=Real:"-1.4436354751788103424932767402731052694055530031569815589830545"

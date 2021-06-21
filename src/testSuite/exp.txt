@@ -11,7 +11,7 @@ Func: fnExp
 
 
 ;=======================================
-; exp(Long Integer) --> Real34
+; exp(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"-919"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"-919" RX=Real:"7.6448880645432290336137105441359425336435324556633455581456822E-400"

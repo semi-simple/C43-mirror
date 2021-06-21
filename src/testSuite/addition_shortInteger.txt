@@ -196,13 +196,13 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"2#13" RX=Real:"5.453099789":MULTPI
 
 
 ;=======================================
-; Short Integer + Complex34 --> Complex34
+; Short Integer + Complex --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 RY=ShoI:"12540#10" RX=Cplx:"123.456 i -6.78"
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"123.456 i -6.78" RX=Cplx:"12663.456 i -6.78"
 
 ;=======================================
-; Complex34 + Short Integer --> Complex34
+; Complex + Short Integer --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Cplx:"123456 i -546" RX=ShoI:"45247#8" ;RX=19111
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"45247#8" RX=Cplx:"142567 i -546"

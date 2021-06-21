@@ -11,7 +11,7 @@ Func: fnChi2R
 
 
 ;=======================================
-; Chi2R(Long Integer) --> Real34
+; Chi2R(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RI=LonI:"1" RX=Real:"0.1"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"0.1" RX=Real:"0.7518296340458492824886447538260134"

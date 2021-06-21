@@ -11,7 +11,7 @@ Func: fnSinc
 
 
 ;=======================================
-; sinc(Long Integer) --> Real34
+; sinc(Long Integer) --> Real
 ;=======================================
 In:  AM=RAD FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"5"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"5" RX=Real:"-0.1917848549326276937786308812311988"
@@ -51,13 +51,13 @@ Out: EC=24 FL_ASLIFT=0 RX=Stri:"String test"
 
 
 ;=======================================
-; sinc(Real16 Matrix)
+; sinc(Real Matrix)
 ;=======================================
 
 
 
 ;=======================================
-; sinc(Complex16 Matrix)
+; sinc(Complex Matrix)
 ;=======================================
 
 
@@ -71,7 +71,7 @@ Out: EC=24 FL_CPXRES=0 FL_ASLIFT=0 RX=ShoI:"5#7"
 
 
 ;=======================================
-; sinc(Real34) --> Real34
+; sinc(Real) --> Real
 ;=======================================
 ;In:  AM=RAD FL_ASLIFT=0 FL_CPXRES=0 RX=Real:"0.0001"
 ;Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"0.0001" RX=Real:"0.999999998333333334166666666468253968281525573189734648"
@@ -113,7 +113,7 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"-inf" RX=Real:"0"
 
 
 ;=======================================
-; sinc(Complex34) --> Complex34
+; sinc(Complex) --> Complex
 ;=======================================
 In:  AM=RAD FL_ASLIFT=0 FL_CPXRES=0 RX=Cplx:"6.2 i -7.6"
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"6.2 i -7.6" RX=Cplx:"73.30765508782941569717089533225506 i -70.72657028341247985391812865164582"

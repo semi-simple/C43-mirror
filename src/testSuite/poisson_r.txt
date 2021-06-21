@@ -11,7 +11,7 @@ Func: fnPoissonR
 
 
 ;=======================================
-; PoissonR(Long Integer) --> Real34
+; PoissonR(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RI=LonI:"1" RX=LonI:"0"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"0" RX=Real:"1"

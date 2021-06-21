@@ -11,7 +11,7 @@ Func: fnArcsin
 
 
 ;=======================================
-; arcsin(Long Integer) --> Real34
+; arcsin(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"-2"
 Out: EC=1 FL_CPXRES=0 FL_ASLIFT=0 RX=LonI:"-2"

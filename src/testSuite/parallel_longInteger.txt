@@ -12,7 +12,7 @@ Func: fnParallel
 
 
 ;=======================================
-; Long Integer || Long Integer --> Real34
+; Long Integer || Long Integer --> Real
 ;=======================================
 In:  FL_ASLIFT=0 RY=LonI:"0" RX=LonI:"0"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"0" RX=Real:"0"

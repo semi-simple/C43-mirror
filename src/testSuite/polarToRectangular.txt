@@ -11,7 +11,7 @@ Func: fnToRect
 
 
 ;=================================================
-; Long Integer, Long Integer --> Real34, Real34
+; Long Integer, Long Integer --> Real, Real
 ;=================================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RY=LonI:"2" RX=LonI:"3"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"3" RX=Real:"2.9981724810572871900187303201317898934857089200099903193117012" RY=Real:"0.1046984901075029149379855448759988120644737281298906142750173"

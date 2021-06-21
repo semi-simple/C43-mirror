@@ -11,7 +11,7 @@ Func: fnSincpi
 
 
 ;=======================================
-; sincpi(Long Integer) --> Real34
+; sincpi(Long Integer) --> Real
 ;=======================================
 In:  AM=RAD FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"5"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"5" RX=Real:"0"
@@ -51,13 +51,13 @@ Out: EC=24 FL_ASLIFT=0 RX=Stri:"String test"
 
 
 ;=======================================
-; sincpi(Real16 Matrix)
+; sincpi(Real Matrix)
 ;=======================================
 
 
 
 ;=======================================
-; sincpi(Complex16 Matrix)
+; sincpi(Complex Matrix)
 ;=======================================
 
 
@@ -71,7 +71,7 @@ Out: EC=24 FL_CPXRES=0 FL_ASLIFT=0 RX=ShoI:"5#7"
 
 
 ;=======================================
-; sincpi(Real34) --> Real34
+; sincpi(Real) --> Real
 ;=======================================
 ;In:  AM=RAD FL_ASLIFT=0 FL_CPXRES=0 RX=Real:"0.0001"
 ;Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"0.0001" RX=Real:"0.9999999835506594126919779728593888366342895938658835096197814403"
@@ -113,7 +113,7 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"-inf" RX=Real:"0"
 
 
 ;=======================================
-; sincpi(Complex34) --> Complex34
+; sincpi(Complex) --> Complex
 ;=======================================
 In:  AM=RAD FL_ASLIFT=0 FL_CPXRES=0 RX=Cplx:"1.973521294339502163534158665819178 i -2.419155134996809103687033203262218"
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"1.973521294339502163534158665819178 i -2.419155134996809103687033203262218" RX=Cplx:"73.3076550878294156971708953322549789597463094254421726414706042134 i -70.726570283412479853918128651645784952300182964020567359461502805"

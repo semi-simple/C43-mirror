@@ -14,7 +14,7 @@ Func: fnMultiply
 ;==================================================================
 ; Short Integer x Long Integer      see in multiplication_longInteger.txt
 ; Short Integer x Real              see in multiplication_real.txt
-; Short Integer x Complex           see in multiplication_complex16.txt
+; Short Integer x Complex           see in multiplication_complex.txt
 ; Short Integer x Time              see in multiplication_time.txt
 ; Short Integer x Date              see in multiplication_date.txt
 ; Short Integer x String            see in multiplication_string.txt

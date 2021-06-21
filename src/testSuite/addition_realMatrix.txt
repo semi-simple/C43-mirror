@@ -1,8 +1,8 @@
 ;*************************************************************
 ;*************************************************************
 ;**                                                         **
-;**                  REAL16 MATRIX + ...                    **
-;**                  ... + REAL16 MATRIX                    **
+;**                  REAL MATRIX + ...                      **
+;**                  ... + REAL MATRIX                      **
 ;**                                                         **
 ;*************************************************************
 ;*************************************************************
@@ -14,7 +14,7 @@ Func: fnAdd
 ;==================================================================
 ; Real Matrix + Long Integer  see in addition_longInteger.txt
 ; Real Matrix + Real          see in addition_real.txt
-; Real Matrix + Complex16     see in addition_complex.txt
+; Real Matrix + Complex       see in addition_complex.txt
 ; Real Matrix + Time          see in addition_time.txt
 ; Real Matrix + Date          see in addition_date.txt
 ; Real Matrix + String        see in addition_string.txt

@@ -11,7 +11,7 @@ Func: fnCubeRoot
 
 
 ;=======================================
-; curt(Long Integer) --> Long Integer or Real34 or Complex34
+; curt(Long Integer) --> Long Integer or Real or Complex
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"0"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"0" RX=LonI:"0"

@@ -12,16 +12,16 @@ Func: fnDivide
 
 
 ;==================================================================
-; Complex34 / Long Integer      see in division_longInteger.txt
-; Complex34 / Real              see in division_real.txt
-; Complex34 / Complex           see in division_complex.txt
-; Complex34 / Time              see in division_time.txt
-; Complex34 / Date              see in division_date.txt
-; Complex34 / String            see in division_string.txt
-; Complex34 / Real Matrix       see in division_realMatrix.txt
-; Complex34 / Complex Matrix    see in division_complexMatrix.txt
-; Complex34 / Short Integer     see in division_shortInteger.txt
-; Complex34 / Real              see in division_real.txt
+; Complex / Long Integer      see in division_longInteger.txt
+; Complex / Real              see in division_real.txt
+; Complex / Complex           see in division_complex.txt
+; Complex / Time              see in division_time.txt
+; Complex / Date              see in division_date.txt
+; Complex / String            see in division_string.txt
+; Complex / Real Matrix       see in division_realMatrix.txt
+; Complex / Complex Matrix    see in division_complexMatrix.txt
+; Complex / Short Integer     see in division_shortInteger.txt
+; Complex / Real              see in division_real.txt
 ;==================================================================
 
 

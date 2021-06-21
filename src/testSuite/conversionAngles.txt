@@ -17,7 +17,7 @@ Func: fnCvtDegToRad
 
 
 ;=======================================
-; Deg->Rad(Long Integer) --> Real34
+; Deg->Rad(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"5"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"5" RX=Real:"0.087266462599716478846184538424430635672143594427086272804859572":RAD
@@ -185,7 +185,7 @@ Func: fnCvtDegToDms
 
 
 ;=======================================
-; Deg->Dms(Long Integer) --> Real34
+; Deg->Dms(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"5"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"5" RX=Real:"5":DMS

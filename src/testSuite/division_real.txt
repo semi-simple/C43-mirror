@@ -1,8 +1,8 @@
 ;*************************************************************
 ;*************************************************************
 ;**                                                         **
-;**                    REAL34 / ...                         **
-;**                    ... / REAL34                         **
+;**                    REAL / ...                           **
+;**                    ... / REAL                           **
 ;**                                                         **
 ;*************************************************************
 ;*************************************************************
@@ -12,13 +12,13 @@ Func: fnDivide
 
 
 ;==================================================================
-; Real34  / Long Integer      see in division_longInteger.txt
-; Real34  / Time              see in division_time.txt
-; Real34  / Date              see in division_date.txt
-; Real34  / String            see in division_string.txt
-; Real34  / Real Matrix       see in division_realMatrix.txt
-; Real34  / Complex Matrix    see in division_complexMatrix.txt
-; Real34  / Short Integer     see in division_shortInteger.txt
+; Real / Long Integer      see in division_longInteger.txt
+; Real / Time              see in division_time.txt
+; Real / Date              see in division_date.txt
+; Real / String            see in division_string.txt
+; Real / Real Matrix       see in division_realMatrix.txt
+; Real / Complex Matrix    see in division_complexMatrix.txt
+; Real / Short Integer     see in division_shortInteger.txt
 ;==================================================================
 
 

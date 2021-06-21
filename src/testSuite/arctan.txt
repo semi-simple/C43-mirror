@@ -11,7 +11,7 @@ Func: fnArctan
 
 
 ;=======================================
-; arctan(Long Integer) --> Real34
+; arctan(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"-2"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"-2" RX=Real:"-63.434948822922010648427806279546705328795785700354778972013984":DEG

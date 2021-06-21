@@ -160,7 +160,7 @@ typedef union {
   uint32_t descriptor;
   struct {
     uint32_t pointerToRegisterData : 16; ///< Memory block number
-    uint32_t dataType              :  4; ///< dtLongInteger, dtReal16, ...
+    uint32_t dataType              :  4; ///< dtLongInteger, dtReal34, ...
     uint32_t tag                   :  5; ///< Short integer base, real34 angular mode, or long integer sign
     uint32_t readOnly              :  1; ///< The register or variable is readOnly if this field is 1 (used for system named variables)
     uint32_t notUsed               :  6; ///< 6 bits free

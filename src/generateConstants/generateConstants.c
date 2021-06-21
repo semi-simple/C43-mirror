@@ -33,7 +33,7 @@ realContext_t ctxtReal34, ctxtReal39, ctxtReal51, ctxtReal1071;
 
 char       whiteSpace[50], temp[10000];
 char       defines[1000000], externalDeclarations[1000000]; // .h file
-char       realArray[1000000], realPointerDeclarations[1000000], real16PointerDeclarations[1000000], real34PointerDeclarations[1000000], real51PointerDeclarations[1000000], real1071PointerDeclarations[1000000]; // .c file
+char       realArray[1000000], realPointerDeclarations[1000000], real34PointerDeclarations[1000000], real51PointerDeclarations[1000000], real1071PointerDeclarations[1000000]; // .c file
 FILE       *constantsC, *constantsH;
 int        idx, c;
 
@@ -749,7 +749,6 @@ int main(int argc, char* argv[]) {
   strcat(externalDeclarations, "extern const uint8_t constants[];\n");
   realArray[0] = 0;
   realPointerDeclarations[0]     = 0;
-  real16PointerDeclarations[0]   = 0;
   real34PointerDeclarations[0]   = 0;
   real1071PointerDeclarations[0] = 0;
 
@@ -842,8 +841,6 @@ int main(int argc, char* argv[]) {
   fprintf(constantsC, "%s", real51PointerDeclarations);
   fprintf(constantsC, "\n");
   fprintf(constantsC, "%s", real1071PointerDeclarations);
-  fprintf(constantsC, "\n");
-  fprintf(constantsC, "%s", real16PointerDeclarations);
   fprintf(constantsC, "\n");
   fprintf(constantsC, "%s", real34PointerDeclarations);
 

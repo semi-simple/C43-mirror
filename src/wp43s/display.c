@@ -302,7 +302,7 @@ void real34ToDisplayString(const real34_t *real34, uint32_t tag, char *displaySt
  * \brief Formats a real
  *
  * \param[out] displayString char* Result string
- * \param[in]  x const real16_t*  Value to format
+ * \param[in]  x const real34_t*  Value to format
  * \return void
  ***********************************************/
 void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator, bool_t noFix, bool_t frontSpace) {

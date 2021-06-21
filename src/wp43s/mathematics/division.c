@@ -179,7 +179,7 @@ void divRealComplex(const real_t *numerReal, const real_t *denomReal, const real
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(long integer) ÷ X(long integer) ==> X(long integer or real16)
+ * \brief Y(long integer) ÷ X(long integer) ==> X(long integer or real34)
  *
  * \param void
  * \return void
@@ -634,11 +634,11 @@ void divTimeTime(void) {
 /******************************************************************************************************************************************************************************************/
 
 /******************************************************************************************************************************************************************************************/
-/* real16 matrix / ...                                                                                                                                                                    */
+/* real34 matrix / ...                                                                                                                                                                    */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(long integer) ==> X(real16 matrix)
+ * \brief Y(real34 matrix) ÷ X(long integer) ==> X(real34 matrix)
  *
  * \param void
  * \return void
@@ -668,7 +668,7 @@ void divRemaLonI(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(real16 matrix) ==> X(real16 matrix)
+ * \brief Y(real34 matrix) ÷ X(real34 matrix) ==> X(real34 matrix)
  *
  * \param void
  * \return void
@@ -709,7 +709,7 @@ void divRemaRema(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(complex16 matrix) ==> X(complex16 matrix)
+ * \brief Y(real34 matrix) ÷ X(complex34 matrix) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -724,7 +724,7 @@ void divRemaCxma(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(short integer) ==> X(real16 matrix)
+ * \brief Y(real34 matrix) ÷ X(short integer) ==> X(real34 matrix)
  *
  * \param void
  * \return void
@@ -754,7 +754,7 @@ void divRemaShoI(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(real34) ==> X(real16 matrix)
+ * \brief Y(real34 matrix) ÷ X(real34) ==> X(real34 matrix)
  *
  * \param void
  * \return void
@@ -782,7 +782,7 @@ void divRemaReal(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) ÷ X(complex34) ==> X(complex16 matrix)
+ * \brief Y(real34 matrix) ÷ X(complex34) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -797,11 +797,11 @@ void divRemaCplx(void) {
 
 
 /******************************************************************************************************************************************************************************************/
-/* complex16 matrix / ...                                                                                                                                                                 */
+/* complex34 matrix / ...                                                                                                                                                                 */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(long integer) ==> X(complex16 matrix)
+ * \brief Y(complex34 matrix) ÷ X(long integer) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -822,7 +822,7 @@ void divCxmaLonI(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(real16 matrix) ==> X(complex16 matrix)
+ * \brief Y(complex34 matrix) ÷ X(real34 matrix) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -837,7 +837,7 @@ void divCxmaRema(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(complex16 matrix) ==> X(complex16 matrix)
+ * \brief Y(complex34 matrix) ÷ X(complex34 matrix) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -878,7 +878,7 @@ void divCxmaCxma(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(short integer) ==> X(complex16 matrix)
+ * \brief Y(complex34 matrix) ÷ X(short integer) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -893,7 +893,7 @@ void divCxmaShoI(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(real34) ==> X(complex16 matrix)
+ * \brief Y(complex34 matrix) ÷ X(real34) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -910,7 +910,7 @@ void divCxmaReal(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) ÷ X(complex34) ==> X(complex16 matrix)
+ * \brief Y(complex34 matrix) ÷ X(complex34) ==> X(complex34 matrix)
  *
  * \param void
  * \return void

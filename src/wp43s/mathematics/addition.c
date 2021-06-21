@@ -571,7 +571,7 @@ void addStriStri(void) {
 
 
 /********************************************//**
- * \brief Y(string) + X(real16 matrix) ==> X(string)
+ * \brief Y(string) + X(real34 matrix) ==> X(string)
  *
  * \param void
  * \return void
@@ -605,7 +605,7 @@ void addStriRema(void) {
 
 
 /********************************************//**
- * \brief Y(string) + X(complex16 matrix) ==> X(string)
+ * \brief Y(string) + X(complex34 matrix) ==> X(string)
  *
  * \param void
  * \return void
@@ -741,11 +741,11 @@ void addStriCplx(void) {
 
 
 /******************************************************************************************************************************************************************************************/
-/* real16 matrix + ...                                                                                                                                                                    */
+/* real34 matrix + ...                                                                                                                                                                    */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(real16 matrix) + X(real16 matrix) ==> X(real16 matrix)
+ * \brief Y(real34 matrix) + X(real34 matrix) ==> X(real34 matrix)
  *
  * \param void
  * \return void
@@ -778,7 +778,7 @@ void addRemaRema(void) {
 
 
 /********************************************//**
- * \brief Y(real16 matrix) + X(complex16 matrix) ==> X(complex16 matrix)
+ * \brief Y(real34 matrix) + X(complex34 matrix) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -793,7 +793,7 @@ void addRemaCxma(void) {
 
 
 /********************************************//**
- * \brief Y(complex16 matrix) + X(real16 matrix) ==> X(complex16 matrix)
+ * \brief Y(complex34 matrix) + X(real34 matrix) ==> X(complex34 matrix)
  *
  * \param void
  * \return void
@@ -808,11 +808,11 @@ void addCxmaRema(void) {
 
 
 /******************************************************************************************************************************************************************************************/
-/* complex16 matrix + ...                                                                                                                                                                 */
+/* complex34 matrix + ...                                                                                                                                                                 */
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(complex16 matrix) + X(complex16 matrix) ==> X(complex16 matrix)
+ * \brief Y(complex34 matrix) + X(complex34 matrix) ==> X(complex34 matrix)
  *
  * \param void
  * \return void

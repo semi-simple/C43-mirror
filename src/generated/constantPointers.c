@@ -468,7 +468,6 @@ TO_QSPI const real_t * const const_gammaC29      = (real_t *)(constants +  7864)
 
 TO_QSPI const real_t * const const1071_2pi       = (real_t *)(constants +  7908);
 
-
 TO_QSPI const real34_t * const const34_0         = (real34_t *)(constants +  8632);
 TO_QSPI const real34_t * const const34_1e_6      = (real34_t *)(constants +  8648);
 TO_QSPI const real34_t * const const34_1e_4      = (real34_t *)(constants +  8664);

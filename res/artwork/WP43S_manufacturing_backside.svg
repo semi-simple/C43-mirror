@@ -972,25 +972,37 @@
      id="layer4"
      inkscape:label="Correction"
      style="display:inline">
-    <rect
-       style="display:inline;fill:#010101;fill-opacity:1;stroke:none;stroke-width:0.229995;stroke-dashoffset:6.27428"
-       id="rect98716"
-       width="10.646689"
-       height="3.6468568"
-       x="10.645081"
-       y="187.79301"
-       transform="translate(0,-149)" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82223px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-       x="11.393118"
-       y="190.69736"
-       id="text101902"
-       transform="translate(0,-149)"><tspan
-         sodipodi:role="line"
-         id="tspan101900"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.50472px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
-         x="11.393118"
-         y="190.69736">FILL</tspan></text>
+    <g
+       id="g1690">
+      <g
+         id="g1695">
+        <rect
+           style="display:inline;fill:#010101;fill-opacity:1;stroke:none;stroke-width:0.229995;stroke-dashoffset:6.27428"
+           id="rect98716"
+           width="10.646689"
+           height="3.6468568"
+           x="10.645081"
+           y="187.79301"
+           transform="translate(0,-149)" />
+        <rect
+           style="fill:#ffffff;stroke-width:0.260254;stroke-dashoffset:6.27428"
+           id="rect1049"
+           width="6.5285583"
+           height="3.3231661"
+           x="11.450808"
+           y="38.989899" />
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82223px;line-height:1.25;font-family:Arial;-inkscape-font-specification:'Arial Bold';letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="12.11375"
+         y="41.697357"
+         id="text101902"><tspan
+           sodipodi:role="line"
+           id="tspan101900"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.50472px;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:0.264583"
+           x="12.11375"
+           y="41.697357">FILL</tspan></text>
+    </g>
   </g>
 </svg>

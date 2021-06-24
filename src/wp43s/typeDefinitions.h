@@ -118,11 +118,11 @@ typedef enum {
  * Angular units.
  */
 typedef enum {
-  amRadian =  0, // radian must be 0  | This is because of the tables
-  amMultPi =  1, // multpi must be 1  | angle45, angle90, and angle180
-  amGrad   =  2, // grad   must be 2  | for angle reduction before
-  amDegree =  3, // degree must be 3  | Taylor trig computation.
-  amDMS    =  4,
+  amRadian =  0, // radian must be 0  | This is because of the tables angle45,
+  amGrad   =  1, // grad   must be 1  | angle90, and angle180 for angle reduction
+  amDegree =  2, // degree must be 2  | before Taylor trig computation.
+  amDMS    =  3,
+  amMultPi =  4,
   amNone   =  5,
   amSecond =  6  // not an angular but a time unit: for the routine unified with the real type
 } angularMode_t;

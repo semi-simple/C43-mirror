@@ -59,12 +59,12 @@ TO_QSPI void (* const multiplication[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS][NUMB
  * \return void
  ***********************************************/
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-void mulError(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  void mulError(void) {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     sprintf(errorMessage, "cannot multiply %s", getRegisterDataTypeName(REGISTER_Y, true, false));
     sprintf(errorMessage + ERROR_MESSAGE_LENGTH/2, "by %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnMultiply:", errorMessage, errorMessage + ERROR_MESSAGE_LENGTH/2, NULL);
-}
+  }
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
@@ -967,30 +967,22 @@ void mulRealReal(void) {
   yAngularMode = getRegisterAngularMode(REGISTER_Y);
   xAngularMode = getRegisterAngularMode(REGISTER_X);
 
-  if(yAngularMode == amNone && xAngularMode == amNone) {
+  if(yAngularMode == amNone && xAngularMode == amNone) { // Neither is an angle
     real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
   }
-  else if(yAngularMode != amNone && xAngularMode != amNone) {
+  else if(yAngularMode != amNone && xAngularMode != amNone) { // Both are angles
     real34Multiply(REGISTER_REAL34_DATA(REGISTER_Y), REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, amNone);
   }
-  else {
+  else { // One and only one is an angle
     real_t y, x;
-
-    if(yAngularMode == amNone) {
-      yAngularMode = currentAngularMode;
-    }
-    else if(xAngularMode == amNone) {
-      xAngularMode = currentAngularMode;
-    }
 
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-
-    convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
-    convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
-
     realMultiply(&y, &x, &x, &ctxtReal39);
+
+    convertAngleFromTo(&x, yAngularMode != amNone ? yAngularMode : xAngularMode, currentAngularMode, &ctxtReal39);
+
     realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }

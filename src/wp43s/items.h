@@ -1453,7 +1453,7 @@
 #define MNU_DYNAMIC                   1394
 #define MNU_PLOT_STAT                 1395
 #define MNU_PLOT_LR                   1396
-#define MNU_1397                      1397
+#define MNU_ELLIPTIC                  1397
 #define MNU_1398                      1398
 #define MNU_1399                      1399
 #define MNU_1400                      1400
@@ -1746,7 +1746,7 @@
 #define ITM_toHR                      1685
 #define ITM_toHMS                     1686
 #define ITM_toINT                     1687
-#define ITM_1688                      1688
+#define ITM_am                        1688
 #define ITM_toPOL                     1689
 #define ITM_1690                      1690
 #define ITM_toREAL                    1691

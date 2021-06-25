@@ -22,8 +22,9 @@
 
 #include <stdint.h>
 
-void fnJacobiSn(uint16_t unusedButMandatoryParameter);
-void fnJacobiCn(uint16_t unusedButMandatoryParameter);
-void fnJacobiDn(uint16_t unusedButMandatoryParameter);
+void fnJacobiSn       (uint16_t unusedButMandatoryParameter);
+void fnJacobiCn       (uint16_t unusedButMandatoryParameter);
+void fnJacobiDn       (uint16_t unusedButMandatoryParameter);
+void fnJacobiAmplitude(uint16_t unusedButMandatoryParameter);
 
 #endif // ELLIPTIC_H

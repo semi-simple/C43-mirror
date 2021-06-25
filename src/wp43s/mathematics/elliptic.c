@@ -21,8 +21,10 @@
 #include "elliptic.h"
 
 #include "constantPointers.h"
+#include "conversionAngles.h"
 #include "debug.h"
 #include "error.h"
+#include "mathematics/arcsin.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/magnitude.h"
 #include "mathematics/wp34s.h"
@@ -229,7 +231,7 @@ static int jacobi_check_inputs(real_t *m, real_t *uReal, real_t *uImag, bool_t *
   return 1;
 }
 
-void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
+static void jacobi_sn_am(bool_t calculateAmplitude) {
   bool_t realInput;
   real_t m, uReal, uImag;
   real_t a, b, denom, snuk, cnuk, dnuk, snvki, cnvki, dnvki;
@@ -242,7 +244,14 @@ void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
 
   if (realInput) {
     calc_real_elliptic(&rReal, NULL, NULL, &uReal, &m);
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    if(calculateAmplitude) {
+      WP34S_Asin(&rReal, &rReal, &ctxtReal39);
+      convertAngleFromTo(&rReal, amRadian, currentAngularMode, &ctxtReal39);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
+    }
+    else {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    }
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
@@ -263,12 +272,18 @@ void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
     realMultiply(&b, &cnvki, &a, &ctxtReal39);
     realDivide(&a, &denom, &rImag, &ctxtReal39);
 
+    if(calculateAmplitude) ArcsinComplex(&rReal, &rImag, &rReal, &rImag, &ctxtReal39);
+
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
   }
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+}
+
+void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
+  jacobi_sn_am(false);
 }
 
 void fnJacobiCn(uint16_t unusedButMandatoryParameter) {
@@ -356,4 +371,8 @@ void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
   }
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+}
+
+void fnJacobiAmplitude(uint16_t unusedButMandatoryParameter) {
+  jacobi_sn_am(true);
 }

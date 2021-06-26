@@ -100,21 +100,21 @@ Out: EC=0 FL_ASLIFT=1 RL=LonI:"-1234" RX=Stri:"String test -1\xa0\x08234"
 
 
 ;=======================================
-; Long Integer + Real16 Matrix
+; Long Integer + Real Matrix
 ;=======================================
 
 ;=======================================
-; Real16 Matrix + Long Integer
+; Real Matrix + Long Integer
 ;=======================================
 
 
 
 ;=======================================
-; Long Integer + Complex16 Matrix
+; Long Integer + Complex Matrix
 ;=======================================
 
 ;=======================================
-; Complex16 Matrix + Long Integer
+; Complex Matrix + Long Integer
 ;=======================================
 
 
@@ -134,7 +134,7 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"123456" RX=LonI:"142567"
 
 
 ;=======================================
-; Long Integer + Real34 --> Real34
+; Long Integer + Real --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 RY=LonI:"37125455431202845695058474896301" RX=Real:"123.456"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"123.456" RX=Real:"37125455431202845695058474896424.456"
@@ -219,7 +219,7 @@ In:  AM=MULTPI FL_CPXRES=0 FL_ASLIFT=0 RY=LonI:"2" RX=Real:"3.453099789":MULTPI
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"3.453099789":MULTPI RX=Real:"5.453099789":MULTPI
 
 ;=======================================
-; Real34 + Long Integer --> Real34
+; Real + Long Integer --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 RY=Real:"123.456" RX=LonI:"12545543120284569505847489630102030405"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"12545543120284569505847489630102030405" RX=Real:"12545543120284569505847489630102030528.456"
@@ -306,7 +306,7 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"2" RX=Real:"5.453099789":MULTPI
 
 
 ;=======================================
-; Long Integer + Complex34 --> Complex34
+; Long Integer + Complex --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 RY=LonI:"12540" RX=Cplx:"123.456 i -6.78"
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"123.456 i -6.78" RX=Cplx:"12663.456 i -6.78"
@@ -316,7 +316,7 @@ In:  FL_ASLIFT=0 RY=LonI:"10000000000000000000000000000004567" RX=Cplx:"10000000
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"1000000000000000000000000000000456.0 i 3" RX=Cplx:"11000000000000000000000000000005023.0 i 3"
 
 ;=======================================
-; Complex34 + Long Integer --> Complex34
+; Complex + Long Integer --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 RY=Cplx:"123.456 i -6.78" RX=LonI:"12540"
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=LonI:"12540" RX=Cplx:"12663.456 i -6.78"

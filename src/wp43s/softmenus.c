@@ -265,7 +265,7 @@ TO_QSPI const int16_t menu_PLOT_STAT[]   = {
 
 TO_QSPI const int16_t menu_PLOT_LR[]   = {
                                              ITM_PLOT_NXT,                  ITM_PLOTZOOM,               ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
-                                             ITM_PLOT_REV,                  ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_PLOT_REV,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL                      };
 
 
@@ -323,8 +323,16 @@ TO_QSPI const int16_t menu_alpha_omega[] = { ITM_alpha,                     ITM_
                                              ITM_alpha_TONOS,               ITM_epsilon_TONOS,          ITM_eta_TONOS,            ITM_iotaTON,           ITM_iota_DIALYTIKA_TONOS,    ITM_NULL,                           //JM modified greek sequence
                                              ITM_iota_DIALYTIKA,            ITM_omicron_TONOS,          ITM_upsilon_TONOS,        ITM_upsilon_DIALYTIKA, ITM_upsilon_DIALYTIKA_TONOS, ITM_omega_TONOS               };
 
+/* Original 43S
+TO_QSPI const int16_t menu_AngleConv[]   = { ITM_toDEG,                     ITM_toRAD,                  ITM_toMULpi,              ITM_NULL,              ITM_toGRAD,                  ITM_toDMS,
+                                             ITM_DEGto,                     ITM_RADto,                  ITM_MULPIto,              ITM_NULL,              ITM_GRADto,                  ITM_DMSto,
+                                             ITM_DtoR,                      ITM_RtoD,                   ITM_MPItoR,               ITM_RtoMPI,            ITM_DtoDMS,                  ITM_DMStoD                    };
+*/
+
 TO_QSPI const int16_t menu_AngleConv[]   = { ITM_DtoR,                      ITM_RtoD,                   ITM_DtoDMS,               ITM_DMStoD,            ITM_ms,                      ITM_dotD,
                                              ITM_toDEG,                     ITM_toRAD,                  ITM_toGRAD,               ITM_toMULpi,           ITM_toDMS,                   ITM_toHMS                   };   //JM mod
+
+
 
 
 /*      Menu name                           <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */

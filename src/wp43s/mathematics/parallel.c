@@ -87,7 +87,7 @@ void fnParallel(uint16_t unusedButMandatoryParameter) {
 /******************************************************************************************************************************************************************************************/
 
 /********************************************//**
- * \brief Y(long integer) || X(long integer) ==> X(Real16)
+ * \brief Y(long integer) || X(long integer) ==> X(Real)
  *
  * \param void
  * \return void

@@ -77,7 +77,7 @@ void fnInvert(uint16_t unusedButMandatoryParameter) {
 
 
 /********************************************//**
- * \brief 1 ÷ X(long integer) ==> X(long integer or real16)
+ * \brief 1 ÷ X(long integer) ==> X(long integer or real34)
  *
  * \param void
  * \return void

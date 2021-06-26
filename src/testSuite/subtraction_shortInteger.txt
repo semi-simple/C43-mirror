@@ -13,13 +13,13 @@ Func: fnSubtract
 
 ;==================================================================
 ; Short Integer - Long Integer      see in subtraction_longInteger.txt
-; Short Integer - Real16            see in subtraction_real16.txt
-; Short Integer - Complex16         see in subtraction_complex16.txt
+; Short Integer - Real              see in subtraction_real.txt
+; Short Integer - Complex           see in subtraction_complex.txt
 ; Short Integer - Time              see in subtraction_time.txt
 ; Short Integer - Date              see in subtraction_date.txt
 ; Short Integer - String            see in subtraction_string.txt
-; Short Integer - Real16 Matrix     see in subtraction_real16Matrix.txt
-; Short Integer - Complex16 Matrix  see in subtraction_complex16Matrix.txt
+; Short Integer - Real Matrix       see in subtraction_realMatrix.txt
+; Short Integer - Complex Matrix    see in subtraction_complexMatrix.txt
 ;==================================================================
 
 
@@ -33,7 +33,7 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"10000#2" RX=ShoI:"12524#10"
 
 
 ;=======================================
-; Short Integer - Real34 --> Real34
+; Short Integer - Real --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=ShoI:"45247#8" RX=Real:"123456" ;RY=19111
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"123456" RX=Real:"-104345"
@@ -114,7 +114,7 @@ In:  AM=MULTPI FL_CPXRES=0 FL_ASLIFT=0 RY=ShoI:"2#13" RX=Real:"3.453099789":MULT
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"3.453099789":MULTPI RX=Real:"-1.453099789":MULTPI
 
 ;=======================================
-; Real34 - Short Integer --> Real34
+; Real - Short Integer --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Real:"123456" RX=ShoI:"45247#8" ;RX=19111
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"45247#8" RX=Real:"104345"
@@ -197,13 +197,13 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"2#13" RX=Real:"1.453099789":MULTPI
 
 
 ;=======================================
-; Short Integer - Complex34 --> Complex34
+; Short Integer - Complex --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 RY=ShoI:"12540#10" RX=Cplx:"123.456 i -6.78"
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"123.456 i -6.78" RX=Cplx:"12416.544 i 6.78"
 
 ;=======================================
-; Complex34 - Short Integer --> Complex34
+; Complex - Short Integer --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Cplx:"123456 i -546" RX=ShoI:"45247#8" ;RX=19111
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"45247#8" RX=Cplx:"104345 i -546"

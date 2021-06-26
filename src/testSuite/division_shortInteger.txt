@@ -13,13 +13,13 @@ Func: fnDivide
 
 ;==================================================================
 ; Short Integer / Long Integer      see in division_longInteger.txt
-; Short Integer / Real16            see in division_real16.txt
-; Short Integer / Complex16         see in division_complex16.txt
+; Short Integer / Real              see in division_real.txt
+; Short Integer / Complex           see in division_complex.txt
 ; Short Integer / Time              see in division_time.txt
 ; Short Integer / Date              see in division_date.txt
 ; Short Integer / String            see in division_string.txt
-; Short Integer / Real16 Matrix     see in division_real16Matrix.txt
-; Short Integer / Complex16 Matrix  see in division_complex16Matrix.txt
+; Short Integer / Real Matrix       see in division_realMatrix.txt
+; Short Integer / Complex Matrix    see in division_complexMatrix.txt
 ;==================================================================
 
 
@@ -33,7 +33,7 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"10000#2" RX=ShoI:"783#10"
 
 
 ;=======================================
-; Short Integer / Real34 --> Real34
+; Short Integer / Real --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=ShoI:"45247#8" RX=Real:"123456" ;RY=19111
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"123456" RX=Real:"0.1548000907205806117159149818558838776568170036288232244686366"
@@ -114,7 +114,7 @@ In:  AM=MULTPI FL_CPXRES=0 FL_ASLIFT=0 RY=ShoI:"2#13" RX=Real:"3.453099789":MULT
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"3.453099789":MULTPI RX=Real:"0.57918974898179520869907880904278147404560859043277419747917977"
 
 ;=======================================
-; Real34 / Short Integer --> Real34
+; Real / Short Integer --> Real
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Real:"123456" RX=ShoI:"45247#8" ;RX=19111
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"45247#8" RX=Real:"6.45994453456124744911307623881534194966249803777928941447334"
@@ -196,13 +196,13 @@ Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=ShoI:"2#13" RX=Real:"1.7265498945":MULTPI
 
 
 ;=======================================
-; Short Integer / Complex34 --> Complex34
+; Short Integer / Complex --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 RY=ShoI:"12540#10" RX=Cplx:"123.456 i -6.78"
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Cplx:"123.456 i -6.78" RX=Cplx:"101.26921954655994264774300155830463486479821262883202772543202 i 5.5615385929049735221592919790476398423999796010196438243457516"
 
 ;=======================================
-; Complex34 / Short Integer --> Complex34
+; Complex / Short Integer --> Complex
 ;=======================================
 In:  FL_ASLIFT=0 FL_CPXRES=0 IM=2COMPL RY=Cplx:"123456 i -546" RX=ShoI:"45247#8" ;RX=19111
 Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=ShoI:"45247#8" RX=Cplx:"6.45994453456124744911307623881534194966249803777928941447334 i -0.028569933546125268170163780021976871958557898592433676939982209"

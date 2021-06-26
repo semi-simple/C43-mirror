@@ -23,6 +23,7 @@
 #include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
+#include "fonts.h"
 #include "mathematics/comparisonReals.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -82,7 +83,7 @@ void fnCvtFromCurrentAngularMode(uint16_t toAngularMode) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnCvtFromCurrentAngularMode:", "the input value must be a long integer, a real16, a real34, an angle16 or an angle34", errorMessage, NULL);
+        moreInfoOnError("In function fnCvtFromCurrentAngularMode:", "the input value must be a long integer, a real34 or an angle16 or an angle34", errorMessage, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
@@ -118,7 +119,7 @@ void fnCvtDegToRad(uint16_t unusedButMandatoryParameter) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnCvtDegToRad:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
+        moreInfoOnError("In function fnCvtDegToRad:", "the input value must be a real34 or a long integer", errorMessage, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
@@ -154,7 +155,79 @@ void fnCvtRadToDeg(uint16_t unusedButMandatoryParameter) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnCvtRadToDeg:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
+        moreInfoOnError("In function fnCvtRadToDeg:", "the input value must be a real34 or a long integer", errorMessage, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+}
+
+
+
+void fnCvtMultPiToRad(uint16_t unusedButMandatoryParameter) {
+  if(!saveLastX()) return;
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amMultPi, amRadian);
+      setRegisterAngularMode(REGISTER_X, amRadian);
+      break;
+
+    case dtReal34:
+      if(getRegisterAngularMode(REGISTER_X) == amMultPi || getRegisterAngularMode(REGISTER_X) == amDMS || getRegisterAngularMode(REGISTER_X) == amNone) {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amMultPi, amRadian);
+        setRegisterAngularMode(REGISTER_X, amRadian);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function fnCvtMultPiToRad:", "cannot use an angle34 not tagged mult" STD_pi " as an input of fnCvtMultPiToRad", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
+      }
+      break;
+
+    default:
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnCvtMultPiToRad:", "the input value must be a real34 or a long integer", errorMessage, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+}
+
+
+
+void fnCvtRadToMultPi(uint16_t unusedButMandatoryParameter) {
+  if(!saveLastX()) return;
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger:
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amRadian, amMultPi);
+      setRegisterAngularMode(REGISTER_X, amMultPi);
+      break;
+
+    case dtReal34:
+      if(getRegisterAngularMode(REGISTER_X) == amRadian || getRegisterAngularMode(REGISTER_X) == amNone) {
+        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amRadian, amMultPi);
+        setRegisterAngularMode(REGISTER_X, amMultPi);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function fnCvtRadToMultPi:", "cannot use an angle34 not tagged radian as an input of fnCvtRadToMultPi", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
+      }
+      break;
+
+    default:
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnCvtRadToMultPi:", "the input value must be a real34 or a long integer", errorMessage, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
@@ -188,7 +261,7 @@ void fnCvtDegToDms(uint16_t unusedButMandatoryParameter) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnCvtDegToDms:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
+        moreInfoOnError("In function fnCvtDegToDms:", "the input value must be a real34 or a long integer", errorMessage, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
   }
@@ -225,7 +298,7 @@ void fnCvtDmsToDeg(uint16_t unusedButMandatoryParameter) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnCvtDmsToDeg:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
+        moreInfoOnError("In function fnCvtDmsToDeg:", "the input value must be a real34 or a long integer", errorMessage, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
@@ -264,7 +337,7 @@ void fnCvtDmsToCurrentAngularMode(uint16_t unusedButMandatoryParameter) {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
-        moreInfoOnError("In function fnCvtDmsToDeg:", "the input value must be a real16, a real34, a long integer", errorMessage, NULL);
+        moreInfoOnError("In function fnCvtDmsToDeg:", "the input value must be a real34 or a long integer", errorMessage, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }

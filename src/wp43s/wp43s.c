@@ -248,18 +248,16 @@ size_t                 wp43sMemInBlocks;
   #ifdef JMSHOWCODES                                           //JM Test
     int8_t            telltale_pos;                            //JM Test
     int8_t            telltale_lastkey;                        //JM Test
-  #endif                                                       //JM Test 
+  #endif //JMSHOWCODES                                         //JM Test 
   uint32_t            nextTimerRefresh;                        //dr timer substitute for refreshTimer()
 #ifdef BUFFER_CLICK_DETECTION
   uint32_t            timeStampKey;                                             //dr - internal keyBuffer POC
-#endif
+#endif //BUFFER_CLICK_DETECTION
   bool_t              backToDMCP;
 //  int                 keyAutoRepeat;   // removed autorepeat stuff
 //  int16_t             previousItem;    // removed autorepeat stuff
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
-#endif // DMCP_BUILD
 
-#ifdef DMCP_BUILD
   void program_main(void) {
     int key = 0;
     char charKey[3];

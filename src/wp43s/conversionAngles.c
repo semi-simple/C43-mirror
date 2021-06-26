@@ -169,13 +169,15 @@ void fnCvtMultPiToRad(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amMultPi, amRadian);
       setRegisterAngularMode(REGISTER_X, amRadian);
       break;
 
     case dtReal34:
-      if(getRegisterAngularMode(REGISTER_X) == amMultPi || getRegisterAngularMode(REGISTER_X) == amDMS || getRegisterAngularMode(REGISTER_X) == amNone) {
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amMultPi, amRadian);
+      if(getRegisterAngularMode(REGISTER_X) == amNone) {
+        real34FromDmsToDeg(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+        setRegisterAngularMode(REGISTER_X, amRadian);
+      }
+      else if(getRegisterAngularMode(REGISTER_X) == amMultPi) {
         setRegisterAngularMode(REGISTER_X, amRadian);
       }
       else {
@@ -183,7 +185,6 @@ void fnCvtMultPiToRad(uint16_t unusedButMandatoryParameter) {
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           moreInfoOnError("In function fnCvtMultPiToRad:", "cannot use an angle34 not tagged mult" STD_pi " as an input of fnCvtMultPiToRad", NULL, NULL);
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-        return;
       }
       break;
 
@@ -193,7 +194,6 @@ void fnCvtMultPiToRad(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "%s cannot be converted to an angle!", getRegisterDataTypeName(REGISTER_X, true, false));
         moreInfoOnError("In function fnCvtMultPiToRad:", "the input value must be a real34 or a long integer", errorMessage, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-      return;
   }
 }
 
@@ -205,13 +205,11 @@ void fnCvtRadToMultPi(uint16_t unusedButMandatoryParameter) {
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger:
       convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amRadian, amMultPi);
       setRegisterAngularMode(REGISTER_X, amMultPi);
       break;
 
     case dtReal34:
       if(getRegisterAngularMode(REGISTER_X) == amRadian || getRegisterAngularMode(REGISTER_X) == amNone) {
-        convertAngle34FromTo(REGISTER_REAL34_DATA(REGISTER_X), amRadian, amMultPi);
         setRegisterAngularMode(REGISTER_X, amMultPi);
       }
       else {
@@ -357,8 +355,8 @@ void convertAngle34FromTo(real34_t *angle34, angularMode_t fromAngularMode, angu
 void convertAngleFromTo(real_t *angle, angularMode_t fromAngularMode, angularMode_t toAngularMode, realContext_t *realContext) {
   switch(fromAngularMode) {
     case amRadian:
+    case amMultPi:
       switch(toAngularMode) {
-        case amMultPi: realDivide(  angle, const_pi,      angle, realContext); break;
         case amGrad:   realMultiply(angle, const_200onPi, angle, realContext); break;
         case amDegree:
         case amDMS:    realMultiply(angle, const_180onPi, angle, realContext); break;
@@ -366,20 +364,10 @@ void convertAngleFromTo(real_t *angle, angularMode_t fromAngularMode, angularMod
       }
       break;
 
-    case amMultPi:
-      switch(toAngularMode) {
-        case amRadian: realMultiply(angle, const_pi,      angle, realContext); break;
-        case amGrad:   realMultiply(angle, const_200,     angle, realContext); break;
-        case amDegree:
-        case amDMS:    realMultiply(angle, const_180,     angle, realContext); break;
-        default: {}
-      }
-      break;
-
     case amGrad:
       switch(toAngularMode) {
-        case amRadian: realDivide(  angle, const_200onPi, angle, realContext); break;
-        case amMultPi: realDivide(  angle, const_200,     angle, realContext); break;
+        case amRadian:
+        case amMultPi: realDivide(  angle, const_200onPi, angle, realContext); break;
         case amDegree:
         case amDMS:    realMultiply(angle, const_9on10,   angle, realContext); break;
         default: {}
@@ -389,8 +377,8 @@ void convertAngleFromTo(real_t *angle, angularMode_t fromAngularMode, angularMod
     case amDegree:
     case amDMS:
       switch(toAngularMode) {
-        case amRadian: realDivide(  angle, const_180onPi, angle, realContext); break;
-        case amMultPi: realDivide(  angle, const_180,     angle, realContext); break;
+        case amRadian:
+        case amMultPi: realDivide(  angle, const_180onPi, angle, realContext); break;
         case amGrad:   realDivide(  angle, const_9on10,   angle, realContext); break;
         default: {}
       }

@@ -2277,7 +2277,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 
       strcpy(errorMessage,tmpString + 2100);
       separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(SHOWregis, errorMessage, WRITE_BUFFER_LEN, 4*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
+      longIntegerRegisterToDisplayString(SHOWregis, errorMessage + 3, WRITE_BUFFER_LEN, 4*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
       last = stringByteLength(errorMessage);
       source = 0;
@@ -2333,7 +2333,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           
         SHOW_reset();
         strcpy(errorMessage,tmpString + 2100);
-        longIntegerRegisterToDisplayString(SHOWregis, errorMessage, WRITE_BUFFER_LEN, 7*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
+        longIntegerRegisterToDisplayString(SHOWregis, errorMessage + 3, WRITE_BUFFER_LEN, 7*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
         last = stringByteLength(errorMessage);
         source = 0;
@@ -2716,13 +2716,17 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       break;
 
     case dtTime:
+      //SHOW_reset();
+      strcpy(tmpString, tmpString + 2100);
       temporaryInformation = TI_SHOW_REGISTER_BIG;
-      timeToDisplayString(SHOWregis, tmpString, true);
+      timeToDisplayString(SHOWregis, tmpString + 3, true);
       break;
 
     case dtDate:
+      //SHOW_reset();
+      strcpy(tmpString, tmpString + 2100);
       temporaryInformation = TI_SHOW_REGISTER_BIG;
-      dateToDisplayString(SHOWregis, tmpString);
+      dateToDisplayString(SHOWregis, tmpString + 3);
       break;
 
 

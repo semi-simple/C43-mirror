@@ -245,12 +245,9 @@ bool_t lastshiftG = false;
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
             addItemToNimBuffer(item);
           }
-          else if((calcMode == CM_NIM) && ((item==ITM_DRG || item == ITM_DMS2) && !catalog)) {   //JM
+          else if((calcMode == CM_NIM) && ((item==ITM_DRG || item == ITM_DMS2 || item == ITM_dotD) && !catalog)) {   //JM
             addItemToNimBuffer(item);
-          }                                                                                   //JM
-          else if((calcMode == CM_NIM) && (item==ITM_DRG && !catalog)) {   //JM
-            addItemToNimBuffer(item);
-          }                                                                                   //JM
+          }                                                                                      //JM
 
 //            else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
 //              if(calcMode == CM_NORMAL) {
@@ -774,6 +771,7 @@ bool_t lowercaseselected;
     //longIntegerInit(lgInt); // For the real34 width test
     switch(item) {
       case ITM_BACKSPACE:
+//removed altogether. Is it to allow action on release?
 //        keyActionProcessed = true;   //JM move this to before fnKeyBackspace to allow fnKeyBackspace to cancel it if needed to allow this function via timing out to NOP, and this is incorporated with the CLRDROP
 //        fnKeyBackspace(NOPARAM);
         if(calcMode == CM_NIM || calcMode == CM_AIM) refreshRegisterLine(NIM_REGISTER_LINE);// else //JM No if needed, it does nothing if not in NIM. TO DISPLAY NUMBER KEYPRESS DIRECTLY AFTER PRESS, NOT ONLY UPON RELEASE          break;

@@ -130,10 +130,15 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
         setSystemFlag(FLAG_ASLIFT);
       }
     }
+
     if((func == ITM_ENTER) && (eRPN)) {      //JM NEWERPN
       setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
-      //printf("Forced ERPN items.c\n");
-    }                                        //JM NEWERPN
+      //printf("ITM_ENTER Forced ERPN items.c\n");
+    } else                                   //JM NEWERPN
+    if(func == ITM_BACKSPACE) {            //JM 
+      clearSystemFlag(FLAG_ASLIFT);          //JM OVERRIDE SLS, AS BACKSPACE ALWAYS HAS SLS CLEAR
+      //printf("ITM_BACKSPACE Forced SLS clear. ERPN items.c, %d\n",getSystemFlag(FLAG_ASLIFT));
+    }                                      //JM
 
     #ifdef PC_BUILD
       refreshLcd(NULL);

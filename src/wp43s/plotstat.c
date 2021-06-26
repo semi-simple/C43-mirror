@@ -414,7 +414,7 @@ void placePixel(uint32_t x, uint32_t y) {
   if (!Aspect_Square) minn = SCREEN_NONSQ_HMIN;
   else minn = 0;
     
-  if(x<SCREEN_WIDTH_GRAPH && x>=0 && y<SCREEN_HEIGHT_GRAPH && y>=1+minn) {
+  if(x<SCREEN_WIDTH_GRAPH && y<SCREEN_HEIGHT_GRAPH && y>=1+minn) {
     setBlackPixel(x,y);
   }
 #endif //!TESTSUITE_BUILD
@@ -427,7 +427,7 @@ void removePixel(uint32_t x, uint32_t y) {
   if (!Aspect_Square) minn = SCREEN_NONSQ_HMIN;
   else minn = 0;
 
-  if(x<SCREEN_WIDTH_GRAPH && x>=0 && y<SCREEN_HEIGHT_GRAPH && y>=1+minn) {
+  if(x<SCREEN_WIDTH_GRAPH && y<SCREEN_HEIGHT_GRAPH && y>=1+minn) {
     setWhitePixel(x,y);
   }
 #endif //!TESTSUITE_BUILD

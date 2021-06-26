@@ -48,7 +48,7 @@
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
   #define SAVE_SPACE_DM42   //Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
   #define SAVE_SPACE_DM42_1 //STAT DEMOS 105-107-109
-  #undef  SAVE_SPACE_DM42_2 //XEQM
+  #define    SAVE_SPACE_DM42_2 //XEQM
   #define SAVE_SPACE_DM42_3 //SOLVER
   #define SAVE_SPACE_DM42_4 //XY GRAPHDEMOS
   #define SAVE_SPACE_DM42_5 //fnShow (old)

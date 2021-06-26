@@ -413,8 +413,8 @@ void placePixel(uint32_t x, uint32_t y) {
   uint32_t minn;
   if (!Aspect_Square) minn = SCREEN_NONSQ_HMIN;
   else minn = 0;
-    
-  if(x<SCREEN_WIDTH_GRAPH && x>=0 && y<SCREEN_HEIGHT_GRAPH && y>=1+minn) {
+
+  if(x<SCREEN_WIDTH_GRAPH && y<SCREEN_HEIGHT_GRAPH && y>=1+minn) {
     setBlackPixel(x,y);
   }
 #endif //!TESTSUITE_BUILD
@@ -427,7 +427,7 @@ void removePixel(uint32_t x, uint32_t y) {
   if (!Aspect_Square) minn = SCREEN_NONSQ_HMIN;
   else minn = 0;
 
-  if(x<SCREEN_WIDTH_GRAPH && x>=0 && y<SCREEN_HEIGHT_GRAPH && y>=1+minn) {
+  if(x<SCREEN_WIDTH_GRAPH && y<SCREEN_HEIGHT_GRAPH && y>=1+minn) {
     setWhitePixel(x,y);
   }
 #endif //!TESTSUITE_BUILD
@@ -1392,9 +1392,9 @@ void fnPlotStat(uint16_t plotMode){
 
 if(telltale == MEM_INITIALIZED && checkMinimumDataPoints(const_2)) {
 
-PLOT_SCALE = false;
+  PLOT_SCALE = false;
 
-#ifndef TESTSUITE_BUILD
+  #ifndef TESTSUITE_BUILD
 
     if (!(lastPlotMode == PLOT_NOTHING || lastPlotMode == PLOT_START)) {
       plotMode = lastPlotMode;
@@ -1408,34 +1408,34 @@ PLOT_SCALE = false;
       plotSelection = lrSelection;
     }
 
-  hourGlassIconEnabled = true;
-  showHideHourGlass();
+    hourGlassIconEnabled = true;
+    showHideHourGlass();
 
-  #ifdef DMCP_BUILD
-    lcd_refresh();
-  #else // !DMCP_BUILD
-    refreshLcd(NULL);
-  #endif // DMCP_BUILD
+    #ifdef DMCP_BUILD
+      lcd_refresh();
+    #else // !DMCP_BUILD
+      refreshLcd(NULL);
+    #endif // DMCP_BUILD
 
-  switch(plotMode) {
-    case PLOT_LR:
-    case PLOT_NXT:
-    case PLOT_REV:
-         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) {
-           showSoftmenu(-MNU_PLOT_LR);
-         }
-         break;
-    case PLOT_ORTHOF:
-    case PLOT_START:
-         PLOT_SCALE = true;
-         if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) {
-           showSoftmenu(-MNU_PLOT_STAT);
-         }
-         break;
-    case PLOT_NOTHING:
-         break;
-    default: break;
-  }
+    switch(plotMode) {
+      case PLOT_LR:
+      case PLOT_NXT:
+      case PLOT_REV:
+           if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_LR) {
+             showSoftmenu(-MNU_PLOT_LR);
+           }
+           break;
+      case PLOT_ORTHOF:
+      case PLOT_START:
+           PLOT_SCALE = true;
+           if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_PLOT_STAT) {
+             showSoftmenu(-MNU_PLOT_STAT);
+           }
+           break;
+      case PLOT_NOTHING:
+           break;
+      default: break;
+    }
 
     if(plotMode != PLOT_START) {
       fnPlotRegressionLine(plotMode);

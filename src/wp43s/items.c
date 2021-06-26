@@ -130,10 +130,15 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
         setSystemFlag(FLAG_ASLIFT);
       }
     }
+
     if((func == ITM_ENTER) && (eRPN)) {      //JM NEWERPN
       setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
-      //printf("Forced ERPN items.c\n");
-    }                                        //JM NEWERPN
+      //printf("ITM_ENTER Forced ERPN items.c\n");
+    } else                                   //JM NEWERPN
+    if(func == ITM_BACKSPACE) {            //JM 
+      clearSystemFlag(FLAG_ASLIFT);          //JM OVERRIDE SLS, AS BACKSPACE ALWAYS HAS SLS CLEAR
+      //printf("ITM_BACKSPACE Forced SLS clear. ERPN items.c, %d\n",getSystemFlag(FLAG_ASLIFT));
+    }                                      //JM
 
     #ifdef PC_BUILD
       refreshLcd(NULL);
@@ -703,6 +708,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnQrDecomposition           (uint16_t unusedButMandatoryParameter) {}
   void fnEigenvalues               (uint16_t unusedButMandatoryParameter) {}
   void fnEigenvectors              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtMultPiToRad            (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtRadToMultPi            (uint16_t unusedButMandatoryParameter) {}
 
   void fnJM                       (uint16_t unusedButMandatoryParameter) {}           //vv JM
   void fnSetSetJM                 (uint16_t unusedButMandatoryParameter) {}
@@ -2136,7 +2143,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1305 */  { fnCurveFitting,               CF_PARABOLIC_FITTING_EX,     "ParabF",                                      "ParabF",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1306 */  { fnCurveFitting,               CF_HYPERBOLIC_FITTING_EX,    "HypF",                                        "HypF",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1307 */  { fnCurveFitting,               CF_ROOT_FITTING_EX,          "RootF",                                       "RootF",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1308 */  { fnCurveFittingReset,          CF_RESET,                    "ResetF",                                      "ResetF",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1308 */  { fnCurveFitting,               CF_RESET,                    "ResetF",                                      "ResetF",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1309 */  { itemToBeCoded,                NOPARAM,                     "1309",                                        "1309",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_UNCHANGED},
 /* 1310 */  { itemToBeCoded,                NOPARAM,                     "1310",                                        "1310",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_UNCHANGED},
 /* 1311 */  { itemToBeCoded,                NOPARAM,                     "1311",                                        "1311",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_UNCHANGED},
@@ -2521,9 +2528,9 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1685 */  { fnToHr,                       NOPARAM,                     STD_RIGHT_ARROW "HR",                          ".d",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1686 */  { fnToHms,                      NOPARAM/*#JM#*/,             STD_RIGHT_ARROW "H.MS",                        STD_RIGHT_ARROW "h.ms",                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },//JM mod
 /* 1687 */  { fnChangeBase,                 TM_VALUE_CHB,                STD_RIGHT_ARROW "INT",                         "#",                                           (2 << TAM_MAX_BITS) |    16, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1688 */  { itemToBeCoded,                NOPARAM,                     "1688",                                        "1688",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
-/* 1689 */  { fnToPolar,                    NOPARAM/*#JM#*/,             STD_RIGHT_ARROW "POL" STD_SUB_o,               STD_RIGHT_ARROW "P" STD_SUB_o,                 (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },//JM TEXT & point to function to add POLAR/RECT
-/* 1690 */  { itemToBeCoded,                NOPARAM,                     "1690",                                        "1690",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
+/* 1688 */  { fnToPolar,                    NOPARAM/*#JM#*/,             STD_RIGHT_ARROW "POL" STD_SUB_o,               STD_RIGHT_ARROW "P" STD_SUB_o,                 (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },//JM TEXT & point to function to add POLAR/RECT
+/* 1689 */  { fnCvtMultPiToRad,             NOPARAM,                     "M" STD_pi STD_RIGHT_ARROW "R",                "M" STD_pi STD_RIGHT_ARROW "R",                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1690 */  { fnCvtRadToMultPi,             NOPARAM,                     "R" STD_RIGHT_ARROW "M" STD_pi,                "R" STD_RIGHT_ARROW "M" STD_pi,                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1691 */  { fnToReal,                     NOPARAM,                     STD_RIGHT_ARROW "REAL",                        ".d",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1692 */  { fnToRect,                     NOPARAM/*#JM#*/,             STD_RIGHT_ARROW "REC" STD_SUB_o,               "R" STD_LEFT_ARROW STD_SUB_o,                  (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },//SWAPPED ARROW DIRECTION & JM TEXT & point to function to add POLAR/RECT
 /* 1693 */  { fnCvtDegToDms,                NOPARAM,                     "D" STD_RIGHT_ARROW "D.MS",                    "D" STD_RIGHT_ARROW "D.MS",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

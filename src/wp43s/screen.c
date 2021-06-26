@@ -1028,7 +1028,7 @@ uint8_t  displaymode = stdNoEnlarge;
         sec = true;
       }
 
-      x = showGlyphCode(charCodeFromString(string, &ch), font, x, y, videoMode, slc, sec);
+      x = showGlyphCode(charCodeFromString(string, &ch), font, x, y, videoMode, slc, sec) - compressString;
     }
     compressString = 0;        //JM compressString
     return x;

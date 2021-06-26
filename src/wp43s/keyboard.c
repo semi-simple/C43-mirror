@@ -142,7 +142,7 @@ bool_t lastshiftG = false;
 
   #ifdef PC_BUILD
     void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-      if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // double click
+      if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
         return;
       }
       if(event->button.button == 2) { // Middle click
@@ -1222,6 +1222,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
         //printf("ERPN--1\n");
         if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
+
         clearSystemFlag(FLAG_ASLIFT);
       }                                               //JM NEWERPN vv
       else {
@@ -1467,11 +1468,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
     refreshScreen();                //JM^^^
     return;
 
-
 undo_disabled:
     temporaryInformation = TI_UNDO_DISABLED;
     return;
-
   #endif // !TESTSUITE_BUILD
 }
 

@@ -28,5 +28,6 @@ void fnJacobiDn       (uint16_t unusedButMandatoryParameter);
 void fnJacobiAmplitude(uint16_t unusedButMandatoryParameter);
 
 void fnEllipticK      (uint16_t unusedButMandatoryParameter);
+void fnEllipticE      (uint16_t unusedButMandatoryParameter);
 
 #endif // ELLIPTIC_H

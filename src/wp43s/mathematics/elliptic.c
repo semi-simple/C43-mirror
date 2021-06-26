@@ -30,6 +30,7 @@
 #include "mathematics/comparisonReals.h"
 #include "mathematics/division.h"
 #include "mathematics/magnitude.h"
+#include "mathematics/multiplication.h"
 #include "mathematics/wp34s.h"
 #include "realType.h"
 #include "registers.h"
@@ -424,6 +425,76 @@ void fnEllipticK(uint16_t unusedButMandatoryParameter) {
     realSquareRoot(&b, &b, &ctxtReal39);
     complexAgm(const_1, const_0, const_0, &b, &a, &b, &ctxtReal39);
     divRealComplex(const_piOn2, &a, &b, &a, &b, &ctxtReal39);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
+  else {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Cannot calculate K(m) for m > 1 if CPXRES is not set");
+      moreInfoOnError("In function fnEllipticK:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+}
+
+void fnEllipticE(uint16_t unusedButMandatoryParameter) {
+  real_t m, a, b, cr, ci;
+
+  if(!saveLastX()) return;
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &m, &ctxtReal39);
+                        break;
+
+    case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &m);
+                        break;
+
+    //case dtComplex34:   // intentionally left unimplemented
+
+    default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+                        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                          sprintf(errorMessage, "cannot calculate elliptic integral K with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
+                          moreInfoOnError("In function fnEllipticE:", errorMessage, NULL, NULL);
+                        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+                        return;
+  }
+
+  if(realCompareLessEqual(&m, const_1)) {
+    if(realCompareEqual(&m, const_1)) {
+      realCopy(const_1, &b);
+    }
+    else if(realCompareEqual(&m, const_0)) {
+      realCopy(const_piOn2, &b);
+    }
+    else {
+      realSubtract(const_1, &m, &b, &ctxtReal39);
+      realSquareRoot(&b, &b, &ctxtReal39);
+      realCopy(&m, &a);
+      realAgm2(const_1, &b, &a, &b, &ctxtReal39);
+      realDivide(const_piOn2, &b, &b, &ctxtReal39);
+
+      realSubtract(&a, const_1, &a, &ctxtReal39);
+      realChangeSign(&a);
+      realMultiply(&a, &b, &b, &ctxtReal39);
+    }
+
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    realToReal34(&b, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else if(getFlag(FLAG_CPXRES)) {
+    realSubtract(&m, const_1, &b, &ctxtReal39);
+    realSquareRoot(&b, &b, &ctxtReal39);
+    realCopy(&m, &cr); realZero(&ci);
+    complexAgm2(const_1, const_0, const_0, &b, &cr, &ci, &a, &b, &ctxtReal39);
+    divRealComplex(const_piOn2, &a, &b, &a, &b, &ctxtReal39);
+
+    realSubtract(&cr, const_1, &cr, &ctxtReal39);
+    realChangeSign(&cr); realChangeSign(&ci);
+    mulComplexComplex(&a, &b, &cr, &ci, &a, &b, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));

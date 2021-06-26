@@ -354,3 +354,4 @@ jacobi_dn
 jacobi_am
 
 ellipticK
+ellipticE

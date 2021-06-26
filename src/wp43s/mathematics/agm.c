@@ -110,19 +110,7 @@ void fnAgm(uint16_t unusedButMandatoryParameter) {
 }
 
 void realAgm(const real_t *a, const real_t *b, real_t *res, realContext_t *realContext) {
-  real_t aReal, bReal, cReal;
-
-  realCopy(a, &aReal);
-  realCopy(b, &bReal);
-
-  while(!realCompareEqual(&aReal, &bReal) && realIdenticalDigits(&aReal, &bReal) <= 34) {
-    realAdd(&aReal, &bReal, &cReal, realContext);          // c = a + b
-    realMultiply(&aReal, &bReal, &bReal, realContext);     // b = a * b
-    realSquareRoot(&bReal, &bReal, realContext);           // b = sqrt(a * b)
-    realMultiply(&cReal, const_1on2, &aReal, realContext); // a = (a + b) / 2
-  }
-
-  realCopy(&aReal, res);
+  realAgm2(a, b, NULL, res, realContext);
 }
 
 void complexAgm(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *resr, real_t *resi, realContext_t *realContext) {
@@ -146,6 +134,80 @@ void complexAgm(const real_t *ar, const real_t *ai, const real_t *br, const real
 
     realMultiply(&cReal, const_1on2, &aReal, realContext); // a = (a + b) / 2 real part
     realMultiply(&cImag, const_1on2, &aImag, realContext); // a = (a + b) / 2 imag part
+  }
+
+  realCopy(&aReal, resr); realCopy(&aImag, resi);
+}
+
+void realAgm2(const real_t *a, const real_t *b, real_t *c, real_t *res, realContext_t *realContext) {
+  real_t aReal, bReal, cReal;
+  real_t cCoeff;
+
+  realCopy(a, &aReal);
+  realCopy(b, &bReal);
+  if(c) {
+    realCopy(const_1, &cCoeff);
+  }
+
+  while(!realCompareEqual(&aReal, &bReal) && realIdenticalDigits(&aReal, &bReal) <= 34) {
+    if(c) {
+      realMultiply(&cCoeff, const_2, &cCoeff, realContext);
+      realSubtract(&aReal, &bReal, &cReal, realContext);     // c = a - b
+      realMultiply(&cReal, const_1on2, &cReal, realContext); // c = (a - b) / 2
+      realMultiply(&cReal, &cReal, &cReal, realContext);     // c^2
+      realFMA(&cReal, &cCoeff, c, c, realContext);
+    }
+    realAdd(&aReal, &bReal, &cReal, realContext);          // c = a + b
+    realMultiply(&aReal, &bReal, &bReal, realContext);     // b = a * b
+    realSquareRoot(&bReal, &bReal, realContext);           // b = sqrt(a * b)
+    realMultiply(&cReal, const_1on2, &aReal, realContext); // a = (a + b) / 2
+  }
+
+  if(c) {
+    realMultiply(c, const_1on2, c, realContext);
+  }
+
+  realCopy(&aReal, res);
+}
+
+void complexAgm2(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, realContext_t *realContext) {
+  real_t aReal, bReal, cReal;
+  real_t aImag, bImag, cImag;
+  real_t cCoeff;
+
+  realCopy(ar, &aReal); realCopy(ai, &aImag);
+  realCopy(br, &bReal); realCopy(bi, &bImag);
+  if(cr&&ci) {
+    realCopy(const_1, &cCoeff);
+  }
+
+  while((!realCompareEqual(&aReal, &bReal) && realIdenticalDigits(&aReal, &bReal) <= 34) || (!realCompareEqual(&aImag, &bImag) && realIdenticalDigits(&aImag, &bImag) <= 34)) {
+    if(cr&&ci) {
+      realMultiply(&cCoeff, const_2, &cCoeff, realContext);
+      realSubtract(&aReal, &bReal, &cReal, realContext); realSubtract(&aImag, &bImag, &cImag, realContext);     // c = a - b
+      realMultiply(&cReal, const_1on2, &cReal, realContext); realMultiply(&cImag, const_1on2, &cImag, realContext); // c = (a - b) / 2
+      mulComplexComplex(&cReal, &cImag, &cReal, &cImag, &cReal, &cImag, realContext);     // c^2
+      realFMA(&cReal, &cCoeff, cr, cr, realContext);
+      realFMA(&cImag, &cCoeff, ci, ci, realContext);
+    }
+
+    realAdd(&aReal, &bReal, &cReal, realContext);                                   // c = a + b real part
+    realAdd(&aImag, &bImag, &cImag, realContext);                                   // c = a + b imag part
+
+    mulComplexComplex(&aReal, &aImag, &bReal, &bImag, &bReal, &bImag, realContext); // b = a * b
+
+    // b = sqrt(a * b)
+    realRectangularToPolar(&bReal, &bImag, &bReal, &bImag, realContext);
+    realSquareRoot(&bReal, &bReal, realContext);
+    realMultiply(&bImag, const_1on2, &bImag, realContext);
+    realPolarToRectangular(&bReal, &bImag, &bReal, &bImag, realContext);
+
+    realMultiply(&cReal, const_1on2, &aReal, realContext); // a = (a + b) / 2 real part
+    realMultiply(&cImag, const_1on2, &aImag, realContext); // a = (a + b) / 2 imag part
+  }
+
+  if(cr&&ci) {
+    realMultiply(cr, const_1on2, cr, realContext); realMultiply(ci, const_1on2, ci, realContext);
   }
 
   realCopy(&aReal, resr); realCopy(&aImag, resi);

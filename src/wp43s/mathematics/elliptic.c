@@ -24,8 +24,11 @@
 #include "conversionAngles.h"
 #include "debug.h"
 #include "error.h"
+#include "flags.h"
+#include "mathematics/agm.h"
 #include "mathematics/arcsin.h"
 #include "mathematics/comparisonReals.h"
+#include "mathematics/division.h"
 #include "mathematics/magnitude.h"
 #include "mathematics/wp34s.h"
 #include "realType.h"
@@ -240,7 +243,7 @@ static void jacobi_sn_am(bool_t calculateAmplitude) {
   if (!jacobi_check_inputs(&m, &uReal, &uImag, &realInput))
     return;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if (realInput) {
     calc_real_elliptic(&rReal, NULL, NULL, &uReal, &m);
@@ -295,7 +298,7 @@ void fnJacobiCn(uint16_t unusedButMandatoryParameter) {
   if (!jacobi_check_inputs(&m, &uReal, &uImag, &realInput))
     return;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if (realInput) {
     calc_real_elliptic(NULL, &rReal, NULL, &uReal, &m);
@@ -338,7 +341,7 @@ void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
   if (!jacobi_check_inputs(&m, &uReal, &uImag, &realInput))
     return;
 
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   if (realInput) {
     calc_real_elliptic(NULL, NULL, &rReal, &uReal, &m);
@@ -375,4 +378,64 @@ void fnJacobiDn(uint16_t unusedButMandatoryParameter) {
 
 void fnJacobiAmplitude(uint16_t unusedButMandatoryParameter) {
   jacobi_sn_am(true);
+}
+
+void fnEllipticK(uint16_t unusedButMandatoryParameter) {
+  real_t m, a, b;
+
+  if(!saveLastX()) return;
+
+  switch(getRegisterDataType(REGISTER_X)) {
+    case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &m, &ctxtReal39);
+                        break;
+
+    case dtReal34:      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &m);
+                        break;
+
+    //case dtComplex34:   // intentionally left unimplemented
+
+    default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+                        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                          sprintf(errorMessage, "cannot calculate elliptic integral K with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
+                          moreInfoOnError("In function fnEllipticK:", errorMessage, NULL, NULL);
+                        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+                        return;
+  }
+
+  if(realCompareLessEqual(&m, const_1)) {
+    if(realCompareEqual(&m, const_1)) {
+      realCopy(const_plusInfinity, &b);
+    }
+    else if(realCompareEqual(&m, const_0)) {
+      realCopy(const_piOn2, &b);
+    }
+    else {
+      realSubtract(const_1, &m, &b, &ctxtReal39);
+      realSquareRoot(&b, &b, &ctxtReal39);
+      realAgm(const_1, &b, &b, &ctxtReal39);
+      realDivide(const_piOn2, &b, &b, &ctxtReal39);
+    }
+
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    realToReal34(&b, REGISTER_REAL34_DATA(REGISTER_X));
+  }
+  else if(getFlag(FLAG_CPXRES)) {
+    realSubtract(&m, const_1, &b, &ctxtReal39);
+    realSquareRoot(&b, &b, &ctxtReal39);
+    complexAgm(const_1, const_0, const_0, &b, &a, &b, &ctxtReal39);
+    divRealComplex(const_piOn2, &a, &b, &a, &b, &ctxtReal39);
+
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&a, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&b, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
+  else {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "Cannot calculate K(m) for m > 1 if CPXRES is not set");
+      moreInfoOnError("In function fnEllipticK:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }

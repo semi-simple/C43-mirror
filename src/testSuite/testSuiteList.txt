@@ -352,3 +352,5 @@ jacobi_sn
 jacobi_cn
 jacobi_dn
 jacobi_am
+
+ellipticK

@@ -140,6 +140,7 @@ const funcTest_t funcTestNoParam[] = {
   {"fnDot",                  fnDot                 },
   {"fnDrop",                 fnDrop                },
   {"fnDropY",                fnDropY               },
+  {"fnEllipticK",            fnEllipticK           },
   {"fnErf",                  fnErf                 },
   {"fnErfc",                 fnErfc                },
   {"fnExp",                  fnExp                 },

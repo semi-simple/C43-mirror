@@ -20,8 +20,11 @@
 #ifndef AGM_H
 #define AGM_H
 
+#include "realType.h"
 #include <stdint.h>
 
-void fnAgm(uint16_t unusedButMandatoryParameter);
+void fnAgm     (uint16_t unusedButMandatoryParameter);
 
+void realAgm   (const real_t *a, const real_t *b, real_t *res, realContext_t *realContext);
+void complexAgm(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *resr, real_t *resi, realContext_t *realContext);
 #endif // AGM_H

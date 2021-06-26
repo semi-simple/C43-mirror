@@ -35,8 +35,8 @@
 
 void fnAgm(uint16_t unusedButMandatoryParameter) {
   bool_t realInput=true;
-  real_t aReal, bReal, cReal;
-  real_t aImag, bImag, cImag;
+  real_t aReal, bReal;
+  real_t aImag, bImag;
 
   switch(getRegisterDataType(REGISTER_X)) {
     case dtLongInteger: convertLongIntegerRegisterToReal(REGISTER_X, &aReal, &ctxtReal39);
@@ -93,32 +93,13 @@ void fnAgm(uint16_t unusedButMandatoryParameter) {
   if(!saveLastX()) return;
 
   if(realInput) {
-    while(realIdenticalDigits(&aReal, &bReal) <= 34) {
-      realAdd(&aReal, &bReal, &cReal, &ctxtReal39);          // c = a + b
-      realMultiply(&aReal, &bReal, &bReal, &ctxtReal39);     // b = a * b
-      realSquareRoot(&bReal, &bReal, &ctxtReal39);           // b = sqrt(a * b)
-      realMultiply(&cReal, const_1on2, &aReal, &ctxtReal39); // a = (a + b) / 2
-    }
+    realAgm(&aReal, &bReal, &aReal, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     realToReal34(&aReal, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else { // Complex input
-    while(realIdenticalDigits(&aReal, &bReal) <= 34 || realIdenticalDigits(&aImag, &bImag) <= 34) {
-      realAdd(&aReal, &bReal, &cReal, &ctxtReal39);                                   // c = a + b real part
-      realAdd(&aImag, &bImag, &cImag, &ctxtReal39);                                   // c = a + b imag part
-
-      mulComplexComplex(&aReal, &aImag, &bReal, &bImag, &bReal, &bImag, &ctxtReal39); // b = a * b
-
-      // b = sqrt(a * b)
-      realRectangularToPolar(&bReal, &bImag, &bReal, &bImag, &ctxtReal39);
-      realSquareRoot(&bReal, &bReal, &ctxtReal39);
-      realMultiply(&bImag, const_1on2, &bImag, &ctxtReal39);
-      realPolarToRectangular(&bReal, &bImag, &bReal, &bImag, &ctxtReal39);
-
-      realMultiply(&cReal, const_1on2, &aReal, &ctxtReal39); // a = (a + b) / 2 real part
-      realMultiply(&cImag, const_1on2, &aImag, &ctxtReal39); // a = (a + b) / 2 imag part
-    }
+    complexAgm(&aReal, &aImag, &bReal, &bImag, &aReal, &aImag, &ctxtReal39);
 
     reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     realToReal34(&aReal, REGISTER_REAL34_DATA(REGISTER_X));
@@ -126,4 +107,46 @@ void fnAgm(uint16_t unusedButMandatoryParameter) {
   }
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+}
+
+void realAgm(const real_t *a, const real_t *b, real_t *res, realContext_t *realContext) {
+  real_t aReal, bReal, cReal;
+
+  realCopy(a, &aReal);
+  realCopy(b, &bReal);
+
+  while(!realCompareEqual(&aReal, &bReal) && realIdenticalDigits(&aReal, &bReal) <= 34) {
+    realAdd(&aReal, &bReal, &cReal, realContext);          // c = a + b
+    realMultiply(&aReal, &bReal, &bReal, realContext);     // b = a * b
+    realSquareRoot(&bReal, &bReal, realContext);           // b = sqrt(a * b)
+    realMultiply(&cReal, const_1on2, &aReal, realContext); // a = (a + b) / 2
+  }
+
+  realCopy(&aReal, res);
+}
+
+void complexAgm(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *resr, real_t *resi, realContext_t *realContext) {
+  real_t aReal, bReal, cReal;
+  real_t aImag, bImag, cImag;
+
+  realCopy(ar, &aReal); realCopy(ai, &aImag);
+  realCopy(br, &bReal); realCopy(bi, &bImag);
+
+  while((!realCompareEqual(&aReal, &bReal) && realIdenticalDigits(&aReal, &bReal) <= 34) || (!realCompareEqual(&aImag, &bImag) && realIdenticalDigits(&aImag, &bImag) <= 34)) {
+    realAdd(&aReal, &bReal, &cReal, realContext);                                   // c = a + b real part
+    realAdd(&aImag, &bImag, &cImag, realContext);                                   // c = a + b imag part
+
+    mulComplexComplex(&aReal, &aImag, &bReal, &bImag, &bReal, &bImag, realContext); // b = a * b
+
+    // b = sqrt(a * b)
+    realRectangularToPolar(&bReal, &bImag, &bReal, &bImag, realContext);
+    realSquareRoot(&bReal, &bReal, realContext);
+    realMultiply(&bImag, const_1on2, &bImag, realContext);
+    realPolarToRectangular(&bReal, &bImag, &bReal, &bImag, realContext);
+
+    realMultiply(&cReal, const_1on2, &aReal, realContext); // a = (a + b) / 2 real part
+    realMultiply(&cImag, const_1on2, &aImag, realContext); // a = (a + b) / 2 imag part
+  }
+
+  realCopy(&aReal, resr); realCopy(&aImag, resi);
 }

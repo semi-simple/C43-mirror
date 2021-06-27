@@ -1227,8 +1227,11 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       }                                               //JM NEWERPN vv
       else {
         if(getSystemFlag(FLAG_ASLIFT)) {
-         saveForUndo();
-         liftStack();
+          saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
+    
+          liftStack();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           //printf("ERPN--2\n");
           if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;

@@ -135,7 +135,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       setSystemFlag(FLAG_ASLIFT);            //JM NEWERPN OVERRIDE SLS, AS ERPN ENTER ALWAYS HAS SLS SET
       //printf("ITM_ENTER Forced ERPN items.c\n");
     } else                                   //JM NEWERPN
-    if(func == ITM_BACKSPACE) {            //JM 
+    if(func == ITM_BACKSPACE || func == ITM_CC) {            //JM 
       clearSystemFlag(FLAG_ASLIFT);          //JM OVERRIDE SLS, AS BACKSPACE ALWAYS HAS SLS CLEAR
       //printf("ITM_BACKSPACE Forced SLS clear. ERPN items.c, %d\n",getSystemFlag(FLAG_ASLIFT));
     }                                      //JM

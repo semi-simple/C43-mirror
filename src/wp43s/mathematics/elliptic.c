@@ -69,25 +69,11 @@ static void _calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t
     realCopy(cn, dn);
     return;
   }
-  realCopy(const_1, mu(0));
+
   realSubtract(const_1, m, &a, &ctxtReal39);
-  realSquareRoot(&a, nu(0), &ctxtReal39);
-  for (;;) {
-    realAdd(mu(n), nu(n), &g, &ctxtReal39);
-    realCopyAbs(&g, &a);
-    realMultiply(&a, const_1e32, &b, &ctxtReal39);
-    realAdd(&b, &b, &a, &ctxtReal39);
-    realSubtract(mu(n), nu(n), &e, &ctxtReal39);
-    realCopyAbs(&e, &f);
-    //if (realCompareGreaterThan(&a, &f))
-    //  break;
-    realMultiply(&g, const_1on2, mu(n+1), &ctxtReal39);
-    realMultiply(mu(n), nu(n), &a, &ctxtReal39);
-    realSquareRoot(&a, nu(n+1), &ctxtReal39);
-    n++;
-    if (n >= ELLIPTIC_N-1)
-      break;
-  }
+  realSquareRoot(&a, &a, &ctxtReal39);
+  n = realAgmStep(const_1, &a, &b, MU, NU, ELLIPTIC_N, &ctxtReal39);
+  realSubtract(mu(n-1), nu(n-1), &e, &ctxtReal39);
 
   realMultiply(u, mu(n), &a, &ctxtReal39);
   WP34S_Cvt2RadSinCosTan(&a, amRadian, &sin_umu, &cos_umu, NULL, &ctxtReal39);
@@ -474,7 +460,7 @@ void fnEllipticE(uint16_t unusedButMandatoryParameter) {
       realSubtract(const_1, &m, &b, &ctxtReal39);
       realSquareRoot(&b, &b, &ctxtReal39);
       realCopy(&m, &a);
-      realAgm2(const_1, &b, &a, &b, &ctxtReal39);
+      realAgmForE(const_1, &b, &a, &b, &ctxtReal39);
       realDivide(const_piOn2, &b, &b, &ctxtReal39);
 
       realSubtract(&a, const_1, &a, &ctxtReal39);
@@ -489,7 +475,7 @@ void fnEllipticE(uint16_t unusedButMandatoryParameter) {
     realSubtract(&m, const_1, &b, &ctxtReal39);
     realSquareRoot(&b, &b, &ctxtReal39);
     realCopy(&m, &cr); realZero(&ci);
-    complexAgm2(const_1, const_0, const_0, &b, &cr, &ci, &a, &b, &ctxtReal39);
+    complexAgmForE(const_1, const_0, const_0, &b, &cr, &ci, &a, &b, &ctxtReal39);
     divRealComplex(const_piOn2, &a, &b, &a, &b, &ctxtReal39);
 
     realSubtract(&cr, const_1, &cr, &ctxtReal39);

@@ -140,9 +140,9 @@ void fnDisplayFormatDsp(uint16_t displayFormatN) {
  * \return void
  ***********************************************/
 void fnDisplayFormatGap(uint16_t gap) {
- if(gap == 1 || gap == 2) {
-   gap = 0;
- }
+  if(gap == 1 || gap == 2) {
+    gap = 0;
+  }
   groupingGap = gap;
 }
 
@@ -342,7 +342,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   real_t value;
 
   real34ToReal(real34, &value);
-  ctxtReal39.digits =  (displayFormat == DF_FIX ? 24 : displayHasNDigits); // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123 
+  ctxtReal39.digits =  (displayFormat == DF_FIX ? 24 : displayHasNDigits); // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123
   //ctxtReal39.digits =  displayHasNDigits; // This line is for fixed number of displayed digits, e.g. in FIX 15: 123 456.789 123 456 8
   realPlus(&value, &value, &ctxtReal39);
   ctxtReal39.digits = 39;
@@ -1791,33 +1791,10 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 }
 
 
-/** based on itoa, integer to string
- * C++ version 0.4 char* style "itoa":
- * Written by Lukás Chmela
- * Released under GPLv3.
- */
-static void uint32ToString_jm(uint32_t val, char* result, uint8_t len) { //jm
-    int32_t value = val;
-    char* ptr = result, *ptr1 = result, tmp_char;
-    int32_t tmp_value;
-    int cnt = 0;
-    do {
-        tmp_value = value;
-        value /= 10;
-        *ptr++ = "9876543210123456789" [9 + (tmp_value - value * 10)];
-    } while ( ++cnt != len);
-    *ptr-- = '\0';
-    while(ptr1 < ptr) {
-        tmp_char = *ptr;
-        *ptr--= *ptr1;
-        *ptr1++ = tmp_char;
-    }
-}
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
-  char syy[10],smm[10],sdd[10];
   real34_t j, y, yy, m, d;
-  uint64_t yearVal;
+  uint32_t yearval32;
   char sign[] = {0, 0};
 
   internalDateToJulianDay(REGISTER_REAL34_DATA(regist), &j);
@@ -1830,22 +1807,16 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
   real34DivideRemainder(&y, const34_2p32, &y);
   real34Divide(&yy, const34_2p32, &yy);
   real34ToIntegralValue(&yy, &yy, DEC_ROUND_DOWN);
-  yearVal = ((uint64_t)real34ToUInt32(&yy) << 32) | ((uint64_t)real34ToUInt32(&y));
-
-  uint32ToString_jm(yearVal,syy,4);
-  uint32_t mm = real34ToUInt32(&m);
-  uint32ToString_jm(mm,smm,2);
-  uint32_t dd = real34ToUInt32(&d);
-  uint32ToString_jm(dd,sdd,2);
+  yearval32 = (uint32_t)(((uint64_t)real34ToUInt32(&yy) << 32) | ((uint64_t)real34ToUInt32(&y)));
 
   if(getSystemFlag(FLAG_DMY)) {
-    sprintf(displayString, "%s.%s.%s%s", sdd, smm, sign, syy); //jm
+    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu32, real34ToUInt32(&d), real34ToUInt32(&m), sign, yearval32);
   }
   else if(getSystemFlag(FLAG_MDY)) {
-    sprintf(displayString, "%s/%s/%s%s", smm, sdd, sign, syy); //jm
+    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu32, real34ToUInt32(&m), real34ToUInt32(&d), sign, yearval32);
   }
   else { // YMD
-    sprintf(displayString, "%s%s-%s-%s", sign, syy, smm, sdd); //jm
+    sprintf(displayString, "%s%04" PRIu32 "-%02" PRIu32 "-%02" PRIu32, sign, yearval32, real34ToUInt32(&m), real34ToUInt32(&d));
   }
 }
 

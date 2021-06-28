@@ -1791,8 +1791,31 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 }
 
 
+/** based on itoa, integer to string
+ * C++ version 0.4 char* style "itoa":
+ * Written by Lukás Chmela
+ * Released under GPLv3.
+ */
+static void uint32ToString_jm(uint32_t val, char* result, uint8_t len) { //jm
+    int32_t value = val;
+    char* ptr = result, *ptr1 = result, tmp_char;
+    int32_t tmp_value;
+    int cnt = 0;
+    do {
+        tmp_value = value;
+        value /= 10;
+        *ptr++ = "9876543210123456789" [9 + (tmp_value - value * 10)];
+    } while ( ++cnt != len);
+    *ptr-- = '\0';
+    while(ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr--= *ptr1;
+        *ptr1++ = tmp_char;
+    }
+}
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
+  char syy[10],smm[10],sdd[10];
   real34_t j, y, yy, m, d;
   uint64_t yearVal;
   char sign[] = {0, 0};
@@ -1809,14 +1832,20 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
   real34ToIntegralValue(&yy, &yy, DEC_ROUND_DOWN);
   yearVal = ((uint64_t)real34ToUInt32(&yy) << 32) | ((uint64_t)real34ToUInt32(&y));
 
+  uint32ToString_jm(yearVal,syy,4);
+  uint32_t mm = real34ToUInt32(&m);
+  uint32ToString_jm(mm,smm,2);
+  uint32_t dd = real34ToUInt32(&d);
+  uint32ToString_jm(dd,sdd,2);
+
   if(getSystemFlag(FLAG_DMY)) {
-    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu64, real34ToUInt32(&d), real34ToUInt32(&m), sign, yearVal);
+    sprintf(displayString, "%s.%s.%s%s", sdd, smm, sign, syy); //jm
   }
   else if(getSystemFlag(FLAG_MDY)) {
-    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu64, real34ToUInt32(&m), real34ToUInt32(&d), sign, yearVal);
+    sprintf(displayString, "%s/%s/%s%s", smm, sdd, sign, syy); //jm
   }
   else { // YMD
-    sprintf(displayString, "%s%04" PRIu64 "-%02" PRIu32 "-%02" PRIu32, sign, yearVal, real34ToUInt32(&m), real34ToUInt32(&d));
+    sprintf(displayString, "%s%s-%s-%s", sign, syy, smm, sdd); //jm
   }
 }
 

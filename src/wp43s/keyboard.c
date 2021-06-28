@@ -177,12 +177,16 @@ bool_t lastshiftG = false;
           }
 
           else {
+/*
     //    #if(FN_KEY_TIMEOUT_TO_NOP == 1)                    //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
     //      showFunctionName(item, 1000); // 1000ms = 1s
     //    #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
     //    showFunctionNameItem = item;
+*/
             btnFnPressed_StateMachine(NULL, data);        //JM ^^ This calls original state analysing btnFnPressed routing, which is now renamed to "statemachine" in keyboardtweaks
+/*
     //    #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+*/
           }
         }
         else {
@@ -218,68 +222,86 @@ bool_t lastshiftG = false;
       }
 
       resetShiftState();                               //shift cancelling delayed to this point after state machine
-  
-        //printf("%d--\n",calcMode);
-      
-        if(calcMode != CM_CONFIRMATION && data[0] != 0 && !running_program_jm) { //JM data is used if operation is from the real keyboard. item is used directly if called from XEQM
-          lastErrorCode = 0;
 
-          if(item < 0) { // softmenu
-            showSoftmenu(item);
-            refreshScreen();
-            return;
-          }
-          else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
-            runFunction(item);
-            refreshScreen();
-            return;
-          }
 
-          // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
-          // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
-          // Use this variable to distinguish between the two
-          fnKeyInCatalog = 1;
-          if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
-            addItemToBuffer(item);
-          }
-          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
-            addItemToNimBuffer(item);
-          }
-          else if((calcMode == CM_NIM) && ((item==ITM_DRG || item == ITM_DMS2 || item == ITM_dotD) && !catalog)) {   //JM
-            addItemToNimBuffer(item);
-          }                                                                                      //JM
+        if(showFunctionNameItem != 0) {
+/* //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
+          item = showFunctionNameItem;
+          #if (FN_KEY_TIMEOUT_TO_NOP == 1)
+            hideFunctionName();
+          #else
+*/
+            showFunctionNameItem = 0;
+/*
+          #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+*/
 
-//            else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
-//              if(calcMode == CM_NORMAL) {
-//                fnAim(NOPARAM);
-//              }
-//              addItemToBuffer(item);  //DIS HIERDIE EEN WAT DIE MENU LAAT TEXT IPV COMMANDS UITGOOI. 
-//KYK HIER. TOFIX
-//CLASH WITH ARROWS !!
-//
-//            }
-          else if(item > 0) { // function
-            if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
-            closeNim();
-              if(calcMode != CM_NIM) {
-                if(indexOfItems[item].func == fnConstant) {
-                  setSystemFlag(FLAG_ASLIFT);
+    
+          //printf("%d--\n",calcMode);
+        
+          if(calcMode != CM_CONFIRMATION && data[0] != 0 && !running_program_jm) { //JM data is used if operation is from the real keyboard. item is used directly if called from XEQM
+            lastErrorCode = 0;
+
+            if(item < 0) { // softmenu
+              showSoftmenu(item);
+              refreshScreen();
+              return;
+            }
+            else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
+              runFunction(item);
+              refreshScreen();
+              return;
+            }
+
+            // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
+            // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
+            // Use this variable to distinguish between the two
+            fnKeyInCatalog = 1;
+            if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
+              addItemToBuffer(item);
+            }
+
+  //            else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {
+  //              if(calcMode == CM_NORMAL) {
+  //                fnAim(NOPARAM);
+  //              }
+  //              addItemToBuffer(item);  //DIS HIERDIE EEN WAT DIE MENU LAAT TEXT IPV COMMANDS UITGOOI. 
+  //KYK HIER. TOFIX
+  //CLASH WITH ARROWS !!
+  //
+  //            }
+
+            else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
+              addItemToNimBuffer(item);
+            }
+            else if((calcMode == CM_NIM) && ((item==ITM_DRG || item == ITM_DMS2 || item == ITM_dotD) && !catalog)) {   //JM
+              addItemToNimBuffer(item);
+            }                                                                                      //JM
+
+
+            else if(item > 0) { // function
+              if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
+              closeNim();
+                if(calcMode != CM_NIM) {
+                  if(indexOfItems[item].func == fnConstant) {
+                    setSystemFlag(FLAG_ASLIFT);
+                  }
                 }
               }
-            }
-            if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
-              closeAim();
-            }
-            if(tam.alpha) {
-              tamLeaveMode();
-            }
+              if(calcMode == CM_AIM && !isAlphabeticSoftmenu()) {
+                closeAim();
+              }
+              if(tam.alpha) {
+                tamLeaveMode();
+              }
 
-            if(lastErrorCode == 0) {
-              temporaryInformation = TI_NO_INFO;
-              runFunction(item);
+              if(lastErrorCode == 0) {
+                temporaryInformation = TI_NO_INFO;
+                runFunction(item);
+              }
             }
+            fnKeyInCatalog = 0;
           }
-          fnKeyInCatalog = 0;
         }
       }
   #ifdef PC_BUILD
@@ -1227,8 +1249,11 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       }                                               //JM NEWERPN vv
       else {
         if(getSystemFlag(FLAG_ASLIFT)) {
-         saveForUndo();
-         liftStack();
+          saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
+    
+          liftStack();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           //printf("ERPN--2\n");
           if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;

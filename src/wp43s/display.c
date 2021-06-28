@@ -2627,7 +2627,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         checkAndEat(&source, last, &dest);
       }
 
-      convertShortIntegerRegisterToUInt64(REGISTER_X, &aa, &nn);
+      convertShortIntegerRegisterToUInt64(SHOWregis, &aa, &nn);
       aa = getRegisterTag(SHOWregis);
       switch(aa){
       	case 2: if(nn <= 0x00000000FFFFFFFF) {

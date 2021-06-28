@@ -1297,6 +1297,7 @@ void kill_ASB_icon(void) {
         default : 
           if(item != -MNU_INTS && item != -MNU_BITS) {
             closeNim();
+            if(eRPN && (item == ITM_RCL || item < 0)) setSystemFlag(FLAG_ASLIFT); //Re-instated LIFT for RCL in NIM
           }
       }
       if(calcMode != CM_NIM) {
@@ -1539,7 +1540,9 @@ void kill_ASB_icon(void) {
 
   void closeNim(void) {
   //printf("closeNim\n");
-if(!eRPN)    setSystemFlag(FLAG_ASLIFT);
+    
+    if(!eRPN) setSystemFlag(FLAG_ASLIFT);     //Re-instate LIFT again for RCL 
+
     if(nimNumberPart == NP_INT_10) {                //JM Input default type vv
       switch (Input_Default) {
       case ID_43S:                                  //   Do nothing, this is default LI/DP

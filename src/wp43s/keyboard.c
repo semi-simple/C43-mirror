@@ -311,6 +311,7 @@ bool_t lastshiftG = false;
     }
 
 
+bool_t allowShiftsToClearError = false;
 #define stringToKeyNumber(data)         ((*((char *)data) - '0')*10 + *(((char *)data)+1) - '0')
 
   int16_t determineItem(const char *data) {
@@ -347,7 +348,6 @@ bool_t lastshiftG = false;
 
   Setup_MultiPresses( key->primary );
 
-
     #ifdef PC_BUILD
       sprintf(tmp,"^^^^^^^keyboard.c: determineitem: key->primary2: %d:",key->primary); jm_show_comment(tmp);
     #endif //PC_BUILD
@@ -355,6 +355,7 @@ bool_t lastshiftG = false;
     // Shift f pressed and JM REMOVED shift g not active
     if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {    //JM Mode added
       temporaryInformation = TI_NO_INFO;
+      if(lastErrorCode != 0) allowShiftsToClearError = true;                                                                                         //JM shifts
       lastErrorCode = 0;
 
       fnTimerStop(TO_FG_LONG);                                //dr
@@ -372,6 +373,7 @@ bool_t lastshiftG = false;
     // Shift g pressed and JM REMOVED shift f not active
     else if(key->primary == ITM_SHIFTg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {
       temporaryInformation = TI_NO_INFO;
+      if(lastErrorCode != 0) allowShiftsToClearError = true;                                                                                         //JM shifts
       lastErrorCode = 0;
 
       fnTimerStop(TO_FG_LONG);                                //dr
@@ -394,11 +396,9 @@ bool_t lastshiftG = false;
       if(ShiftTimoutMode) {
         fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER); //^^
       }
-      temporaryInformation = TI_NO_INFO;
-                                                                                                                                //JM shifts
-      if(lastErrorCode != 0) {                                                                                                  //JM shifts
-        lastErrorCode = 0;                                                                                                      //JM shifts
-      }                                                                                                                         //JM shifts
+      temporaryInformation = TI_NO_INFO;                                                                                                                                //JM shifts
+      if(lastErrorCode != 0) allowShiftsToClearError = true;                                                                                         //JM shifts
+      lastErrorCode = 0;                                                                                                      //JM shifts
 
       fg_processing_jm();
 
@@ -630,14 +630,14 @@ bool_t lastshiftG = false;
 //      }
   #endif // DMCP_BUILD
 
-      if(!checkShifts((char *)data)) {
+      if(allowShiftsToClearError || !checkShifts((char *)data)) {
         #ifdef PC_BUILD
           char tmp[200]; sprintf(tmp,">>> btnReleased (%s):   refreshScreen from keyboard.c  which is the main normal place for it.", (char *)data); jm_show_comment(tmp);
           jm_show_calc_state("      ##### keyboard.c: btnReleased end");
         #endif //PC_BUILD
         refreshScreen(); //JM PROBLEM. THIS MUST BE REMOVED FOR MOST CASES
       }
-
+      allowShiftsToClearError = false;
 
     }
 

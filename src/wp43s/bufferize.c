@@ -870,6 +870,7 @@ void kill_ASB_icon(void) {
         if(nimNumberPart == NP_COMPLEX_INT_PART && aimBuffer[strlen(aimBuffer) - 1] == 'i') {
           done = true;
           strcat(aimBuffer, "3.141592653589793238462643383279503");
+          reallyRunFunction(ITM_ENTER, NOPARAM);
         }
         break;
 

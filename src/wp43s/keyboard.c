@@ -1303,35 +1303,6 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         mimEnter(false);
         break;
 
-      case CM_NIM:
-        closeNim();
-
-      if( !eRPN ) {                                    //JM NEWERPN vv
-        if(calcMode != CM_NIM && lastErrorCode == 0) {
-          setSystemFlag(FLAG_ASLIFT);
-          saveForUndo();
-          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
-          liftStack();
-          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
-          clearSystemFlag(FLAG_ASLIFT);
-          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
-        }
-      } else {
-        if(getSystemFlag(FLAG_ASLIFT)) {
-        if(calcMode != CM_NIM && lastErrorCode == 0) {
-            saveForUndo();
-            if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
-            liftStack();
-            if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
-            clearSystemFlag(FLAG_ASLIFT);
-            copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-            if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
-          }
-        }
-      }                                                //JM NEWERPN ^^
-      break;
-
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:

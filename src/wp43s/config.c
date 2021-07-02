@@ -398,7 +398,7 @@ void fnGetSignificantDigits(uint16_t unusedButMandatoryParameter) {
   liftStack();
 
   longIntegerInit(sigDigits);
-  uIntToLongInteger(significantDigits, sigDigits);
+  uIntToLongInteger(significantDigits == 0 ? 34 : significantDigits, sigDigits);
   convertLongIntegerToLongIntegerRegister(sigDigits, REGISTER_X);
   longIntegerFree(sigDigits);
 }

@@ -98,7 +98,7 @@ void jacobiComplexDn  (const real_t *ur, const real_t *ui, const real_t *m, real
  */
 void ellipticKE       (const real_t *m, real_t *k, real_t *ki, real_t *e, real_t *ei, realContext_t *realContext);
 /**
- * Computes incomplete elliptic integral of the 1st kind.
+ * Computes incomplete elliptic integral of the 1st kind F(𝜑 + i 𝜓 | 𝑚).
  *
  * \param[in] phi amplitude 𝜑
  * \param[in] psi amplitude i𝜓
@@ -107,5 +107,15 @@ void ellipticKE       (const real_t *m, real_t *k, real_t *ki, real_t *e, real_t
  * \param[out] resi imaginary part of the result
  */
 void ellipticF        (const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext);
+/**
+ * Computes Jacobi zeta function Ζ(𝜑 + i 𝜓 | 𝑚).
+ *
+ * \param[in] phi amplitude 𝜑
+ * \param[in] psi amplitude i𝜓
+ * \param[in] m parameter 𝑚 = 𝑘² = sin²𝛼
+ * \param[out] res real part of the result
+ * \param[out] resi imaginary part of the result
+ */
+void jacobiZeta       (const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext);
 
 #endif // ELLIPTIC_H

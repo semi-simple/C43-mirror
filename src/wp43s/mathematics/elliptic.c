@@ -582,6 +582,30 @@ void ellipticF(const real_t *phi, const real_t *psi, const real_t *m, real_t *re
   if(realIsNegative(phi)) realChangeSign(res);
 }
 
+void jacobiZeta(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  real_t k, v, vi, agm, agmi;
+
+  realCopy(phi, &v); realCopy(psi, &vi);
+  realSubtract(const_1, m, &k, realContext);
+  if(realIsNegative(&k)) {
+    realSetPositiveSign(&k);
+    realSquareRoot(&k, &k, realContext);
+    complexAgmForZ(const_1, const_0, const_0, &k, &v, &vi, &agm, &agmi, realContext);
+    realCopy(&v, res); realCopy(&vi, resi);
+  }
+  else if(realIsZero(&vi)) {
+    realSquareRoot(&k, &k, realContext);
+    realAgmForZ(const_1, &k, &v, &agm, realContext);
+    realCopy(&v, res); realZero(resi);
+  }
+  else {
+    realSquareRoot(&k, &k, realContext);
+    complexAgmForZ(const_1, const_0, &k, const_0, &v, &vi, &agm, &agmi, realContext);
+    realCopy(&v, res); realCopy(&vi, resi);
+  }
+}
+
+
 void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
   bool_t realInput;
   real_t m, uReal, uImag;

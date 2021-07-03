@@ -27,6 +27,7 @@
 #include "mathematics/multiplication.h"
 #include "mathematics/toRect.h"
 #include "mathematics/toPolar.h"
+#include "mathematics/wp34s.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 
@@ -109,49 +110,70 @@ void fnAgm(uint16_t unusedButMandatoryParameter) {
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
 
-static void _realAgm(const real_t *a, const real_t *b, real_t *c, real_t *res, real_t *_a, real_t *_b, size_t *_sz, realContext_t *realContext) {
+static int _realAgm(int mode, const real_t *a, const real_t *b, real_t *c, real_t *res, real_t *_a, real_t *_b, size_t _sz, realContext_t *realContext) {
   real_t aReal, bReal, cReal;
-  real_t cCoeff;
+  real_t cCoeff, prevDelta;
   int n = 0;
 
   realCopy(a, &aReal);
   realCopy(b, &bReal);
-  if(c) {
+  if(mode==1) {
     realCopy(const_1, &cCoeff);
   }
-  if(_a&&_b&&_sz) {
+  if(mode==2) {
     realCopy(&aReal, _a);
     realCopy(&bReal, _b);
   }
+  if(mode==3) {
+    realCopy(const_0, &cCoeff);
+    realCopy(const_plusInfinity, &prevDelta);
+  }
 
   while(!realCompareEqual(&aReal, &bReal) && realIdenticalDigits(&aReal, &bReal) <= 34) {
-    if(c) {
+    if(mode==1) {
       realMultiply(&cCoeff, const_2, &cCoeff, realContext);
       realSubtract(&aReal, &bReal, &cReal, realContext);     // c = a - b
       realMultiply(&cReal, const_1on2, &cReal, realContext); // c = (a - b) / 2
       realMultiply(&cReal, &cReal, &cReal, realContext);     // c^2
       realFMA(&cReal, &cCoeff, c, c, realContext);
     }
+    if(mode==3) {
+      real_t d, e, tanphi, ba;
+      WP34S_Cvt2RadSinCosTan(c, amRadian, &d, &e, &tanphi, realContext);
+      realDivide(&bReal, &aReal, &ba, realContext);
+      realDivide(const_1, &tanphi, &d, realContext);
+      realFMA(&ba, &tanphi, &d, &d, realContext);
+      realSubtract(&ba, const_1, &e, realContext);
+      WP34S_Atan2(&e, &d, &d, realContext);
+      realAdd(&cCoeff, &cCoeff, &cCoeff, realContext);
+      if(realCompareAbsLessThan(&prevDelta, &d)) {
+        realAdd(&cCoeff, const_1, &cCoeff, realContext);
+      }
+      realCopy(&d, &prevDelta);
+      realAdd(&d, c, &d, realContext);
+      realAdd(&d, c, c, realContext);
+    }
     realAdd(&aReal, &bReal, &cReal, realContext);          // c = a + b
     realMultiply(&aReal, &bReal, &bReal, realContext);     // b = a * b
     realSquareRoot(&bReal, &bReal, realContext);           // b = sqrt(a * b)
     realMultiply(&cReal, const_1on2, &aReal, realContext); // a = (a + b) / 2
-    if(_a&&_b&&_sz) {
-      ++n;
+    ++n;
+    if(mode==2) {
       realCopy(&aReal, _a + n);
       realCopy(&bReal, _b + n);
-      if(n >= (int)(*_sz) - 1) break;
+      if(n >= (int)_sz - 1) break;
     }
   }
 
-  if(c) {
+  if(mode==1) {
     realMultiply(c, const_1on2, c, realContext);
   }
-  if(_a&&_b&&_sz) {
-    (*_sz) = n;
+  if(mode==3) {
+    realFMA(&cCoeff, const_pi, c, c, realContext);
   }
 
   realCopy(&aReal, res);
+  return n;
 }
 
 static void _complexAgm(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, realContext_t *realContext) {
@@ -197,24 +219,26 @@ static void _complexAgm(const real_t *ar, const real_t *ai, const real_t *br, co
   realCopy(&aReal, resr); realCopy(&aImag, resi);
 }
 
-void realAgm(const real_t *a, const real_t *b, real_t *res, realContext_t *realContext) {
-  _realAgm(a, b, NULL, res, NULL, NULL, NULL, realContext);
+size_t realAgm(const real_t *a, const real_t *b, real_t *res, realContext_t *realContext) {
+  return _realAgm(0, a, b, NULL, res, NULL, NULL, 0, realContext);
 }
 
 void complexAgm(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *resr, real_t *resi, realContext_t *realContext) {
   _complexAgm(ar, ai, br, bi, NULL, NULL, resr, resi, realContext);
 }
 
-void realAgmForE(const real_t *a, const real_t *b, real_t *c, real_t *res, realContext_t *realContext) {
-  _realAgm(a, b, c, res, NULL, NULL, NULL, realContext);
+size_t realAgmForE(const real_t *a, const real_t *b, real_t *c, real_t *res, realContext_t *realContext) {
+  return _realAgm(1, a, b, c, res, NULL, NULL, 0, realContext);
 }
 
 void complexAgmForE(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, realContext_t *realContext) {
   _complexAgm(ar, ai, br, bi, cr, ci, resr, resi, realContext);
 }
 
+size_t realAgmForF(const real_t *a, const real_t *b, real_t *c, real_t *res, realContext_t *realContext) {
+  return _realAgm(3, a, b, c, res, NULL, NULL, 0, realContext);
+}
+
 size_t realAgmStep(const real_t *a, const real_t *b, real_t *res, real_t *aStep, real_t *bStep, size_t bufSize, realContext_t *realContext) {
-  size_t sz = bufSize;
-  _realAgm(a, b, NULL, res, aStep, bStep, &sz, realContext);
-  return sz;
+  return _realAgm(2, a, b, NULL, res, aStep, bStep, bufSize, realContext);
 }

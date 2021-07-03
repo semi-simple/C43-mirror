@@ -27,10 +27,13 @@
 #include "flags.h"
 #include "mathematics/agm.h"
 #include "mathematics/arcsin.h"
+#include "mathematics/arctan.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/division.h"
 #include "mathematics/magnitude.h"
 #include "mathematics/multiplication.h"
+#include "mathematics/sin.h"
+#include "mathematics/tan.h"
 #include "mathematics/wp34s.h"
 #include "realType.h"
 #include "registers.h"
@@ -347,6 +350,237 @@ void ellipticKE(const real_t *m, real_t *k, real_t *ki, real_t *e, real_t *ei, r
   }
 }
 
+static void _ellipticF(const real_t *phi, const real_t *m, real_t *res, realContext_t *realContext) {
+  // assumes 0 ≤ phi ≤ pi/2 and 0 ≤ m ≤ 1
+  real_t v, k1, agm;
+  int n;
+
+  /* The formula used here is found at:
+   * http://hp41programs.yolasite.com/ellipticf.php
+   */
+  realCopy(phi, &v);
+  realSubtract(const_1, m, &k1, realContext);
+  realSquareRoot(&k1, &k1, realContext);
+  n = realAgmForF(const_1, &k1, &v, &agm, realContext);
+  realDivide(&v, &agm, res, realContext);
+  while(n-- > 0) {
+    realMultiply(res, const_1on2, res, realContext);
+  }
+}
+static void _ellipticF_1(const real_t *phi, const real_t *m, real_t *res, realContext_t *realContext) {
+  if(realCompareLessEqual(phi, const_piOn4)) {
+    _ellipticF(phi, m, res, realContext);
+  }
+  else {
+    // Abramowitz & Stegun §17.4.13
+    real_t psi, m1, k1, tanPhi, k;
+
+    ellipticKE(m, &k, NULL, NULL, NULL, realContext);
+    WP34S_Cvt2RadSinCosTan(phi, amRadian, &m1, &k1, &tanPhi, realContext);
+    realSubtract(const_1, m, &m1, realContext);
+    realSquareRoot(&m1, &k1, realContext);
+    realDivide(const_1, &k1, &psi, realContext);
+    realMultiply(&k1, &tanPhi, &psi, realContext);
+    WP34S_Atan2(const_1, &psi, &psi, realContext);
+    _ellipticF(&psi, &m1, res, realContext);
+    realSubtract(&k, res, res, realContext);
+  }
+}
+static void _ellipticF_2(const real_t *phi, const real_t *m, real_t *res, realContext_t *realContext) {
+  // assumes phi is real and 0 ≤ m ≤ 1
+  // Abramowitz & Stegun §17.4.1, §17.4.3
+  real_t phi1, phiQuotient, phiRemainder;
+  bool_t remainderNegative = false;
+
+  realCopyAbs(phi, &phi1);
+  realDivide(&phi1, const_pi, &phiQuotient, realContext);
+  realToIntegralValue(&phiQuotient, &phiQuotient, DEC_ROUND_DOWN, realContext);
+  realDivideRemainder(&phi1, const_pi, &phiRemainder, realContext);
+  if(realCompareGreaterThan(&phiRemainder, const_piOn2)) {
+    realAdd(&phiQuotient, const_1, &phiQuotient, realContext);
+    realSubtract(const_pi, &phiRemainder, &phiRemainder, realContext);
+    realSetPositiveSign(&phiRemainder);
+    remainderNegative = true;
+  }
+
+  if(realIsZero(&phiQuotient)) {
+    _ellipticF_1(&phiRemainder, m, res, realContext);
+  }
+  else {
+    realAdd(&phiQuotient, &phiQuotient, &phiQuotient, realContext);
+    ellipticKE(m, &phi1, NULL, NULL, NULL, realContext);
+    _ellipticF_1(&phiRemainder, m, res, realContext);
+    if(remainderNegative) realChangeSign(res);
+    realFMA(&phiQuotient, &phi1, res, res, realContext);
+  }
+
+  if(realIsNegative(phi)) realChangeSign(res);
+}
+static void _ellipticF_3(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  if(realIsZero(psi)) {
+    _ellipticF_2(phi, m, res, realContext);
+    if(resi) realZero(resi);
+  }
+  else if(realIsZero(phi)) {
+    // Abramowitz & Stegun §17.4.8
+    real_t m1, theta;
+
+    realSubtract(const_1, m, &m1, realContext);
+    WP34S_SinhCosh(psi, &theta, NULL, realContext);
+    WP34S_Atan(&theta, &theta, realContext);
+    _ellipticF_2(&theta, &m1, resi, realContext);
+    if(resi) realZero(res);
+  }
+  else {
+    // Abramowitz & Stegun §17.4.11
+    real_t m1, lambda, mu, b, c, csc2Phi, tan2Phi, cot2Phi, sinh2Psi, cot2Lambda;
+
+    realSubtract(const_1, m, &m1, realContext);
+
+    WP34S_Cvt2RadSinCosTan(phi, amRadian, &csc2Phi, &cot2Phi, &tan2Phi, realContext);
+    realDivide(const_1, &csc2Phi, &csc2Phi, realContext);
+    realMultiply(&csc2Phi, &csc2Phi, &csc2Phi, realContext);
+    realDivide(const_1, &tan2Phi, &cot2Phi, realContext);
+    realMultiply(&tan2Phi, &tan2Phi, &tan2Phi, realContext);
+    realMultiply(&cot2Phi, &cot2Phi, &cot2Phi, realContext);
+    WP34S_SinhCosh(psi, &sinh2Psi, NULL, realContext);
+    realMultiply(&sinh2Psi, &sinh2Psi, &sinh2Psi, realContext);
+
+    realMultiply(m, &sinh2Psi, &b, realContext);
+    realFMA(&b, &csc2Phi, &cot2Phi, &b, realContext);
+    realSubtract(&b, &m1, &b, realContext);
+    realChangeSign(&b);
+    realMultiply(&m1, &cot2Phi, &c, realContext);
+    realChangeSign(&c);
+
+    realMultiply(const__4, &c, &cot2Lambda, realContext);
+    realFMA(&b, &b, &cot2Lambda, &cot2Lambda, realContext);
+    realSquareRoot(&cot2Lambda, &cot2Lambda, realContext);
+    realSubtract(&cot2Lambda, &b, &cot2Lambda, realContext);
+    realMultiply(&cot2Lambda, const_1on2, &cot2Lambda, realContext);
+
+    realDivide(const_1, &cot2Lambda, &lambda, realContext);
+    realSquareRoot(&lambda, &lambda, realContext);
+    WP34S_Atan(&lambda, &lambda, realContext);
+
+    realFMA(&tan2Phi, &cot2Lambda, const__1, &mu, realContext);
+    realDivide(&mu, m, &mu, realContext);
+    realSquareRoot(&mu, &mu, realContext);
+    WP34S_Atan(&mu, &mu, realContext);
+
+    _ellipticF_2(&lambda, m, res, realContext);
+    _ellipticF_2(&mu, &m1, resi, realContext);
+  }
+}
+static void _ellipticF_4(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  if(realIsZero(m)) {
+    // Abramowitz & Stegun §17.4.19-20
+    realCopy(phi, res);
+    realCopy(psi, resi);
+  }
+  /*else if(realCompareEqual(m, const_1)) {
+    // Abramowitz & Stegun §17.4.21
+    real_t s, c, t;
+    realFMA(phi, const_1on2, const_piOn4, &t, realContext);
+    WP34S_Cvt2RadSinCosTan(&t, amRadian, &s, &c, &t, realContext);
+    WP34S_Ln(&t, res, realContext);
+  }*/
+  else if(realCompareGreaterThan(m, const_1)) {
+    // Abramowitz & Stegun §17.4.15
+    real_t k, m_1, theta, thetai, a, b;
+
+    WP34S_Mod(phi, const1071_2pi, &theta, realContext);
+    sinComplex(&theta, psi, &a, &b, realContext);
+    realSquareRoot(m, &k, realContext);
+    realDivide(const_1, m, &m_1, realContext);
+    realMultiply(&k, &a, &a, realContext); realMultiply(&k, &b, &b, realContext);
+    ArcsinComplex(&a, &b, &theta, &thetai, realContext);
+              fflush(stdout);
+    _ellipticF_3(&theta, &thetai, &m_1, res, resi, realContext);
+    divComplexComplex(res, resi, &k, const_0, res, resi, realContext);
+  }
+  else if(realIsPositive(m)) {
+    _ellipticF_3(phi, psi, m, res, resi, realContext);
+  }
+  else {
+    // Abramowitz & Stegun §17.4.17
+    real_t absm, mp1, rtmp1, k, ki, m2, phi1, phi1i, f, fi;
+
+    realCopyAbs(m, &absm);
+    realAdd(&absm, const_1, &mp1, realContext);
+    realSquareRoot(&mp1, &rtmp1, realContext);
+
+    realDivide(&absm, &mp1, &m2, realContext);
+    ellipticKE(&m2, &k, &ki, NULL, NULL, realContext);
+
+    realSubtract(const_piOn2, phi, &phi1, realContext); realMinus(psi, &phi1i, realContext);
+    ellipticF(&phi1, &phi1i, &m2, &f, &fi, realContext); // recurses here
+    
+    realSubtract(&k, &f, &k, realContext); realSubtract(&ki, &fi, &ki, realContext);
+    divComplexComplex(&k, &ki, &rtmp1, const_0, res, resi, realContext);
+  }
+}
+static void _ellipticF_5(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  // Abramowitz & Stegun §17.4.15
+  if(realCompareLessEqual(phi, const_piOn4)) {
+    _ellipticF_4(phi, psi, m, res, resi, realContext);
+  }
+  else {
+    real_t psir, psii, m1, k1, k1i, tanPhi, tanPhiI, k, ki;
+
+    ellipticKE(m, &k, &ki, NULL, NULL, realContext);
+    TanComplex(phi, psi, &tanPhi, &tanPhiI, realContext);
+    realSubtract(const_1, m, &m1, realContext);
+    if(realIsNegative(&m1)) {
+      realSetPositiveSign(&m1);
+      realZero(&k1); realSquareRoot(&m1, &k1i, realContext);
+      realSetNegativeSign(&m1);
+    }
+    else {
+      realSquareRoot(&m1, &k1, realContext); realZero(&k1i);
+    }
+    mulComplexComplex(&k1, &k1i, &tanPhi, &tanPhiI, &psir, &psii, realContext);
+    divRealComplex(const_1, &psir, &psii, &psir, &psii, realContext);
+    ArctanComplex(&psir, &psii, &psir, &psii, realContext);
+    _ellipticF_4(&psir, &psii, m, res, resi, realContext);
+    realSubtract(&k, res, res, realContext); realSubtract(&ki, resi, resi, realContext);
+  }
+}
+
+void ellipticF(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  // Abramowitz & Stegun §17.4.1, §17.4.3
+  real_t phi1, phiQuotient, phiRemainder, psi1;
+  bool_t remainderNegative = false;
+
+  realCopyAbs(phi, &phi1); realCopy(psi, &psi1);
+  realDivide(&phi1, const_pi, &phiQuotient, realContext);
+  realToIntegralValue(&phiQuotient, &phiQuotient, DEC_ROUND_DOWN, realContext);
+  realDivideRemainder(&phi1, const_pi, &phiRemainder, realContext);
+  if(realCompareGreaterThan(&phiRemainder, const_piOn2)) {
+    realAdd(&phiQuotient, const_1, &phiQuotient, realContext);
+    realSubtract(const_pi, &phiRemainder, &phiRemainder, realContext);
+    realSetPositiveSign(&phiRemainder);
+    realChangeSign(&psi1);
+    remainderNegative = true;
+  }
+
+  if(realIsZero(&phiQuotient)) {
+    _ellipticF_5(&phiRemainder, &psi1, m, res, resi, realContext);
+  }
+  else {
+    realAdd(&phiQuotient, &phiQuotient, &phiQuotient, realContext);
+    _ellipticF_5(&phiRemainder, &psi1, m, res, resi, realContext);
+    ellipticKE(m, &phi1, &psi1, NULL, NULL, realContext);
+    if(remainderNegative) {
+      realChangeSign(res);
+      realChangeSign(resi);
+    }
+    realFMA(&phiQuotient, &phi1, res, res, realContext);
+    realFMA(&phiQuotient, &psi1, resi, resi, realContext);
+  }
+
+  if(realIsNegative(phi)) realChangeSign(res);
+}
 
 void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
   bool_t realInput;

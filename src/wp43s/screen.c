@@ -1088,6 +1088,48 @@ uint8_t  displaymode = stdNoEnlarge;
   }
 
 
+  void showDisp(uint16_t offset, uint8_t _h1) {
+  #define line_h1 38
+
+        uint32_t w = stringWidthC43(tmpString + offset, stdnumEnlarge, nocompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+
+        w = stringWidthC43(tmpString + offset, stdEnlarge, nocompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, stdEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+
+        w = stringWidthC43(tmpString + offset, stdNoEnlarge, nocompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, stdNoEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+
+        w = stringWidthC43(tmpString + offset, numSmall, nocompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, numSmall, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+
+        w = stringWidthC43(tmpString + offset, numSmall, stdcompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, numSmall, stdcompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+printf(">>>>>> %s\n",tmpString + offset);
+        w = stringWidth(tmpString + offset + 2, &standardFont, true, true);
+printf(">>>>>> %u\n",w);
+        if(w < SCREEN_WIDTH) {
+          showString(tmpString + offset + 2, &standardFont,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+    }
+
+
 
 uint8_t lines    = 2;      //lines   0
 uint8_t y_offset = 3;
@@ -1700,35 +1742,18 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
 
         else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {            //JMSHOW ^^
-          #define line_h1 38
           switch(regist) {
             // L1
-            case REGISTER_T: w = stringWidthC43(tmpString, stdnumEnlarge, nocompress, true, true);
-                             showStringC43(tmpString, stdnumEnlarge, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
-                             #if defined VERBOSE_SCREEN && defined PC_BUILD
-                               printf("^^^^NEW SHOW: Display Register T: %s\n",tmpString);
-                             #endif //VERBOSE_SCREEN
+            case REGISTER_T: showDisp(0  ,0);
                              break;
             // L2 & L3
-            case REGISTER_Z: w = stringWidthC43(tmpString + 300, stdnumEnlarge, nocompress, true, true);
-                             showStringC43(tmpString + 300, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1, vmNormal, true, true);
-                             #if defined VERBOSE_SCREEN && defined PC_BUILD
-                               printf("^^^^NEW SHOW: Display Register Z: %s\n",tmpString + 300);
-                             #endif //VERBOSE_SCREEN
+            case REGISTER_Z: showDisp(300,1);
                              break;
             // L4 & L5
-            case REGISTER_Y: w = stringWidthC43(tmpString + 600, stdnumEnlarge, nocompress, true, true);
-                             showStringC43(tmpString + 600, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*2, vmNormal, true, true);
-                             #if defined VERBOSE_SCREEN && defined PC_BUILD
-                               printf("^^^^NEW SHOW: Display Register Y: %s\n",tmpString + 600);
-                             #endif //VERBOSE_SCREEN
+            case REGISTER_Y: showDisp(600,2);
                              break;
             // L6 & L7
-            case REGISTER_X: w = stringWidthC43(tmpString + 900, stdnumEnlarge, nocompress, true, true);
-                             showStringC43(tmpString + 900, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*3, vmNormal, true, true);
-                             #if defined VERBOSE_SCREEN && defined PC_BUILD
-                               printf("^^^^NEW SHOW: Display Register X: %s\n",tmpString + 900);
-                             #endif //VERBOSE_SCREEN
+            case REGISTER_X: showDisp(900,3);
                              break;
             default: {}
           }

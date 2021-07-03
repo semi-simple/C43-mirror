@@ -1330,10 +1330,19 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
 
 void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, bool_t determineFont) {
   int16_t i, j, k, unit, gap, digit, bitsPerDigit, maxDigits, base;
-  uint64_t number, sign;
+  uint64_t orgnumber, number, sign;
+
+char str3[4];
+j = 0;                                    //JM Pre-load X: 
+str3[j] = displayString[j]; j++;
+str3[j] = displayString[j]; j++;
+str3[j] = displayString[j]; j++;
+str3[j] = 0;
+printf(">>>A %s %s\n",str3, displayString);
 
   base    = getRegisterTag(regist);
   number  = *(REGISTER_SHORT_INTEGER_DATA(regist));
+  orgnumber = number;
 
   if(base <= 1 || base >= 17) {
     sprintf(errorMessage, "In function shortIntegerToDisplayString: %d is an unexpected value for base!", base);
@@ -1396,6 +1405,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
       gap = 3;
     }
   }
+printf(">>>B %s %i\n",displayString,i);
 
   while(number) {
     if(gap != 0 && digit != 0 && digit%gap == 0) {
@@ -1407,6 +1417,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
     number /= base;
     displayString[i++] = digits[unit];
   }
+printf(">>>C %s %i\n",displayString,i);
 
   // Add leading zeros
   if(getSystemFlag(FLAG_LEAD0)) {
@@ -1432,11 +1443,23 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
       }
     }
   }
+printf(">>>D %s %i\n",displayString,i);
 
   if(sign) {
     displayString[i++] = '-';
   }
 
+printf(">>>>@@@ %u %llu\n",base,orgnumber);
+if( (str3[0] >= 'A' && str3[0] <= 'Z' && str3[1] == ':' && str3[2] == ' ' && str3[3] == 0) && !(base == 2 && orgnumber > 0x3FFF)) 
+{             //JM SHOW
+  displayString[i++] = str3[2];
+  displayString[i++] = str3[1];
+  displayString[i++] = str3[0];
+  printf(">>>> Adding Register name\n");
+}
+
+
+printf("### DetermineFont §%s§\n",displayString);
   if(determineFont) { // The font is not yet determined
     // 1st try: numeric font digits from 30 to 39
     fontForShortInteger = &numericFont;
@@ -1454,10 +1477,13 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
+printf("###0 §%s§ \n",displayString);
+printf(">>>0 %d %d\n",stringWidth(displayString, fontForShortInteger, false, false), SCREEN_WIDTH);
 
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
+printf("###1\n");
 
     // 2nd try: numeric font digits from 2487 to 2490
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
@@ -1477,10 +1503,13 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
+printf("###1 §%s§ \n",displayString);
+printf(">>>1 %d %d\n",stringWidth(displayString, fontForShortInteger, false, false), SCREEN_WIDTH);
 
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
+printf("###2\n");
 
     // 3rd try: standard font digits from 30 to 39
     fontForShortInteger = &standardFont;
@@ -1498,10 +1527,13 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
+printf("###2 §%s§ \n",displayString);
+printf(">>>2 %d %d\n",stringWidth(displayString, fontForShortInteger, false, false), SCREEN_WIDTH);
 
-    if(temporaryInformation == TI_SHOW_REGISTER_BIG || stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {     //JMSHOW
+    if(/*temporaryInformation == TI_SHOW_REGISTER_BIG ||*/ stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {     //JMSHOW
       return;
     }
+printf("###3\n");
 
     // 4th and last try: standard font digits 220e and 2064 (binary)
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
@@ -1525,16 +1557,19 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
 
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
+printf("###3 §%s§ \n",displayString);
+printf(">>>3 %d %d\n",stringWidth(displayString, fontForShortInteger, false, false), SCREEN_WIDTH);
 
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
+printf("###4\n");
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
-    strcpy(displayString, "Integer data representation to wide!");
+    strcpy(displayString, "Integer data representation too wide!");
   }
 
   else { // the font is already determined (standard font)
@@ -1558,6 +1593,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
+printf("###5\n");
 
     // 2nd and last try: standard font digits 220e and 2064 (binary)
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
@@ -1585,6 +1621,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
+printf("###6\n");
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (2)!", displayString, NULL, NULL);
@@ -2175,10 +2212,35 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
 
 
 
+void RegName(void) {
+  char ss[3];
+  ss[0]=0;
+  ss[1]=0;
+  if(SHOWregis >= 0 && SHOWregis < 100) {
+    snprintf(tmpString + 2100, 10, "%d:", SHOWregis);
+  } else {
+    switch (SHOWregis) {
+      case REGISTER_X: ss[0]='X'; break;
+      case REGISTER_Y: ss[0]='Y'; break;
+      case REGISTER_Z: ss[0]='Z'; break;
+      case REGISTER_T: ss[0]='T'; break;
+      case REGISTER_A: ss[0]='A'; break;
+      case REGISTER_B: ss[0]='B'; break;
+      case REGISTER_C: ss[0]='C'; break;
+      case REGISTER_D: ss[0]='D'; break;
+      case REGISTER_L: ss[0]='L'; break;
+      case REGISTER_I: ss[0]='I'; break;
+      case REGISTER_J: ss[0]='J'; break;
+      case REGISTER_K: ss[0]='K'; break;
+      default: break;
+    }
+  }
+  strcpy(tmpString + 2100, ss);
+  strcat(tmpString + 2100, ": ");
+}
 
 
 void SHOW_reset(void){
-  char ss[3];
   uint8_t ix;
 
   for(ix=0; ix<=8; ix++) { //L1 ... L7
@@ -2186,29 +2248,7 @@ void SHOW_reset(void){
   }
 
   temporaryInformation = TI_SHOW_REGISTER_SMALL;
-
-  ss[0]=0;
-  ss[1]=0;
-  if(SHOWregis >= 0 && SHOWregis < 100) {
-    snprintf(tmpString + 2100, 10, "%d:", SHOWregis);
-  } else
-  switch (SHOWregis) {
-    case REGISTER_X: ss[0]='X'; break;
-    case REGISTER_Y: ss[0]='Y'; break;
-    case REGISTER_Z: ss[0]='Z'; break;
-    case REGISTER_T: ss[0]='T'; break;
-    case REGISTER_A: ss[0]='A'; break;
-    case REGISTER_B: ss[0]='B'; break;
-    case REGISTER_C: ss[0]='C'; break;
-    case REGISTER_D: ss[0]='D'; break;
-    case REGISTER_L: ss[0]='L'; break;
-    case REGISTER_I: ss[0]='I'; break;
-    case REGISTER_J: ss[0]='J'; break;
-    case REGISTER_K: ss[0]='K'; break;
-    default: break;
-  }
-  strcpy(tmpString + 2100, ss);
-  strcat(tmpString + 2100, ": ");
+  RegName();
 }
 
 
@@ -2558,8 +2598,9 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
 
-      shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
-    
+printf("aa0\n");
+      shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true); //jm include X: 
+printf(">>>>>## %s\n",tmpString + 2100);    
       if(getRegisterTag(SHOWregis) == 2) {
         source = 2100;
         dest = 2400;
@@ -2587,7 +2628,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       for(d=0; d<=900 ; d+=300) {
         dest = d;
         if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+        while(source < last) {
           tmpString[dest] = tmpString[source];
           if(tmpString[dest] & 0x80) {
             tmpString[++dest] = tmpString[++source];
@@ -2600,67 +2641,32 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 
       convertShortIntegerRegisterToUInt64(SHOWregis, &aa, &nn);
       aa = getRegisterTag(SHOWregis);
+
       switch(aa){
-      	case 2: if(nn <= 0x00000000FFFFFFFF) {
-      		      aa2=0;  aa3=8;  aa4=16; break;
-      	        } else {
-      	          aa2=0;  aa3=0;  aa4=0; break;
-      	        }
-      	case 3: if(nn <= 0x00000000FFFFFFFF) {
-      		      aa2=0;  aa3=8;  aa4=16; break;
-      	        } else {
-      	          aa2=0;  aa3=0;  aa4=16; break;
-      	        }
-      	case 4: if(nn <= 0x00000000FFFFFFFF) {
-      		      aa2=8;  aa3=10;  aa4=16; break;
-      	        } else {
-      	          aa2=0;  aa3=8;  aa4=16; break;
-      	        }
-      	case 5:
-      	case 6:
-      	case 7: if(nn <= 0x00000000FFFFFFFF) {
-      		      aa2=8;  aa3=10;  aa4=16; break;
-      	        } else 
-      	        if(nn <= 0x003FFFFFFFFFFFFF) {
-      	          aa2=0;  aa3=8;  aa4=16; break;
-      	        } else {
-      	          aa2=0;  aa3=0;  aa4=16; break;
-      	        }
-      	case  9:
-      	case 11: if(nn <= 0x001FFFFFFFFFFFFF) {
-      	           aa2= 8;  aa3=10;  aa4=16; break;
-      	         } else {
-      	           aa2= 0;  aa3= 8;  aa4=16; break;
-      	         }
-      	case 12:
-      	case 13:
-      	case 14: 
-      	case 15: if(nn <= 0x001FFFFFFFFFFFFF) {
-      	           aa2= 8;  aa3=10;  aa4=16; break;
-      	         } else {
-      	           aa2=10;  aa3= 0;  aa4=16; break;
-      	         }
-      	case 16: if(nn <= 0x00000000FFFFFFFF) {
-      	           aa2=4;  aa3= 8;  aa4=10; break;
-      	         } else {
-      	           aa2=10;  aa3= 0;  aa4=8; break;
-      	         }
-      	case 10: if(nn <= 0x00000000FFFFFFFF) {
-      	           aa2=4;  aa3= 8;  aa4=16; break;
-      	         } else {
-      	           aa2=0;  aa3= 8;  aa4=16; break;
-      	         }
-      	case  8: if(nn <= 0x00000000FFFFFFFF) {
-      	           aa2=4;  aa3=10;  aa4=16; break;
-      	         } else {
-      	           aa2=10;  aa3=0;  aa4=16; break;
-      	         }
+        case  2: aa2=10;  aa3=8;  aa4=16; break;
+        case  3:
+        case  4:
+        case  5:
+        case  6:
+        case  7:
+        case  9: aa2=10;  aa3=8;  aa4=16; break;
+
+        case  8: aa2= 2; aa3=10;  aa4=16; break;
+        case 10: aa2= 2;  aa3=8;  aa4=16; break;
+        case 11:
+        case 12:
+        case 13:
+        case 14: 
+        case 15:
+        case 16: aa2=10;  aa3= 8;  aa4=16; break;
       }
 
 
       if(aa2){
         setRegisterTag(SHOWregis,aa2);
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+RegName();
+printf("aa2 %s\n",tmpString + 2100);
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
@@ -2668,7 +2674,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         for(d=300; d<=900 ; d+=300) {
           dest = d;
           if(dest != 300){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          while(source < last) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
               tmpString[++dest] = tmpString[++source];
@@ -2680,8 +2686,10 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         }
       }
       if(aa3){
+RegName();
+printf("aa3 %s\n",tmpString + 2100);
         setRegisterTag(SHOWregis,aa3);
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
@@ -2689,7 +2697,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         for(d=600; d<=900 ; d+=300) {
           dest = d;
           if(dest != 600){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          while(source < last) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
               tmpString[++dest] = tmpString[++source];
@@ -2701,8 +2709,10 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         }
       }
       if(aa4){
+RegName();
+printf("aa4 %s\n",tmpString + 2100);
         setRegisterTag(SHOWregis,aa4);
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
@@ -2710,7 +2720,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         for(d=900; d<=900 ; d+=300) {
           dest = d;
           if(dest != 900){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          while(source < last) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
               tmpString[++dest] = tmpString[++source];

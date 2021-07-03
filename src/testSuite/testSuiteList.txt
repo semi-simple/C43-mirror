@@ -355,3 +355,4 @@ jacobi_am
 
 ellipticK
 ellipticE
+ellipticPi

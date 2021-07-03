@@ -201,8 +201,8 @@ static int jacobi_check_inputs(real_t *m, real_t *uReal, real_t *uImag, bool_t *
 
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                          sprintf(errorMessage, "cannot calculate Jacobi elliptic function with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
-                          moreInfoOnError("In function fnAgm:", errorMessage, NULL, NULL);
+                          sprintf(errorMessage, "cannot calculate elliptic integral or Jacobi elliptic function with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
+                          moreInfoOnError("In function jacobi_check_inputs:", errorMessage, NULL, NULL);
                         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
                         return 0;
   }
@@ -216,8 +216,8 @@ static int jacobi_check_inputs(real_t *m, real_t *uReal, real_t *uImag, bool_t *
 
     default:            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_Y);
                         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                          sprintf(errorMessage, "cannot calculate Jacobi elliptic function with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
-                          moreInfoOnError("In function fnAgm:", errorMessage, NULL, NULL);
+                          sprintf(errorMessage, "cannot calculate elliptic integral or Jacobi elliptic function with %s in Y", getRegisterDataTypeName(REGISTER_Y, true, false));
+                          moreInfoOnError("In function jacobi_check_inputs:", errorMessage, NULL, NULL);
                         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
                         return 0;
   }
@@ -616,6 +616,173 @@ void jacobiZeta(const real_t *phi, const real_t *psi, const real_t *m, real_t *r
   }
 }
 
+static void heumanLambda(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  // Abramowitz & Stegun §17.4.39-40
+  real_t k, ki, k1, k1i, z, zi, f, fi, m1;
+
+  realSubtract(const_1, m, &m1, realContext);
+  ellipticKE(m, &k, &ki, NULL, NULL, realContext);
+  ellipticKE(&m1, &k1, &k1i, NULL, NULL, realContext);
+  ellipticF(phi, psi, &m1, &f, &fi, realContext);
+  jacobiZeta(phi, psi, &m1, &z, &zi, realContext);
+
+  divComplexComplex(&f, &fi, &k1, &k1i, res, resi, realContext);
+  mulComplexComplex(&k, &ki, &z, &zi, &z, &zi, realContext);
+  divComplexComplex(&z, &zi, const_piOn2, const_0, &z, &zi, realContext);
+  realAdd(res, &z, res, realContext); realAdd(resi, &zi, resi, realContext);
+}
+
+static void rcSqrt(const real_t *x, real_t *r, real_t *i, realContext_t *realContext) {
+  real_t xx;
+
+  realCopy(x, &xx);
+  if(realIsNegative(&xx)) {
+    realSetPositiveSign(&xx);
+    realSquareRoot(&xx, i, realContext);
+    realZero(r);
+  }
+  else {
+    realSquareRoot(&xx, r, realContext);
+    realZero(i);
+  }
+}
+
+static void _ellipticPi_1(const real_t *n, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  // Abramowitz & Stegun §17.7.6
+  real_t epsilon, epsiloni, delta1, delta1i, k, ki, z, zi, p;
+
+  realDivide(n, m, &epsilon, realContext);
+  rcSqrt(&epsilon, &epsilon, &epsiloni, realContext);
+  ArcsinComplex(&epsilon, &epsiloni, &epsilon, &epsiloni, realContext);
+
+  realSubtract(const_1, n, &delta1, realContext);
+  realDivide(n, &delta1, &delta1, realContext);
+  realSubtract(m, n, &p, realContext);
+  realDivide(&delta1, &p, &delta1, realContext);
+  rcSqrt(&delta1, &delta1, &delta1i, realContext);
+
+  ellipticKE(m, &k, &ki, NULL, NULL, realContext);
+  jacobiZeta(&epsilon, &epsiloni, m, &z, &zi, realContext);
+  mulComplexComplex(&k, &ki, &z, &zi, res, resi, realContext);
+  mulComplexComplex(res, resi, &delta1, &delta1i, res, resi, realContext);
+  realAdd(res, &k, res, realContext); realAdd(resi, &ki, resi, realContext);
+}
+static void _ellipticPi_2(const real_t *n, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  // Abramowitz & Stegun §17.7.7, §17.7.9
+  real_t nn, k, ki;
+
+  realDivide(m, n, &nn, realContext);
+  ellipticKE(m, &k, &ki, NULL, NULL, realContext);
+  _ellipticPi_1(&nn, m, res, resi, realContext);
+  realSubtract(&k, res, res, realContext); realSubtract(&ki, resi, resi, realContext);
+}
+static void _ellipticPi_3(const real_t *n, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  // Abramowitz & Stegun §17.7.14
+  real_t epsilon, epsiloni, delta2, delta2i, k, ki, n1, m1, p;
+
+  realSubtract(const_1, n, &n1, realContext);
+  realSubtract(const_1, m, &m1, realContext);
+
+  realDivide(&n1, &m1, &epsilon, realContext);
+  rcSqrt(&epsilon, &epsilon, &epsiloni, realContext);
+  ArcsinComplex(&epsilon, &epsiloni, &epsilon, &epsiloni, realContext);
+
+  realDivide(n, &n1, &delta2, realContext);
+  realSubtract(n, m, &p, realContext);
+  realDivide(&delta2, &p, &delta2, realContext);
+  rcSqrt(&delta2, &delta2, &delta2i, realContext);
+
+  ellipticKE(m, &k, &ki, NULL, NULL, realContext);
+
+  heumanLambda(&epsilon, &epsiloni, m, res, resi, realContext);
+  realSubtract(const_1, res, res, realContext); realChangeSign(resi);
+  mulComplexComplex(&delta2, &delta2i, res, resi, res, resi, realContext);
+  realFMA(const_piOn2, res, &k, res, realContext); realFMA(const_piOn2, resi, &ki, resi, realContext);
+}
+static void _ellipticPi_4(const real_t *n, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  // Abramowitz & Stegun §17.7.15, §17.7.17
+  real_t nn, k, ki, mmn, n1;
+
+  realSubtract(m, n, &mmn, realContext);
+  realSubtract(const_1, n, &n1, realContext);
+  realDivide(&mmn, &n1, &nn, realContext);
+  ellipticKE(m, &k, &ki, NULL, NULL, realContext);
+
+  _ellipticPi_3(&nn, m, res, resi, realContext);
+  divComplexComplex(res, resi, &mmn, const_0, res, resi, realContext);
+  divComplexComplex(res, resi, &n1, const_0, res, resi, realContext);
+  realMultiply(m, res, res, realContext); realMultiply(m, resi, resi, realContext);
+  realMultiply(n, res, res, realContext); realMultiply(n, resi, resi, realContext);
+
+  divComplexComplex(&k, &ki, &mmn, const_0, &k, &ki, realContext);
+  realMultiply(m, &k, &k, realContext); realMultiply(m, &ki, &ki, realContext);
+
+  realSubtract(&k, res, res, realContext); realSubtract(&ki, resi, resi, realContext);
+}
+
+void ellipticPi(const real_t *n, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  if(realIsZero(n)) {
+    ellipticKE(m, res, resi, NULL, NULL, realContext);
+  }
+  else if(realIsZero(m)) {
+    // Abramowitz & Stegun §17.7.20
+    if(realCompareLessThan(n, const_1)) {
+      //      lim       (Arctan(sqrt(1-n) tan(phi)) / sqrt(1-n))
+      //  phi->(pi/2)-0                                          = (pi/2) sqrt(1-n) / n
+      realSubtract(const_1, n, res, realContext);
+      rcSqrt(res, res, resi, realContext);
+      divComplexComplex(res, resi, n, const_0, res, resi, realContext);
+      realMultiply(const_piOn2, res, res, realContext); realMultiply(const_piOn2, resi, resi, realContext);
+    }
+    else if(realCompareGreaterThan(n, const_1)) {
+      //      lim       (Arctanh(sqrt(n-1) tan(phi)) / sqrt(n-1))
+      //  phi->(pi/2)-0                                          = -(pi/2) i / sqrt(n-1)
+      realSubtract(n, const_1, res, realContext);
+      rcSqrt(res, res, resi, realContext);
+      divComplexComplex(const_0, const_1, res, resi, res, resi, realContext);
+      realMultiply(const_piOn2, res, res, realContext); realMultiply(const_piOn2, resi, resi, realContext);
+      realChangeSign(res); realChangeSign(resi);
+    }
+    else { // n = 1
+      realCopy(const_NaN, res); realCopy(const_0, resi); // unsigned infinity
+    }
+  }
+  else if(realCompareEqual(m, const_1)) {
+    if(realCompareLessThan(n, const_1)) {
+      realCopy(const_plusInfinity, res); realCopy(const_0, resi);
+    }
+    else if(realCompareGreaterThan(n, const_1)) {
+      realCopy(const_minusInfinity, res); realCopy(const_0, resi);
+    }
+    else { // n = 1
+      realCopy(const_NaN, res); realCopy(const_0, resi); // unsigned infinity
+    }
+  }
+  else if(realCompareEqual(m, n)) {
+    // Abramowitz & Stegun §17.7.24
+    real_t cos2Alpha, e, ei;
+
+    realSubtract(const_1, m, &cos2Alpha, realContext);
+    ellipticKE(m, NULL, NULL, &e, &ei, realContext);
+    divComplexComplex(&e, &ei, &cos2Alpha, const_0, res, resi, realContext);
+  }
+  else if(realCompareEqual(m, const_1)) {
+    realCopy(const_NaN, res); realCopy(const_0, resi); // unsigned infinity
+  }
+  else if(realCompareGreaterThan(n, const_1)) {
+    _ellipticPi_2(n, m, res, resi, realContext);
+  }
+  else if(realIsNegative(n)) {
+    _ellipticPi_4(n, m, res, resi, realContext);
+  }
+  else if(realCompareLessThan(n, m)) {
+    _ellipticPi_1(n, m, res, resi, realContext);
+  }
+  else {
+    _ellipticPi_3(n, m, res, resi, realContext);
+  }
+}
+
 
 void fnJacobiSn(uint16_t unusedButMandatoryParameter) {
   bool_t realInput;
@@ -808,4 +975,49 @@ void fnEllipticE(uint16_t unusedButMandatoryParameter) {
   }
 
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+}
+
+void fnEllipticPi(uint16_t unusedButMandatoryParameter) {
+  real_t m, ur, ui, rr, ri;
+  bool_t realInput;
+
+  if(!jacobi_check_inputs(&m, &ur, &ui, &realInput)) return;
+
+  if(!saveLastX()) return;
+
+  if(realIsNegative(&m) || realCompareGreaterEqual(&m, const_1)) {
+    displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "m is out of range (must in 0 ≤ m < 1)");
+      moreInfoOnError("In function fnEllipticPi:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else if(realInput) {
+    ellipticPi(&ur, &m, &rr, &ri, &ctxtReal39);
+    if(realIsZero(&ri)) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else if(getFlag(FLAG_CPXRES)) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+      realToReal34(&rr, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&ri, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Π(n|m) cannot return complex result without CPXRES set");
+        moreInfoOnError("In function fnEllipticPi:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "cannot calculate elliptic integral with %s in X", getRegisterDataTypeName(REGISTER_X, true, false));
+      moreInfoOnError("In function fnEllipticPi:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }

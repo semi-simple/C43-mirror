@@ -671,6 +671,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnJacobiAmplitude           (uint16_t unusedButMandatoryParameter) {}
   void fnEllipticK                 (uint16_t unusedButMandatoryParameter) {}
   void fnEllipticE                 (uint16_t unusedButMandatoryParameter) {}
+  void fnEllipticPi                (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2445,7 +2446,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1725 */  { itemToBeCoded,                NOPARAM,                     "R/S",                                         "R/S",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 /* 1726 */  { fnEllipticK,                  NOPARAM,                     "K(m)",                                        "K(m)",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1727 */  { fnEllipticE,                  NOPARAM,                     "E(m)",                                        "E(m)",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1728 */  { itemToBeCoded,                NOPARAM,                     STD_PI "(n,m)",                                STD_PI "(n,m)",                                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1728 */  { fnEllipticPi,                 NOPARAM,                     STD_PI "(n,m)",                                STD_PI "(n,m)",                                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1729 */  { fnFlipFlag,                   FLAG_USER,                   "USER",                                        "USER",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 /* 1730 */  { fnKeyCC,                      NOPARAM,                     "CC",                                          "CC",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 /* 1731 */  { itemToBeCoded,                NOPARAM,                     "",                                            "f",                                           (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},

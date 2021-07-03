@@ -30,6 +30,7 @@ void fnJacobiAmplitude(uint16_t unusedButMandatoryParameter);
 
 void fnEllipticK      (uint16_t unusedButMandatoryParameter);
 void fnEllipticE      (uint16_t unusedButMandatoryParameter);
+void fnEllipticPi     (uint16_t unusedButMandatoryParameter);
 
 /**
  * Computes Jacobi elliptic functions am, sn, cn and dn.
@@ -97,6 +98,15 @@ void jacobiComplexDn  (const real_t *ur, const real_t *ui, const real_t *m, real
  * \param[out] ei elliptic integral of the 2nd kind ℑ(E(𝑚))
  */
 void ellipticKE       (const real_t *m, real_t *k, real_t *ki, real_t *e, real_t *ei, realContext_t *realContext);
+/**
+ * Computes incomplete elliptic integral of the 3rd kind Π(𝑛 | 𝑚).
+ *
+ * \param[in] n characteristic 𝑛
+ * \param[in] m parameter 𝑚 = 𝑘² = sin²𝛼
+ * \param[out] res real part of the result
+ * \param[out] resi imaginary part of the result
+ */
+void ellipticPi       (const real_t *n, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext);
 /**
  * Computes incomplete elliptic integral of the 1st kind F(𝜑 + i 𝜓 | 𝑚).
  *

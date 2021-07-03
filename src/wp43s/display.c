@@ -302,7 +302,7 @@ void real34ToDisplayString(const real34_t *real34, uint32_t tag, char *displaySt
  * \brief Formats a real
  *
  * \param[out] displayString char* Result string
- * \param[in]  x const real16_t*  Value to format
+ * \param[in]  x const real34_t*  Value to format
  * \return void
  ***********************************************/
 void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t displayHasNDigits, bool_t limitExponent, const char *separator, bool_t noFix, bool_t frontSpace) {
@@ -1009,7 +1009,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
 
   if(getSystemFlag(FLAG_POLAR)) { // polar mode
     strcat(displayString, STD_SPACE_4_PER_EM STD_MEASURED_ANGLE STD_SPACE_4_PER_EM);
-    angle34ToDisplayString2(&imag34, currentAngularMode, displayString + stringByteLength(displayString), displayHasNDigits, limitExponent, false, false);
+    angle34ToDisplayString2(&imag34, currentAngularMode, displayString + stringByteLength(displayString), displayHasNDigits, limitExponent, separator, false);
   }
   else { // rectangular mode
     if(strncmp(displayString + stringByteLength(displayString) - 2, STD_SPACE_HAIR, 2) != 0) {
@@ -1248,11 +1248,20 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
                                                                        s,         RADIX34_MARK_STRING,
                                                                                     fs);
   }
+  else if(mode == amMultPi) {
+    real34_t multPi34;
+    real_t multPi;
+
+    real34ToReal(angle34, &multPi);
+    realDivide(&multPi, const_pi, &multPi, &ctxtReal39);
+    realToReal34(&multPi, &multPi34);
+    real34ToDisplayString2(&multPi34, displayString, displayHasNDigits, limitExponent, separator, mode == amSecond, frontSpace);
+    strcat(displayString, STD_pi);
+  }
   else {
     real34ToDisplayString2(angle34, displayString, displayHasNDigits, limitExponent, separator, mode == amSecond, frontSpace);
 
          if(mode == amRadian) strcat(displayString, STD_SUP_r);
-    else if(mode == amMultPi) strcat(displayString, STD_pi);
     else if(mode == amGrad)   strcat(displayString, STD_SUP_g);
     else if(mode == amDegree) strcat(displayString, STD_DEGREE);
     else if(mode == amSecond) strcat(displayString, "s");
@@ -1726,7 +1735,7 @@ void longIntegerToAllocatedString(const longInteger_t lgInt, char *str, int32_t 
 
 void dateToDisplayString(calcRegister_t regist, char *displayString) {
   real34_t j, y, yy, m, d;
-  uint64_t yearVal;
+  uint32_t yearval32;
   char sign[] = {0, 0};
 
   internalDateToJulianDay(REGISTER_REAL34_DATA(regist), &j);
@@ -1739,16 +1748,16 @@ void dateToDisplayString(calcRegister_t regist, char *displayString) {
   real34DivideRemainder(&y, const34_2p32, &y);
   real34Divide(&yy, const34_2p32, &yy);
   real34ToIntegralValue(&yy, &yy, DEC_ROUND_DOWN);
-  yearVal = ((uint64_t)real34ToUInt32(&yy) << 32) | ((uint64_t)real34ToUInt32(&y));
+  yearval32 = (uint32_t)(((uint64_t)real34ToUInt32(&yy) << 32) | ((uint64_t)real34ToUInt32(&y)));
 
   if(getSystemFlag(FLAG_DMY)) {
-    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu64, real34ToUInt32(&d), real34ToUInt32(&m), sign, yearVal);
+    sprintf(displayString, "%02" PRIu32 ".%02" PRIu32 ".%s%04" PRIu32, real34ToUInt32(&d), real34ToUInt32(&m), sign, yearval32);
   }
   else if(getSystemFlag(FLAG_MDY)) {
-    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu64, real34ToUInt32(&m), real34ToUInt32(&d), sign, yearVal);
+    sprintf(displayString, "%02" PRIu32 "/%02" PRIu32 "/%s%04" PRIu32, real34ToUInt32(&m), real34ToUInt32(&d), sign, yearval32);
   }
   else { // YMD
-    sprintf(displayString, "%s%04" PRIu64 "-%02" PRIu32 "-%02" PRIu32, sign, yearVal, real34ToUInt32(&m), real34ToUInt32(&d));
+    sprintf(displayString, "%s%04" PRIu32 "-%02" PRIu32 "-%02" PRIu32, sign, yearval32, real34ToUInt32(&m), real34ToUInt32(&d));
   }
 }
 

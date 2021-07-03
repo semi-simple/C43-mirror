@@ -101,6 +101,9 @@
 
   #ifdef PC_BUILD
     void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+      if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
+        return;
+      }
       if(event->button.button == 2) { // Middle click
         shiftF = true;
         shiftG = false;
@@ -719,9 +722,12 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_NORMAL:
         setSystemFlag(FLAG_ASLIFT);
         saveForUndo();
+        if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
 
         liftStack();
+        if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+        if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
 
         clearSystemFlag(FLAG_ASLIFT);
         break;
@@ -741,10 +747,13 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
 
           setSystemFlag(FLAG_ASLIFT);
           saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
           liftStack();
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
           clearSystemFlag(FLAG_ASLIFT);
 
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
           aimBuffer[0] = 0;
         }
         break;
@@ -759,9 +768,12 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         if(calcMode != CM_NIM && lastErrorCode == 0) {
           setSystemFlag(FLAG_ASLIFT);
           saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
           liftStack();
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
           clearSystemFlag(FLAG_ASLIFT);
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         }
         break;
 
@@ -782,6 +794,16 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "In function fnKeyEnter: unexpected calcMode value (%" PRIu8 ") while processing key ENTER!", calcMode);
         displayBugScreen(errorMessage);
     }
+    return;
+
+undo_disabled:
+    temporaryInformation = TI_UNDO_DISABLED;
+    return;
+
+ram_full:
+    displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    fnUndo(NOPARAM);
+    return;
   #endif // !TESTSUITE_BUILD
 }
 
@@ -811,13 +833,16 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         if(lastErrorCode != 0) {
           lastErrorCode = 0;
         }
-        popSoftmenu();
+        else {
+          popSoftmenu();
+        }
         break;
 
       case CM_AIM:
         if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
           closeAim();
           saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
         }
         else {
           popSoftmenu();
@@ -844,6 +869,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         leavePem();
         calcModeNormal();
         saveForUndo();
+        if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
         break;
 
       case CM_REGISTER_BROWSER:
@@ -874,6 +900,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         sprintf(errorMessage, "In function fnKeyExit: unexpected calcMode value (%" PRIu8 ") while processing key EXIT!", calcMode);
         displayBugScreen(errorMessage);
     }
+    return;
+
+undo_disabled:
+    temporaryInformation = TI_UNDO_DISABLED;
+    return;
   #endif // !TESTSUITE_BUILD
 }
 

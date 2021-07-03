@@ -49,11 +49,11 @@ TO_QSPI void (* const arg[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \return void
  ***********************************************/
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-void argError(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  void argError(void) {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     sprintf(errorMessage, "cannot calculate arg for %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnArg:", errorMessage, NULL, NULL);
-}
+  }
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
@@ -67,7 +67,7 @@ void argError(void) {
  * \return void
  ***********************************************/
 void fnArg(uint16_t unusedButMandatoryParameter) {
-  copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  if(!saveLastX()) return;
 
   arg[getRegisterDataType(REGISTER_X)]();
 
@@ -127,14 +127,15 @@ void argCxma(void) {
   real34_t dummy;
 
   linkToComplexMatrixRegister(REGISTER_X, &cMat);
-  realMatrixInit(&rMat, cMat.header.matrixRows, cMat.header.matrixColumns);
+  if(realMatrixInit(&rMat, cMat.header.matrixRows, cMat.header.matrixColumns)) {
+    for(uint16_t i = 0; i < cMat.header.matrixRows * cMat.header.matrixColumns; ++i) {
+      real34RectangularToPolar(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]), &dummy, &rMat.matrixElements[i]);
+      convertAngle34FromTo(&rMat.matrixElements[i], amRadian, currentAngularMode);
+    }
 
-  for(uint16_t i = 0; i < cMat.header.matrixRows * cMat.header.matrixColumns; ++i) {
-    real34RectangularToPolar(VARIABLE_REAL34_DATA(&cMat.matrixElements[i]), VARIABLE_IMAG34_DATA(&cMat.matrixElements[i]), &dummy, &rMat.matrixElements[i]);
-    convertAngle34FromTo(&rMat.matrixElements[i], amRadian, currentAngularMode);
+    convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X);
+    realMatrixFree(&rMat);
   }
-
-  convertReal34MatrixToReal34MatrixRegister(&rMat, REGISTER_X);
-  realMatrixFree(&rMat);
+  else lastErrorCode = ERROR_RAM_FULL;
 #endif // TESTSUITE_BUILD
 }

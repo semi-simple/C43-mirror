@@ -46,11 +46,11 @@ TO_QSPI void (* const chs[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(void) = {
  * \return void
  ***********************************************/
 #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-void chsError(void) {
-  displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+  void chsError(void) {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
     sprintf(errorMessage, "cannot change the sign of %s", getRegisterDataTypeName(REGISTER_X, true, false));
     moreInfoOnError("In function fnChangeSign:", errorMessage, NULL, NULL);
-}
+  }
 #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
 
@@ -63,7 +63,7 @@ void chsError(void) {
  * \return void
  ***********************************************/
 void fnChangeSign(uint16_t unusedButMandatoryParameter) {
-  //copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
+  //if(!saveLastX()) return;
 
   chs[getRegisterDataType(REGISTER_X)]();
 }

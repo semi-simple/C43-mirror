@@ -36,7 +36,7 @@
 #include "wp43s.h"
 
 #define BACKUP_VERSION         56  // Added lrChosenUndo
-#define START_REGISTER_VALUE 1522
+#define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
 static char *tmpRegisterString = NULL;
@@ -572,7 +572,6 @@ static void registerToSaveString(calcRegister_t regist) {
       strcpy(aimBuffer, "Date");
       break;
 
-#ifndef TESTSUITE_BUILD
     case dtReal34Matrix:
       sprintf(tmpRegisterString, "%" PRIu16 " %" PRIu16, REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows, REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns);
       strcpy(aimBuffer, "Rema");
@@ -582,7 +581,6 @@ static void registerToSaveString(calcRegister_t regist) {
       sprintf(tmpRegisterString, "%" PRIu16 " %" PRIu16, REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows, REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns);
       strcpy(aimBuffer, "Cxma");
       break;
-#endif // TESTSUITE_BUILD
 
     case dtConfig:
       for(str=tmpRegisterString, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
@@ -1157,26 +1155,28 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       allocateLocalRegisters(numberOfRegs);
     }
 
-    for(i=0; i<numberOfRegs; i++) {
-      readLine(stream, tmpString); // Register number
-      regist = stringToInt16(tmpString + 2) + FIRST_LOCAL_REGISTER;
-      readLine(stream, aimBuffer); // Register data type
-      readLine(stream, tmpString); // Register value
+    if((loadMode != LM_ALL && loadMode != LM_REGISTERS) || lastErrorCode == ERROR_NONE) {
+      for(i=0; i<numberOfRegs; i++) {
+        readLine(stream, tmpString); // Register number
+        regist = stringToInt16(tmpString + 2) + FIRST_LOCAL_REGISTER;
+        readLine(stream, aimBuffer); // Register data type
+        readLine(stream, tmpString); // Register value
 
-      if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-        restoreRegister(regist, aimBuffer, tmpString);
-        restoreMatrixData(regist, stream);
+        if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
+          restoreRegister(regist, aimBuffer, tmpString);
+          restoreMatrixData(regist, stream);
+        }
+        else {
+          skipMatrixData(aimBuffer, tmpString, stream);
+        }
       }
-      else {
-        skipMatrixData(aimBuffer, tmpString, stream);
-      }
-    }
 
-    if(numberOfRegs > 0) {
-      readLine(stream, tmpString); // LOCAL_FLAGS
-      readLine(stream, tmpString); // LOCAL_FLAGS
-      if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-        currentLocalFlags->localFlags = stringToUint32(tmpString);
+      if(numberOfRegs > 0) {
+        readLine(stream, tmpString); // LOCAL_FLAGS
+        readLine(stream, tmpString); // LOCAL_FLAGS
+        if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
+          currentLocalFlags->localFlags = stringToUint32(tmpString);
+        }
       }
     }
   }
@@ -1207,10 +1207,12 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
 
     for(i=0; i<numberOfRegs; i++) {
       readLine(stream, tmpString); // statistical sum
-      if(loadMode == LM_ALL || loadMode == LM_SUMS) {
-        stringToReal(tmpString, (real_t *)(statisticalSumsPointer + REAL_SIZE * i), &ctxtReal75);
+      if(statisticalSumsPointer) { // likely
+        if(loadMode == LM_ALL || loadMode == LM_SUMS) {
+          stringToReal(tmpString, (real_t *)(statisticalSumsPointer + REAL_SIZE * i), &ctxtReal75);
+        }
       }
-    }    
+    }
   }
 
   else if(strcmp(tmpString, "SYSTEM_FLAGS") == 0) {

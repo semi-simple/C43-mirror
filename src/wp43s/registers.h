@@ -129,14 +129,14 @@ calcRegister_t findOrAllocateNamedVariable     (const char *variableName);
 uint16_t       getRegisterFullSize             (calcRegister_t regist);
 /**
  * Clears a register.
- * That is, set it to 0,0 real16.
+ * That is, set it to 0,0 real34.
  *
  * \param[in] regist Register number
  */
 void           clearRegister                   (calcRegister_t regist);
 /**
  * Clears all the regs.
- * This includes all globals and locals, which are set to 0,0 real16s
+ * This includes all globals and locals, which are set to 0,0 real34s
  *
  * \param[in] confirmation Current status of the confirmation of clearing registers
  */
@@ -203,5 +203,12 @@ void           fnToReal                        (uint16_t unusedButMandatoryParam
    ***********************************************/
   void    printRegisterToString           (calcRegister_t regist, char *registerContent);
 #endif // TESTSUITE_BUILD
+
+  /********************************************//**
+   * \brief Save register X to register X
+   *
+   * \return true if succeeded
+   ***********************************************/
+  bool_t  saveLastX                       (void);
 
 #endif // REGISTERS_H

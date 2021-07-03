@@ -519,7 +519,7 @@ bool_t allowShiftsToClearError = false;
   }
 
 
-bool_t nimWhenButtonPressed = false;
+bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
 
   /********************************************//**
    * \brief A calc button was pressed
@@ -530,7 +530,7 @@ bool_t nimWhenButtonPressed = false;
    ***********************************************/
   #ifdef PC_BUILD
     void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-      nimWhenButtonPressed = (calcMode == CM_NIM);
+      nimWhenButtonPressed = (calcMode == CM_NIM);                  //PHM eRPN 2021-07
       if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
         return;
       }
@@ -570,7 +570,7 @@ bool_t nimWhenButtonPressed = false;
 
   #ifdef DMCP_BUILD
     void btnPressed(void *data) {
-      nimWhenButtonPressed = (calcMode == CM_NIM);
+      nimWhenButtonPressed = (calcMode == CM_NIM);                  //PHM eRPN 2021-07
       int16_t item;
 
 //      if(keyAutoRepeat) {            // AUTOREPEAT
@@ -1237,7 +1237,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
     switch(calcMode) {
       case CM_NORMAL:
-        if (!eRPN || !nimWhenButtonPressed) {
+        if (!eRPN || !nimWhenButtonPressed) {                  //vv PHM eRPN 2021-07
           setSystemFlag(FLAG_ASLIFT);
           saveForUndo();
           if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
@@ -1249,9 +1249,9 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           clearSystemFlag(FLAG_ASLIFT);
         }
-        else {
+        else {                                               //^^ PHM eRPN 2021-07
           setSystemFlag(FLAG_ASLIFT);
-        }
+        }                                                    //PHM eRPN 2021-07
         break;
 
       case CM_AIM:
@@ -1271,7 +1271,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), amNone);
           xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, len);
 
-          if (!eRPN) {
+          if (!eRPN) {                                  //PHM eRPN 2021-07
             setSystemFlag(FLAG_ASLIFT);
             saveForUndo();
             if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
@@ -1281,10 +1281,11 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
 
             copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
             if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
+            aimBuffer[0] = 0;
           } else {
             setSystemFlag(FLAG_ASLIFT);
+            aimBuffer[0] = 0;              //PHM JM Keeping the structure like 43S, to be able to pick up changes from their side easier
           }
-          aimBuffer[0] = 0;
         }
         break;
 
@@ -1292,6 +1293,22 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         mimEnter(false);
         break;
 
+/* 43S code not in use: PHM. JM Keeping the structure like in 43S, to be able to pick up changes
+      case CM_NIM:
+        closeNim();
+
+        if(calcMode != CM_NIM && lastErrorCode == 0) {
+          setSystemFlag(FLAG_ASLIFT);
+          saveForUndo();
+          if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
+          liftStack();
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
+          clearSystemFlag(FLAG_ASLIFT);
+          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
+          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
+        }
+        break;
+*/
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:

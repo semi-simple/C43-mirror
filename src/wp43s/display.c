@@ -2578,6 +2578,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       temporaryInformation = TI_SHOW_REGISTER_BIG;
 
       shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true); //jm include X: 
+/*
       if(getRegisterTag(SHOWregis) == 2) {
         source = 2100;
         dest = 2400;
@@ -2595,13 +2596,15 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           source++;
         }
         tmpString[dest]=0;
-      } else {
+      } 
+*/
+//      else {
         strcpy(tmpString + 2400,tmpString + 2100);
-      }
+//      }
  	
-
       last = 2400 + stringByteLength(tmpString + 2400);
       source = 2400;
+      tmpString[0]=0;
       for(d=0; d<=900 ; d+=300) {
         dest = d;
         if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
@@ -2620,22 +2623,22 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       aa = getRegisterTag(SHOWregis);
 
       switch(aa){
-        case  2: aa2=10;  aa3=8;  aa4=16; break;
+        case  2: aa2=10;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+        case  4: aa2= 2;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+        case  8: aa2= 2;  aa3=10;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+        case 10: aa2= 2;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+        case 16: aa2= 2;  aa3= 8;  aa4=10; break;   //Keeping the 2 8 16 sequence where possible
+
         case  3:
-        case  4:
         case  5:
         case  6:
         case  7:
-        case  9: aa2=10;  aa3=8;  aa4=16; break;
-
-        case  8: aa2= 2; aa3=10;  aa4=16; break;
-        case 10: aa2= 2;  aa3=8;  aa4=16; break;
+        case  9:
         case 11:
         case 12:
         case 13:
         case 14: 
-        case 15:
-        case 16: aa2=10;  aa3= 8;  aa4=16; break;
+        case 15: aa2=10;  aa3= 8;  aa4=16; break;
       }
 
 

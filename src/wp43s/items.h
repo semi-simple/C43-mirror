@@ -1453,7 +1453,7 @@
 #define MNU_DYNAMIC                   1394
 #define MNU_PLOT_STAT                 1395
 #define MNU_PLOT_LR                   1396
-#define MNU_ELLIPTIC                  1397
+#define MNU_ELLIPT                    1397
 #define MNU_1398                      1398
 #define MNU_1399                      1399
 #define MNU_1400                      1400

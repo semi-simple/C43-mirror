@@ -582,6 +582,17 @@ void ellipticF(const real_t *phi, const real_t *psi, const real_t *m, real_t *re
   if(realIsNegative(phi)) realChangeSign(res);
 }
 
+void ellipticE(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  real_t k, ki, e, ei, f, fi, z, zi;
+
+  ellipticKE(m, &k, &ki, &e, &ei, realContext);
+  ellipticF(phi, psi, m, &f, &fi, realContext);
+  jacobiZeta(phi, psi, m, &z, &zi, realContext);
+  divComplexComplex(&e, &ei, &k, &ki, res, resi, realContext);
+  mulComplexComplex(res, resi, &f, &fi, res, resi, realContext);
+  realAdd(res, &z, res, realContext); realAdd(resi, &zi, resi, realContext);
+}
+
 void jacobiZeta(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
   real_t k, v, vi, agm, agmi;
 

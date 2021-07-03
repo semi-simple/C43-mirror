@@ -1155,7 +1155,6 @@ void decodeOneStep(uint8_t *step) {
         case ITM_gammaXY:        //  1662
         case ITM_GAMMAXY:        //  1663
         case ITM_GAMMAX:         //  1664
-        case ITM_deltaX:         //  1665
         case ITM_DELTAPC:        //  1666
         case ITM_SCATTFACT:      //  1667
         case ITM_SCATTFACTm:     //  1668

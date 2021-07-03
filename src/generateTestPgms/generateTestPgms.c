@@ -10898,9 +10898,6 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_GAMMAX >> 8) | 0x80;
     *(currentStep++) =  ITM_GAMMAX       & 0xff;
 
-    *(currentStep++) = (ITM_deltaX >> 8) | 0x80;
-    *(currentStep++) =  ITM_deltaX       & 0xff;
-
     *(currentStep++) = (ITM_DELTAPC >> 8) | 0x80;
     *(currentStep++) =  ITM_DELTAPC       & 0xff;
 

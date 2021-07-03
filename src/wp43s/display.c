@@ -1338,7 +1338,6 @@ str3[j] = displayString[j]; j++;
 str3[j] = displayString[j]; j++;
 str3[j] = displayString[j]; j++;
 str3[j] = 0;
-printf(">>>A %s %s\n",str3, displayString);
 
   base    = getRegisterTag(regist);
   number  = *(REGISTER_SHORT_INTEGER_DATA(regist));
@@ -1405,7 +1404,6 @@ printf(">>>A %s %s\n",str3, displayString);
       gap = 3;
     }
   }
-printf(">>>B %s %i\n",displayString,i);
 
   while(number) {
     if(gap != 0 && digit != 0 && digit%gap == 0) {
@@ -1417,7 +1415,6 @@ printf(">>>B %s %i\n",displayString,i);
     number /= base;
     displayString[i++] = digits[unit];
   }
-printf(">>>C %s %i\n",displayString,i);
 
   // Add leading zeros
   if(getSystemFlag(FLAG_LEAD0)) {
@@ -1443,23 +1440,19 @@ printf(">>>C %s %i\n",displayString,i);
       }
     }
   }
-printf(">>>D %s %i\n",displayString,i);
 
   if(sign) {
     displayString[i++] = '-';
   }
 
-printf(">>>>@@@ %u %llu\n",base,orgnumber);
 if( (str3[0] >= 'A' && str3[0] <= 'Z' && str3[1] == ':' && str3[2] == ' ' && str3[3] == 0) && !(base == 2 && orgnumber > 0x3FFF)) 
 {             //JM SHOW
   displayString[i++] = str3[2];
   displayString[i++] = str3[1];
   displayString[i++] = str3[0];
-  printf(">>>> Adding Register name\n");
 }
 
 
-printf("### DetermineFont §%s§\n",displayString);
   if(determineFont) { // The font is not yet determined
     // 1st try: numeric font digits from 30 to 39
     fontForShortInteger = &numericFont;
@@ -1477,13 +1470,10 @@ printf("### DetermineFont §%s§\n",displayString);
 
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
-printf("###0 §%s§ \n",displayString);
-printf(">>>0 %d %d\n",stringWidth(displayString, fontForShortInteger, false, false), SCREEN_WIDTH);
 
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
-printf("###1\n");
 
     // 2nd try: numeric font digits from 2487 to 2490
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
@@ -1503,13 +1493,10 @@ printf("###1\n");
 
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
-printf("###1 §%s§ \n",displayString);
-printf(">>>1 %d %d\n",stringWidth(displayString, fontForShortInteger, false, false), SCREEN_WIDTH);
 
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
-printf("###2\n");
 
     // 3rd try: standard font digits from 30 to 39
     fontForShortInteger = &standardFont;
@@ -1527,13 +1514,10 @@ printf("###2\n");
 
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
-printf("###2 §%s§ \n",displayString);
-printf(">>>2 %d %d\n",stringWidth(displayString, fontForShortInteger, false, false), SCREEN_WIDTH);
 
     if(/*temporaryInformation == TI_SHOW_REGISTER_BIG ||*/ stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {     //JMSHOW
       return;
     }
-printf("###3\n");
 
     // 4th and last try: standard font digits 220e and 2064 (binary)
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
@@ -1557,13 +1541,10 @@ printf("###3\n");
 
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
-printf("###3 §%s§ \n",displayString);
-printf(">>>3 %d %d\n",stringWidth(displayString, fontForShortInteger, false, false), SCREEN_WIDTH);
 
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
-printf("###4\n");
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
@@ -1593,7 +1574,6 @@ printf("###4\n");
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
-printf("###5\n");
 
     // 2nd and last try: standard font digits 220e and 2064 (binary)
     for(k=i-1, j=0; k>=ERROR_MESSAGE_LENGTH / 2; k--, j++) {
@@ -1621,7 +1601,6 @@ printf("###5\n");
     if(stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {
       return;
     }
-printf("###6\n");
 
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (2)!", displayString, NULL, NULL);
@@ -2598,9 +2577,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
 
-printf("aa0\n");
       shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true); //jm include X: 
-printf(">>>>>## %s\n",tmpString + 2100);    
       if(getRegisterTag(SHOWregis) == 2) {
         source = 2100;
         dest = 2400;
@@ -2664,8 +2641,7 @@ printf(">>>>>## %s\n",tmpString + 2100);
 
       if(aa2){
         setRegisterTag(SHOWregis,aa2);
-RegName();
-printf("aa2 %s\n",tmpString + 2100);
+        RegName();
         shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
@@ -2686,8 +2662,7 @@ printf("aa2 %s\n",tmpString + 2100);
         }
       }
       if(aa3){
-RegName();
-printf("aa3 %s\n",tmpString + 2100);
+        RegName();
         setRegisterTag(SHOWregis,aa3);
         shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);
@@ -2709,8 +2684,7 @@ printf("aa3 %s\n",tmpString + 2100);
         }
       }
       if(aa4){
-RegName();
-printf("aa4 %s\n",tmpString + 2100);
+        RegName();
         setRegisterTag(SHOWregis,aa4);
         shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);

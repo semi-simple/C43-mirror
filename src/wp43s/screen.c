@@ -1120,9 +1120,7 @@ uint8_t  displaymode = stdNoEnlarge;
           showStringC43(tmpString + offset, numSmall, stdcompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
           return;
         }
-printf(">>>>>> %s\n",tmpString + offset);
         w = stringWidth(tmpString + offset + 2, &standardFont, true, true);
-printf(">>>>>> %u\n",w);
         if(w < SCREEN_WIDTH) {
           showString(tmpString + offset + 2, &standardFont,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
           return;

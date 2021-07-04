@@ -1642,7 +1642,7 @@
 #define ITM_R_COPY                    1581
 #define ITM_R_SORT                    1582
 #define ITM_R_SWAP                    1583
-#define ITM_1584                      1584
+#define ITM_am                        1584
 #define ITM_STDDEVWEIGHTED            1585
 #define ITM_SAVE                      1586
 #define ITM_SCI                       1587
@@ -1723,7 +1723,7 @@
 #define ITM_gammaXY                   1662
 #define ITM_GAMMAXY                   1663
 #define ITM_GAMMAX                    1664
-#define ITM_deltaX                    1665
+#define ITM_1665                      1665
 #define ITM_DELTAPC                   1666
 #define ITM_SCATTFACT                 1667
 #define ITM_SCATTFACTm                1668
@@ -1746,9 +1746,9 @@
 #define ITM_toHR                      1685
 #define ITM_toHMS                     1686
 #define ITM_toINT                     1687
-#define ITM_am                        1688
-#define ITM_toPOL                     1689
-#define ITM_1690                      1690
+#define ITM_toPOL                     1688
+#define ITM_MPItoR                    1689
+#define ITM_RtoMPI                    1690
 #define ITM_toREAL                    1691
 #define ITM_toREC                     1692
 #define ITM_DtoDMS                    1693

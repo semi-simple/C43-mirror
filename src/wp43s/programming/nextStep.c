@@ -377,6 +377,7 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_LocR:           //  1514
         case ITM_RDP:            //  1565
         case ITM_RM:             //  1571
+        case ITM_DSP:            //  1573
         case ITM_RSD:            //  1577
         case ITM_SCI:            //  1587
         case ITM_SIM_EQ:         //  1602
@@ -898,6 +899,7 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_R_COPY:         //  1581
         case ITM_R_SORT:         //  1582
         case ITM_R_SWAP:         //  1583
+        case ITM_am:             //  1584
         case ITM_STDDEVWEIGHTED: //  1585
         case ITM_SDIGS:          //  1588
         case ITM_SEED:           //  1589
@@ -952,7 +954,6 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_gammaXY:        //  1662
         case ITM_GAMMAXY:        //  1663
         case ITM_GAMMAX:         //  1664
-        case ITM_deltaX:         //  1665
         case ITM_DELTAPC:        //  1666
         case ITM_SCATTFACT:      //  1667
         case ITM_SCATTFACTm:     //  1668
@@ -968,12 +969,14 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_XMOD:           //  1680
         case ITM_toDATE:         //  1681
         case ITM_sn:             //  1682
-        case ITM_cn:             //  1682
-        case ITM_dn:             //  1682
+        case ITM_cn:             //  1683
+        case ITM_dn:             //  1684
         case ITM_toHR:           //  1685
         case ITM_toHMS:          //  1686
         case ITM_toINT:          //  1687
-        case ITM_toPOL:          //  1689
+        case ITM_toPOL:          //  1688
+        case ITM_MPItoR:         //  1689
+        case ITM_RtoMPI:         //  1690
         case ITM_toREAL:         //  1691
         case ITM_toREC:          //  1692
         case ITM_DtoDMS:         //  1693
@@ -998,6 +1001,9 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_PRINTERWIDTH:   //  1719
         case ITM_PRINTERSIGMA:   //  1720
         case ITM_PRINTERHASH:    //  1721
+        case ITM_Kk:             //  1726
+        case ITM_Ek:             //  1727
+        case ITM_PInk:           //  1728
         case ITM_SHOW:           //  1742
         case ITM_DMStoD:         //  1744
         case ITM_VANGLE:         //  1745

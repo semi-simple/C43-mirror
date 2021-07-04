@@ -11,7 +11,7 @@ Func: fnEllipticE
 
 
 ;=======================================
-; E(Long Integer) --> Real34
+; E(Long Integer) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=LonI:"-2"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=LonI:"-2" RX=Real:"2.184438142746201185404837989426994"
@@ -60,13 +60,13 @@ Out: EC=24 FL_ASLIFT=0 RX=Stri:"String test"
 
 
 ;=======================================
-; E(Real16 Matrix) --> Error24
+; E(Real Matrix) --> Error24
 ;=======================================
 
 
 
 ;=======================================
-; E(Complex16 Matrix) --> Error24
+; E(Complex Matrix) --> Error24
 ;=======================================
 
 
@@ -78,7 +78,7 @@ Out: EC=24 FL_ASLIFT=0 RX=Stri:"String test"
 
 
 ;=======================================
-; E(Real34) --> Real34
+; E(Real) --> Real
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=Real:"-2"
 Out: EC=0 FL_CPXRES=0 FL_ASLIFT=1 RL=Real:"-2" RX=Real:"2.184438142746201185404837989426994"
@@ -125,7 +125,7 @@ Out: EC=0 FL_CPXRES=1 FL_ASLIFT=1 RL=Real:"3" RX=Cplx:"0.47522393535101711103315
 
 
 ;=======================================
-; E(Complex34) --> Error24
+; E(Complex) --> Error24
 ;=======================================
 In:  AM=DEG FL_ASLIFT=0 FL_CPXRES=0 RX=Cplx:"0i1"
 Out: EC=24 FL_CPXRES=0 FL_ASLIFT=0 RX=Cplx:"0i1"

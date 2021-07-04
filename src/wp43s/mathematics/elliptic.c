@@ -35,6 +35,7 @@
 #include "mathematics/sin.h"
 #include "mathematics/tan.h"
 #include "mathematics/wp34s.h"
+#include "memory.h"
 #include "realType.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -44,90 +45,121 @@
 
 static void _calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t *u, const real_t *m, realContext_t *realContext) {
   real_t a, b, e, f, g;
-  real_t MU[ELLIPTIC_N], NU[ELLIPTIC_N], C[ELLIPTIC_N], D[ELLIPTIC_N];
+  real_t *MU, *NU, *C, *D;
   real_t sin_umu, cos_umu, t, r;
   int n = 0;
+
+  if((MU = allocWp43s(ELLIPTIC_N * REAL_SIZE))) {
+    if((NU = allocWp43s(ELLIPTIC_N * REAL_SIZE))) {
+      if((C = allocWp43s(ELLIPTIC_N * REAL_SIZE))) {
+        if((D = allocWp43s(ELLIPTIC_N * REAL_SIZE))) {
 
 #define mu(n)	(MU + (n))
 #define nu(n)	(NU + (n))
 #define c(n)	(C + (n))
 #define d(n)	(D + (n))
 
-  if (realIsNegative(m) || realCompareLessThan(const_1, m)) {
-    realCopy(const_NaN, sn);
-    realCopy(const_NaN, cn);
-    realCopy(const_NaN, dn);
-    return;
-  }
-  if (realCompareLessThan(m, const_1e_32)) {
-    WP34S_Cvt2RadSinCosTan(u, amRadian, sn, cn, NULL, realContext);
-    realCopy(const_1, dn);
-    return;
-  }
-  realSubtract(m, const_1, &a, realContext);
-  if (realCompareAbsLessThan(&a, const_1e_32)) {
-    WP34S_SinhCosh(u, &a, &b, realContext);
-    realDivide(const_1, &b, cn, realContext);
-    realMultiply(&a, cn, sn, realContext);
-    realCopy(cn, dn);
-    return;
-  }
+          if (realIsNegative(m) || realCompareLessThan(const_1, m)) {
+            realCopy(const_NaN, sn);
+            realCopy(const_NaN, cn);
+            realCopy(const_NaN, dn);
+            return;
+          }
+          if (realCompareLessThan(m, const_1e_32)) {
+            WP34S_Cvt2RadSinCosTan(u, amRadian, sn, cn, NULL, realContext);
+            realCopy(const_1, dn);
+            return;
+          }
+          realSubtract(m, const_1, &a, realContext);
+          if (realCompareAbsLessThan(&a, const_1e_32)) {
+            WP34S_SinhCosh(u, &a, &b, realContext);
+            realDivide(const_1, &b, cn, realContext);
+            realMultiply(&a, cn, sn, realContext);
+            realCopy(cn, dn);
+            return;
+          }
 
-  realSubtract(const_1, m, &a, realContext);
-  realSquareRoot(&a, &a, realContext);
-  n = realAgmStep(const_1, &a, &b, MU, NU, ELLIPTIC_N, realContext);
-  realSubtract(mu(n-1), nu(n-1), &e, realContext);
+          realSubtract(const_1, m, &a, realContext);
+          realSquareRoot(&a, &a, realContext);
+          n = realAgmStep(const_1, &a, &b, MU, NU, ELLIPTIC_N, realContext);
+          realSubtract(mu(n-1), nu(n-1), &e, realContext);
 
-  realMultiply(u, mu(n), &a, realContext);
-  WP34S_Cvt2RadSinCosTan(&a, amRadian, &sin_umu, &cos_umu, NULL, realContext);
-  realCopyAbs(&cos_umu, &b);
-  //if (realCompareAbsLessThan(&sin_umu, &b))
-  //  realDivide(&sin_umu, &cos_umu, &t, realContext);
-  //else
-    realDivide(&cos_umu, &sin_umu, &t, realContext);
-  if(realIsZero(&sin_umu)) {
-    realCopy(const_0, sn);
-    realCopy(const_1, cn);
-    realCopy(const_1, dn);
-    return;
-  }
+          realMultiply(u, mu(n), &a, realContext);
+          WP34S_Cvt2RadSinCosTan(&a, amRadian, &sin_umu, &cos_umu, NULL, realContext);
+          realCopyAbs(&cos_umu, &b);
+          //if (realCompareAbsLessThan(&sin_umu, &b))
+          //  realDivide(&sin_umu, &cos_umu, &t, realContext);
+          //else
+            realDivide(&cos_umu, &sin_umu, &t, realContext);
+          if(realIsZero(&sin_umu)) {
+            realCopy(const_0, sn);
+            realCopy(const_1, cn);
+            realCopy(const_1, dn);
+            return;
+          }
 
-  realMultiply(mu(n), &t, c(n), realContext);
-  realCopy(const_1, d(n));
+          realMultiply(mu(n), &t, c(n), realContext);
+          realCopy(const_1, d(n));
 
-  while (n > 0) {
-    n--;
-    realMultiply(d(n+1), c(n+1), c(n), realContext);
-    realMultiply(c(n+1), c(n+1), &a, realContext);
-    realDivide(&a, mu(n+1), &r, realContext);
-    realAdd(&r, nu(n), &a, realContext);
-    realAdd(&r, mu(n), &b, realContext);
-    realDivide(&a, &b, d(n), realContext);
-  }
-  complexMagnitude(const_1, c(0), &f, realContext);
-  if (realIsNegative(&e)) {
-    realSubtract(const_1, m, &a, realContext);
-    realSquareRoot(&a, &g, realContext);
-    realDivide(&g, d(0), dn, realContext);
+          while (n > 0) {
+            n--;
+            realMultiply(d(n+1), c(n+1), c(n), realContext);
+            realMultiply(c(n+1), c(n+1), &a, realContext);
+            realDivide(&a, mu(n+1), &r, realContext);
+            realAdd(&r, nu(n), &a, realContext);
+            realAdd(&r, mu(n), &b, realContext);
+            realDivide(&a, &b, d(n), realContext);
+          }
+          complexMagnitude(const_1, c(0), &f, realContext);
+          if (realIsNegative(&e)) {
+            realSubtract(const_1, m, &a, realContext);
+            realSquareRoot(&a, &g, realContext);
+            realDivide(&g, d(0), dn, realContext);
 
-    realDivide(dn, &f, cn, realContext);
-    if (realIsNegative(&cos_umu))
-      realChangeSign(cn);
+            realDivide(dn, &f, cn, realContext);
+            if (realIsNegative(&cos_umu))
+              realChangeSign(cn);
 
-    realDivide(c(0), &g, &a, realContext);
-    realMultiply(cn, &a, sn, realContext);
-  } else {
-    realCopy(d(0), dn);
+            realDivide(c(0), &g, &a, realContext);
+            realMultiply(cn, &a, sn, realContext);
+          } else {
+            realCopy(d(0), dn);
 
-    realDivide(const_1, &f, sn, realContext);
-    if (realIsNegative(&sin_umu))
-      realChangeSign(sn);
-    realMultiply(c(0), sn, cn, realContext);
-  }
+            realDivide(const_1, &f, sn, realContext);
+            if (realIsNegative(&sin_umu))
+              realChangeSign(sn);
+            realMultiply(c(0), sn, cn, realContext);
+          }
+
 #undef mu
 #undef nu
 #undef c
 #undef d
+
+          freeWp43s(D, ELLIPTIC_N * REAL_SIZE);
+        }
+        else {
+          lastErrorCode = ERROR_RAM_FULL;
+          realCopy(const_NaN, sn); realCopy(const_NaN, cn); realCopy(const_NaN, dn);
+        }
+        freeWp43s(C, ELLIPTIC_N * REAL_SIZE);
+      }
+      else {
+        lastErrorCode = ERROR_RAM_FULL;
+        realCopy(const_NaN, sn); realCopy(const_NaN, cn); realCopy(const_NaN, dn);
+      }
+      freeWp43s(NU, ELLIPTIC_N * REAL_SIZE);
+    }
+    else {
+      lastErrorCode = ERROR_RAM_FULL;
+      realCopy(const_NaN, sn); realCopy(const_NaN, cn); realCopy(const_NaN, dn);
+    }
+    freeWp43s(MU, ELLIPTIC_N * REAL_SIZE);
+  }
+  else {
+    lastErrorCode = ERROR_RAM_FULL;
+    realCopy(const_NaN, sn); realCopy(const_NaN, cn); realCopy(const_NaN, dn);
+  }
 }
 
 static void calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t *u, const real_t *m, realContext_t *realContext) {

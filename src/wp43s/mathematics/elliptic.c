@@ -63,11 +63,19 @@ static void _calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t
             realCopy(const_NaN, sn);
             realCopy(const_NaN, cn);
             realCopy(const_NaN, dn);
+            freeWp43s(MU, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(NU, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(C, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(D, ELLIPTIC_N * REAL_SIZE);
             return;
           }
           if (realCompareLessThan(m, const_1e_32)) {
             WP34S_Cvt2RadSinCosTan(u, amRadian, sn, cn, NULL, realContext);
             realCopy(const_1, dn);
+            freeWp43s(MU, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(NU, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(C, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(D, ELLIPTIC_N * REAL_SIZE);
             return;
           }
           realSubtract(m, const_1, &a, realContext);
@@ -76,6 +84,10 @@ static void _calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t
             realDivide(const_1, &b, cn, realContext);
             realMultiply(&a, cn, sn, realContext);
             realCopy(cn, dn);
+            freeWp43s(MU, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(NU, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(C, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(D, ELLIPTIC_N * REAL_SIZE);
             return;
           }
 
@@ -95,6 +107,10 @@ static void _calc_real_elliptic(real_t *sn, real_t *cn, real_t *dn, const real_t
             realCopy(const_0, sn);
             realCopy(const_1, cn);
             realCopy(const_1, dn);
+            freeWp43s(MU, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(NU, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(C, ELLIPTIC_N * REAL_SIZE);
+            freeWp43s(D, ELLIPTIC_N * REAL_SIZE);
             return;
           }
 

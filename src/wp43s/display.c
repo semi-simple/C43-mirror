@@ -56,7 +56,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   clearSystemFlag(FLAG_FRACT);
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
-  if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {
+  if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {     //JM let FIX operate on time as well
     fnDisplayFormatTime(displayFormatN);
   }
 
@@ -333,7 +333,8 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
-  uint8_t charIndex, valueIndex, digitToRound=0;
+  uint8_t charIndex, valueIndex;
+  int16_t digitToRound=0;
   uint8_t *bcd;
   int16_t digitsToDisplay=0, numDigits, digitPointer, firstDigit, lastDigit, i, digitCount, digitsToTruncate, exponent;
   int32_t sign;
@@ -616,22 +617,24 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
     else { // display fix number of digits without ten exponent factor
       // Number of digits to truncate
 
-      int displayFormatDigits_active;                                    //JM SIGFIGNEW vv
-      if(SigFigMode >= 1) {
-        displayFormatDigits_active =  max((SigFigMode+1)-exponent-1,0);  //Convert SIG to FIX.
+      uint8_t displayFormatDigits_Active;                                    //JM SIGFIGNEW vv
+      if(SigFigMode !=0 ) {
+        displayFormatDigits_Active =  min(max((SigFigMode+1)-exponent-1,0),255);  //Convert SIG to FIX.
       } else {
-        displayFormatDigits_active = displayFormatDigits;
+        displayFormatDigits_Active = displayFormatDigits;
       }                                                                  //JM SIGFIGNEW ^^
-
-      digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits_active - exponent - 1, 0);   //JM SIGFIGNEW hackpoint
+      //printf(">>>## %u %u %u\n",displayFormatDigits_Active,displayFormatDigits, numDigits);
+      digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits_Active - exponent - 1, 0);   //JM SIGFIGNEW hackpoint
       numDigits -= digitsToTruncate;
       lastDigit -= digitsToTruncate;
 
-      if(SigFigMode >= 1) {                                              //JM SIGFIGNEW vv
+      if(SigFigMode != 0 && firstDigit + SigFigMode <= 34) {                                              //JM SIGFIGNEW vv
         digitToRound = firstDigit + SigFigMode;
       } else {
         digitToRound = lastDigit;
       }                                                                  //JM SIGFIGNEW ^^
+
+      //printf(">>> ###A %d %d %d %d %d |",numDigits, firstDigit, lastDigit, digitToRound, exponent); for(i=firstDigit; i<=lastDigit; i++) {printf("%c",48+bcd[i]);} printf("\n");
 
       // Round the displayed number
       if(bcd[digitToRound+1] >= 5) {
@@ -641,22 +644,26 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
       // Transfert the carry
       while(bcd[digitToRound] == 10) {
         bcd[digitToRound--] = 0;
-        numDigits--;
+        if(SigFigMode == 0) numDigits--;
         bcd[digitToRound]++;
       }
+
+      lastDigit = digitToRound; //JM
 
       // Case when 9.9999 rounds to 10.0000
       if(digitToRound < firstDigit) {
         firstDigit--;
         lastDigit = firstDigit;
         numDigits = 1;
+        if(SigFigMode != 0) displayFormatDigits_Active--;
         exponent++;
       }
 
+
       //JM SIGFIG - blank out non-sig digits to the right                 //JM SIGFIGNEW vv
-      if(SigFigMode>=1) {
+      if(SigFigMode != 0) {
         if((SigFigMode+1)-exponent-1 < 0) {
-           for (digitCount = firstDigit + (SigFigMode+1); digitCount <= lastDigit; digitCount++) {
+           for (digitCount = firstDigit + (SigFigMode+1); digitCount <= 34; digitCount++) {
             bcd[digitCount] = 0;
             }
         }
@@ -713,7 +720,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
         }
 
         // Zeros after last significant digit
-        for(i=1; i<=(int16_t)displayFormatDigits_active+exponent+1-numDigits; i++, digitCount--) {   //JM SIGFIGNEW hackpoint
+        for(i=1; i<=(int16_t)displayFormatDigits_Active+exponent+1-numDigits; i++, digitCount--) {   //JM SIGFIGNEW hackpoint
           if(groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
             xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
@@ -726,7 +733,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
       }
       else { // zero or positive exponent
   //JM SIGFIGNEW hackpoint
-        for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + exponent + (int16_t)displayFormatDigits_active; digitPointer++, digitCount--) { // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123 
+        for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + exponent + (int16_t)displayFormatDigits_Active; digitPointer++, digitCount--) { // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123 
         //for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) { // This line is for fixed number of displayed digits, e.g. in FIX 15: 123 456.789 123 456 8
           if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
             xcopy(displayString + charIndex, separator, 2);

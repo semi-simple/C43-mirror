@@ -96,16 +96,16 @@ TO_QSPI const radiocb_t indexOfRadioCbEepromItems[] = {
 /*      */  { ITM_DENANY,           DM_ANY,                 CB_JC },  //  --fnDenMode
 /*      */  { ITM_DENFIX,           DM_FIX,                 CB_JC },  //  --fnDenMode
 
-/*  308 */  { ITM_LINF,             JC_LINEAR_FITTING       ,CB_JC },  //fnCurveFitting
-/*  161 */  { ITM_EXPF,             JC_EXPONENTIAL_FITTING  ,CB_JC },  //fnCurveFitting
-/*  325 */  { ITM_LOGF,             JC_LOGARITHMIC_FITTING  ,CB_JC },  //fnCurveFitting
-/*  466 */  { ITM_POWERF,           JC_POWER_FITTING        ,CB_JC },  //fnCurveFitting
-/* 1566 */  { ITM_ROOTF,            JC_ROOT_FITTING         ,CB_JC },  //fnCurveFitting
-/* 1565 */  { ITM_HYPF,             JC_HYPERBOLIC_FITTING   ,CB_JC },  //fnCurveFitting
-/* 1564 */  { ITM_PARABF,           JC_PARABOLIC_FITTING    ,CB_JC },  //fnCurveFitting
-/* 1563 */  { ITM_CAUCHF,           JC_CAUCHY_FITTING       ,CB_JC },  //fnCurveFitting
-/* 1562 */  { ITM_GAUSSF,           JC_GAUSS_FITTING        ,CB_JC },  //fnCurveFitting
-/*  438 */  { ITM_ORTHOF,           JC_ORTHOGONAL_FITTING   ,CB_JC },  //fnCurveFitting
+/*  308 */  { ITM_T_LINF,           JC_LINEAR_FITTING       ,CB_JC },  //fnCurveFitting
+/*  161 */  { ITM_T_EXPF,           JC_EXPONENTIAL_FITTING  ,CB_JC },  //fnCurveFitting
+/*  325 */  { ITM_T_LOGF,           JC_LOGARITHMIC_FITTING  ,CB_JC },  //fnCurveFitting
+/*  466 */  { ITM_T_POWERF,         JC_POWER_FITTING        ,CB_JC },  //fnCurveFitting
+/* 1566 */  { ITM_T_ROOTF,          JC_ROOT_FITTING         ,CB_JC },  //fnCurveFitting
+/* 1565 */  { ITM_T_HYPF,           JC_HYPERBOLIC_FITTING   ,CB_JC },  //fnCurveFitting
+/* 1564 */  { ITM_T_PARABF,         JC_PARABOLIC_FITTING    ,CB_JC },  //fnCurveFitting
+/* 1563 */  { ITM_T_CAUCHF,         JC_CAUCHY_FITTING       ,CB_JC },  //fnCurveFitting
+/* 1562 */  { ITM_T_GAUSSF,         JC_GAUSS_FITTING        ,CB_JC },  //fnCurveFitting
+/*  438 */  { ITM_T_ORTHOF,         JC_ORTHOGONAL_FITTING   ,CB_JC },  //fnCurveFitting
 
 /* 1744 */  { ITM_BASE_AHOME,       JC_BASE_AHOME,          CB_JC },  //fnSetSetJM
 /* 1742 */  { ITM_BASE_HOME,        JC_BASE_HOME,           CB_JC },  //fnSetSetJM

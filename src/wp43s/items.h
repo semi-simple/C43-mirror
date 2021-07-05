@@ -22,8 +22,6 @@
 
 #include <stdint.h>
 
-
-
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1362,7 +1360,7 @@
 #define ITM_PARABF                    1305
 #define ITM_HYPF                      1306
 #define ITM_ROOTF                     1307
-#define ITM_RSTF                      1308
+#define ITM_1308                      1308
 #define ITM_1309                      1309
 #define ITM_1310                      1310
 #define ITM_1311                      1311
@@ -2111,8 +2109,19 @@
 #define ITM_STATDEM105                2038
 #define ITM_STATDEM107                2039
 #define ITM_STATDEM109                2040
+#define ITM_T_EXPF                    2041
+#define ITM_T_LINF                    2042
+#define ITM_T_LOGF                    2043
+#define ITM_T_ORTHOF                  2044
+#define ITM_T_POWERF                  2045
+#define ITM_T_GAUSSF                  2046
+#define ITM_T_CAUCHF                  2047
+#define ITM_T_PARABF                  2048
+#define ITM_T_HYPF                    2049
+#define ITM_T_ROOTF                   2050
+#define ITM_RSTF                      2051
 
-#define LAST_ITEM                     2041   //JM
+#define LAST_ITEM                     2052   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

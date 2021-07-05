@@ -241,13 +241,15 @@ TO_QSPI const int16_t menu_STAT[]        = { ITM_SIGMAPLUS,                 ITM_
                                              ITM_SA,                        ITM_XH,                     ITM_XRMS,                 ITM_XMAX,              ITM_XMIN,                    ITM_NULL,
                                              ITM_PLOT_LR,                   ITM_NULL,                   ITM_LISTXY,               ITM_PLOT_XY,           ITM_NULL,                    ITM_PLOT,
 
-//                                             ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_ORTHOF,                  ITM_NULL,
-  //                                           ITM_PARABF,                    ITM_HYPF,                   ITM_ROOTF,                ITM_NULL,              ITM_NULL,                    ITM_PLOT_LR,
-    //                                         ITM_GAUSSF,                    ITM_CAUCHF,                 ITM_NULL,                 ITM_BESTF,             ITM_NULL,                    ITM_LR,
+/*WP43S
+                                             ITM_LINF,                      ITM_EXPF,                   ITM_LOGF,                 ITM_POWERF,            ITM_NULL,                    ITM_ORTHOF,
+                                             ITM_PARABF,                    ITM_HYPF,                   ITM_ROOTF,                ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_GAUSSF,                    ITM_CAUCHF,                 ITM_NULL,                 ITM_BESTF,             ITM_NULL,                    ITM_NULL,
+*/
 
-                                             ITM_LINF,                      ITM_EXPF,                  ITM_LOGF,                  ITM_POWERF,            ITM_ROOTF,                   ITM_PLOT_LRALL,
-                                             ITM_HYPF,                      ITM_PARABF,                ITM_CAUCHF,                ITM_GAUSSF,            ITM_ORTHOF,                  ITM_PLOT_LR,
-                                             ITM_RSTF,                      ITM_BESTF,                 ITM_NULL,                  ITM_NULL,              ITM_NULL,                    ITM_LR,
+                                             ITM_T_LINF,                    ITM_T_EXPF,                ITM_T_LOGF,                ITM_T_POWERF,          ITM_T_ROOTF,                 ITM_PLOT_LR,
+                                             ITM_T_HYPF,                    ITM_T_PARABF,              ITM_T_CAUCHF,              ITM_T_GAUSSF,          ITM_T_ORTHOF,                ITM_PLOT_LRALL,
+                                             ITM_RSTF,                      ITM_BESTF,                 ITM_BESTFQ,                ITM_NULL,              ITM_NULL,                    ITM_LR,
 
                 
                                              ITM_D0,                        ITM_D1,                     ITM_D2,                   ITM_D3,                ITM_D4,                      ITM_D5                        };

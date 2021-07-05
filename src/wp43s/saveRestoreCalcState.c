@@ -579,7 +579,8 @@ static void registerToSaveString(calcRegister_t regist) {
   longInteger_t lgInt;
   int16_t sign;
   uint64_t value;
-  char *str, *cfg;
+  char *str;
+  uint8_t *cfg;
 
   tmpRegisterString = tmpString + START_REGISTER_VALUE;
 
@@ -663,7 +664,7 @@ static void registerToSaveString(calcRegister_t regist) {
       break;
 
     case dtConfig:
-      for(str=tmpRegisterString, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
+      for(str=tmpRegisterString, cfg=(uint8_t *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
         sprintf(str, "%02X", *cfg);
       }
       strcpy(aimBuffer, "Conf");
@@ -1107,7 +1108,7 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
 
     reallocateRegister(regist, dtConfig, CONFIG_SIZE, amNone);
     for(cfg=(char *)REGISTER_CONFIG_DATA(regist), tag=0; tag<sizeof(dtConfigDescriptor_t); tag++, value+=2, cfg++) {
-      *cfg = ((*value >= 'A' ? *value - 'A' + 10 : *value - '0') << 8) | (*(value + 1) >= 'A' ? *(value + 1) - 'A' + 10 : *(value + 1) - '0');
+      *cfg = ((*value >= 'A' ? *value - 'A' + 10 : *value - '0') << 4) | (*(value + 1) >= 'A' ? *(value + 1) - 'A' + 10 : *(value + 1) - '0');
     }
   }
 

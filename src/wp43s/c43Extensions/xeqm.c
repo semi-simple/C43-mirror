@@ -1715,6 +1715,7 @@ void fnCla(uint16_t unusedButMandatoryParameter){
 
 void fnCln(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
+    nimNumberPart = NP_EMPTY;
     calcModeNim(0);
     last_CM=252;
     refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done

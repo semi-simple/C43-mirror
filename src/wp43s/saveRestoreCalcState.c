@@ -1175,7 +1175,7 @@ static void skipMatrixData(char *type, char *value, void *stream) {
 
 
 
-static void restoreOneSection(void *stream, uint16_t loadMode) {
+static bool_t restoreOneSection(void *stream, uint16_t loadMode) {
   int16_t i, numberOfRegs;
   calcRegister_t regist;
   char *str;
@@ -1255,14 +1255,13 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
           skipMatrixData(aimBuffer, tmpString, stream);
         }
       }
+    }
+  }
 
-      if(numberOfRegs > 0) {
-        readLine(stream, tmpString); // LOCAL_FLAGS
-        readLine(stream, tmpString); // LOCAL_FLAGS
-        if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-          currentLocalFlags->localFlags = stringToUint32(tmpString);
-        }
-      }
+  else if(strcmp(tmpString, "LOCAL_FLAGS") == 0) {
+    readLine(stream, tmpString); // LOCAL_FLAGS
+    if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
+      currentLocalFlags->localFlags = stringToUint32(tmpString);
     }
   }
 
@@ -1479,10 +1478,12 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, tmpString);
       gr_y[i] = strtod(tmpString, &end);
       //printf("^^^^### %u %f %f \n",i,gr_x[i],gr_y[i]);
+      return false;
     }
   }
   // Graph memory                                  //^^ GRAPH MEMORY RESTORE
 
+  return true;
 }
 
 
@@ -1508,16 +1509,9 @@ void fnLoad(uint16_t loadMode) {
     }
   #endif // DMCP_BUILD
 
-  restoreOneSection(BACKUP, loadMode); // GLOBAL_REGISTERS
-  restoreOneSection(BACKUP, loadMode); // GLOBAL_FLAGS
-  restoreOneSection(BACKUP, loadMode); // LOCAL_REGISTERS
-  restoreOneSection(BACKUP, loadMode); // NAMED_VARIABLES
-  restoreOneSection(BACKUP, loadMode); // STATISTICAL_SUMS
-  restoreOneSection(BACKUP, loadMode); // SYSTEM_FLAGS
-  restoreOneSection(BACKUP, loadMode); // KEYBOARD_ASSIGNMENTS
-  restoreOneSection(BACKUP, loadMode); // PROGRAMS
-  restoreOneSection(BACKUP, loadMode); // OTHER_CONFIGURATION_STUFF
-  restoreOneSection(BACKUP, loadMode); // Graph memory
+  while (restoreOneSection(BACKUP, loadMode))
+  {
+  }
 
   lastErrorCode = ERROR_NONE;
 

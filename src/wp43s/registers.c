@@ -1170,27 +1170,31 @@ int16_t indirectAddressing(calcRegister_t regist, bool_t valueIsRegister, int16_
     return 9999;
   }
 
-  if(valueIsRegister && minValue <= value && (value <= 99 || isValidAlpha)) {
-    return value;
+  if(valueIsRegister){
+    if(minValue <= value && (value <= 99 || isValidAlpha)) {
+      return value;
+    }
+    else {
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #ifdef PC_BUILD
+        sprintf(errorMessage, "value = %d! Should be from %d to 99.", value, minValue);
+        moreInfoOnError("In function indirectAddressing:", errorMessage, NULL, NULL);
+      #endif // PC_BUILD
+      return 9999;
+    }
   }
   else {
-    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    #ifdef PC_BUILD
-      sprintf(errorMessage, "value = %d! Should be from %d to 99.", value, minValue);
-      moreInfoOnError("In function indirectAddressing:", errorMessage, NULL, NULL);
-    #endif // PC_BUILD
-  }
-
-  if(minValue <= value && value <= maxValue) {
-    return value;
-  }
-  else {
-    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
-    #ifdef PC_BUILD
-      sprintf(errorMessage, "value = %d! Should be from %d to %d.", value, minValue, maxValue);
-      moreInfoOnError("In function indirectAddressing:", errorMessage, NULL, NULL);
-    #endif // PC_BUILD
-    return 9999;
+    if(minValue <= value && value <= maxValue) {
+      return value;
+    }
+    else {
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #ifdef PC_BUILD
+        sprintf(errorMessage, "value = %d! Should be from %d to %d.", value, minValue, maxValue);
+        moreInfoOnError("In function indirectAddressing:", errorMessage, NULL, NULL);
+      #endif // PC_BUILD
+      return 9999;
+    }
   }
 }
 

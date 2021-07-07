@@ -31,6 +31,9 @@ void fnJacobiAmplitude(uint16_t unusedButMandatoryParameter);
 void fnEllipticK      (uint16_t unusedButMandatoryParameter);
 void fnEllipticE      (uint16_t unusedButMandatoryParameter);
 void fnEllipticPi     (uint16_t unusedButMandatoryParameter);
+void fnEllipticFphi   (uint16_t unusedButMandatoryParameter);
+void fnEllipticEphi   (uint16_t unusedButMandatoryParameter);
+void fnJacobiZeta     (uint16_t unusedButMandatoryParameter);
 
 /**
  * Computes Jacobi elliptic functions am, sn, cn and dn.

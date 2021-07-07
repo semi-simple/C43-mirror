@@ -32,6 +32,7 @@
 #include "mathematics/division.h"
 #include "mathematics/magnitude.h"
 #include "mathematics/multiplication.h"
+#include "mathematics/power.h"
 #include "mathematics/sin.h"
 #include "mathematics/tan.h"
 #include "mathematics/wp34s.h"
@@ -398,6 +399,21 @@ void ellipticKE(const real_t *m, real_t *k, real_t *ki, real_t *e, real_t *ei, r
   }
 }
 
+static void rcSqrt(const real_t *x, real_t *r, real_t *i, realContext_t *realContext) {
+  real_t xx;
+
+  realCopy(x, &xx);
+  if(realIsNegative(&xx)) {
+    realSetPositiveSign(&xx);
+    realSquareRoot(&xx, i, realContext);
+    realZero(r);
+  }
+  else {
+    realSquareRoot(&xx, r, realContext);
+    realZero(i);
+  }
+}
+
 static void _ellipticF(const real_t *phi, const real_t *m, real_t *res, realContext_t *realContext) {
   // assumes 0 ≤ phi ≤ pi/2 and 0 ≤ m ≤ 1
   real_t v, k1, agm;
@@ -447,7 +463,6 @@ static void _ellipticF_2(const real_t *phi, const real_t *m, real_t *res, realCo
   if(realCompareGreaterThan(&phiRemainder, const_piOn2)) {
     realAdd(&phiQuotient, const_1, &phiQuotient, realContext);
     realSubtract(const_pi, &phiRemainder, &phiRemainder, realContext);
-    realSetPositiveSign(&phiRemainder);
     remainderNegative = true;
   }
 
@@ -464,10 +479,50 @@ static void _ellipticF_2(const real_t *phi, const real_t *m, real_t *res, realCo
 
   if(realIsNegative(phi)) realChangeSign(res);
 }
-static void _ellipticF_3(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
-  if(realIsZero(psi)) {
+static void _ellipticF_3(const real_t *phi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  if(realIsZero(m)) {
+    // Abramowitz & Stegun §17.4.19-20
+    realCopy(phi, res);
+    realCopy(const_0, resi);
+  }
+  else if(realCompareGreaterThan(m, const_1)) {
+    // Abramowitz & Stegun §17.4.15
+    real_t k, m_1, theta, thetai, a;
+
+    WP34S_Mod(phi, const1071_2pi, &theta, realContext);
+    WP34S_Cvt2RadSinCosTan(&theta, amRadian, &a, NULL, NULL, realContext);
+    realSquareRoot(m, &k, realContext);
+    realDivide(const_1, m, &m_1, realContext);
+    realMultiply(&k, &a, &a, realContext);
+    ArcsinComplex(&a, const_0, &theta, &thetai, realContext);
+    ellipticF(&theta, &thetai, &m_1, res, resi, realContext); // recurses here
+    divComplexComplex(res, resi, &k, const_0, res, resi, realContext);
+  }
+  else if(realIsPositive(m)) {
     _ellipticF_2(phi, m, res, realContext);
-    if(resi) realZero(resi);
+    realCopy(const_0, resi);
+  }
+  else {
+    // Abramowitz & Stegun §17.4.17
+    real_t absm, mp1, rtmp1, k, ki, m2, phi1, f, fi;
+
+    realCopyAbs(m, &absm);
+    realAdd(&absm, const_1, &mp1, realContext);
+    realSquareRoot(&mp1, &rtmp1, realContext);
+
+    realDivide(&absm, &mp1, &m2, realContext);
+    ellipticKE(&m2, &k, &ki, NULL, NULL, realContext);
+
+    realSubtract(const_piOn2, phi, &phi1, realContext);
+    ellipticF(&phi1, const_0, &m2, &f, &fi, realContext); // recurses here
+
+    realSubtract(&k, &f, &k, realContext); realSubtract(&ki, &fi, &ki, realContext);
+    divComplexComplex(&k, &ki, &rtmp1, const_0, res, resi, realContext);
+  }
+}
+static void _ellipticF_4(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
+  if(realIsZero(psi)) {
+    _ellipticF_3(phi, m, res, resi, realContext);
   }
   else if(realIsZero(phi)) {
     // Abramowitz & Stegun §17.4.8
@@ -476,12 +531,12 @@ static void _ellipticF_3(const real_t *phi, const real_t *psi, const real_t *m, 
     realSubtract(const_1, m, &m1, realContext);
     WP34S_SinhCosh(psi, &theta, NULL, realContext);
     WP34S_Atan(&theta, &theta, realContext);
-    _ellipticF_2(&theta, &m1, resi, realContext);
-    if(resi) realZero(res);
+    _ellipticF_3(&theta, &m1, resi, res, realContext);
+    realChangeSign(res);
   }
   else {
     // Abramowitz & Stegun §17.4.11
-    real_t m1, lambda, mu, b, c, csc2Phi, tan2Phi, cot2Phi, sinh2Psi, cot2Lambda;
+    real_t m1, lambda, lambdaI, mu, muI, b, c, csc2Phi, tan2Phi, cot2Phi, sinh2Psi, cot2Lambda, cot2LambdaI;
 
     realSubtract(const_1, m, &m1, realContext);
 
@@ -503,95 +558,100 @@ static void _ellipticF_3(const real_t *phi, const real_t *psi, const real_t *m, 
 
     realMultiply(const__4, &c, &cot2Lambda, realContext);
     realFMA(&b, &b, &cot2Lambda, &cot2Lambda, realContext);
-    realSquareRoot(&cot2Lambda, &cot2Lambda, realContext);
+    rcSqrt(&cot2Lambda, &cot2Lambda, &cot2LambdaI, realContext);
     realSubtract(&cot2Lambda, &b, &cot2Lambda, realContext);
     realMultiply(&cot2Lambda, const_1on2, &cot2Lambda, realContext);
+    realMultiply(&cot2LambdaI, const_1on2, &cot2LambdaI, realContext);
 
-    realDivide(const_1, &cot2Lambda, &lambda, realContext);
-    realSquareRoot(&lambda, &lambda, realContext);
-    WP34S_Atan(&lambda, &lambda, realContext);
+    if(realIsZero(&cot2LambdaI)) {
+      realDivide(const_1, &cot2Lambda, &lambda, realContext);
+      rcSqrt(&lambda, &lambda, &lambdaI, realContext);
+      if(realIsZero(&lambdaI))
+        WP34S_Atan(&lambda, &lambda, realContext);
+      else
+        ArctanComplex(&lambda, &lambdaI, &lambda, &lambdaI, realContext);
 
-    realFMA(&tan2Phi, &cot2Lambda, const__1, &mu, realContext);
-    realDivide(&mu, m, &mu, realContext);
-    realSquareRoot(&mu, &mu, realContext);
-    WP34S_Atan(&mu, &mu, realContext);
+      if(realIsZero(&cot2Lambda) && realIsZero(&cot2LambdaI)) {
+        realCopy(const__1, &mu);
+      }
+      else {
+        realFMA(&tan2Phi, &cot2Lambda, const__1, &mu, realContext);
+      }
+      realDivide(&mu, m, &mu, realContext);
+      rcSqrt(&mu, &mu, &muI, realContext);
+      if(realIsZero(&muI))
+        WP34S_Atan(&mu, &mu, realContext);
+      else
+        ArctanComplex(&mu, &muI, &mu, &muI, realContext);
+    }
+    else {
+      divRealComplex(const_1, &cot2Lambda, &cot2LambdaI, &lambda, &lambdaI, realContext);
+      PowerComplex(&lambda, &lambdaI, const_1on2, const_0, &lambda, &lambdaI, realContext);
+      ArctanComplex(&lambda, &lambdaI, &lambda, &lambdaI, realContext);
 
-    _ellipticF_2(&lambda, m, res, realContext);
-    _ellipticF_2(&mu, &m1, resi, realContext);
-  }
-}
-static void _ellipticF_4(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
-  if(realIsZero(m)) {
-    // Abramowitz & Stegun §17.4.19-20
-    realCopy(phi, res);
-    realCopy(psi, resi);
-  }
-  /*else if(realCompareEqual(m, const_1)) {
-    // Abramowitz & Stegun §17.4.21
-    real_t s, c, t;
-    realFMA(phi, const_1on2, const_piOn4, &t, realContext);
-    WP34S_Cvt2RadSinCosTan(&t, amRadian, &s, &c, &t, realContext);
-    WP34S_Ln(&t, res, realContext);
-  }*/
-  else if(realCompareGreaterThan(m, const_1)) {
-    // Abramowitz & Stegun §17.4.15
-    real_t k, m_1, theta, thetai, a, b;
+      if(realIsZero(&cot2Lambda) && realIsZero(&cot2LambdaI)) {
+        realCopy(const__1, &mu); realCopy(const_0, &muI);
+      }
+      else {
+        realFMA(&tan2Phi, &cot2Lambda, const__1, &mu, realContext); realMultiply(&tan2Phi, &cot2LambdaI, &muI, realContext);
+      }
+      realDivide(&mu, m, &mu, realContext); realDivide(&muI, m, &muI, realContext);
+      PowerComplex(&mu, &muI, const_1on2, const_0, &mu, &muI, realContext);
+      ArctanComplex(&mu, &muI, &mu, &muI, realContext);
+    }
 
-    WP34S_Mod(phi, const1071_2pi, &theta, realContext);
-    sinComplex(&theta, psi, &a, &b, realContext);
-    realSquareRoot(m, &k, realContext);
-    realDivide(const_1, m, &m_1, realContext);
-    realMultiply(&k, &a, &a, realContext); realMultiply(&k, &b, &b, realContext);
-    ArcsinComplex(&a, &b, &theta, &thetai, realContext);
-              fflush(stdout);
-    _ellipticF_3(&theta, &thetai, &m_1, res, resi, realContext);
-    divComplexComplex(res, resi, &k, const_0, res, resi, realContext);
-  }
-  else if(realIsPositive(m)) {
-    _ellipticF_3(phi, psi, m, res, resi, realContext);
-  }
-  else {
-    // Abramowitz & Stegun §17.4.17
-    real_t absm, mp1, rtmp1, k, ki, m2, phi1, phi1i, f, fi;
-
-    realCopyAbs(m, &absm);
-    realAdd(&absm, const_1, &mp1, realContext);
-    realSquareRoot(&mp1, &rtmp1, realContext);
-
-    realDivide(&absm, &mp1, &m2, realContext);
-    ellipticKE(&m2, &k, &ki, NULL, NULL, realContext);
-
-    realSubtract(const_piOn2, phi, &phi1, realContext); realMinus(psi, &phi1i, realContext);
-    ellipticF(&phi1, &phi1i, &m2, &f, &fi, realContext); // recurses here
-    
-    realSubtract(&k, &f, &k, realContext); realSubtract(&ki, &fi, &ki, realContext);
-    divComplexComplex(&k, &ki, &rtmp1, const_0, res, resi, realContext);
+    if(realIsZero(&lambdaI)) {
+      _ellipticF_3(&lambda, m, &b, &c, realContext);
+    }
+    else {
+      ellipticF(&lambda, &lambdaI, m, &b, &c, realContext); // recurses here
+    }
+    realCopy(&b, res); realCopy(&c, resi);
+    if(realIsZero(&muI)) {
+      _ellipticF_3(&mu, &m1, &b, &c, realContext);
+    }
+    else {
+      _ellipticF_4(&mu, &muI, &m1, &b, &c, realContext); // recurses here
+    }
+    realAdd(resi, &b, resi, realContext);
+    realSubtract(res, &c, res, realContext);
   }
 }
 static void _ellipticF_5(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
-  // Abramowitz & Stegun §17.4.15
-  if(realCompareLessEqual(phi, const_piOn4)) {
-    _ellipticF_4(phi, psi, m, res, resi, realContext);
-  }
-  else {
+  // Abramowitz & Stegun §17.4.13
+  if(realCompareAbsGreaterThan(phi, const_piOn4)) {
     real_t psir, psii, m1, k1, k1i, tanPhi, tanPhiI, k, ki;
 
     ellipticKE(m, &k, &ki, NULL, NULL, realContext);
+    if(realIsNegative(psi)) realChangeSign(&ki); // conjugate
     TanComplex(phi, psi, &tanPhi, &tanPhiI, realContext);
     realSubtract(const_1, m, &m1, realContext);
-    if(realIsNegative(&m1)) {
-      realSetPositiveSign(&m1);
-      realZero(&k1); realSquareRoot(&m1, &k1i, realContext);
-      realSetNegativeSign(&m1);
-    }
-    else {
-      realSquareRoot(&m1, &k1, realContext); realZero(&k1i);
-    }
+    rcSqrt(&m1, &k1, &k1i, realContext);
     mulComplexComplex(&k1, &k1i, &tanPhi, &tanPhiI, &psir, &psii, realContext);
     divRealComplex(const_1, &psir, &psii, &psir, &psii, realContext);
-    ArctanComplex(&psir, &psii, &psir, &psii, realContext);
+    if(realIsZero(&psii))
+      WP34S_Atan(&psir, &psir, realContext);
+    else
+      ArctanComplex(&psir, &psii, &psir, &psii, realContext);
     _ellipticF_4(&psir, &psii, m, res, resi, realContext);
+
+    if(!realIsZero(&ki)) {
+      if(realIsPositive(&ki))
+        realSetPositiveSign(resi);
+      else
+        realSetNegativeSign(resi);
+    }
     realSubtract(&k, res, res, realContext); realSubtract(&ki, resi, resi, realContext);
+
+    if(realIsPositive(psi))
+      realSetPositiveSign(resi);
+    else
+      realSetNegativeSign(resi);
+    if(!realIsZero(&ki) && realIsNegative(&ki))
+      realChangeSign(resi);
+  }
+  else {
+    _ellipticF_4(phi, psi, m, res, resi, realContext);
   }
 }
 
@@ -600,34 +660,77 @@ void ellipticF(const real_t *phi, const real_t *psi, const real_t *m, real_t *re
   real_t phi1, phiQuotient, phiRemainder, psi1;
   bool_t remainderNegative = false;
 
-  realCopyAbs(phi, &phi1); realCopy(psi, &psi1);
+  realCopy(phi, &phi1); realCopy(psi, &psi1);
+  if(realIsNegative(phi)) {
+    realChangeSign(&phi1);
+    realChangeSign(&psi1);
+  }
   realDivide(&phi1, const_pi, &phiQuotient, realContext);
   realToIntegralValue(&phiQuotient, &phiQuotient, DEC_ROUND_DOWN, realContext);
   realDivideRemainder(&phi1, const_pi, &phiRemainder, realContext);
   if(realCompareGreaterThan(&phiRemainder, const_piOn2)) {
     realAdd(&phiQuotient, const_1, &phiQuotient, realContext);
     realSubtract(const_pi, &phiRemainder, &phiRemainder, realContext);
-    realSetPositiveSign(&phiRemainder);
-    realChangeSign(&psi1);
     remainderNegative = true;
   }
 
-  if(realIsZero(&phiQuotient)) {
-    _ellipticF_5(&phiRemainder, &psi1, m, res, resi, realContext);
+  if(realIsZero(phi) && realIsZero(psi)) {
+    realZero(res); realZero(resi);
+    return;
   }
-  else {
-    realAdd(&phiQuotient, &phiQuotient, &phiQuotient, realContext);
+  else if(realIsZero(m)) {
+    realCopy(phi, res); realCopy(psi, resi);
+    return;
+  }
+  else if(realIsZero(&phiQuotient)) {
     _ellipticF_5(&phiRemainder, &psi1, m, res, resi, realContext);
-    ellipticKE(m, &phi1, &psi1, NULL, NULL, realContext);
     if(remainderNegative) {
       realChangeSign(res);
       realChangeSign(resi);
     }
+    if(realIsNegative(phi)) {
+      realChangeSign(res);
+      realChangeSign(resi);
+    }
+  }
+  else {
+    realAdd(&phiQuotient, &phiQuotient, &phiQuotient, realContext);
+    _ellipticF_5(&phiRemainder, &psi1, m, res, resi, realContext);
+    if(remainderNegative) {
+      realChangeSign(res);
+      realChangeSign(resi);
+    }
+    if(realIsNegative(phi)) {
+      realChangeSign(res);
+      realChangeSign(resi);
+    }
+    ellipticKE(m, &phi1, &psi1, NULL, NULL, realContext);
     realFMA(&phiQuotient, &phi1, res, res, realContext);
     realFMA(&phiQuotient, &psi1, resi, resi, realContext);
   }
 
-  if(realIsNegative(phi)) realChangeSign(res);
+  if(realCompareGreaterThan(m, const_1) && (realCompareAbsGreaterThan(phi, const_piOn2) || realIsZero(psi))) {
+    if(realIsPositive(phi)) {
+      realSetNegativeSign(resi);
+    }
+    else {
+      realSetPositiveSign(resi);
+    }
+  }
+  else {
+    if(realIsPositive(psi)) {
+      realSetPositiveSign(resi);
+    }
+    else if(realIsNegative(psi)) {
+      realSetNegativeSign(resi);
+    }
+    else if(realIsPositive(psi)) {
+      realSetPositiveSign(resi);
+    }
+    else if(realIsNegative(psi)) {
+      realSetNegativeSign(resi);
+    }
+  }
 }
 
 void ellipticE(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
@@ -678,21 +781,6 @@ static void heumanLambda(const real_t *phi, const real_t *psi, const real_t *m, 
   mulComplexComplex(&k, &ki, &z, &zi, &z, &zi, realContext);
   divComplexComplex(&z, &zi, const_piOn2, const_0, &z, &zi, realContext);
   realAdd(res, &z, res, realContext); realAdd(resi, &zi, resi, realContext);
-}
-
-static void rcSqrt(const real_t *x, real_t *r, real_t *i, realContext_t *realContext) {
-  real_t xx;
-
-  realCopy(x, &xx);
-  if(realIsNegative(&xx)) {
-    realSetPositiveSign(&xx);
-    realSquareRoot(&xx, i, realContext);
-    realZero(r);
-  }
-  else {
-    realSquareRoot(&xx, r, realContext);
-    realZero(i);
-  }
 }
 
 static void _ellipticPi_1(const real_t *n, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
@@ -1069,3 +1157,121 @@ void fnEllipticPi(uint16_t unusedButMandatoryParameter) {
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
 }
+
+void fnEllipticFphi(uint16_t unusedButMandatoryParameter) {
+  bool_t realInput;
+  real_t m, uReal, uImag;
+  real_t rReal, rImag;
+
+  if (!jacobi_check_inputs(&m, &uReal, &uImag, &realInput))
+    return;
+
+  if(!saveLastX()) return;
+
+  if(realInput) {
+    ellipticF(&uReal, const_0, &m, &rReal, &rImag, &ctxtReal39);
+    if(realIsZero(&rImag)) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else if(getFlag(FLAG_CPXRES)) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "F(φ|m) cannot return complex result without CPXRES set");
+        moreInfoOnError("In function fnEllipticFphi:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+  else {
+    ellipticF(&uReal, &uImag, &m, &rReal, &rImag, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+}
+
+void fnEllipticEphi(uint16_t unusedButMandatoryParameter) {
+  bool_t realInput;
+  real_t m, uReal, uImag;
+  real_t rReal, rImag;
+
+  if (!jacobi_check_inputs(&m, &uReal, &uImag, &realInput))
+    return;
+
+  if(!saveLastX()) return;
+
+  if(realInput) {
+    ellipticE(&uReal, const_0, &m, &rReal, &rImag, &ctxtReal39);
+    if(realIsZero(&rImag)) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else if(getFlag(FLAG_CPXRES)) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "E(φ|m) cannot return complex result without CPXRES set");
+        moreInfoOnError("In function fnEllipticFphi:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+  else {
+    ellipticE(&uReal, &uImag, &m, &rReal, &rImag, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+}
+
+void fnJacobiZeta(uint16_t unusedButMandatoryParameter) {
+  bool_t realInput;
+  real_t m, uReal, uImag;
+  real_t rReal, rImag;
+
+  if (!jacobi_check_inputs(&m, &uReal, &uImag, &realInput))
+    return;
+
+  if(!saveLastX()) return;
+
+  if(realInput) {
+    jacobiZeta(&uReal, const_0, &m, &rReal, &rImag, &ctxtReal39);
+    if(realIsZero(&rImag)) {
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else if(getFlag(FLAG_CPXRES)) {
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+      realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "Ζ(φ|m) cannot return complex result without CPXRES set");
+        moreInfoOnError("In function fnEllipticFphi:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+  else {
+    jacobiZeta(&uReal, &uImag, &m, &rReal, &rImag, &ctxtReal39);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+    realToReal34(&rReal, REGISTER_REAL34_DATA(REGISTER_X));
+    realToReal34(&rImag, REGISTER_IMAG34_DATA(REGISTER_X));
+  }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, -1, -1);
+}
+

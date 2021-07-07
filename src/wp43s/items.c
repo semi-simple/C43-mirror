@@ -674,6 +674,9 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnEllipticK                 (uint16_t unusedButMandatoryParameter) {}
   void fnEllipticE                 (uint16_t unusedButMandatoryParameter) {}
   void fnEllipticPi                (uint16_t unusedButMandatoryParameter) {}
+  void fnEllipticFphi              (uint16_t unusedButMandatoryParameter) {}
+  void fnEllipticEphi              (uint16_t unusedButMandatoryParameter) {}
+  void fnJacobiZeta                (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2483,6 +2486,9 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1760 */  { fnPlotStat,                   PLOT_NXT,                    "",                                            "NXTFIT",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /* 1761 */  { fnPlotStat,                   PLOT_REV,                    "",                                            "",                                            (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /* 1762 */  { fnPlotZoom,                   NOPARAM,                     "",                                            "ZOOM",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
+/* 1763 */  { fnEllipticFphi,               NOPARAM,                     "F(" STD_phi ",m)",                            "F(" STD_phi ",m)",                            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1764 */  { fnEllipticEphi,               NOPARAM,                     "E(" STD_phi ",m)",                            "E(" STD_phi ",m)",                            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1765 */  { fnJacobiZeta,                 NOPARAM,                     STD_ZETA "(" STD_phi ",m)",                    STD_ZETA "(" STD_phi ",m)",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 
-/* 1766 */  { itemToBeCoded,                NOPARAM,                    "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 1766 */  { itemToBeCoded,                NOPARAM,                    "",                                            "Last item",                                    (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

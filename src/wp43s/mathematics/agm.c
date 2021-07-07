@@ -239,7 +239,10 @@ static void _complexAgm(int mode, const real_t *ar, const real_t *ai, const real
       realAdd(&e, &d, &d, realContext); realAdd(&ei, &di, &di, realContext);
       realSubtract(&ba, const_1, &e, realContext); realCopy(&bai, &ei);
       divComplexComplex(&e, &ei, &d, &di, &d, &di, realContext);
-      ArctanComplex(&d, &di, &d, &di, realContext);
+      if(realIsZero(&di))
+        WP34S_Atan(&d, &d, realContext);
+      else
+        ArctanComplex(&d, &di, &d, &di, realContext);
       realAdd(&cCoeff, &cCoeff, &cCoeff, realContext);
       if(realCompareAbsLessThan(&prevDelta, &d)) {
         realAdd(&cCoeff, const_1, &cCoeff, realContext);

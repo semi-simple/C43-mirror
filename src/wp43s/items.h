@@ -1823,8 +1823,11 @@
 #define ITM_PLOT_NXT                  1760
 #define ITM_PLOT_REV                  1761
 #define ITM_PLOTZOOM                  1762
+#define ITM_Fphik                     1763
+#define ITM_Ephik                     1764
+#define ITM_ZETAphik                  1765
 
-#define LAST_ITEM                     1763
+#define LAST_ITEM                     1766
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

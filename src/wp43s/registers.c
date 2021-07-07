@@ -1224,7 +1224,7 @@ int16_t indirectAddressing(calcRegister_t regist, bool_t valueIsRegister, int16_
     if(longIntegerIsNegative(lgInt) || longIntegerCompareUInt(lgInt, maxValue) >= 0) {
       displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
       #ifdef PC_BUILD
-        longIntegerToAllocatedString(lgInt, errorMessage, sizeof(errorMessage));
+        longIntegerToAllocatedString(lgInt, errorMessage, ERROR_MESSAGE_LENGTH);
         sprintf(tmpString, "register %" PRId16 " = %s:", regist, errorMessage);
         moreInfoOnError("In function indirectAddressing:", tmpString, "this value is negative or too big!", NULL);
       #endif // PC_BUILD

@@ -30,6 +30,7 @@
 #include "mathematics/arctan.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/division.h"
+#include "mathematics/ln.h"
 #include "mathematics/magnitude.h"
 #include "mathematics/multiplication.h"
 #include "mathematics/power.h"
@@ -680,6 +681,21 @@ void ellipticF(const real_t *phi, const real_t *psi, const real_t *m, real_t *re
   }
   else if(realIsZero(m)) {
     realCopy(phi, res); realCopy(psi, resi);
+    return;
+  }
+  else if(realCompareEqual(m, const_1)) {
+    real_t p, q;
+    realFMA(phi, const_1on2, const_piOn4, &p, realContext); realMultiply(psi, const_1on2, &q, realContext);
+    if(realIsZero(&q)) {
+      WP34S_Cvt2RadSinCosTan(&p, amRadian, res, resi, &q, realContext);
+      WP34S_Ln(&q, res, realContext);
+      realZero(resi);
+    }
+    else {
+      TanComplex(&p, &q, &p, &q, realContext);
+      lnComplex(&p, &q, res, resi, realContext);
+      if(realIsZero(&p)) realZero(res);
+    }
     return;
   }
   else if(realIsZero(&phiQuotient)) {

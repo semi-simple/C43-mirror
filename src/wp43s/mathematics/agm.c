@@ -203,15 +203,22 @@ static int _realAgm(int mode, const real_t *a, const real_t *b, real_t *c, real_
   return n;
 }
 
-static void _complexAgm(int mode, const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, realContext_t *realContext) {
+static int _complexAgm(int mode, const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, real_t *_ar, real_t *_ai, real_t *_br, real_t *_bi, size_t _sz, realContext_t *realContext) {
   real_t aReal, bReal, cReal;
   real_t aImag, bImag, cImag;
   real_t cCoeff, prevDelta, zr, zi;
+  int n = 0;
 
   realCopy(ar, &aReal); realCopy(ai, &aImag);
   realCopy(br, &bReal); realCopy(bi, &bImag);
   if(mode==AGM_MODE_E) {
     realCopy(const_1, &cCoeff);
+  }
+  if(mode==AGM_MODE_STEP) {
+    realCopy(&aReal, _ar);
+    realCopy(&aImag, _ai);
+    realCopy(&bReal, _br);
+    realCopy(&bImag, _bi);
   }
   if(mode==AGM_MODE_ZETA) {
     realCopy(const_plusInfinity, &prevDelta);
@@ -276,6 +283,15 @@ static void _complexAgm(int mode, const real_t *ar, const real_t *ai, const real
 
     realMultiply(&cReal, const_1on2, &aReal, realContext); // a = (a + b) / 2 real part
     realMultiply(&cImag, const_1on2, &aImag, realContext); // a = (a + b) / 2 imag part
+
+    ++n;
+    if(mode==AGM_MODE_STEP) {
+      realCopy(&aReal, _ar + n);
+      realCopy(&aImag, _ai + n);
+      realCopy(&bReal, _br + n);
+      realCopy(&bImag, _bi + n);
+      if(n >= (int)_sz - 1) break;
+    }
   }
 
   if(mode==AGM_MODE_E) {
@@ -286,22 +302,23 @@ static void _complexAgm(int mode, const real_t *ar, const real_t *ai, const real
   }
 
   realCopy(&aReal, resr); realCopy(&aImag, resi);
+  return n;
 }
 
 size_t realAgm(const real_t *a, const real_t *b, real_t *res, realContext_t *realContext) {
   return _realAgm(AGM_MODE_NORMAL, a, b, NULL, res, NULL, NULL, 0, realContext);
 }
 
-void complexAgm(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *resr, real_t *resi, realContext_t *realContext) {
-  _complexAgm(AGM_MODE_NORMAL, ar, ai, br, bi, NULL, NULL, resr, resi, realContext);
+size_t complexAgm(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *resr, real_t *resi, realContext_t *realContext) {
+  return _complexAgm(AGM_MODE_NORMAL, ar, ai, br, bi, NULL, NULL, resr, resi, NULL, NULL, NULL, NULL, 0, realContext);
 }
 
 size_t realAgmForE(const real_t *a, const real_t *b, real_t *c, real_t *res, realContext_t *realContext) {
   return _realAgm(AGM_MODE_E, a, b, c, res, NULL, NULL, 0, realContext);
 }
 
-void complexAgmForE(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, realContext_t *realContext) {
-  _complexAgm(AGM_MODE_E, ar, ai, br, bi, cr, ci, resr, resi, realContext);
+size_t complexAgmForE(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, realContext_t *realContext) {
+  return _complexAgm(AGM_MODE_E, ar, ai, br, bi, cr, ci, resr, resi, NULL, NULL, NULL, NULL, 0, realContext);
 }
 
 size_t realAgmForF(const real_t *a, const real_t *b, real_t *c, real_t *res, realContext_t *realContext) {
@@ -312,10 +329,14 @@ size_t realAgmForZ(const real_t *a, const real_t *b, real_t *c, real_t *res, rea
   return _realAgm(AGM_MODE_ZETA, a, b, c, res, NULL, NULL, 0, realContext);
 }
 
-void complexAgmForZ(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, realContext_t *realContext) {
-  _complexAgm(AGM_MODE_ZETA, ar, ai, br, bi, cr, ci, resr, resi, realContext);
+size_t complexAgmForZ(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *cr, real_t *ci, real_t *resr, real_t *resi, realContext_t *realContext) {
+  return _complexAgm(AGM_MODE_ZETA, ar, ai, br, bi, cr, ci, resr, resi, NULL, NULL, NULL, NULL, 0, realContext);
 }
 
 size_t realAgmStep(const real_t *a, const real_t *b, real_t *res, real_t *aStep, real_t *bStep, size_t bufSize, realContext_t *realContext) {
   return _realAgm(AGM_MODE_STEP, a, b, NULL, res, aStep, bStep, bufSize, realContext);
+}
+
+size_t complexAgmStep(const real_t *ar, const real_t *ai, const real_t *br, const real_t *bi, real_t *resr, real_t *resi, real_t *aStep, real_t *aiStep, real_t *bStep, real_t *biStep, size_t bufSize, realContext_t *realContext){
+  return _complexAgm(AGM_MODE_STEP, ar, ai, br, bi, NULL, NULL, resr, resi, aStep, aiStep, bStep, biStep, bufSize, realContext);
 }

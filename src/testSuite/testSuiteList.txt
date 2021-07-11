@@ -355,5 +355,7 @@ jacobi_am
 
 ellipticK
 ellipticE
-ellipticPi
+;ellipticPi
 ellipticFphi
+ellipticEphi
+jacobi_zeta

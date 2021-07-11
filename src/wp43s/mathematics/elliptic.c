@@ -1035,28 +1035,6 @@ static void _jacobiZeta_Agm(const real_t *phi, const real_t *psi, const real_t *
     realCopy(const_NaN, res); realCopy(const_NaN, resi);
   }
 }
-/*static void _jacobiZeta(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
-  real_t k, v, vi, agm, agmi;
-
-  realCopy(phi, &v); realCopy(psi, &vi);
-  realSubtract(const_1, m, &k, realContext);
-  if(realIsNegative(&k)) {
-    realSetPositiveSign(&k);
-    realSquareRoot(&k, &k, realContext);
-    complexAgmForZ(const_1, const_0, const_0, &k, &v, &vi, &agm, &agmi, realContext);
-    realCopy(&v, res); realCopy(&vi, resi);
-  }
-  else if(realIsZero(&vi)) {
-    realSquareRoot(&k, &k, realContext);
-    realAgmForZ(const_1, &k, &v, &agm, realContext);
-    realCopy(&v, res); realZero(resi);
-  }
-  else {
-    realSquareRoot(&k, &k, realContext);
-    complexAgmForZ(const_1, const_0, &k, const_0, &v, &vi, &agm, &agmi, realContext);
-    realCopy(&v, res); realCopy(&vi, resi);
-  }
-}*/
 static void _jacobiZeta(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
   if(realCompareLessEqual(m, const_1)) {
     _jacobiZeta_Agm(phi, psi, m, res, resi, realContext);
@@ -1132,28 +1110,6 @@ void jacobiZeta(const real_t *phi, const real_t *psi, const real_t *m, real_t *r
     realChangeSign(resi);
   }
 }
-/*void jacobiZeta(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
-  real_t k, v, vi, agm, agmi;
-
-  realCopy(phi, &v); realCopy(psi, &vi);
-  realSubtract(const_1, m, &k, realContext);
-  if(realIsNegative(&k)) {
-    realSetPositiveSign(&k);
-    realSquareRoot(&k, &k, realContext);
-    complexAgmForZ(const_1, const_0, const_0, &k, &v, &vi, &agm, &agmi, realContext);
-    realCopy(&v, res); realCopy(&vi, resi);
-  }
-  else if(realIsZero(&vi)) {
-    realSquareRoot(&k, &k, realContext);
-    realAgmForZ(const_1, &k, &v, &agm, realContext);
-    realCopy(&v, res); realZero(resi);
-  }
-  else {
-    realSquareRoot(&k, &k, realContext);
-    complexAgmForZ(const_1, const_0, &k, const_0, &v, &vi, &agm, &agmi, realContext);
-    realCopy(&v, res); realCopy(&vi, resi);
-  }
-}*/
 
 static void heumanLambda(const real_t *phi, const real_t *psi, const real_t *m, real_t *res, real_t *resi, realContext_t *realContext) {
   // Abramowitz & Stegun §17.4.39-40

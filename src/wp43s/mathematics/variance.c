@@ -22,6 +22,7 @@
 
 #include "constantPointers.h"
 #include "curveFitting.h"
+#include "debug.h"
 #include "error.h"
 #include "flags.h"
 #include "registers.h"
@@ -268,7 +269,7 @@ void fnMinExpStdDev(uint16_t unusedButMandatoryParameter){ //smi
  ***********************************************/
 void fnStatSa(uint16_t unusedButMandatoryParameter) {
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
-  real_t SA0,SA1,RR,SX,SY,RR2,MX2,SX2,SY2,UU,SS,TT,aa0,aa1,aa2,SMI;
+  real_t SA0,SA1,RR,MX,SX,SY,RR2,MX2,SX2,SY2,UU,SS,TT,aa0,aa1,aa2,SMI;
 
   //LINF:   SA0 & SA1: RR2, n, Sy, Sx, Sx^2, Mx^2
   //EXPF:   new value for SY2, SY and use REX
@@ -287,29 +288,34 @@ void fnStatSa(uint16_t unusedButMandatoryParameter) {
       lrChosen = CF_LINEAR_FITTING;
     }
     //Replaced fnStatR       (&RR,&SXY,&SX,&SY);
-    processCurvefitSelectionAll(lrChosen, &RR, &MX2, &SX2, &SY2, &SMI, &aa0, &aa1, &aa2);  //Can be optimised a lot, as fnStatR is also called here
-    realSquareRoot(&SX2,&SX,realContext);
-    realSquareRoot(&SY2,&SY,realContext);
+    processCurvefitSelectionAll(lrChosen, &RR, &MX, &MX2, &SX2, &SY2, &SMI, &aa0, &aa1, &aa2);  //Can be optimised a lot, as fnStatR is also called here
     realMultiply  (&RR,&RR,&RR2,realContext);               //   --> r^2
+
+    #if defined STATDEBUG && defined PC_BUILD
+      printf("##### fnStatSa:\n");
+      char ss[100];
+      formatRealDebug(ss, &RR2); printf("§§ RR^2: %s\n",ss);
+      formatRealDebug(ss, &MX2); printf("§§ MX^2: %s\n",ss);
+      formatRealDebug(ss, &SX2); printf("§§ SX^2: %s\n",ss);
+      formatRealDebug(ss, &SY2); printf("§§ SY^2: %s\n",ss);
+    #endif
+
 
     switch(lrChosen) {
       case CF_LINEAR_FITTING :
-      case CF_ORTHOGONAL_FITTING :
-        realSubtract  (const_1,&RR2,&SS,realContext);
-        realSubtract  (SIGMA_N,const_2,&TT,realContext);
-        realDivide    (&SS,&TT,&UU,realContext);
-        realSquareRoot(&UU,&UU,&ctxtReal39);
-        realMultiply  (&UU,&SY,&UU,&ctxtReal39);
-        realDivide    (&UU,&SX,&SA1,&ctxtReal39); 
-
-        realSubtract  (SIGMA_N,const_1,&SS,realContext);
-        realDivide    (&SS,SIGMA_N,&SS,realContext);             //SS = (n-1)/n
-        realMultiply  (&SS,&SX2,&SS,realContext);                //SS = SS * SX^2
-        realAdd       (&SS,&MX2,&SS,realContext);
-        realSquareRoot(&SS,&SS,&ctxtReal39);
-        realMultiply  (&SS,&SA1,&SA0,&ctxtReal39);
+      case CF_ORTHOGONAL_FITTING :        
+        //All parameters set from processCurvefitSelectionAll
         break;
-      
+
+      case CF_EXPONENTIAL_FITTING :
+        //All parameters set from processCurvefitSelectionAll
+        break;
+      case CF_POWER_FITTING :
+        //All parameters set from processCurvefitSelectionAll
+        break;
+      case CF_LOGARITHMIC_FITTING :
+        //All parameters set from processCurvefitSelectionAll        
+        break;
       default :
         displayCalcErrorMessage(ERROR_NO_ERRORS_CALCULABLE, ERR_REGISTER_LINE, REGISTER_X);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -318,6 +324,24 @@ void fnStatSa(uint16_t unusedButMandatoryParameter) {
         return;
         //break;
     }
+
+    realSquareRoot(&SX2,&SX,realContext);
+    realSquareRoot(&SY2,&SY,realContext);
+
+    realSubtract  (const_1,&RR2,&SS,realContext);       //SA1 = f( RR2, n, SY, SX )
+    realSubtract  (SIGMA_N,const_2,&TT,realContext);
+    realDivide    (&SS,&TT,&UU,realContext);
+    realSquareRoot(&UU,&UU,&ctxtReal39);
+    realMultiply  (&UU,&SY,&UU,&ctxtReal39);
+    realDivide    (&UU,&SX,&SA1,&ctxtReal39); 
+
+    realSubtract  (SIGMA_N,const_1,&SS,realContext);    //SA0 = f( n, SX2, MX2, SA1 )
+    realDivide    (&SS,SIGMA_N,&SS,realContext);             //SS = (n-1)/n
+    realMultiply  (&SS,&SX2,&SS,realContext);                //SS = SS * SX^2
+    realAdd       (&SS,&MX2,&SS,realContext);
+    realSquareRoot(&SS,&SS,&ctxtReal39);
+    realMultiply  (&SS,&SA1,&SA0,&ctxtReal39);
+
 
     liftStack();
     setSystemFlag(FLAG_ASLIFT);

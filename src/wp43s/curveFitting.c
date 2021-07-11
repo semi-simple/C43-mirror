@@ -306,8 +306,8 @@ real_t SS,TT,UU;
 
 
 void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, real_t *aa0, real_t *aa1, real_t *aa2){
-  real_t MX2, SX2, SY2;
-  processCurvefitSelectionAll(selection, RR_, &MX2, &SX2, &SY2, SMI_, aa0, aa1, aa2);
+  real_t MX, MX2, SX2, SY2;
+  processCurvefitSelectionAll(selection, RR_, &MX, &MX2, &SX2, &SY2, SMI_, aa0, aa1, aa2);
 }
 
 /********************************************//**
@@ -317,7 +317,7 @@ void processCurvefitSelection(uint16_t selection, real_t *RR_, real_t *SMI_, rea
  * \return void
  *
  ***********************************************/
-void processCurvefitSelectionAll(uint16_t selection, real_t *RR_, real_t *MX2, real_t *SX2, real_t *SY2, real_t *SMI_, real_t *aa0, real_t *aa1, real_t *aa2){
+void processCurvefitSelectionAll(uint16_t selection, real_t *RR_, real_t *MX, real_t *MX2,real_t *SX2, real_t *SY2, real_t *SMI_, real_t *aa0, real_t *aa1, real_t *aa2){
     real_t AA,BB,CC,DD,EE,FF,GG,HH,RR2;   // Curve aux fitting variables
     real_t SS,TT,UU;                  // Temporary curve fitting variables
     uint16_t ix,jx;               //only a single graph can be displayed at once, so retain the single lowest bit, and clear the higher order bits if ever control comes here with multpile graph selections
@@ -341,8 +341,8 @@ void processCurvefitSelectionAll(uint16_t selection, real_t *RR_, real_t *MX2, r
 
     realMultiply(&S_X,&S_X,SX2,realContext);
     realMultiply(&S_Y,&S_Y,SY2,realContext);
-    realDivide    (SIGMA_X,SIGMA_N,MX2,realContext);         //MX = SumX / N
-    realMultiply  (MX2,MX2,MX2,realContext);                 //MX2
+    realDivide    (SIGMA_X,SIGMA_N,MX,realContext);         //MX = SumX / N
+    realMultiply  (MX,MX,MX2,realContext);                 //MX2
 
 
     #if defined STAT_DISPLAY_ABCDEFG && defined PC_BUILD
@@ -434,7 +434,7 @@ void processCurvefitSelectionAll(uint16_t selection, real_t *RR_, real_t *MX2, r
         realDivide(&SS,&TT,RR_,realContext);
         realDivide(RR_,&VV,RR_,realContext);            //r
 
-        realSubtract  (const_1,SIGMA_N,&SS,realContext); // Section for s(a)
+        realSubtract  (SIGMA_N,const_1,&SS,realContext); // Section for s(a)
         realMultiply  (SIGMA_N,&SS,&SS,realContext);
         realDivide    (const_1,&SS,&SS,realContext);
         realMultiply  (&SS,&ZZ,SY2,realContext);
@@ -485,12 +485,12 @@ void processCurvefitSelectionAll(uint16_t selection, real_t *RR_, real_t *MX2, r
         realDivide(&SS,&TT,RR_,realContext);
         realDivide(RR_,&UU,RR_,realContext);            //r
 
-        realSubtract  (const_1,SIGMA_N,&SS,realContext); // Section for s(a)
+        realSubtract  (SIGMA_N,const_1,&SS,realContext); // Section for s(a)
         realMultiply  (SIGMA_N,&SS,&SS,realContext);
         realDivide    (const_1,&SS,&SS,realContext);
         realMultiply  (&SS,&WW,SX2,realContext);
-        realDivide    (SIGMA_lnX,SIGMA_N,MX2,realContext);
-        realMultiply  (MX2,MX2,MX2,realContext);
+        realDivide    (SIGMA_lnX,SIGMA_N,MX,realContext);
+        realMultiply  (MX,MX,MX2,realContext);
 
         #if defined STATDEBUG && defined PC_BUILD
           printf("##### LOGF\n");
@@ -539,14 +539,14 @@ void processCurvefitSelectionAll(uint16_t selection, real_t *RR_, real_t *MX2, r
         realDivide(&SS,&TT,RR_,realContext);
         realDivide(RR_,&UU,RR_,realContext);            //r
 
-        realSubtract  (const_1,SIGMA_N,&SS,realContext); // Section for s(a)
+        realSubtract  (SIGMA_N,const_1,&SS,realContext); // Section for s(a)
         realMultiply  (SIGMA_N,&SS,&SS,realContext);
         realDivide    (const_1,&SS,&SS,realContext);
         realMultiply  (&SS,&WW,SX2,realContext);
-        realDivide    (SIGMA_lnX,SIGMA_N,MX2,realContext);
-        realMultiply  (MX2,MX2,MX2,realContext);
+        realDivide    (SIGMA_lnX,SIGMA_N,MX,realContext);
+        realMultiply  (MX,MX,MX2,realContext);
 
-        realSubtract  (const_1,SIGMA_N,&SS,realContext); // Section for s(a)
+        realSubtract  (SIGMA_N,const_1,&SS,realContext); // Section for s(a)
         realMultiply  (SIGMA_N,&SS,&SS,realContext);
         realDivide    (const_1,&SS,&SS,realContext);
         realMultiply  (&SS,&ZZ,SY2,realContext);

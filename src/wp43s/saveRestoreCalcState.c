@@ -36,7 +36,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         56  // Added lrChosenUndo
+#define BACKUP_VERSION         57  // indirect fix
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -91,10 +91,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
     save(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
     save(globalFlags,                         sizeof(globalFlags),                        BACKUP);
-    save(errorMessage,                        sizeof(errorMessage),                       BACKUP);
-    save(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
-    save(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
-    save(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
+    save(errorMessage,                        ERROR_MESSAGE_LENGTH,                       BACKUP);
+    save(aimBuffer,                           AIM_BUFFER_LENGTH,                          BACKUP);
+    save(nimBufferDisplay,                    NIM_BUFFER_LENGTH,                          BACKUP);
+    save(tamBuffer,                           TAM_BUFFER_LENGTH,                          BACKUP);
     save(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
     save(oldTime,                             sizeof(oldTime),                            BACKUP);
     save(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
@@ -320,10 +320,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
       restore(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
       restore(globalFlags,                         sizeof(globalFlags),                        BACKUP);
-      restore(errorMessage,                        sizeof(errorMessage),                       BACKUP);
-      restore(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
-      restore(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
-      restore(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
+      restore(errorMessage,                        ERROR_MESSAGE_LENGTH,                       BACKUP);
+      restore(aimBuffer,                           AIM_BUFFER_LENGTH,                          BACKUP);
+      restore(nimBufferDisplay,                    NIM_BUFFER_LENGTH,                          BACKUP);
+      restore(tamBuffer,                           TAM_BUFFER_LENGTH,                          BACKUP);
       restore(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
       restore(oldTime,                             sizeof(oldTime),                            BACKUP);
       restore(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);

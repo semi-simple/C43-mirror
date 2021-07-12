@@ -23,6 +23,7 @@
 #include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
+#include "items.h"
 #include "mathematics/arccosh.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/division.h"
@@ -57,7 +58,7 @@ static bool_t besselGetParam(calcRegister_t regist, real_t *r, realContext_t *re
   return false;
 }
 
-void fnBessel(uint16_t unusedButMandatoryParameter) {
+void fnBesselJ(uint16_t unusedButMandatoryParameter) {
   real_t x, n, r, a;
 
   if(!saveLastX()) return;
@@ -87,6 +88,10 @@ void fnBessel(uint16_t unusedButMandatoryParameter) {
   }
 
   adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
+}
+
+void fnBesselY(uint16_t unusedButMandatoryParameter) {
+  itemToBeCoded(NOPARAM);
 }
 
 
@@ -467,3 +472,7 @@ void WP34S_BesselJ(const real_t *alpha, const real_t *x, real_t *res, realContex
     bessel(&a, x, true, res, realContext);
   }
 }
+
+void WP34S_BesselY(const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext) {
+}
+

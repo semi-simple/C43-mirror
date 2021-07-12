@@ -23,7 +23,6 @@
 #include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
-#include "items.h"
 #include "mathematics/arccosh.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/division.h"
@@ -91,7 +90,35 @@ void fnBesselJ(uint16_t unusedButMandatoryParameter) {
 }
 
 void fnBesselY(uint16_t unusedButMandatoryParameter) {
-  itemToBeCoded(NOPARAM);
+  real_t x, n, r, a;
+
+  if(!saveLastX()) return;
+
+  if(besselGetParam(REGISTER_X, &x, &ctxtReal75) && besselGetParam(REGISTER_Y, &n, &ctxtReal75)) {
+    if(realIsAnInteger(&n) || (!realIsNegative(&x))) {
+      WP34S_BesselY(&n, &x, &r, &ctxtReal75);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+    else if(getSystemFlag(FLAG_CPXRES)) { // Real -> Complex
+      realSetPositiveSign(&x);
+      WP34S_BesselY(&n, &x, &r, &ctxtReal75);
+      WP34S_Mod(&n, const_2, &a, &ctxtReal75);
+      realMultiply(&a, const_pi, &a, &ctxtReal75);
+      realPolarToRectangular(&r, &a, &r, &a, &ctxtReal75);
+      reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+      realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
+      realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnBessel:", "negative argument for Bessel function of non-integer degree", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+  }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
 }
 
 
@@ -110,14 +137,12 @@ static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real
 
   WP34S_SinCosTanTaylor(&chi, false, &sChi, &cChi, NULL, realContext);
 
-  int32ToReal(4, &tmp);
   realMultiply(alpha, alpha, &mu, realContext);
-  realMultiply(&mu, &tmp, &mu, realContext);
+  realMultiply(&mu, const_4, &mu, realContext);
 
   realCopy(const_1, &p);
   realSubtract(&mu, const_1, &q, realContext);
-  int32ToReal(8, &tmp);
-  realMultiply(x, &tmp, &z8, realContext);
+  realMultiply(x, const_8, &z8, realContext);
   realDivide(&q, &z8, &q, realContext);
   realCopy(const_1, &k21);
   realCopy(&q, &nm), realCopy(const_1, &qq);
@@ -271,10 +296,9 @@ static void Sigma_u_k(const real_t *nu, const real_t *t_r, const real_t *t_i, bo
              break;
            }
          }
-         int32ToReal(8, &tmp);
          for(j = 0; j < NUMBER_OF_COEFF; ++j) { // 1/8
-           realDivide(&coeff_deriv[j], &tmp, &tmp2, realContext);
-           realAdd(&coeff_next[j], &tmp2, &coeff_next[j], realContext);
+           realDivide(&coeff_deriv[j], const_8, &tmp, realContext);
+           realAdd(&coeff_next[j], &tmp, &coeff_next[j], realContext);
            if(realIsZero(&coeff_deriv[j])) {
              break;
            }
@@ -393,6 +417,22 @@ static void bessel_recur(const real_t *nu, const real_t *x, bool_t descending, r
 }
 
 
+// Digamma function (integer arguments only)
+static void digamma(const real_t *x, real_t *res, realContext_t *realContext) {
+  if(realIsAnInteger(x) && realCompareGreaterThan(x, const_0)) {
+    real_t a, ar;
+    realMinus(const_gammaEM, res, realContext);
+    realCopy(const_1, &a);
+    while(realCompareLessThan(&a, x)) {
+      realDivide(const_1, &a, &ar, realContext);
+      realAdd(res, &ar, res, realContext);
+      realAdd(&a, const_1, &a, realContext);
+    }
+  }
+  else realCopy(const_NaN, res);
+}
+
+
 
 /* The code below is ported from the WP 34s repository,
  * but never implemented in it. */
@@ -473,6 +513,121 @@ void WP34S_BesselJ(const real_t *alpha, const real_t *x, real_t *res, realContex
   }
 }
 
+// See A&S page 360 section 9.1.11
+static void bessel2_int_series(const real_t *n, const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t factor;
+  real_t xon2, xon2n, x2on4;
+  real_t k, npk, t, u, v, s, p, nf, absn;
+  int32_t i, in, n_neg;
+
+  realDivide(const__1, const_pi, &factor, realContext);
+
+  if(realIsNegative(n)) {
+    realCopyAbs(n, &absn);
+    n = &absn;
+    n_neg = 1;
+  }
+  else n_neg = 0;
+  realToInt32(n, in);
+
+  realDivide(x, const_2, &xon2, realContext);      // xon2 = x/2
+  realPower(&xon2, n, &xon2n, realContext);        // xon2n = (x/2)^n
+  realMultiply(&xon2, &xon2, &x2on4, realContext); // x2on4 = +/- x^2/4
+
+  if(in > 0) {
+    realSubtract(n, const_1, &v, realContext);     // v = n-k-1 = n-1
+    realZero(&k);
+    WP34S_Gamma(n, &p, realContext);               // p = (n-1)!
+    realCopy(&p, &s);
+    realMultiply(&p, n, &nf, realContext);         // nf = n!  (for later)
+    for(i = 1; i < in; i++) {
+      realDivide(&p, &v, &t, realContext);
+      realSubtract(&v, const_1, &v, realContext);
+      realAdd(&k, const_1, &k, realContext);
+      realMultiply(&t, &k, &u, realContext);
+      realMultiply(&u, &x2on4, &p, realContext);
+      realAdd(&s, &p, &s, realContext);
+    }
+    realMultiply(&s, &factor, &t, realContext);
+    realDivide(&t, &xon2n, res, realContext);
+  }
+  else {
+    realZero(res);
+    realCopy(const_1, &nf);
+  }
+
+  WP34S_BesselJ(n, x, &u, realContext);
+  realDivide(&u, const_piOn2, &t, realContext);
+
+  WP34S_Ln(&xon2, &u, realContext);
+  realMultiply(&u, &t, &v, realContext);
+  realAdd(res, &v, res, realContext);
+
+  realChangeSign(&x2on4);
+  realAdd(n, const_1, &t, realContext);            // t = n+1
+  digamma(&t, &u, realContext);                    // u = Psi(n+1)
+                                    printRealToConsole(&t, "Psi(", ")");
+                                    printRealToConsole(&u, " = ", "\n");
+                                    fflush(stdout);
+  realSubtract(&u, const_egamma, &v, realContext); // v = psi(k+1) + psi(n+k+1)
+  realZero(&k);
+  realCopy(n, &npk);
+  realDivide(const_1, &nf, &p, realContext);       // p = (x^2/4)^k/(k!(n+k)!)
+  realMultiply(&v, &p, &s, realContext);
+
+  for(i = 0; i < 1000; i++) {
+    realAdd(&k, const_1, &k, realContext);
+    realAdd(&npk, const_1, &npk, realContext);
+    realMultiply(&p, &x2on4, &t, realContext);
+    realMultiply(&k, &npk, &u, realContext);
+    realDivide(&t, &u, &p, realContext);
+
+    realDivide(const_1, &k, &t, realContext);
+    realAdd(&v, &t, &u, realContext);
+    realDivide(const_1, &npk, &t, realContext);
+    realAdd(&u, &t, &v, realContext);
+
+    realMultiply(&v, &p, &t, realContext);
+    realAdd(&t, &s, &u, realContext);
+    if(realCompareEqual(&u, &s))
+      break;
+    realCopy(&u, &s);
+  }
+  realMultiply(&s, &xon2n, &t, realContext);
+
+  realDivide(&t, const_pi, &u, realContext);
+
+  realSubtract(res, &u, res, realContext);
+  if(n_neg)
+    realChangeSign(res);
+}
+
 void WP34S_BesselY(const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext) {
+  real_t t, u, s, c;
+
+  if(realIsNaN(alpha) || realIsSpecial(x)) {
+    realCopy(const_NaN, res);
+    return;
+  }
+  else if(realIsZero(x)) {
+    realCopy(const_minusInfinity, res);
+    return;
+  }
+  else if(realIsInfinite(alpha) || realIsNegative(x)) {
+    realCopy(const_NaN, res);
+    return;
+  }
+  else if(!realIsAnInteger(alpha)) {
+    realMultiply(alpha, const_pi, &t, realContext);
+    WP34S_Cvt2RadSinCosTan(&t, amRadian, &s, &c, NULL, realContext);
+    bessel(alpha, x, true, &t, realContext);
+    realMultiply(&t, &c, &u, realContext);
+    realMinus(alpha, &c, realContext);
+    bessel(&c, x, true, &t, realContext);
+    realSubtract(&u, &t, &c, realContext);
+    realDivide(&c, &s, res, realContext);
+  } else {
+    bessel2_int_series(alpha, x, res, realContext);
+  }
 }
 

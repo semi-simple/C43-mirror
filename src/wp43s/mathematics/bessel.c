@@ -52,7 +52,7 @@ static bool_t besselGetParam(calcRegister_t regist, real_t *r, realContext_t *re
   displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
   #if (EXTRA_INFO_ON_CALC_ERROR == 1)
     sprintf(errorMessage, "cannot calculate Bessel function for %s and %s", getRegisterDataTypeName(REGISTER_X, true, false), getRegisterDataTypeName(REGISTER_Y, true, false));
-    moreInfoOnError("In function fnBessel:", errorMessage, NULL, NULL);
+    moreInfoOnError("In function besselGetParam:", errorMessage, NULL, NULL);
   #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   return false;
 }
@@ -81,7 +81,7 @@ void fnBesselJ(uint16_t unusedButMandatoryParameter) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        moreInfoOnError("In function fnBessel:", "negative argument for Bessel function of non-integer degree", NULL, NULL);
+        moreInfoOnError("In function fnBesselJ:", "negative argument for Bessel function of non-integer degree", NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
@@ -90,12 +90,12 @@ void fnBesselJ(uint16_t unusedButMandatoryParameter) {
 }
 
 void fnBesselY(uint16_t unusedButMandatoryParameter) {
-  real_t x, n, r, a;
+  real_t x, n, r, a, b, c;
 
   if(!saveLastX()) return;
 
   if(besselGetParam(REGISTER_X, &x, &ctxtReal75) && besselGetParam(REGISTER_Y, &n, &ctxtReal75)) {
-    if(realIsAnInteger(&n) || (!realIsNegative(&x))) {
+    if(!realIsNegative(&x)) {
       WP34S_BesselY(&n, &x, &r, &ctxtReal75);
       reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
       realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
@@ -104,8 +104,16 @@ void fnBesselY(uint16_t unusedButMandatoryParameter) {
       realSetPositiveSign(&x);
       WP34S_BesselY(&n, &x, &r, &ctxtReal75);
       WP34S_Mod(&n, const_2, &a, &ctxtReal75);
-      realMultiply(&a, const_pi, &a, &ctxtReal75);
+      realMultiply(&a, const_pi, &b, &ctxtReal75);
+      realMinus(&b, &a, &ctxtReal75);
       realPolarToRectangular(&r, &a, &r, &a, &ctxtReal75);
+
+      WP34S_Cvt2RadSinCosTan(&b, amRadian, NULL, &b, NULL, &ctxtReal75);
+      WP34S_BesselJ(&n, &x, &c, &ctxtReal75);
+      realMultiply(&b, &c, &b, &ctxtReal75);
+      realAdd(&b, &b, &b, &ctxtReal75);
+      realAdd(&a, &b, &a, &ctxtReal75);
+
       reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
       realToReal34(&r, REGISTER_REAL34_DATA(REGISTER_X));
       realToReal34(&a, REGISTER_IMAG34_DATA(REGISTER_X));
@@ -113,7 +121,7 @@ void fnBesselY(uint16_t unusedButMandatoryParameter) {
     else {
       displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        moreInfoOnError("In function fnBessel:", "negative argument for Bessel function of non-integer degree", NULL, NULL);
+        moreInfoOnError("In function fnBesselY:", "negative argument for Bessel function", NULL, NULL);
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
@@ -123,7 +131,7 @@ void fnBesselY(uint16_t unusedButMandatoryParameter) {
 
 
 
-// Hankel's asymptotic expansion (based on Abramowitz and Steven, p.364)
+// Hankel's asymptotic expansion (based on Abramowitz and Stegun, p.364)
 static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real_t *res, realContext_t *realContext) {
   real_t p, q, pp, qq, chi, sChi, cChi, mu, z8, k21, k21sq, nm, tmp;
   int32_t k;
@@ -187,7 +195,7 @@ static void bessel_asymptotic_large_x(const real_t *alpha, const real_t *x, real
 
 
 
-// Polynomial U[k] (based on Abramowitz and Steven, p.366)
+// Polynomial U[k] (based on Abramowitz and Stegun, p.366)
 #define NUMBER_OF_COEFF   100
 #define COEFF_BUFFER_SIZE (REAL_SIZE * NUMBER_OF_COEFF)
 static void u_k(uint32_t k, const real_t *coeff/*array*/, const real_t *t_r, const real_t *t_i, real_t *res_r, real_t *res_i, realContext_t *realContext) {
@@ -323,7 +331,7 @@ static void Sigma_u_k(const real_t *nu, const real_t *t_r, const real_t *t_i, bo
 #undef COEFF_BUFFER_SIZE
 #undef NUMBER_OF_COEFF
 
-// Debye's asymptotic expansion (based on Abramowitz and Steven, p.366)
+// Debye's asymptotic expansion (based on Abramowitz and Stegun, p.366)
 static void bessel_asymptotic_large_order_hyp(const real_t *nu, const real_t *x, real_t *res, realContext_t *realContext) {
   real_t alpha, tanh_alpha, coefficient, itrval, t, tmp;
 
@@ -387,7 +395,7 @@ static void bessel_asymptotic_large_order_trig(const real_t *nu, const real_t *x
 
 
 
-// Recurrence relations (Abramowitz and Steven, p.361)
+// Recurrence relations (Abramowitz and Stegun, p.361)
 static void plusMinus(bool_t subtracting, const real_t *a, const real_t *b, real_t *res, realContext_t *realContext) {
   if(subtracting) {
     realSubtract(a, b, res, realContext);
@@ -566,9 +574,6 @@ static void bessel2_int_series(const real_t *n, const real_t *x, real_t *res, re
   realChangeSign(&x2on4);
   realAdd(n, const_1, &t, realContext);            // t = n+1
   digamma(&t, &u, realContext);                    // u = Psi(n+1)
-                                    printRealToConsole(&t, "Psi(", ")");
-                                    printRealToConsole(&u, " = ", "\n");
-                                    fflush(stdout);
   realSubtract(&u, const_egamma, &v, realContext); // v = psi(k+1) + psi(n+k+1)
   realZero(&k);
   realCopy(n, &npk);

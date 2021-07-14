@@ -433,6 +433,9 @@ size_t                 wp43sMemInBlocks;
           uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
           sleepTime = min(sleepTime, timeoutTime);
         }
+        if(fnTimerGetStatus(TO_FG_TIMR) == TMR_RUNNING) {
+          sleepTime = min(sleepTime, 160);
+        }
         if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) {
           sleepTime = min(sleepTime, 40);
         }
@@ -441,9 +444,6 @@ size_t                 wp43sMemInBlocks;
         }                                                                      //^^
         CLR_ST(STAT_RUNNING);
         if(sleepTime == UINT32_MAX) {
-          sys_sleep();
-        }
-        else if(sleepTime > 1000) {
           sys_sleep();
         }
         else {
@@ -759,22 +759,21 @@ size_t                 wp43sMemInBlocks;
 
     else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
       btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
-      if(fnTestBitIsSet(0) != true) {
-        fnTimerStop(TO_KB_ACTV);
-      }
     //lcd_refresh_dma();
      }
     else if(key == 0) {
       btnReleased(NULL);
-      if(fnTestBitIsSet(0) != true) {
-        fnTimerStop(TO_KB_ACTV);
-      }
     //lcd_refresh_dma();
     }
 
     if(key >= 0) {                                          //dr
       lcd_refresh_dma();
-      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);  //dr
+      if(key > 0) {
+        fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);//dr
+      }
+      else {
+        fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV/10);
+      }
     }
 
     uint32_t now = sys_current_ms();

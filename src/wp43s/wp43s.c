@@ -467,6 +467,12 @@ size_t                 wp43sMemInBlocks;
         CLR_ST(STAT_CLK_WKUP_FLAG);
         continue;
       }
+      if(ST(STAT_POWER_CHANGE)) {
+        refreshLcd();
+        lcd_refresh_wait();
+        CLR_ST(STAT_POWER_CHANGE);
+        continue;
+      }
 
       // Wakeup in off state or going to sleep
       if(ST(STAT_PGM_END) || ST(STAT_SUSPENDED)) {
@@ -753,10 +759,16 @@ size_t                 wp43sMemInBlocks;
 
     else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
       btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
+      if(fnTestBitIsSet(0) != true) {
+        fnTimerStop(TO_KB_ACTV);
+      }
     //lcd_refresh_dma();
      }
     else if(key == 0) {
       btnReleased(NULL);
+      if(fnTestBitIsSet(0) != true) {
+        fnTimerStop(TO_KB_ACTV);
+      }
     //lcd_refresh_dma();
     }
 

@@ -26,8 +26,9 @@
 //#define JMSHOWCODES
 
 #if defined(DMCP_BUILD)
-  #include "c43Extensions/keyboardTweak.h"
+  #include "c43Extensions/inlineTest.h"
   #include "c43Extensions/jm.h"
+  #include "c43Extensions/keyboardTweak.h"
 #endif
 
 
@@ -267,10 +268,9 @@ size_t                 wp43sMemInBlocks;
 #ifdef BUFFER_CLICK_DETECTION
   timeStampKey = (uint32_t)sys_current_ms();                                    //dr - internal keyBuffer POC
 #endif
-  int count_refreshes = 0;                                                      //dr clock down refresh after 1 minute of no keystroke
-  //bool_t wp43sKbdLayout, inFastRefresh, seenKeyPress = 0;;            // removed autorepeat stuff //dr - no keymap is used
+//uint8_t act_min = 0;                                           // dr - one second POC
 
-
+  //bool_t wp43sKbdLayout, inFastRefresh = 0, inDownUpPress = 0, repeatDownUpPress = 0;  // removed autorepeat stuff   //dr - no keymap is used
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
     uint32_t previousRefresh;
 
@@ -279,8 +279,8 @@ size_t                 wp43sMemInBlocks;
     mp_set_memory_functions(allocGmp, reallocGmp, freeGmp);
 
   lcd_clear_buf();
-#ifdef NOKEYMAP
-  lcd_putsAt(t24, 4, "Press the bottom left key."); lcd_refresh();           //vv dr - no keymap is used
+#ifdef NOKEYMAP                                                //vv dr - no keymap is used
+  lcd_putsAt(t24, 4, "Press the bottom left key."); lcd_refresh();
   while(key != 33 && key != 37) {
     key = key_pop();
     while(key == -1) {
@@ -292,8 +292,8 @@ size_t                 wp43sMemInBlocks;
     wp43sKbdLayout = (key == 37); // bottom left key
     key = 0;
 
-  lcd_clear_buf();                                             //^^
-#endif //NOKEYMAP
+  lcd_clear_buf();
+#endif //NOKEYMAP                                              //^^
   fnReset(CONFIRMED);
   refreshScreen();
 
@@ -396,8 +396,8 @@ size_t                 wp43sMemInBlocks;
 
     lcd_forced_refresh();                                        //JM 
     previousRefresh = sys_current_ms();
-    //inFastRefresh = 0;                                       // removed autorepeat stuff
     nextScreenRefresh = previousRefresh + SCREEN_REFRESH_PERIOD;
+  //now = sys_current_ms();                                      // Remove all autorepeat stuff
     //runner_key_tout_init(0); // Enables fast auto repeat     // Remove all autorepeat stuff
 
     fnTimerReset();                                              //vv dr timeouts for kb handling
@@ -416,13 +416,19 @@ size_t                 wp43sMemInBlocks;
     //   ST(STAT_SUSPENDED) - Program signals it is ready for off and doesn't need to be woken-up again
     //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
     //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
+  //SET_ST(STAT_CLK_WKUP_SECONDS);
+    SET_ST(STAT_CLK_WKUP_ENABLE); // Enable wakeup each minute (for clock update)
+
     while(!backToDMCP) {
       if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
         CLR_ST(STAT_RUNNING);
         sys_sleep();
       }
-      else if ((!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer())) {        // Just wait if no keys available.      //dr - internal keyBuffer POC
-        uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());        //vv dr timer without DMCP timer
+      else if ((!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer())) {       // Just wait if no keys available.      //dr - internal keyBuffer POC
+        uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());     //vv dr timer without DMCP timer
+        if(fnTestBitIsSet(0) != true) {
+          sleepTime = UINT32_MAX;
+        }
         if(nextTimerRefresh != 0) {
           uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
           sleepTime = min(sleepTime, timeoutTime);
@@ -432,11 +438,34 @@ size_t                 wp43sMemInBlocks;
         }
         if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {
           sleepTime = min(sleepTime, 15);
-        }                                                                         //^^
+        }                                                                      //^^
         CLR_ST(STAT_RUNNING);
-        sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));             // wake up for screen refresh           //dr
-        sys_sleep();
-        sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
+        if(sleepTime == UINT32_MAX) {
+          sys_sleep();
+        }
+        else if(sleepTime > 1000) {
+          sys_sleep();
+        }
+        else {
+          sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));        // wake up for screen refresh           //dr
+          sys_sleep();
+          sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
+        }
+      }
+
+    //now = sys_current_ms();                                    // Remove all autorepeat stuff
+
+      // =======================
+      // Externally forced LCD repaint
+      if(ST(STAT_CLK_WKUP_FLAG)) {
+      //uint8_t min_now = rtc_read_min();
+      //if(act_min != min_now) {
+          refreshLcd();
+          lcd_refresh_wait();
+      //  act_min = min_now;
+      //}
+        CLR_ST(STAT_CLK_WKUP_FLAG);
+        continue;
       }
 
       // Wakeup in off state or going to sleep
@@ -482,8 +511,13 @@ size_t                 wp43sMemInBlocks;
       //  < 0 -> No key event
       //  > 0 -> Key pressed
       // == 0 -> Key released
-      //key = key_pop();
-      key = runner_get_key_delay(&keyAutoRepeat, 100, 100, 100, 100);
+      key = key_pop();
+
+      //key = runner_get_key_delay(&keyAutoRepeat,
+      //                           50,                            // timeout - this should be the fastest period between loops
+      //                           KEY_AUTOREPEAT_FIRST_PERIOD,  // time before the first autorepeat
+      //                           KEY_AUTOREPEAT_PERIOD,        // time between subsequent autorepeats
+      //                           KEY_AUTOREPEAT_FIRST_PERIOD); // should be the same as time before first autorepeat
       //key = runner_get_key(&keyAutoRepeat);
 
       if(wp43sKbdLayout) {
@@ -569,10 +603,36 @@ size_t                 wp43sMemInBlocks;
       //showString(sysLastKeyCh, &standardFont, 0, 0, vmReverse, true, true);
       //The line below to emit a beep
       //while(get_beep_volume() < 11) beep_volume_up(); start_buzzer_freq(220000); sys_delay(200); stop_buzzer();
-
-      // If we have seen a key press, increase the refresh to pick up auto key repeats
-      // seenKeyPress = (key > 0);    //Removed AUTOREPEAT STUFF
 #endif //NOKEYMAP
+
+#ifdef AUTOREPEAT
+      // Increase the refresh rate if we are in an UP/DOWN key press so we pick up auto key repeats
+      if(key == 27 || key == 32) {
+        inDownUpPress = 1;
+        nextAutoRepeat = now + KEY_AUTOREPEAT_FIRST_PERIOD;
+      }
+      else if(key == 0) {
+        inDownUpPress = 0;
+        repeatDownUpPress = 0;
+        nextAutoRepeat = 0;
+      }
+      else if(repeatDownUpPress) {
+        keyAutoRepeat = 1;
+        key = 0;
+        nextAutoRepeat = now + KEY_AUTOREPEAT_PERIOD;
+        repeatDownUpPress = 0;
+      }
+
+      //if(keyAutoRepeat) {
+      //  if(key == 27 || key == 32) { // UP or DOWN keys
+      //    //beep(2200, 50);
+      //    key = 0; // to trigger btnReleased
+      //  }
+      //  else {
+      //    key = -1;
+      //  }
+      //}
+#endif //AUTOREPEAT
 
 
     uint8_t outKey;
@@ -613,17 +673,6 @@ size_t                 wp43sMemInBlocks;
     }                                                       //^^
 
 
-#ifdef AUTOREPEAT
-      if(keyAutoRepeat) {
-        if(key == 27 || key == 32) { // UP or DOWN keys
-          //beep(2200, 50);
-          key = 0; // to trigger btnReleased
-        }
-        else {
-          key = -1;
-        }
-      }
-#endif //AUTOREPEAT
 
       if(key == 44) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
       resetShiftState();                                       //JM to avoid f or g top left of the screen
@@ -702,20 +751,19 @@ size_t                 wp43sMemInBlocks;
 #endif //AUTOREPEAT
 
 
-      else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
-        btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
-      //lcd_refresh_dma();
-      }
-      else if(key == 0) {
-        btnReleased(NULL);
-      //lcd_refresh_dma();
-      }
+    else if(key == 0 && FN_key_pressed != 0) {                 //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
+      btnFnReleased(NULL);                                     //    in short, it can only execute FN release after there was a FN press.
+    //lcd_refresh_dma();
+     }
+    else if(key == 0) {
+      btnReleased(NULL);
+    //lcd_refresh_dma();
+    }
 
-      if(key >= 0) {                                          //dr
-        lcd_refresh_dma();
-        fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);  //dr
-        count_refreshes = 10;                                 //dr
-        }
+    if(key >= 0) {                                          //dr
+      lcd_refresh_dma();
+      fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);  //dr
+    }
 
     uint32_t now = sys_current_ms();
 
@@ -734,9 +782,6 @@ size_t                 wp43sMemInBlocks;
     now = sys_current_ms();                                 //vv dr
     if(nextScreenRefresh <= now) {
       nextScreenRefresh += SCREEN_REFRESH_PERIOD;
-      count_refreshes++;
-      if(count_refreshes > 384)
-        nextScreenRefresh += SCREEN_REFRESH_PERIOD;
       if(nextScreenRefresh < now) {
         nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;    // we were out longer than expected; just skip ahead.
       }

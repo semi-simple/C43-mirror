@@ -245,7 +245,8 @@ fib
 gd
 invGd
 
-bessel
+bessel_j
+bessel_y
 
 zeta
 bn

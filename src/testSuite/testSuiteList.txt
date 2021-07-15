@@ -246,6 +246,7 @@ gd
 invGd
 
 bessel_j
+bessel_y
 
 zeta
 bn

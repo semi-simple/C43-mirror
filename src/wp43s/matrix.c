@@ -1014,39 +1014,27 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
 
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t matrix;
-    real_t elem, sum;
+    real34_t sum;
 
     linkToRealMatrixRegister(REGISTER_X, &matrix);
 
-    realZero(&sum);
-    for(int i = 0; i < matrix.header.matrixRows * matrix.header.matrixColumns; ++i) {
-      real34ToReal(&matrix.matrixElements[i], &elem);
-      realFMA(&elem, &elem, &sum, &sum, &ctxtReal39);
-    }
-    realSquareRoot(&sum, &sum, &ctxtReal39);
+    euclideanNormRealMatrix(&matrix, &sum);
 
     // `matrix` invalidates here
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    realToReal34(&sum, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(&sum, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     complex34Matrix_t matrix;
-    real_t elem, sum;
+    real34_t sum;
 
     linkToComplexMatrixRegister(REGISTER_X, &matrix);
 
-    realZero(&sum);
-    for(int i = 0; i < matrix.header.matrixRows * matrix.header.matrixColumns; ++i) {
-      real34ToReal(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]), &elem);
-      realFMA(&elem, &elem, &sum, &sum, &ctxtReal39);
-      real34ToReal(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i]), &elem);
-      realFMA(&elem, &elem, &sum, &sum, &ctxtReal39);
-    }
-    realSquareRoot(&sum, &sum, &ctxtReal39);
+    euclideanNormComplexMatrix(&matrix, &sum);
 
     // `matrix` invalidates here
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    realToReal34(&sum, REGISTER_REAL34_DATA(REGISTER_X));
+    real34Copy(&sum, REGISTER_REAL34_DATA(REGISTER_X));
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -1177,6 +1165,46 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
   }
 
   adjustResult(REGISTER_X, false, true, REGISTER_X, -1, -1);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+void fnVectorAngle(uint16_t unusedParamButMandatory) {
+#ifndef TESTSUITE_BUILD
+  if(!saveLastX()) return;
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34Matrix && getRegisterDataType(REGISTER_Y) == dtReal34Matrix) {
+    real34Matrix_t x, y;
+    real34_t res;
+    linkToRealMatrixRegister(REGISTER_X, &x);
+    linkToRealMatrixRegister(REGISTER_Y, &y);
+
+    if((realVectorSize(&y) < 2) || (realVectorSize(&x) < 2) || (realVectorSize(&y) > 3) || (realVectorSize(&x) > 3) || (realVectorSize(&y) != realVectorSize(&x))) {
+      displayCalcErrorMessage(ERROR_MATRIX_MISMATCH, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "invalid numbers of elements of %d" STD_CROSS "%d-matrix to %d" STD_CROSS "%d-matrix",
+                x.header.matrixRows, x.header.matrixColumns,
+                y.header.matrixRows, y.header.matrixColumns);
+        moreInfoOnError("In function fnVectorAngle:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      vectorAngle(&y, &x, &res);
+      convertAngle34FromTo(&res, amRadian, currentAngularMode);
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, currentAngularMode);
+      real34Copy(&res, REGISTER_REAL34_DATA(REGISTER_X));
+    }
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnVectorAngle:", errorMessage, "is not a real matrix.", "");
+    #endif
+  }
+
+  adjustResult(REGISTER_X, true, true, REGISTER_X, REGISTER_Y, -1);
 #endif // TESTSUITE_BUILD
 }
 
@@ -3017,6 +3045,40 @@ void multiplyComplexMatrices(const complex34Matrix_t *y, const complex34Matrix_t
 
 
 
+/* Euclidean (Frobenius) norm */
+static void _euclideanNormRealMatrix(const real34Matrix_t *matrix, real_t *res, realContext_t *realContext) {
+  real_t elem;
+
+  realZero(res);
+  for(int i = 0; i < matrix->header.matrixRows * matrix->header.matrixColumns; ++i) {
+    real34ToReal(&matrix->matrixElements[i], &elem);
+    realFMA(&elem, &elem, res, res, realContext);
+  }
+  realSquareRoot(res, res, realContext);
+}
+void euclideanNormRealMatrix(const real34Matrix_t *matrix, real34_t *res) {
+  real_t sum;
+
+  _euclideanNormRealMatrix(matrix, &sum, &ctxtReal39);
+  realToReal34(&sum, res);
+}
+
+void euclideanNormComplexMatrix(const complex34Matrix_t *matrix, real34_t *res) {
+  real_t elem, sum;
+
+  realZero(&sum);
+  for(int i = 0; i < matrix->header.matrixRows * matrix->header.matrixColumns; ++i) {
+    real34ToReal(VARIABLE_REAL34_DATA(&matrix->matrixElements[i]), &elem);
+    realFMA(&elem, &elem, &sum, &sum, &ctxtReal39);
+    real34ToReal(VARIABLE_IMAG34_DATA(&matrix->matrixElements[i]), &elem);
+    realFMA(&elem, &elem, &sum, &sum, &ctxtReal39);
+  }
+  realSquareRoot(&sum, &sum, &ctxtReal39);
+  realToReal34(&sum, res);
+}
+
+
+
 /* Vectors */
 uint16_t realVectorSize(const real34Matrix_t *matrix) {
   if((matrix->header.matrixColumns != 1) && (matrix->header.matrixRows != 1))
@@ -3025,25 +3087,29 @@ uint16_t realVectorSize(const real34Matrix_t *matrix) {
     return matrix->header.matrixColumns * matrix->header.matrixRows;
 }
 
-void dotRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34_t *res) {
+static void _dotRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real_t *res, realContext_t *realContext) {
   const uint16_t elements = realVectorSize(y);
   int32_t i;
-  real_t sum, prod, p, q;
+  real_t sum, p, q;
+
+  realCopy(const_0, &sum);
+  for(i = 0; i < elements; ++i) {
+    real34ToReal(&y->matrixElements[i], &p);
+    real34ToReal(&x->matrixElements[i], &q);
+    realFMA(&p, &q, &sum, &sum, realContext);
+  }
+  realCopy(&sum, res);
+}
+void dotRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34_t *res) {
+  real_t p;
 
   if((realVectorSize(y) == 0) || (realVectorSize(x) == 0) || (realVectorSize(y) != realVectorSize(x))) {
     realToReal34(const_NaN, res); // Not a vector or mismatched
     return;
   }
 
-  realCopy(const_0, &sum);
-  realCopy(const_0, &prod);
-  for(i = 0; i < elements; ++i) {
-    real34ToReal(&y->matrixElements[i], &p);
-    real34ToReal(&x->matrixElements[i], &q);
-    realMultiply(&p, &q, &prod, &ctxtReal39);
-    realAdd(&sum, &prod, &sum, &ctxtReal39);
-  }
-  realToReal34(&sum, res);
+  _dotRealVectors(y, x, &p, &ctxtReal39);
+  realToReal34(&p, res);
 }
 
 void crossRealVectors(const real34Matrix_t *y, const real34Matrix_t *x, real34Matrix_t *res) {
@@ -3148,6 +3214,29 @@ void crossComplexVectors(const complex34Matrix_t *y, const complex34Matrix_t *x,
     realToReal34(&pi, VARIABLE_IMAG34_DATA(&res->matrixElements[2]));
   }
   else lastErrorCode = ERROR_RAM_FULL;
+}
+
+void vectorAngle(const real34Matrix_t *y, const real34Matrix_t *x, real34_t *radians) {
+  const uint16_t elements = realVectorSize(y);
+  real_t a, b;
+
+  if((elements == 0) || (realVectorSize(x) == 0) || (elements != realVectorSize(x))) {
+    realToReal34(const_NaN, radians); // Not a vector or mismatched
+    return;
+  }
+
+  if(elements == 2 || elements == 3) {
+    _dotRealVectors(y, x, &a, &ctxtReal39);
+    _euclideanNormRealMatrix(y, &b, &ctxtReal39);
+    realDivide(&a, &b, &a, &ctxtReal39);
+    _euclideanNormRealMatrix(x, &b, &ctxtReal39);
+    realDivide(&a, &b, &a, &ctxtReal39);
+    WP34S_Acos(&a, &a, &ctxtReal39);
+    realToReal34(&a, radians);
+  }
+  else {
+    realToReal34(const_NaN, radians);
+  }
 }
 
 

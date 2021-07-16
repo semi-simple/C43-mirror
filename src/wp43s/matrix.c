@@ -31,6 +31,7 @@
 #include "longIntegerType.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/division.h"
+#include "mathematics/magnitude.h"
 #include "mathematics/multiplication.h"
 #include "mathematics/toPolar.h"
 #include "mathematics/toRect.h"
@@ -1020,8 +1021,7 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
     realZero(&sum);
     for(int i = 0; i < matrix.header.matrixRows * matrix.header.matrixColumns; ++i) {
       real34ToReal(&matrix.matrixElements[i], &elem);
-      realMultiply(&elem, &elem, &elem, &ctxtReal39);
-      realAdd(&sum, &elem, &sum, &ctxtReal39);
+      realFMA(&elem, &elem, &sum, &sum, &ctxtReal39);
     }
     realSquareRoot(&sum, &sum, &ctxtReal39);
 
@@ -1038,11 +1038,9 @@ void fnEuclideanNorm(uint16_t unusedParamButMandatory) {
     realZero(&sum);
     for(int i = 0; i < matrix.header.matrixRows * matrix.header.matrixColumns; ++i) {
       real34ToReal(VARIABLE_REAL34_DATA(&matrix.matrixElements[i]), &elem);
-      realMultiply(&elem, &elem, &elem, &ctxtReal39);
-      realAdd(&sum, &elem, &sum, &ctxtReal39);
+      realFMA(&elem, &elem, &sum, &sum, &ctxtReal39);
       real34ToReal(VARIABLE_IMAG34_DATA(&matrix.matrixElements[i]), &elem);
-      realMultiply(&elem, &elem, &elem, &ctxtReal39);
-      realAdd(&sum, &elem, &sum, &ctxtReal39);
+      realFMA(&elem, &elem, &sum, &sum, &ctxtReal39);
     }
     realSquareRoot(&sum, &sum, &ctxtReal39);
 
@@ -1160,10 +1158,7 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
       for(uint16_t j = 0; j < x.header.matrixColumns; ++j) {
         real34ToReal(VARIABLE_REAL34_DATA(&x.matrixElements[i * x.header.matrixColumns + j]), &elem);
         real34ToReal(VARIABLE_IMAG34_DATA(&x.matrixElements[i * x.header.matrixColumns + j]), &imag);
-        realMultiply(&elem, &elem, &elem, &ctxtReal39);
-        realMultiply(&imag, &imag, &imag, &ctxtReal39);
-        realAdd(&elem, &imag, &elem, &ctxtReal39);
-        realSquareRoot(&elem, &elem, &ctxtReal39);
+        complexMagnitude(&elem, &imag, &elem, &ctxtReal39);
         realAdd(&sum, &elem, &sum, &ctxtReal39);
       }
       if(realCompareGreaterThan(&sum, &norm))
@@ -3266,15 +3261,9 @@ static bool_t luCpxMat(real_t *tmpMat, uint16_t size, uint16_t *p, realContext_t
   for(k = 0; k < n; k++) {
     /* Find the pivot row */
     pvt = k;
-    realMultiply(&tmpMat[(k * n + k) * 2    ], &tmpMat[(k * n + k) * 2    ], &u, realContext);
-    realMultiply(&tmpMat[(k * n + k) * 2 + 1], &tmpMat[(k * n + k) * 2 + 1], &v, realContext);
-    realAdd(&u, &v, &u, realContext);
-    realSquareRoot(&u, &max, realContext);
+    complexMagnitude(&tmpMat[(k * n + k) * 2], &tmpMat[(k * n + k) * 2 + 1], &max, realContext);
     for(j = k + 1; j < n; j++) {
-      realMultiply(&tmpMat[(j * n + k) * 2    ], &tmpMat[(j * n + k) * 2    ], &t, realContext);
-      realMultiply(&tmpMat[(j * n + k) * 2 + 1], &tmpMat[(j * n + k) * 2 + 1], &v, realContext);
-      realAdd(&t, &v, &t, realContext);
-      realSquareRoot(&t, &u, realContext);
+      complexMagnitude(&tmpMat[(j * n + k) * 2], &tmpMat[(j * n + k) * 2 + 1], &u, realContext);
       if(realCompareGreaterThan(&u, &max)) {
         realCopy(&u, &max);
         pvt = j;
@@ -3664,13 +3653,13 @@ static bool_t invCpxMat(real_t *matrix, uint16_t n, realContext_t *realContext) 
         real_t p, q;
         realCopy(lu,     &p);
         realCopy(lu + 1, &q);
-        realRectangularToPolar(&p, &q, &p, &q, realContext);
+        complexMagnitude(&p, &q, &p, realContext);
         realCopy(&p, &maxVal);
         realCopy(&p, &minVal);
         for(i = 1; i < n; ++i) {
           realCopy(lu + (i * n + i) * 2,     &p);
           realCopy(lu + (i * n + i) * 2 + 1, &q);
-          realRectangularToPolar(&p, &q, &p, &q, realContext);
+          complexMagnitude(&p, &q, &p, realContext);
           if(realCompareLessThan(&p, &minVal))
             real34Copy(&p, &minVal);
           if(realCompareGreaterThan(&p, &maxVal))
@@ -4135,10 +4124,8 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
       for(i = 0; i < (size - j); i++) {
         realCopy(matr + ((i + j) * size + j) * 2,     v + i * 2    );
         realCopy(matr + ((i + j) * size + j) * 2 + 1, v + i * 2 + 1);
-        realMultiply(v + i * 2,     v + i * 2,     &t, realContext);
-        realAdd(&sum, &t, &sum, realContext);
-        realMultiply(v + i * 2 + 1, v + i * 2 + 1, &t, realContext);
-        realAdd(&sum, &t, &sum, realContext);
+        realFMA(v + i * 2,     v + i * 2,     &sum, &sum, realContext);
+        realFMA(v + i * 2 + 1, v + i * 2 + 1, &sum, &sum, realContext);
       }
       realSquareRoot(&sum, &sum, realContext);
 
@@ -4156,10 +4143,8 @@ static void QR_decomposition_householder(const real_t *mat, uint16_t size, real_
       // Euclidean norm
       realCopy(const_0, &sum);
       for(i = 0; i < (size - j); i++) {
-        realMultiply(v + i * 2,     v + i * 2,     &t, realContext);
-        realAdd(&sum, &t, &sum, realContext);
-        realMultiply(v + i * 2 + 1, v + i * 2 + 1, &t, realContext);
-        realAdd(&sum, &t, &sum, realContext);
+        realFMA(v + i * 2,     v + i * 2,     &sum, &sum, realContext);
+        realFMA(v + i * 2 + 1, v + i * 2 + 1, &sum, &sum, realContext);
       }
       realSquareRoot(&sum, &sum, realContext);
 
@@ -4427,9 +4412,9 @@ static void calculateQrShift(const real_t *mat, uint16_t size, real_t *re, real_
 
   // Choose shift parameter
   realSubtract(&t1r, dr, &tmpR, realContext), realSubtract(&t1i, di, &tmpI, realContext);
-  realRectangularToPolar(&tmpR, &tmpI, &tmpR, &tmpI, realContext);
+  complexMagnitude(&tmpR, &tmpI, &tmpR, realContext);
   realSubtract(&t2r, dr, &tmp, realContext), realSubtract(&t2i, di, &tmpI, realContext);
-  realRectangularToPolar(&tmp, &tmpI, &tmp, &tmpI, realContext);
+  complexMagnitude(&tmp, &tmpI, &tmp, realContext);
 
   if(realCompareLessThan(&tmpR, &tmp)) {
     realCopy(&t1r, re); realCopy(&t1i, im);
@@ -4449,9 +4434,8 @@ static void sortEigenvalues(real_t *eig, uint16_t size, uint16_t begin_a, uint16
     return;
   }
   else if(size == 2) { // simply compare
-    realRectangularToPolar(eig,     eig + 1, eig + 2, eig + 3, realContext);
-    realRectangularToPolar(eig + 6, eig + 7, eig + 4, eig + 5, realContext);
-    realZero(eig + 3); realZero(eig + 5);
+    complexMagnitude(eig,     eig + 1, eig + 2, realContext);
+    complexMagnitude(eig + 6, eig + 7, eig + 4, realContext);
     if(realCompareLessThan(eig + 2, eig + 4)) {
       realCopy(eig,     eig + 2); realCopy(eig + 1, eig + 3);
       realCopy(eig + 6, eig    ); realCopy(eig + 7, eig + 1);
@@ -4463,8 +4447,7 @@ static void sortEigenvalues(real_t *eig, uint16_t size, uint16_t begin_a, uint16
     sortEigenvalues(eig, size, begin_a, (begin_a + end_a + 2) / 2, end_a, realContext);
     sortEigenvalues(eig, size, begin_b, (begin_b + end_b + 2) / 2, end_b, realContext);
     for(uint16_t i = begin_a; i <= end_b; i++) {
-      realRectangularToPolar(eig + (i * size + i) * 2, eig + (i * size + i) * 2 + 1, eig + (i * size + (i + 1) % size) * 2, eig + (i * size + (i + 1) % size) * 2 + 1, realContext);
-      realZero(eig + (i * size + (i + 1) % size) * 2 + 1);
+      complexMagnitude(eig + (i * size + i) * 2, eig + (i * size + i) * 2 + 1, eig + (i * size + (i + 1) % size) * 2, realContext);
     }
     for(uint16_t i = begin_a; i <= end_b; i++) {
       if(a > end_a) {
@@ -4826,13 +4809,11 @@ void realEigenvectors(const real34Matrix_t *matrix, real34Matrix_t *res, real34M
 
       // Normalize
       for(j = 0; j < size; j++) {
-        real_t prod, sum;
+        real_t sum;
         realZero(&sum);
         for(i = 0; i < size; i++) {
-          realMultiply(r + (i * size + j) * 2,     r + (i * size + j) * 2,     &prod, &ctxtReal75);
-          realAdd(&sum, &prod, &sum, &ctxtReal75);
-          realMultiply(r + (i * size + j) * 2 + 1, r + (i * size + j) * 2 + 1, &prod, &ctxtReal75);
-          realAdd(&sum, &prod, &sum, &ctxtReal75);
+          realFMA(r + (i * size + j) * 2,     r + (i * size + j) * 2,     &sum, &sum, &ctxtReal75);
+          realFMA(r + (i * size + j) * 2 + 1, r + (i * size + j) * 2 + 1, &sum, &sum, &ctxtReal75);
         }
         realSquareRoot(&sum, &sum, &ctxtReal75);
         if(!realIsZero(&sum) && !realIsSpecial(&sum)) {

@@ -1453,7 +1453,7 @@
 #define MNU_DYNAMIC                   1394
 #define MNU_PLOT_STAT                 1395
 #define MNU_PLOT_LR                   1396
-#define MNU_1397                      1397
+#define MNU_ELLIPT                    1397
 #define MNU_1398                      1398
 #define MNU_1399                      1399
 #define MNU_1400                      1400
@@ -1642,7 +1642,7 @@
 #define ITM_R_COPY                    1581
 #define ITM_R_SORT                    1582
 #define ITM_R_SWAP                    1583
-#define ITM_1584                      1584
+#define ITM_am                        1584
 #define ITM_STDDEVWEIGHTED            1585
 #define ITM_SAVE                      1586
 #define ITM_SCI                       1587
@@ -1823,8 +1823,11 @@
 #define ITM_PLOT_NXT                  1760
 #define ITM_PLOT_REV                  1761
 #define ITM_PLOTZOOM                  1762
+#define ITM_Fphik                     1763
+#define ITM_Ephik                     1764
+#define ITM_ZETAphik                  1765
 
-#define LAST_ITEM                     1763
+#define LAST_ITEM                     1766
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

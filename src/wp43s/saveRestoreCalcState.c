@@ -90,10 +90,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
     save(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
     save(globalFlags,                         sizeof(globalFlags),                        BACKUP);
-    save(errorMessage,                        sizeof(errorMessage),                       BACKUP);
-    save(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
-    save(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
-    save(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
+    save(errorMessage,                        ERROR_MESSAGE_LENGTH,                       BACKUP);
+    save(aimBuffer,                           AIM_BUFFER_LENGTH,                          BACKUP);
+    save(nimBufferDisplay,                    NIM_BUFFER_LENGTH,                          BACKUP);
+    save(tamBuffer,                           TAM_BUFFER_LENGTH,                          BACKUP);
     save(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
     save(oldTime,                             sizeof(oldTime),                            BACKUP);
     save(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
@@ -284,10 +284,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(freeMemoryRegions,                   sizeof(freeMemoryRegions),                  BACKUP);
       restore(&numberOfFreeMemoryRegions,          sizeof(numberOfFreeMemoryRegions),          BACKUP);
       restore(globalFlags,                         sizeof(globalFlags),                        BACKUP);
-      restore(errorMessage,                        sizeof(errorMessage),                       BACKUP);
-      restore(aimBuffer,                           sizeof(aimBuffer),                          BACKUP);
-      restore(nimBufferDisplay,                    sizeof(nimBufferDisplay),                   BACKUP);
-      restore(tamBuffer,                           sizeof(tamBuffer),                          BACKUP);
+      restore(errorMessage,                        ERROR_MESSAGE_LENGTH,                       BACKUP);
+      restore(aimBuffer,                           AIM_BUFFER_LENGTH,                          BACKUP);
+      restore(nimBufferDisplay,                    NIM_BUFFER_LENGTH,                          BACKUP);
+      restore(tamBuffer,                           TAM_BUFFER_LENGTH,                          BACKUP);
       restore(asmBuffer,                           sizeof(asmBuffer),                          BACKUP);
       restore(oldTime,                             sizeof(oldTime),                            BACKUP);
       restore(dateTimeString,                      sizeof(dateTimeString),                     BACKUP);
@@ -499,7 +499,8 @@ static void registerToSaveString(calcRegister_t regist) {
   longInteger_t lgInt;
   int16_t sign;
   uint64_t value;
-  char *str, *cfg;
+  char *str;
+  uint8_t *cfg;
 
   tmpRegisterString = tmpString + START_REGISTER_VALUE;
 
@@ -583,7 +584,7 @@ static void registerToSaveString(calcRegister_t regist) {
       break;
 
     case dtConfig:
-      for(str=tmpRegisterString, cfg=(char *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
+      for(str=tmpRegisterString, cfg=(uint8_t *)REGISTER_CONFIG_DATA(regist), value=0; value<sizeof(dtConfigDescriptor_t); value++, cfg++, str+=2) {
         sprintf(str, "%02X", *cfg);
       }
       strcpy(aimBuffer, "Conf");
@@ -1023,7 +1024,7 @@ static void restoreRegister(calcRegister_t regist, char *type, char *value) {
 
     reallocateRegister(regist, dtConfig, CONFIG_SIZE, amNone);
     for(cfg=(char *)REGISTER_CONFIG_DATA(regist), tag=0; tag<sizeof(dtConfigDescriptor_t); tag++, value+=2, cfg++) {
-      *cfg = ((*value >= 'A' ? *value - 'A' + 10 : *value - '0') << 8) | (*(value + 1) >= 'A' ? *(value + 1) - 'A' + 10 : *(value + 1) - '0');
+      *cfg = ((*value >= 'A' ? *value - 'A' + 10 : *value - '0') << 4) | (*(value + 1) >= 'A' ? *(value + 1) - 'A' + 10 : *(value + 1) - '0');
     }
   }
 
@@ -1090,7 +1091,7 @@ static void skipMatrixData(char *type, char *value, void *stream) {
 
 
 
-static void restoreOneSection(void *stream, uint16_t loadMode) {
+static bool_t restoreOneSection(void *stream, uint16_t loadMode) {
   int16_t i, numberOfRegs;
   calcRegister_t regist;
   char *str;
@@ -1170,14 +1171,13 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
           skipMatrixData(aimBuffer, tmpString, stream);
         }
       }
+    }
+  }
 
-      if(numberOfRegs > 0) {
-        readLine(stream, tmpString); // LOCAL_FLAGS
-        readLine(stream, tmpString); // LOCAL_FLAGS
-        if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
-          currentLocalFlags->localFlags = stringToUint32(tmpString);
-        }
-      }
+  else if(strcmp(tmpString, "LOCAL_FLAGS") == 0) {
+    readLine(stream, tmpString); // LOCAL_FLAGS
+    if(loadMode == LM_ALL || loadMode == LM_REGISTERS) {
+      currentLocalFlags->localFlags = stringToUint32(tmpString);
     }
   }
 
@@ -1389,10 +1389,12 @@ static void restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, tmpString);
       gr_y[i] = strtod(tmpString, &end);
       //printf("^^^^### %u %f %f \n",i,gr_x[i],gr_y[i]);
+      return false;
     }
   }
   // Graph memory                                  //^^ GRAPH MEMORY RESTORE
 
+  return true;
 }
 
 
@@ -1418,16 +1420,11 @@ void fnLoad(uint16_t loadMode) {
     }
   #endif // DMCP_BUILD
 
-  restoreOneSection(BACKUP, loadMode); // GLOBAL_REGISTERS
-  restoreOneSection(BACKUP, loadMode); // GLOBAL_FLAGS
-  restoreOneSection(BACKUP, loadMode); // LOCAL_REGISTERS
-  restoreOneSection(BACKUP, loadMode); // NAMED_VARIABLES
-  restoreOneSection(BACKUP, loadMode); // STATISTICAL_SUMS
-  restoreOneSection(BACKUP, loadMode); // SYSTEM_FLAGS
-  restoreOneSection(BACKUP, loadMode); // KEYBOARD_ASSIGNMENTS
-  restoreOneSection(BACKUP, loadMode); // PROGRAMS
-  restoreOneSection(BACKUP, loadMode); // OTHER_CONFIGURATION_STUFF
-  restoreOneSection(BACKUP, loadMode); // Graph memory
+  while (restoreOneSection(BACKUP, loadMode))
+  {
+  }
+
+  lastErrorCode = ERROR_NONE;
 
   #ifdef DMCP_BUILD
     f_close(BACKUP);

@@ -4327,7 +4327,7 @@ static void calculateEigenvalues22(const real_t *mat, uint16_t size, real_t *t1r
   //                                            t = ((a + d) ± √(a^2 + 2 a d + d^2 - 4 (a d - b c))) / 2
   //                                                ((a + d) ± √(a^2         + d^2 - 2 a d + 4 b c)) / 2
   const real_t *ar, *ai, *br, *bi, *cr, *ci, *dr, *di;
-  real_t tmp, tmpR, tmpI, discrR, discrI;
+  real_t tmpR, tmpI, discrR, discrI;
 
   ar = mat + ((size - 2) * size + (size - 2)) * 2; ai = ar + 1;
   br = mat + ((size - 2) * size + (size - 1)) * 2; bi = br + 1;
@@ -4360,15 +4360,14 @@ static void calculateEigenvalues22(const real_t *mat, uint16_t size, real_t *t1r
   realSubtract(&discrR, &tmpR, &discrR, realContext), realSubtract(&discrI, &tmpI, &discrI, realContext);
 
   // 4bc
-  int32ToReal(4, &tmp);
   if(realIsZero(bi) && realIsZero(ci)) {
     realMultiply(br, cr, &tmpR, realContext), realZero(&tmpI);
-    realMultiply(&tmpR, &tmp, &tmpR, realContext);
+    realMultiply(&tmpR, const_4, &tmpR, realContext);
   }
   else {
     mulComplexComplex(br, bi, cr, ci, &tmpR, &tmpI, realContext);
-    realMultiply(&tmpR, &tmp, &tmpR, realContext);
-    realMultiply(&tmpI, &tmp, &tmpI, realContext);
+    realMultiply(&tmpR, const_4, &tmpR, realContext);
+    realMultiply(&tmpI, const_4, &tmpI, realContext);
   }
   realAdd(&discrR, &tmpR, &discrR, realContext), realAdd(&discrI, &tmpI, &discrI, realContext);
 

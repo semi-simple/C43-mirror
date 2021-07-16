@@ -124,8 +124,7 @@ static void zeta_calc_complex(real_t *reg4, real_t *reg5, real_t *reg6, real_t *
   realCopy(const_3, &q); q.exponent += 10;
   WP34S_Ln(&q, &q, realContext);
   realAdd(&p, &q, &p, realContext);
-  int32ToReal(8, &q);
-  realSquareRoot(&q, &q, realContext);
+  realSquareRoot(const_8, &q, realContext);
   realAdd(&q, const_3, &q, realContext);
   WP34S_Ln(&q, &q, realContext);
   realDivide(&p, &q, &p, realContext);

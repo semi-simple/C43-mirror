@@ -70,7 +70,7 @@ TO_QSPI const int16_t menu_CLR[]         = { ITM_CLSIGMA,                   ITM_
 /*                                          <---------------------------------------------------------------------- 6 f shifted functions ------------------------------------------------------------------------->  */
 /*                                          <---------------------------------------------------------------------- 6 g shifted functions ------------------------------------------------------------------------->  */
 TO_QSPI const int16_t menu_CPX[]         = { ITM_DOT_PROD,                  ITM_CROSS_PROD,             ITM_UNITV,                ITM_RE,                ITM_CONJ,                    ITM_REexIM,
-                                             ITM_CXtoRE,                    ITM_REtoCX,                 ITM_SIGN,                 ITM_IM,                ITM_MAGNITUDE,               ITM_ANGLE                     };
+                                             ITM_CXtoRE,                    ITM_REtoCX,                 ITM_SIGN,                 ITM_IM,                ITM_MAGNITUDE,               ITM_ARG                       };
 
 TO_QSPI const int16_t menu_DISP[]        = { ITM_FIX,                       ITM_SCI,                    ITM_ENG,                  ITM_ALL,               ITM_ROUNDI,                  ITM_ROUND,
                                              ITM_SDL,                       ITM_SDR,                    ITM_NULL,                 ITM_NULL,              ITM_RDP,                     ITM_RSD,
@@ -137,7 +137,7 @@ TO_QSPI const int16_t menu_MODE[]        = { ITM_SF,                        ITM_
                                                                                                                                                                                                             };
 
 TO_QSPI const int16_t menu_PARTS[]       = { ITM_IP,                        ITM_FP,                     ITM_MANT,                 ITM_EXPT,              ITM_SIGN,                    ITM_DECOMP,
-                                             ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_MAGNITUDE,               ITM_ANGLE,
+                                             ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_MAGNITUDE,               ITM_ARG,
                                              ITM_NULL,                      ITM_NULL,                   ITM_NULL,                 ITM_NULL,              ITM_RE,                      ITM_IM                        };
 
 /*      Menu name                           <----------------------------------------------------------------------------- 6 functions ---------------------------------------------------------------------------->  */

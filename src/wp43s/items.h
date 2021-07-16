@@ -1764,7 +1764,7 @@
 #define ITM_PARALLEL                  1703
 #define ITM_M_TRANSP                  1704
 #define ITM_M_INV                     1705
-#define ITM_ANGLE                     1706
+#define ITM_ARG                       1706
 #define ITM_MULPIto                   1707
 #define ITM_PRINTERADV                1708
 #define ITM_PRINTERCHAR               1709
@@ -1799,7 +1799,7 @@
 #define ITM_SST                       1736
 #define ITM_EXIT                      1737
 #define ITM_BACKSPACE                 1738
-#define ITM_1739                      1739
+#define ITM_ANGLE                     1739
 #define ITM_AIM                       1740
 #define ITM_dotD                      1741
 #define ITM_SHOW                      1742

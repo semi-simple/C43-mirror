@@ -205,10 +205,18 @@ bool_t isValidDay(const real34_t *year, const real34_t *month, const real34_t *d
 }
 
 
-#define AddInt(p, q, r) int32ToReal34(q, &tmp), real34Add(p, &tmp, r)
-#define SubInt(p, q, r) int32ToReal34(q, &tmp), real34Subtract(p, &tmp, r)
-#define MulInt(p, q, r) int32ToReal34(q, &tmp), real34Multiply(p, &tmp, r)
-#define DivInt(p, q, r) int32ToReal34(q, &tmp), real34Divide(p, &tmp, &tmp), real34ToIntegralValue(&tmp, r, DEC_ROUND_DOWN)
+static void divInt(const real34_t *p, const real34_t *q, real34_t *r) {
+  real34_t tmp;
+  real34Divide(p, q, &tmp), real34ToIntegralValue(&tmp, r, DEC_ROUND_DOWN);
+}
+static void divInt2(const real34_t *p, const real34_t *q, real34_t *r) {
+  real34_t tmp;
+  real34Divide(p, q, &tmp), real34ToIntegralValue(&tmp, r, DEC_ROUND_FLOOR);
+}
+static void modInt(const real34_t *p, const real34_t *q, real34_t *r) {
+  real34_t tmp;
+  divInt2(p, q, &tmp), real34Multiply(&tmp, q, &tmp), real34Subtract(p, &tmp, r);
+}
 
 /********************************************//**
  * \brief Convert date into Julian day number floored
@@ -233,60 +241,56 @@ void composeJulianDay(const real34_t *year, const real34_t *month, const real34_
 // Gregorian
 void composeJulianDay_g(const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd) {
   real34_t m_14_12; // round_down((month - 14) / 12)
-  real34_t a, tmp;
+  real34_t a;
 
   // round_down((month - 14) / 12)
-  SubInt(month, 14, &m_14_12);
-  DivInt(&m_14_12, 12, &m_14_12);
+  real34Subtract(month, const34_14, &m_14_12);
+  divInt(&m_14_12, const34_12, &m_14_12);
 
-  AddInt(year, 4800, &a);
+  real34Add(year, const34_4800, &a);
   real34Add(&a, &m_14_12, &a);
-  MulInt(&a, 1461, &a);
-  DivInt(&a, 4, jd);
+  real34Multiply(&a, const34_1461, &a);
+  divInt(&a, const34_4, jd);
 
-  MulInt(&m_14_12, 12, &a);
+  real34Multiply(&m_14_12, const34_12, &a);
   real34Subtract(month, &a, &a);
-  SubInt(&a, 2, &a);
-  MulInt(&a, 367, &a);
-  DivInt(&a, 12, &a);
+  real34Subtract(&a, const34_2, &a);
+  real34Multiply(&a, const34_367, &a);
+  divInt(&a, const34_12, &a);
   real34Add(jd, &a, jd);
 
-  AddInt(year, 4900, &a);
+  real34Add(year, const34_4900, &a);
   real34Add(&a, &m_14_12, &a);
-  DivInt(&a, 100, &a);
-  MulInt(&a, 3, &a);
-  DivInt(&a, 4, &a);
+  divInt(&a, const34_100, &a);
+  real34Multiply(&a, const34_3, &a);
+  divInt(&a, const34_4, &a);
   real34Subtract(jd, &a, jd);
 
   real34Add(jd, day, jd);
-  SubInt(jd, 32075, jd);
+  real34Subtract(jd, const34_32075, jd);
 }
 
 // Julian
 void composeJulianDay_j(const real34_t *year, const real34_t *month, const real34_t *day, real34_t *jd) {
-  real34_t a, tmp;
+  real34_t a;
 
-  MulInt(year, 367, jd);
+  real34Multiply(year, const34_367, jd);
 
-  SubInt(month, 9, &a);
-  DivInt(&a, 7, &a);
+  real34Subtract(month, const34_9, &a);
+  divInt(&a, const34_7, &a);
   real34Add(&a, year, &a);
-  AddInt(&a, 5001, &a);
-  MulInt(&a, 7, &a);
-  DivInt(&a, 4, &a);
+  real34Add(&a, const34_5001, &a);
+  real34Multiply(&a, const34_7, &a);
+  divInt(&a, const34_4, &a);
   real34Subtract(jd, &a, jd);
 
-  MulInt(month, 275, &a);
-  DivInt(&a, 9, &a);
+  real34Multiply(month, const34_275, &a);
+  divInt(&a, const34_9, &a);
   real34Add(jd, &a, jd);
 
   real34Add(jd, day, jd);
-  AddInt(jd, 1729777, jd);
+  real34Add(jd, const34_1729777, jd);
 }
-
-#undef DivInt
-#define DivInt(p, q, r) int32ToReal34(q, &tmp), real34Divide(p, &tmp, &tmp), real34ToIntegralValue(&tmp, r, DEC_ROUND_FLOOR)
-#define ModInt(p, q, r) DivInt(p, q, &modtmp), MulInt(&modtmp, q, &modtmp), real34Subtract(p, &modtmp, r)
 
 /********************************************//**
  * \brief Convert Julian day number (floored) into date
@@ -298,42 +302,42 @@ void composeJulianDay_j(const real34_t *year, const real34_t *month, const real3
  * \return void
  ***********************************************/
 void decomposeJulianDay(const real34_t *jd, real34_t *year, real34_t *month, real34_t *day) {
-  real34_t e, h, tmp1, tmp, modtmp;
+  real34_t e, h, tmp1;
 
-  AddInt(jd, 1401, &e);
-  uInt32ToReal34(firstGregorianDay, &tmp);
+  real34Add(jd, const34_1401, &e);
+  uInt32ToReal34(firstGregorianDay, &tmp1);
   // proleptic Gregorian calendar is used if firstGregorianDay == 0: for special purpose only!
-  if((firstGregorianDay == 0u) || real34CompareGreaterEqual(jd, &tmp)) { // Gregorian
-    MulInt(jd, 4, &tmp1);
-    AddInt(&tmp1, 274277, &tmp1);
-    DivInt(&tmp1, 146097, &tmp1);
-    MulInt(&tmp1, 3, &tmp1);
-    DivInt(&tmp1, 4, &tmp1);
-    SubInt(&tmp1, 38, &tmp1);
+  if((firstGregorianDay == 0u) || real34CompareGreaterEqual(jd, &tmp1)) { // Gregorian
+    real34Multiply(jd, const34_4, &tmp1);
+    real34Add(&tmp1, const34_274277, &tmp1);
+    divInt2(&tmp1, const34_146097, &tmp1);
+    real34Multiply(&tmp1, const34_3, &tmp1);
+    divInt2(&tmp1, const34_4, &tmp1);
+    real34Subtract(&tmp1, const34_38, &tmp1);
     real34Add(&e, &tmp1, &e);
   }
 
-  MulInt(&e, 4, &e);
-  AddInt(&e, 3, &e);
+  real34Multiply(&e, const34_4, &e);
+  real34Add(&e, const34_3, &e);
 
-  ModInt(&e, 1461, &h);
-  DivInt(&h, 4, &h);
-  MulInt(&h, 5, &h);
-  AddInt(&h, 2, &h);
+  modInt(&e, const34_1461, &h);
+  divInt2(&h, const34_4, &h);
+  real34Multiply(&h, const34_5, &h);
+  real34Add(&h, const34_2, &h);
 
-  ModInt(&h, 153, day);
-  DivInt(day, 5, day);
-  AddInt(day, 1, day);
+  modInt(&h, const34_153, day);
+  divInt2(day, const34_5, day);
+  real34Add(day, const34_1, day);
 
-  DivInt(&h, 153, month);
-  AddInt(month, 2, month);
-  ModInt(month, 12, month);
-  AddInt(month, 1, month);
+  divInt2(&h, const34_153, month);
+  real34Add(month, const34_2, month);
+  modInt(month, const34_12, month);
+  real34Add(month, const34_1, month);
 
-  DivInt(&e, 1461, year);
-  SubInt(year, 4716, year);
-  int32ToReal34(14, &tmp1), real34Subtract(&tmp1, month, &tmp1);
-  DivInt(&tmp1, 12, &tmp1);
+  divInt2(&e, const34_1461, year);
+  real34Subtract(year, const34_4716, year);
+  real34Subtract(const34_14, month, &tmp1);
+  divInt2(&tmp1, const34_12, &tmp1);
   real34Add(year, &tmp1, year);
 }
 
@@ -344,21 +348,16 @@ void decomposeJulianDay(const real34_t *jd, real34_t *year, real34_t *month, rea
  * \return uint32_t day of week (1 = Monday, 7 = Sunday), 0 if invalid
  ***********************************************/
 uint32_t getDayOfWeek(calcRegister_t regist) {
-  real34_t date34, tmp, modtmp;
+  real34_t date34;
   if(checkDateArgument(regist, &date34)) {
-    ModInt(&date34, 7, &date34);
-    AddInt(&date34, 1, &date34);
+    modInt(&date34, const34_7, &date34);
+    real34Add(&date34, const34_1, &date34);
     return real34ToUInt32(&date34);
   }
   else {
     return 0u;
   }
 }
-#undef ModInt
-#undef AddInt
-#undef SubInt
-#undef MulInt
-#undef DivInt
 
 /********************************************//**
  * \brief Check date range

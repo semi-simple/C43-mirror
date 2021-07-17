@@ -20,6 +20,7 @@
 
 #include "dateTime.h"
 
+#include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
 #include "flags.h"
@@ -65,10 +66,8 @@ void fnSetDateFormat(uint16_t dateFormat) {
  * \return void
  ***********************************************/
 void internalDateToJulianDay(const real34_t *source, real34_t *destination) {
-  real34_t val;
-
-  int32ToReal34(43200, &val), real34Subtract(source, &val, destination);
-  int32ToReal34(86400, &val), real34Divide(destination, &val, destination), real34ToIntegralValue(destination, destination, DEC_ROUND_FLOOR);
+  real34Subtract(source, const34_43200, destination);
+  real34Divide(destination, const34_86400, destination), real34ToIntegralValue(destination, destination, DEC_ROUND_FLOOR);
 }
 
 /********************************************//**
@@ -79,11 +78,9 @@ void internalDateToJulianDay(const real34_t *source, real34_t *destination) {
  * \return void
  ***********************************************/
 void julianDayToInternalDate(const real34_t *source, real34_t *destination) {
-  real34_t val;
-
   real34ToIntegralValue(source, destination, DEC_ROUND_FLOOR);
-  int32ToReal34(86400, &val), real34Multiply(destination, &val, destination);
-  int32ToReal34(43200, &val), real34Add(destination, &val, destination);
+  real34Multiply(destination, const34_86400, destination);
+  real34Add(destination, const34_43200, destination);
 }
 
 /********************************************//**
@@ -126,17 +123,16 @@ bool_t checkDateArgument(calcRegister_t regist, real34_t *jd) {
  * \return bool_t true if leap year
  ***********************************************/
 bool_t isLeapYear(const real34_t *year) {
-  real34_t val, four_hundred, val2;
+  real34_t val, val2;
   int32_t y400; // year mod 400
   bool_t isGregorian;
-  int32ToReal34(400, &four_hundred);
 
-  int32ToReal34(2, &val), int32ToReal34(28, &val2), composeJulianDay(year, &val, &val2, &val);
+  composeJulianDay(year, const34_2, const34_28, &val);
   uInt32ToReal34(firstGregorianDay, &val2);
   isGregorian = real34CompareGreaterEqual(&val, &val2);
 
-  real34Divide(year, &four_hundred, &val), real34ToIntegralValue(&val, &val, DEC_ROUND_FLOOR);
-  real34Multiply(&val, &four_hundred, &val);
+  real34Divide(year, const34_400, &val), real34ToIntegralValue(&val, &val, DEC_ROUND_FLOOR);
+  real34Multiply(&val, const34_400, &val);
   real34Subtract(year, &val, &val);
   y400 = real34ToInt32(&val);
 
@@ -161,23 +157,23 @@ bool_t isValidDay(const real34_t *year, const real34_t *month, const real34_t *d
   // Year (this rejects year -4713 and earlier)
   real34ToIntegralValue(year, &val, DEC_ROUND_FLOOR), real34Subtract(year, &val, &val);
   if(!real34IsZero(&val)) return false;
-  int32ToReal34(-4712, &val), real34Compare(year, &val, &val);
+  real34Compare(year, const34__4712, &val);
   if(real34ToInt32(&val) < 0) return false;
 
   // Day
   real34ToIntegralValue(day, &val, DEC_ROUND_FLOOR), real34Subtract(day, &val, &val);
   if(!real34IsZero(&val)) return false;
-  int32ToReal34(1, &val), real34Compare(day, &val, &val);
+  real34Compare(day, const34_1, &val);
   if(real34ToInt32(&val) < 0) return false;
-  int32ToReal34(31, &val), real34Compare(day, &val, &val);
+  real34Compare(day, const34_31, &val);
   if(real34ToInt32(&val) > 0) return false;
 
   // Month
   real34ToIntegralValue(month, &val, DEC_ROUND_FLOOR), real34Subtract(month, &val, &val);
   if(!real34IsZero(&val)) return false;
-  int32ToReal34(1, &val), real34Compare(month, &val, &val);
+  real34Compare(month, const34_1, &val);
   if(real34ToInt32(&val) < 0) return false;
-  int32ToReal34(12, &val), real34Compare(month, &val, &val);
+  real34Compare(month, const34_12, &val);
   if(real34ToInt32(&val) > 0) return false;
 
   // Thirty days hath September...
@@ -371,9 +367,7 @@ uint32_t getDayOfWeek(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void checkDateRange(const real34_t *date34) {
-  real34_t hundredgigayear;
-  stringToReal34("3155695348699627200.000000000000000", &hundredgigayear);
-  if(real34CompareGreaterEqual(date34, &hundredgigayear) || real34IsNegative(date34)) {
+  if(real34CompareGreaterEqual(date34, const34_maxDate) || real34IsNegative(date34)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "value of date type is too large");
@@ -400,22 +394,18 @@ void hmmssToSeconds(const real34_t *src, real34_t *dest) {
   // Hours
   real34CopyAbs(src, &time34);
   real34ToIntegralValue(&time34, &real34, DEC_ROUND_DOWN);
-  int32ToReal34(3600, &value34);
-  real34Multiply(&real34, &value34, dest);
+  real34Multiply(&real34, const34_3600, dest);
 
   // Minutes
   real34Subtract(&time34, &real34, &time34);
-  int32ToReal34(100, &value34);
-  real34Multiply(&time34, &value34, &time34);
+  real34Multiply(&time34, const34_100, &time34);
   real34ToIntegralValue(&time34, &real34, DEC_ROUND_DOWN);
-  int32ToReal34(60, &value34);
-  real34Multiply(&value34, &real34, &value34);
+  real34Multiply(const34_60, &real34, &value34);
   real34Add(dest, &value34, dest);
 
   // Seconds
   real34Subtract(&time34, &real34, &time34);
-  int32ToReal34(100, &value34);
-  real34Multiply(&time34, &value34, &time34);
+  real34Multiply(&time34, const34_100, &time34);
   real34Add(dest, &time34, dest);
 
   // Sign
@@ -445,10 +435,9 @@ void hmmssInRegisterToSeconds(calcRegister_t regist) {
  * \return void
  ***********************************************/
 void checkTimeRange(const real34_t *time34) {
-  real34_t t, petahour;
+  real34_t t;
   real34CopyAbs(time34, &t);
-  stringToReal34("36000000000000000000.00000000000000", &petahour);
-  if(real34CompareGreaterEqual(&t, &petahour)) {
+  if(real34CompareGreaterEqual(&t, const34_maxTime)) {
     displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       sprintf(errorMessage, "value of time type is too large");
@@ -832,15 +821,12 @@ void fnSetTime(uint16_t unusedButMandatoryParameter) {
     real34_t time34, value34;
     int32_t timeVal;
 
-    if(getRegisterDataType(REGISTER_X) == dtTime) {
-      int32ToReal34(86400, &value34);
-      if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(REGISTER_X), &value34)) {
+      if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_86400)) {
         displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, REGISTER_X);
       }
       else {
         rtc_read(&timeInfo, &dateInfo);
-        int32ToReal34(100, &value34);
-        real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), &value34, &time34);
+        real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_100, &time34);
         real34ToIntegralValue(&time34, &time34, DEC_ROUND_DOWN);
         timeVal = real34ToInt32(&time34);
         timeInfo.csec =  timeVal         % 100;
@@ -848,6 +834,27 @@ void fnSetTime(uint16_t unusedButMandatoryParameter) {
         timeInfo.min  = (timeVal /=  60) %  60;
         timeInfo.hour = (timeVal /=  60);
         rtc_write(&timeInfo, &dateInfo);
+      }
+    }
+    else if(getRegisterDataType(REGISTER_X) == dtReal34) {
+      if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_24)) {
+        displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, REGISTER_X);
+      }
+      else {
+        rtc_read(&timeInfo, &dateInfo);
+        real34Multiply(REGISTER_REAL34_DATA(REGISTER_X), const34_1e6, &time34);
+        real34ToIntegralValue(&time34, &time34, DEC_ROUND_DOWN);
+        timeVal = real34ToInt32(&time34);
+        timeInfo.csec =  timeVal         % 100;
+        timeInfo.sec  = (timeVal /= 100) % 100;
+        timeInfo.min  = (timeVal /= 100) % 100;
+        timeInfo.hour = (timeVal /= 100);
+        if(timeInfo.sec <= 59 && timeInfo.min <= 59 && timeInfo.hour <= 23) {
+          rtc_write(&timeInfo, &dateInfo);
+        }
+        else {
+          displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, REGISTER_X);
+        }
       }
     }
     else {

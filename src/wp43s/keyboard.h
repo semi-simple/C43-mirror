@@ -70,6 +70,12 @@ void fnKeyDown       (uint16_t unusedButMandatoryParameter);
  * \param[in] unusedButMandatoryParameter
  */
 void fnKeyDotD       (uint16_t unusedButMandatoryParameter);
+/**
+ * Processing ANGLE key.
+ *
+ * \param[in] unusedButMandatoryParameter
+ */
+void fnKeyAngle      (uint16_t unusedButMandatoryParameter);
 
 void executeFunction(const char *data, int16_t item_);
 

@@ -167,7 +167,7 @@
 
 #ifdef LINUX
   #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
-#endif // __linux__ == 1
+#endif // LINUX
 
 
 #define DEBUG_STAT                       0 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
@@ -558,7 +558,7 @@ typedef enum {
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS     10
 
 // Number of constants
-#define NUMBER_OF_CONSTANTS_39                   183+2   //JM 2 additionalconstants
+#define NUMBER_OF_CONSTANTS_39                   187+2   //JM 2 additionalconstants
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
 #define NUMBER_OF_CONSTANTS_34                     8
@@ -1010,7 +1010,7 @@ typedef enum {
   #ifdef WIN32 // No DEBUG_PANEL mode for Windows
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
-  #endif // __MINGW64__
+  #endif // WIN32
   #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0

@@ -31,6 +31,7 @@
 #include "mathematics/multiplication.h"
 #include "mathematics/sin.h"
 #include "mathematics/toPolar.h"
+#include "realType.h"
 #include "statusBar.h"
 
 #include "wp43s.h"

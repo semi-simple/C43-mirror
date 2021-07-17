@@ -817,9 +817,10 @@ void fnSetTime(uint16_t unusedButMandatoryParameter) {
   #ifdef DMCP_BUILD
     tm_t timeInfo;
     dt_t dateInfo;
-    real34_t time34, value34;
+    real34_t time34;
     int32_t timeVal;
 
+    if(getRegisterDataType(REGISTER_X) == dtTime) {
       if(real34IsNegative(REGISTER_REAL34_DATA(REGISTER_X)) || real34IsNaN(REGISTER_REAL34_DATA(REGISTER_X)) || real34CompareGreaterEqual(REGISTER_REAL34_DATA(REGISTER_X), const34_86400)) {
         displayCalcErrorMessage(ERROR_BAD_TIME_OR_DATE_INPUT, ERR_REGISTER_LINE, REGISTER_X);
       }

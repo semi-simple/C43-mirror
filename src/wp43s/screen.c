@@ -499,7 +499,7 @@
       else {
         hideCursor();
       }
-      cursorBlink = !cursorBlink;
+    //cursorBlink = !cursorBlink;
     }
   }
 

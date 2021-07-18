@@ -105,7 +105,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     #ifdef DMCP_BUILD
       lcd_refresh();
     #else // !DMCP_BUILD
-      refreshStatusBar(NULL);
+      refreshLcd(NULL);
     #endif // DMCP_BUILD
 
     indexOfItems[func].func(param);

@@ -45,6 +45,7 @@
 #include "softmenus.h"
 #include "stack.h"
 #include "stats.h"
+#include "statusBar.h"
 #include "store.h"
 #include "stringFuncs.h"
 #include "timer.h"
@@ -97,6 +98,15 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     else if((indexOfItems[func].status & US_STATUS) == US_CANCEL) {
       thereIsSomethingToUndo = false;
     }
+
+    hourGlassIconEnabled = !hourGlassIconEnabled;
+    showHideHourGlass();
+
+    #ifdef DMCP_BUILD
+      lcd_refresh();
+    #else // !DMCP_BUILD
+      refreshStatusBar(NULL);
+    #endif // DMCP_BUILD
 
     indexOfItems[func].func(param);
 

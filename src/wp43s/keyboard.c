@@ -1247,7 +1247,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
           if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          clearSystemFlag(FLAG_ASLIFT);
+          if(!eRPN) clearSystemFlag(FLAG_ASLIFT); //JM eRPN 2021-07B
         }
         else {                                               //^^ PHM eRPN 2021-07
           setSystemFlag(FLAG_ASLIFT);

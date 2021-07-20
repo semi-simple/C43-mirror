@@ -458,18 +458,17 @@ size_t                 wp43sMemInBlocks;
       // =======================
       // Externally forced LCD repaint
       if(ST(STAT_CLK_WKUP_FLAG)) {
-      //uint8_t min_now = rtc_read_min();
-      //if(act_min != min_now) {
+        if(!ST(STAT_OFF) && (nextTimerRefresh == 0) && (fnTestBitIsSet(0) != true)) {
           refreshLcd();
           lcd_refresh_wait();
-      //  act_min = min_now;
-      //}
+        }
         CLR_ST(STAT_CLK_WKUP_FLAG);
         continue;
       }
       if(ST(STAT_POWER_CHANGE)) {
-        refreshLcd();
-        lcd_refresh_wait();
+        if(!ST(STAT_OFF) && (fnTimerGetStatus(TO_KB_ACTV) != TMR_RUNNING) && (fnTestBitIsSet(0) != true)) {
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 40);
+        }
         CLR_ST(STAT_POWER_CHANGE);
         continue;
       }
@@ -772,7 +771,7 @@ size_t                 wp43sMemInBlocks;
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);//dr
         }
         else {
-          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 940);
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 640);
         }
       }
 

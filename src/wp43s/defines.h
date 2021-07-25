@@ -51,7 +51,7 @@
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
   #define SAVE_SPACE_DM42   //014984 bytes: Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
   #define SAVE_SPACE_DM42_1 //001568 bytes: STAT DEMOS 105-107-109
-  #define SAVE_SPACE_DM42_2 //004320 bytes: XEQM
+  #define SAVE_SPACE_DM42_2 // bytes: XEQM
   #define SAVE_SPACE_DM42_4 //000736 bytes: XY GRAPHDEMOS
     #define SAVE_SPACE_DM42_3 //002680 SOLVER (already excluded by XY GRAPHDEMOS)
   #define SAVE_SPACE_DM42_5 //001168 bytes: SHOW (old WP43S on VIEW)

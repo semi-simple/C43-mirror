@@ -179,10 +179,10 @@ uint32_t indic_y = SCREEN_HEIGHT-1;
 typedef struct {
   uint16_t itemNr;            ///<
   char     *itemName;         ///<
-} fuction_t;
+} function_t;
 
 
-TO_QSPI const fuction_t indexOfFunctions[] = {
+TO_QSPI const function_t indexOfFunctions[] = {
 #ifndef SAVE_SPACE_DM42_2
 //            function                      functionName
 //XEQM TYPE1 ORIGINAL FULL SELECTED LIST
@@ -1492,6 +1492,7 @@ void fnXEQMENU(uint16_t XEQM_no) {
 
 
 void XEQMENU_loadAllfromdisk(void) {
+#ifndef SAVE_SPACE_DM42_2
 #ifndef TESTSUITE_BUILD
 //uint16_t Delay;
       clearScreen_old(false, true, true);
@@ -1510,6 +1511,7 @@ void XEQMENU_loadAllfromdisk(void) {
         ix++;
       }
     #endif
+#endif //SAVE_SPACE_DM42_2
 }
 
 
@@ -1560,6 +1562,7 @@ char line1[TMP_STR_LENGTH];
 
 
 void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGISTER TO DISK
+#ifndef SAVE_SPACE_DM42_2
   char tt[40]; 
   if(getRegisterDataType(REGISTER_X) == dtString) {
     xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
@@ -1580,10 +1583,12 @@ void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGIST
       if(tt[0]!=0) export_string_to_filename(tmpString, OVERWRITE, "PROGRAMS", tt);
     #endif
   }
+#endif //SAVE_SPACE_DM42_2
 }
 
 
 void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to X-REGISTER
+#ifndef SAVE_SPACE_DM42_2
   #ifdef PC_BUILD
     printf("LOAD %d\n",XEQM_no);
   #endif
@@ -1603,13 +1608,14 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
   liftStack();
   reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), amNone);
   strcpy(REGISTER_STRING_DATA(REGISTER_X),line1 + TMP_STR_LENGTH/2);
-
+#endif //SAVE_SPACE_DM42_2
 }
 
 
 
 
 void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
+#ifndef SAVE_SPACE_DM42_2
 
           if(aimBuffer[0] != 0) {          //JM if something already in the AIMB|UFFER when X-EDIT is called, store this in the stack first
             setSystemFlag(FLAG_ASLIFT);
@@ -1705,10 +1711,12 @@ void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
   refreshScreen();
   last_CM=251;
   refreshScreen();
+#endif //SAVE_SPACE_DM42_2
 }
 
 
 void fnXEQMXXEQ (uint16_t unusedButMandatoryParameter) {
+#ifndef SAVE_SPACE_DM42_2
   char line1[XEQ_STR_LENGTH_LONG];
   if(getRegisterDataType(REGISTER_X) == dtString) {
     xcopy(line1, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
@@ -1717,14 +1725,16 @@ void fnXEQMXXEQ (uint16_t unusedButMandatoryParameter) {
     execute_string(line1,!EXEC,  !SCAN); //Run to catch all label names
     execute_string(line1, EXEC,  !SCAN); //Run to execute
   }
-
+#endif //SAVE_SPACE_DM42_2
 }
 
 
 
 void fnXEQNEW (uint16_t unusedButMandatoryParameter) {
+#ifndef SAVE_SPACE_DM42_2
   fnStrtoX("XEQC43 XEQLBL 01 XXXXXX ");
   fnXEQMEDIT(0);
+#endif //SAVE_SPACE_DM42_2
 }
 
 

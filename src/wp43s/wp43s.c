@@ -22,6 +22,7 @@
 #include "longIntegerType.h"
 #include "memory.h"
 #include "screen.h"
+#include <string.h>
 
 //#define JMSHOWCODES
 

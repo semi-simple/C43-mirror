@@ -722,8 +722,8 @@ void Shft_handler() {                        //JM SHIFT NEW vv
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
         Shft_timeouts = false;
-        fnTimerStop(TO_FG_LONG);
-        fnTimerStop(TO_FG_TIMR);
+      //fnTimerStop(TO_FG_LONG);                  // vv moved to resetShiftState()
+      //fnTimerStop(TO_FG_TIMR);                  // ^^
         resetShiftState();                        //force into no shift state, i.e. to wait
         if(HOME3) {
           #ifdef PC_BUILD          
@@ -761,8 +761,8 @@ void LongpressKey_handler() {
 
 void Shft_stop() {
   Shft_timeouts = false;
-  fnTimerStop(TO_FG_LONG);
-  fnTimerStop(TO_FG_TIMR);
+//fnTimerStop(TO_FG_LONG);                  // vv moved to resetShiftState()
+//fnTimerStop(TO_FG_TIMR);                  // ^^
   resetShiftState();                        //force into no shift state, i.e. to wait
 }
   #ifndef DMCP_BUILD

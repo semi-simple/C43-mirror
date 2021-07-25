@@ -424,32 +424,49 @@ size_t                 wp43sMemInBlocks;
         CLR_ST(STAT_RUNNING);
         sys_sleep();
       }
-      else if ((!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer())) {       // Just wait if no keys available.      //dr - internal keyBuffer POC
-        uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());     //vv dr timer without DMCP timer
-        if(nextTimerRefresh != 0) {
-          uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
-          sleepTime = min(sleepTime, timeoutTime);
-          if(fnTestBitIsSet(0) != true) {
-            sleepTime = min(sleepTime, 160);
-          }
-        }
-        else if(fnTestBitIsSet(0) != true) {
-          sleepTime = UINT32_MAX;
-        }
-        if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) {
-          sleepTime = min(sleepTime, 40);
-        }
-        if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {
-          sleepTime = min(sleepTime, 15);
-        }                                                                      //^^
+      else if (!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer()) {         // Just wait if no keys available.
         CLR_ST(STAT_RUNNING);
-        if(sleepTime == UINT32_MAX) {
+
+        if(nextTimerRefresh == 0) {                                            // no timeout available
+          if(fnTestBitIsSet(2) == true) {
+            showString("key_empty()", &standardFont, 20, 40, vmNormal, false, false);
+            refreshLcd();
+            lcd_refresh_wait();
+          }
+
+        /*if(fnTestBitIsSet(0) == true) { sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh - sys_current_ms())); }*/
           sys_sleep();
+        /*if(fnTestBitIsSet(0) == true) { sys_timer_disable(TIMER_IDX_SCREEN_REFRESH); }*/
         }
-        else {
-          sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));        // wake up for screen refresh           //dr
+        else {                                                                 // timeout available
+          uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
+
+          if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) {
+            timeoutTime = min(timeoutTime, 40);
+          }
+          if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {
+            timeoutTime = min(timeoutTime, 15);
+          }
+
+        /*if(timeoutTime > 1000) {                                             // timeout > 1s
+            sys_sleep();
+          }
+          else {*/                                                             // timeout leads to sys_timer
+
+          uint32_t sleepTime = SCREEN_REFRESH_PERIOD;
+        /*if(fnTestBitIsSet(0) == true) { sleepTime = max(1, nextScreenRefresh - sys_current_ms()); }*/
+          sleepTime = min(sleepTime, timeoutTime);
+          sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));        // wake up for screen refresh
+          if(fnTestBitIsSet(1) == true) {
+            char snum[50];
+            itoa(sleepTime, snum, 10);
+            strcat(snum, "   ");
+            showString(snum, &standardFont, 20, 40, vmNormal, false, false);
+          }
+
           sys_sleep();
           sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
+        /*}*/
         }
       }
 
@@ -458,18 +475,21 @@ size_t                 wp43sMemInBlocks;
       // =======================
       // Externally forced LCD repaint
       if(ST(STAT_CLK_WKUP_FLAG)) {
-      //uint8_t min_now = rtc_read_min();
-      //if(act_min != min_now) {
+        if(!ST(STAT_OFF) && (nextTimerRefresh == 0)/* && (fnTestBitIsSet(0) != true)*/) {
+          if(fnTestBitIsSet(1) == true) {
+            showString("CLK_WKUP_FLAG", &standardFont, 20, 40, vmNormal, false, false);
+          }
+          
           refreshLcd();
           lcd_refresh_wait();
-      //  act_min = min_now;
-      //}
+        }
         CLR_ST(STAT_CLK_WKUP_FLAG);
         continue;
       }
       if(ST(STAT_POWER_CHANGE)) {
-        refreshLcd();
-        lcd_refresh_wait();
+        if(!ST(STAT_OFF) && (fnTimerGetStatus(TO_KB_ACTV) != TMR_RUNNING)/* && (fnTestBitIsSet(0) != true)*/) {
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 40);
+        }
         CLR_ST(STAT_POWER_CHANGE);
         continue;
       }
@@ -768,11 +788,11 @@ size_t                 wp43sMemInBlocks;
 
       if(key >= 0) {                                        //dr
         lcd_refresh_dma();
-        if((key > 0) || ((fnTestBitIsSet(0) == true))) {
+        if((key > 0)/* || (fnTestBitIsSet(0) == true)*/) {
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);//dr
         }
         else {
-          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 940);
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 640);
         }
       }
 

@@ -106,6 +106,8 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
+  fnTimerStop(TO_FG_LONG);
+  fnTimerStop(TO_FG_TIMR);
   if(shiftF || shiftG) {                                                        //vv dr
     shiftF = false;
     shiftG = false;

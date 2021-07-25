@@ -1548,8 +1548,10 @@ void fnKeyCC(uint16_t complex_Type) {    //JM Using 'unusedButMandatoryParameter
 void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
     uint16_t lg;
+#ifndef SAVE_SPACE_DM42_10
     uint8_t *nextStep;
-
+#endif //SAVE_SPACE_DM42_10
+    
     if(tam.mode) {
       tamProcessInput(ITM_BACKSPACE);
       return;
@@ -1631,10 +1633,12 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       break;
 
       case CM_PEM:
+        #ifndef SAVE_SPACE_DM42_10
         nextStep = findNextStep(currentStep);
         if(*nextStep != 255 || *(nextStep + 1) != 255) { // Not the last END
           deleteStepsFromTo(currentStep, nextStep);
         }
+        #endif //SAVE_SPACE_DM42_10
         break;
 
       default:

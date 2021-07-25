@@ -37,6 +37,9 @@
   #undef SAVE_SPACE_DM42_5
   #undef SAVE_SPACE_DM42_6
   #undef SAVE_SPACE_DM42_7
+  #undef SAVE_SPACE_DM42_8
+  #undef SAVE_SPACE_DM42_9
+  #undef SAVE_SPACE_DM42_10
   //Key layout option
   #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
   #undef  SWAP_TO_L42_ON_SIM
@@ -46,15 +49,18 @@
 
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-  #define SAVE_SPACE_DM42   //Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
-  #define SAVE_SPACE_DM42_1 //STAT DEMOS 105-107-109
-  #define    SAVE_SPACE_DM42_2 //XEQM
-  #define SAVE_SPACE_DM42_3 //SOLVER
-  #define SAVE_SPACE_DM42_4 //XY GRAPHDEMOS
-  #define SAVE_SPACE_DM42_5 //fnShow (old)
-  #define SAVE_SPACE_DM42_6 //ELEC functions
-  #define SAVE_SPACE_DM42_7 //KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
-//  #undef  SAVE_SPACE_DM42          //switch off memoery saving options
+  #define SAVE_SPACE_DM42   //014984 bytes: Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
+  #define SAVE_SPACE_DM42_1 //001568 bytes: STAT DEMOS 105-107-109
+  #define SAVE_SPACE_DM42_2 //004320 bytes: XEQM
+  #define SAVE_SPACE_DM42_4 //000736 bytes: XY GRAPHDEMOS
+    #define SAVE_SPACE_DM42_3 //002680 SOLVER (already excluded by XY GRAPHDEMOS)
+  #define SAVE_SPACE_DM42_5 //001168 bytes: SHOW (old WP43S on VIEW)
+  #define SAVE_SPACE_DM42_6 //001648 bytes: ELEC functions
+  #define SAVE_SPACE_DM42_7 //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
+  #define SAVE_SPACE_DM42_8 //007136 bytes: Standard Flag-, Register-, Font- Browser functions
+  #define SAVE_SPACE_DM42_9 //004448 bytes: SHOW (new C43)
+  #define SAVE_SPACE_DM42_10 // 005800  WP43S programming ...
+
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
   //#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
@@ -88,7 +94,7 @@
 
 //Allow longpress CHS and EEX
 #define TESTING
-#undef TESTING
+//#undef TESTING
 
 
 //This is to allow the cursors to change the case. Normal on 43S. Off on C43
@@ -125,10 +131,7 @@
 //Backup here, not active. Meant for WP43S Master JM branch, to enable WP43S usage on C43 template (see config.c)
 #undef WP43S_ON_C43_USER_MODE       //Default setting
 
-
-#define INIT_RAMDUMP
-#undef INIT_RAMDUMP
-
+  
 
 
 //*********************************

@@ -42,6 +42,7 @@
    * \return void
    ***********************************************/
   void registerBrowser(uint16_t unusedButMandatoryParameter) {
+  #ifndef SAVE_SPACE_DM42_8
     int16_t registerNameWidth;
 
     if(calcMode != CM_REGISTER_BROWSER) {
@@ -313,5 +314,6 @@
         registerBrowser(NOPARAM);
       }
     }
+  #endif //SAVE_SPACE_DM42_8
   }
 #endif // TESTSUITE_BUILD

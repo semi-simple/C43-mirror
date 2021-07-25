@@ -2250,6 +2250,8 @@ void checkAndEat(int16_t *source, int16_t last, int16_t *dest) {
 
 
 void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified by JM from the original fnShow
+#ifndef SAVE_SPACE_DM42_9
+
 #ifndef TESTSUITE_BUILD
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
@@ -2830,5 +2832,5 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
   #endif
 
 #endif //TESTSUITE_BUILD
-
+#endif //#ifndef SAVE_SPACE_DM42_9
 }

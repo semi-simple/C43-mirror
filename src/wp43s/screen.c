@@ -658,7 +658,7 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 
 void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler
                                              //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
-  if((FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0)) {
+  if((FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0) && !(softmenuStack[0].softmenuId==0 && jm_NO_BASE_SCREEN) ) {
 
     if(fnTimerGetStatus(TO_FN_LONG) == TMR_COMPLETED) {
       FN_handle_timed_out_to_EXEC = false;
@@ -751,7 +751,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
 void LongpressKey_handler() {
   if(fnTimerGetStatus(TO_CL_LONG) == TMR_COMPLETED) {
     if(JM_auto_longpress_enabled != 0) {
-      showFunctionName(JM_auto_longpress_enabled, 1000);            //fnClearStack(0);
+      showFunctionName(JM_auto_longpress_enabled, JM_TO_CL_LONG);
       JM_auto_longpress_enabled = 0;
     } 
   }
@@ -1348,12 +1348,12 @@ void force_refresh(void) {
   if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
     if(longpressDelayedkey2 != 0) {                              //  If a delayed key2 is defined, qeue it
       item = longpressDelayedkey2; 
-      delayInMs = FUNCTION_NOPTIME;
+      delayInMs = JM_TO_CL_LONG;
       longpressDelayedkey2 = 0;
     } else
     if(longpressDelayedkey3 != 0) {                              //  If a delayed key3 is defined, qeue it
       item = longpressDelayedkey3; 
-      delayInMs = FUNCTION_NOPTIME;
+      delayInMs = JM_TO_CL_LONG;
       longpressDelayedkey3 = 0;
     }
   }                                                              //JM^^

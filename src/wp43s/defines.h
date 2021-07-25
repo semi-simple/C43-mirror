@@ -117,7 +117,28 @@
 
 #define BUFFER_SIZE 2             //dr muss 2^n betragen (8, 16, 32, 64 ...)
 //* Longpress repeat 
-#define FUNCTION_NOPTIME 800      //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS
+#define FUNCTION_NOPTIME   800   //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS
+
+#define JM_SHIFT_TIMER     4000  //ms TO_FG_TIMR
+#define JM_TO_FG_LONG      580   //ms TO_FG_LONG
+
+#define JM_FN_DOUBLE_TIMER 150   //ms TO_FN_EXEC
+#define JM_TO_FN_LONG      400   //ms TO_FN_LONG  //  450 on 2020-03-13
+
+#ifdef DMCP_BUILD
+  #define JM_CLRDROP_TIMER 900   //ms TO_CL_DROP   //DROP
+  #define JM_TO_CL_LONG    800   //ms TO_CL_LONG   //CLSTK
+  #define JM_TO_3S_CTFF    900   //ms TO_3S_CTFF
+#else
+  #define JM_CLRDROP_TIMER 500   //ms TO_CL_DROP   //DROP
+  #define JM_TO_CL_LONG    800   //ms TO_CL_LONG   //CLSTK
+  #define JM_TO_3S_CTFF    600   //ms TO_3S_CTFF
+#endif
+
+#define JM_TO_KB_ACTV      6000  //ms TO_KB_ACTV
+
+
+
 
 #define JMSHOWCODES_KB3   // top line right   Single Double Triple
 #undef JMSHOWCODES_KB3
@@ -984,7 +1005,7 @@ typedef enum {
 #define RADIX34_MARK_CHAR                    (getSystemFlag(FLAG_DECIMP) ? '.'       : ',')
 #define RADIX34_MARK_STRING                  (getSystemFlag(FLAG_DECIMP) ? "."       : ",")
 #define PRODUCT_SIGN                         (getSystemFlag(FLAG_MULTx)  ? STD_CROSS : STD_DOT)
-#define clearScreen()                        lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE)
+#define clearScreen()                        {lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE); clear_ul();}
 #define currentReturnProgramNumber           (currentSubroutineLevelData[0].returnProgramNumber)
 #define currentReturnLocalStep               (currentSubroutineLevelData[0].returnLocalStep)
 #define currentNumberOfLocalFlags            (currentSubroutineLevelData[1].numberOfLocalFlags)

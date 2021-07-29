@@ -318,27 +318,91 @@
         }
         refreshScreen();
 
-      switch(item) {
-        case ITM_EXPONENT :
-        case ITM_PERIOD :
+        switch(item) {
+          case ITM_EXPONENT :
+          case ITM_PERIOD :
 
-        case ITM_0 :
-        case ITM_1 :
-        case ITM_2 :
-        case ITM_3 :
-        case ITM_4 :
-        case ITM_5 :
-        case ITM_6 :
-        case ITM_7 :
-        case ITM_8 :
-        case ITM_9 :
+          case ITM_0 :
+          case ITM_1 :
+          case ITM_2 :
+          case ITM_3 :
+          case ITM_4 :
+          case ITM_5 :
+          case ITM_6 :
+          case ITM_7 :
+          case ITM_8 :
+          case ITM_9 :
 
-        case ITM_CHS : // +/-
+          case ITM_CHS : // +/-
 
-        case ITM_CONSTpi :
+          case ITM_CONSTpi :
 
-        mimAddNumber(item);
-        break;
+            mimAddNumber(item);
+            break;
+
+          case ITM_SQUAREROOTX :
+          case ITM_EXP :
+          case ITM_10x :
+          case ITM_LN :
+          case ITM_LOG10 :
+          case ITM_1ONX :
+          case ITM_MAGNITUDE :
+          case ITM_XFACT :
+          case ITM_ANGLE :
+            {
+              int16_t i = getIRegisterAsInt(true);
+              int16_t j = getJRegisterAsInt(true);
+              bool_t isComplex = (getRegisterDataType(matrixIndex) == dtComplex34Matrix);
+
+              if(item == ITM_ANGLE) item = ITM_ARG;
+
+              mimEnter(true);
+              fnSwapX(REGISTER_I);
+              if(isComplex) {
+                reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
+                complex34Copy(&openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j], REGISTER_COMPLEX34_DATA(REGISTER_X));
+              }
+              else {
+                reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+                real34Copy(&openMatrixMIMPointer.realMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j], REGISTER_REAL34_DATA(REGISTER_X));
+              }
+
+              reallyRunFunction(item, NOPARAM);
+
+              if(getRegisterDataType(matrixIndex) == dtLongInteger)
+                convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+              if(getRegisterDataType(matrixIndex) == dtShortInteger)
+                convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+
+              if(isComplex && getRegisterDataType(matrixIndex) == dtComplex34) {
+                complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), &openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]);
+              }
+              else if(isComplex) {
+                real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]));
+                real34Zero(                                  VARIABLE_IMAG34_DATA(&openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]));
+              }
+              else if(getRegisterDataType(matrixIndex) == dtComplex34) { // Convert to a complex matrix
+                complex34Matrix_t cxma;
+
+                fnSwapX(REGISTER_I);
+                convertReal34MatrixToComplex34Matrix(&openMatrixMIMPointer.realMatrix, &cxma);
+                realMatrixFree(&openMatrixMIMPointer.realMatrix);
+                convertComplex34MatrixToComplex34MatrixRegister(&cxma, matrixIndex);
+                openMatrixMIMPointer.complexMatrix.header.matrixRows = cxma.header.matrixRows;
+                openMatrixMIMPointer.complexMatrix.header.matrixColumns = cxma.header.matrixColumns;
+                openMatrixMIMPointer.complexMatrix.matrixElements = cxma.matrixElements;
+                fnSwapX(REGISTER_I);
+
+                complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), &openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]);
+              }
+              else {
+                real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &openMatrixMIMPointer.realMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]);
+              }
+
+              fnSwapX(REGISTER_I);
+              setIRegisterAsInt(true, i);
+            }
+            break;
 
         }
       }

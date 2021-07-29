@@ -27,6 +27,7 @@
 #include "error.h"
 #include "flags.h"
 #include "fonts.h"
+#include "gui.h"
 #include "items.h"
 #include "longIntegerType.h"
 #include "mathematics/comparisonReals.h"
@@ -525,6 +526,9 @@ void fnGoToColumn(uint16_t col) {
       setIRegisterAsInt(false, tmpRow);
       setJRegisterAsInt(false, col);
     }
+    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+      calcModeNormalGui();
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
   else {
     displayCalcErrorMessage(ERROR_OPERATION_UNDEFINED, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -1718,8 +1722,20 @@ void showMatrixEditor() {
   int cols = openMatrixMIMPointer.header.matrixColumns;
   int16_t width = 0;
 
-  if(softmenuStack[0].firstItem != -MNU_M_EDIT)
+  for(int i = 0; i < SOFTMENU_STACK_SIZE; i++) {
+    if(softmenu[softmenuStack[i].softmenuId].menuItem == -MNU_M_EDIT) {
+      width = 1;
+      break;
+    }
+  }
+  if(width == 0) {
     showSoftmenu(-MNU_M_EDIT);
+  }
+  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+  if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_M_EDIT) {
+    calcModeNormalGui();
+  }
+  #endif // PC_BUILD && (SCREEN_800X480 == 0)
 
   bool_t colVector = false;
   if(cols == 1 && rows > 1) {

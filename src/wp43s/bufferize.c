@@ -346,14 +346,48 @@
             mimAddNumber(item);
             break;
 
+          case ITM_SQUARE :
+          case ITM_CUBE :
           case ITM_SQUAREROOTX :
+          case ITM_CUBEROOT :
+          case ITM_2X :
           case ITM_EXP :
+          case ITM_ROUND :
           case ITM_10x :
+          case ITM_LOG2 :
           case ITM_LN :
           case ITM_LOG10 :
           case ITM_1ONX :
+          case ITM_cos :
+          case ITM_cosh :
+          case ITM_sin :
+          case ITM_sinh :
+          case ITM_tan :
+          case ITM_tanh :
+          case ITM_arccos :
+          case ITM_arcosh :
+          case ITM_arcsin :
+          case ITM_arsinh :
+          case ITM_arctan :
+          case ITM_artanh :
+          case ITM_CEIL :
+          case ITM_FLOOR :
+          case ITM_DEC :
+          case ITM_INC :
+          case ITM_IP :
+          case ITM_FP :
           case ITM_MAGNITUDE :
+          case ITM_NEXTP :
           case ITM_XFACT :
+          case ITM_toDEG :
+          case ITM_toDMS :
+          case ITM_toGRAD :
+          case ITM_toMULpi :
+          case ITM_toRAD :
+          case ITM_DtoR :
+          case ITM_RtoD :
+          case ITM_LOGICALNOT :
+
           case ITM_ANGLE :
             {
               int16_t i = getIRegisterAsInt(true);
@@ -394,7 +428,7 @@
                 real34Copy(&re, REGISTER_REAL34_DATA(REGISTER_X));
               }
 
-              reallyRunFunction(item, NOPARAM);
+              runFunction(item);
 
               if(getRegisterDataType(matrixIndex) == dtLongInteger)
                 convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);

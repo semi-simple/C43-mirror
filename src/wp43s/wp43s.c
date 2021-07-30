@@ -461,7 +461,15 @@ size_t                 wp43sMemInBlocks;
           if(fnTestBitIsSet(1) == true) {
             char snum[50];
             itoa(sleepTime, snum, 10);
-            strcat(snum, "   ");
+            strcat(snum, " ");
+            if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) strcat(snum, "7"); else strcat(snum, "_");
+            if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) strcat(snum, "6"); else strcat(snum, "_");
+            if(fnTimerGetStatus(TO_3S_CTFF) == TMR_RUNNING) strcat(snum, "5"); else strcat(snum, "_");
+            if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) strcat(snum, "4"); else strcat(snum, "_");
+            if(fnTimerGetStatus(TO_FN_LONG) == TMR_RUNNING) strcat(snum, "3"); else strcat(snum, "_");
+            if(fnTimerGetStatus(TO_FG_TIMR) == TMR_RUNNING) strcat(snum, "2"); else strcat(snum, "_");
+            if(fnTimerGetStatus(TO_CL_LONG) == TMR_RUNNING) strcat(snum, "1"); else strcat(snum, "_");
+            if(fnTimerGetStatus(TO_FG_LONG) == TMR_RUNNING) strcat(snum, "0"); else strcat(snum, "_");
             showString(snum, &standardFont, 20, 40, vmNormal, false, false);
           }
 
@@ -792,8 +800,12 @@ size_t                 wp43sMemInBlocks;
         if((key > 0)/* || (fnTestBitIsSet(0) == true)*/) {
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);//dr
         }
-        else {
-          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 640);
+        else if(cursorEnabled == true) {
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 480);
+        }
+        else
+        {
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 40);
         }
       }
 

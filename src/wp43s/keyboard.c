@@ -209,6 +209,9 @@ bool_t lastshiftG = false;
     if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
       btnFnReleased_StateMachine(NULL, data);            //This function does the longpress differentiation, and calls ExecuteFunctio below, via fnbtnclicked
     }
+
+    fnTimerStop(TO_3S_CTFF);      //dr
+    fnTimerStop(TO_CL_LONG);      //dr
   }
 
   /********************************************//**
@@ -613,6 +616,8 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
 
         if(calcMode == CM_NIM && item == ITM_SQUAREROOTX) closeNim();      //JM moved here, from bufferize see JMCLOSE
 
+        fnTimerStop(TO_3S_CTFF);      //dr
+
         hideFunctionName();
         if(item < 0) {
           showSoftmenu(item);
@@ -640,6 +645,7 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
       }
       allowShiftsToClearError = false;
 
+      fnTimerStop(TO_CL_LONG);    //dr
     }
 
 

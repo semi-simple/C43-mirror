@@ -621,6 +621,7 @@
                 real34Zero(&im1);
               }
 
+              lastErrorCode = ERROR_NONE;
               mimEnter(true);
 
               if(isComplex) {
@@ -644,21 +645,23 @@
 
               runFunction(item);
 
-              if(getRegisterDataType(matrixIndex) == dtLongInteger)
+              if(getRegisterDataType(REGISTER_X) == dtLongInteger)
                 convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-              if(getRegisterDataType(matrixIndex) == dtShortInteger)
+              if(getRegisterDataType(REGISTER_X) == dtShortInteger)
                 convertShortIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
 
-              if(isComplex && getRegisterDataType(matrixIndex) == dtComplex34) {
+              if(isComplex && getRegisterDataType(REGISTER_X) == dtComplex34) {
                 complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), &openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]);
               }
               else if(isComplex) {
                 real34Copy(REGISTER_REAL34_DATA(REGISTER_X), VARIABLE_REAL34_DATA(&openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]));
                 real34Zero(                                  VARIABLE_IMAG34_DATA(&openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]));
               }
-              else if(getRegisterDataType(matrixIndex) == dtComplex34) { // Convert to a complex matrix
+              else if(getRegisterDataType(REGISTER_X) == dtComplex34) { // Convert to a complex matrix
                 complex34Matrix_t cxma;
+                complex34_t ans;
 
+                complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), &ans);
                 converted = true;
                 //fnSwapX(REGISTER_I);
                 convertReal34MatrixToComplex34Matrix(&openMatrixMIMPointer.realMatrix, &cxma);
@@ -669,7 +672,7 @@
                 openMatrixMIMPointer.complexMatrix.matrixElements = cxma.matrixElements;
                 //fnSwapX(REGISTER_I);
 
-                complex34Copy(REGISTER_COMPLEX34_DATA(REGISTER_X), &openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]);
+                complex34Copy(&ans, &openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]);
               }
               else {
                 real34Copy(REGISTER_REAL34_DATA(REGISTER_X), &openMatrixMIMPointer.realMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]);

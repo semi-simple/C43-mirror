@@ -362,6 +362,12 @@
           case ITM_RCLMAX :
           case ITM_RCLMIN :
 
+          case ITM_ALL :
+          case ITM_ENG :
+          case ITM_FIX :
+          case ITM_DSP :
+          case ITM_SCI :
+
           case ITM_SDL :
           case ITM_SDR :
 

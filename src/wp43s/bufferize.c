@@ -366,6 +366,8 @@
           case ITM_SF :
           case ITM_FF :
 
+          case ITM_CNST :
+
           case ITM_ALL :
           case ITM_ENG :
           case ITM_FIX :
@@ -385,6 +387,7 @@
 
               lastErrorCode = ERROR_NONE;
               mimEnter(true);
+              clearSystemFlag(FLAG_ASLIFT);
               runFunction(item);
               break;
 
@@ -429,6 +432,86 @@
           case ITM_DtoR :
           case ITM_RtoD :
           case ITM_LOGICALNOT :
+
+          case CST_01 :
+          case CST_02 :
+          case CST_03 :
+          case CST_04 :
+          case CST_05 :
+          case CST_06 :
+          case CST_07 :
+          case CST_08 :
+          case CST_09 :
+          case CST_10 :
+          case CST_11 :
+          case CST_12 :
+          case CST_13 :
+          case CST_14 :
+          case CST_15 :
+          case CST_16 :
+          case CST_17 :
+          case CST_18 :
+          case CST_19 :
+          case CST_20 :
+          case CST_21 :
+          case CST_22 :
+          case CST_23 :
+          case CST_24 :
+          case CST_25 :
+          case CST_26 :
+          case CST_27 :
+          case CST_28 :
+          case CST_29 :
+          case CST_30 :
+          case CST_31 :
+          case CST_32 :
+          case CST_33 :
+          case CST_34 :
+          case CST_35 :
+          case CST_36 :
+          case CST_37 :
+          case CST_38 :
+          case CST_39 :
+          case CST_40 :
+          case CST_41 :
+          case CST_42 :
+          case CST_43 :
+          case CST_44 :
+          case CST_45 :
+          case CST_46 :
+          case CST_47 :
+          case CST_48 :
+          case CST_49 :
+          case CST_50 :
+          case CST_51 :
+          case CST_52 :
+          case CST_53 :
+          case CST_54 :
+          case CST_55 :
+          case CST_56 :
+          case CST_57 :
+          case CST_58 :
+          case CST_59 :
+          case CST_60 :
+          case CST_61 :
+          case CST_62 :
+          case CST_63 :
+          case CST_64 :
+          case CST_65 :
+          case CST_66 :
+          case CST_67 :
+          case CST_68 :
+          case CST_69 :
+          case CST_70 :
+          case CST_71 :
+          case CST_72 :
+          case CST_73 :
+          case CST_74 :
+          case CST_75 :
+          case CST_76 :
+          case CST_77 :
+          case CST_78 :
+          case CST_79 :
 
           case ITM_CtoF :
           case ITM_FtoC :

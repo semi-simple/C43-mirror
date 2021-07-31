@@ -1983,6 +1983,7 @@ void mimRunFunction(int16_t func, uint16_t param) {
 
   lastErrorCode = ERROR_NONE;
   mimEnter(true);
+  clearSystemFlag(FLAG_ASLIFT);
 
   if(isComplex) {
     real34Copy(VARIABLE_REAL34_DATA(&openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]), &re);
@@ -2061,6 +2062,10 @@ void mimRunFunction(int16_t func, uint16_t param) {
       real34Copy(&re1, &linkedMatrix.matrixElements[i * linkedMatrix.header.matrixColumns + j]);
     }
   }
+
+  #ifdef PC_BUILD
+    refreshLcd(NULL);
+  #endif // PC_BUILD
 }
 
 void mimFinalize(void) {

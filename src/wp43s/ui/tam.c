@@ -26,6 +26,7 @@
 #include "items.h"
 #include "mathematics/fractionalPart.h"
 #include "mathematics/integerPart.h"
+#include "matrix.h"
 #include "programming/lblGtoXeq.h"
 #include "registers.h"
 #include "softmenus.h"
@@ -419,7 +420,10 @@
           }
         }
         else if(run) {
-          reallyRunFunction(_tamOperation(), value);
+          if(calcMode == CM_MIM)
+            mimRunFunction(_tamOperation(), value);
+          else
+            reallyRunFunction(_tamOperation(), value);
         }
         if(_tamOperation() == ITM_M_GOTO_ROW) {
           tamLeaveMode();
@@ -455,7 +459,10 @@
         }
       }
       if(value != INVALID_VARIABLE) {
-        reallyRunFunction(_tamOperation(), value);
+        if(calcMode == CM_MIM)
+          mimRunFunction(_tamOperation(), value);
+        else
+          reallyRunFunction(_tamOperation(), value);
       }
       if(_tamOperation() == ITM_M_GOTO_ROW) {
         tamLeaveMode();

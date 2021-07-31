@@ -582,9 +582,12 @@
           case ITM_RDP :
           case ITM_RE :
           case ITM_REexIM :
+          case ITM_EX1 :
           case ITM_ROUNDI :
           case ITM_RSD :
           case ITM_SIGN :
+          case ITM_LN1X :
+          case ITM_UNITV :
           case ITM_WDAY :
           case ITM_WM :
           case ITM_WP :

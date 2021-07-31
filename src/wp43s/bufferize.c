@@ -557,6 +557,51 @@
           case ITM_FENtoM :
           case ITM_MtoFEN :
 
+          case ITM_ABS :
+          case ITM_BN :
+          case ITM_BNS :
+          case ITM_CONJ :
+          case ITM_DAY :
+          case ITM_DEGto :
+          case ITM_DMSto :
+          case ITM_DtoJ :
+          case ITM_ERF :
+          case ITM_ERFC :
+          case ITM_EXPT :
+          case ITM_FIB :
+          case ITM_GD :
+          case ITM_GDM1 :
+          case ITM_GRADto :
+          case ITM_IM :
+          case ITM_JtoD :
+          case ITM_LNGAMMA :
+          case ITM_MANT :
+          case ITM_MONTH :
+          case ITM_sincpi :
+          case ITM_RADto :
+          case ITM_RDP :
+          case ITM_RE :
+          case ITM_REexIM :
+          case ITM_ROUNDI :
+          case ITM_RSD :
+          case ITM_SIGN :
+          case ITM_WDAY :
+          case ITM_WM :
+          case ITM_WP :
+          case ITM_WM1 :
+          case ITM_YEAR :
+          case ITM_GAMMAX :
+          case ITM_zetaX :
+          case ITM_M1X :
+          case ITM_toHMS :
+          case ITM_MPItoR :
+          case ITM_RtoMPI :
+          case ITM_toREAL :
+          case ITM_DtoDMS :
+          case ITM_MULPIto :
+
+          case ITM_Kk :
+          case ITM_Ek :
           case ITM_ANGLE :
             {
               int16_t i = getIRegisterAsInt(true);

@@ -1615,8 +1615,6 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
 
 
 void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
-#ifndef SAVE_SPACE_DM42_2
-
           if(aimBuffer[0] != 0) {          //JM if something already in the AIMB|UFFER when X-EDIT is called, store this in the stack first
             setSystemFlag(FLAG_ASLIFT);
             liftStack();
@@ -1711,7 +1709,6 @@ void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
   refreshScreen();
   last_CM=251;
   refreshScreen();
-#endif //SAVE_SPACE_DM42_2
 }
 
 

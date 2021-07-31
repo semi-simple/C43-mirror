@@ -362,6 +362,10 @@
           case ITM_RCLMAX :
           case ITM_RCLMIN :
 
+          case ITM_CF :
+          case ITM_SF :
+          case ITM_FF :
+
           case ITM_ALL :
           case ITM_ENG :
           case ITM_FIX :
@@ -373,6 +377,11 @@
 
           case ITM_RDP :
           case ITM_RSD :
+
+          case ITM_DEG :
+          case ITM_GRAD :
+          case ITM_MULPI :
+          case ITM_RAD :
 
               lastErrorCode = ERROR_NONE;
               mimEnter(true);

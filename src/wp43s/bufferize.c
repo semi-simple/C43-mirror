@@ -388,7 +388,6 @@
 
               lastErrorCode = ERROR_NONE;
               mimEnter(true);
-              clearSystemFlag(FLAG_ASLIFT);
               runFunction(item);
               break;
 

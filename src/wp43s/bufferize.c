@@ -378,6 +378,7 @@
           case ITM_SDR :
 
           case ITM_RDP :
+          case ITM_RM :
           case ITM_RSD :
 
           case ITM_DEG :

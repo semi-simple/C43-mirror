@@ -401,6 +401,8 @@ void kill_ASB_icon(void) {
 
         case ITM_CHS : // +/-
 
+        case ITM_CONSTpi :
+
         mimAddNumber(item);
         break;
 

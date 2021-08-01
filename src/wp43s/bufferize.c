@@ -444,6 +444,7 @@ void kill_ASB_icon(void) {
           case ITM_SDR :
 
           case ITM_RDP :
+          case ITM_RM :
           case ITM_RSD :
 
           case ITM_DEG :
@@ -453,7 +454,6 @@ void kill_ASB_icon(void) {
 
               lastErrorCode = ERROR_NONE;
               mimEnter(true);
-              clearSystemFlag(FLAG_ASLIFT);
               runFunction(item);
               break;
 

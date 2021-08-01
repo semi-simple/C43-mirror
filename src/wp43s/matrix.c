@@ -1971,6 +1971,7 @@ void mimRunFunction(int16_t func, uint16_t param) {
   bool_t isComplex = (getRegisterDataType(matrixIndex) == dtComplex34Matrix);
   real34_t re, im, re1, im1;
   bool_t converted = false;
+  bool_t liftStackFlag = getSystemFlag(FLAG_ASLIFT);
 
   if(isComplex) {
     real34Copy(VARIABLE_REAL34_DATA(&openMatrixMIMPointer.complexMatrix.matrixElements[i * openMatrixMIMPointer.header.matrixColumns + j]), &re1);
@@ -2062,6 +2063,8 @@ void mimRunFunction(int16_t func, uint16_t param) {
       real34Copy(&re1, &linkedMatrix.matrixElements[i * linkedMatrix.header.matrixColumns + j]);
     }
   }
+
+  if(liftStackFlag) setSystemFlag(FLAG_ASLIFT);
 
   #ifdef PC_BUILD
     refreshLcd(NULL);

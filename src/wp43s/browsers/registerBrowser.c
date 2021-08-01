@@ -45,6 +45,8 @@
   #ifndef SAVE_SPACE_DM42_8
     int16_t registerNameWidth;
 
+    hourGlassIconEnabled = false;
+
     if(calcMode != CM_REGISTER_BROWSER) {
       if(calcMode == CM_AIM) {
         hideCursor();

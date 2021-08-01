@@ -94,6 +94,8 @@
 
     uint16_t x, y, first;
 
+    hourGlassIconEnabled = false;
+
     if(calcMode != CM_FONT_BROWSER) {
       previousCalcMode = calcMode;
       calcMode = CM_FONT_BROWSER;

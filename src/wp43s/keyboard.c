@@ -276,6 +276,10 @@ bool_t lastshiftG = false;
           else if((calcMode == CM_NIM) && ((item==ITM_DRG || item == ITM_DMS2 || item == ITM_dotD) && !catalog)) {   //JM
             addItemToNimBuffer(item);
           }                                                                                      //JM
+          else if(calcMode == CM_MIM && softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_M_EDIT) {
+            addItemToBuffer(item);
+          }
+
 
 
           else if(item > 0) { // function
@@ -1146,6 +1150,7 @@ bool_t lowercaseselected;
   }
 
 
+
   static void menuUp(void) {
     int16_t menuId = softmenuStack[0].softmenuId;
     int16_t sm = softmenu[menuId].menuItem;
@@ -1406,9 +1411,11 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_MIM:
-        mimEnter(true);
-        mimFinalize();
-        calcModeNormal();
+        if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_M_EDIT) {
+          mimEnter(true);
+          mimFinalize();
+          calcModeNormal();
+        }
         popSoftmenu(); // close softmenu dedicated for the MIM
         break;
 
@@ -1750,6 +1757,9 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         break;                            //JM ^^
           
       case CM_MIM:
+        if(currentSoftmenuScrolls()) {
+          menuUp();
+        }
         break;
 
       default:
@@ -1863,6 +1873,9 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         break;                            //JM ^^
           
       case CM_MIM:
+        if(currentSoftmenuScrolls()) {
+          menuDown();
+        }
         break;
 
       default:

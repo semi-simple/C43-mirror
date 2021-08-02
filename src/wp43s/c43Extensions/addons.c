@@ -310,6 +310,10 @@ void fnMultiplySI(uint16_t multiplier)
   char divi[20];
   mult[0] = 0;
   divi[0] = 0;
+  if(multiplier > 100 && multiplier <= 100 + 18) addzeroes(mult, multiplier - 100); else //JM optimized
+  if(multiplier < 100 && multiplier >= 100 - 18) addzeroes(divi, 100 - multiplier); else //JM optimized
+  if(multiplier == 100) strcpy(mult, "1");  //JM optimized
+/* JM optimized
   switch(multiplier) {
   case 100 + 0:     strcpy(mult, "1");      break; //unity
   case 100 + 3:     addzeroes(mult, 3);     break; //kilo
@@ -326,7 +330,7 @@ void fnMultiplySI(uint16_t multiplier)
   case 100 - 18:    addzeroes(divi, 18);    break; //atto
   default:    break;
   }
-
+*/
   setSystemFlag(FLAG_ASLIFT);
   liftStack();
   longInteger_t lgInt;

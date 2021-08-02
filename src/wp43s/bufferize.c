@@ -62,6 +62,9 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
 /*JM*/ //nextChar = NC_NORMAL;
 
     if(subOrSup == NC_SUBSCRIPT) {
+      if(item >= ITM_0 && item <= ITM_9) return item + (ITM_SUB_9 - ITM_9); else //JM optimized
+      if(item >= ITM_a && item <= ITM_z) return item + (ITM_SUB_z - ITM_z); else //JM optimized
+      if(item >= ITM_A && item <= ITM_Z) return item + (ITM_SUB_Z - ITM_Z); else //JM optimized
       switch(item) {
         case ITM_alpha    : return ITM_SUB_alpha;
         case ITM_delta    : return ITM_SUB_delta;
@@ -73,6 +76,7 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
         case ITM_s        : return ITM_SUB_s;
         case ITM_PLUS     : return ITM_SUB_PLUS;
         case ITM_MINUS    : return ITM_SUB_MINUS;
+/* //JM optimized
         case ITM_0        :
         case ITM_1        :
         case ITM_2        :
@@ -129,6 +133,7 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
         case ITM_X        :
         case ITM_Y        :
         case ITM_Z        : return item + (ITM_SUB_Z - ITM_Z);
+*/
         default           : return item;
       }
     }
@@ -412,6 +417,14 @@ void kill_ASB_icon(void) {
             mimAddNumber(item);
             break;
 
+#ifdef SAVE_SPACE_DM42_11
+          case ITM_STO : //JM optimized
+          case ITM_RCL : //JM optimized
+              lastErrorCode = ERROR_NONE;
+              mimEnter(true);
+              runFunction(item);
+              break;
+#else //SAVE_SPACE_DM42_11
           case ITM_STO :
           case ITM_STOADD :
           case ITM_STOSUB :
@@ -839,7 +852,7 @@ void kill_ASB_icon(void) {
           case ITM_Kk :
           case ITM_Ek :
           case ITM_ANGLE :
-          
+#endif //SAVE_SPACE_DM42_11          
           case ITM_op_a :                 //C43
           case ITM_op_a2:                 //C43
           case ITM_op_j :                 //C43

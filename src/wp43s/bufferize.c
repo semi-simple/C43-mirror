@@ -748,10 +748,39 @@ void kill_ASB_icon(void) {
           case ITM_FENtoM :
           case ITM_MtoFEN :
 
+          case ITM_NSIGMA :
+          case ITM_SIGMAx :
+          case ITM_SIGMAy :
+          case ITM_SIGMAx2 :
+          case ITM_SIGMAx2y :
+          case ITM_SIGMAy2 :
+          case ITM_SIGMAxy :
+          case ITM_SIGMAlnxy :
+          case ITM_SIGMAlnx :
+          case ITM_SIGMAln2x :
+          case ITM_SIGMAylnx :
+          case ITM_SIGMAlny :
+          case ITM_SIGMAln2y :
+          case ITM_SIGMAxlny :
+          case ITM_SIGMAx2lny :
+          case ITM_SIGMAlnyonx :
+          case ITM_SIGMAx2ony :
+          case ITM_SIGMA1onx :
+          case ITM_SIGMA1onx2 :
+          case ITM_SIGMAxony :
+          case ITM_SIGMA1ony :
+          case ITM_SIGMA1ony2 :
+          case ITM_SIGMAx3 :
+          case ITM_SIGMAx4 :
+
           case ITM_ABS :
+          case ITM_BATT :
           case ITM_BN :
           case ITM_BNS :
           case ITM_CONJ :
+          case ITM_CORR :
+          case ITM_COV :
+          case ITM_BESTFQ :
           case ITM_DAY :
           case ITM_DEGto :
           case ITM_DMSto :
@@ -760,30 +789,45 @@ void kill_ASB_icon(void) {
           case ITM_ERFC :
           case ITM_EXPT :
           case ITM_FIB :
+          case ITM_FLASH :
           case ITM_GD :
           case ITM_GDM1 :
           case ITM_GRADto :
           case ITM_IM :
           case ITM_JtoD :
+          case ITM_LASTX :
           case ITM_LNGAMMA :
+          case ITM_LocRQ :
           case ITM_MANT :
+          case ITM_MEM :
           case ITM_MONTH :
           case ITM_sincpi :
           case ITM_RADto :
+          case ITM_RAN :
           case ITM_RE :
           case ITM_REexIM :
+          case ITM_RMQ :
           case ITM_EX1 :
           case ITM_ROUNDI :
+          case ITM_SDIGS :
           case ITM_SIGN :
+          case ITM_ISM :
+          case ITM_SMW :
+          case ITM_SSIZE :
           case ITM_LN1X :
+          case ITM_SW :
+          case ITM_SXY :
+          case ITM_TICKS :
           case ITM_UNITV :
           case ITM_WDAY :
           case ITM_WM :
           case ITM_WP :
           case ITM_WM1 :
+          case ITM_XW :
           case ITM_YEAR :
           case ITM_GAMMAX :
           case ITM_zetaX :
+          case ITM_STDDEVPOP :
           case ITM_M1X :
           case ITM_toHMS :
           case ITM_MPItoR :

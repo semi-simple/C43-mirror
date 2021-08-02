@@ -29,14 +29,26 @@
 
 #include "wp43s.h"
 
+#ifdef DMCP_BUILD
+  TO_QSPI uint32_t frequency[10] = {164814, 220000, 246942, 277183, 293665, 329628, 369995, 415305, 440000, 554365};
+#endif // DMCP_BUILD
+
 static void playTone(uint16_t toneNum) {
 #if defined(TESTSUITE_BUILD)
 #elif defined(PC_BUILD) && defined(__MINGW64__)
   char filename[32];
-  sprintf(filename, "res\\tone\\tone%" PRIu16 ".wav", toneNum);
-  PlaySoundA(filename, NULL, SND_FILENAME | SND_SYNC | SND_NODEFAULT);
+  if(toneNum < 10) {
+    sprintf(filename, "res\\tone\\tone%" PRIu16 ".wav", toneNum);
+    PlaySoundA(filename, NULL, SND_FILENAME | SND_SYNC | SND_NODEFAULT);
+  }
 #elif defined(PC_BUILD) && defined(__APPLE__)
 #elif defined(PC_BUILD)
+#elif defined(DMCP_BUILD)
+  if(toneNum < 10) {
+    start_buzzer_freq(frequency[toneNum]);
+    sys_delay(250);
+    stop_buzzer();
+  }
 #endif
 }
 

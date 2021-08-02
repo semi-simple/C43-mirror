@@ -179,10 +179,10 @@ uint32_t indic_y = SCREEN_HEIGHT-1;
 typedef struct {
   uint16_t itemNr;            ///<
   char     *itemName;         ///<
-} fuction_t;
+} function_t;
 
 
-TO_QSPI const fuction_t indexOfFunctions[] = {
+TO_QSPI const function_t indexOfFunctions[] = {
 #ifndef SAVE_SPACE_DM42_2
 //            function                      functionName
 //XEQM TYPE1 ORIGINAL FULL SELECTED LIST
@@ -521,7 +521,6 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //           {ITM_HN,   "HN"},
 //           {ITM_HNP,   "HNP"},
            {ITM_IM,   "IM"},
-//           {ITM_INDEX,   "INDEX"},
 //           {ITM_IXYZ,   "IXYZ"},
 //           {ITM_IGAMMAP,   "IGAMMAP"},
 //           {ITM_IGAMMAQ,   "IGAMMAQ"},
@@ -560,14 +559,10 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
            {ITM_MULPI,   "MULPI"},
 //           {ITM_MVAR,   "MVAR"},
 //           {ITM_M_DELR,   "M.DELR"},
-//           {ITM_M_DIM,   "M.DIM"},
 //           {ITM_M_DIMQ,   "M.DIM?"},
 //           {ITM_MDY,   "M.DY"},
-//           {ITM_M_EDI,   "M.EDI"},
-//           {ITM_M_EDIN,   "M.EDIN"},
 //           {ITM_M_GET,   "M.GET"},
 //           {ITM_M_GOTO,   "M.GOTO"},
-//           {ITM_M_GROW,   "M.GROW"},
 //           {ITM_M_INSR,   "M.INSR"},
 //           {ITM_M_LU,   "M.LU"},
 //           {ITM_M_NEW,   "M.NEW"},
@@ -575,7 +570,6 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //           {ITM_M_PUT,   "M.PUT"},
 //           {ITM_M_RR,   "M.R<>R"},
            {ITM_sincpi,   "SINCPI"},
-//           {ITM_M_WRAP,   "M.WRAP"},
 //           {ITM_NOP,   "NOP"},
 //           {ITM_OFF,   "OFF"},
 //           {ITM_DROPY,   "DROPY"},
@@ -606,6 +600,7 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
            {ITM_REexIM,   "RE<>IM"},
 //           {ITM_RM,   "RMODE"},
 //           {ITM_RMQ,   "RMODE?"},
+//           {ITM_DSP,   "DSP"},
 //           {ITM_RNORM,   "RNORM"},
            {ITM_EX1,   "E^X-1"},
 //           {ITM_RSD,   "RSD"},
@@ -614,6 +609,7 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //           {ITM_R_COPY,   "R-COPY"},
 //           {ITM_R_SORT,   "R-SORT"},
 //           {ITM_R_SWAP,   "R-SWAP"},
+//           {ITM_am,   "PSI(U,M)"},
 //           {ITM_STDDEVWEIGHTED,   "S"},
 //           {ITM_SAVE,   "SAVE"},
            {ITM_SCI,   "SCI"},
@@ -675,6 +671,7 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //           {ITM_XCIRC,   "X_CIRC"},
 //           {ITM_XtoDATE,   "X>DATE"},
 //           {ITM_XtoALPHA,   "X>ALPHA"},
+//           {ITM_M_QR,   "M.QR"},
 //           {ITM_YEAR,   "YEAR"},
 //           {ITM_YCIRC,   "Y_CIRC"},
 //           {ITM_YMD,   "Y.MD"},
@@ -686,6 +683,7 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //           {ITM_gammaXY,   "GAMMAXY"},
 //           {ITM_GAMMAXY,   "GAMMAXY"},
 //           {ITM_GAMMAX,   "GAMMA"},
+//           {ITM_YYX,   "YY(X)"},
 //           {ITM_DELTAPC,   "DELTA%"},
 //           {ITM_SCATTFACT,   "EPSILON"},
 //           {ITM_SCATTFACTm,   "EPSILONM"},
@@ -702,9 +700,14 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
            {ITM_M1X,   "(-1)^X"},
 //           {ITM_XMOD,   "CROSSMOD"},
 //           {ITM_toDATE,   ">DATE"},
+//           {ITM_sn,   "SN(U,M)"},
+//           {ITM_cn,   "CN(U,M)"},
+//           {ITM_dn,   "DN(U,M)"},
 //           {ITM_toHR,   ">HR"},
 //           {ITM_toHMS,   ">H.MS"},
 //           {ITM_toINT,   ">INT"},
+//           {ITM_MPItoR,   "MPI>R"},
+//           {ITM_RtoMPI,   "R>MPI"},
            {ITM_toREAL,   ">REAL"},
 //           {ITM_DtoDMS,   "D>D.MS"},
 //           {ITM_SHUFFLE,   "<>"},
@@ -719,7 +722,6 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //           {ITM_PARALLEL,   "PARL"},
 //           {ITM_M_TRANSP,   "[M]^T"},
 //           {ITM_M_INV,   "[M]^MINUS_1"},
-           {ITM_ANGLE,   "ARG"},
 //           {ITM_MULPIto,   "MULPI>"},
 //           {ITM_PRINTERADV,   "PRINTERADV"},
 //           {ITM_PRINTERCHAR,   "PRINTERCHAR"},
@@ -736,7 +738,11 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //           {ITM_PRINTERSIGMA,   "PRINTERSUM"},
 //           {ITM_PRINTERHASH,   "PRINTER#"},
 //           {ITM_FBR,   "FBR"},
+//           {ITM_Kk,   "K(M)"},
+//           {ITM_Ek,   "E(M)"},
+//           {ITM_PInk,   "PI(N,M)"},
            {ITM_EXIT1,   "EXIT"},
+//           {ITM_ANGLE,   "ANGLE"},
            {ITM_AIM,   "ALPHA"},
            {ITM_dotD,   "DOTD"},
 //           {ITM_SHOW,   "SHOW"},
@@ -747,6 +753,9 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
 //           {ITM_DET,   "DET"},
 //           {ITM_INVRT,   "INVRT"},
 //           {ITM_TRANS,   "TRANS"},
+//           {ITM_Fphik,   "F(PHI,M)"},
+//           {ITM_Ephik,   "E(PHI,M)"},
+//           {ITM_ZETAphik,   "ZETA(PHI,M)"},
 //           {ITM_EE_D2Y,   "D>Y"},
 //           {ITM_EE_Y2D,   "Y>D"},
 //           {ITM_EE_A2S,   "ATOSYM"},
@@ -832,6 +841,19 @@ TO_QSPI const fuction_t indexOfFunctions[] = {
            {ITM_CLGRF,   "CLGRF"},
            {ITM_PLOT_XY,   "PLOTXY"},
            {ITM_PLOTRST,   "PLTRST"}
+//           {ITM_T_EXPF,   "EXPF"},
+//           {ITM_T_LINF,   "LINF"},
+//           {ITM_T_LOGF,   "LOGF"},
+//           {ITM_T_ORTHOF,   "ORTHOF"},
+//           {ITM_T_POWERF,   "POWERF"},
+//           {ITM_T_GAUSSF,   "GAUSSF"},
+//           {ITM_T_CAUCHF,   "CAUCHF"},
+//           {ITM_T_PARABF,   "PARABF"},
+//           {ITM_T_HYPF,   "HYPF"},
+//           {ITM_T_ROOTF,   "ROOTF"},
+//           {ITM_RSTF,   "RESETF"},
+
+
 
 #endif //SAVE_SPACE_DM42_2
 
@@ -1021,7 +1043,11 @@ void execute_string(const char *inputstring, bool_t exec1, bool_t namescan) {
             case ',': //,
             case ' ': 
   //print_linestr(commandnumber,false);
-                     //printf("@@@ %s\n",commandnumber);
+                     #ifdef PC_BUILD_VERBOSE0
+                       #ifdef PC_BUILD
+                         printf("@@@ %s\n",commandnumber);
+                       #endif
+                     #endif
                      if(state_commands){
                         state_commands = false;                // Waiting for delimiter to close off and send command number: nnn<                 
                         #ifdef PC_BUILD_VERBOSE0
@@ -1274,6 +1300,12 @@ void execute_string(const char *inputstring, bool_t exec1, bool_t namescan) {
       gotlabels = true;                              //allow to run only once, unless
       if(!exec) exec = exec1; else exec = false;     //exec must run, and ensure it runs only once.
     }
+    #ifdef PC_BUILD_VERBOSE0
+      #ifdef PC_BUILD
+        printf(">>>end gotlabels=%i exec=%i \n",gotlabels,exec);
+      #endif
+    #endif
+
     exec_exit:
     exec = false;     //exec must run, and ensure it runs only once.
   #endif //TESTSUITE_BUILD
@@ -1418,6 +1450,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec, bool_t scan
 
   displaywords(line1);       //output  is  in  tmpString
 
+  strcpy(line1,tmpString);  
   #if (VERBOSE_LEVEL >= 2) 
     #ifdef DMCP_BUILD
       press_key();
@@ -1428,7 +1461,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec, bool_t scan
     clearScreen_old(false, true, true);
   #endif
 
-  execute_string(tmpString,exec, scanning);
+  execute_string(line1,exec, scanning);
 
   #if (VERBOSE_LEVEL >= 2) 
     #ifdef DMCP_BUILD
@@ -1459,6 +1492,7 @@ void fnXEQMENU(uint16_t XEQM_no) {
 
 
 void XEQMENU_loadAllfromdisk(void) {
+#ifndef SAVE_SPACE_DM42_2
 #ifndef TESTSUITE_BUILD
 //uint16_t Delay;
       clearScreen_old(false, true, true);
@@ -1477,6 +1511,7 @@ void XEQMENU_loadAllfromdisk(void) {
         ix++;
       }
     #endif
+#endif //SAVE_SPACE_DM42_2
 }
 
 
@@ -1527,6 +1562,7 @@ char line1[TMP_STR_LENGTH];
 
 
 void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGISTER TO DISK
+#ifndef SAVE_SPACE_DM42_2
   char tt[40]; 
   if(getRegisterDataType(REGISTER_X) == dtString) {
     xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X))+1);
@@ -1547,10 +1583,12 @@ void fnXEQMSAVE (uint16_t XEQM_no) {                                  //X-REGIST
       if(tt[0]!=0) export_string_to_filename(tmpString, OVERWRITE, "PROGRAMS", tt);
     #endif
   }
+#endif //SAVE_SPACE_DM42_2
 }
 
 
 void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to X-REGISTER
+#ifndef SAVE_SPACE_DM42_2
   #ifdef PC_BUILD
     printf("LOAD %d\n",XEQM_no);
   #endif
@@ -1570,14 +1608,13 @@ void fnXEQMLOAD (uint16_t XEQM_no) {                                  //DISK to 
   liftStack();
   reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(len), amNone);
   strcpy(REGISTER_STRING_DATA(REGISTER_X),line1 + TMP_STR_LENGTH/2);
-
+#endif //SAVE_SPACE_DM42_2
 }
 
 
 
 
 void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
-
           if(aimBuffer[0] != 0) {          //JM if something already in the AIMB|UFFER when X-EDIT is called, store this in the stack first
             setSystemFlag(FLAG_ASLIFT);
             liftStack();
@@ -1676,6 +1713,7 @@ void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
 
 
 void fnXEQMXXEQ (uint16_t unusedButMandatoryParameter) {
+#ifndef SAVE_SPACE_DM42_2
   char line1[XEQ_STR_LENGTH_LONG];
   if(getRegisterDataType(REGISTER_X) == dtString) {
     xcopy(line1, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
@@ -1684,14 +1722,16 @@ void fnXEQMXXEQ (uint16_t unusedButMandatoryParameter) {
     execute_string(line1,!EXEC,  !SCAN); //Run to catch all label names
     execute_string(line1, EXEC,  !SCAN); //Run to execute
   }
-
+#endif //SAVE_SPACE_DM42_2
 }
 
 
 
 void fnXEQNEW (uint16_t unusedButMandatoryParameter) {
+#ifndef SAVE_SPACE_DM42_2
   fnStrtoX("XEQC43 XEQLBL 01 XXXXXX ");
   fnXEQMEDIT(0);
+#endif //SAVE_SPACE_DM42_2
 }
 
 
@@ -1715,6 +1755,7 @@ void fnCla(uint16_t unusedButMandatoryParameter){
 
 void fnCln(uint16_t unusedButMandatoryParameter){
   #ifndef TESTSUITE_BUILD
+    nimNumberPart = NP_EMPTY;
     calcModeNim(0);
     last_CM=252;
     refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done

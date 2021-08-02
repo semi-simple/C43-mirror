@@ -106,6 +106,8 @@ void showShiftState(void) {
  *
  ***********************************************/
 void resetShiftState(void) {
+  fnTimerStop(TO_FG_LONG);
+  fnTimerStop(TO_FG_TIMR);
   if(shiftF || shiftG) {                                                        //vv dr
     shiftF = false;
     shiftG = false;
@@ -187,6 +189,7 @@ void fg_processing_jm(void) {
       if(fnTimerGetStatus(TO_3S_CTFF) == TMR_RUNNING) {
         JM_SHIFT_HOME_TIMER1++;
         if(JM_SHIFT_HOME_TIMER1 >= 3) {
+          fnTimerStop(TO_FG_TIMR);      //dr
           fnTimerStop(TO_3S_CTFF);
           shiftF = false;               // Set it up, for flags to be cleared below.
           shiftG = true;

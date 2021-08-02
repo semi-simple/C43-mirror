@@ -42,7 +42,10 @@
    * \return void
    ***********************************************/
   void registerBrowser(uint16_t unusedButMandatoryParameter) {
+  #ifndef SAVE_SPACE_DM42_8
     int16_t registerNameWidth;
+
+    hourGlassIconEnabled = false;
 
     if(calcMode != CM_REGISTER_BROWSER) {
       if(calcMode == CM_AIM) {
@@ -313,5 +316,6 @@
         registerBrowser(NOPARAM);
       }
     }
+  #endif //SAVE_SPACE_DM42_8
   }
 #endif // TESTSUITE_BUILD

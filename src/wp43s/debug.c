@@ -346,6 +346,8 @@ void debugNIM(void) {
     if(df == DF_FIX) return "FIX";
     if(df == DF_SCI) return "SCI";
     if(df == DF_ENG) return "ENG";
+    if(df == DF_SF)  return "SIG"; //JM
+    if(df == DF_UN)  return "UNT"; //JM
 
     return "???";
   }

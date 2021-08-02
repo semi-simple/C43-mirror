@@ -56,7 +56,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   clearSystemFlag(FLAG_FRACT);
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
-  if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {
+  if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {     //JM let FIX operate on time as well
     fnDisplayFormatTime(displayFormatN);
   }
 
@@ -333,7 +333,8 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   #undef MAX_DIGITS
   #define MAX_DIGITS 37 // 34 + 1 before (used when rounding from 9.999 to 10.000) + 2 after (used for rounding and ENG display mode)
 
-  uint8_t charIndex, valueIndex, digitToRound=0;
+  uint8_t charIndex, valueIndex;
+  int16_t digitToRound=0;
   uint8_t *bcd;
   int16_t digitsToDisplay=0, numDigits, digitPointer, firstDigit, lastDigit, i, digitCount, digitsToTruncate, exponent;
   int32_t sign;
@@ -616,22 +617,24 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
     else { // display fix number of digits without ten exponent factor
       // Number of digits to truncate
 
-      int displayFormatDigits_active;                                    //JM SIGFIGNEW vv
-      if(SigFigMode >= 1) {
-        displayFormatDigits_active =  max((SigFigMode+1)-exponent-1,0);  //Convert SIG to FIX.
+      uint8_t displayFormatDigits_Active;                                    //JM SIGFIGNEW vv
+      if(SigFigMode !=0 ) {
+        displayFormatDigits_Active =  min(max((SigFigMode+1)-exponent-1,0),255);  //Convert SIG to FIX.
       } else {
-        displayFormatDigits_active = displayFormatDigits;
+        displayFormatDigits_Active = displayFormatDigits;
       }                                                                  //JM SIGFIGNEW ^^
-
-      digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits_active - exponent - 1, 0);   //JM SIGFIGNEW hackpoint
+      //printf(">>>## %u %u %u\n",displayFormatDigits_Active,displayFormatDigits, numDigits);
+      digitsToTruncate = max(numDigits - (int16_t)displayFormatDigits_Active - exponent - 1, 0);   //JM SIGFIGNEW hackpoint
       numDigits -= digitsToTruncate;
       lastDigit -= digitsToTruncate;
 
-      if(SigFigMode >= 1) {                                              //JM SIGFIGNEW vv
+      if(SigFigMode != 0 && firstDigit + SigFigMode <= 34) {                                              //JM SIGFIGNEW vv
         digitToRound = firstDigit + SigFigMode;
       } else {
         digitToRound = lastDigit;
       }                                                                  //JM SIGFIGNEW ^^
+
+      //printf(">>> ###A %d %d %d %d %d |",numDigits, firstDigit, lastDigit, digitToRound, exponent); for(i=firstDigit; i<=lastDigit; i++) {printf("%c",48+bcd[i]);} printf("\n");
 
       // Round the displayed number
       if(bcd[digitToRound+1] >= 5) {
@@ -641,22 +644,26 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
       // Transfert the carry
       while(bcd[digitToRound] == 10) {
         bcd[digitToRound--] = 0;
-        numDigits--;
+        if(SigFigMode == 0) numDigits--;
         bcd[digitToRound]++;
       }
+
+      lastDigit = digitToRound; //JM
 
       // Case when 9.9999 rounds to 10.0000
       if(digitToRound < firstDigit) {
         firstDigit--;
         lastDigit = firstDigit;
         numDigits = 1;
+        if(SigFigMode != 0) displayFormatDigits_Active--;
         exponent++;
       }
 
+
       //JM SIGFIG - blank out non-sig digits to the right                 //JM SIGFIGNEW vv
-      if(SigFigMode>=1) {
+      if(SigFigMode != 0) {
         if((SigFigMode+1)-exponent-1 < 0) {
-           for (digitCount = firstDigit + (SigFigMode+1); digitCount <= lastDigit; digitCount++) {
+           for (digitCount = firstDigit + (SigFigMode+1); digitCount <= 34; digitCount++) {
             bcd[digitCount] = 0;
             }
         }
@@ -713,7 +720,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
         }
 
         // Zeros after last significant digit
-        for(i=1; i<=(int16_t)displayFormatDigits_active+exponent+1-numDigits; i++, digitCount--) {   //JM SIGFIGNEW hackpoint
+        for(i=1; i<=(int16_t)displayFormatDigits_Active+exponent+1-numDigits; i++, digitCount--) {   //JM SIGFIGNEW hackpoint
           if(groupingGap!=0 && digitCount%(uint16_t)groupingGap==0) {
             xcopy(displayString + charIndex, separator, 2);
             charIndex += 2;
@@ -726,7 +733,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
       }
       else { // zero or positive exponent
   //JM SIGFIGNEW hackpoint
-        for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + exponent + (int16_t)displayFormatDigits_active; digitPointer++, digitCount--) { // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123 
+        for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + exponent + (int16_t)displayFormatDigits_Active; digitPointer++, digitCount--) { // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123 
         //for(digitCount=exponent, digitPointer=firstDigit; digitPointer<=firstDigit + min(exponent + (int16_t)displayFormatDigits, 15); digitPointer++, digitCount--) { // This line is for fixed number of displayed digits, e.g. in FIX 15: 123 456.789 123 456 8
           if(digitCount!=-1 && digitCount!=exponent && groupingGap!=0 && modulo(digitCount, (uint16_t)groupingGap) == (uint16_t)groupingGap - 1) {
             xcopy(displayString + charIndex, separator, 2);
@@ -1330,10 +1337,18 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
 
 void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, bool_t determineFont) {
   int16_t i, j, k, unit, gap, digit, bitsPerDigit, maxDigits, base;
-  uint64_t number, sign;
+  uint64_t orgnumber, number, sign;
+
+char str3[4];
+j = 0;                                    //JM Pre-load X: 
+str3[j] = displayString[j]; j++;
+str3[j] = displayString[j]; j++;
+str3[j] = displayString[j]; j++;
+str3[j] = 0;
 
   base    = getRegisterTag(regist);
   number  = *(REGISTER_SHORT_INTEGER_DATA(regist));
+  orgnumber = number;
 
   if(base <= 1 || base >= 17) {
     sprintf(errorMessage, "In function shortIntegerToDisplayString: %d is an unexpected value for base!", base);
@@ -1437,6 +1452,14 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
     displayString[i++] = '-';
   }
 
+if( (str3[0] >= 'A' && str3[0] <= 'Z' && str3[1] == ':' && str3[2] == ' ' && str3[3] == 0) && !(base == 2 && orgnumber > 0x3FFF)) 
+{             //JM SHOW
+  displayString[i++] = str3[2];
+  displayString[i++] = str3[1];
+  displayString[i++] = str3[0];
+}
+
+
   if(determineFont) { // The font is not yet determined
     // 1st try: numeric font digits from 30 to 39
     fontForShortInteger = &numericFont;
@@ -1499,7 +1522,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
     strcat(displayString, STD_BASE_2);
     displayString[strlen(displayString) - 1] += base - 2;
 
-    if(temporaryInformation == TI_SHOW_REGISTER_BIG || stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {     //JMSHOW
+    if(/*temporaryInformation == TI_SHOW_REGISTER_BIG ||*/ stringWidth(displayString, fontForShortInteger, false, false) < SCREEN_WIDTH) {     //JMSHOW
       return;
     }
 
@@ -1534,7 +1557,7 @@ void shortIntegerToDisplayString(calcRegister_t regist, char *displayString, boo
       moreInfoOnError("In function shortIntegerToDisplayString: the integer data representation is too wide (1)!", displayString, NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
 
-    strcpy(displayString, "Integer data representation to wide!");
+    strcpy(displayString, "Integer data representation too wide!");
   }
 
   else { // the font is already determined (standard font)
@@ -2175,10 +2198,35 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
 
 
 
+void RegName(void) {
+  char ss[3];
+  ss[0]=0;
+  ss[1]=0;
+  if(SHOWregis >= 0 && SHOWregis < 100) {
+    snprintf(tmpString + 2100, 10, "%d:", SHOWregis);
+  } else {
+    switch (SHOWregis) {
+      case REGISTER_X: ss[0]='X'; break;
+      case REGISTER_Y: ss[0]='Y'; break;
+      case REGISTER_Z: ss[0]='Z'; break;
+      case REGISTER_T: ss[0]='T'; break;
+      case REGISTER_A: ss[0]='A'; break;
+      case REGISTER_B: ss[0]='B'; break;
+      case REGISTER_C: ss[0]='C'; break;
+      case REGISTER_D: ss[0]='D'; break;
+      case REGISTER_L: ss[0]='L'; break;
+      case REGISTER_I: ss[0]='I'; break;
+      case REGISTER_J: ss[0]='J'; break;
+      case REGISTER_K: ss[0]='K'; break;
+      default: break;
+    }
+  }
+  strcpy(tmpString + 2100, ss);
+  strcat(tmpString + 2100, ": ");
+}
 
 
 void SHOW_reset(void){
-  char ss[3];
   uint8_t ix;
 
   for(ix=0; ix<=8; ix++) { //L1 ... L7
@@ -2186,29 +2234,7 @@ void SHOW_reset(void){
   }
 
   temporaryInformation = TI_SHOW_REGISTER_SMALL;
-
-  ss[0]=0;
-  ss[1]=0;
-  if(SHOWregis >= 0 && SHOWregis < 100) {
-    snprintf(tmpString + 2100, 10, "%d:", SHOWregis);
-  } else
-  switch (SHOWregis) {
-    case REGISTER_X: ss[0]='X'; break;
-    case REGISTER_Y: ss[0]='Y'; break;
-    case REGISTER_Z: ss[0]='Z'; break;
-    case REGISTER_T: ss[0]='T'; break;
-    case REGISTER_A: ss[0]='A'; break;
-    case REGISTER_B: ss[0]='B'; break;
-    case REGISTER_C: ss[0]='C'; break;
-    case REGISTER_D: ss[0]='D'; break;
-    case REGISTER_L: ss[0]='L'; break;
-    case REGISTER_I: ss[0]='I'; break;
-    case REGISTER_J: ss[0]='J'; break;
-    case REGISTER_K: ss[0]='K'; break;
-    default: break;
-  }
-  strcpy(tmpString + 2100, ss);
-  strcat(tmpString + 2100, ": ");
+  RegName();
 }
 
 
@@ -2224,6 +2250,8 @@ void checkAndEat(int16_t *source, int16_t last, int16_t *dest) {
 
 
 void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified by JM from the original fnShow
+#ifndef SAVE_SPACE_DM42_9
+
 #ifndef TESTSUITE_BUILD
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
   bool_t savedUNITDisplay = UNITDisplay;
@@ -2558,8 +2586,8 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
       #endif
       temporaryInformation = TI_SHOW_REGISTER_BIG;
 
-      shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
-    
+      shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true); //jm include X: 
+/*
       if(getRegisterTag(SHOWregis) == 2) {
         source = 2100;
         dest = 2400;
@@ -2577,17 +2605,19 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           source++;
         }
         tmpString[dest]=0;
-      } else {
+      } 
+*/
+//      else {
         strcpy(tmpString + 2400,tmpString + 2100);
-      }
+//      }
  	
-
       last = 2400 + stringByteLength(tmpString + 2400);
       source = 2400;
+      tmpString[0]=0;
       for(d=0; d<=900 ; d+=300) {
         dest = d;
         if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+        while(source < last) {
           tmpString[dest] = tmpString[source];
           if(tmpString[dest] & 0x80) {
             tmpString[++dest] = tmpString[++source];
@@ -2600,67 +2630,31 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 
       convertShortIntegerRegisterToUInt64(SHOWregis, &aa, &nn);
       aa = getRegisterTag(SHOWregis);
+
       switch(aa){
-      	case 2: if(nn <= 0x00000000FFFFFFFF) {
-      		      aa2=0;  aa3=8;  aa4=16; break;
-      	        } else {
-      	          aa2=0;  aa3=0;  aa4=0; break;
-      	        }
-      	case 3: if(nn <= 0x00000000FFFFFFFF) {
-      		      aa2=0;  aa3=8;  aa4=16; break;
-      	        } else {
-      	          aa2=0;  aa3=0;  aa4=16; break;
-      	        }
-      	case 4: if(nn <= 0x00000000FFFFFFFF) {
-      		      aa2=8;  aa3=10;  aa4=16; break;
-      	        } else {
-      	          aa2=0;  aa3=8;  aa4=16; break;
-      	        }
-      	case 5:
-      	case 6:
-      	case 7: if(nn <= 0x00000000FFFFFFFF) {
-      		      aa2=8;  aa3=10;  aa4=16; break;
-      	        } else 
-      	        if(nn <= 0x003FFFFFFFFFFFFF) {
-      	          aa2=0;  aa3=8;  aa4=16; break;
-      	        } else {
-      	          aa2=0;  aa3=0;  aa4=16; break;
-      	        }
-      	case  9:
-      	case 11: if(nn <= 0x001FFFFFFFFFFFFF) {
-      	           aa2= 8;  aa3=10;  aa4=16; break;
-      	         } else {
-      	           aa2= 0;  aa3= 8;  aa4=16; break;
-      	         }
-      	case 12:
-      	case 13:
-      	case 14: 
-      	case 15: if(nn <= 0x001FFFFFFFFFFFFF) {
-      	           aa2= 8;  aa3=10;  aa4=16; break;
-      	         } else {
-      	           aa2=10;  aa3= 0;  aa4=16; break;
-      	         }
-      	case 16: if(nn <= 0x00000000FFFFFFFF) {
-      	           aa2=4;  aa3= 8;  aa4=10; break;
-      	         } else {
-      	           aa2=10;  aa3= 0;  aa4=8; break;
-      	         }
-      	case 10: if(nn <= 0x00000000FFFFFFFF) {
-      	           aa2=4;  aa3= 8;  aa4=16; break;
-      	         } else {
-      	           aa2=0;  aa3= 8;  aa4=16; break;
-      	         }
-      	case  8: if(nn <= 0x00000000FFFFFFFF) {
-      	           aa2=4;  aa3=10;  aa4=16; break;
-      	         } else {
-      	           aa2=10;  aa3=0;  aa4=16; break;
-      	         }
+        case  2: aa2=10;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+        case  4: aa2= 2;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+        case  8: aa2= 2;  aa3=10;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+        case 10: aa2= 2;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+        case 16: aa2= 2;  aa3= 8;  aa4=10; break;   //Keeping the 2 8 16 sequence where possible
+
+        case  3:
+        case  5:
+        case  6:
+        case  7:
+        case  9:
+        case 11:
+        case 12:
+        case 13:
+        case 14: 
+        case 15: aa2=10;  aa3= 8;  aa4=16; break;
       }
 
 
       if(aa2){
         setRegisterTag(SHOWregis,aa2);
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+        RegName();
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
@@ -2668,7 +2662,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         for(d=300; d<=900 ; d+=300) {
           dest = d;
           if(dest != 300){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          while(source < last) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
               tmpString[++dest] = tmpString[++source];
@@ -2680,8 +2674,9 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         }
       }
       if(aa3){
+        RegName();
         setRegisterTag(SHOWregis,aa3);
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
@@ -2689,7 +2684,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         for(d=600; d<=900 ; d+=300) {
           dest = d;
           if(dest != 600){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          while(source < last) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
               tmpString[++dest] = tmpString[++source];
@@ -2701,8 +2696,9 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         }
       }
       if(aa4){
+        RegName();
         setRegisterTag(SHOWregis,aa4);
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2103, true);
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
         strcpy(tmpString + 2400,tmpString + 2100);
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
@@ -2710,7 +2706,7 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
         for(d=900; d<=900 ; d+=300) {
           dest = d;
           if(dest != 900){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+          while(source < last) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
               tmpString[++dest] = tmpString[++source];
@@ -2836,5 +2832,5 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
   #endif
 
 #endif //TESTSUITE_BUILD
-
+#endif //#ifndef SAVE_SPACE_DM42_9
 }

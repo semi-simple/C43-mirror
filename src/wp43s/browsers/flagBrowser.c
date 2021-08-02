@@ -34,8 +34,8 @@
 #include "wp43s.h"
 
 
-
 #ifndef TESTSUITE_BUILD
+#ifndef SAVE_SPACE_DM42_8
   static void oneSystemFlag(uint16_t systemFlag, const char *systemFlagNamename, int16_t *line, bool_t *firstSystemFlag) {
     if(getSystemFlag(systemFlag)) {
       if(stringWidth(tmpString + CHARS_PER_LINE * *line, &standardFont, true, true) + stringWidth(systemFlagNamename, &standardFont, true, false) <= SCREEN_WIDTH - 1 - 8) { // SPACE is 8 pixel wide
@@ -52,7 +52,7 @@
       }
     }
   }
-
+#endif //SAVE_SPACE_DM42_8
 
 
   /********************************************//**
@@ -62,9 +62,13 @@
    * \return void
    ***********************************************/
   void flagBrowser(uint16_t init) {
+  #ifndef SAVE_SPACE_DM42_8
+
     static int16_t line;
     int16_t f;
     bool_t firstFlag;
+
+    hourGlassIconEnabled = false;
 
     if(calcMode != CM_FLAG_BROWSER) {
       if(calcMode == CM_AIM) {
@@ -403,6 +407,7 @@
       //printf("leave new\n");
       flagBrowser(NOPARAM);
     }
+  #endif //SAVE_SPACE_DM42_8
   }
 #endif // TESTSUITE_BUILD
 

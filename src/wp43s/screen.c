@@ -499,7 +499,7 @@
       else {
         hideCursor();
       }
-      cursorBlink = !cursorBlink;
+    //cursorBlink = !cursorBlink;
     }
   }
 
@@ -658,7 +658,7 @@ void underline_softkey(int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear) {
 
 void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key shift longpress handler
                                              //   Processing cycles here while the key is pressed, that is, after PRESS #1, waiting for RELEASE #2
-  if((FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0)) {
+  if((FN_state = ST_1_PRESS1) && FN_timeouts_in_progress && (FN_key_pressed != 0) && !(softmenuStack[0].softmenuId==0 && jm_NO_BASE_SCREEN) ) {
 
     if(fnTimerGetStatus(TO_FN_LONG) == TMR_COMPLETED) {
       FN_handle_timed_out_to_EXEC = false;
@@ -722,8 +722,8 @@ void Shft_handler() {                        //JM SHIFT NEW vv
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
         Shft_timeouts = false;
-        fnTimerStop(TO_FG_LONG);
-        fnTimerStop(TO_FG_TIMR);
+      //fnTimerStop(TO_FG_LONG);                  // vv moved to resetShiftState()
+      //fnTimerStop(TO_FG_TIMR);                  // ^^
         resetShiftState();                        //force into no shift state, i.e. to wait
         if(HOME3) {
           #ifdef PC_BUILD          
@@ -751,7 +751,7 @@ void Shft_handler() {                        //JM SHIFT NEW vv
 void LongpressKey_handler() {
   if(fnTimerGetStatus(TO_CL_LONG) == TMR_COMPLETED) {
     if(JM_auto_longpress_enabled != 0) {
-      showFunctionName(JM_auto_longpress_enabled, 1000);            //fnClearStack(0);
+      showFunctionName(JM_auto_longpress_enabled, JM_TO_CL_LONG);
       JM_auto_longpress_enabled = 0;
     } 
   }
@@ -761,8 +761,8 @@ void LongpressKey_handler() {
 
 void Shft_stop() {
   Shft_timeouts = false;
-  fnTimerStop(TO_FG_LONG);
-  fnTimerStop(TO_FG_TIMR);
+//fnTimerStop(TO_FG_LONG);                  // vv moved to resetShiftState()
+//fnTimerStop(TO_FG_TIMR);                  // ^^
   resetShiftState();                        //force into no shift state, i.e. to wait
 }
   #ifndef DMCP_BUILD
@@ -1088,6 +1088,46 @@ uint8_t  displaymode = stdNoEnlarge;
   }
 
 
+  void showDisp(uint16_t offset, uint8_t _h1) {
+  #define line_h1 38
+
+        uint32_t w = stringWidthC43(tmpString + offset, stdnumEnlarge, nocompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+
+        w = stringWidthC43(tmpString + offset, stdEnlarge, nocompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, stdEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+
+        w = stringWidthC43(tmpString + offset, stdNoEnlarge, nocompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, stdNoEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+
+        w = stringWidthC43(tmpString + offset, numSmall, nocompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, numSmall, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+
+        w = stringWidthC43(tmpString + offset, numSmall, stdcompress, true, true);
+        if(w < SCREEN_WIDTH) {
+          showStringC43(tmpString + offset, numSmall, stdcompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+        w = stringWidth(tmpString + offset + 2, &standardFont, true, true);
+        if(w < SCREEN_WIDTH) {
+          showString(tmpString + offset + 2, &standardFont,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1 * _h1, vmNormal, true, true);
+          return;
+        }
+    }
+
+
 
 uint8_t lines    = 2;      //lines   0
 uint8_t y_offset = 3;
@@ -1308,12 +1348,12 @@ void force_refresh(void) {
   if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
     if(longpressDelayedkey2 != 0) {                              //  If a delayed key2 is defined, qeue it
       item = longpressDelayedkey2; 
-      delayInMs = FUNCTION_NOPTIME;
+      delayInMs = JM_TO_CL_LONG;
       longpressDelayedkey2 = 0;
     } else
     if(longpressDelayedkey3 != 0) {                              //  If a delayed key3 is defined, qeue it
       item = longpressDelayedkey3; 
-      delayInMs = FUNCTION_NOPTIME;
+      delayInMs = JM_TO_CL_LONG;
       longpressDelayedkey3 = 0;
     }
   }                                                              //JM^^
@@ -1700,35 +1740,18 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
 
         else if(temporaryInformation == TI_SHOW_REGISTER_BIG) {            //JMSHOW ^^
-          #define line_h1 38
           switch(regist) {
             // L1
-            case REGISTER_T: w = stringWidthC43(tmpString, stdnumEnlarge, nocompress, true, true);
-                             showStringC43(tmpString, stdnumEnlarge, nocompress, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true);
-                             #if defined VERBOSE_SCREEN && defined PC_BUILD
-                               printf("^^^^NEW SHOW: Display Register T: %s\n",tmpString);
-                             #endif //VERBOSE_SCREEN
+            case REGISTER_T: showDisp(0  ,0);
                              break;
             // L2 & L3
-            case REGISTER_Z: w = stringWidthC43(tmpString + 300, stdnumEnlarge, nocompress, true, true);
-                             showStringC43(tmpString + 300, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1, vmNormal, true, true);
-                             #if defined VERBOSE_SCREEN && defined PC_BUILD
-                               printf("^^^^NEW SHOW: Display Register Z: %s\n",tmpString + 300);
-                             #endif //VERBOSE_SCREEN
+            case REGISTER_Z: showDisp(300,1);
                              break;
             // L4 & L5
-            case REGISTER_Y: w = stringWidthC43(tmpString + 600, stdnumEnlarge, nocompress, true, true);
-                             showStringC43(tmpString + 600, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*2, vmNormal, true, true);
-                             #if defined VERBOSE_SCREEN && defined PC_BUILD
-                               printf("^^^^NEW SHOW: Display Register Y: %s\n",tmpString + 600);
-                             #endif //VERBOSE_SCREEN
+            case REGISTER_Y: showDisp(600,2);
                              break;
             // L6 & L7
-            case REGISTER_X: w = stringWidthC43(tmpString + 900, stdnumEnlarge, nocompress, true, true);
-                             showStringC43(tmpString + 900, stdnumEnlarge, nocompress,  SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_T_LINE + line_h1*3, vmNormal, true, true);
-                             #if defined VERBOSE_SCREEN && defined PC_BUILD
-                               printf("^^^^NEW SHOW: Display Register X: %s\n",tmpString + 900);
-                             #endif //VERBOSE_SCREEN
+            case REGISTER_X: showDisp(900,3);
                              break;
             default: {}
           }
@@ -1884,6 +1907,17 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
 
         else if(getRegisterDataType(regist) == dtReal34) {
+          if(temporaryInformation == TI_THETA_RADIUS) {
+            if(regist == REGISTER_Y) {
+              strcpy(prefix, "r =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+            else if(regist == REGISTER_X) {
+              strcpy(prefix, STD_theta " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
           if(temporaryInformation == TI_RADIUS_THETA) {
             if(regist == REGISTER_X) {
               strcpy(prefix, "r =");

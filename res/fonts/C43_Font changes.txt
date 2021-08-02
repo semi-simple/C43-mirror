@@ -71,3 +71,20 @@ WP43S font:
            New WP43S_StandardFont.ttf generated.
 
 2020-08-20 Changed USB icon U+2434
+           New WP43S_StandardFont.ttf generated.
+
+2021-05-02 Made + and - 16 pixels wide (1 pixel wider) in NumericFont
+           Reduced the space (U+0020) down to 8 pixels wide.
+
+
+WP43C font:
+2021-06-29 Copied 6 last glyphs in font from previous font, into the new WP43S font, and renamed back to C43
+           JM 6 Greek glyphs to WP43S_NumericFont.ttf.
+           Ϙ  GREEK LETTER ARCHAIC KOPPA
+           ϙ  GREEK SMALL LETTER ARCHAIC KOPPA   
+           Ϝ  GREEK LETTER DIGAMMA
+           ϝ  GREEK SMALL LETTER DIGAMMA
+           Ϡ  GREEK LETTER SAMPI
+           ϡ  GREEK SMALL LETTER SAMPI
+
+

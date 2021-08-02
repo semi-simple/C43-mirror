@@ -37,6 +37,9 @@
   #undef SAVE_SPACE_DM42_5
   #undef SAVE_SPACE_DM42_6
   #undef SAVE_SPACE_DM42_7
+  #undef SAVE_SPACE_DM42_8
+  #undef SAVE_SPACE_DM42_9
+  #undef SAVE_SPACE_DM42_10
   //Key layout option
   #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
   #undef  SWAP_TO_L42_ON_SIM
@@ -46,15 +49,18 @@
 
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
-  #define SAVE_SPACE_DM42   //Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
-  #define SAVE_SPACE_DM42_1 //STAT DEMOS 105-107-109
-  #define    SAVE_SPACE_DM42_2 //XEQM
-  #define SAVE_SPACE_DM42_3 //SOLVER
-  #define SAVE_SPACE_DM42_4 //XY GRAPHDEMOS
-  #define SAVE_SPACE_DM42_5 //fnShow (old)
-  #define SAVE_SPACE_DM42_6 //ELEC functions
-  #define SAVE_SPACE_DM42_7 //KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
-//  #undef  SAVE_SPACE_DM42          //switch off memoery saving options
+  #define SAVE_SPACE_DM42   //014984 bytes: Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
+  #define SAVE_SPACE_DM42_1 //001568 bytes: STAT DEMOS 105-107-109
+  #define SAVE_SPACE_DM42_2 // bytes: XEQM
+  #define SAVE_SPACE_DM42_4 //000736 bytes: XY GRAPHDEMOS
+    #define SAVE_SPACE_DM42_3 //002680 SOLVER (already excluded by XY GRAPHDEMOS)
+  #define SAVE_SPACE_DM42_5 //001168 bytes: SHOW (old WP43S on VIEW)
+  #define SAVE_SPACE_DM42_6 //001648 bytes: ELEC functions
+  #define SAVE_SPACE_DM42_7 //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
+  #define SAVE_SPACE_DM42_8 //007136 bytes: Standard Flag-, Register-, Font- Browser functions
+  #define SAVE_SPACE_DM42_9 //004448 bytes: SHOW (new C43)
+  #define SAVE_SPACE_DM42_10 // 005800  WP43S programming ...
+
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42
   //#undef  SWAP_TO_L1_ON_DM42              //JM comment once the template is available
@@ -88,7 +94,7 @@
 
 //Allow longpress CHS and EEX
 #define TESTING
-#undef TESTING
+//#undef TESTING
 
 
 //This is to allow the cursors to change the case. Normal on 43S. Off on C43
@@ -111,7 +117,28 @@
 
 #define BUFFER_SIZE 2             //dr muss 2^n betragen (8, 16, 32, 64 ...)
 //* Longpress repeat 
-#define FUNCTION_NOPTIME 800      //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS
+#define FUNCTION_NOPTIME   800   //JM SCREEN NOP TIMEOUT FOR FIRST 15 FUNCTIONS
+
+#define JM_SHIFT_TIMER     4000  //ms TO_FG_TIMR
+#define JM_TO_FG_LONG      580   //ms TO_FG_LONG
+
+#define JM_FN_DOUBLE_TIMER 150   //ms TO_FN_EXEC
+#define JM_TO_FN_LONG      400   //ms TO_FN_LONG  //  450 on 2020-03-13
+
+#ifdef DMCP_BUILD
+  #define JM_CLRDROP_TIMER 900   //ms TO_CL_DROP   //DROP
+  #define JM_TO_CL_LONG    800   //ms TO_CL_LONG   //CLSTK
+  #define JM_TO_3S_CTFF    900   //ms TO_3S_CTFF
+#else
+  #define JM_CLRDROP_TIMER 500   //ms TO_CL_DROP   //DROP
+  #define JM_TO_CL_LONG    800   //ms TO_CL_LONG   //CLSTK
+  #define JM_TO_3S_CTFF    600   //ms TO_3S_CTFF
+#endif
+
+#define JM_TO_KB_ACTV      6000  //ms TO_KB_ACTV
+
+
+
 
 #define JMSHOWCODES_KB3   // top line right   Single Double Triple
 #undef JMSHOWCODES_KB3
@@ -125,10 +152,7 @@
 //Backup here, not active. Meant for WP43S Master JM branch, to enable WP43S usage on C43 template (see config.c)
 #undef WP43S_ON_C43_USER_MODE       //Default setting
 
-
-#define INIT_RAMDUMP
-#undef INIT_RAMDUMP
-
+  
 
 
 //*********************************
@@ -167,7 +191,7 @@
 
 #ifdef LINUX
   #define _XOPEN_SOURCE                700 // see: https://stackoverflow.com/questions/5378778/what-does-d-xopen-source-do-mean
-#endif // __linux__ == 1
+#endif // LINUX
 
 
 #define DEBUG_STAT                       0 // PLOT & STATS verbose level can be 0, 1 or 2 (more)
@@ -250,8 +274,9 @@
 #define ERROR_WRITE_PROTECTED_VAR                 37
 #define ERROR_BAD_INPUT                           38 // This error is not in ReM and cannot occur (theoretically).
 #define ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX    39
+#define ERROR_NO_ERRORS_CALCULABLE                40
 
-#define NUMBER_OF_ERROR_CODES                     40
+#define NUMBER_OF_ERROR_CODES                     41
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
@@ -557,10 +582,10 @@ typedef enum {
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS     10
 
 // Number of constants
-#define NUMBER_OF_CONSTANTS_39                   183+2   //JM 2 additionalconstants
+#define NUMBER_OF_CONSTANTS_39                   187+2   //JM 2 additionalconstants
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
-#define NUMBER_OF_CONSTANTS_34                     8
+#define NUMBER_OF_CONSTANTS_34                    42
 
 #define MAX_FREE_REGION                           50 // Maximum number of free memory regions
 
@@ -598,7 +623,6 @@ typedef enum {
 #define CF_CAUCHY_FITTING                        128
 #define CF_GAUSS_FITTING                         256
 #define CF_ORTHOGONAL_FITTING                    512
-#define CF_RESET                                   0
 
 // Curve fitting excluding all other curve fitting bits, 10 bits
 #define CF_LINEAR_FITTING_EX                     (~CF_LINEAR_FITTING) & 0x01FF
@@ -981,7 +1005,7 @@ typedef enum {
 #define RADIX34_MARK_CHAR                    (getSystemFlag(FLAG_DECIMP) ? '.'       : ',')
 #define RADIX34_MARK_STRING                  (getSystemFlag(FLAG_DECIMP) ? "."       : ",")
 #define PRODUCT_SIGN                         (getSystemFlag(FLAG_MULTx)  ? STD_CROSS : STD_DOT)
-#define clearScreen()                        lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE)
+#define clearScreen()                        {lcd_fill_rect(0, 0, SCREEN_WIDTH, 240, LCD_SET_VALUE); clear_ul();}
 #define currentReturnProgramNumber           (currentSubroutineLevelData[0].returnProgramNumber)
 #define currentReturnLocalStep               (currentSubroutineLevelData[0].returnLocalStep)
 #define currentNumberOfLocalFlags            (currentSubroutineLevelData[1].numberOfLocalFlags)
@@ -1010,7 +1034,7 @@ typedef enum {
   #ifdef WIN32 // No DEBUG_PANEL mode for Windows
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0
-  #endif // __MINGW64__
+  #endif // WIN32
   #ifdef RASPBERRY // No DEBUG_PANEL mode for Raspberry Pi
     #undef  DEBUG_PANEL
     #define DEBUG_PANEL 0

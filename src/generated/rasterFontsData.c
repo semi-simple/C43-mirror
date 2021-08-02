@@ -70,16 +70,16 @@ TO_QSPI const font_t numericFont = {
      .data="\x08\x00\x49\x00\x2a\x00\x1c\x00\xff\x80\x1c\x00\x2a\x00\x49\x00\x08\x00"},
 
     // plus
-    {.charCode=0x002b, .colsBeforeGlyph= 0, .colsGlyph=12, .colsAfterGlyph= 3, .rowsAboveGlyph=12, .rowsGlyph=12, .rowsBelowGlyph= 8, .rank1=  0, .rank2=  0,
-     .data="\x06\x00\x06\x00\x06\x00\x06\x00\x06\x00\xff\xf0\xff\xf0\x06\x00\x06\x00\x06\x00\x06\x00\x06\x00"},
+    {.charCode=0x002b, .colsBeforeGlyph= 0, .colsGlyph=13, .colsAfterGlyph= 3, .rowsAboveGlyph=12, .rowsGlyph=13, .rowsBelowGlyph= 7, .rank1=  0, .rank2=  0,
+     .data="\x07\x00\x07\x00\x07\x00\x07\x00\x07\x00\xff\xf8\xff\xf8\xff\xf8\x07\x00\x07\x00\x07\x00\x07\x00\x07\x00"},
 
     // comma
     {.charCode=0x002c, .colsBeforeGlyph= 0, .colsGlyph= 5, .colsAfterGlyph= 3, .rowsAboveGlyph=23, .rowsGlyph= 9, .rowsBelowGlyph= 0, .rank1=  0, .rank2=  0,
      .data="\x70\xf8\xf8\xf8\x78\x38\x30\x30\x60"},
 
     // hyphen
-    {.charCode=0x002d, .colsBeforeGlyph= 0, .colsGlyph=12, .colsAfterGlyph= 3, .rowsAboveGlyph=17, .rowsGlyph= 3, .rowsBelowGlyph=12, .rank1=  0, .rank2=  0,
-     .data="\xff\xf0\xff\xf0\xff\xf0"},
+    {.charCode=0x002d, .colsBeforeGlyph= 0, .colsGlyph=13, .colsAfterGlyph= 3, .rowsAboveGlyph=17, .rowsGlyph= 3, .rowsBelowGlyph=12, .rank1=  0, .rank2=  0,
+     .data="\xff\xf8\xff\xf8\xff\xf8"},
 
     // period
     {.charCode=0x002e, .colsBeforeGlyph= 0, .colsGlyph= 5, .colsAfterGlyph= 3, .rowsAboveGlyph=23, .rowsGlyph= 5, .rowsBelowGlyph= 4, .rank1=  0, .rank2=  0,

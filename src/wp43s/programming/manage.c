@@ -88,6 +88,7 @@
 
 
 void scanLabelsAndPrograms(void) {
+#ifndef SAVE_SPACE_DM42_10
   uint32_t stepNumber = 0;
   uint8_t *nextStep, *step = beginOfProgramMemory;
 
@@ -154,6 +155,7 @@ void scanLabelsAndPrograms(void) {
   }
 
   defineCurrentProgramFromCurrentStep();
+#endif //SAVE_SPACE_DM42_10
 }
 
 
@@ -239,6 +241,7 @@ void defineCurrentProgramFromCurrentStep(void) {
 
 
 void fnPem(uint16_t unusedButMandatoryParameter) {
+#ifndef SAVE_SPACE_DM42_10
   #ifndef TESTSUITE_BUILD
     ///////////////////////////////////////////////////////////////////////////////////////
     // For this function to work properly we need the following variables set properly:
@@ -325,6 +328,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
       step = nextStep;
     }
   #endif // TESTSUITE_BUILD
+#endif //SAVE_SPACE_DM42_10
 }
 
 

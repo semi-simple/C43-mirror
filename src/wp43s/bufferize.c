@@ -843,6 +843,7 @@ void kill_ASB_icon(void) {
           case ITM_op_a :                 //C43
           case ITM_op_a2:                 //C43
           case ITM_op_j :                 //C43
+          case ITM_EE_EXP_TH :            //C43
           
             if(item == ITM_ANGLE) item = ITM_ARG;
             mimRunFunction(item, indexOfItems[item].param);

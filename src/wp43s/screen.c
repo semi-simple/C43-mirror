@@ -963,7 +963,7 @@
            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
            w = stringWidth(tmpString, &standardFont, true, true);
            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-        }            
+        }
       }
 
       else if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
@@ -1471,7 +1471,7 @@
             }
           }
 
-          else if(temporaryInformation == TI_CORR) {             
+          else if(temporaryInformation == TI_CORR) {
             if(regist == REGISTER_X) {
               prefix[0]=0;
               if(lrChosen == 0) {
@@ -1520,11 +1520,11 @@
           else if(temporaryInformation == TI_STATISTIC_SUMS) {
             realToInt32(SIGMA_N, w);
             if(regist == REGISTER_X && w > LIM) {
-              sprintf(prefix, "Plot memory full, continuing");                
+              sprintf(prefix, "Plot memory full, continuing");
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
-              sprintf(prefix, "Data point %03" PRId16, w);                
+              sprintf(prefix, "Data point %03" PRId16, w);
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
             }
@@ -1539,7 +1539,7 @@
                }
                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                //lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
-             }            
+             }
            }
 
           real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION, true);
@@ -1860,7 +1860,9 @@
         showSoftmenuCurrentPart();
         hourGlassIconEnabled = false;
         refreshStatusBar();
-        //for(int y=Y_POSITION_OF_REGISTER_Y_LINE; y<Y_POSITION_OF_REGISTER_Y_LINE + 2*REGISTER_LINE_HEIGHT; y++ ) setBlackPixel(SCREEN_WIDTH - largeur - 1, y); // For the real34 width test
+        #if (REAL34_WIDTH_TEST == 1)
+          for(int y=Y_POSITION_OF_REGISTER_Y_LINE; y<Y_POSITION_OF_REGISTER_Y_LINE + 2*REGISTER_LINE_HEIGHT; y++ ) setBlackPixel(SCREEN_WIDTH - largeur - 1, y);
+        #endif // (REAL34_WIDTH_TEST == 1)
         break;
 
       case CM_PLOT_STAT:

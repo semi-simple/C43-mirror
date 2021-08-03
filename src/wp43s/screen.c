@@ -946,6 +946,10 @@
         if(displayStack > 4 /* in case of overflow */) displayStack = 0;
       }
 
+      if(calcMode == CM_MIM && matrixIndex == REGISTER_X) {
+        displayStack += 1;
+      }
+
       if(temporaryInformation == TI_STATISTIC_LR && (getRegisterDataType(REGISTER_X) != dtReal34)) {
         if(regist == REGISTER_X) {
           if( (uint16_t)((~lrSelection) & 0x01FF) == 511) {

@@ -2150,7 +2150,10 @@ smallFont:
 
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(" " STD_ELLIPSIS, font, true, true) : 0);
-  totalWidth = baseWidth + getRealMatrixColumnWidths(matrix, font, colWidth, rPadWidth, &digits, maxCols);
+  int16_t mtxWidth = getRealMatrixColumnWidths(matrix, font, colWidth, rPadWidth, &digits, maxCols);
+  bool_t noFix = (mtxWidth < 0);
+  mtxWidth = abs(mtxWidth);
+  totalWidth = baseWidth + mtxWidth;
   if(totalWidth > maxWidth || leftEllipsis) {
     if(font == &numericFont) {
       goto smallFont;
@@ -2158,7 +2161,10 @@ smallFont:
     else {
       displayFormat = DF_SCI;
       displayFormatDigits = 3;
-      totalWidth = baseWidth + getRealMatrixColumnWidths(matrix, font, colWidth, rPadWidth, &digits, maxCols);
+      mtxWidth = getRealMatrixColumnWidths(matrix, font, colWidth, rPadWidth, &digits, maxCols);
+      noFix = (mtxWidth < 0);
+      mtxWidth = abs(mtxWidth);
+      totalWidth = baseWidth + mtxWidth;
       if(totalWidth > maxWidth) {
         maxCols--;
         goto smallFont;
@@ -2195,7 +2201,7 @@ smallFont:
         vm = vmNormal;
       }
       else {
-        real34ToDisplayString(&matrix->matrixElements[(i+sRow)*cols+j+sCol], amNone, tmpString, font, colWidth[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, true);
+        real34ToDisplayString1(&matrix->matrixElements[(i+sRow)*cols+j+sCol], amNone, tmpString, font, colWidth[j], displayFormat == DF_ALL ? digits : 15, true, STD_SPACE_4_PER_EM, noFix, true);
         if(forEditor && matSelRow == (i + sRow) && matSelCol == (j + sCol)) {
           lcd_fill_rect(X_POS + colX, Y_POS - (maxRows -1 -i) * fontHeight, colWidth[j], font == &numericFont ? 32 : 20, 0xFF);
           vm = vmReverse;
@@ -2230,7 +2236,9 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
   int16_t totalWidth = 0, width = 0;
   int16_t maxRightWidth[MATRIX_MAX_COLUMNS] = {};
   int16_t maxLeftWidth[MATRIX_MAX_COLUMNS] = {};
+  bool_t noFix = false;
 
+  begin:
   for(int k = 15; k >= 1; k--) {
     if(displayFormat == DF_ALL) *digits = k;
     for(int i = 0; i < maxRows; i++) {
@@ -2238,7 +2246,11 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
         real34_t r34Val;
         real34Copy(&matrix->matrixElements[(i+sRow)*cols+j+sCol], &r34Val);
         real34SetPositiveSign(&r34Val);
-        real34ToDisplayString(&r34Val, amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM, true);
+        real34ToDisplayString1(&r34Val, amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM, noFix, true);
+        if(displayFormat == DF_ALL && !noFix && strstr(tmpString, STD_SUB_10)) { // something like SCI
+          noFix = true;
+          goto begin; // redo
+        }
         width = stringWidth(tmpString, font, true, true) + 1;
         rPadWidth[i * MATRIX_MAX_COLUMNS + j] = 0;
         for(char *xStr = tmpString; *xStr != 0; xStr++) {
@@ -2278,7 +2290,7 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
       }
     }
   }
-  return totalWidth;
+  return totalWidth * (noFix ? -1 : 1);
 }
 
 

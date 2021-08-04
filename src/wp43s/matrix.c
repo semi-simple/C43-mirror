@@ -2127,13 +2127,6 @@ void showRealMatrix(const real34Matrix_t *matrix) {
 
   videoMode_t vm = vmNormal;
 
-  if(forEditor) {
-    clearRegisterLine(REGISTER_X, true, true);
-    clearRegisterLine(REGISTER_Y, true, true);
-    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
-    if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
-  }
-
   font = &numericFont;
   if(rows >= (forEditor ? 4 : 5)){
 smallFont:
@@ -2160,6 +2153,8 @@ smallFont:
   }
   if(totalWidth > maxWidth || leftEllipsis) {
     if(font == &numericFont) {
+      displayFormat = tmpDisplayFormat;
+      displayFormatDigits = tmpDisplayFormatDigits;
       goto smallFont;
     }
     else {
@@ -2191,6 +2186,13 @@ smallFont:
   baseWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
 
   if(!forEditor) X_POS = SCREEN_WIDTH - ((colVector ? stringWidth("[]" STD_SUP_T, font, true, true) : stringWidth("[]", font, true, true)) + baseWidth);
+
+  if(forEditor) {
+    clearRegisterLine(REGISTER_X, true, true);
+    clearRegisterLine(REGISTER_Y, true, true);
+    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= (font == &standardFont ? 4 : 3)) clearRegisterLine(REGISTER_T, true, true);
+  }
 
   for(int i = 0; i < maxRows; i++) {
     int16_t colX = stringWidth("[", font, true, true);

@@ -55,6 +55,7 @@ dist_windows: build.rel/wiki
 	mkdir -p $(WIN_DIST_DIR)/res/artwork $(WIN_DIST_DIR)/res/dmcp
 	cp build.rel/src/wp43s-gtk/wp43s.exe $(WIN_DIST_DIR)/
 	cp res/artwork/*.png $(WIN_DIST_DIR)/res/artwork/
+	cp res/tone/*.wav $(WIN_DIST_DIR)/res/tone/
 	cp res/dmcp/testPgms.bin $(WIN_DIST_DIR)/res/dmcp/
 	cp res/wp43s_pre.css $(WIN_DIST_DIR)/res/
 	cp res/fonts/WP43S_StandardFont.ttf $(WIN_DIST_DIR)/

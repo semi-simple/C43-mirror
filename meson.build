@@ -41,8 +41,8 @@ gtk_dep = dependency('gtk+-3.0',  native : true)
 gmp_dep = dependency('gmp', native : true)
 m_dep   = cc.find_library('m', required : false)
 
-if build_machine.system() == 'linux'
-  pulse_dep = dependency('libpulse-simple', fallback : ['libpulse', 'pulseaudio'], native : true)
+if host_machine.system() == 'linux'
+  pulse_dep = dependency('libpulse-simple', native : true)
 else
   pulse_dep = dependency('', required : false)
 endif

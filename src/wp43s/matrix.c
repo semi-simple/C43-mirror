@@ -2154,6 +2154,10 @@ smallFont:
   bool_t noFix = (mtxWidth < 0);
   mtxWidth = abs(mtxWidth);
   totalWidth = baseWidth + mtxWidth;
+  if(displayFormat == DF_ALL && noFix) {
+    displayFormat = getSystemFlag(FLAG_ALLENG) ? DF_ENG : DF_SCI;
+    displayFormatDigits = digits;
+  }
   if(totalWidth > maxWidth || leftEllipsis) {
     if(font == &numericFont) {
       goto smallFont;
@@ -2236,19 +2240,26 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
   int16_t totalWidth = 0, width = 0;
   int16_t maxRightWidth[MATRIX_MAX_COLUMNS] = {};
   int16_t maxLeftWidth[MATRIX_MAX_COLUMNS] = {};
-  bool_t noFix = false;
+  bool_t noFix = false; const int16_t dspDigits = displayFormatDigits;
 
   begin:
   for(int k = 15; k >= 1; k--) {
     if(displayFormat == DF_ALL) *digits = k;
+    if(displayFormat == DF_ALL && noFix) { // something like SCI
+      displayFormat = getSystemFlag(FLAG_ALLENG) ? DF_ENG : DF_SCI;
+      displayFormatDigits = k;
+    }
     for(int i = 0; i < maxRows; i++) {
       for(int j = 0; j < maxCols; j++) {
         real34_t r34Val;
         real34Copy(&matrix->matrixElements[(i+sRow)*cols+j+sCol], &r34Val);
         real34SetPositiveSign(&r34Val);
-        real34ToDisplayString1(&r34Val, amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM, noFix, true);
+        real34ToDisplayString(&r34Val, amNone, tmpString, font, maxWidth, displayFormat == DF_ALL ? k : 15, true, STD_SPACE_4_PER_EM, true);
         if(displayFormat == DF_ALL && !noFix && strstr(tmpString, STD_SUB_10)) { // something like SCI
           noFix = true;
+          totalWidth = 0;
+          for(int p = 0; p < MATRIX_MAX_COLUMNS; ++p)
+            maxRightWidth[p] = maxLeftWidth[p] = 0;
           goto begin; // redo
         }
         width = stringWidth(tmpString, font, true, true) + 1;
@@ -2275,6 +2286,10 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
       totalWidth += colWidth[j] + stringWidth(STD_SPACE_FIGURE, font, true, true) * 2;
     }
     totalWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
+    if(noFix) {
+      displayFormat = DF_ALL;
+      displayFormatDigits = dspDigits;
+    }
     if(displayFormat != DF_ALL) {
       break;
     }

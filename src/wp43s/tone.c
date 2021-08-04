@@ -23,7 +23,6 @@
 #elif defined(PC_BUILD) && defined(__MINGW64__)
   #define NOMINMAX
   #include <windows.h>
-#elif defined(PC_BUILD) && defined(__APPLE__)
 #elif defined(PC_BUILD)
   #include <pulse/simple.h>
 #endif
@@ -40,7 +39,6 @@ static void playTone(uint16_t toneNum) {
     sprintf(filename, "res\\tone\\tone%" PRIu16 ".wav", toneNum);
     PlaySoundA(filename, NULL, SND_FILENAME | SND_SYNC | SND_NODEFAULT);
   }
-#elif defined(PC_BUILD) && defined(__APPLE__)
 #elif defined(PC_BUILD)
   if(toneNum < 10) {
     pa_simple *s;
@@ -101,4 +99,3 @@ void fnBeep(uint16_t unusedButMandatoryParameter) {
   playTone(9);
   playTone(8);
 }
-

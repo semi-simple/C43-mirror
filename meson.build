@@ -42,7 +42,13 @@ gmp_dep = dependency('gmp', native : true)
 m_dep   = cc.find_library('m', required : false)
 
 if build_machine.system() == 'linux'
-  pulse_dep = dependency('libpulse-simple', fallback : ['libpulse', 'pulseaudio'], native : true)
+  pulse_dep = dependency('libpulse-simple', required : false, native : true)
+  if not pulse_dep.found()
+    pulse_dep = dependency('libpulse', required : false, native : true)
+    if not pulse_dep.found()
+      pulse_dep = dependency('pulseaudio', native : true)
+    endif
+  endif
 else
   pulse_dep = dependency('', required : false)
 endif

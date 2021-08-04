@@ -25,13 +25,12 @@
   #include <windows.h>
 #elif defined(PC_BUILD) && defined(__APPLE__)
 #elif defined(PC_BUILD)
+  #include <pulse/simple.h>
 #endif
 
 #include "wp43s.h"
 
-#ifdef DMCP_BUILD
-  TO_QSPI uint32_t frequency[10] = {164814, 220000, 246942, 277183, 293665, 329628, 369995, 415305, 440000, 554365};
-#endif // DMCP_BUILD
+TO_QSPI uint32_t frequency[10] = {164814, 220000, 246942, 277183, 293665, 329628, 369995, 415305, 440000, 554365};
 
 static void playTone(uint16_t toneNum) {
 #if defined(TESTSUITE_BUILD)
@@ -43,6 +42,34 @@ static void playTone(uint16_t toneNum) {
   }
 #elif defined(PC_BUILD) && defined(__APPLE__)
 #elif defined(PC_BUILD)
+  if(toneNum < 10) {
+    pa_simple *s;
+    pa_sample_spec ss;
+
+    ss.format   = PA_SAMPLE_S16NE;
+    ss.channels = 1;
+    ss.rate     = 44100;
+
+    s = pa_simple_new(NULL, "WP 43S", PA_STREAM_PLAYBACK, NULL, "BEEP/TONE", &ss, NULL, NULL, NULL);
+
+    if(s) {
+      size_t bufSize = ss.rate / 4;
+      int16_t *samples = (int16_t *)malloc(bufSize * sizeof(int16_t));
+      int errCode;
+      uint64_t p = 0;
+
+      for(unsigned int i = 0; i < bufSize; ++i) {
+        samples[i] = p < ((uint64_t)ss.rate * 500) ? 10362 : -10362;
+        p += (uint64_t)frequency[toneNum];
+        p %= (uint64_t)ss.rate * 1000;
+      }
+
+      pa_simple_write(s, samples, bufSize * sizeof(int16_t), &errCode);
+      pa_simple_drain(s, &errCode);
+      free(samples);
+      pa_simple_free(s);
+    }
+  }
 #elif defined(DMCP_BUILD)
   if(toneNum < 10) {
     start_buzzer_freq(frequency[toneNum]);

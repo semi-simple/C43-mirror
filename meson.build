@@ -41,6 +41,12 @@ gtk_dep = dependency('gtk+-3.0',  native : true)
 gmp_dep = dependency('gmp', native : true)
 m_dep   = cc.find_library('m', required : false)
 
+if build_machine.system() == 'linux'
+  pulse_dep = dependency('libpulse-simple', native : true)
+else
+  pulse_dep = ''
+endif
+
 conf_data = configuration_data()
 commit_tag = get_option('CI_COMMIT_TAG')
 if commit_tag != ''

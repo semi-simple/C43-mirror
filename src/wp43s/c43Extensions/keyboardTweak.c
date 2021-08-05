@@ -623,6 +623,7 @@ Replaced this with the2x chages of jm_G_DOUBLETAP && calcMode != CM_AIM
       exexute_double_g = true;
       fnTimerStop(TO_FN_EXEC);
     }
+  if(softmenuStack[0].softmenuId == 0) exexute_double_g = false; //JM prevent double click from executing nothing and showing a line, if no menu is showing
   }
   else {
     FN_handle_timed_out_to_EXEC = true;

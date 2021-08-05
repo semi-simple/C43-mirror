@@ -1242,16 +1242,16 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           setSystemFlag(FLAG_ASLIFT);
           saveForUndo();
           if(lastErrorCode == ERROR_RAM_FULL) goto undo_disabled;
-          setSystemFlag(FLAG_ASLIFT);
+
           liftStack();
           if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
           copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
-          copySourceRegisterToDestRegister(REGISTER_Y, REGISTER_X);
-          if(!eRPN) clearSystemFlag(FLAG_ASLIFT); //JM eRPN 2021-07B
+        }
+        if(eRPN) {
+          setSystemFlag(FLAG_ASLIFT);
         }
         else {                                               //^^ PHM eRPN 2021-07
-          setSystemFlag(FLAG_ASLIFT);
+          clearSystemFlag(FLAG_ASLIFT);
         }                                                    //PHM eRPN 2021-07
         break;
 

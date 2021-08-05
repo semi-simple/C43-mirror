@@ -116,7 +116,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     #endif //PC_BUILD
 
 
-    hourGlassIconEnabled = !hourGlassIconEnabled;
+    hourGlassIconEnabled = true; // !hourGlassIconEnabled; //jm
     showHideHourGlass();
 
     #ifdef DMCP_BUILD
@@ -126,10 +126,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     #endif // DMCP_BUILD
 
     indexOfItems[func].func(param);
-    #ifdef PC_BUILD
-      //print_stck();
-      //printf("####--- After end of function call\n");
-    #endif //PC_BUILD
 
     if(lastErrorCode != 0) {
       undo();

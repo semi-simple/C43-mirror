@@ -2855,7 +2855,9 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
           refreshRegisterLine(REGISTER_T);
           refreshRegisterLine(REGISTER_Z);
           refreshRegisterLine(REGISTER_Y);
-      }
+      } else {                             //jm v
+        clearScreen_old(true,false,false); 
+      }                                    //jm v
 
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(0); }      //dr
@@ -2880,10 +2882,13 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         doRefreshSoftMenu = false;
         displayShiftAndTamBuffer();
         showSoftmenuCurrentPart();
-        hourGlassIconEnabled = false;
-        refreshStatusBar();
+      } 
+                                        //jm v
+      hourGlassIconEnabled = false;
+      refreshStatusBar();
+                                        //jm ^
 
-      }
+
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStop(2); }      //dr
 #endif

@@ -41,8 +41,13 @@ gtk_dep = dependency('gtk+-3.0',  native : true)
 gmp_dep = dependency('gmp', native : true)
 m_dep   = cc.find_library('m', required : false)
 
-if host_machine.system() == 'linux' or host_machine.system() == 'darwin'
-  pulse_dep = dependency('libpulse-simple', native : true)
+if (not meson.is_cross_build()) and (host_machine.system() == 'linux' or host_machine.system() == 'darwin')
+  pulse_dep = dependency('libpulse-simple', native : true, required : false)
+  if pulse_dep.found()
+    add_project_arguments('-DWITH_PULSEAUDIO', native : true, language : 'c')
+  else
+    message('libpulse-simple not found so BEEP and TONE are disabled')
+  endif
 else
   pulse_dep = dependency('', required : false)
 endif

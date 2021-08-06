@@ -577,7 +577,7 @@ TO_QSPI const int16_t menu_HOME[360]     = { //JMHOMEDEMO: NOTE REMOVE CONST TO 
                                              -MNU_TRI,             ITM_DEG,         ITM_RAD,           ITM_op_j,         ITM_RECT,         ITM_POLAR,                          //JM HOME
 /*HOME-1*/                                                                                                                                                                     //JM HOME
 /*1*18*/                                     ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,          ITM_CC,                        //JM HOME
-                                             ITM_RI,              ITM_IP,          ITM_NULL,          ITM_XFACT,        -MNU_BASE,        -MNU_INTS,                          //JM HOME
+                                             ITM_RI,              ITM_IP,          ITM_PGMTST,        ITM_XFACT,        -MNU_BASE,        -MNU_INTS,                          //JM HOME
                                              ITM_SF,              ITM_CF,          ITM_RL,            ITM_RR,           ITM_RMD,          ITM_IDIV,                           //JM HOME
 /*HOME-2*/                                                                                                                                                                     //JM HOME
 /*2*18*/                                     ITM_SIGMAMINUS,      ITM_YX,          ITM_SQUARE,        ITM_10x,          ITM_EXP,          ITM_CC,                        //JM HOME

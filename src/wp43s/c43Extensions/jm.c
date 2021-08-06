@@ -823,9 +823,17 @@ void fnJM(uint16_t JM_OPCODE) {
 
   if(JM_OPCODE == 45) {                                         //PRIME stats
     #ifdef PC_BUILD
-      ramDump();
+//      ramDump();
     #endif
-  }
+  char line1[600];
+
+//  strcpy(line1,"XEQC43 DOTD 569936821221962380720 EXIT STO 01 569936821113563493509 CHS EXIT STO 02 472715493453327032    CHS EXIT STO 03 RCL 01 RCL 02 RCL 03 RCL 01 3 Y^X RCL 02 3 Y^X + RCL 03 3 Y^X + ALPHA \"Sum of Cubes equals \"  ENTER X<>Y + ");
+  //Create a 3x1 matrix from Z Y X
+  strcpy(line1,"XEQC43 ERPN 3 ENTER 1 M.NEW STO 99 DROP INDEX 99 3 ENTER 1 STOIJ DROP DROP STOEL DROP  I- STOEL DROP  I-  STOEL DROP RCL 99 ");
+  //Create a 3x3 A-matrix
+  strcat(line1," 3 ENTER 3 M.NEW STO 99 DROP INDEX 99 1 ENTER 1 STOIJ DROP DROP   1 STOEL J+ STOEL J+ STOEL J+ STOEL DROP 0.5 ENTER CHS 3 ENTER SQRT 2 / COMPLEX X^2 J+ STOEL SQRT J+ STOEL 1 J+ STOEL DROP J+ STOEL X^2 J+ STOEL   DROP RCL 99 ");
+  fnXEQMexecute(line1);
+    }
   
 #endif //SAVE_SPACE_DM42_6
 

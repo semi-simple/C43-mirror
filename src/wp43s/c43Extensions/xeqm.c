@@ -565,8 +565,15 @@ TO_QSPI const function_t indexOfFunctions[] = {
 //           {ITM_M_GOTO,   "M.GOTO"},
 //           {ITM_M_INSR,   "M.INSR"},
 //           {ITM_M_LU,   "M.LU"},
-//           {ITM_M_NEW,   "M.NEW"},
-//           {ITM_M_OLD,   "M.OLD"},
+           {ITM_M_NEW,   "M.NEW"},
+           {ITM_INDEX,   "INDEX"},
+           {ITM_STOEL,   "STOEL"},
+           {ITM_STOIJ,   "STOIJ"},
+           {ITM_IPLUS,   "I+"},
+           {ITM_IMINUS,   "I-"},
+           {ITM_JPLUS,   "J+"},
+           {ITM_JMINUS,   "J-"},                                 
+           //           {ITM_M_OLD,   "M.OLD"},
 //           {ITM_M_PUT,   "M.PUT"},
 //           {ITM_M_RR,   "M.R<>R"},
            {ITM_sincpi,   "SINCPI"},
@@ -1712,15 +1719,22 @@ void fnXEQMEDIT (uint16_t unusedButMandatoryParameter) {
 }
 
 
+
+void fnXEQMexecute(char *line1) {
+  displaywords(line1); 
+  execute_string(line1,!EXEC,  !SCAN); //Run to catch all label names
+  execute_string(line1, EXEC,  !SCAN); //Run to execute   
+}
+
+
+
 void fnXEQMXXEQ (uint16_t unusedButMandatoryParameter) {
 #ifndef SAVE_SPACE_DM42_2
   char line1[XEQ_STR_LENGTH_LONG];
   if(getRegisterDataType(REGISTER_X) == dtString) {
     xcopy(line1, REGISTER_STRING_DATA(REGISTER_X), stringByteLength(REGISTER_STRING_DATA(REGISTER_X)) + 1);
     fnDrop(0);
-    displaywords(line1); 
-    execute_string(line1,!EXEC,  !SCAN); //Run to catch all label names
-    execute_string(line1, EXEC,  !SCAN); //Run to execute
+    fnXEQMexecute(line1);
   }
 #endif //SAVE_SPACE_DM42_2
 }

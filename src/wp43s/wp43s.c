@@ -326,6 +326,9 @@ size_t                 wp43sMemInBlocks;
     //   ST(STAT_SUSPENDED) - Program signals it is ready for off and doesn't need to be woken-up again
     //   ST(STAT_OFF)       - Program in off state (OS goes to sleep and only [EXIT] key can wake it up again)
     //   ST(STAT_RUNNING)   - OS doesn't sleep in this mode
+  //SET_ST(STAT_CLK_WKUP_SECONDS);
+    SET_ST(STAT_CLK_WKUP_ENABLE); // Enable wakeup each minute (for clock update)
+
     while(!backToDMCP) {
       if(ST(STAT_PGM_END) && ST(STAT_SUSPENDED)) { // Already in off mode and suspended
         CLR_ST(STAT_RUNNING);

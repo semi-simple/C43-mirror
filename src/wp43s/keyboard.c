@@ -140,6 +140,21 @@
   #endif // PC_BUILD
 
 
+    void execAutoRepeat(uint16_t key) {
+#ifdef DMCP_BUILD
+      char charKey[6];
+      sprintf(charKey, "%02d", key -1);
+
+      fnTimerStart(TO_AUTO_REPEAT, key, KEY_AUTOREPEAT_PERIOD);
+
+      btnClicked(NULL, (char *)charKey);
+//    btnPressed(charKey);
+      refreshLcd();
+      lcd_refresh_dma();
+#endif
+    }
+
+
 bool_t lastshiftF = false;
 bool_t lastshiftG = false;
 

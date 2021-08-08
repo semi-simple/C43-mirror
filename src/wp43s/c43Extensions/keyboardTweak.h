@@ -121,7 +121,7 @@ uint8_t  fnTimerGetStatus     (uint8_t nr);
  * \typedef timer_t
  * \brief Structure keeping the information for one timer
  ***********************************************/
-#define TMR_NUMBER    8
+#define TMR_NUMBER    9
 
 #define TMR_UNUSED    0
 #define TMR_STOPPED   1

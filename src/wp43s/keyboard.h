@@ -135,6 +135,8 @@ void executeFunction(const char *data, int16_t item_);
   void btnReleased   (GtkWidget *notUsed, GdkEvent *event, gpointer data);
 #endif // PC_BUILD
 
+void execAutoRepeat(uint16_t key);
+
 #ifdef DMCP_BUILD
   void btnFnClicked (void *w, void *data);
   void btnFnPressed (void *data);

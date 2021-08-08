@@ -46,6 +46,19 @@ uint32_t    timerLastCalled;
 #endif
 
 
+void keyClick(uint8_t length){  //Debugging on scope, a pulse after every key edge. !!!!! Destroys the prior volume setting
+#ifdef DMCP_BUILD
+  #ifdef DM42_KEYCLICK
+    while(get_beep_volume() < 11) {
+      beep_volume_up();
+    }
+    start_buzzer_freq(1000000); //Click 1kHz for 1 ms
+    sys_delay((uint32_t)length);
+    stop_buzzer();
+  #endif
+#endif
+}
+
 
 void showAlphaModeonGui(void) {
 #ifdef PC_BUILD

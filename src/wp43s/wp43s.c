@@ -772,11 +772,13 @@ size_t                 wp43sMemInBlocks;
       if(38 <= key && key <=43) { // Function key
         sprintf(charKey, "%c", key+11);
         btnFnPressed(charKey);
+        keyClick(3);
       //lcd_refresh_dma();
       }
       else if(1 <= key && key <= 37) { // Not a function key
         sprintf(charKey, "%02d", key - 1);
         btnPressed(charKey);
+        keyClick(1);
       //lcd_refresh_dma();
       }
 
@@ -784,10 +786,12 @@ size_t                 wp43sMemInBlocks;
       else if(key == 0) { // Autorepeat
         if(charKey[1] == 0) { // Last key pressed was one of the 6 function keys
           btnFnReleased(charKey);
+          keyClick(6);
         }
         else { // Last key pressed was not one of the 6 function keys
           //beep(440, 50);
           btnReleased(charKey);
+          keyClick(5);
         }
         keyAutoRepeat = 0;
         lcd_refresh();
@@ -805,10 +809,12 @@ size_t                 wp43sMemInBlocks;
 
       else if(key == 0 && FN_key_pressed != 0) {            //JM, key=0 is release, therefore there must have been a press before that. If the press was a FN key, FN_key_pressed > 0 when it comes back here for release.
         btnFnReleased(NULL);                                //    in short, it can only execute FN release after there was a FN press.
+        keyClick(4);
       //lcd_refresh_dma();
       }
       else if(key == 0) {
         btnReleased(NULL);
+        keyClick(2);
         //lcd_refresh_dma();
       }
 

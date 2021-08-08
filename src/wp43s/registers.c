@@ -26,6 +26,7 @@
 #include "flags.h"
 #include "items.h"
 #include "mathematics/comparisonReals.h"
+#include "mathematics/rsd.h"
 #include "matrix.h"
 #include "memory.h"
 #include "registerValueConversions.h"
@@ -1014,6 +1015,24 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
       real34ToReal(REGISTER_IMAG34_DATA(res), &tmp);
       convertRealToImag34ResultRegister(&tmp, res);
       break;
+
+#ifndef TESTSUITE_BUILD
+    case dtReal34Matrix:
+      if(significantDigits == 0 || significantDigits >= 34) {
+        break;
+      }
+
+      rsdRema(significantDigits);
+      break;
+
+    case dtComplex34Matrix:
+      if(significantDigits == 0 || significantDigits >= 34) {
+        break;
+      }
+
+      rsdCxma(significantDigits);
+      break;
+#endif // TESTSUITE_BUILD
 
     default:
       break;

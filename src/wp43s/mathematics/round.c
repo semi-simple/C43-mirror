@@ -218,7 +218,7 @@ void roundCplx(void) {
     stringToReal(displayValueX,        &magnitude, &ctxtReal39);
     stringToReal(displayValueX + posI, &theta,     &ctxtReal39);
     realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39);
-    convertRealToReal34ResultRegister(&magnitude, REGISTER_X);
+    realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
     realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {

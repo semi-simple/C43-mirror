@@ -214,38 +214,7 @@ void rdpReal(uint16_t digits) {
 
 
 void rdpCplx(uint16_t digits) {
-  int32_t pos, posI;
-  bool_t polar = false;
-
-  updateDisplayValueX = true;
-  displayValueX[0] = 0;
-  refreshRegisterLine(REGISTER_X);
-  updateDisplayValueX = false;
-
-  posI = DISPLAY_VALUE_LEN - 1;
-  pos = 0;
-  while(displayValueX[pos] != 0) {
-    if(displayValueX[pos] == 'i') {
-      posI = pos;
-      break;
-    }
-    pos++;
-  }
-
-  if(posI == DISPLAY_VALUE_LEN - 1) {
-    pos = 0;
-    while(displayValueX[pos] != 0) {
-      if(displayValueX[pos] == 'j') {
-        posI = pos;
-        polar = true;
-        break;
-      }
-      pos++;
-    }
-  }
-
-  displayValueX[posI++] = 0;
-  if(polar) {
+  if(getSystemFlag(FLAG_POLAR)) {
     real_t magnitude, theta;
     real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &magnitude);
     real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &theta);
@@ -254,7 +223,7 @@ void rdpCplx(uint16_t digits) {
     roundToDecimalPlace(&theta,     &theta,     digits, &ctxtReal39);
     realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39);
     convertRealToReal34ResultRegister(&magnitude, REGISTER_X);
-    realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
+    convertRealToImag34ResultRegister(&theta,     REGISTER_X);
   }
   else {
     real_t real, imaginary;
@@ -262,7 +231,7 @@ void rdpCplx(uint16_t digits) {
     real34ToReal(REGISTER_IMAG34_DATA(REGISTER_X), &imaginary);
     roundToDecimalPlace(&real,      &real,      digits, &ctxtReal39);
     roundToDecimalPlace(&imaginary, &imaginary, digits, &ctxtReal39);
-    realToReal34(&real,      REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&real,      REGISTER_X);
     convertRealToImag34ResultRegister(&imaginary, REGISTER_X);
   }
 }

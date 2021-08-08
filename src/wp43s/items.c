@@ -59,6 +59,7 @@
 #include "store.h"
 #include "stringFuncs.h"
 #include "timer.h"
+#include "tone.h"
 #include "ui/tam.h"
 #include "c43Extensions/xeqm.h"
 
@@ -252,6 +253,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnClearStack                (uint16_t unusedButMandatoryParameter) {}
   void fnClearRegisters            (uint16_t unusedButMandatoryParameter) {}
   void fnTimeFormat                (uint16_t unusedButMandatoryParameter) {}
+  void fnTone                      (uint16_t unusedButMandatoryParameter) {}
+  void fnBeep                      (uint16_t unusedButMandatoryParameter) {}
   void fnSetDateFormat             (uint16_t unusedButMandatoryParameter) {}
   void fnComplexUnit               (uint16_t unusedButMandatoryParameter) {}
   void fnComplexMode               (uint16_t unusedButMandatoryParameter) {}
@@ -488,156 +491,156 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnCvtQuartL                 (uint16_t unusedButMandatoryParameter) {}
   void fnCvtDmsToDeg               (uint16_t unusedButMandatoryParameter) {}
   void fnCvtDmsToCurrentAngularMode(uint16_t unusedButMandatoryParameter) {}
-  void fnCvtFathomM               (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtBarrelM3              (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtHectareM2             (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtDegToDms              (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtMuM2                  (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtLiM                   (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtChiM                  (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtYinM                  (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtCunM                  (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtZhangM                (uint16_t unusedButMandatoryParameter) {}
-  void fnCvtFenM                  (uint16_t unusedButMandatoryParameter) {}
-  void addItemToBuffer            (uint16_t unusedButMandatoryParameter) {}
-  void fnOff                      (uint16_t unusedButMandatoryParameter) {}
-  void fnAim                      (uint16_t unusedButMandatoryParameter) {}
-  void fnShow                     (uint16_t unusedButMandatoryParameter) {}
-  void fnLastX                    (uint16_t unusedButMandatoryParameter) {}
-  void fnCyx                      (uint16_t unusedButMandatoryParameter) {}
-  void fnPyx                      (uint16_t unusedButMandatoryParameter) {}
-  void fnJulianToDate             (uint16_t unusedButMandatoryParameter) {}
-  void fnDateToJulian             (uint16_t unusedButMandatoryParameter) {}
-  void fnToDate                   (uint16_t unusedButMandatoryParameter) {}
-  void fnDateTo                   (uint16_t unusedButMandatoryParameter) {}
-  void fnXToDate                  (uint16_t unusedButMandatoryParameter) {}
-  void fnYear                     (uint16_t unusedButMandatoryParameter) {}
-  void fnMonth                    (uint16_t unusedButMandatoryParameter) {}
-  void fnDay                      (uint16_t unusedButMandatoryParameter) {}
-  void fnWday                     (uint16_t unusedButMandatoryParameter) {}
-  void fnToHr                     (uint16_t unusedButMandatoryParameter) {}
-  void fnToHms                    (uint16_t unusedButMandatoryParameter) {}
-  void fnToReal                   (uint16_t unusedButMandatoryParameter) {}
-  void fnDec                      (uint16_t unusedButMandatoryParameter) {}
-  void fnInc                      (uint16_t unusedButMandatoryParameter) {}
-  void fnIse                      (uint16_t unusedButMandatoryParameter) {}
-  void fnIsg                      (uint16_t unusedButMandatoryParameter) {}
-  void fnIsz                      (uint16_t unusedButMandatoryParameter) {}
-  void fnDse                      (uint16_t unusedButMandatoryParameter) {}
-  void fnDsl                      (uint16_t unusedButMandatoryParameter) {}
-  void fnDsz                      (uint16_t unusedButMandatoryParameter) {}
-  void fncountBits                (uint16_t unusedButMandatoryParameter) {}
-  void fnLogicalNot               (uint16_t unusedButMandatoryParameter) {}
-  void fnLogicalAnd               (uint16_t unusedButMandatoryParameter) {}
-  void fnLogicalNand              (uint16_t unusedButMandatoryParameter) {}
-  void fnLogicalOr                (uint16_t unusedButMandatoryParameter) {}
-  void fnLogicalNor               (uint16_t unusedButMandatoryParameter) {}
-  void fnLogicalXor               (uint16_t unusedButMandatoryParameter) {}
-  void fnLogicalXnor              (uint16_t unusedButMandatoryParameter) {}
-  void fnDecomp                   (uint16_t unusedButMandatoryParameter) {}
-  void fnPlotStat                 (uint16_t unusedButMandatoryParameter) {}
-  void fnSumXY                    (uint16_t unusedButMandatoryParameter) {}
-  void fnMeanXY                   (uint16_t unusedButMandatoryParameter) {}
-  void fnGeometricMeanXY          (uint16_t unusedButMandatoryParameter) {}
-  void fnWeightedMeanX            (uint16_t unusedButMandatoryParameter) {}
-  void fnHarmonicMeanXY           (uint16_t unusedButMandatoryParameter) {}
-  void fnRMSMeanXY                (uint16_t unusedButMandatoryParameter) {}
-  void fnWeightedSampleStdDev     (uint16_t unusedButMandatoryParameter) {}
-  void fnWeightedPopulationStdDev (uint16_t unusedButMandatoryParameter) {}
-  void fnWeightedStandardError    (uint16_t unusedButMandatoryParameter) {}
-  void fnSampleStdDev             (uint16_t unusedButMandatoryParameter) {}
-  void fnPopulationStdDev         (uint16_t unusedButMandatoryParameter) {}
-  void fnStandardError            (uint16_t unusedButMandatoryParameter) {}
-  void fnGeometricSampleStdDev    (uint16_t unusedButMandatoryParameter) {}
-  void fnGeometricPopulationStdDev(uint16_t unusedButMandatoryParameter) {}
-  void fnGeometricStandardError   (uint16_t unusedButMandatoryParameter) {}
-  void fnPopulationCovariance     (uint16_t unusedButMandatoryParameter) {}
-  void fnSampleCovariance         (uint16_t unusedButMandatoryParameter) {}
-  void fnCoefficientDetermination (uint16_t unusedButMandatoryParameter) {}
-  void fnMinExpStdDev             (uint16_t unusedButMandatoryParameter) {}
-  void fnPlotCloseSmi             (uint16_t unusedButMandatoryParameter) {}
-  void fnMaskl                    (uint16_t unusedButMandatoryParameter) {}
-  void fnMaskr                    (uint16_t unusedButMandatoryParameter) {}
-  void fnAsr                      (uint16_t unusedButMandatoryParameter) {}
-  void fnCb                       (uint16_t unusedButMandatoryParameter) {}
-  void fnSb                       (uint16_t unusedButMandatoryParameter) {}
-  void fnFb                       (uint16_t unusedButMandatoryParameter) {}
-  void fnBs                       (uint16_t unusedButMandatoryParameter) {}
-  void fnBc                       (uint16_t unusedButMandatoryParameter) {}
-  void fnSl                       (uint16_t unusedButMandatoryParameter) {}
-  void fnRl                       (uint16_t unusedButMandatoryParameter) {}
-  void fnRlc                      (uint16_t unusedButMandatoryParameter) {}
-  void fnSr                       (uint16_t unusedButMandatoryParameter) {}
-  void fnRr                       (uint16_t unusedButMandatoryParameter) {}
-  void fnRrc                      (uint16_t unusedButMandatoryParameter) {}
-  void fnLj                       (uint16_t unusedButMandatoryParameter) {}
-  void fnRj                       (uint16_t unusedButMandatoryParameter) {}
-  void fnCountBits                (uint16_t unusedButMandatoryParameter) {}
-  void fnNextPrime                (uint16_t unusedButMandatoryParameter) {}
-  void fnScreenDump               (uint16_t unusedButMandatoryParameter) {}
-  //void fnArg                      (uint16_t unusedButMandatoryParameter) {}  //JM
-  void fnRange                    (uint16_t unusedButMandatoryParameter) {}
-  void fnGetRange                 (uint16_t unusedButMandatoryParameter) {}
-  void fnDot                      (uint16_t unusedButMandatoryParameter) {}
-  void fnCross                    (uint16_t unusedButMandatoryParameter) {}
-  void fnPercent                  (uint16_t unusedButMandatoryParameter) {}
-  void fnPercentMRR               (uint16_t unusedButMandatoryParameter) {}
-  void fnPercentT                 (uint16_t unusedButMandatoryParameter) {}
-  void fnPercentSigma             (uint16_t unusedButMandatoryParameter) {}
-  void fnPercentPlusMG            (uint16_t unusedButMandatoryParameter) {}
-  void fnDeltaPercent             (uint16_t unusedButMandatoryParameter) {}
-  void fnXthRoot                  (uint16_t unusedButMandatoryParameter) {}
-  void fnGetSystemFlag            (uint16_t unusedButMandatoryParameter) {}
-  void fnFractionType             (uint16_t unusedButMandatoryParameter) {}
-  void fnAlphaLeng                (uint16_t unusedButMandatoryParameter) {}
-  void fnAlphaSR                  (uint16_t unusedButMandatoryParameter) {}
-  void fnAlphaSL                  (uint16_t unusedButMandatoryParameter) {}
-  void fnAlphaRR                  (uint16_t unusedButMandatoryParameter) {}
-  void fnAlphaRL                  (uint16_t unusedButMandatoryParameter) {}
-  void fnAlphaPos                 (uint16_t unusedButMandatoryParameter) {}
-  void fnXToAlpha                 (uint16_t unusedButMandatoryParameter) {}
-  void fnAlphaToX                 (uint16_t unusedButMandatoryParameter) {}
-  void fnTicks                    (uint16_t unusedButMandatoryParameter) {}
-  void fnSetFirstGregorianDay     (uint16_t unusedButMandatoryParameter) {}
-  void fnGetFirstGregorianDay     (uint16_t unusedButMandatoryParameter) {}
-  void fnDate                     (uint16_t unusedButMandatoryParameter) {}
-  void fnTime                     (uint16_t unusedButMandatoryParameter) {}
-  void fnSave                     (uint16_t unusedButMandatoryParameter) {}
-  void fnLoad                     (uint16_t unusedButMandatoryParameter) {}
-  void fnUndo                     (uint16_t unusedButMandatoryParameter) {}
-  void fnXmax                     (uint16_t unusedButMandatoryParameter) {}
-  void fnXmin                     (uint16_t unusedButMandatoryParameter) {}
-  void fnFib                      (uint16_t unusedButMandatoryParameter) {}
-  void fnGd                       (uint16_t unusedButMandatoryParameter) {}
-  void fnInvGd                    (uint16_t unusedButMandatoryParameter) {}
-  void fnClP                      (uint16_t unusedButMandatoryParameter) {}
-  void fnPem                      (uint16_t unusedButMandatoryParameter) {}
-  void fnGoto                     (uint16_t unusedButMandatoryParameter) {}
-  void fnGotoDot                  (uint16_t unusedButMandatoryParameter) {}
-  void fnDynamicMenu              (uint16_t unusedButMandatoryParameter) {}
-  void fnCheckInteger             (uint16_t unusedButMandatoryParameter) {}
-  void fnNormalP                  (uint16_t unusedButMandatoryParameter) {}
-  void fnNormalL                  (uint16_t unusedButMandatoryParameter) {}
-  void fnNormalR                  (uint16_t unusedButMandatoryParameter) {}
-  void fnNormalI                  (uint16_t unusedButMandatoryParameter) {}
-  void fnT_P                      (uint16_t unusedButMandatoryParameter) {}
-  void fnT_L                      (uint16_t unusedButMandatoryParameter) {}
-  void fnT_R                      (uint16_t unusedButMandatoryParameter) {}
-  void fnT_I                      (uint16_t unusedButMandatoryParameter) {}
-  void fnChi2P                    (uint16_t unusedButMandatoryParameter) {}
-  void fnChi2L                    (uint16_t unusedButMandatoryParameter) {}
-  void fnChi2R                    (uint16_t unusedButMandatoryParameter) {}
-  void fnChi2I                    (uint16_t unusedButMandatoryParameter) {}
-  void fnF_P                      (uint16_t unusedButMandatoryParameter) {}
-  void fnF_L                      (uint16_t unusedButMandatoryParameter) {}
-  void fnF_R                      (uint16_t unusedButMandatoryParameter) {}
-  void fnF_I                      (uint16_t unusedButMandatoryParameter) {}
-  void fnProcessLR                (uint16_t unusedButMandatoryParameter) {}
-  void fnPlotZoom                 (uint16_t unusedButMandatoryParameter) {}
-  void fnYIsFnx                   (uint16_t unusedButMandatoryParameter) {}
-  void fnXIsFny                   (uint16_t unusedButMandatoryParameter) {}
-  void fnStatSa                   (uint16_t unusedButMandatoryParameter) {}
-  void fnCurveFittingLR           (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFathomM                (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtBarrelM3               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtHectareM2              (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtDegToDms               (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtMuM2                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtLiM                    (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtChiM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtYinM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtCunM                   (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtZhangM                 (uint16_t unusedButMandatoryParameter) {}
+  void fnCvtFenM                   (uint16_t unusedButMandatoryParameter) {}
+  void addItemToBuffer             (uint16_t unusedButMandatoryParameter) {}
+  void fnOff                       (uint16_t unusedButMandatoryParameter) {}
+  void fnAim                       (uint16_t unusedButMandatoryParameter) {}
+  void fnShow                      (uint16_t unusedButMandatoryParameter) {}
+  void fnLastX                     (uint16_t unusedButMandatoryParameter) {}
+  void fnCyx                       (uint16_t unusedButMandatoryParameter) {}
+  void fnPyx                       (uint16_t unusedButMandatoryParameter) {}
+  void fnJulianToDate              (uint16_t unusedButMandatoryParameter) {}
+  void fnDateToJulian              (uint16_t unusedButMandatoryParameter) {}
+  void fnToDate                    (uint16_t unusedButMandatoryParameter) {}
+  void fnDateTo                    (uint16_t unusedButMandatoryParameter) {}
+  void fnXToDate                   (uint16_t unusedButMandatoryParameter) {}
+  void fnYear                      (uint16_t unusedButMandatoryParameter) {}
+  void fnMonth                     (uint16_t unusedButMandatoryParameter) {}
+  void fnDay                       (uint16_t unusedButMandatoryParameter) {}
+  void fnWday                      (uint16_t unusedButMandatoryParameter) {}
+  void fnToHr                      (uint16_t unusedButMandatoryParameter) {}
+  void fnToHms                     (uint16_t unusedButMandatoryParameter) {}
+  void fnToReal                    (uint16_t unusedButMandatoryParameter) {}
+  void fnDec                       (uint16_t unusedButMandatoryParameter) {}
+  void fnInc                       (uint16_t unusedButMandatoryParameter) {}
+  void fnIse                       (uint16_t unusedButMandatoryParameter) {}
+  void fnIsg                       (uint16_t unusedButMandatoryParameter) {}
+  void fnIsz                       (uint16_t unusedButMandatoryParameter) {}
+  void fnDse                       (uint16_t unusedButMandatoryParameter) {}
+  void fnDsl                       (uint16_t unusedButMandatoryParameter) {}
+  void fnDsz                       (uint16_t unusedButMandatoryParameter) {}
+  void fncountBits                 (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalNot                (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalAnd                (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalNand               (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalOr                 (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalNor                (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalXor                (uint16_t unusedButMandatoryParameter) {}
+  void fnLogicalXnor               (uint16_t unusedButMandatoryParameter) {}
+  void fnDecomp                    (uint16_t unusedButMandatoryParameter) {}
+  void fnPlotStat                  (uint16_t unusedButMandatoryParameter) {}
+  void fnSumXY                     (uint16_t unusedButMandatoryParameter) {}
+  void fnMeanXY                    (uint16_t unusedButMandatoryParameter) {}
+  void fnGeometricMeanXY           (uint16_t unusedButMandatoryParameter) {}
+  void fnWeightedMeanX             (uint16_t unusedButMandatoryParameter) {}
+  void fnHarmonicMeanXY            (uint16_t unusedButMandatoryParameter) {}
+  void fnRMSMeanXY                 (uint16_t unusedButMandatoryParameter) {}
+  void fnWeightedSampleStdDev      (uint16_t unusedButMandatoryParameter) {}
+  void fnWeightedPopulationStdDev  (uint16_t unusedButMandatoryParameter) {}
+  void fnWeightedStandardError     (uint16_t unusedButMandatoryParameter) {}
+  void fnSampleStdDev              (uint16_t unusedButMandatoryParameter) {}
+  void fnPopulationStdDev          (uint16_t unusedButMandatoryParameter) {}
+  void fnStandardError             (uint16_t unusedButMandatoryParameter) {}
+  void fnGeometricSampleStdDev     (uint16_t unusedButMandatoryParameter) {}
+  void fnGeometricPopulationStdDev (uint16_t unusedButMandatoryParameter) {}
+  void fnGeometricStandardError    (uint16_t unusedButMandatoryParameter) {}
+  void fnPopulationCovariance      (uint16_t unusedButMandatoryParameter) {}
+  void fnSampleCovariance          (uint16_t unusedButMandatoryParameter) {}
+  void fnCoefficientDetermination  (uint16_t unusedButMandatoryParameter) {}
+  void fnMinExpStdDev              (uint16_t unusedButMandatoryParameter) {}
+  void fnPlotCloseSmi              (uint16_t unusedButMandatoryParameter) {}
+  void fnMaskl                     (uint16_t unusedButMandatoryParameter) {}
+  void fnMaskr                     (uint16_t unusedButMandatoryParameter) {}
+  void fnAsr                       (uint16_t unusedButMandatoryParameter) {}
+  void fnCb                        (uint16_t unusedButMandatoryParameter) {}
+  void fnSb                        (uint16_t unusedButMandatoryParameter) {}
+  void fnFb                        (uint16_t unusedButMandatoryParameter) {}
+  void fnBs                        (uint16_t unusedButMandatoryParameter) {}
+  void fnBc                        (uint16_t unusedButMandatoryParameter) {}
+  void fnSl                        (uint16_t unusedButMandatoryParameter) {}
+  void fnRl                        (uint16_t unusedButMandatoryParameter) {}
+  void fnRlc                       (uint16_t unusedButMandatoryParameter) {}
+  void fnSr                        (uint16_t unusedButMandatoryParameter) {}
+  void fnRr                        (uint16_t unusedButMandatoryParameter) {}
+  void fnRrc                       (uint16_t unusedButMandatoryParameter) {}
+  void fnLj                        (uint16_t unusedButMandatoryParameter) {}
+  void fnRj                        (uint16_t unusedButMandatoryParameter) {}
+  void fnCountBits                 (uint16_t unusedButMandatoryParameter) {}
+  void fnNextPrime                 (uint16_t unusedButMandatoryParameter) {}
+  void fnScreenDump                (uint16_t unusedButMandatoryParameter) {}
+  void fnArg                       (uint16_t unusedButMandatoryParameter) {}
+  void fnRange                     (uint16_t unusedButMandatoryParameter) {}
+  void fnGetRange                  (uint16_t unusedButMandatoryParameter) {}
+  void fnDot                       (uint16_t unusedButMandatoryParameter) {}
+  void fnCross                     (uint16_t unusedButMandatoryParameter) {}
+  void fnPercent                   (uint16_t unusedButMandatoryParameter) {}
+  void fnPercentMRR                (uint16_t unusedButMandatoryParameter) {}
+  void fnPercentT                  (uint16_t unusedButMandatoryParameter) {}
+  void fnPercentSigma              (uint16_t unusedButMandatoryParameter) {}
+  void fnPercentPlusMG             (uint16_t unusedButMandatoryParameter) {}
+  void fnDeltaPercent              (uint16_t unusedButMandatoryParameter) {}
+  void fnXthRoot                   (uint16_t unusedButMandatoryParameter) {}
+  void fnGetSystemFlag             (uint16_t unusedButMandatoryParameter) {}
+  void fnFractionType              (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaLeng                 (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaSR                   (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaSL                   (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaRR                   (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaRL                   (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaPos                  (uint16_t unusedButMandatoryParameter) {}
+  void fnXToAlpha                  (uint16_t unusedButMandatoryParameter) {}
+  void fnAlphaToX                  (uint16_t unusedButMandatoryParameter) {}
+  void fnTicks                     (uint16_t unusedButMandatoryParameter) {}
+  void fnSetFirstGregorianDay      (uint16_t unusedButMandatoryParameter) {}
+  void fnGetFirstGregorianDay      (uint16_t unusedButMandatoryParameter) {}
+  void fnDate                      (uint16_t unusedButMandatoryParameter) {}
+  void fnTime                      (uint16_t unusedButMandatoryParameter) {}
+  void fnSave                      (uint16_t unusedButMandatoryParameter) {}
+  void fnLoad                      (uint16_t unusedButMandatoryParameter) {}
+  void fnUndo                      (uint16_t unusedButMandatoryParameter) {}
+  void fnXmax                      (uint16_t unusedButMandatoryParameter) {}
+  void fnXmin                      (uint16_t unusedButMandatoryParameter) {}
+  void fnFib                       (uint16_t unusedButMandatoryParameter) {}
+  void fnGd                        (uint16_t unusedButMandatoryParameter) {}
+  void fnInvGd                     (uint16_t unusedButMandatoryParameter) {}
+  void fnClP                       (uint16_t unusedButMandatoryParameter) {}
+  void fnPem                       (uint16_t unusedButMandatoryParameter) {}
+  void fnGoto                      (uint16_t unusedButMandatoryParameter) {}
+  void fnGotoDot                   (uint16_t unusedButMandatoryParameter) {}
+  void fnDynamicMenu               (uint16_t unusedButMandatoryParameter) {}
+  void fnCheckInteger              (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalP                   (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalL                   (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalR                   (uint16_t unusedButMandatoryParameter) {}
+  void fnNormalI                   (uint16_t unusedButMandatoryParameter) {}
+  void fnT_P                       (uint16_t unusedButMandatoryParameter) {}
+  void fnT_L                       (uint16_t unusedButMandatoryParameter) {}
+  void fnT_R                       (uint16_t unusedButMandatoryParameter) {}
+  void fnT_I                       (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2P                     (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2L                     (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2R                     (uint16_t unusedButMandatoryParameter) {}
+  void fnChi2I                     (uint16_t unusedButMandatoryParameter) {}
+  void fnF_P                       (uint16_t unusedButMandatoryParameter) {}
+  void fnF_L                       (uint16_t unusedButMandatoryParameter) {}
+  void fnF_R                       (uint16_t unusedButMandatoryParameter) {}
+  void fnF_I                       (uint16_t unusedButMandatoryParameter) {}
+  void fnProcessLR                 (uint16_t unusedButMandatoryParameter) {}
+  void fnPlotZoom                  (uint16_t unusedButMandatoryParameter) {}
+  void fnYIsFnx                    (uint16_t unusedButMandatoryParameter) {}
+  void fnXIsFny                    (uint16_t unusedButMandatoryParameter) {}
+  void fnStatSa                    (uint16_t unusedButMandatoryParameter) {}
+  void fnCurveFittingLR            (uint16_t unusedButMandatoryParameter) {}
   void fnLogNormalP                (uint16_t unusedButMandatoryParameter) {}
   void fnLogNormalL                (uint16_t unusedButMandatoryParameter) {}
   void fnLogNormalR                (uint16_t unusedButMandatoryParameter) {}
@@ -2269,7 +2272,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1411 */  { itemToBeCoded,                NOPARAM/*#JM#*/,             "ASN",                                         "ASN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1412 */  { itemToBeCoded,                NOPARAM,                     "BACK",                                        "BACK",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1413 */  { fnBatteryVoltage,             NOPARAM,                     "BATT?",                                       "BATT?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1414 */  { itemToBeCoded,                NOPARAM,                     "BEEP",                                        "BEEP",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1414 */  { fnBeep,                       NOPARAM,                     "BEEP",                                        "BEEP",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 1415 */  { itemToBeCoded,                NOPARAM,                     "BeginP",                                      "Begin",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1416 */  { fnBn,                         NOPARAM,                     "B" STD_SUB_n,                                 "B" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1417 */  { fnBnStar,                     NOPARAM,                     "B" STD_SUB_n STD_SUP_ASTERISK,                "B" STD_SUB_n STD_SUP_ASTERISK,                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2479,7 +2482,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1621 */  { fnTime,                       NOPARAM,                     "TIME",                                        "TIME",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1622 */  { itemToBeCoded,                NOPARAM,                     "TIMER",                                       "TIMER",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1623 */  { fnChebyshevT,                 NOPARAM,                     "T" STD_SUB_n,                                 "T" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1624 */  { itemToBeCoded,                NOPARAM,                     "TONE",                                        "TONE",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1624 */  { fnTone,                       TM_VALUE,                    "TONE",                                        "TONE",                                        (0 << TAM_MAX_BITS) |     9, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 1625 */  { fnSwapT,                      TM_REGISTER,                 "t" STD_LEFT_RIGHT_ARROWS,                     "t" STD_LEFT_RIGHT_ARROWS,                     (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1626 */  { fnUlp,                        NOPARAM,                     "ULP?",                                        "ULP?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1627 */  { fnChebyshevU,                 NOPARAM,                     "U" STD_SUB_n,                                 "U" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

@@ -29,7 +29,6 @@ extern const enum rounding roundingModeTable[7];
  * \brief Sets the calc to meet Chinese standards
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnConfigChina         (uint16_t unusedButMandatoryParameter);
 
@@ -37,7 +36,6 @@ void     fnConfigChina         (uint16_t unusedButMandatoryParameter);
  * \brief Sets the calc to meet European standards
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnConfigEurope        (uint16_t unusedButMandatoryParameter);
 
@@ -45,7 +43,6 @@ void     fnConfigEurope        (uint16_t unusedButMandatoryParameter);
  * \brief Sets the calc to meet Indian standards
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnConfigIndia         (uint16_t unusedButMandatoryParameter);
 
@@ -53,7 +50,6 @@ void     fnConfigIndia         (uint16_t unusedButMandatoryParameter);
  * \brief Sets the calc to meet Japanese standards
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnConfigJapan         (uint16_t unusedButMandatoryParameter);
 
@@ -61,7 +57,6 @@ void     fnConfigJapan         (uint16_t unusedButMandatoryParameter);
  * \brief Sets the calc to meet English standards
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnConfigUk            (uint16_t unusedButMandatoryParameter);
 
@@ -69,7 +64,6 @@ void     fnConfigUk            (uint16_t unusedButMandatoryParameter);
  * \brief Sets the calc to meet American standards
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnConfigUsa           (uint16_t unusedButMandatoryParameter);
 
@@ -77,7 +71,6 @@ void     fnConfigUsa           (uint16_t unusedButMandatoryParameter);
  * \brief Sets the integer mode
  *
  * \param[in] mode uint16_t Integer mode
- * \return void
  ***********************************************/
 void     fnIntegerMode         (uint16_t mode);
 
@@ -86,7 +79,6 @@ void     fnIntegerMode         (uint16_t mode);
  * made this project work.
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnWho                 (uint16_t unusedButMandatoryParameter);
 
@@ -94,7 +86,6 @@ void     fnWho                 (uint16_t unusedButMandatoryParameter);
  * \brief Displays the version of this software
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnVersion             (uint16_t unusedButMandatoryParameter);
 
@@ -102,7 +93,6 @@ void     fnVersion             (uint16_t unusedButMandatoryParameter);
  * \brief Sets X to the amount of free RAM
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnFreeMemory          (uint16_t unusedButMandatoryParameter);
 
@@ -110,7 +100,6 @@ void     fnFreeMemory          (uint16_t unusedButMandatoryParameter);
  * \brief Sets X to the value of the rounding mode
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnGetRoundingMode     (uint16_t unusedButMandatoryParameter);
 
@@ -118,14 +107,11 @@ void     fnGetRoundingMode     (uint16_t unusedButMandatoryParameter);
  * \brief Sets the rounding mode
  *
  * \param[in] RM uint16_t
- * \return void
  ***********************************************/
 void     fnSetRoundingMode     (uint16_t RM);
 
 /********************************************//**
  * \brief Sets X to the value of the integer mode
- *
- * \return void
  ***********************************************/
 void     fnGetIntegerSignMode  (uint16_t unusedButMandatoryParameter);
 
@@ -133,7 +119,6 @@ void     fnGetIntegerSignMode  (uint16_t unusedButMandatoryParameter);
  * \brief Gets the word size
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnGetWordSize         (uint16_t unusedButMandatoryParameter);
 
@@ -141,7 +126,6 @@ void     fnGetWordSize         (uint16_t unusedButMandatoryParameter);
  * \brief Sets the word size
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnSetWordSize         (uint16_t WS);
 
@@ -149,7 +133,6 @@ void     fnSetWordSize         (uint16_t WS);
  * \brief Sets X to the amount of free flash memory
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnFreeFlashMemory     (uint16_t unusedButMandatoryParameter);
 
@@ -157,7 +140,6 @@ void     fnFreeFlashMemory     (uint16_t unusedButMandatoryParameter);
  * \brief Sets X to the battery voltage
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnBatteryVoltage      (uint16_t unusedButMandatoryParameter);
 
@@ -174,7 +156,6 @@ uint32_t getFreeFlash          (void);
  * rounding after each operation
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnGetSignificantDigits(uint16_t unusedButMandatoryParameter);
 
@@ -183,7 +164,6 @@ void     fnGetSignificantDigits(uint16_t unusedButMandatoryParameter);
  * rounding after each operation to X
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnSetSignificantDigits(uint16_t unusedButMandatoryParameter);
 
@@ -191,7 +171,6 @@ void     fnSetSignificantDigits(uint16_t unusedButMandatoryParameter);
  * \brief Sets the rounding mode
  *
  * \param[in] RM uint16_t Rounding mode
- * \return void
  ***********************************************/
 void     fnRoundingMode        (uint16_t RM);
 
@@ -199,7 +178,6 @@ void     fnRoundingMode        (uint16_t RM);
  * \brief Sets the angular mode
  *
  * \param[in] am uint16_t Angular mode
- * \return void
  ***********************************************/
 void     fnAngularMode         (uint16_t angularMode);
 
@@ -207,7 +185,6 @@ void     fnAngularMode         (uint16_t angularMode);
  * \brief Activates fraction display and toggles which of improper (like 3/2) or mixed (like 1 1/2) fractions is preferred.
  *
  * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
  ***********************************************/
 void     fnFractionType        (uint16_t unusedButMandatoryParameter);
 

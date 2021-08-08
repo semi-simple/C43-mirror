@@ -1138,7 +1138,7 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
     }
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    realToReal34(&norm, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&norm, REGISTER_X);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     complex34Matrix_t x;
@@ -1159,7 +1159,7 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
     }
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    realToReal34(&norm, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&norm, REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);

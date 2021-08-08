@@ -26,6 +26,7 @@
 #include "mathematics/toRect.h"
 #include "matrix.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "saveRestoreCalcState.h"
 #include "screen.h"
 
@@ -217,7 +218,7 @@ void roundCplx(void) {
     stringToReal(displayValueX,        &magnitude, &ctxtReal39);
     stringToReal(displayValueX + posI, &theta,     &ctxtReal39);
     realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39);
-    realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&magnitude, REGISTER_X);
     realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {

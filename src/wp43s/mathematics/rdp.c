@@ -56,7 +56,7 @@ TO_QSPI void (* const Rdp[NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS])(uint16_t) = {
  * \param[in] digits uint16_t
  * \return void
  ***********************************************/
-void roundToDecimalPlace(real_t *source, real_t *destination, uint16_t digits, realContext_t *realContext) {
+void roundToDecimalPlace(const real_t *source, real_t *destination, uint16_t digits, realContext_t *realContext) {
   real_t val, tmp;
   int16_t exponent;
 
@@ -172,7 +172,7 @@ void rdpReal(uint16_t digits) {
 
   real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &val);
   roundToDecimalPlace(&val, &val, digits, &ctxtReal39);
-  realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
+  convertRealToReal34ResultRegister(&val, REGISTER_X);
 
   if(getRegisterAngularMode(REGISTER_X) == amDMS) {
     real34FromDmsToDeg(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
@@ -208,7 +208,7 @@ void rdpReal(uint16_t digits) {
     convertAngleFromTo(&val, amDMS, amDMS, &ctxtReal39);
   }
 
-  realToReal34(&val, REGISTER_REAL34_DATA(REGISTER_X));
+  convertRealToReal34ResultRegister(&val, REGISTER_X);
 }*/
 
 
@@ -253,7 +253,7 @@ void rdpCplx(uint16_t digits) {
     roundToDecimalPlace(&magnitude, &magnitude, digits, &ctxtReal39);
     roundToDecimalPlace(&theta,     &theta,     digits, &ctxtReal39);
     realPolarToRectangular(&magnitude, &theta, &magnitude, &theta, &ctxtReal39);
-    realToReal34(&magnitude, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&magnitude, REGISTER_X);
     realToReal34(&theta,     REGISTER_IMAG34_DATA(REGISTER_X));
   }
   else {
@@ -263,6 +263,6 @@ void rdpCplx(uint16_t digits) {
     roundToDecimalPlace(&real,      &real,      digits, &ctxtReal39);
     roundToDecimalPlace(&imaginary, &imaginary, digits, &ctxtReal39);
     realToReal34(&real,      REGISTER_REAL34_DATA(REGISTER_X));
-    realToReal34(&imaginary, REGISTER_IMAG34_DATA(REGISTER_X));
+    convertRealToImag34ResultRegister(&imaginary, REGISTER_X);
   }
 }

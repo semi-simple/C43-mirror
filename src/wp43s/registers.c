@@ -1000,10 +1000,8 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      ctxtReal39.digits = significantDigits;
       real34ToReal(REGISTER_REAL34_DATA(res), &tmp);
-      ctxtReal39.digits = 39;
-      realToReal34(&tmp, REGISTER_REAL34_DATA(res));
+      convertRealToReal34ResultRegister(&tmp, res);
       break;
 
     case dtComplex34:
@@ -1011,12 +1009,10 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
         break;
       }
 
-      ctxtReal39.digits = significantDigits;
       real34ToReal(REGISTER_REAL34_DATA(res), &tmp);
-      realToReal34(&tmp, REGISTER_REAL34_DATA(res));
+      convertRealToReal34ResultRegister(&tmp, res);
       real34ToReal(REGISTER_IMAG34_DATA(res), &tmp);
-      realToReal34(&tmp, REGISTER_IMAG34_DATA(res));
-      ctxtReal39.digits = 39;
+      convertRealToImag34ResultRegister(&tmp, res);
       break;
 
     default:

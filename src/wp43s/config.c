@@ -267,7 +267,7 @@ void fnBatteryVoltage(uint16_t unusedButMandatoryParameter) {
   #endif // DMCP_BUILD
 
   realDivide(&value, const_1000, &value, &ctxtReal39);
-  realToReal34(&value, REGISTER_REAL34_DATA(REGISTER_X));
+  convertRealToReal34ResultRegister(&value, REGISTER_X);
 }
 
 

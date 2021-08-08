@@ -1138,7 +1138,7 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
     }
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    realToReal34(&norm, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&norm, REGISTER_X);
   }
   else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix) {
     complex34Matrix_t x;
@@ -1159,7 +1159,7 @@ void fnRowNorm(uint16_t unusedParamButMandatory) {
     }
 
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    realToReal34(&norm, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&norm, REGISTER_X);
   }
   else {
     displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -5418,7 +5418,7 @@ void elementwiseCxma_UInt16(void (*f)(uint16_t), uint16_t param) {
   convertComplex34MatrixRegisterToComplex34Matrix(REGISTER_X, &x);
 
   for(int i = 0; i < x.header.matrixRows * x.header.matrixColumns; ++i) {
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
     complex34Copy(&x.matrixElements[i], REGISTER_COMPLEX34_DATA(REGISTER_X));
     f(param);
     if(getRegisterDataType(REGISTER_X) == dtLongInteger)

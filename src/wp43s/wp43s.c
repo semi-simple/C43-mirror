@@ -260,6 +260,8 @@ size_t                 wp43sMemInBlocks;
 //  int16_t             previousItem;    // removed autorepeat stuff
   uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 
+#define TMR_OBSERVE
+
   void program_main(void) {
     int key = 0;
     char charKey[3];
@@ -410,6 +412,7 @@ size_t                 wp43sMemInBlocks;
     fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
     fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
     fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);
+    fnTimerConfig(TO_AUTO_REPEAT, execAutoRepeat, 0);
     nextTimerRefresh = 0;                                   //vv
 
     // Status flags:
@@ -429,11 +432,13 @@ size_t                 wp43sMemInBlocks;
         CLR_ST(STAT_RUNNING);
 
         if(nextTimerRefresh == 0) {                                            // no timeout available
+#ifdef TMR_OBSERVE
           if(fnTestBitIsSet(2) == true) {
             showString("key_empty()", &standardFont, 20, 40, vmNormal, false, false);
             refreshLcd();
             lcd_refresh_wait();
           }
+#endif
 
         /*if(fnTestBitIsSet(0) == true) { sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh - sys_current_ms())); }*/
           sys_sleep();
@@ -449,33 +454,32 @@ size_t                 wp43sMemInBlocks;
             timeoutTime = min(timeoutTime, 15);
           }
 
-        /*if(timeoutTime > 1000) {                                             // timeout > 1s
-            sys_sleep();
-          }
-          else {*/                                                             // timeout leads to sys_timer
+        //if(timeoutTime > 1000) {                                             // timeout > 1s
+        //  sys_sleep();
+        //}
+        //else {                                                               // timeout leads to sys_timer
 
           uint32_t sleepTime = SCREEN_REFRESH_PERIOD;
         /*if(fnTestBitIsSet(0) == true) { sleepTime = max(1, nextScreenRefresh - sys_current_ms()); }*/
           sleepTime = min(sleepTime, timeoutTime);
           sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));        // wake up for screen refresh
+#ifdef TMR_OBSERVE
           if(fnTestBitIsSet(1) == true) {
             char snum[50];
             itoa(sleepTime, snum, 10);
             strcat(snum, " ");
-            if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) strcat(snum, "7"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) strcat(snum, "6"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_3S_CTFF) == TMR_RUNNING) strcat(snum, "5"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) strcat(snum, "4"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_FN_LONG) == TMR_RUNNING) strcat(snum, "3"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_FG_TIMR) == TMR_RUNNING) strcat(snum, "2"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_CL_LONG) == TMR_RUNNING) strcat(snum, "1"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_FG_LONG) == TMR_RUNNING) strcat(snum, "0"); else strcat(snum, "_");
+            for(int8_t i = TMR_NUMBER -1; i>=0; i--) {
+              char digit[2] = "_";
+              if(fnTimerGetStatus(i) == TMR_RUNNING) { itoa(i, digit, 16); } 
+              strcat(snum, digit);
+            }
             showString(snum, &standardFont, 20, 40, vmNormal, false, false);
           }
+#endif
 
           sys_sleep();
           sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
-        /*}*/
+        //}
         }
       }
 
@@ -485,10 +489,12 @@ size_t                 wp43sMemInBlocks;
       // Externally forced LCD repaint
       if(ST(STAT_CLK_WKUP_FLAG)) {
         if(!ST(STAT_OFF) && (nextTimerRefresh == 0)/* && (fnTestBitIsSet(0) != true)*/) {
+#ifdef TMR_OBSERVE
           if(fnTestBitIsSet(1) == true) {
             showString("CLK_WKUP_FLAG", &standardFont, 20, 40, vmNormal, false, false);
           }
-          
+#endif
+
           refreshLcd();
           lcd_refresh_wait();
         }
@@ -709,6 +715,17 @@ size_t                 wp43sMemInBlocks;
 
 
 
+      if(key == 18 || key == 23) {
+        if(fnTimerGetStatus(TO_AUTO_REPEAT) != TMR_RUNNING) {
+          fnTimerStart(TO_AUTO_REPEAT, key, KEY_AUTOREPEAT_FIRST_PERIOD);
+        }
+      }
+      else if(key == 0) {
+        fnTimerStop(TO_AUTO_REPEAT);
+      }
+
+
+
       if(key == 44) { //DISP for special SCREEN DUMP key code. To be 16 but shift decoding already done to 44 in DMCP
         resetShiftState();                                  //JM to avoid f or g top left of the screen
 
@@ -798,13 +815,12 @@ size_t                 wp43sMemInBlocks;
       if(key >= 0) {                                        //dr
         lcd_refresh_dma();
         if((key > 0)/* || (fnTestBitIsSet(0) == true)*/) {
-          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);//dr
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);  //dr
         }
         else if(cursorEnabled == true) {
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 480);
         }
-        else
-        {
+        else {
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 40);
         }
       }

@@ -37,6 +37,7 @@
 #include "screen.h"
 #include "softmenus.h"
 #include "stack.h"
+#include "timer.h"
 #include "ui/tam.h"
 #if (REAL34_WIDTH_TEST == 1)
   #include "registerValueConversions.h"

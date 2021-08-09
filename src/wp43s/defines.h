@@ -74,7 +74,7 @@
 
 
 //Testing and debugging
-#define DM42_KEYCLICK              //Add a 1 ms click after key presses and releases, for scope syncing
+//#define DM42_KEYCLICK              //Add a 1 ms click after key presses and releases, for scope syncing
 
 
 //Verbose options

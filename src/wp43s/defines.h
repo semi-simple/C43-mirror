@@ -555,10 +555,12 @@ typedef enum {
 #define X_USER_MODE                              375
 #define X_BATTERY                                389
 
-#define TIMER_IDX_SCREEN_REFRESH                   0 // use timer 0 to wake up for screen refresh
-//#define TIMER_IDX_AUTO_REPEAT                      1 // use timer 1 to wake up for key auto-repeat
+#define TIMER_IDX_REFRESH_SLEEP                    0 // use timer 0 to wake up for screen refresh
+//#define TIMER_IDX_AUTO_REPEAT                    1 // use timer 1 to wake up for key auto-repeat
 
-// timer nr for FG and FN use                                       //dr vv
+#define TMR_NUMBER                                 9
+
+// timer
 #define TO_FG_LONG                                 0
 #define TO_CL_LONG                                 1
 #define TO_FG_TIMR                                 2
@@ -566,7 +568,8 @@ typedef enum {
 #define TO_FN_EXEC                                 4
 #define TO_3S_CTFF                                 5
 #define TO_CL_DROP                                 6
-#define TO_KB_ACTV                                 7                //dr ^^
+#define TO_AUTO_REPEAT                             7
+#define TO_KB_ACTV                                 8
 
 
 
@@ -880,6 +883,8 @@ typedef enum {
 #define SCREEN_REFRESH_PERIOD                    100 // 500 // in milliseconds //JM timeout for lcd refresh in ms 100
 #define FAST_SCREEN_REFRESH_PERIOD               100 // in milliseconds
 #endif
+#define KEY_AUTOREPEAT_FIRST_PERIOD              400 // in milliseconds
+#define KEY_AUTOREPEAT_PERIOD                    200 // in milliseconds
 
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)

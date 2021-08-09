@@ -22,6 +22,7 @@
 #include "longIntegerType.h"
 #include "memory.h"
 #include "screen.h"
+#include "timer.h"
 #include <string.h>
 
 //#define JMSHOWCODES
@@ -225,7 +226,9 @@ uint16_t               lrChosen;
 uint16_t               lrChosenUndo;
 uint16_t               lastPlotMode;
 uint16_t               plotSelection;
-//uint16_t               largeur=400; // For the real34 width test
+#if (REAL34_WIDTH_TEST == 1)
+  uint16_t               largeur=200;
+#endif // (REAL34_WIDTH_TEST == 1)
 
 int32_t                numberOfFreeMemoryRegions;
 int32_t                lgCatalogSelection;
@@ -251,14 +254,14 @@ size_t                 wp43sMemInBlocks;
     int8_t            telltale_pos;                         //JM Test
     int8_t            telltale_lastkey;                     //JM Test
   #endif //JMSHOWCODES                                      //JM Test 
-  uint32_t            nextTimerRefresh;                     //dr timer substitute for refreshTimer()
 #ifdef BUFFER_CLICK_DETECTION
   uint32_t            timeStampKey;                         //dr - internal keyBuffer POC
 #endif //BUFFER_CLICK_DETECTION
   bool_t              backToDMCP;
-//  int                 keyAutoRepeat;   // removed autorepeat stuff
-//  int16_t             previousItem;    // removed autorepeat stuff
-  uint32_t            nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
+//int                  keyAutoRepeat;
+//int16_t              previousItem;
+  uint32_t             nextTimerRefresh;
+  uint32_t             nextScreenRefresh; // timer substitute for refreshLcd(), which does cursor blinking and other stuff
 
   void program_main(void) {
     int key = 0;
@@ -271,9 +274,10 @@ size_t                 wp43sMemInBlocks;
 #endif
   //uint8_t act_min = 0;                                    // dr - one second POC
 
-  //bool_t wp43sKbdLayout, inFastRefresh = 0, inDownUpPress = 0, repeatDownUpPress = 0;  // removed autorepeat stuff   //dr - no keymap is used
+  //bool_t wp43sKbdLayout/*, inFastRefresh = 0, inDownUpPress = 0, repeatDownUpPress = 0*/;         //dr - no keymap is used
+
     uint16_t currentVolumeSetting, savedVoluleSetting; // used for beep signaling screen shot
-  //uint32_t now, previousRefresh, nextAutoRepeat = 0;      // removed autorepeat stuff
+  //uint32_t now, previousRefresh, nextAutoRepeat = 0;
 
     wp43sMemInBlocks = 0;
     gmpMemInBytes = 0;
@@ -281,19 +285,19 @@ size_t                 wp43sMemInBlocks;
 
     lcd_clear_buf();
 #ifdef NOKEYMAP                                             //vv dr - no keymap is used
-  lcd_putsAt(t24, 4, "Press the bottom left key."); lcd_refresh();
-  while(key != 33 && key != 37) {
-    key = key_pop();
-    while(key == -1) {
-      sys_sleep();
+    lcd_putsAt(t24, 4, "Press the bottom left key."); lcd_refresh();
+    while(key != 33 && key != 37) {
       key = key_pop();
+      while(key == -1) {
+        sys_sleep();
+        key = key_pop();
+      }
     }
-  }
 
     wp43sKbdLayout = (key == 37); // bottom left key
     key = 0;
 
-  lcd_clear_buf();
+    lcd_clear_buf();
 #endif //NOKEYMAP                                           //^^
     fnReset(CONFIRMED);
     refreshScreen();
@@ -396,21 +400,22 @@ size_t                 wp43sMemInBlocks;
     backToDMCP = false;
 
     lcd_forced_refresh();                                   //JM 
-  //previousRefresh = sys_current_ms();                     // removed autorepeat stuff
-    nextScreenRefresh = sys_current_ms()/*previousRefresh*/ + SCREEN_REFRESH_PERIOD;
-  //now = sys_current_ms();                                 // Remove all autorepeat stuff
-  //runner_key_tout_init(0); // Enables fast auto repeat    // Remove all autorepeat stuff
+  //previousRefresh = sys_current_ms();
+    nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
+  //now = sys_current_ms();
+    //runner_key_tout_init(0); // Enables fast auto repeat
 
-    fnTimerReset();                                         //vv dr timeouts for kb handling
-    fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG/*, 580*/);
-    fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG/*, 500*/);
-    fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR/*, 4000*/);
-    fnTimerConfig(TO_FN_LONG, refreshFn, TO_FN_LONG/*, 450*/);
-    fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0/*, 150*/);
-    fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF/*, 600*/);
-    fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP/*, 500*/);
-    fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);
-    nextTimerRefresh = 0;                                   //vv
+    fnTimerReset();
+    fnTimerConfig(TO_FG_LONG, refreshFn, TO_FG_LONG);
+    fnTimerConfig(TO_CL_LONG, refreshFn, TO_CL_LONG);
+    fnTimerConfig(TO_FG_TIMR, refreshFn, TO_FG_TIMR);
+    fnTimerConfig(TO_FN_LONG, refreshFn, TO_FN_LONG);
+    fnTimerConfig(TO_FN_EXEC, execFnTimeout, 0);
+    fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF);
+    fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP);
+    fnTimerConfig(TO_AUTO_REPEAT, execAutoRepeat, 0);
+    fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV);
+    nextTimerRefresh = 0;
 
     // Status flags:
     //   ST(STAT_PGM_END)   - Indicates that program should go to off state (set by auto off timer)
@@ -425,19 +430,19 @@ size_t                 wp43sMemInBlocks;
         CLR_ST(STAT_RUNNING);
         sys_sleep();
       }
-      else if (!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer()) {         // Just wait if no keys available.
+      else if(!ST(STAT_PGM_END) && key_empty() && emptyKeyBuffer()) {          // Just wait if no keys available.
         CLR_ST(STAT_RUNNING);
 
         if(nextTimerRefresh == 0) {                                            // no timeout available
+#ifdef TMR_OBSERVE
           if(fnTestBitIsSet(2) == true) {
             showString("key_empty()", &standardFont, 20, 40, vmNormal, false, false);
             refreshLcd();
             lcd_refresh_wait();
           }
+#endif
 
-        /*if(fnTestBitIsSet(0) == true) { sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, nextScreenRefresh - sys_current_ms())); }*/
           sys_sleep();
-        /*if(fnTestBitIsSet(0) == true) { sys_timer_disable(TIMER_IDX_SCREEN_REFRESH); }*/
         }
         else {                                                                 // timeout available
           uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
@@ -449,46 +454,46 @@ size_t                 wp43sMemInBlocks;
             timeoutTime = min(timeoutTime, 15);
           }
 
-        /*if(timeoutTime > 1000) {                                             // timeout > 1s
-            sys_sleep();
-          }
-          else {*/                                                             // timeout leads to sys_timer
+        //if(timeoutTime > 1000) {                                             // timeout > 1s
+        //  sys_sleep();
+        //}
+        //else {                                                               // timeout leads to sys_timer
 
           uint32_t sleepTime = SCREEN_REFRESH_PERIOD;
-        /*if(fnTestBitIsSet(0) == true) { sleepTime = max(1, nextScreenRefresh - sys_current_ms()); }*/
           sleepTime = min(sleepTime, timeoutTime);
-          sys_timer_start(TIMER_IDX_SCREEN_REFRESH, max(1, sleepTime));        // wake up for screen refresh
+          sys_timer_start(TIMER_IDX_REFRESH_SLEEP, max(1, sleepTime));         // wake up for screen refresh
+#ifdef TMR_OBSERVE
           if(fnTestBitIsSet(1) == true) {
             char snum[50];
             itoa(sleepTime, snum, 10);
             strcat(snum, " ");
-            if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) strcat(snum, "7"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_CL_DROP) == TMR_RUNNING) strcat(snum, "6"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_3S_CTFF) == TMR_RUNNING) strcat(snum, "5"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) strcat(snum, "4"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_FN_LONG) == TMR_RUNNING) strcat(snum, "3"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_FG_TIMR) == TMR_RUNNING) strcat(snum, "2"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_CL_LONG) == TMR_RUNNING) strcat(snum, "1"); else strcat(snum, "_");
-            if(fnTimerGetStatus(TO_FG_LONG) == TMR_RUNNING) strcat(snum, "0"); else strcat(snum, "_");
+            for(int8_t i = TMR_NUMBER -1; i>=0; i--) {
+              char digit[2] = "_";
+              if(fnTimerGetStatus(i) == TMR_RUNNING) { itoa(i, digit, 16); } 
+              strcat(snum, digit);
+            }
             showString(snum, &standardFont, 20, 40, vmNormal, false, false);
           }
+#endif
 
           sys_sleep();
-          sys_timer_disable(TIMER_IDX_SCREEN_REFRESH);
-        /*}*/
+          sys_timer_disable(TIMER_IDX_REFRESH_SLEEP);
+        //}
         }
       }
 
-    //now = sys_current_ms();                               // Remove all autorepeat stuff
+    //now = sys_current_ms();
 
       // =======================
       // Externally forced LCD repaint
       if(ST(STAT_CLK_WKUP_FLAG)) {
-        if(!ST(STAT_OFF) && (nextTimerRefresh == 0)/* && (fnTestBitIsSet(0) != true)*/) {
+        if(!ST(STAT_OFF) && (nextTimerRefresh == 0)) {
+#ifdef TMR_OBSERVE
           if(fnTestBitIsSet(1) == true) {
             showString("CLK_WKUP_FLAG", &standardFont, 20, 40, vmNormal, false, false);
           }
-          
+#endif
+
           refreshLcd();
           lcd_refresh_wait();
         }
@@ -496,7 +501,7 @@ size_t                 wp43sMemInBlocks;
         continue;
       }
       if(ST(STAT_POWER_CHANGE)) {
-        if(!ST(STAT_OFF) && (fnTimerGetStatus(TO_KB_ACTV) != TMR_RUNNING)/* && (fnTestBitIsSet(0) != true)*/) {
+        if(!ST(STAT_OFF) && (fnTimerGetStatus(TO_KB_ACTV) != TMR_RUNNING)) {
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 40);
         }
         CLR_ST(STAT_POWER_CHANGE);
@@ -643,20 +648,24 @@ size_t                 wp43sMemInBlocks;
 #ifdef AUTOREPEAT
       // Increase the refresh rate if we are in an UP/DOWN key press so we pick up auto key repeats
       if(key == 27 || key == 32) {
-        inDownUpPress = 1;
-        nextAutoRepeat = now + KEY_AUTOREPEAT_FIRST_PERIOD;
+//      inDownUpPress = 1;
+//      nextAutoRepeat = now + KEY_AUTOREPEAT_FIRST_PERIOD;
+        if(fnTimerGetStatus(TO_AUTO_REPEAT) != TMR_RUNNING) {
+          fnTimerStart(TO_AUTO_REPEAT, key, KEY_AUTOREPEAT_FIRST_PERIOD);
+        }
       }
       else if(key == 0) {
-        inDownUpPress = 0;
-        repeatDownUpPress = 0;
-        nextAutoRepeat = 0;
+//      inDownUpPress = 0;
+//      repeatDownUpPress = 0;
+//      nextAutoRepeat = 0;
+        fnTimerStop(TO_AUTO_REPEAT);
       }
-      else if(repeatDownUpPress) {
-        keyAutoRepeat = 1;
-        key = 0;
-        nextAutoRepeat = now + KEY_AUTOREPEAT_PERIOD;
-        repeatDownUpPress = 0;
-      }
+//    else if(repeatDownUpPress) {
+//      keyAutoRepeat = 1;
+//      key = 0;
+//      nextAutoRepeat = now + KEY_AUTOREPEAT_PERIOD;
+//      repeatDownUpPress = 0;
+//    }
 
       //if(keyAutoRepeat) {
       //  if(key == 27 || key == 32) { // UP or DOWN keys
@@ -706,6 +715,17 @@ size_t                 wp43sMemInBlocks;
       else {
         key = -1;
       }                                                     //^^
+
+
+
+      if(key == 18 || key == 23) {
+        if(fnTimerGetStatus(TO_AUTO_REPEAT) != TMR_RUNNING) {
+          fnTimerStart(TO_AUTO_REPEAT, key, KEY_AUTOREPEAT_FIRST_PERIOD);
+        }
+      }
+      else if(key == 0) {
+        fnTimerStop(TO_AUTO_REPEAT);
+      }
 
 
 
@@ -797,24 +817,23 @@ size_t                 wp43sMemInBlocks;
 
       if(key >= 0) {                                        //dr
         lcd_refresh_dma();
-        if((key > 0)/* || (fnTestBitIsSet(0) == true)*/) {
-          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);//dr
+        if(key > 0) {
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, JM_TO_KB_ACTV);  //dr
         }
         else if(cursorEnabled == true) {
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 480);
         }
-        else
-        {
+        else {
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 40);
         }
       }
 
       uint32_t now = sys_current_ms();
 
-      if(nextTimerRefresh != 0 && nextTimerRefresh <= now) {//vv dr Timer
-        refreshTimer();
-      }                                                     //^^
-      now = sys_current_ms();                               //vv dr
+      if(nextTimerRefresh != 0 && nextTimerRefresh <= now) {
+        refreshTimer();                                     // Executes pending timer jobs
+      }
+      now = sys_current_ms();
       if(nextScreenRefresh <= now) {
         nextScreenRefresh += SCREEN_REFRESH_PERIOD;
         if(nextScreenRefresh < now) {
@@ -823,11 +842,14 @@ size_t                 wp43sMemInBlocks;
         refreshLcd();
         if(key >= 0) lcd_refresh();                         //JMTOCHECK if key>0 is needed. what about -1?
         else {lcd_refresh_wait();}
-      }                                                     //^^
+      }
 
-    /*if(nextScreenRefresh <= now) {                        // removed autorepeat stuff
-        previousRefresh = now;
-        nextScreenRefresh = previousRefresh + (inFastRefresh ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);
+    /*if(nextScreenRefresh <= now) {
+//      previousRefresh = now;
+        nextScreenRefresh += ((showFunctionNameCounter > 0) ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);
+        if(nextScreenRefresh < now) {
+          nextScreenRefresh = now + ((showFunctionNameCounter > 0) ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);         // we were out longer than expected; just skip ahead.
+        }
         refreshLcd();
         lcd_refresh();
       }*/

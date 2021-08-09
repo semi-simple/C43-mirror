@@ -265,7 +265,9 @@
   extern uint16_t               lrChosenUndo;
   extern uint16_t               lastPlotMode;
   extern uint16_t               plotSelection;
-  //extern uint16_t               largeur; // For the real34 width test
+  #if (REAL34_WIDTH_TEST == 1)
+    extern uint16_t               largeur;
+  #endif // (REAL34_WIDTH_TEST == 1)
 
   extern int32_t                numberOfFreeMemoryRegions;
   extern int32_t                lgCatalogSelection;
@@ -288,12 +290,12 @@
 
   #ifdef DMCP_BUILD
     extern bool_t              backToDMCP;
-    extern uint32_t            nextTimerRefresh;    //dr
   #ifdef BUFFER_CLICK_DETECTION
     extern uint32_t            timeStampKey;                                      //dr - internal keyBuffer POC
   #endif
-  //extern int                 keyAutoRepeat; // Key repetition // Removed the autorepeat stuff
-  //extern int16_t             previousItem;                    // Removed the autorepeat stuff
+//  extern int                  keyAutoRepeat; // Key repetition
+//  extern int16_t              previousItem;
+    extern uint32_t             nextTimerRefresh;
   #endif // DMCP_BUILD
 
 #endif // WP43S_H

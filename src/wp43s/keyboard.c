@@ -37,7 +37,11 @@
 #include "screen.h"
 #include "softmenus.h"
 #include "stack.h"
+#include "timer.h"
 #include "ui/tam.h"
+#if (REAL34_WIDTH_TEST == 1)
+  #include "registerValueConversions.h"
+#endif // (REAL34_WIDTH_TEST == 1)
 
 #include "wp43s.h"
 
@@ -138,6 +142,21 @@
       btnFnReleased(notUsed, &mouseButton, data);
     }
   #endif // PC_BUILD
+
+
+    void execAutoRepeat(uint16_t key) {
+#ifdef DMCP_BUILD
+      char charKey[6];
+      sprintf(charKey, "%02d", key -1);
+
+      fnTimerStart(TO_AUTO_REPEAT, key, KEY_AUTOREPEAT_PERIOD);
+
+      btnClicked(NULL, (char *)charKey);
+//    btnPressed(charKey);
+      refreshLcd();
+      lcd_refresh_dma();
+#endif
+    }
 
 
 bool_t lastshiftF = false;
@@ -279,9 +298,6 @@ bool_t lastshiftG = false;
           else if(calcMode == CM_MIM && softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_M_EDIT) {
             addItemToBuffer(item);
           }
-
-
-
           else if(item > 0) { // function
             if(calcMode == CM_NIM && item != ITM_CC && item!=ITM_HASH_JM && item!=ITM_toHMS && item!=ITM_ms) {  //JMNIM Allow NIM not closed, so that JMNIM can change the bases without ierrors thrown 
               closeNim();
@@ -794,8 +810,11 @@ bool_t lowercaseselected;
 
     temporaryInformation = TI_NO_INFO;
 
-    //longInteger_t lgInt; // For the real34 width test
-    //longIntegerInit(lgInt); // For the real34 width test
+    #if (REAL34_WIDTH_TEST == 1)
+      longInteger_t lgInt;
+      longIntegerInit(lgInt);
+    #endif // (REAL34_WIDTH_TEST == 1)
+
     switch(item) {
       case ITM_BACKSPACE:
 //removed altogether. Is it to allow action on release?
@@ -811,6 +830,11 @@ bool_t lowercaseselected;
           keyActionProcessed = true;
           addItemToBuffer(ITM_UP_ARROW);    //Let the arrows produce arrow up and arrow down in ALPHA mode
         }                            //JM^^
+        #if (REAL34_WIDTH_TEST == 1)
+          if(++largeur > SCREEN_WIDTH) largeur--;
+          uIntToLongInteger(largeur, lgInt);
+          convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_Z);
+        #endif // (REAL34_WIDTH_TEST == 1)
         break;
 
       case ITM_DOWN1:
@@ -820,7 +844,12 @@ bool_t lowercaseselected;
            keyActionProcessed = true;
            addItemToBuffer(ITM_DOWN_ARROW);    //Let the arrows produce arrow up and arrow down in ALPHA mode
         }                            //JM^^
-        break;
+        #if (REAL34_WIDTH_TEST == 1)
+          if(--largeur < 20) largeur++;
+          uIntToLongInteger(largeur, lgInt);
+          convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_Z);
+        #endif // (REAL34_WIDTH_TEST == 1)
+	        break;
 
 
       case ITM_BST:                  //JMvv used for arrows in AIM
@@ -1147,6 +1176,9 @@ bool_t lowercaseselected;
     #endif
       }
     }
+    #if (REAL34_WIDTH_TEST == 1)
+      longIntegerFree(lgInt);
+    #endif // (REAL34_WIDTH_TEST == 1)
   }
 
 

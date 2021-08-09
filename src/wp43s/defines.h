@@ -54,7 +54,7 @@
 //  #define SAVE_SPACE_DM42    //014984 bytes: Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
 //  #define SAVE_SPACE_DM42_1  //001568 bytes: STAT DEMOS 105-107-109
 //  #define SAVE_SPACE_DM42_2  //005672 bytes: XEQM
-//  #define SAVE_SPACE_DM42_4  //000736 bytes: XY GRAPHDEMOS
+  #define SAVE_SPACE_DM42_4  //000736 bytes: XY GRAPHDEMOS
 //  #define SAVE_SPACE_DM42_3  //002680 SOLVER (already excluded by XY GRAPHDEMOS)
 //  #define SAVE_SPACE_DM42_5  //001168 bytes: SHOW (old WP43S on VIEW)
 //  #define SAVE_SPACE_DM42_6  //001648 bytes: ELEC functions
@@ -71,6 +71,10 @@
   #define TWO_FILE_PGM
   #undef  TWO_FILE_PGM
 #endif
+
+
+//Testing and debugging
+//#define DM42_KEYCLICK              //Add a 1 ms click after key presses and releases, for scope syncing
 
 
 //Verbose options
@@ -212,6 +216,7 @@
   #define STATDEBUG_VERBOSE
 #endif
 
+#define REAL34_WIDTH_TEST 0 // For debugging real34 ALL 0 formating. Use UP/DOWN to shrink or enlarge the available space. The Z register holds the available width.
 
 
 //*************************
@@ -555,10 +560,12 @@ typedef enum {
 #define X_USER_MODE                              375
 #define X_BATTERY                                389
 
-#define TIMER_IDX_SCREEN_REFRESH                   0 // use timer 0 to wake up for screen refresh
-//#define TIMER_IDX_AUTO_REPEAT                      1 // use timer 1 to wake up for key auto-repeat
+#define TIMER_IDX_REFRESH_SLEEP                    0 // use timer 0 to wake up for screen refresh
+//#define TIMER_IDX_AUTO_REPEAT                    1 // use timer 1 to wake up for key auto-repeat
 
-// timer nr for FG and FN use                                       //dr vv
+#define TMR_NUMBER                                 9
+
+// timer
 #define TO_FG_LONG                                 0
 #define TO_CL_LONG                                 1
 #define TO_FG_TIMR                                 2
@@ -566,7 +573,8 @@ typedef enum {
 #define TO_FN_EXEC                                 4
 #define TO_3S_CTFF                                 5
 #define TO_CL_DROP                                 6
-#define TO_KB_ACTV                                 7                //dr ^^
+#define TO_AUTO_REPEAT                             7
+#define TO_KB_ACTV                                 8
 
 
 
@@ -880,6 +888,8 @@ typedef enum {
 #define SCREEN_REFRESH_PERIOD                    100 // 500 // in milliseconds //JM timeout for lcd refresh in ms 100
 #define FAST_SCREEN_REFRESH_PERIOD               100 // in milliseconds
 #endif
+#define KEY_AUTOREPEAT_FIRST_PERIOD              400 // in milliseconds
+#define KEY_AUTOREPEAT_PERIOD                    200 // in milliseconds
 
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)

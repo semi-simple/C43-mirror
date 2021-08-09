@@ -36,6 +36,8 @@
 //extern uint32_t nextTimerRefresh;
 //#endif
 
+void     keyClick(uint8_t length); 
+
 void     showAlphaModeonGui   (void);
 void     resetShiftState      (void);
 void     showShiftState       (void);
@@ -60,14 +62,11 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, 
 bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t SHFT, bool_t GSHFT);
 
 #ifdef PC_BUILD
-gboolean refreshTimer         (gpointer data);
 void     btnFnPressed_StateMachine (GtkWidget *unused, gpointer data);
 void     btnFnReleased_StateMachine(GtkWidget *unused, gpointer data);
 
 #endif
 #ifdef DMCP_BUILD
-void     refreshTimer         (void);
-
 
 #define BUFFER_FAIL     0                                   //vv dr - internal keyBuffer POC
 #define BUFFER_SUCCESS  1
@@ -105,42 +104,6 @@ bool_t   emptyKeyBuffer       ();                           //^^
 void     btnFnPressed_StateMachine (void *unused, void *data);
 void     btnFnReleased_StateMachine(void *unused, void *data);
 #endif
-
-void     fnTimerReset         (void);
-void     fnTimerDummyTest     (uint16_t param);
-void     fnTimerConfig        (uint8_t nr, void(*func)(uint16_t), uint16_t param/*, uint32_t time*/);
-void     fnTimerStart         (uint8_t nr, uint16_t param, uint32_t time);      // Start Timer, 0..n-1
-void     fnTimerStop          (uint8_t nr);                                     // Stop Timer, 0..n-1
-void     fnTimerExec          (uint8_t nr);                                     // Execute Timer, 0..n-1
-void     fnTimerDel           (uint8_t nr);                                     // Delete Timer, 0..n-1
-uint8_t  fnTimerGetStatus     (uint8_t nr);
-
-
-
-/********************************************//**
- * \typedef timer_t
- * \brief Structure keeping the information for one timer
- ***********************************************/
-#define TMR_NUMBER    8
-
-#define TMR_UNUSED    0
-#define TMR_STOPPED   1
-#define TMR_RUNNING   2
-#define TMR_COMPLETED 3
-
-
-
-typedef struct {
-  void     (*func)(uint16_t); ///< Function called to execute the timer
-  uint16_t param;             ///< 1st parameter to the above
-//uint32_t time;              ///<
-#ifndef PC_BUILD
-  uint32_t timer_will_expire; ///<
-#else
-  gint64   timer_will_expire; ///<
-#endif
-  uint8_t  state;             ///<
-} kb_timer_t;
 
 
 void fnT_ARROW(uint16_t command);

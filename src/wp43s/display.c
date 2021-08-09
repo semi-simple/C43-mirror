@@ -34,6 +34,7 @@
 #include "c43Extensions/jm.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
+#include "mathematics/wp34s.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -323,6 +324,37 @@ void real34ToDisplayString(const real34_t *real34, uint32_t tag, char *displaySt
 }
 
 
+static bool_t checkForAndChange(char *displayString, const real34_t *val, const real_t *constMul, const real_t *constant, const real_t *constDiv, const char *ss, bool_t frontSpace) {
+  real34_t constant34, diff;  real_t temp;
+
+  realMultiply(constMul, constant, &temp, &ctxtReal39);
+  realDivide(&temp, constDiv, &temp, &ctxtReal39);
+  realToReal34(&temp, &constant34);
+
+  real34Subtract(val, &constant34, &diff);
+
+  realDivide(const_1e_24, const_1e8, &temp, &ctxtReal39);
+  realToReal34(&temp, &constant34);
+
+  if(real34CompareAbsLessThan(&diff,&constant34)) {
+    if(real34IsPositive(&val)) {
+      if(frontSpace) {
+        strcpy(displayString, " ");
+        strcat(displayString, ss);
+      }
+      else {
+        strcpy(displayString, ss);
+      }
+    }
+    else {
+      strcpy(displayString, "-");
+      strcat(displayString, ss);
+    }
+    return true;
+  } else 
+    return false;
+}
+
 
 /********************************************//**
  * \brief Formats a real
@@ -343,6 +375,20 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
   real_t value;
+
+
+if (checkForAndChange(displayString, real34, const_1, const_eE,           const_1, "e", frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_piOn2,        const_1, STD_pi "/2", frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_pi,           const_1, STD_pi, frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_2pi,          const_1, "2" STD_pi, frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_3piOn2,       const_1, "3" STD_pi "/2",frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_3piOn4,       const_1, "3" STD_pi "/4",frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_2, const_root2on2,     const_1, STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_root2on2,     const_1, STD_SQUARE_ROOT STD_SUB_2 "/2",frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_rt3,          const_1, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_rt3on2,       const_1, STD_SQUARE_ROOT STD_SUB_3 "/2",frontSpace)) return;
+
+
 
   real34ToReal(real34, &value);
   ctxtReal39.digits =  (displayFormat == DF_FIX ? 24 : displayHasNDigits); // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123

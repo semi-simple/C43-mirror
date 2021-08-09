@@ -355,6 +355,35 @@ static bool_t checkForAndChange(char *displayString, const real34_t *val, const 
     return false;
 }
 
+static bool_t checkForAndChange_(char *displayString, const real34_t *val, const real_t *constant, const char *ss, bool_t frontSpace) {
+real_t d_r, m_r;
+bool_t status;
+char ss1[20];
+char ss2[10];
+char ss2a[10];
+
+int8_t mm = 1;
+int8_t dd = 1;
+
+  while(dd<=5) {
+    int32ToReal((int32_t)dd, &d_r);
+    mm = 1;
+    while(mm<=5) { 
+      int32ToReal((int32_t)mm, &m_r);
+      if(mm>1) sprintf(ss1,"%i",mm); else ss1[0]=0;
+      strcpy(ss2,"/");
+      if(dd>1) {sprintf(ss2a,"%i",dd); strcat(ss2,ss2a);} else ss2[0]=0;
+      strcat(ss1,ss);
+      strcat(ss1,ss2);
+      status = checkForAndChange(displayString, val, &m_r, constant, &d_r, ss1, frontSpace);
+      if(status) return true;
+      mm++;    
+    }
+    dd++;
+  }
+  return false;
+}
+
 
 /********************************************//**
  * \brief Formats a real
@@ -374,20 +403,26 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
-  real_t value;
+  real_t value, c_temp;
 
 
-if (checkForAndChange(displayString, real34, const_1, const_eE,           const_1, "e", frontSpace)) return;
+if (checkForAndChange_(displayString, real34, const_eE,  "e", frontSpace)) return;
+if (checkForAndChange_(displayString, real34, const_pi,  STD_pi, frontSpace)) return;
+realMultiply(const_root2on2, const_2, &c_temp, &ctxtReal39);
+if (checkForAndChange_(displayString, real34, &c_temp,  STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
+if (checkForAndChange_(displayString, real34, const_rt3, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
+realSquareRoot(const_5, &c_temp, &ctxtReal39);
+if (checkForAndChange_(displayString, real34, &c_temp,  STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
+
+/*
+if (checkForAndChange(displayString, real34, const_1, const_root2on2,     const_1, STD_SQUARE_ROOT STD_SUB_2 "/2",frontSpace)) return;
 if (checkForAndChange(displayString, real34, const_1, const_piOn2,        const_1, STD_pi "/2", frontSpace)) return;
-if (checkForAndChange(displayString, real34, const_1, const_pi,           const_1, STD_pi, frontSpace)) return;
+if (checkForAndChange(displayString, real34, const_1, const_rt3on2,       const_1, STD_SQUARE_ROOT STD_SUB_3 "/2",frontSpace)) return;
 if (checkForAndChange(displayString, real34, const_1, const_2pi,          const_1, "2" STD_pi, frontSpace)) return;
 if (checkForAndChange(displayString, real34, const_1, const_3piOn2,       const_1, "3" STD_pi "/2",frontSpace)) return;
 if (checkForAndChange(displayString, real34, const_1, const_3piOn4,       const_1, "3" STD_pi "/4",frontSpace)) return;
 if (checkForAndChange(displayString, real34, const_2, const_root2on2,     const_1, STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
-if (checkForAndChange(displayString, real34, const_1, const_root2on2,     const_1, STD_SQUARE_ROOT STD_SUB_2 "/2",frontSpace)) return;
-if (checkForAndChange(displayString, real34, const_1, const_rt3,          const_1, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
-if (checkForAndChange(displayString, real34, const_1, const_rt3on2,       const_1, STD_SQUARE_ROOT STD_SUB_3 "/2",frontSpace)) return;
-
+*/
 
 
   real34ToReal(real34, &value);

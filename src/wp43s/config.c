@@ -1009,7 +1009,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_106o"
+#define VERSION1 "_106o+"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2
@@ -1035,6 +1035,10 @@ void fnReset(uint16_t confirmation) {
     fnStrtoX("C43 L42: unmodified DM42");
     #endif
     fnStore(103);
+
+    fnStrtoX("C43: Try POC pi and e and roots, ...");
+    fnStore(104);
+
     fnDrop(0);
 //    fnDrop(0);
 //    fnStrtoX("C43 LARGE TEXT");

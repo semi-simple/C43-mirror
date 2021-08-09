@@ -25,6 +25,7 @@
 #include "memory.h"
 #include "saveRestoreCalcState.h"
 #include "screen.h"
+#include "timer.h"
 
 #include "wp43s.h"
 

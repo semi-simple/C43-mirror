@@ -1590,3 +1590,101 @@ bool_t saveLastX(void) {
   copySourceRegisterToDestRegister(REGISTER_X, REGISTER_L);
   return lastErrorCode == ERROR_NONE;
 }
+
+
+static uint8_t getRegParam(bool_t *f, uint16_t *s, uint16_t *n, uint16_t *d) {
+  real_t x, p;
+  int32_t t;
+
+  if(getRegisterDataType(REGISTER_X) == dtReal34) {
+    *s = *n = 0;
+    if(d) *d = 0;
+    real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    if(!realCompareAbsLessThan(&x, const_1000))
+      return ERROR_OUT_OF_RANGE;
+
+    if(f) *f = realIsNegative(&x);
+    realSetPositiveSign(&x);
+
+    realToIntegralValue(&x, &p, DEC_ROUND_DOWN, &ctxtReal39);
+    realToInt32(&p, t); *s = t;
+
+    realSubtract(&x, &p, &x, &ctxtReal39);
+    x.exponent += 2;
+    realToIntegralValue(&x, &p, DEC_ROUND_DOWN, &ctxtReal39);
+    realToInt32(&p, t); *n = t;
+
+    if(d) {
+      realSubtract(&x, &p, &p, &ctxtReal39);
+      p.exponent += 3;
+      realToIntegralValue(&x, &p, DEC_ROUND_DOWN, &ctxtReal39);
+      realToInt32(&p, t); *d = t;
+    }
+
+    if(*s < REGISTER_X) { // global numbered registers
+      if(*s + *n >= REGISTER_X) {
+        return ERROR_OUT_OF_RANGE;
+      }
+      else if(*n == 0) {
+        *n = REGISTER_X - *s;
+      }
+    }
+    else if(*s < FIRST_LOCAL_REGISTER) { // stack and global lettered registers (XYZT ABCD LIJK)
+      if(*s + *n >= FIRST_LOCAL_REGISTER) {
+        return ERROR_OUT_OF_RANGE;
+      }
+      else if(*n == 0) {
+        *n = FIRST_LOCAL_REGISTER - *s;
+      }
+    }
+    else if(*s < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) { // local registers
+      if(*s + *n >= FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+        return ERROR_OUT_OF_RANGE;
+      }
+      else if(*n == 0) {
+        *n = FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters - *s;
+      }
+    }
+    else {
+      return ERROR_OUT_OF_RANGE;
+    }
+
+    if(d) {
+      if(*d < REGISTER_X) { // global numbered registers
+        if(*d + *n >= REGISTER_X) {
+          return ERROR_OUT_OF_RANGE;
+        }
+      }
+      else if(*d < FIRST_LOCAL_REGISTER) { // stack and global lettered registers (XYZT ABCD LIJK)
+        if(*d + *n >= FIRST_LOCAL_REGISTER) {
+          return ERROR_OUT_OF_RANGE;
+        }
+      }
+      else if(*d < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) { // local registers
+        if(*d + *n >= FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+          return ERROR_OUT_OF_RANGE;
+        }
+      }
+      else {
+        return ERROR_OUT_OF_RANGE;
+      }
+    }
+
+    return ERROR_NONE;
+  }
+  else {
+    *s = *n = 0;
+    if(d) *d = 0;
+    return ERROR_INVALID_DATA_TYPE_FOR_OP;
+  }
+}
+
+void fnRegClr(uint16_t unusedButMandatoryParameter) {
+  uint16_t s, n;
+
+  if((lastErrorCode = getRegParam(NULL, &s, &n, NULL)) == ERROR_NONE) {
+    for(int i = s; i < (s + n); ++i) {
+      clearRegister(i);
+    }
+  }
+}

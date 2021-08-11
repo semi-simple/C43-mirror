@@ -1605,6 +1605,8 @@ static uint8_t getRegParam(bool_t *f, uint16_t *s, uint16_t *n, uint16_t *d) {
       return ERROR_OUT_OF_RANGE;
 
     if(f) *f = realIsNegative(&x);
+    if(f == NULL && realIsNegative(&x))
+      return ERROR_OUT_OF_RANGE;
     realSetPositiveSign(&x);
 
     realToIntegralValue(&x, &p, DEC_ROUND_DOWN, &ctxtReal39);
@@ -1679,6 +1681,7 @@ static uint8_t getRegParam(bool_t *f, uint16_t *s, uint16_t *n, uint16_t *d) {
     return ERROR_INVALID_DATA_TYPE_FOR_OP;
   }
 }
+
 
 void fnRegClr(uint16_t unusedButMandatoryParameter) {
   uint16_t s, n;

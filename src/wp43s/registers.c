@@ -1778,3 +1778,29 @@ void fnRegSort(uint16_t unusedButMandatoryParameter) {
     }
   }
 }
+
+
+void fnRegCopy(uint16_t unusedButMandatoryParameter) {
+  bool_t f;
+  uint16_t s, n, d;
+
+  if((lastErrorCode = getRegParam(&f, &s, &n, &d)) == ERROR_NONE) {
+    if(f) {
+      // to be coded
+    }
+    else {
+      if(s > d) {
+        for(int i = 0; i < n; ++i) {
+          copySourceRegisterToDestRegister(s + i, d + i);
+          if(lastErrorCode == ERROR_RAM_FULL) return; // abort if not enough memory
+        }
+      }
+      else if(s < d) {
+        for(int i = n - 1; i >= 0; --i) {
+          copySourceRegisterToDestRegister(s + i, d + i);
+          if(lastErrorCode == ERROR_RAM_FULL) return; // abort if not enough memory
+        }
+      }
+    }
+  }
+}

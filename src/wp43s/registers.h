@@ -212,5 +212,6 @@ void           fnToReal                        (uint16_t unusedButMandatoryParam
   bool_t  saveLastX                       (void);
 
 void      fnRegClr                        (uint16_t unusedButMandatoryParameter);
+void      fnRegCopy                       (uint16_t unusedButMandatoryParameter);
 void      fnRegSort                       (uint16_t unusedButMandatoryParameter);
 #endif // REGISTERS_H

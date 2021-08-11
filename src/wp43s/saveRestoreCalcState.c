@@ -1091,7 +1091,7 @@ static void skipMatrixData(char *type, char *value, void *stream) {
 
 
 
-static bool_t restoreOneSection(void *stream, uint16_t loadMode) {
+static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uint16_t n, uint16_t d) {
   int16_t i, numberOfRegs;
   calcRegister_t regist;
   char *str;
@@ -1107,9 +1107,9 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode) {
       readLine(stream, aimBuffer); // Register data type
       readLine(stream, tmpString); // Register value
 
-      if(loadMode == LM_ALL || (loadMode == LM_REGISTERS && regist < REGISTER_X)) {
-        restoreRegister(regist, aimBuffer, tmpString);
-        restoreMatrixData(regist, stream);
+      if(loadMode == LM_ALL || (loadMode == LM_REGISTERS && regist < REGISTER_X) || (loadMode == LM_REGISTERS_PARTIAL && regist >= s && regist < (s + n))) {
+        restoreRegister(loadMode == LM_REGISTERS_PARTIAL ? (regist - s + d) : regist, aimBuffer, tmpString);
+        restoreMatrixData(loadMode == LM_REGISTERS_PARTIAL ? (regist - s + d) : regist, stream);
       }
       else {
         skipMatrixData(aimBuffer, tmpString, stream);
@@ -1399,7 +1399,7 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode) {
 
 
 
-void fnLoad(uint16_t loadMode) {
+void doLoad(uint16_t loadMode, uint16_t s, uint16_t n, uint16_t d) {
   #ifdef DMCP_BUILD
     if(f_open(BACKUP, "SAVFILES\\wp43s.sav", FA_READ) != FR_OK) {
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
@@ -1420,7 +1420,7 @@ void fnLoad(uint16_t loadMode) {
     }
   #endif // DMCP_BUILD
 
-  while (restoreOneSection(BACKUP, loadMode))
+  while (restoreOneSection(BACKUP, loadMode, s, n, d))
   {
   }
 
@@ -1437,6 +1437,12 @@ void fnLoad(uint16_t loadMode) {
       temporaryInformation = TI_BACKUP_RESTORED;
     }
   #endif // TESTSUITE_BUILD
+}
+
+
+
+void fnLoad(uint16_t loadMode) {
+  doLoad(loadMode, 0, 0, 0);
 }
 
 #undef BACKUP

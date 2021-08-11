@@ -25,6 +25,7 @@
 #include "error.h"
 #include "flags.h"
 #include "items.h"
+#include "mathematics/compare.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/rsd.h"
 #include "matrix.h"
@@ -1686,5 +1687,67 @@ void fnRegClr(uint16_t unusedButMandatoryParameter) {
     for(int i = s; i < (s + n); ++i) {
       clearRegister(i);
     }
+  }
+}
+
+
+static void sortReg(uint16_t range_start, uint16_t range_end) {
+  int8_t res;
+
+  if(range_start == range_end) {
+    // do nothing
+  }
+  else if(range_start + 1 == range_end) {
+    if(registerCmp(range_start, range_end, &res)) {
+      if(res > 0) {
+        registerHeader_t savedRegisterHeader = globalRegister[range_start];
+        globalRegister[range_start] = globalRegister[range_end];
+        globalRegister[range_end] = savedRegisterHeader;
+      }
+    }
+  }
+  else {
+    const uint16_t range_center = (range_end - range_start) / 2 + range_start;
+    uint16_t pos1 = range_start, pos2 = range_center + 1;
+    registerHeader_t *sortedReg = allocWp43s(TO_BLOCKS(sizeof(registerHeader_t)) * (range_end - range_start + 1));
+    if(lastErrorCode == ERROR_RAM_FULL) return; // unlikely
+
+    if(sortedReg) {
+      sortReg(range_start,      range_center);
+      sortReg(range_center + 1, range_end   );
+
+      for(uint16_t i = 0; i <= (range_end - range_start); ++i) {
+        if(registerCmp(pos1, pos2, &res)) {
+          if(pos2 > range_end) {
+            sortedReg[i] = globalRegister[pos1++];
+          }
+          else if(pos1 > range_center) {
+            sortedReg[i] = globalRegister[pos2++];
+          }
+          else if(res > 0) {
+            sortedReg[i] = globalRegister[pos2++];
+          }
+          else {
+            sortedReg[i] = globalRegister[pos1++];
+          }
+        }
+      }
+      for(uint16_t i = 0; i <= (range_end - range_start); ++i) {
+        globalRegister[range_start + i] = sortedReg[i];
+      }
+      freeWp43s(sortedReg, TO_BLOCKS(sizeof(registerHeader_t)) * (range_end - range_start + 1));
+    }
+    else { // unlikely
+      lastErrorCode = ERROR_RAM_FULL;
+    }
+  }
+}
+
+
+void fnRegSort(uint16_t unusedButMandatoryParameter) {
+  uint16_t s, n;
+
+  if((lastErrorCode = getRegParam(NULL, &s, &n, NULL)) == ERROR_NONE) {
+    sortReg(s, s + n - 1);
   }
 }

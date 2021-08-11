@@ -1808,3 +1808,21 @@ void fnRegCopy(uint16_t unusedButMandatoryParameter) {
     }
   }
 }
+
+
+void fnRegSwap(uint16_t unusedButMandatoryParameter) {
+  uint16_t s, n, d;
+
+  if((lastErrorCode = getRegParam(NULL, &s, &n, &d)) == ERROR_NONE) {
+    if((d < s + n) && (s < d + n)) { // overlap
+      lastErrorCode = ERROR_OUT_OF_RANGE;
+    }
+    else {
+      for(int i = 0; i < n; ++i) {
+        registerHeader_t savedRegisterHeader = globalRegister[s + i];
+        globalRegister[s + i] = globalRegister[d + i];
+        globalRegister[d + i] = savedRegisterHeader;
+      }
+    }
+  }
+}

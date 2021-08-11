@@ -31,6 +31,7 @@
 #include "matrix.h"
 #include "memory.h"
 #include "registerValueConversions.h"
+#include "saveRestoreCalcState.h"
 #include "sort.h"
 #include "stack.h"
 #include <string.h>
@@ -1618,8 +1619,8 @@ static uint8_t getRegParam(bool_t *f, uint16_t *s, uint16_t *n, uint16_t *d) {
     realToInt32(&p, t); *n = t;
 
     if(d) {
-      realSubtract(&x, &p, &p, &ctxtReal39);
-      p.exponent += 3;
+      realSubtract(&x, &p, &x, &ctxtReal39);
+      x.exponent += 3;
       realToIntegralValue(&x, &p, DEC_ROUND_DOWN, &ctxtReal39);
       realToInt32(&p, t); *d = t;
     }
@@ -1642,6 +1643,9 @@ static uint8_t getRegParam(bool_t *f, uint16_t *s, uint16_t *n, uint16_t *d) {
     }
     else if(*s < FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) { // local registers
       if(*s + *n >= FIRST_LOCAL_REGISTER + currentNumberOfLocalRegisters) {
+        return ERROR_OUT_OF_RANGE;
+      }
+      else if(f && *f) {
         return ERROR_OUT_OF_RANGE;
       }
       else if(*n == 0) {
@@ -1786,7 +1790,7 @@ void fnRegCopy(uint16_t unusedButMandatoryParameter) {
 
   if((lastErrorCode = getRegParam(&f, &s, &n, &d)) == ERROR_NONE) {
     if(f) {
-      // to be coded
+      doLoad(LM_REGISTERS_PARTIAL, s, n, d);
     }
     else {
       if(s > d) {

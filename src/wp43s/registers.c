@@ -1748,6 +1748,30 @@ void fnRegSort(uint16_t unusedButMandatoryParameter) {
   uint16_t s, n;
 
   if((lastErrorCode = getRegParam(NULL, &s, &n, NULL)) == ERROR_NONE) {
-    sortReg(s, s + n - 1);
+    switch(getRegisterDataType(s)) {
+      case dtLongInteger:
+      case dtShortInteger:
+      case dtReal34:
+        for(int i = s + 1; i < (s + n); ++i) {
+          if((getRegisterDataType(i) != dtLongInteger) && (getRegisterDataType(i) != dtShortInteger) && (getRegisterDataType(i) != dtReal34)) {
+            lastErrorCode = ERROR_INVALID_DATA_TYPE_FOR_OP;
+            break;
+          }
+        }
+        break;
+      case dtTime:
+      case dtDate:
+      case dtString:
+        for(int i = s + 1; i < (s + n); ++i) {
+          if(getRegisterDataType(i) != getRegisterDataType(s)) {
+            lastErrorCode = ERROR_INVALID_DATA_TYPE_FOR_OP;
+            break;
+          }
+        }
+        break;
+    }
+    if(lastErrorCode == ERROR_NONE) {
+      sortReg(s, s + n - 1);
+    }
   }
 }

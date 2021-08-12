@@ -814,6 +814,7 @@
     bool_t prefixPre = true;
     bool_t prefixPost = true;
     const uint8_t origDisplayStack = displayStack;
+    calcRegister_t regX = temporaryInformation == TI_VIEW ? currentViewRegister : REGISTER_X;
 
     char prefix[200], lastBase[4];
 
@@ -915,12 +916,12 @@
       #endif // PC_BUILD
 
 
-      if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtReal34Matrix)) {
+      if(getRegisterDataType(regX) == dtReal34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtReal34Matrix)) {
         real34Matrix_t matrix;
         if(calcMode == CM_MIM)
           matrix = openMatrixMIMPointer.realMatrix;
         else
-          linkToRealMatrixRegister(REGISTER_X, &matrix);
+          linkToRealMatrixRegister(regX, &matrix);
         const uint16_t rows = matrix.header.matrixRows;
         const uint16_t cols = matrix.header.matrixColumns;
         bool_t smallFont = (rows >= 5);
@@ -934,12 +935,12 @@
         if(calcMode == CM_MIM) displayStack -= 2;
         if(displayStack > 4 /* in case of overflow */) displayStack = 0;
       }
-      else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtComplex34Matrix)) {
+      else if(getRegisterDataType(regX) == dtComplex34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtComplex34Matrix)) {
         complex34Matrix_t matrix;
         if(calcMode == CM_MIM)
           matrix = openMatrixMIMPointer.complexMatrix;
         else
-          linkToComplexMatrixRegister(calcMode == CM_MIM ? matrixIndex : REGISTER_X, &matrix);
+          linkToComplexMatrixRegister(regX, &matrix);
         const uint16_t rows = matrix.header.matrixRows;
         const uint16_t cols = matrix.header.matrixColumns;
         bool_t smallFont = (rows >= 5);
@@ -1051,7 +1052,16 @@
 
       else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
         prefixWidth = 0;
-        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) ? 4 - displayStack : 0));
+        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(regX) == dtReal34Matrix || getRegisterDataType(regX) == dtComplex34Matrix) ? 4 - displayStack : 0));
+        calcRegister_t origRegist = regist;
+        if(temporaryInformation == TI_VIEW) {
+          if(regist == REGISTER_X) {
+            regist = currentViewRegister;
+          }
+          else {
+            --regist;
+          }
+        }
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
           if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
@@ -1680,9 +1690,9 @@
         }
 
         else if(getRegisterDataType(regist) == dtReal34Matrix) {
-          if(regist == REGISTER_X && calcMode != CM_MIM) {
+          if(origRegist == REGISTER_X && calcMode != CM_MIM) {
             real34Matrix_t matrix;
-            linkToRealMatrixRegister(REGISTER_X, &matrix);
+            linkToRealMatrixRegister(regist, &matrix);
             showRealMatrix(&matrix);
             if(lastErrorCode != 0)
               refreshRegisterLine(errorMessageRegisterLine);
@@ -1702,9 +1712,9 @@
         }
 
         else if(getRegisterDataType(regist) == dtComplex34Matrix) {
-          if(regist == REGISTER_X && calcMode != CM_MIM) {
+          if(origRegist == REGISTER_X && calcMode != CM_MIM) {
             complex34Matrix_t matrix;
-            linkToComplexMatrixRegister(REGISTER_X, &matrix);
+            linkToComplexMatrixRegister(regist, &matrix);
             showComplexMatrix(&matrix);
             if(lastErrorCode != 0)
               refreshRegisterLine(errorMessageRegisterLine);
@@ -1727,6 +1737,28 @@
           sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
           showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), baseY + 6, vmNormal, false, true);
         }
+
+        if(temporaryInformation == TI_VIEW && origRegist == REGISTER_X) regist = REGISTER_X;
+      }
+
+      if(temporaryInformation == TI_VIEW && regist == REGISTER_X) {
+        if(currentViewRegister < REGISTER_X) {
+          sprintf(tmpString, "R%02" PRIu16 " =", currentViewRegister);
+        }
+        else if(currentViewRegister < FIRST_LOCAL_REGISTER) {
+          sprintf(tmpString, "%c =", "XYZTABCDLIJK"[currentViewRegister - REGISTER_X]);
+        }
+        else if(currentViewRegister <= LAST_LOCAL_REGISTER) {
+          sprintf(tmpString, "R.%02" PRIu16 " =", currentViewRegister - FIRST_LOCAL_REGISTER);
+        }
+        else if(currentViewRegister >= FIRST_NAMED_VARIABLE && currentViewRegister <= LAST_NAMED_VARIABLE) {
+          memcpy(tmpString, allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName[0]);
+          strcpy(tmpString + allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName[0], " =");
+        }
+        else {
+          sprintf(tmpString, "? =");
+        }
+        showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
       }
 
       if(regist == REGISTER_T) {
@@ -1734,7 +1766,7 @@
       }
     }
 
-    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix || calcMode == CM_MIM) {
+    if(getRegisterDataType(regX) == dtReal34Matrix || getRegisterDataType(regX) == dtComplex34Matrix || calcMode == CM_MIM) {
       displayStack = origDisplayStack;
     }
   }

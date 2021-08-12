@@ -1772,9 +1772,9 @@ void showMatrixEditor() {
   }
 
   if(getRegisterDataType(matrixIndex) == dtReal34Matrix)
-    showRealMatrix(&openMatrixMIMPointer.realMatrix);
+    showRealMatrix(&openMatrixMIMPointer.realMatrix, 0);
   else
-    showComplexMatrix(&openMatrixMIMPointer.complexMatrix);
+    showComplexMatrix(&openMatrixMIMPointer.complexMatrix, 0);
 
   sprintf(tmpString, "%" PRIi16";%" PRIi16"=%s%s", (int16_t)(colVector ? matSelCol+1 : matSelRow+1), (int16_t)(colVector ? 1 : matSelCol+1), (aimBuffer[0] == 0 || aimBuffer[0] == '-') ? "" : " ", nimBufferDisplay);
   width = stringWidth(tmpString, &numericFont, true, true) + 1;
@@ -2093,7 +2093,7 @@ void mimRestore(void) {
 }
 
 
-void showRealMatrix(const real34Matrix_t *matrix) {
+void showRealMatrix(const real34Matrix_t *matrix, int16_t prefixWidth) {
   int rows = matrix->header.matrixRows;
   int cols = matrix->header.matrixColumns;
   int16_t Y_POS = Y_POSITION_OF_REGISTER_X_LINE;
@@ -2101,7 +2101,7 @@ void showRealMatrix(const real34Matrix_t *matrix) {
   int16_t totalWidth = 0, width = 0;
   const font_t *font;
   int16_t fontHeight = NUMERIC_FONT_HEIGHT;
-  int16_t maxWidth = MATRIX_LINE_WIDTH;
+  int16_t maxWidth = MATRIX_LINE_WIDTH - prefixWidth;
   int16_t colWidth[MATRIX_MAX_COLUMNS] = {}, rPadWidth[MATRIX_MAX_ROWS * MATRIX_MAX_COLUMNS] = {};
   const bool_t forEditor = matrix == &openMatrixMIMPointer.realMatrix;
   const uint16_t sRow = forEditor ? scrollRow : 0;
@@ -2143,7 +2143,7 @@ smallFont:
 
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(" " STD_ELLIPSIS, font, true, true) : 0);
-  int16_t mtxWidth = getRealMatrixColumnWidths(matrix, font, colWidth, rPadWidth, &digits, maxCols);
+  int16_t mtxWidth = getRealMatrixColumnWidths(matrix, prefixWidth, font, colWidth, rPadWidth, &digits, maxCols);
   bool_t noFix = (mtxWidth < 0);
   mtxWidth = abs(mtxWidth);
   totalWidth = baseWidth + mtxWidth;
@@ -2160,7 +2160,7 @@ smallFont:
     else {
       displayFormat = DF_SCI;
       displayFormatDigits = 3;
-      mtxWidth = getRealMatrixColumnWidths(matrix, font, colWidth, rPadWidth, &digits, maxCols);
+      mtxWidth = getRealMatrixColumnWidths(matrix, prefixWidth, font, colWidth, rPadWidth, &digits, maxCols);
       noFix = (mtxWidth < 0);
       mtxWidth = abs(mtxWidth);
       totalWidth = baseWidth + mtxWidth;
@@ -2230,7 +2230,7 @@ smallFont:
 
 }
 
-int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *rPadWidth, int16_t *digits, uint16_t maxCols) {
+int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, int16_t prefixWidth, const font_t *font, int16_t *colWidth, int16_t *rPadWidth, int16_t *digits, uint16_t maxCols) {
   const bool_t colVector = matrix->header.matrixColumns == 1 && matrix->header.matrixRows > 1;
   const int rows = colVector ? 1 : matrix->header.matrixRows;
   const int cols = colVector ? matrix->header.matrixRows : matrix->header.matrixColumns;
@@ -2238,7 +2238,7 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
   const bool_t forEditor = matrix == &openMatrixMIMPointer.realMatrix;
   const uint16_t sRow = forEditor ? scrollRow : 0;
   const uint16_t sCol = forEditor ? scrollColumn : 0;
-  const int16_t maxWidth = MATRIX_LINE_WIDTH;
+  const int16_t maxWidth = MATRIX_LINE_WIDTH - prefixWidth;
   int16_t totalWidth = 0, width = 0;
   int16_t maxRightWidth[MATRIX_MAX_COLUMNS] = {};
   int16_t maxLeftWidth[MATRIX_MAX_COLUMNS] = {};
@@ -2331,7 +2331,7 @@ int16_t getRealMatrixColumnWidths(const real34Matrix_t *matrix, const font_t *fo
 }
 
 
-void showComplexMatrix(const complex34Matrix_t *matrix) {
+void showComplexMatrix(const complex34Matrix_t *matrix, int16_t prefixWidth) {
   int rows = matrix->header.matrixRows;
   int cols = matrix->header.matrixColumns;
   int16_t Y_POS = Y_POSITION_OF_REGISTER_X_LINE;
@@ -2339,7 +2339,7 @@ void showComplexMatrix(const complex34Matrix_t *matrix) {
   int16_t totalWidth = 0, width = 0;
   const font_t *font;
   int16_t fontHeight = NUMERIC_FONT_HEIGHT;
-  int16_t maxWidth = MATRIX_LINE_WIDTH;
+  int16_t maxWidth = MATRIX_LINE_WIDTH - prefixWidth;
   int16_t colWidth[MATRIX_MAX_COLUMNS] = {}, colWidth_r[MATRIX_MAX_COLUMNS] = {}, colWidth_i[MATRIX_MAX_COLUMNS] = {};
   int16_t rPadWidth_r[MATRIX_MAX_ROWS * MATRIX_MAX_COLUMNS] = {}, rPadWidth_i[MATRIX_MAX_ROWS * MATRIX_MAX_COLUMNS] = {};
   const bool_t forEditor = matrix == &openMatrixMIMPointer.complexMatrix;
@@ -2391,7 +2391,7 @@ smallFont:
 
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0);
-  totalWidth = baseWidth + getComplexMatrixColumnWidths(matrix, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits, maxCols);
+  totalWidth = baseWidth + getComplexMatrixColumnWidths(matrix, prefixWidth, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits, maxCols);
   if(totalWidth > maxWidth || leftEllipsis) {
     if(font == &numericFont) {
       goto smallFont;
@@ -2404,7 +2404,7 @@ smallFont:
       displayFormat = DF_SCI;
       displayFormatDigits = 2;
       clearSystemFlag(FLAG_MULTx);
-      totalWidth = baseWidth + getComplexMatrixColumnWidths(matrix, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits, maxCols);
+      totalWidth = baseWidth + getComplexMatrixColumnWidths(matrix, prefixWidth, font, colWidth, colWidth_r, colWidth_i, rPadWidth_r, rPadWidth_i, &digits, maxCols);
       if(totalWidth > maxWidth) {
         maxCols--;
         goto smallFont;
@@ -2507,7 +2507,7 @@ smallFont:
 
 }
 
-int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i, int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits, uint16_t maxCols) {
+int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, int16_t prefixWidth, const font_t *font, int16_t *colWidth, int16_t *colWidth_r, int16_t *colWidth_i, int16_t *rPadWidth_r, int16_t *rPadWidth_i, int16_t *digits, uint16_t maxCols) {
   const bool_t colVector = matrix->header.matrixColumns == 1 && matrix->header.matrixRows > 1;
   const int rows = colVector ? 1 : matrix->header.matrixRows;
   const int cols = colVector ? matrix->header.matrixRows : matrix->header.matrixColumns;
@@ -2515,7 +2515,7 @@ int16_t getComplexMatrixColumnWidths(const complex34Matrix_t *matrix, const font
   const bool_t forEditor = matrix == &openMatrixMIMPointer.complexMatrix;
   const uint16_t sRow = forEditor ? scrollRow : 0;
   const uint16_t sCol = forEditor ? scrollColumn : 0;
-  const int16_t maxWidth = MATRIX_LINE_WIDTH;
+  const int16_t maxWidth = MATRIX_LINE_WIDTH - prefixWidth;
   int16_t totalWidth = 0, width = 0;
   int16_t maxRightWidth_r[MATRIX_MAX_COLUMNS] = {};
   int16_t maxLeftWidth_r[MATRIX_MAX_COLUMNS] = {};

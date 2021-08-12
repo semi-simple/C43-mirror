@@ -3069,16 +3069,19 @@ void transposeRealMatrix(const real34Matrix_t *matrix, real34Matrix_t *res) {
     else lastErrorCode = ERROR_RAM_FULL;
   }
   else {
-    real34_t tmp;
-    for(i = 0; i < rows; ++i) {
-      for(j = i + 1; j < cols; ++j) {
-        real34Copy(&res->matrixElements[j * rows + i], &tmp);
-        real34Copy(&res->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
-        real34Copy(&tmp,                               &res->matrixElements[i * cols + j]);
+    real34Matrix_t tmp;
+    copyRealMatrix(matrix, &tmp);
+    if(tmp.matrixElements) {
+      for(i = 0; i < rows; ++i) {
+        for(j = 0; j < cols; ++j) {
+          real34Copy(&tmp.matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+        }
       }
+      realMatrixFree(&tmp);
+      res->header.matrixRows    = cols;
+      res->header.matrixColumns = rows;
     }
-    res->header.matrixRows    = cols;
-    res->header.matrixColumns = rows;
+    else lastErrorCode = ERROR_RAM_FULL;
   }
 }
 
@@ -3098,16 +3101,19 @@ void transposeComplexMatrix(const complex34Matrix_t *matrix, complex34Matrix_t *
     else lastErrorCode = ERROR_RAM_FULL;
   }
   else {
-    complex34_t tmp;
-    for(i = 0; i < rows; ++i) {
-      for(j = i + 1; j < cols; ++j) {
-        complex34Copy(&res->matrixElements[j * rows + i], &tmp);
-        complex34Copy(&res->matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
-        complex34Copy(&tmp,                               &res->matrixElements[i * cols + j]);
+    complex34Matrix_t tmp;
+    copyComplexMatrix(matrix, &tmp);
+    if(tmp.matrixElements) {
+      for(i = 0; i < rows; ++i) {
+        for(j = 0; j < cols; ++j) {
+          complex34Copy(&tmp.matrixElements[i * cols + j], &res->matrixElements[j * rows + i]);
+        }
       }
+      complexMatrixFree(&tmp);
+      res->header.matrixRows    = cols;
+      res->header.matrixColumns = rows;
     }
-    res->header.matrixRows    = cols;
-    res->header.matrixColumns = rows;
+    else lastErrorCode = ERROR_RAM_FULL;
   }
 }
 

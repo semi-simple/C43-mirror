@@ -826,7 +826,59 @@
       sprintf(prefix, "? =");
     }
     *prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-}
+  }
+
+
+  void updateMatrixHeightCache(void) {
+    int16_t prefixWidth = 0;
+    char prefix[200];
+    calcRegister_t regX = temporaryInformation == TI_VIEW ? currentViewRegister : REGISTER_X;
+
+    if(getRegisterDataType(regX) == dtReal34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtReal34Matrix)) {
+      real34Matrix_t matrix;
+      if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
+      if(calcMode == CM_MIM)
+        matrix = openMatrixMIMPointer.realMatrix;
+      else
+        linkToRealMatrixRegister(regX, &matrix);
+      const uint16_t rows = matrix.header.matrixRows;
+      const uint16_t cols = matrix.header.matrixColumns;
+      bool_t smallFont = (rows >= 5);
+      int16_t dummyVal[MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS + 1) + 1] = {};
+      const int16_t mtxWidth = getRealMatrixColumnWidths(&matrix, prefixWidth, &numericFont, dummyVal, dummyVal + MATRIX_MAX_COLUMNS, dummyVal + (MATRIX_MAX_ROWS + 1) * MATRIX_MAX_COLUMNS, cols > MATRIX_MAX_COLUMNS ? MATRIX_MAX_COLUMNS : cols);
+      if(abs(mtxWidth) > MATRIX_LINE_WIDTH) smallFont = true;
+      if(rows == 2 && cols > 1 && !smallFont) cachedDisplayStack = 3;
+      if(rows == 3 && cols > 1) cachedDisplayStack = smallFont ? 3 : 2;
+      if(rows == 4 && cols > 1) cachedDisplayStack = smallFont ? 2 : 1;
+      if(rows >= 5 && cols > 1) cachedDisplayStack = 2;
+      if(calcMode == CM_MIM) cachedDisplayStack -= 2;
+      if(cachedDisplayStack > 4 /* in case of overflow */) cachedDisplayStack = 0;
+    }
+    else if(getRegisterDataType(regX) == dtComplex34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtComplex34Matrix)) {
+      complex34Matrix_t matrix;
+      if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
+      if(calcMode == CM_MIM)
+        matrix = openMatrixMIMPointer.complexMatrix;
+      else
+        linkToComplexMatrixRegister(regX, &matrix);
+      const uint16_t rows = matrix.header.matrixRows;
+      const uint16_t cols = matrix.header.matrixColumns;
+      bool_t smallFont = (rows >= 5);
+      int16_t dummyVal[MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS * 2 + 3) + 1] = {};
+      const int16_t mtxWidth = getComplexMatrixColumnWidths(&matrix, prefixWidth, &numericFont, dummyVal, dummyVal + MATRIX_MAX_COLUMNS, dummyVal + MATRIX_MAX_COLUMNS * 2, dummyVal + MATRIX_MAX_COLUMNS * 3, dummyVal + MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS + 3), dummyVal + MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS * 2 + 3), cols > MATRIX_MAX_COLUMNS ? MATRIX_MAX_COLUMNS : cols);
+      if(mtxWidth > MATRIX_LINE_WIDTH) smallFont = true;
+      if(rows == 2 && cols > 1 && !smallFont) cachedDisplayStack = 3;
+      if(rows == 3 && cols > 1) cachedDisplayStack = smallFont ? 3 : 2;
+      if(rows == 4 && cols > 1) cachedDisplayStack = smallFont ? 2 : 1;
+      if(rows >= 5 && cols > 1) cachedDisplayStack = 2;
+      if(calcMode == CM_MIM) cachedDisplayStack -= 2;
+      if(cachedDisplayStack > 4 /* in case of overflow */) cachedDisplayStack = 0;
+    }
+
+    if(calcMode == CM_MIM && matrixIndex == REGISTER_X) {
+      cachedDisplayStack += 1;
+    }
+  }
 
   void refreshRegisterLine(calcRegister_t regist) {
     int16_t w, wLastBaseNumeric, wLastBaseStandard, prefixWidth, lineWidth = 0;
@@ -934,50 +986,11 @@
         #endif // (SHOW_MEMORY_STATUS == 1)
       #endif // PC_BUILD
 
-
       if(getRegisterDataType(regX) == dtReal34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtReal34Matrix)) {
-        real34Matrix_t matrix;
-        if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
-        if(calcMode == CM_MIM)
-          matrix = openMatrixMIMPointer.realMatrix;
-        else
-          linkToRealMatrixRegister(regX, &matrix);
-        const uint16_t rows = matrix.header.matrixRows;
-        const uint16_t cols = matrix.header.matrixColumns;
-        bool_t smallFont = (rows >= 5);
-        int16_t dummyVal[MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS + 1) + 1] = {};
-        const int16_t mtxWidth = getRealMatrixColumnWidths(&matrix, prefixWidth, &numericFont, dummyVal, dummyVal + MATRIX_MAX_COLUMNS, dummyVal + (MATRIX_MAX_ROWS + 1) * MATRIX_MAX_COLUMNS, cols > MATRIX_MAX_COLUMNS ? MATRIX_MAX_COLUMNS : cols);
-        if(abs(mtxWidth) > MATRIX_LINE_WIDTH) smallFont = true;
-        if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
-        if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
-        if(rows == 4 && cols > 1) displayStack = smallFont ? 2 : 1;
-        if(rows >= 5 && cols > 1) displayStack = 2;
-        if(calcMode == CM_MIM) displayStack -= 2;
-        if(displayStack > 4 /* in case of overflow */) displayStack = 0;
+        displayStack = cachedDisplayStack;
       }
       else if(getRegisterDataType(regX) == dtComplex34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtComplex34Matrix)) {
-        complex34Matrix_t matrix;
-        if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
-        if(calcMode == CM_MIM)
-          matrix = openMatrixMIMPointer.complexMatrix;
-        else
-          linkToComplexMatrixRegister(regX, &matrix);
-        const uint16_t rows = matrix.header.matrixRows;
-        const uint16_t cols = matrix.header.matrixColumns;
-        bool_t smallFont = (rows >= 5);
-        int16_t dummyVal[MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS * 2 + 3) + 1] = {};
-        const int16_t mtxWidth = getComplexMatrixColumnWidths(&matrix, prefixWidth, &numericFont, dummyVal, dummyVal + MATRIX_MAX_COLUMNS, dummyVal + MATRIX_MAX_COLUMNS * 2, dummyVal + MATRIX_MAX_COLUMNS * 3, dummyVal + MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS + 3), dummyVal + MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS * 2 + 3), cols > MATRIX_MAX_COLUMNS ? MATRIX_MAX_COLUMNS : cols);
-        if(mtxWidth > MATRIX_LINE_WIDTH) smallFont = true;
-        if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
-        if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
-        if(rows == 4 && cols > 1) displayStack = smallFont ? 2 : 1;
-        if(rows >= 5 && cols > 1) displayStack = 2;
-        if(calcMode == CM_MIM) displayStack -= 2;
-        if(displayStack > 4 /* in case of overflow */) displayStack = 0;
-      }
-
-      if(calcMode == CM_MIM && matrixIndex == REGISTER_X) {
-        displayStack += 1;
+        displayStack = cachedDisplayStack;
       }
 
       if(temporaryInformation == TI_STATISTIC_LR && (getRegisterDataType(REGISTER_X) != dtReal34)) {
@@ -1743,8 +1756,9 @@
         else if(getRegisterDataType(regist) == dtReal34Matrix) {
           if(origRegist == REGISTER_X && calcMode != CM_MIM) {
             real34Matrix_t matrix;
+            prefixWidth = 0; prefix[0] = 0;
             linkToRealMatrixRegister(regist, &matrix);
-            if(temporaryInformation == TI_VIEW && origRegist == REGISTER_X) viewRegName(prefix, &prefixWidth);
+            if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
             showRealMatrix(&matrix, prefixWidth);
             if(lastErrorCode != 0)
               refreshRegisterLine(errorMessageRegisterLine);

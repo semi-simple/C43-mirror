@@ -1848,6 +1848,7 @@ void mimEnter(bool_t commit) {
     else
       convertComplex34MatrixToComplex34MatrixRegister(&openMatrixMIMPointer.complexMatrix, matrixIndex);
   }
+  updateMatrixHeightCache();
 }
 
 void mimAddNumber(int16_t item) {
@@ -2066,6 +2067,7 @@ void mimRunFunction(int16_t func, uint16_t param) {
 
   if(liftStackFlag) setSystemFlag(FLAG_ASLIFT);
 
+  updateMatrixHeightCache();
   #ifdef PC_BUILD
     refreshLcd(NULL);
   #endif // PC_BUILD

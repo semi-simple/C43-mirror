@@ -52,12 +52,6 @@
 
 
 
-/********************************************//**
- * \brief Sets the calc to meet Chinese standards
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnConfigChina(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 4;
@@ -70,12 +64,6 @@ void fnConfigChina(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the calc to meet European standards
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnConfigEurope(uint16_t unusedButMandatoryParameter) {
   clearSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
@@ -88,12 +76,6 @@ void fnConfigEurope(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the calc to meet Indian standards
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnConfigIndia(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
@@ -106,12 +88,6 @@ void fnConfigIndia(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the calc to meet Japanese standards
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnConfigJapan(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
@@ -124,12 +100,6 @@ void fnConfigJapan(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the calc to meet English standards
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnConfigUk(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
@@ -142,12 +112,6 @@ void fnConfigUk(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the calc to meet American standards
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnConfigUsa(uint16_t unusedButMandatoryParameter) {
   setSystemFlag(FLAG_DECIMP);
   groupingGap = 3;
@@ -160,12 +124,6 @@ void fnConfigUsa(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the integer mode
- *
- * \param[in] mode uint16_t Integer mode
- * \return void
- ***********************************************/
 void fnIntegerMode(uint16_t mode) {
   shortIntegerMode = mode;
   
@@ -175,37 +133,18 @@ void fnIntegerMode(uint16_t mode) {
 
 
 
-/********************************************//**
- * \brief Displays credits to the brave men who
- * made this project work.
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnWho(uint16_t unusedButMandatoryParameter) {
   temporaryInformation = TI_WHO;
  }
 
 
 
-/********************************************//**
- * \brief Displays the version of this software
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnVersion(uint16_t unusedButMandatoryParameter) {
   temporaryInformation = TI_VERSION;
 }
 
 
 
-/********************************************//**
- * \brief Sets X to the amount of free RAM
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnFreeMemory(uint16_t unusedButMandatoryParameter) {
   longInteger_t mem;
 
@@ -219,12 +158,6 @@ void fnFreeMemory(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets X to the value of the rounding mode
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnGetRoundingMode(uint16_t unusedButMandatoryParameter) {
   longInteger_t rounding;
 
@@ -238,12 +171,6 @@ void fnGetRoundingMode(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the rounding mode
- *
- * \param[in] RM uint16_t
- * \return void
- ***********************************************/
 void fnSetRoundingMode(uint16_t RM) {
   roundingMode = RM;
 }
@@ -258,11 +185,6 @@ TO_QSPI const enum rounding roundingModeTable[7] = {
 
 
 
-/********************************************//**
- * \brief Sets X to the value of the integer mode
- *
- * \return void
- ***********************************************/
 void fnGetIntegerSignMode(uint16_t unusedButMandatoryParameter) {
   longInteger_t ism;
 
@@ -276,12 +198,6 @@ void fnGetIntegerSignMode(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Gets the word size
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnGetWordSize(uint16_t unusedButMandatoryParameter) {
   longInteger_t wordSize;
 
@@ -295,12 +211,6 @@ void fnGetWordSize(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the word size
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnSetWordSize(uint16_t WS) {
   bool_t reduceWordSize;
   if(WS == 0) {
@@ -342,12 +252,6 @@ void fnSetWordSize(uint16_t WS) {
 
 
 
-/********************************************//**
- * \brief Sets X to the amount of free flash memory
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnFreeFlashMemory(uint16_t unusedButMandatoryParameter) {
   longInteger_t flashMem;
 
@@ -361,12 +265,6 @@ void fnFreeFlashMemory(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets X to the battery voltage
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnBatteryVoltage(uint16_t unusedButMandatoryParameter) {
   real_t value;
 
@@ -381,30 +279,17 @@ void fnBatteryVoltage(uint16_t unusedButMandatoryParameter) {
   #endif // DMCP_BUILD
 
   realDivide(&value, const_1000, &value, &ctxtReal39);
-  realToReal34(&value, REGISTER_REAL34_DATA(REGISTER_X));
+  convertRealToReal34ResultRegister(&value, REGISTER_X);
 }
 
 
 
-/********************************************//**
- * \brief Retrives the amount of free flash memory
- *
- * \param void
- * \return uint32_t Number of bytes free
- ***********************************************/
 uint32_t getFreeFlash(void) {
   return 1234567u;
 }
 
 
 
-/********************************************//**
- * \brief Sets X to the number of signficant digits
- * rounding after each operation
- *
- * \param[in] unusedButMandatoryParameter uint16_t
- * \return void
- ***********************************************/
 void fnGetSignificantDigits(uint16_t unusedButMandatoryParameter) {
   longInteger_t sigDigits;
 
@@ -418,12 +303,35 @@ void fnGetSignificantDigits(uint16_t unusedButMandatoryParameter) {
 
 
 
-/********************************************//**
- * \brief Sets the rounding mode
- *
- * \param[in] RM uint16_t Rounding mode
- * \return void
- ***********************************************/
+void fnSetSignificantDigits(uint16_t unusedButMandatoryParameter) {
+  longInteger_t sigDigits;
+
+  if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+    convertLongIntegerRegisterToLongInteger(REGISTER_X, sigDigits);
+    if((longIntegerCompareInt(sigDigits, 0) >= 0) && (longIntegerCompareInt(sigDigits, 34) <= 0)) {
+      longIntegerToUInt(sigDigits, significantDigits);
+      if(significantDigits == 0) significantDigits = 34;
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ARG_EXCEEDS_FUNCTION_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #ifdef PC_BUILD
+      longIntegerToAllocatedString(sigDigits, errorMessage, sizeof(errorMessage));
+      moreInfoOnError("In function fnSetSignificantDigits:", errorMessage, "is out of range.", "");
+      #endif
+    }
+    longIntegerFree(sigDigits);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+    sprintf(errorMessage, "DataType %" PRIu32, getRegisterDataType(REGISTER_X));
+    moreInfoOnError("In function fnSetSignificantDigits:", errorMessage, "is not a long integer.", "");
+    #endif
+  }
+}
+
+
+
 void fnRoundingMode(uint16_t RM) {
   roundingMode = RM;
 
@@ -442,12 +350,6 @@ void fnRoundingMode(uint16_t RM) {
 
 
 
-/********************************************//**
- * \brief Sets the angular mode
- *
- * \param[in] am uint16_t Angular mode
- * \return void
- ***********************************************/
 void fnAngularMode(uint16_t am) {
   currentAngularMode = am;
   lastSetAngularMode = currentAngularMode;                         //JM

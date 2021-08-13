@@ -223,7 +223,7 @@ void subLonIReal(void) {
 
   if(xAngularMode == amNone) {
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
   }
   else {
     if(currentAngularMode == amMultPi) {
@@ -231,7 +231,7 @@ void subLonIReal(void) {
     }
     convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
@@ -258,7 +258,7 @@ void subRealLonI(void) {
 
   if(yAngularMode == amNone) {
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
   }
   else {
     if(currentAngularMode == amMultPi) {
@@ -266,7 +266,7 @@ void subRealLonI(void) {
     }
     convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
@@ -290,7 +290,7 @@ void subLonICplx(void) {
 
   realSubtract(&a, &c, &c, &ctxtReal39);
 
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  convertRealToReal34ResultRegister(&c, REGISTER_X);
   real34ChangeSign(REGISTER_IMAG34_DATA(REGISTER_X));
 
   if(running_program_jm) temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
@@ -316,7 +316,7 @@ void subCplxLonI(void) {
   realSubtract(&a, &c, &c, &ctxtReal39);
 
   reallocateRegister(REGISTER_X, dtComplex34, COMPLEX34_SIZE, amNone);
-  realToReal34(&c, REGISTER_REAL34_DATA(REGISTER_X));
+  convertRealToReal34ResultRegister(&c, REGISTER_X);
   real34Copy(&b, REGISTER_IMAG34_DATA(REGISTER_X));
 
   if(running_program_jm) temporaryInformation = (real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE) & (real34IsZero(REGISTER_IMAG34_DATA(REGISTER_X)) ? TI_TRUE : TI_FALSE);    //JM Temporary hack to do DSZ
@@ -566,7 +566,7 @@ void subShoIReal(void) {
 
   if(xAngularMode == amNone) {
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
   }
   else {
     if(currentAngularMode == amMultPi) {
@@ -574,7 +574,7 @@ void subShoIReal(void) {
     }
     convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
@@ -600,7 +600,7 @@ void subRealShoI(void) {
 
   if(yAngularMode == amNone) {
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
   }
   else {
     if(currentAngularMode == amMultPi) {
@@ -608,7 +608,7 @@ void subRealShoI(void) {
     }
     convertAngleFromTo(&y, yAngularMode, currentAngularMode, &ctxtReal39);
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 
@@ -690,7 +690,7 @@ void subRealReal(void) {
     convertAngleFromTo(&x, xAngularMode, currentAngularMode, &ctxtReal39);
 
     realSubtract(&y, &x, &x, &ctxtReal39);
-    realToReal34(&x, REGISTER_REAL34_DATA(REGISTER_X));
+    convertRealToReal34ResultRegister(&x, REGISTER_X);
     setRegisterAngularMode(REGISTER_X, currentAngularMode);
   }
 

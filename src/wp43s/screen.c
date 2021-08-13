@@ -1607,7 +1607,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
            w = stringWidth(tmpString, &standardFont, true, true);
            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-        }            
+        }
       }
 
       else if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
@@ -2245,7 +2245,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
 
-          else if(temporaryInformation == TI_CORR) {             
+          else if(temporaryInformation == TI_CORR) {
             if(regist == REGISTER_X) {
               prefix[0]=0;
               if(lrChosen == 0) {
@@ -2294,7 +2294,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           else if(temporaryInformation == TI_STATISTIC_SUMS) {
             realToInt32(SIGMA_N, w);
             if(regist == REGISTER_X && w > LIM) {
-              sprintf(prefix, "Plot memory full, continuing");                
+              sprintf(prefix, "Plot memory full, continuing");
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
@@ -2313,7 +2313,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                }
                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                //lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
-             }            
+             }
            }
 
 

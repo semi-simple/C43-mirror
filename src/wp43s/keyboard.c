@@ -849,7 +849,7 @@ bool_t lowercaseselected;
           uIntToLongInteger(largeur, lgInt);
           convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_Z);
         #endif // (REAL34_WIDTH_TEST == 1)
-	        break;
+        break;
 
 
       case ITM_BST:                  //JMvv used for arrows in AIM

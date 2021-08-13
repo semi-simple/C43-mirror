@@ -890,7 +890,6 @@ typedef enum {
 #endif
 #define KEY_AUTOREPEAT_FIRST_PERIOD              400 // in milliseconds
 #define KEY_AUTOREPEAT_PERIOD                    200 // in milliseconds
-
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 

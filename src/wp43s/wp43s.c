@@ -797,7 +797,7 @@ size_t                 wp43sMemInBlocks;
           btnReleased(charKey);
           keyClick(5);
         }
-        keyAutoRepeat = 0;
+//      keyAutoRepeat = 0;
         lcd_refresh();
       }
 

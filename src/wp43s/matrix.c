@@ -2144,6 +2144,7 @@ smallFont:
   int16_t digits;
 
   if(prefixWidth > 0) Y_POS = Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT + 1 + maxRows * fontHeight;
+  if(prefixWidth > 0 && font == &standardFont) Y_POS += (maxRows == 1 ? STANDARD_FONT_HEIGHT : REGISTER_LINE_HEIGHT - STANDARD_FONT_HEIGHT);
 
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(" " STD_ELLIPSIS, font, true, true) : 0);
@@ -2393,6 +2394,7 @@ smallFont:
   int16_t digits;
 
   if(prefixWidth > 0) Y_POS = Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT + 1 + maxRows * fontHeight;
+  if(prefixWidth > 0 && font == &standardFont) Y_POS += (maxRows == 1 ? STANDARD_FONT_HEIGHT : REGISTER_LINE_HEIGHT - STANDARD_FONT_HEIGHT);
 
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0);

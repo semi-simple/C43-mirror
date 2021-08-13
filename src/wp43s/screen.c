@@ -833,6 +833,8 @@
     int16_t prefixWidth = 0;
     char prefix[200];
 
+    cachedDisplayStack = 4;
+
     if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtReal34Matrix)) {
       real34Matrix_t matrix;
       if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);

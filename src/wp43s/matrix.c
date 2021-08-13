@@ -2195,7 +2195,7 @@ smallFont:
   if(forEditor) {
     clearRegisterLine(REGISTER_X, true, true);
     clearRegisterLine(REGISTER_Y, true, true);
-    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= (font == &standardFont ? 3 : 2)) clearRegisterLine(REGISTER_Z, true, true);
     if(rows >= (font == &standardFont ? 4 : 3)) clearRegisterLine(REGISTER_T, true, true);
   }
   else if(prefixWidth > 0) {
@@ -2438,8 +2438,8 @@ smallFont:
   if(forEditor) {
     clearRegisterLine(REGISTER_X, true, true);
     clearRegisterLine(REGISTER_Y, true, true);
-    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
-    if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
+    if(rows >= (font == &standardFont ? 3 : 2)) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= (font == &standardFont ? 4 : 2)) clearRegisterLine(REGISTER_T, true, true);
   }
   else if(prefixWidth > 0) {
     clearRegisterLine(REGISTER_T, true, true);

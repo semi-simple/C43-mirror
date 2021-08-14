@@ -226,6 +226,7 @@ uint16_t               lrChosen;
 uint16_t               lrChosenUndo;
 uint16_t               lastPlotMode;
 uint16_t               plotSelection;
+uint16_t               currentViewRegister;
 #if (REAL34_WIDTH_TEST == 1)
   uint16_t               largeur=200;
 #endif // (REAL34_WIDTH_TEST == 1)

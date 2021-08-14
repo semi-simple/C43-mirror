@@ -507,6 +507,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnOff                       (uint16_t unusedButMandatoryParameter) {}
   void fnAim                       (uint16_t unusedButMandatoryParameter) {}
   void fnShow                      (uint16_t unusedButMandatoryParameter) {}
+  void fnView                      (uint16_t unusedButMandatoryParameter) {}
   void fnLastX                     (uint16_t unusedButMandatoryParameter) {}
   void fnCyx                       (uint16_t unusedButMandatoryParameter) {}
   void fnPyx                       (uint16_t unusedButMandatoryParameter) {}
@@ -927,7 +928,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /*   98 */  { fnMultiply,                   ITM_MULT,                    STD_CROSS,                                     STD_CROSS,                                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*   99 */  { fnDivide,                     ITM_DIV/*#JM#*/,             STD_DIVIDE,                                    STD_DIVIDE,                                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  100 */  { fnIDiv,                       NOPARAM,                     "IDIV",                                        "IDIV",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  101 */  { fnShow,                       NOPARAM/*#JM#*/,             "VIEW",                                        "VIEW",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },//TEMPORARY SHOW OLD
+/*  101 */  { fnView,                       TM_M_DIM,                    "VIEW",                                        "VIEW",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /*  102 */  { fnMod,                        NOPARAM,                     "MOD",                                         "MOD",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  103 */  { fnMax,                        NOPARAM,                     "max",                                         "max",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  104 */  { fnMin,                        NOPARAM,                     "min",                                         "min",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

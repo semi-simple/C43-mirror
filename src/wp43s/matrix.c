@@ -2144,6 +2144,7 @@ smallFont:
   int16_t digits;
 
   if(prefixWidth > 0) Y_POS = Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT + 1 + maxRows * fontHeight;
+  if(prefixWidth > 0 && font == &standardFont) Y_POS += (maxRows == 1 ? STANDARD_FONT_HEIGHT : REGISTER_LINE_HEIGHT - STANDARD_FONT_HEIGHT);
 
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(" " STD_ELLIPSIS, font, true, true) : 0);
@@ -2194,7 +2195,7 @@ smallFont:
   if(forEditor) {
     clearRegisterLine(REGISTER_X, true, true);
     clearRegisterLine(REGISTER_Y, true, true);
-    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= (font == &standardFont ? 3 : 2)) clearRegisterLine(REGISTER_Z, true, true);
     if(rows >= (font == &standardFont ? 4 : 3)) clearRegisterLine(REGISTER_T, true, true);
   }
   else if(prefixWidth > 0) {
@@ -2393,6 +2394,7 @@ smallFont:
   int16_t digits;
 
   if(prefixWidth > 0) Y_POS = Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT + 1 + maxRows * fontHeight;
+  if(prefixWidth > 0 && font == &standardFont) Y_POS += (maxRows == 1 ? STANDARD_FONT_HEIGHT : REGISTER_LINE_HEIGHT - STANDARD_FONT_HEIGHT);
 
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0);
@@ -2436,8 +2438,8 @@ smallFont:
   if(forEditor) {
     clearRegisterLine(REGISTER_X, true, true);
     clearRegisterLine(REGISTER_Y, true, true);
-    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
-    if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
+    if(rows >= (font == &standardFont ? 3 : 2)) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= (font == &standardFont ? 4 : 2)) clearRegisterLine(REGISTER_T, true, true);
   }
   else if(prefixWidth > 0) {
     clearRegisterLine(REGISTER_T, true, true);
@@ -2761,6 +2763,8 @@ bool_t redimMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols) 
       if(lastErrorCode == ERROR_NONE) {
         reallocateRegister(regist, dtReal34Matrix, newSize, amNone);
         if(lastErrorCode == ERROR_NONE) {
+          REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixRows    = rows;
+          REGISTER_REAL34_MATRIX_DBLOCK(regist)->matrixColumns = cols;
           for(uint16_t i = 0; i < origRows * origCols; ++i) {
             real34Copy(newMatrix.matrixElements + i, REGISTER_REAL34_MATRIX_M_ELEMENTS(regist) + i);
           }
@@ -2794,6 +2798,8 @@ bool_t redimMatrixRegister(calcRegister_t regist, uint16_t rows, uint16_t cols) 
       if(lastErrorCode == ERROR_NONE) {
         reallocateRegister(regist, dtComplex34Matrix, newSize, amNone);
         if(lastErrorCode == ERROR_NONE) {
+          REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixRows    = rows;
+          REGISTER_COMPLEX34_MATRIX_DBLOCK(regist)->matrixColumns = cols;
           for(uint16_t i = 0; i < origRows * origCols; ++i) {
             complex34Copy(newMatrix.matrixElements + i, REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist) + i);
           }

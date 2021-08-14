@@ -36,7 +36,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         57  // indirect fix
+#define BACKUP_VERSION         1057  // Added lrChosenUndo
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -113,6 +113,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&tam.min,                            sizeof(tam.min),                            BACKUP);
     save(&tam.max,                            sizeof(tam.max),                            BACKUP);
     save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
+    save(&numberOfNamedVariables,             sizeof(numberOfNamedVariables),             BACKUP);
     ramPtr = TO_WP43SMEMPTR(allNamedVariables);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
@@ -342,6 +343,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&tam.min,                            sizeof(tam.min),                            BACKUP);
       restore(&tam.max,                            sizeof(tam.max),                            BACKUP);
       restore(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
+      restore(&numberOfNamedVariables,             sizeof(numberOfNamedVariables),             BACKUP);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       allNamedVariables = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);

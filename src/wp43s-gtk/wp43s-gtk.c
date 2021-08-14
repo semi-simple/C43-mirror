@@ -134,9 +134,9 @@
   //fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV/*, 6000*/);  //dr no keyboard scan boost for emulator
     gdk_threads_add_timeout(5, refreshTimer, NULL);                     //dr refreshTimer is called every 5 ms    //^^
 
-    fnTimerReset();
+  //  fnTimerReset();
 //  fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV);
-    gdk_threads_add_timeout(5, refreshTimer, NULL);
+  //  gdk_threads_add_timeout(5, refreshTimer, NULL);
 
     gtk_main();
 

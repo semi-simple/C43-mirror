@@ -121,6 +121,7 @@ uint8_t                roundingMode;
 uint8_t                calcMode;
 uint8_t                nextChar;
 uint8_t                displayStack;
+uint8_t                cachedDisplayStack;
 uint8_t                alphaCase;
 uint8_t                numLinesNumericFont;
 uint8_t                numLinesStandardFont;

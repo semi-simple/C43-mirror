@@ -140,6 +140,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       }
     }
 
+    updateMatrixHeightCache();
     #ifdef PC_BUILD
       refreshLcd(NULL);
     #endif // PC_BUILD

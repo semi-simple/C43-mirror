@@ -1848,6 +1848,7 @@ void mimEnter(bool_t commit) {
     else
       convertComplex34MatrixToComplex34MatrixRegister(&openMatrixMIMPointer.complexMatrix, matrixIndex);
   }
+  updateMatrixHeightCache();
 }
 
 void mimAddNumber(int16_t item) {
@@ -2066,6 +2067,7 @@ void mimRunFunction(int16_t func, uint16_t param) {
 
   if(liftStackFlag) setSystemFlag(FLAG_ASLIFT);
 
+  updateMatrixHeightCache();
   #ifdef PC_BUILD
     refreshLcd(NULL);
   #endif // PC_BUILD
@@ -2141,6 +2143,8 @@ smallFont:
   const bool_t leftEllipsis = (sCol > 0);
   int16_t digits;
 
+  if(prefixWidth > 0) Y_POS = Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT + 1 + maxRows * fontHeight;
+
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(" " STD_ELLIPSIS, font, true, true) : 0);
   int16_t mtxWidth = getRealMatrixColumnWidths(matrix, prefixWidth, font, colWidth, rPadWidth, &digits, maxCols);
@@ -2192,6 +2196,12 @@ smallFont:
     clearRegisterLine(REGISTER_Y, true, true);
     if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
     if(rows >= (font == &standardFont ? 4 : 3)) clearRegisterLine(REGISTER_T, true, true);
+  }
+  else if(prefixWidth > 0) {
+    clearRegisterLine(REGISTER_T, true, true);
+    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= (font == &standardFont ? 4 : 3)) clearRegisterLine(REGISTER_Y, true, true);
+    if(rows == 4 && font != &standardFont) clearRegisterLine(REGISTER_X, true, true);
   }
 
   for(int i = 0; i < maxRows; i++) {
@@ -2368,13 +2378,6 @@ void showComplexMatrix(const complex34Matrix_t *matrix, int16_t prefixWidth) {
   videoMode_t vm = vmNormal;
   if(maxCols + sCol >= cols) maxCols = cols - sCol;
 
-  if(forEditor) {
-    clearRegisterLine(REGISTER_X, true, true);
-    clearRegisterLine(REGISTER_Y, true, true);
-    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
-    if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
-  }
-
   font = &numericFont;
   if(rows >= (forEditor ? 4 : 5)) {
 smallFont:
@@ -2388,6 +2391,8 @@ smallFont:
   bool_t rightEllipsis = (cols > maxCols) && (cols > maxCols + sCol);
   bool_t leftEllipsis = (sCol > 0);
   int16_t digits;
+
+  if(prefixWidth > 0) Y_POS = Y_POSITION_OF_REGISTER_T_LINE - REGISTER_LINE_HEIGHT + 1 + maxRows * fontHeight;
 
   int16_t baseWidth = (leftEllipsis ? stringWidth(STD_ELLIPSIS " ", font, true, true) : 0) +
     (rightEllipsis ? stringWidth(STD_ELLIPSIS, font, true, true) : 0);
@@ -2427,6 +2432,19 @@ smallFont:
   baseWidth -= stringWidth(STD_SPACE_FIGURE, font, true, true);
 
   if(!forEditor) X_POS = SCREEN_WIDTH - ((colVector ? stringWidth("[]" STD_SUP_T, font, true, true) : stringWidth("[]", font, true, true)) + baseWidth) - (font == &standardFont ? 0 : 1);
+
+  if(forEditor) {
+    clearRegisterLine(REGISTER_X, true, true);
+    clearRegisterLine(REGISTER_Y, true, true);
+    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= 3) clearRegisterLine(REGISTER_T, true, true);
+  }
+  else if(prefixWidth > 0) {
+    clearRegisterLine(REGISTER_T, true, true);
+    if(rows >= 2) clearRegisterLine(REGISTER_Z, true, true);
+    if(rows >= (font == &standardFont ? 4 : 3)) clearRegisterLine(REGISTER_Y, true, true);
+    if(rows == 4 && font != &standardFont) clearRegisterLine(REGISTER_X, true, true);
+  }
 
   for(int i = 0; i < maxRows; i++) {
     int16_t colX = stringWidth("[", font, true, true);

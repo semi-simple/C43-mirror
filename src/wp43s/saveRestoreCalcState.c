@@ -569,6 +569,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
           clearSystemFlag(FLAG_ALPHA);
         }
 
+      updateMatrixHeightCache();
       refreshScreen();
     }
   }

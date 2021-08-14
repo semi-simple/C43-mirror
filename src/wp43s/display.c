@@ -2836,3 +2836,8 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 #endif //TESTSUITE_BUILD
 #endif //#ifndef SAVE_SPACE_DM42_9
 }
+
+void fnView(uint16_t regist) {
+  currentViewRegister = regist;
+  temporaryInformation = TI_VIEW;
+}

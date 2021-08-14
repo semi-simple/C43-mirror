@@ -24,6 +24,7 @@
 #include "constantPointers.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "stack.h"
 
 #include "wp43s.h"
@@ -75,7 +76,7 @@ void fnConstant(const uint16_t constant) {
 void fnPi(uint16_t unusedButMandatoryParameter) {
   liftStack();
 
-  realToReal34(const_pi, REGISTER_REAL34_DATA(REGISTER_X));
+  convertRealToReal34ResultRegister(const_pi, REGISTER_X);
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 
   lastIntegerBase = 0;                                                      //JMNIM

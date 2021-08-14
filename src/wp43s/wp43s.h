@@ -186,6 +186,7 @@
   extern uint8_t                calcMode;
   extern uint8_t                nextChar;
   extern uint8_t                displayStack;
+  extern uint8_t                cachedDisplayStack;
   extern uint8_t                displayStackSHOIDISP;         //JM SHOIDISP
   extern bool_t                 numLock;                      //JM
   extern uint8_t                alphaCase;
@@ -265,6 +266,7 @@
   extern uint16_t               lrChosenUndo;
   extern uint16_t               lastPlotMode;
   extern uint16_t               plotSelection;
+  extern uint16_t               currentViewRegister;
   #if (REAL34_WIDTH_TEST == 1)
     extern uint16_t               largeur;
   #endif // (REAL34_WIDTH_TEST == 1)

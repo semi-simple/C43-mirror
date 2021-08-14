@@ -315,7 +315,13 @@ bool_t lastshiftG = false;
             }
 
             if(lastErrorCode == 0) {
-              temporaryInformation = TI_NO_INFO;
+              if(temporaryInformation == TI_VIEW) {
+                temporaryInformation = TI_NO_INFO;
+                updateMatrixHeightCache();
+              }
+              else {
+                temporaryInformation = TI_NO_INFO;
+              }
               runFunction(item);
             }
           }
@@ -373,7 +379,14 @@ bool_t allowShiftsToClearError = false;
 
     // Shift f pressed and JM REMOVED shift g not active
     if(key->primary == ITM_SHIFTf && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM  || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {    //JM Mode added
-      temporaryInformation = TI_NO_INFO;
+      if(temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) allowShiftsToClearError = true; //JM
+      if(temporaryInformation == TI_VIEW) {
+        temporaryInformation = TI_NO_INFO;
+        updateMatrixHeightCache();
+      }
+      else {
+        temporaryInformation = TI_NO_INFO;
+      }
       if(lastErrorCode != 0) allowShiftsToClearError = true;                                                                                         //JM shifts
       lastErrorCode = 0;
 
@@ -391,7 +404,14 @@ bool_t allowShiftsToClearError = false;
 
     // Shift g pressed and JM REMOVED shift f not active
     else if(key->primary == ITM_SHIFTg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH)) {
-      temporaryInformation = TI_NO_INFO;
+      if(temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) allowShiftsToClearError = true; //JM
+      if(temporaryInformation == TI_VIEW) {
+        temporaryInformation = TI_NO_INFO;
+        updateMatrixHeightCache();
+      }
+      else {
+        temporaryInformation = TI_NO_INFO;
+      }
       if(lastErrorCode != 0) allowShiftsToClearError = true;                                                                                         //JM shifts
       lastErrorCode = 0;
 
@@ -415,7 +435,14 @@ bool_t allowShiftsToClearError = false;
       if(ShiftTimoutMode) {
         fnTimerStart(TO_FG_TIMR, TO_FG_TIMR, JM_SHIFT_TIMER); //^^
       }
-      temporaryInformation = TI_NO_INFO;                                                                                                                                //JM shifts
+      if(temporaryInformation == TI_VIEW || temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) allowShiftsToClearError = true; //JM
+      if(temporaryInformation == TI_VIEW) {
+        temporaryInformation = TI_NO_INFO;
+        updateMatrixHeightCache();
+      }
+      else {
+        temporaryInformation = TI_NO_INFO;
+      }
       if(lastErrorCode != 0) allowShiftsToClearError = true;                                                                                         //JM shifts
       lastErrorCode = 0;                                                                                                      //JM shifts
 
@@ -589,6 +616,7 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
     }
   #endif // PC_BUILD
 
+
   #ifdef DMCP_BUILD
     void btnPressed(void *data) {
       nimWhenButtonPressed = (calcMode == CM_NIM);                  //PHM eRPN 2021-07
@@ -603,7 +631,7 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
         lastshiftG = shiftG;
         item = determineItem((char *)data);
 //      previousItem = item;
-//      }
+//    }
 
       showFunctionNameItem = 0;
       if(item != ITM_NOP && item != ITM_NULL) {
@@ -808,7 +836,13 @@ bool_t lowercaseselected;
       lastErrorCode = 0;
     }
 
-    temporaryInformation = TI_NO_INFO;
+    if(temporaryInformation == TI_VIEW) {
+      temporaryInformation = TI_NO_INFO;
+      updateMatrixHeightCache();
+    }
+    else {
+      temporaryInformation = TI_NO_INFO;
+    }
 
     #if (REAL34_WIDTH_TEST == 1)
       longInteger_t lgInt;
@@ -849,7 +883,7 @@ bool_t lowercaseselected;
           uIntToLongInteger(largeur, lgInt);
           convertLongIntegerToLongIntegerRegister(lgInt, REGISTER_Z);
         #endif // (REAL34_WIDTH_TEST == 1)
-	        break;
+        break;
 
 
       case ITM_BST:                  //JMvv used for arrows in AIM
@@ -1447,6 +1481,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           mimEnter(true);
           mimFinalize();
           calcModeNormal();
+          updateMatrixHeightCache();
         }
         popSoftmenu(); // close softmenu dedicated for the MIM
         break;

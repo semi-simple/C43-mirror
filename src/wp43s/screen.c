@@ -1425,6 +1425,80 @@ void hideFunctionName(void) {
 
 uint8_t   displayStack_m = 255;                                                  //JMSHOIDISP
 
+
+  static void viewRegName(char *prefix, int16_t *prefixWidth) {
+    if(currentViewRegister < REGISTER_X) {
+      sprintf(prefix, "R%02" PRIu16 " =", currentViewRegister);
+    }
+    else if(currentViewRegister < FIRST_LOCAL_REGISTER) {
+      sprintf(prefix, "%c =", "XYZTABCDLIJK"[currentViewRegister - REGISTER_X]);
+    }
+    else if(currentViewRegister <= LAST_LOCAL_REGISTER) {
+      sprintf(prefix, "R.%02" PRIu16 " =", (uint16_t)(currentViewRegister - FIRST_LOCAL_REGISTER));
+    }
+    else if(currentViewRegister >= FIRST_NAMED_VARIABLE && currentViewRegister <= LAST_NAMED_VARIABLE) {
+      memcpy(prefix, allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName[0]);
+      strcpy(prefix + allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName[0], " =");
+    }
+    else {
+      sprintf(prefix, "? =");
+    }
+    *prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+  }
+
+
+  void updateMatrixHeightCache(void) {
+    int16_t prefixWidth = 0;
+    char prefix[200];
+
+    cachedDisplayStack = 4;
+
+    if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtReal34Matrix)) {
+      real34Matrix_t matrix;
+      if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
+      if(calcMode == CM_MIM)
+        matrix = openMatrixMIMPointer.realMatrix;
+      else
+        linkToRealMatrixRegister(REGISTER_X, &matrix);
+      const uint16_t rows = matrix.header.matrixRows;
+      const uint16_t cols = matrix.header.matrixColumns;
+      bool_t smallFont = (rows >= 5);
+      int16_t dummyVal[MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS + 1) + 1] = {};
+      const int16_t mtxWidth = getRealMatrixColumnWidths(&matrix, prefixWidth, &numericFont, dummyVal, dummyVal + MATRIX_MAX_COLUMNS, dummyVal + (MATRIX_MAX_ROWS + 1) * MATRIX_MAX_COLUMNS, cols > MATRIX_MAX_COLUMNS ? MATRIX_MAX_COLUMNS : cols);
+      if(abs(mtxWidth) > MATRIX_LINE_WIDTH) smallFont = true;
+      if(rows == 2 && cols > 1 && !smallFont) cachedDisplayStack = 3;
+      if(rows == 3 && cols > 1) cachedDisplayStack = smallFont ? 3 : 2;
+      if(rows == 4 && cols > 1) cachedDisplayStack = smallFont ? 2 : 1;
+      if(rows >= 5 && cols > 1) cachedDisplayStack = 2;
+      if(calcMode == CM_MIM) cachedDisplayStack -= 2;
+      if(cachedDisplayStack > 4 /* in case of overflow */) cachedDisplayStack = 0;
+    }
+    else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtComplex34Matrix)) {
+      complex34Matrix_t matrix;
+      if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
+      if(calcMode == CM_MIM)
+        matrix = openMatrixMIMPointer.complexMatrix;
+      else
+        linkToComplexMatrixRegister(REGISTER_X, &matrix);
+      const uint16_t rows = matrix.header.matrixRows;
+      const uint16_t cols = matrix.header.matrixColumns;
+      bool_t smallFont = (rows >= 5);
+      int16_t dummyVal[MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS * 2 + 3) + 1] = {};
+      const int16_t mtxWidth = getComplexMatrixColumnWidths(&matrix, prefixWidth, &numericFont, dummyVal, dummyVal + MATRIX_MAX_COLUMNS, dummyVal + MATRIX_MAX_COLUMNS * 2, dummyVal + MATRIX_MAX_COLUMNS * 3, dummyVal + MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS + 3), dummyVal + MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS * 2 + 3), cols > MATRIX_MAX_COLUMNS ? MATRIX_MAX_COLUMNS : cols);
+      if(mtxWidth > MATRIX_LINE_WIDTH) smallFont = true;
+      if(rows == 2 && cols > 1 && !smallFont) cachedDisplayStack = 3;
+      if(rows == 3 && cols > 1) cachedDisplayStack = smallFont ? 3 : 2;
+      if(rows == 4 && cols > 1) cachedDisplayStack = smallFont ? 2 : 1;
+      if(rows >= 5 && cols > 1) cachedDisplayStack = 2;
+      if(calcMode == CM_MIM) cachedDisplayStack -= 2;
+      if(cachedDisplayStack > 4 /* in case of overflow */) cachedDisplayStack = 0;
+    }
+
+    if(calcMode == CM_MIM && matrixIndex == REGISTER_X) {
+      cachedDisplayStack += 1;
+    }
+  }
+
   void refreshRegisterLine(calcRegister_t regist) {
     int32_t w;
     int16_t wLastBaseNumeric, wLastBaseStandard, prefixWidth = 0, lineWidth = 0;
@@ -1450,6 +1524,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
   #if (DEBUG_PANEL == 1)
     refreshDebugPanel();
   #endif
+
+    if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_X) { //JM frame the SHOW window
+      lcd_fill_rect(0,Y_POSITION_OF_REGISTER_T_LINE-4,SCREEN_WIDTH,1,LCD_EMPTY_VALUE);
+      lcd_fill_rect(0,240-3*SOFTMENU_HEIGHT,SCREEN_WIDTH,3,LCD_EMPTY_VALUE);
+    }
 
     if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_PLOT_STAT) && (calcMode != CM_GRAPH) && (calcMode != CM_LISTXY)) {               //JM      
       if(temporaryInformation != TI_SHOW_REGISTER_BIG) {                        //JMSHOW
@@ -1550,48 +1629,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         printf("^^^^Display Register: %d temporaryInformation: %d\n",regist, temporaryInformation);
       #endif //VERBOSE_SCREEN
 
-
       if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtReal34Matrix)) {
-        real34Matrix_t matrix;
-        if(calcMode == CM_MIM)
-          matrix = openMatrixMIMPointer.realMatrix;
-        else
-          linkToRealMatrixRegister(REGISTER_X, &matrix);
-        const uint16_t rows = matrix.header.matrixRows;
-        const uint16_t cols = matrix.header.matrixColumns;
-        bool_t smallFont = (rows >= 5);
-        int16_t dummyVal[MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS + 1) + 1] = {};
-        const int16_t mtxWidth = getRealMatrixColumnWidths(&matrix, &numericFont, dummyVal, dummyVal + MATRIX_MAX_COLUMNS, dummyVal + (MATRIX_MAX_ROWS + 1) * MATRIX_MAX_COLUMNS, cols > MATRIX_MAX_COLUMNS ? MATRIX_MAX_COLUMNS : cols);
-        if(abs(mtxWidth) > MATRIX_LINE_WIDTH) smallFont = true;
-        if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
-        if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
-        if(rows == 4 && cols > 1) displayStack = smallFont ? 2 : 1;
-        if(rows >= 5 && cols > 1) displayStack = 2;
-        if(calcMode == CM_MIM) displayStack -= 2;
-        if(displayStack > 4 /* in case of overflow */) displayStack = 0;
+        displayStack = cachedDisplayStack;
       }
       else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtComplex34Matrix)) {
-        complex34Matrix_t matrix;
-        if(calcMode == CM_MIM)
-          matrix = openMatrixMIMPointer.complexMatrix;
-        else
-          linkToComplexMatrixRegister(calcMode == CM_MIM ? matrixIndex : REGISTER_X, &matrix);
-        const uint16_t rows = matrix.header.matrixRows;
-        const uint16_t cols = matrix.header.matrixColumns;
-        bool_t smallFont = (rows >= 5);
-        int16_t dummyVal[MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS * 2 + 3) + 1] = {};
-        const int16_t mtxWidth = getComplexMatrixColumnWidths(&matrix, &numericFont, dummyVal, dummyVal + MATRIX_MAX_COLUMNS, dummyVal + MATRIX_MAX_COLUMNS * 2, dummyVal + MATRIX_MAX_COLUMNS * 3, dummyVal + MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS + 3), dummyVal + MATRIX_MAX_COLUMNS * (MATRIX_MAX_ROWS * 2 + 3), cols > MATRIX_MAX_COLUMNS ? MATRIX_MAX_COLUMNS : cols);
-        if(mtxWidth > MATRIX_LINE_WIDTH) smallFont = true;
-        if(rows == 2 && cols > 1 && !smallFont) displayStack = 3;
-        if(rows == 3 && cols > 1) displayStack = smallFont ? 3 : 2;
-        if(rows == 4 && cols > 1) displayStack = smallFont ? 2 : 1;
-        if(rows >= 5 && cols > 1) displayStack = 2;
-        if(calcMode == CM_MIM) displayStack -= 2;
-        if(displayStack > 4 /* in case of overflow */) displayStack = 0;
-      }
-
-      if(calcMode == CM_MIM && matrixIndex == REGISTER_X) {
-        displayStack += 1;
+        displayStack = cachedDisplayStack;
       }
 
       if(temporaryInformation == TI_STATISTIC_LR && (getRegisterDataType(REGISTER_X) != dtReal34)) {
@@ -1607,7 +1649,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
            w = stringWidth(tmpString, &standardFont, true, true);
            showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-        }            
+        }
       }
 
       else if(temporaryInformation == TI_ARE_YOU_SURE && regist == REGISTER_X) {
@@ -1772,7 +1814,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
       else if(regist < REGISTER_X + displayStack || (lastErrorCode != 0 && regist == errorMessageRegisterLine)) {
         prefixWidth = 0;
-        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) ? 4 - displayStack : 0));
+        const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((temporaryInformation == TI_VIEW && regist == REGISTER_T) ? 0 : (getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) ? 4 - displayStack : 0));
+        calcRegister_t origRegist = regist;
+        if(temporaryInformation == TI_VIEW && regist == REGISTER_T) {
+          regist = currentViewRegister;
+        }
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
           if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
@@ -2245,7 +2291,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
           }
 
-          else if(temporaryInformation == TI_CORR) {             
+          else if(temporaryInformation == TI_CORR) {
             if(regist == REGISTER_X) {
               prefix[0]=0;
               if(lrChosen == 0) {
@@ -2294,7 +2340,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           else if(temporaryInformation == TI_STATISTIC_SUMS) {
             realToInt32(SIGMA_N, w);
             if(regist == REGISTER_X && w > LIM) {
-              sprintf(prefix, "Plot memory full, continuing");                
+              sprintf(prefix, "Plot memory full, continuing");
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
@@ -2313,8 +2359,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                }
                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
                //lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
-             }            
+             }
            }
+
+          else if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
 
 
             else if(temporaryInformation == TI_ABC) {                             //JM EE \/
@@ -2382,22 +2430,22 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
                                                                        //JM EE ^
 
-
-          real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION, false);
+          real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION, true);
 
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
           if(prefixWidth > 0) {
             showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
           }
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
+          showString(tmpString, &numericFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
           //JM else if(getRegisterDataType(regist) == dtComplex34) {                                                                                                      //JM EE Removed and replaced with the below
           //JM complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);   //JM EE Removed and replaced with the below
+        else if(getRegisterDataType(regist) == dtComplex34) { 
+          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
 
-          else if(getRegisterDataType(regist) == dtComplex34) {
-            if(temporaryInformation == TI_ABC) {                             //JM EE \/
+           else  if(temporaryInformation == TI_ABC) {                             //JM EE \/
               if(regist == REGISTER_X) {
                 strcpy(prefix, "c" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
@@ -2457,15 +2505,21 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
 
-            complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS,true, STD_SPACE_PUNCTUATION, false);
+              complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS,true, STD_SPACE_PUNCTUATION, true);
 
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
+          if(prefixWidth > 0) {
+            showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+          }
+          showString(tmpString, &numericFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtString) {
-                                                                                  //JMvv
+          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
+          if(prefixWidth > 0) {
+            showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+          }
 
        //JM REGISTER STRING LARGE FONTS
         #ifdef STACK_X_STR_LRG_FONT
@@ -2500,46 +2554,57 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         { //printf("^^^^#### combinationFonts=%d maxiC=%d miniC=%d displaymode=%d\n",combinationFonts, maxiC, miniC, displaymode);
           w = stringWidth(REGISTER_STRING_DATA(regist), &standardFont, false, true);
 
-          if(w >= SCREEN_WIDTH) {
+          if(w >= SCREEN_WIDTH - prefixWidth) {
             if(regist == REGISTER_X) {
               xcopy(tmpString, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
               do {
                 tmpString[stringLastGlyph(tmpString)] = 0;
                 w = stringWidth(tmpString, &standardFont, false, true);
-              } while(w >= SCREEN_WIDTH);
-              showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - 3, vmNormal, false, true);
+              } while(w >= SCREEN_WIDTH - prefixWidth);
+              showString(tmpString, &standardFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE - 3, vmNormal, false, true);
 
               w = stringByteLength(tmpString);
               xcopy(tmpString, REGISTER_STRING_DATA(regist) + w, stringByteLength(REGISTER_STRING_DATA(regist) + w) + 1);
               w = stringWidth(tmpString, &standardFont, false, true);
-              if(w >= SCREEN_WIDTH) {
+              if(w >= SCREEN_WIDTH - prefixWidth) {
                 do {
                   tmpString[stringLastGlyph(tmpString)] = 0;
                   w = stringWidth(tmpString, &standardFont, false, true);
-                } while(w >= SCREEN_WIDTH - 14); // 14 is the width of STD_ELLIPSIS
+                } while(w >= SCREEN_WIDTH - prefixWidth - 14); // 14 is the width of STD_ELLIPSIS
                 xcopy(tmpString + stringByteLength(tmpString), STD_ELLIPSIS, 3);
                 w += 14;
               }
-              showString(tmpString, &standardFont, SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE + 18, vmNormal, false, true);
+              showString(tmpString, &standardFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, Y_POSITION_OF_REGISTER_X_LINE + 18, vmNormal, false, true);
             }
             else {
               xcopy(tmpString, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
               do {
                 tmpString[stringLastGlyph(tmpString)] = 0;
                 w = stringWidth(tmpString, &standardFont, false, true);
-              } while(w >= SCREEN_WIDTH - 14); // 14 is the width of STD_ELLIPSIS
+              } while(w >= SCREEN_WIDTH - prefixWidth - 14); // 14 is the width of STD_ELLIPSIS
               xcopy(tmpString + stringByteLength(tmpString), STD_ELLIPSIS, 3);
               w += 14;
               lineWidth = w;
-              showString(tmpString, &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
+              showString(tmpString, &standardFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
             }
           }
           else {
             lineWidth = w;
-            showString(REGISTER_STRING_DATA(regist), &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
+            showString(REGISTER_STRING_DATA(regist), &standardFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
           }
         }
       }
+
+
+//          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
+  //        shortIntegerToDisplayString(regist, tmpString, true);
+    //      if(prefixWidth > 0) {
+      //      showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+        //  }
+          //w = stringWidth(tmpString, fontForShortInteger, false, true);
+//          showString(tmpString, fontForShortInteger, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? min(prefixWidth, SCREEN_WIDTH - w) : SCREEN_WIDTH - w, baseY + (fontForShortInteger == &standardFont ? 6 : 0), vmNormal, false, true);
+  //      }
+
 
       else if(getRegisterDataType(regist) == dtShortInteger) {
         shortIntegerToDisplayString(regist, tmpString, true);
@@ -2605,6 +2670,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               }
             }                                                               //JMms ^^
 
+          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
           longIntegerRegisterToDisplayString(regist, tmpString, TMP_STR_LENGTH, SCREEN_WIDTH - prefixWidth, 50, STD_SPACE_PUNCTUATION, true);          //JMms added prefix   //JM added last parameter: Allow LARGELI
 
           if(temporaryInformation == TI_DAY_OF_WEEK) {
@@ -2623,9 +2689,12 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
+          if(prefixWidth > 0) {
+            showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+          }
 
           if(w <= SCREEN_WIDTH) {
-            showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
+            showString(tmpString, &numericFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY, vmNormal, false, true);
           }
           else {
             w = stringWidth(tmpString, &standardFont, false, true);
@@ -2637,14 +2706,18 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
             w = stringWidth(tmpString, &standardFont, false, true);
             lineWidth = w;
-            showString(tmpString, &standardFont, SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
+            showString(tmpString, &standardFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY + 6, vmNormal, false, true);
           }
         }
 
         else if(getRegisterDataType(regist) == dtTime) {
+          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
           timeToDisplayString(regist, tmpString, false);
           w = stringWidth(tmpString, &numericFont, false, true);
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
+          if(prefixWidth > 0) {
+            showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+          }
+          showString(tmpString, &numericFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtDate) {
@@ -2654,28 +2727,40 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, true, true);
             }
           }
+          else if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
 
           dateToDisplayString(regist, tmpString);
           w = stringWidth(tmpString, &numericFont, false, true);
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
+          if(prefixWidth > 0) {
+            showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+          }
+          showString(tmpString, &numericFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtConfig) {
+          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
           xcopy(tmpString, "Configuration data", 19);
           w = stringWidth(tmpString, &numericFont, false, true);
           lineWidth = w;
-          showString(tmpString, &numericFont, SCREEN_WIDTH - w, baseY, vmNormal, false, true);
+          if(prefixWidth > 0) {
+            showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
+          }
+          showString(tmpString, &numericFont, (temporaryInformation == TI_VIEW && origRegist == REGISTER_T) ? prefixWidth : SCREEN_WIDTH - w, baseY, vmNormal, false, true);
         }
 
         else if(getRegisterDataType(regist) == dtReal34Matrix) {
-          if(regist == REGISTER_X && calcMode != CM_MIM) {
+          if((origRegist == REGISTER_X && calcMode != CM_MIM) || (temporaryInformation == TI_VIEW && origRegist == REGISTER_T)) {
             real34Matrix_t matrix;
-            linkToRealMatrixRegister(REGISTER_X, &matrix);
-            showRealMatrix(&matrix);
+            prefixWidth = 0; prefix[0] = 0;
+            linkToRealMatrixRegister(regist, &matrix);
+            if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
+            showRealMatrix(&matrix, prefixWidth);
             if(lastErrorCode != 0)
               refreshRegisterLine(errorMessageRegisterLine);
             if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE)
               refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
+            if(prefixWidth > 0)
+              showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
           }
           else {
             real34MatrixToDisplayString(regist, tmpString);
@@ -2690,14 +2775,17 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         }
 
         else if(getRegisterDataType(regist) == dtComplex34Matrix) {
-          if(regist == REGISTER_X && calcMode != CM_MIM) {
+          if((origRegist == REGISTER_X && calcMode != CM_MIM) || (temporaryInformation == TI_VIEW && origRegist == REGISTER_T)) {
             complex34Matrix_t matrix;
-            linkToComplexMatrixRegister(REGISTER_X, &matrix);
-            showComplexMatrix(&matrix);
+            linkToComplexMatrixRegister(regist, &matrix);
+            if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
+            showComplexMatrix(&matrix, prefixWidth);
             if(lastErrorCode != 0)
               refreshRegisterLine(errorMessageRegisterLine);
             if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE)
               refreshRegisterLine(TRUE_FALSE_REGISTER_LINE);
+            if(prefixWidth > 0)
+              showString(prefix, &standardFont, 1, baseY + TEMPORARY_INFO_OFFSET, vmNormal, prefixPre, prefixPost);
           }
           else {
             complex34MatrixToDisplayString(regist, tmpString);
@@ -2715,6 +2803,8 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           sprintf(tmpString, "Displaying %s: to be coded!", getRegisterDataTypeName(regist, true, false));
           showString(tmpString, &standardFont, SCREEN_WIDTH - stringWidth(tmpString, &standardFont, false, true), baseY + 6, vmNormal, false, true);
         }
+
+        if(temporaryInformation == TI_VIEW && origRegist == REGISTER_X) regist = REGISTER_X;
       }
 
       if(regist == REGISTER_T) {
@@ -2864,7 +2954,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
           clearScreen();
 
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
-          refreshRegisterLine(REGISTER_T);
+        if(temporaryInformation != TI_VIEW) refreshRegisterLine(REGISTER_T);
           refreshRegisterLine(REGISTER_Z);
           refreshRegisterLine(REGISTER_Y);
       } else {                             //jm v
@@ -2878,6 +2968,10 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   if(testEnabled) { fnSwStart(1); }     //dr
 #endif
         refreshRegisterLine(REGISTER_X);
+        if(temporaryInformation == TI_VIEW) {
+          clearRegisterLine(REGISTER_T, true, true);
+          refreshRegisterLine(REGISTER_T);
+        }
         if(calcMode == CM_MIM) {
           showMatrixEditor();
         }

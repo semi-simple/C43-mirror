@@ -56,7 +56,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-  constantFractions=false;
+//  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
   if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {     //JM let FIX operate on time as well
@@ -78,7 +78,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-  constantFractions=false;
+//  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -97,7 +97,7 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-  constantFractions=false;
+//  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -117,7 +117,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   displayFormat = DF_ALL;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-  constantFractions=false;
+//  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -135,7 +135,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
 void fnDisplayFormatDsp(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-  constantFractions=false;
+//  constantFractions=false;
 }
 
 
@@ -354,7 +354,7 @@ static bool_t checkForAndChange(char *displayString, const real34_t *val, const 
 	resstr[0]=0;
 	if(abs(resint) > 1 && abs(resint) < 1000 && real34CompareAbsLessThan(&result_fp,&tol34)) {
 	  real34Divide(&val1, &result_ip, &val1);
-	  sprintf(resstr,"%i" STD_DOT, resint);
+	  sprintf(resstr,"%i" STD_DOT, (int16_t)resint);
     //printf(">>> %s\n",resstr);
 	}
 
@@ -388,19 +388,33 @@ static bool_t checkForAndChange_(char *displayString, const real34_t *val, const
   bool_t status;
   char ss1[20];
   char ss2[10];
-  int8_t dd = 1;
+  int16_t dd = 1;
+  int16_t cnt = 4;
 
-  while(dd<=8) {
-    if(dd==4 || dd==6) dd++;
+  real34_t d34, v34;
+  realToReal34(constant,&v34);
+  real34Divide(val,&v34,&d34);
+  real34ToIntegralValue(&d34, &v34, DEC_ROUND_DOWN);
+  real34Subtract(&d34, &v34, &d34); // Fractional part
+  real34Divide(const34_1,&d34,&d34);
+  real34ToIntegralValue(&d34, &v34, DEC_ROUND_DOWN);
+  dd = (int16_t)real34ToInt32(&v34);
+  if(dd==0 || abs(dd)>999) dd=1;
+  printf(">>>### %i\n",dd);
+  goto aa;
+
+  while(cnt != 0) {                //changed from 8
+    //if(dd==5 || dd==7) dd++;
+aa:
     int32ToReal((int32_t)dd, &d_r);
 	    ss1[0]=0;
-      strcpy(ss2,"/0");
-      if(dd>1) ss2[1] = '0' + dd; else ss2[0]=0;
+      if(dd>1) sprintf(ss2,"/%i",dd); else ss2[0]=0;
       strcat(ss1,ss);
 	    strcat(ss1,ss2);
 	    status = checkForAndChange(displayString, val, const_1, constant, &d_r, ss1, frontSpace);
 	    if(status) return true;
     dd++;
+    cnt--;
   }
   return false;
 }
@@ -447,33 +461,20 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
-  real_t value, c_temp, d_temp;
+  real_t value, c_temp;//, d_temp;
   uint16_t constNr;
 
 
-  if(constantFractions) {
+printf(">>---\n");
+  real34ToIntegralValue(real34, &value34, DEC_ROUND_DOWN);
+  real34Subtract(real34, &value34, &value34); // Fractional part
+
+  if(constantFractions && constantFractionsMode != 0 && !real34IsZero(real34) && !real34IsZero(&value34)) {
+    constantFractionsMode = 1;
     fnConstantR( 8  /*const_eE     */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
     fnConstantR( 73 /*const_PHI    */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
-    fnConstantR( 64 /*const_mu0    */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
-    fnConstantR( 17 /*const_gEarth */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
-    fnConstantR( 4  /*const_c      */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
-    fnConstantR( 60 /*const_eps0   */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
-
-//  	if (checkForAndChange_(displayString, real34, const_eE,  "e", frontSpace)) return;
-//    if (checkForAndChange_(displayString, real34, const_PHI, STD_PHI, frontSpace)) return;
-
-  	realMultiply(const_eE, const_eE, &c_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &c_temp,   "e" STD_SUP_2,frontSpace)) return;
-
-  	realSquareRoot(const_eE, &c_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT "e",frontSpace)) return;
-
-  	realMultiply(const_PHI, const_PHI, &c_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_PHI STD_SUP_2,frontSpace)) return;
 
   	if (checkForAndChange_(displayString, real34, const_pi,  STD_pi, frontSpace)) return;
-  	realMultiply(const_eE, const_pi, &c_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_pi STD_SUP_2,frontSpace)) return;
 
   	realMultiply(const_root2on2, const_2, &c_temp, &ctxtReal39);
   	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
@@ -483,14 +484,10 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   	realSquareRoot(const_5, &c_temp, &ctxtReal39);
   	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
 
-  	realMultiply(const_3, const_2, &c_temp, &ctxtReal39);
-  	realSquareRoot(&c_temp, &d_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &d_temp,   STD_SQUARE_ROOT STD_SUB_2 STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
-
-  	realAdd(&c_temp, const_1, &c_temp, &ctxtReal39);
-  	realSquareRoot(&c_temp, &d_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &d_temp,   STD_SQUARE_ROOT STD_SUB_7,frontSpace)) return;
   }
+
+
+
 
 
   real34ToReal(real34, &value);
@@ -1466,6 +1463,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     real34ToReal(angle34, &multPi);
     realDivide(&multPi, const_pi, &multPi, &ctxtReal39);
     realToReal34(&multPi, &multPi34);
+    constantFractionsMode = 0;        //JM
     real34ToDisplayString2(&multPi34, displayString, displayHasNDigits, limitExponent, separator, mode == amSecond, frontSpace);
     strcat(displayString, STD_pi);
   }

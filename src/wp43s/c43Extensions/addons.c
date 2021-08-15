@@ -447,7 +447,7 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) { //DONE          //JM SIGFI
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-  constantFractions=false;
+//  constantFractions=false;
   SigFigMode = displayFormatN; //JM SIGFIG
   UNITDisplay = false;         //JM SIGFIG display Reset
 
@@ -463,7 +463,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) { //DONE           //JM UNIT
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-  constantFractions=false;
+//  constantFractions=false;
   SigFigMode = 0;     //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
   UNITDisplay = true; //JM UNIT display
 

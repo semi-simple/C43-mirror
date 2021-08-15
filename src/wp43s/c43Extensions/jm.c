@@ -110,6 +110,7 @@ void reset_jm_defaults(int16_t toload) {
     #endif
     jm_LARGELI=true;
     constantFractions=false;                                   //JM
+    constantFractionsMode = 1;
     running_program_jm=false;                                  //JM program is running flag
     indic_x=0;                                                 //JM program progress indicators
     indic_y=0;                                                 //JM program progress indicators

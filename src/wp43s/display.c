@@ -391,6 +391,7 @@ static bool_t checkForAndChange_(char *displayString, const real34_t *val, const
   int8_t dd = 1;
 
   while(dd<=8) {
+    if(dd==4 || dd==6) dd++;
     int32ToReal((int32_t)dd, &d_r);
 	    ss1[0]=0;
       strcpy(ss2,"/0");
@@ -402,6 +403,29 @@ static bool_t checkForAndChange_(char *displayString, const real34_t *val, const
     dd++;
   }
   return false;
+}
+
+
+void fnConstantR(uint16_t constantAddr, uint16_t *constNr, real_t *rVal) {
+
+  uint16_t constant =constantAddr;
+  *constNr = constant;
+//printf(">>> %u\n",constant);
+  if(constant < NUMBER_OF_CONSTANTS_39) { // 39 digit constants
+    realCopy((real_t *)(constants + constant * TO_BYTES(REAL39_SIZE)), rVal);
+  }
+  else if(constant < NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51) { // 51 digit constants (gamma coefficients)
+    realCopy((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * TO_BYTES(REAL39_SIZE)
+                                      + (constant - NUMBER_OF_CONSTANTS_39) * TO_BYTES(REAL51_SIZE)), rVal);
+  }
+  else if(constant < NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071) { // 1071 digit constant
+    realCopy((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * TO_BYTES(REAL39_SIZE) + NUMBER_OF_CONSTANTS_51 * TO_BYTES(REAL51_SIZE)
+                                      + (constant - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51) * TO_BYTES(REAL1071_SIZE)), rVal);
+  }
+  else { // 34 digit constants
+    real34ToReal((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * TO_BYTES(REAL39_SIZE) + NUMBER_OF_CONSTANTS_51 * TO_BYTES(REAL51_SIZE) + NUMBER_OF_CONSTANTS_1071 * TO_BYTES(REAL1071_SIZE)
+                                    + (constant - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51 - NUMBER_OF_CONSTANTS_1071) * TO_BYTES(REAL34_SIZE)), rVal);
+  }
 }
 
 
@@ -424,16 +448,26 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
   real_t value, c_temp, d_temp;
+  uint16_t constNr;
 
 
   if(constantFractions) {
-  	if (checkForAndChange_(displayString, real34, const_eE,  "e", frontSpace)) return;
+    fnConstantR( 8  /*const_eE     */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+    fnConstantR( 73 /*const_PHI    */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+    fnConstantR( 64 /*const_mu0    */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+    fnConstantR( 17 /*const_gEarth */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+    fnConstantR( 4  /*const_c      */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+    fnConstantR( 60 /*const_eps0   */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+
+//  	if (checkForAndChange_(displayString, real34, const_eE,  "e", frontSpace)) return;
+//    if (checkForAndChange_(displayString, real34, const_PHI, STD_PHI, frontSpace)) return;
+
   	realMultiply(const_eE, const_eE, &c_temp, &ctxtReal39);
   	if (checkForAndChange_(displayString, real34, &c_temp,   "e" STD_SUP_2,frontSpace)) return;
+
   	realSquareRoot(const_eE, &c_temp, &ctxtReal39);
   	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT "e",frontSpace)) return;
 
-  	if (checkForAndChange_(displayString, real34, const_PHI, STD_PHI, frontSpace)) return;
   	realMultiply(const_PHI, const_PHI, &c_temp, &ctxtReal39);
   	if (checkForAndChange_(displayString, real34, &c_temp,   STD_PHI STD_SUP_2,frontSpace)) return;
 

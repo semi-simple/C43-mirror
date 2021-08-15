@@ -204,6 +204,7 @@ typedef struct {
   bool_t jm_HOME_MIR;
   bool_t jm_HOME_FIX;     
   bool_t jm_LARGELI;
+  bool_t constantFractions;
   uint8_t displayStackSHOIDISP;                                             //JMCFG^^
 
 } dtConfigDescriptor_t;

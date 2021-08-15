@@ -99,6 +99,7 @@ extern bool_t jm_HOME_SUM;                                          //JMHOME
 extern bool_t jm_HOME_MIR;                                          //JMHOME
 extern bool_t jm_HOME_FIX;                                          //JMHOME
 extern bool_t jm_LARGELI;                                           //JM flag to keep large font numbers on screen
+extern bool_t constantFractions;                                    //JM
 extern bool_t running_program_jm;                                   //JM program is running flag
 extern uint32_t indic_x;                                            //JM program progress indicators
 extern uint32_t indic_y;                                            //JM program progress indicators

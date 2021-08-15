@@ -109,6 +109,7 @@ void reset_jm_defaults(int16_t toload) {
     jm_HOME_FIX = false;                                       //JMHOME
     #endif
     jm_LARGELI=true;
+    constantFractions=false;                                   //JM
     running_program_jm=false;                                  //JM program is running flag
     indic_x=0;                                                 //JM program progress indicators
     indic_y=0;                                                 //JM program progress indicators

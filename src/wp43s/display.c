@@ -20,6 +20,7 @@
 
 #include "display.h"
 
+#include "saveRestoreCalcState.h"
 #include "c43Extensions/addons.h"
 #include "charString.h"
 #include "constantPointers.h"
@@ -55,6 +56,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
   if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {     //JM let FIX operate on time as well
@@ -76,6 +78,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -94,6 +97,7 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -113,6 +117,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   displayFormat = DF_ALL;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -130,6 +135,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
 void fnDisplayFormatDsp(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractions=false;
 }
 
 
@@ -348,10 +354,9 @@ static bool_t checkForAndChange(char *displayString, const real34_t *val, const 
 	resstr[0]=0;
 	if(abs(resint) > 1 && abs(resint) < 1000 && real34CompareAbsLessThan(&result_fp,&tol34)) {
 	  real34Divide(&val1, &result_ip, &val1);
-	  sprintf(resstr,"%i" STD_DOT,resint);
-	  //printf(">>> %s\n",resstr);
+	  sprintf(resstr,"%i" STD_DOT, resint);
+    //printf(">>> %s\n",resstr);
 	}
-
 
   real34Subtract(&val1, &constant34, &diff);
 
@@ -379,23 +384,20 @@ static bool_t checkForAndChange(char *displayString, const real34_t *val, const 
 }
 
 static bool_t checkForAndChange_(char *displayString, const real34_t *val, const real_t *constant, const char *ss, bool_t frontSpace) {
-  real_t d_r, m_r;
+  real_t d_r;
   bool_t status;
   char ss1[20];
   char ss2[10];
-  char ss2a[10];
   int8_t dd = 1;
-  int8_t mm = 1;
-  int32ToReal((int32_t)mm, &m_r);
 
   while(dd<=8) {
     int32ToReal((int32_t)dd, &d_r);
-	    if(mm>1) sprintf(ss1,"%i",mm); else ss1[0]=0;
-	    strcpy(ss2,"/");
-	    if(dd>1) {sprintf(ss2a,"%i",dd); strcat(ss2,ss2a);} else ss2[0]=0;
-	    strcat(ss1,ss);
+	    ss1[0]=0;
+      strcpy(ss2,"/0");
+      if(dd>1) ss2[1] = '0' + dd; else ss2[0]=0;
+      strcat(ss1,ss);
 	    strcat(ss1,ss2);
-	    status = checkForAndChange(displayString, val, &m_r, constant, &d_r, ss1, frontSpace);
+	    status = checkForAndChange(displayString, val, const_1, constant, &d_r, ss1, frontSpace);
 	    if(status) return true;
     dd++;
   }
@@ -424,38 +426,37 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   real_t value, c_temp, d_temp;
 
 
-	if (checkForAndChange_(displayString, real34, const_eE,  "e", frontSpace)) return;
-	realMultiply(const_eE, const_eE, &c_temp, &ctxtReal39);
-	if (checkForAndChange_(displayString, real34, &c_temp,  "e" STD_SUP_2,frontSpace)) return;
-	realSquareRoot(const_eE, &c_temp, &ctxtReal39);
-	if (checkForAndChange_(displayString, real34, &c_temp,  STD_SQUARE_ROOT "e",frontSpace)) return;
+  if(constantFractions) {
+  	if (checkForAndChange_(displayString, real34, const_eE,  "e", frontSpace)) return;
+  	realMultiply(const_eE, const_eE, &c_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &c_temp,   "e" STD_SUP_2,frontSpace)) return;
+  	realSquareRoot(const_eE, &c_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT "e",frontSpace)) return;
 
-	if (checkForAndChange_(displayString, real34, const_PHI, STD_PHI, frontSpace)) return;
-	realMultiply(const_PHI, const_PHI, &c_temp, &ctxtReal39);
-	if (checkForAndChange_(displayString, real34, &c_temp,  STD_PHI STD_SUP_2,frontSpace)) return;
+  	if (checkForAndChange_(displayString, real34, const_PHI, STD_PHI, frontSpace)) return;
+  	realMultiply(const_PHI, const_PHI, &c_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_PHI STD_SUP_2,frontSpace)) return;
 
-	if (checkForAndChange_(displayString, real34, const_pi,  STD_pi, frontSpace)) return;
-	realMultiply(const_eE, const_pi, &c_temp, &ctxtReal39);
-	if (checkForAndChange_(displayString, real34, &c_temp, STD_pi STD_SUP_2,frontSpace)) return;
+  	if (checkForAndChange_(displayString, real34, const_pi,  STD_pi, frontSpace)) return;
+  	realMultiply(const_eE, const_pi, &c_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_pi STD_SUP_2,frontSpace)) return;
 
-	realMultiply(const_root2on2, const_2, &c_temp, &ctxtReal39);
-	if (checkForAndChange_(displayString, real34, &c_temp,  STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
+  	realMultiply(const_root2on2, const_2, &c_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
 
-	if (checkForAndChange_(displayString, real34, const_rt3, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
+  	if (checkForAndChange_(displayString, real34, const_rt3, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
 
-	realSquareRoot(const_5, &c_temp, &ctxtReal39);
-	if (checkForAndChange_(displayString, real34, &c_temp,  STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
+  	realSquareRoot(const_5, &c_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
 
-	realMultiply(const_3, const_2, &c_temp, &ctxtReal39);
-	realSquareRoot(&c_temp, &d_temp, &ctxtReal39);
-	if (checkForAndChange_(displayString, real34, &d_temp,  STD_SQUARE_ROOT STD_SUB_2 STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
+  	realMultiply(const_3, const_2, &c_temp, &ctxtReal39);
+  	realSquareRoot(&c_temp, &d_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &d_temp,   STD_SQUARE_ROOT STD_SUB_2 STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
 
-	realAdd(&c_temp, const_1, &c_temp, &ctxtReal39);
-	realSquareRoot(&c_temp, &d_temp, &ctxtReal39);
-	if (checkForAndChange_(displayString, real34, &d_temp,  STD_SQUARE_ROOT STD_SUB_7,frontSpace)) return;
-
-
-
+  	realAdd(&c_temp, const_1, &c_temp, &ctxtReal39);
+  	realSquareRoot(&c_temp, &d_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &d_temp,   STD_SQUARE_ROOT STD_SUB_7,frontSpace)) return;
+  }
 
 
   real34ToReal(real34, &value);

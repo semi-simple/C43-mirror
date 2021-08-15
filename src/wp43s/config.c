@@ -361,6 +361,16 @@ void fnAngularMode(uint16_t am) {
 
 
 void fnFractionType(uint16_t unusedButMandatoryParameter) {
+  if(!constantFractions && getSystemFlag(FLAG_FRACT) && !getSystemFlag(FLAG_PROPFR)) { //JM v
+    constantFractions = true;
+    clearSystemFlag(FLAG_FRACT);
+    clearSystemFlag(FLAG_PROPFR);
+  } else
+  if(constantFractions) {
+    constantFractions = false;
+    setSystemFlag(FLAG_FRACT);
+    setSystemFlag(FLAG_PROPFR);
+  } else                                                                              //JM ^
   if(getSystemFlag(FLAG_FRACT)) {
     flipSystemFlag(FLAG_PROPFR);
   }

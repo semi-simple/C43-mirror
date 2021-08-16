@@ -361,7 +361,7 @@ void fnAngularMode(uint16_t am) {
 
 
 void fnFractionType(uint16_t unusedButMandatoryParameter) {
-  if(!constantFractions && getSystemFlag(FLAG_FRACT) && !getSystemFlag(FLAG_PROPFR)) { //JM v
+  if(!constantFractions && !getSystemFlag(FLAG_FRACT)) { //JM v
     constantFractions = true;
     clearSystemFlag(FLAG_FRACT);
     clearSystemFlag(FLAG_PROPFR);
@@ -371,12 +371,13 @@ void fnFractionType(uint16_t unusedButMandatoryParameter) {
     setSystemFlag(FLAG_FRACT);
     setSystemFlag(FLAG_PROPFR);
   } else                                                                              //JM ^
-  if(getSystemFlag(FLAG_FRACT)) {
-    flipSystemFlag(FLAG_PROPFR);
+  if(getSystemFlag(FLAG_PROPFR)) {  //this means constantfractiosn is off AND FLAG_FRACT is on
+    clearSystemFlag(FLAG_PROPFR);
   }
   else {
-    setSystemFlag(FLAG_FRACT);
-    setSystemFlag(FLAG_PROPFR);
+    constantFractions = true;
+    clearSystemFlag(FLAG_FRACT);
+    clearSystemFlag(FLAG_PROPFR);
   }
 }
 

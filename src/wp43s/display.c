@@ -36,6 +36,7 @@
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
 #include "mathematics/wp34s.h"
+#include "plotstat.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -330,38 +331,89 @@ void real34ToDisplayString(const real34_t *real34, uint32_t tag, char *displaySt
 }
 
 
-static bool_t checkForAndChange(char *displayString, const real34_t *val, const real_t *constMul, const real_t *constant, const real_t *constDiv, const char *ss, bool_t frontSpace) {
-  real34_t tol34, constant34, diff, val1, result, result_ip, result_fp;  real_t temp;
+int16_t getD(const real34_t *val) {
+/*
+** find rational approximation to given real number
+** David Eppstein / UC Irvine / 8 Aug 1993
+** With corrections from Arno Formella, May 2008
+**
+** based on the theory of continued fractions
+** if x = a1 + 1/(a2 + 1/(a3 + 1/(a4 + ...)))
+** then best approximation is found by truncating this series
+** (with some adjustments in the last term).
+**
+** Note the fraction can be recovered as the first column of the matrix
+**  ( a1 1 ) ( a2 1 ) ( a3 1 ) ...
+**  ( 1  0 ) ( 1  0 ) ( 1  0 )
+** Instead of keeping the sequence of continued fraction terms,
+** we just keep the last partial product of these matrices.
+*/
+
+    double x = 11.0/840.0;
+
+    real_t val_r;
+    real34ToReal(val, &val_r);
+    realToDouble1(&val_r, &x);
+
+    long m[2][2];
+    long maxden = 999;
+    long ai;
+    
+    /* initialize matrix */
+    m[0][0] = m[1][1] = 1;
+    m[0][1] = m[1][0] = 0;
+
+    /* loop finding terms until denom gets too big */
+    while (m[1][0] *  ( ai = (long)x ) + m[1][1] <= maxden) {
+      long t;
+      t = m[0][0] * ai + m[0][1];
+      m[0][1] = m[0][0];
+      m[0][0] = t;
+      t = m[1][0] * ai + m[1][1];
+      m[1][1] = m[1][0];
+      m[1][0] = t;
+            if(x==(double)ai) break;     // AF: division by zero
+      x = 1/(x - (double) ai);
+            if(x>(double)0x7FFFFFFF) break;  // AF: representation failure
+      } 
+
+    //int nn = (double) m[0][0];
+    int dd = (double) m[1][0];
+    //printf("%i / %i \n",nn,dd);
+
+    if(dd == 0) dd = 1;
+    return dd;
+}
+
+
+static bool_t checkForAndChange(char *displayString, const real34_t *val, const real_t *constant, const real_t *constDiv, const real34_t *tol34, const char *ss, bool_t frontSpace) {
+  real34_t constant34, diff, val1, result, result_ip, result_fp;  real_t temp;
   char resstr[30];
   int32_t resint = 0;
   real34Copy(val, &val1);
 
-  realDivide(const_1e_24, const_8, &temp, &ctxtReal39);
-  realToReal34(&temp, &tol34);
-
-  realMultiply(constMul, constant, &temp, &ctxtReal39);
-  realDivide(&temp, constDiv, &temp, &ctxtReal39);
+  realDivide(constant, constDiv, &temp, &ctxtReal39);
   realToReal34(&temp, &constant34);
 
 	//See if there is a whole multiple
 	real34Divide(val, &constant34, &result);
-	//printReal34ToConsole(&val1,"val="," / ");
-	//printReal34ToConsole(&constant34,"const="," = ");
-	//printReal34ToConsole(&result,"result=","\n");
+  //printReal34ToConsole(&val1,"val="," / ");
+  //printReal34ToConsole(&constant34,"const="," = ");
+  //printReal34ToConsole(&result,"result=","\n");
 	real34ToIntegralValue(&result, &result_ip, DEC_ROUND_HALF_UP);
 	real34Subtract(&result, &result_ip, &result_fp);
   resint = real34ToInt32(&result_ip);
 	resstr[0]=0;
-	if(abs(resint) > 1 && abs(resint) < 1000 && real34CompareAbsLessThan(&result_fp,&tol34)) {
+	if(abs(resint) > 1 && abs(resint) < 1000 && real34CompareAbsLessThan(&result_fp,tol34)) {
 	  real34Divide(&val1, &result_ip, &val1);
 	  sprintf(resstr,"%i" STD_DOT, (int16_t)resint);
-    //printf(">>> %s\n",resstr);
+  //printf(">>> %s\n",resstr);
 	}
 
   real34Subtract(&val1, &constant34, &diff);
 
   displayString[0]=0;
-  if(real34CompareAbsLessThan(&diff,&tol34)) {
+  if(real34CompareAbsLessThan(&diff,tol34)) {
     if(real34IsPositive(&val1)) {
       if(frontSpace) {
         strcat(displayString, " ");
@@ -383,36 +435,29 @@ static bool_t checkForAndChange(char *displayString, const real34_t *val, const 
     return false;
 }
 
-static bool_t checkForAndChange_(char *displayString, const real34_t *val, const real_t *constant, const char *ss, bool_t frontSpace) {
+static bool_t checkForAndChange_(char *displayString, const real34_t *val, const real_t *constant, const real34_t *tol34, const char *ss, bool_t frontSpace) {
   real_t d_r;
   bool_t status;
   char ss1[20];
   char ss2[10];
   int16_t dd = 1;
-  int16_t cnt = 4;
+  int16_t cnt = 1;
 
   real34_t d34, v34;
   realToReal34(constant,&v34);
   real34Divide(val,&v34,&d34);
-  real34ToIntegralValue(&d34, &v34, DEC_ROUND_DOWN);
-  real34Subtract(&d34, &v34, &d34); // Fractional part
-  real34Divide(const34_1,&d34,&d34);
-  real34ToIntegralValue(&d34, &v34, DEC_ROUND_DOWN);
-  dd = (int16_t)real34ToInt32(&v34);
-  if(dd==0 || abs(dd)>999) dd=1;
-  printf(">>>### %i\n",dd);
-  goto aa;
+  dd = getD(&d34);
+  //printRealToConsole(constant,"constant=","\n");
+  //printf(">>>### %i\n",dd);
 
   while(cnt != 0) {                //changed from 8
-    //if(dd==5 || dd==7) dd++;
-aa:
     int32ToReal((int32_t)dd, &d_r);
-	    ss1[0]=0;
-      if(dd>1) sprintf(ss2,"/%i",dd); else ss2[0]=0;
-      strcat(ss1,ss);
-	    strcat(ss1,ss2);
-	    status = checkForAndChange(displayString, val, const_1, constant, &d_r, ss1, frontSpace);
-	    if(status) return true;
+	  ss1[0]=0;
+    if(dd>1) sprintf(ss2,"/%i",dd); else ss2[0]=0;
+    strcat(ss1,ss);
+	  strcat(ss1,ss2);
+	  status = checkForAndChange(displayString, val, constant, &d_r, tol34, ss1, frontSpace);
+	  if(status) return true;
     dd++;
     cnt--;
   }
@@ -460,29 +505,32 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   int16_t digitsToDisplay=0, numDigits, digitPointer, firstDigit, lastDigit, i, digitCount, digitsToTruncate, exponent;
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
-  real34_t value34;
+  real34_t tol34, value34;
   real_t value, c_temp;//, d_temp;
   uint16_t constNr;
 
+  realDivide(const_1e_24, const_8, &c_temp, &ctxtReal39);
+  realToReal34(&c_temp, &tol34);
 
-printf(">>---\n");
-  real34ToIntegralValue(real34, &value34, DEC_ROUND_DOWN);
-  real34Subtract(real34, &value34, &value34); // Fractional part
 
-  if(constantFractions && constantFractionsMode != 0 && !real34IsZero(real34) && !real34IsZero(&value34)) {
+  //printf(">>---\n");
+  if(constantFractions && constantFractionsMode != 0 && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
     constantFractionsMode = 1;
-    fnConstantR( 8  /*const_eE     */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
-    fnConstantR( 73 /*const_PHI    */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
 
-  	if (checkForAndChange_(displayString, real34, const_pi,  STD_pi, frontSpace)) return;
+    //checking for root(3), pi, e, root(2), phi, root(5)
+
+    if (checkForAndChange_(displayString, real34, const_rt3, &tol34, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
+    if (checkForAndChange_(displayString, real34, const_pi , &tol34, STD_pi, frontSpace)) return;
+
+    fnConstantR( 8  /*const_eE     */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
 
   	realMultiply(const_root2on2, const_2, &c_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
+  	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,   STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
 
-  	if (checkForAndChange_(displayString, real34, const_rt3, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
+    fnConstantR( 73 /*const_PHI    */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
 
   	realSquareRoot(const_5, &c_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &c_temp,   STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
+  	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,   STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
 
   }
 

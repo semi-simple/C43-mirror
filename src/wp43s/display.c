@@ -446,11 +446,11 @@ static bool_t checkForAndChange_(char *displayString, const real34_t *val, const
   real34_t d34, v34;
   realToReal34(constant,&v34);
   real34Divide(val,&v34,&d34);
-  dd = getD(&d34);
+  dd = getD(&d34);                //Get the smallest denominator
   //printRealToConsole(constant,"constant=","\n");
   //printf(">>>### %i\n",dd);
 
-  while(cnt != 0) {                //changed from 8
+  while(cnt != 0) {
     int32ToReal((int32_t)dd, &d_r);
 	  ss1[0]=0;
     if(dd>1) sprintf(ss2,"/%i",dd); else ss2[0]=0;
@@ -506,18 +506,21 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t tol34, value34;
-  real_t value, c_temp;//, d_temp;
+  real_t value, c_temp;
   uint16_t constNr;
 
+  //Tolerance declaration 1x10^-32
   realDivide(const_1e_24, const_8, &c_temp, &ctxtReal39);
   realToReal34(&c_temp, &tol34);
 
 
   //printf(">>---\n");
+  //Not checked for reals smaller than 1x10^-6 and integers
+  //Fractions are switched off id MULTPI is used
+  //Checking for root(3), pi, e, root(2), phi, root(5), in this sequence
+  
   if(constantFractions && constantFractionsMode != 0 && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
     constantFractionsMode = 1;
-
-    //checking for root(3), pi, e, root(2), phi, root(5)
 
     if (checkForAndChange_(displayString, real34, const_rt3, &tol34, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
     if (checkForAndChange_(displayString, real34, const_pi , &tol34, STD_pi, frontSpace)) return;

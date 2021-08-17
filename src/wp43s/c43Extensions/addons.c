@@ -1182,3 +1182,171 @@ void fnToTime(uint16_t unusedButMandatoryParameter) {
   reallocateRegister(REGISTER_X, dtTime, REAL34_SIZE, amNone);
   real34Copy(&hr, REGISTER_REAL34_DATA(REGISTER_X));
 }
+
+
+
+
+// *******************************************************************
+
+int16_t getD(const real34_t *val) {
+/*
+** Adapted from:
+** https://www.ics.uci.edu/~eppstein/numth/frap.c
+**
+** find rational approximation to given real number
+** David Eppstein / UC Irvine / 8 Aug 1993
+** With corrections from Arno Formella, May 2008
+**
+** based on the theory of continued fractions
+** if x = a1 + 1/(a2 + 1/(a3 + 1/(a4 + ...)))
+** then best approximation is found by truncating this series
+** (with some adjustments in the last term).
+**
+** Note the fraction can be recovered as the first column of the matrix
+**  ( a1 1 ) ( a2 1 ) ( a3 1 ) ...
+**  ( 1  0 ) ( 1  0 ) ( 1  0 )
+** Instead of keeping the sequence of continued fraction terms,
+** we just keep the last partial product of these matrices.
+*/
+
+    double x = 11.0/840.0;
+
+    real_t val_r;
+    real34ToReal(val, &val_r);
+    realToDouble1(&val_r, &x);
+
+    long m[2][2];
+    long maxden = 999;
+    long ai;
+    
+    /* initialize matrix */
+    m[0][0] = m[1][1] = 1;
+    m[0][1] = m[1][0] = 0;
+
+    /* loop finding terms until denom gets too big */
+    while (m[1][0] *  ( ai = (long)x ) + m[1][1] <= maxden) {
+      long t;
+      t = m[0][0] * ai + m[0][1];
+      m[0][1] = m[0][0];
+      m[0][0] = t;
+      t = m[1][0] * ai + m[1][1];
+      m[1][1] = m[1][0];
+      m[1][0] = t;
+            if(x==(double)ai) break;     // AF: division by zero
+      x = 1/(x - (double) ai);
+            if(x>(double)0x7FFFFFFF) break;  // AF: representation failure
+      } 
+
+    //int nn = (double) m[0][0];
+    int dd = (double) m[1][0];
+    //printf("%i / %i \n",nn,dd);
+
+    if(dd == 0) dd = 1;
+    return dd;
+}
+
+
+static bool_t checkForWholeMultiple(char *displayString, const real34_t *val, const real_t *constant, const real_t *constDiv, const real34_t *tol34, const char *ss, bool_t frontSpace) {
+  real34_t constant34, diff, val1, result, result_ip, result_fp;  real_t temp;
+  char resstr[30];
+  int32_t resint = 0;
+  real34Copy(val, &val1);
+
+  realDivide(constant, constDiv, &temp, &ctxtReal39);
+  realToReal34(&temp, &constant34);
+
+  //See if there is a whole multiple
+  real34Divide(val, &constant34, &result);
+  //printReal34ToConsole(&val1,"val="," / ");
+  //printReal34ToConsole(&constant34,"const="," = ");
+  //printReal34ToConsole(&result,"result=","\n");
+  real34ToIntegralValue(&result, &result_ip, DEC_ROUND_HALF_UP);
+  real34Subtract(&result, &result_ip, &result_fp);
+  resint = real34ToInt32(&result_ip);
+  resstr[0]=0;
+  if(abs(resint) > 1 && abs(resint) < 1000 && real34CompareAbsLessThan(&result_fp,tol34)) {
+    real34Divide(&val1, &result_ip, &val1);
+    sprintf(resstr,"%i" STD_DOT, (int16_t)resint);
+  //printf(">>> %s\n",resstr);
+  }
+
+  real34Subtract(&val1, &constant34, &diff);
+
+  displayString[0]=0;
+  if(real34CompareAbsLessThan(&diff,tol34)) {
+    if(real34IsPositive(&val1)) {
+      if(frontSpace) {
+        strcat(displayString, " ");
+        if(resstr[0]!=0) strcat(displayString, resstr);
+        strcat(displayString, ss);
+      }
+      else {
+        if(resstr[0]!=0) strcat(displayString, resstr);
+        strcat(displayString, ss);
+      }
+    }
+    else {
+      strcat(displayString, "-");
+      if(resstr[0]!=0) strcat(displayString, resstr);
+      strcat(displayString, ss);
+    }
+    return true;
+  } else 
+    return false;
+}
+
+
+bool_t checkForAndChange_(char *displayString, const real34_t *val, const real_t *constant, const real34_t *tol34, const char *ss, bool_t frontSpace) {
+  real_t d_r;
+  bool_t status;
+  char ss1[20];
+  char ss2[10];
+  int16_t dd = 1;
+  int16_t cnt = 1;
+
+  real34_t d34, v34;
+  realToReal34(constant,&v34);
+  real34Divide(val,&v34,&d34);
+  dd = getD(&d34);                //Get the smallest denominator
+  //printRealToConsole(constant,"constant=","\n");
+  //printf(">>>### %i\n",dd);
+
+  while(cnt != 0) {
+    int32ToReal((int32_t)dd, &d_r);
+    ss1[0]=0;
+    if(dd>1) sprintf(ss2,"/%i",dd); else ss2[0]=0;
+    strcat(ss1,ss);
+    strcat(ss1,ss2);
+    status = checkForWholeMultiple(displayString, val, constant, &d_r, tol34, ss1, frontSpace);
+    if(status) return true;
+    dd++;
+    cnt--;
+  }
+  return false;
+}
+
+
+void fnConstantR(uint16_t constantAddr, uint16_t *constNr, real_t *rVal) {
+
+  uint16_t constant =constantAddr;
+  *constNr = constant;
+//printf(">>> %u\n",constant);
+  if(constant < NUMBER_OF_CONSTANTS_39) { // 39 digit constants
+    realCopy((real_t *)(constants + constant * TO_BYTES(REAL39_SIZE)), rVal);
+  }
+  else if(constant < NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51) { // 51 digit constants (gamma coefficients)
+    realCopy((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * TO_BYTES(REAL39_SIZE)
+                                      + (constant - NUMBER_OF_CONSTANTS_39) * TO_BYTES(REAL51_SIZE)), rVal);
+  }
+  else if(constant < NUMBER_OF_CONSTANTS_39 + NUMBER_OF_CONSTANTS_51 + NUMBER_OF_CONSTANTS_1071) { // 1071 digit constant
+    realCopy((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * TO_BYTES(REAL39_SIZE) + NUMBER_OF_CONSTANTS_51 * TO_BYTES(REAL51_SIZE)
+                                      + (constant - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51) * TO_BYTES(REAL1071_SIZE)), rVal);
+  }
+  else { // 34 digit constants
+    real34ToReal((real_t *)(constants + NUMBER_OF_CONSTANTS_39 * TO_BYTES(REAL39_SIZE) + NUMBER_OF_CONSTANTS_51 * TO_BYTES(REAL51_SIZE) + NUMBER_OF_CONSTANTS_1071 * TO_BYTES(REAL1071_SIZE)
+                                    + (constant - NUMBER_OF_CONSTANTS_39 - NUMBER_OF_CONSTANTS_51 - NUMBER_OF_CONSTANTS_1071) * TO_BYTES(REAL34_SIZE)), rVal);
+  }
+}
+
+
+

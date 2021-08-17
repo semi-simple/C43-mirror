@@ -110,7 +110,7 @@ void reset_jm_defaults(int16_t toload) {
     #endif
     jm_LARGELI=true;
     constantFractions=false;                                   //JM
-    constantFractionsMode = 1;
+    constantFractionsMode = CF_NORMAL;
     running_program_jm=false;                                  //JM program is running flag
     indic_x=0;                                                 //JM program progress indicators
     indic_y=0;                                                 //JM program progress indicators
@@ -833,7 +833,7 @@ void fnJM(uint16_t JM_OPCODE) {
   //Create a 3x1 matrix from Z Y X
   strcpy(line1,"XEQC43 ERPN 3 ENTER 1 M.NEW STO 99 DROP INDEX 99 3 ENTER 1 STOIJ DROP DROP STOEL DROP  I- STOEL DROP  I-  STOEL DROP RCL 99 ");
   //Create a 3x3 A-matrix
-  strcat(line1," 3 ENTER 3 M.NEW STO 99 DROP INDEX 99 1 ENTER 1 STOIJ DROP DROP");
+  strcat(line1," RECT 3 ENTER 3 M.NEW STO 99 DROP INDEX 99 1 ENTER 1 STOIJ DROP DROP");
   strcat(line1, " 1 STOEL J+ STOEL J+ STOEL");
   strcat(line1, " J+ STOEL DROP 0.5 ENTER CHS 3 ENTER SQRT 2 / CHS COMPLEX J+ STOEL COMPLEX CHS COMPLEX J+ STOEL");
   strcat(line1, " 1 J+ STOEL DROP J+ STOEL X^2 J+ STOEL DROP");

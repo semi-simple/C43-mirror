@@ -740,7 +740,7 @@ void fnReset(uint16_t confirmation) {
 
     systemFlags = 0;
     displayFormat = DF_ALL;
-    displayFormatDigits = 0;
+    displayFormatDigits = 3;                             //JM Set to ALL 3
     timeDisplayFormatDigits = 0;
     currentAngularMode = amDegree;
     lastSetAngularMode = currentAngularMode;             //JM

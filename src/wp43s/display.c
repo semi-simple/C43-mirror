@@ -369,8 +369,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   realDivide(const_1e_24, const_8, &c_temp, &ctxtReal39);
   realToReal34(&c_temp, &tol34);
 
-  if(constantFractions && constantFractionsMode != 0 && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
-    constantFractionsMode = 1;
+  if(constantFractions && constantFractionsMode != CF_OFF && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
 
     if (checkForAndChange_(displayString, real34, const_rt3, &tol34, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
     if (checkForAndChange_(displayString, real34, const_pi , &tol34, STD_pi, frontSpace)) return;
@@ -385,6 +384,8 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   	realSquareRoot(const_5, &c_temp, &ctxtReal39);
   	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,   STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
   }
+  constantFractionsMode = CF_NORMAL;
+
 // JM^^ ***********************
 
 
@@ -1364,7 +1365,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     real34ToReal(angle34, &multPi);
     realDivide(&multPi, const_pi, &multPi, &ctxtReal39);
     realToReal34(&multPi, &multPi34);
-    constantFractionsMode = 0;        //JM
+    constantFractionsMode = CF_OFF;        //JM
     real34ToDisplayString2(&multPi34, displayString, displayHasNDigits, limitExponent, separator, mode == amSecond, frontSpace);
     strcat(displayString, STD_pi);
   }

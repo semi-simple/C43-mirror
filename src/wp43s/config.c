@@ -361,12 +361,23 @@ void fnAngularMode(uint16_t am) {
 
 
 void fnFractionType(uint16_t unusedButMandatoryParameter) {
-  if(getSystemFlag(FLAG_FRACT)) {
-    flipSystemFlag(FLAG_PROPFR);
-  }
-  else {
+  if(!constantFractions && !getSystemFlag(FLAG_FRACT)) { //JM v
+    constantFractions = true;
+    clearSystemFlag(FLAG_FRACT);
+    clearSystemFlag(FLAG_PROPFR);
+  } else
+  if(constantFractions) {
+    constantFractions = false;
     setSystemFlag(FLAG_FRACT);
     setSystemFlag(FLAG_PROPFR);
+  } else                                                                              //JM ^
+  if(getSystemFlag(FLAG_PROPFR)) {  //this means constantfractiosn is off AND FLAG_FRACT is on
+    clearSystemFlag(FLAG_PROPFR);
+  }
+  else {
+    constantFractions = true;
+    clearSystemFlag(FLAG_FRACT);
+    clearSystemFlag(FLAG_PROPFR);
   }
 }
 
@@ -406,8 +417,8 @@ void fnRange(uint16_t unusedButMandatoryParameter) {
   if(longIntegerCompareInt(longInt, 6145) > 0) {
     exponentLimit = 6145;
   }
-  else if(longIntegerCompareInt(longInt, 99) < 0) {
-    exponentLimit = 99;
+  else if(longIntegerCompareInt(longInt, 9) < 0) {
+    exponentLimit = 9;
   }
   else {
     exponentLimit = (int16_t)(longInt->_mp_d[0]); // OK for 32 and 64 bit limbs
@@ -911,7 +922,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_106o"
+#define VERSION1 "_106p+"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2
@@ -937,6 +948,10 @@ void fnReset(uint16_t confirmation) {
     fnStrtoX("C43 L42: unmodified DM42");
     #endif
     fnStore(103);
+
+    fnStrtoX("C43: Try POC pi and e and roots, ...");
+    fnStore(104);
+
     fnDrop(0);
 //    fnDrop(0);
 //    fnStrtoX("C43 LARGE TEXT");

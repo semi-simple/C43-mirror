@@ -310,6 +310,7 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(jm_HOME_MIR);
   storeToDtConfigDescriptor(jm_HOME_FIX);
   storeToDtConfigDescriptor(jm_LARGELI);                                   //JMCFG^^
+  storeToDtConfigDescriptor(constantFractions);                           //JM
   storeToDtConfigDescriptor(displayStackSHOIDISP);                                   //JMCFG^^
 
 }

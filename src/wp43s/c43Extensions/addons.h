@@ -84,4 +84,10 @@ void   fnStrInputLongint        (char inp1[]);              // CONVERT STRING to
 void   fnRCL                    (int16_t inp);              //DONE
 
 
+void   fnConstantR              (uint16_t constantAddr, uint16_t *constNr, real_t *rVal);
+bool_t checkForAndChange_       (char *displayString, const real34_t *val, const real_t *constant, const real34_t *tol34, const char *ss, bool_t frontSpace);
+
+
+
+
 #endif //ADDONS_H

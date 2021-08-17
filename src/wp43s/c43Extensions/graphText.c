@@ -331,8 +331,12 @@ int16_t import_string_from_filename(char *line1,  char *dirname,  char *filename
           if(fr == 4) {
             sprintf(line,"Not found ID006 --> %d ",fr); print_inlinestr(line,false);
             sprintf(line,"File: %s \n",dirfile);        print_inlinestr(line,false);
+          } else if(fr == 5) {
+            sprintf(line,"No path ID007 --> %d ",fr);   print_inlinestr(line,false);
+            sprintf(line,"File: %s \n",dirfile);        print_inlinestr(line,false);
           } else {
             sprintf(line,"File open error --> %d ",fr); print_inlinestr(line,false);
+            sprintf(line,"File: %s \n",dirfile);        print_inlinestr(line,false);
           }
         #endif
       #endif

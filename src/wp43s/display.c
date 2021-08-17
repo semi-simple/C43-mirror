@@ -20,6 +20,7 @@
 
 #include "display.h"
 
+#include "saveRestoreCalcState.h"
 #include "c43Extensions/addons.h"
 #include "charString.h"
 #include "constantPointers.h"
@@ -34,6 +35,7 @@
 #include "c43Extensions/jm.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
+#include "mathematics/wp34s.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -54,6 +56,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+//  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
   if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {     //JM let FIX operate on time as well
@@ -75,6 +78,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+//  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -93,6 +97,7 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+//  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -112,6 +117,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   displayFormat = DF_ALL;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+//  constantFractions=false;
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -129,6 +135,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
 void fnDisplayFormatDsp(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+//  constantFractions=false;
 }
 
 
@@ -342,7 +349,47 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   int32_t sign;
   bool_t  ovrSCI=false, ovrENG=false, firstDigitAfterPeriod=true;
   real34_t value34;
-  real_t value;
+
+
+
+
+
+// JM^^ multiples and fractions of constants
+
+  //printf(">>---\n");
+  //Not checked for reals smaller than 1x10^-6 and integers
+  //Fractions are switched off id MULTPI is used
+  //Checking for root(3), pi, e, root(2), phi, root(5), in this sequence
+  
+  real34_t tol34;
+  real_t value, c_temp;
+  uint16_t constNr;
+
+  //Tolerance declaration 1x10^-32
+  realDivide(const_1e_24, const_8, &c_temp, &ctxtReal39);
+  realToReal34(&c_temp, &tol34);
+
+  if(constantFractions && constantFractionsMode != 0 && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
+    constantFractionsMode = 1;
+
+    if (checkForAndChange_(displayString, real34, const_rt3, &tol34, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
+    if (checkForAndChange_(displayString, real34, const_pi , &tol34, STD_pi, frontSpace)) return;
+
+    fnConstantR( 8  /*const_eE     */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+
+  	realMultiply(const_root2on2, const_2, &c_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,   STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
+
+    fnConstantR( 73 /*const_PHI    */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+
+  	realSquareRoot(const_5, &c_temp, &ctxtReal39);
+  	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,   STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
+  }
+// JM^^ ***********************
+
+
+
+
 
   real34ToReal(real34, &value);
   ctxtReal39.digits =  (displayFormat == DF_FIX ? 24 : displayHasNDigits); // This line is for FIX n displaying more than 16 digits. e.g. in FIX 15: 123 456.789 123 456 789 123
@@ -1317,6 +1364,7 @@ void angle34ToDisplayString2(const real34_t *angle34, uint8_t mode, char *displa
     real34ToReal(angle34, &multPi);
     realDivide(&multPi, const_pi, &multPi, &ctxtReal39);
     realToReal34(&multPi, &multPi34);
+    constantFractionsMode = 0;        //JM
     real34ToDisplayString2(&multPi34, displayString, displayHasNDigits, limitExponent, separator, mode == amSecond, frontSpace);
     strcat(displayString, STD_pi);
   }

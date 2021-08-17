@@ -240,6 +240,7 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(jm_HOME_MIR);      
     recallFromDtConfigDescriptor(jm_HOME_FIX);
     recallFromDtConfigDescriptor(jm_LARGELI);                                  //JMCFG^^         
+    recallFromDtConfigDescriptor(constantFractions);                           //JM
     recallFromDtConfigDescriptor(displayStackSHOIDISP);                                  //JMCFG^^         
 
     synchronizeLetteredFlags();

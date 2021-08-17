@@ -1869,7 +1869,7 @@
 #define ITM_EE_STO_IR                 1798
 #define ITM_EE_STO_V_Z                1799
 #define ITM_EE_X2BAL                  1800
-#define ITM_PGMTST                    1801
+#define ITM_MATX_A                    1801
 #define ITM_op_a                      1802
 #define ITM_op_a2                     1803
 #define ITM_op_j                      1804
@@ -1973,7 +1973,7 @@
 #define ITM_T_DOWN_ARROW              1902
 #define ITM_T_HOME                    1903
 #define ITM_T_END                     1904
-#define ITM_1905                      1905
+#define ITM_STKTO3x1                  1905
 #define MNU_T_EDIT                    1906
 #define MNU_XXEQ                      1907
 #define ITM_RNG                       1908

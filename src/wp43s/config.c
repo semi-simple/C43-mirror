@@ -922,7 +922,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_106p+"
+#define VERSION1 "_106q"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2
@@ -949,8 +949,8 @@ void fnReset(uint16_t confirmation) {
     #endif
     fnStore(103);
 
-    fnStrtoX("C43: Try POC pi and e and roots, ...");
-    fnStore(104);
+//    fnStrtoX("C43: Try POC pi and e and roots, ...");
+//    fnStore(104);
 
     fnDrop(0);
 //    fnDrop(0);

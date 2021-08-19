@@ -160,6 +160,10 @@
 //Backup here, not active. Meant for WP43S Master JM branch, to enable WP43S usage on C43 template (see config.c)
 #undef WP43S_ON_C43_USER_MODE       //Default setting
 
+
+//constantFractionsMode
+#define CF_OFF                   0
+#define CF_NORMAL                1
   
 
 
@@ -281,11 +285,12 @@
 #define ERROR_NO_BACKUP_DATA                      35
 #define ERROR_UNDEF_SOURCE_VAR                    36
 #define ERROR_WRITE_PROTECTED_VAR                 37
-#define ERROR_BAD_INPUT                           38 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_NO_MATRIX_INDEXED                   38
 #define ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX    39
 #define ERROR_NO_ERRORS_CALCULABLE                40
+#define ERROR_BAD_INPUT                           41 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     41
+#define NUMBER_OF_ERROR_CODES                     42
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111

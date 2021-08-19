@@ -295,7 +295,7 @@ bool_t lastshiftG = false;
           else if((calcMode == CM_NIM) && ((item==ITM_DRG || item == ITM_DMS2 || item == ITM_dotD) && !catalog)) {   //JM
             addItemToNimBuffer(item);
           }                                                                                      //JM
-          else if(calcMode == CM_MIM && softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_M_EDIT) {
+          else if(calcMode == CM_MIM && softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_M_EDIT && item != ITM_CC) { //JM added ITM_CC to let it work in matrix edit
             addItemToBuffer(item);
           }
           else if(item > 0) { // function

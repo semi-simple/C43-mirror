@@ -418,7 +418,7 @@ void fnRange(uint16_t unusedButMandatoryParameter) {
     exponentLimit = 6145;
   }
   else if(longIntegerCompareInt(longInt, 9) < 0) {
-    exponentLimit = 9;
+    exponentLimit = 9;                                //JM changed from 99 to 9
   }
   else {
     exponentLimit = (int16_t)(longInt->_mp_d[0]); // OK for 32 and 64 bit limbs

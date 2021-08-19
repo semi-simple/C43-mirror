@@ -22,6 +22,7 @@
 
 #include <stdint.h>
 
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2101,7 +2102,7 @@
 #define ITM_XDEMO                     2030
 #define ITM_PRN                       2031
 #define ITM_PLOT_XY                   2032
-#define ITM_2033                      2033
+#define ITM_3x1TOSTK                  2033
 #define ITM_PLOTRST                   2034
 #define ITM_STATDEMO0                 2035
 #define ITM_STATDEMO1                 2036

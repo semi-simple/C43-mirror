@@ -827,10 +827,10 @@ void fnJM(uint16_t JM_OPCODE) {
     #ifdef PC_BUILD
 //      ramDump();
     #endif
-  char line1[700];
 
+  char line1[700];
   //Create a 3x3 A-matrix
-  strcat(line1,"XEQC43 ERPN RECT 3 ENTER 3 M.NEW STO 99 DROP INDEX 99 1 ENTER 1 STOIJ DROP DROP");
+  strcpy(line1,"XEQC43 ERPN RECT 3 ENTER 3 M.NEW STO 99 DROP INDEX 99 1 ENTER 1 STOIJ DROP DROP");
   strcat(line1, " 1 STOEL J+ STOEL J+ STOEL");
   strcat(line1, " J+ STOEL DROP 0.5 ENTER CHS 3 ENTER SQRT 2 / CHS COMPLEX J+ STOEL COMPLEX CHS COMPLEX J+ STOEL");
   strcat(line1, " 1 J+ STOEL DROP J+ STOEL X^2 J+ STOEL DROP");
@@ -840,13 +840,18 @@ void fnJM(uint16_t JM_OPCODE) {
   else
 
   if(JM_OPCODE == 46) {                                         //PRIME stats
-    #ifdef PC_BUILD
-//      ramDump();
-    #endif
   char line1[700];
-
   //Create a 3x1 matrix from Z Y X
   strcpy(line1,"XEQC43 ERPN 3 ENTER 1 M.NEW STO 99 DROP INDEX 99 3 ENTER 1 STOIJ DROP DROP STOEL DROP  I- STOEL DROP  I-  STOEL DROP RCL 99 ");
+  fnXEQMexecute(line1);
+    }
+  else
+
+
+  if(JM_OPCODE == 47) {                                         //PRIME stats
+  char line1[700];
+  //Create a ZYX form a 3x1 matrix
+  strcpy(line1,"XEQC43 ERPN STO 99 INDEX 99 DROP 1 ENTER 1 STOIJ DROP DROP RCLEL I+ RCLEL I+ RCLEL ");
   fnXEQMexecute(line1);
     }
 

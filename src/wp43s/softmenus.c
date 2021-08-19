@@ -456,7 +456,7 @@ TO_QSPI const int16_t menu_BASE[]        = { ITM_IP,                        ITM_
 
 
 TO_QSPI const int16_t menu_EE[]          = { ITM_CONSTpi,                   ITM_op_j,                   ITM_SQUARE,               ITM_op_a,              ITM_op_a2,                   ITM_CLSTK,                          //JM EE
-                                             ITM_M_INV,                     ITM_NULL,                   ITM_STKTO3x1,             ITM_MATX_A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
+                                             ITM_M_INV,                     ITM_STKTO3x1,               ITM_3x1TOSTK,             ITM_MATX_A,            ITM_PARALLEL,                -MNU_CPX,                           //JM EE
                                              ITM_DEG,                       ITM_DEG2,                   ITM_RAD,                  ITM_RAD2,              ITM_RECT,                    ITM_POLAR,                          //JM EE
 
                                              ITM_EE_D2Y,                    ITM_EE_Y2D,                 ITM_EE_A2S,               ITM_EE_S2A,            ITM_EE_EXP_TH,                ITM_CLSTK,                         //JM EE

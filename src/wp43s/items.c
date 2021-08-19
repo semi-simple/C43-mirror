@@ -826,6 +826,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 TO_QSPI const item_t indexOfItems[] = {
 
 //            function                      parameter                    item in catalog                                item in softmenu                               TAM min                 max  CATALOG    stackLift       UNDO status
+
 /*    0 */  { itemToBeCoded,                NOPARAM,                     "",                                            "0000",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2777,7 +2778,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1902 */  { fnT_ARROW,                    ITM_T_DOWN_ARROW,            "",                                            STD_DOWN_ARROW,                                (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1903 */  { fnT_ARROW,                    ITM_T_HOME,                  "",                                            "HOME",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1904 */  { fnT_ARROW,                    ITM_T_END,                   "",                                            "END",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
-/* 1905 */  { fnJM,                         46,                          "",                                            "zyx>M",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
+/* 1905 */  { fnJM,                         46,                          "",                                            "zyx" STD_RIGHT_ARROW "M",                     (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1906 */  { itemToBeCoded,                NOPARAM,                     "T.EDIT",                                      "T.EDIT",                                      (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_ENABLED   | US_UNCHANGED},
 /* 1907 */  { itemToBeCoded,                NOPARAM,                     "XXEQ",                                        "XXEQ",                                        (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_ENABLED   | US_UNCHANGED},
 /* 1908 */  { fnRange,                      NOPARAM,                     "",                                            "RNG",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
@@ -2905,7 +2906,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 2030 */  { fnGraph,                      22,                          "X.DEMO",                                      "X.DEMO",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2031 */  { fnP_All_Regs,                 1,                           "PRN",                                         "PRN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 /* 2032 */  { fnPlot,                       NOPARAM,                     "PLOTXY",                                      "PLOTXY",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 2033 */  { itemToBeCoded,                NOPARAM,                     "2033",                                        "2033",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_ENABLED   | US_ENABLED  },
+/* 2033 */  { fnJM,                         47,                          "",                                            "M" STD_RIGHT_ARROW "zyx",                     (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 2034 */  { fnPlotReset,                  NOPARAM,                     "PLTRST",                                      "PLTRST",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 2035 */  { fnStatDemo0,                  NOPARAM,                     "",                                             "DEMO0"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /* 2036 */  { fnStatDemo1,                  NOPARAM,                     "",                                             "DEMO1"                ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },

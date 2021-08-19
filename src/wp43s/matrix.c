@@ -1411,8 +1411,6 @@ void fnQrDecomposition(uint16_t unusedParamButMandatory) {
 
 void fnEigenvalues(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  if(!saveLastX()) return;
-
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, res, ires;
 
@@ -1504,8 +1502,6 @@ void fnEigenvalues(uint16_t unusedParamButMandatory) {
 
 void fnEigenvectors(uint16_t unusedParamButMandatory) {
 #ifndef TESTSUITE_BUILD
-  if(!saveLastX()) return;
-
   if(getRegisterDataType(REGISTER_X) == dtReal34Matrix) {
     real34Matrix_t x, res, ires;
 

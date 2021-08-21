@@ -550,6 +550,10 @@ int16_t fnItemShowValue(int16_t item) {
     result = exponentLimit;
     break;
 
+  case ITM_HIDE:     //
+    result = exponentHideLimit;
+    break;
+
 //  case ITM_BESTF:     //
 //    result = (~lrSelection) & 0x1FF;
 //    break;

@@ -36,7 +36,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         1057  // Added lrChosenUndo
+#define BACKUP_VERSION         58  // exponentHideLimit now will be saved
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -180,6 +180,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(displayValueX,                       sizeof(displayValueX),                      BACKUP);
     save(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
     save(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
+    save(&exponentHideLimit,                  sizeof(exponentHideLimit),                  BACKUP);
     save(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
     save(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
     save(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
@@ -415,6 +416,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(displayValueX,                       sizeof(displayValueX),                      BACKUP);
       restore(&pcg32_global,                       sizeof(pcg32_global),                       BACKUP);
       restore(&exponentLimit,                      sizeof(exponentLimit),                      BACKUP);
+      restore(&exponentHideLimit,                  sizeof(exponentHideLimit),                  BACKUP);
       restore(&keyActionProcessed,                 sizeof(keyActionProcessed),                 BACKUP);
       restore(&systemFlags,                        sizeof(systemFlags),                        BACKUP);
       restore(&savedSystemFlags,                   sizeof(savedSystemFlags),                   BACKUP);
@@ -857,6 +859,8 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   sprintf(tmpString, "rngState\n%" PRIu64 " %" PRIu64 "\n", pcg32_global.state, pcg32_global.inc);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "exponentLimit\n%" PRId16 "\n", exponentLimit);
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "exponentHideLimit\n%" PRId16 "\n", exponentHideLimit);
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "notBestF\n%" PRIu16 "\n", lrSelection);
   save(tmpString, strlen(tmpString), BACKUP);
@@ -1453,6 +1457,9 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
         }
         else if(strcmp(aimBuffer, "exponentLimit") == 0) {
           exponentLimit = stringToInt16(tmpString);
+        }
+        else if(strcmp(aimBuffer, "exponentHideLimit") == 0) {
+          exponentHideLimit = stringToInt16(tmpString);
         }
         else if(strcmp(aimBuffer, "notBestF") == 0) {
           lrSelection = stringToUint16(tmpString);

@@ -1817,7 +1817,7 @@
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
 #define ITM_PLOT_CENTRL               1756
-#define ITM_1757                      1757
+#define ITM_HIDE                      1757
 #define ITM_SMI                       1758
 #define ITM_PLOT_LR                   1759
 #define ITM_PLOT_NXT                  1760
@@ -1826,7 +1826,7 @@
 #define ITM_Fphik                     1763
 #define ITM_Ephik                     1764
 #define ITM_ZETAphik                  1765
-#define ITM_1766                      1766
+#define ITM_GETHIDE                   1766
 #define ITM_1767                      1767
 #define ITM_1768                      1768
 

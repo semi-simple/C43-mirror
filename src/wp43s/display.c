@@ -462,7 +462,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
     }
   }*/
 
-  if(limitExponent && abs(exponent) > exponentLimit) {
+  if(limitExponent && (abs(exponent) > exponentLimit || (exponentHideLimit != 0 && exponent < exponentHideLimit))) {
     if(exponent > exponentLimit) {
       if(real34IsPositive(&value34)) {
         if(frontSpace) {
@@ -475,7 +475,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
           strcpy(displayValueX + strlen(displayValueX), "9e9999");
         }
       }
-      else {
+      else if(real34IsNegative(&value34)) {
         strcpy(displayString, "-" STD_LEFT_SINGLE_QUOTE STD_INFINITY STD_RIGHT_SINGLE_QUOTE);
         if(updateDisplayValueX) {
           strcpy(displayValueX + strlen(displayValueX), "-9e9999");
@@ -483,14 +483,14 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
       }
       return;
     }
-    else if(exponent < -exponentLimit) {
+    else if(exponent < -exponentLimit || (exponentHideLimit != 0 && exponent < -exponentHideLimit)) {
       if(real34IsPositive(&value34)) {
         strcpy(displayString, STD_LEFT_SINGLE_QUOTE "0." STD_RIGHT_SINGLE_QUOTE);
         if(updateDisplayValueX) {
           strcpy(displayValueX + strlen(displayValueX), "0");
         }
       }
-      else {
+      else if(real34IsNegative(&value34)) {
         strcpy(displayString, STD_LEFT_SINGLE_QUOTE "0." STD_RIGHT_SINGLE_QUOTE);
         if(updateDisplayValueX) {
           strcpy(displayValueX + strlen(displayValueX), "0");

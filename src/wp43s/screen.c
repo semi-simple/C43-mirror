@@ -139,19 +139,23 @@
       case dtReal34Matrix: {
         dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
         real34_t *real34 = REGISTER_REAL34_MATRIX_M_ELEMENTS(regist);
+        real34_t reduced;
         int rows, columns, len;
 
-        real34MatrixToDisplayString(regist, string);
         rows = dblock->matrixRows;
         columns = dblock->matrixColumns;
+        sprintf(string, "%dx%d", rows, columns);
+
         for(int i=0; i<rows*columns; i++) {
           strcat(string, LINEBREAK);
           len = strlen(string);
-          real34ToString(real34++, string + len);
-          // The following 3 lines to distinguish between a long integer and a real
-          //if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
-          //  strcat(string + len, ".");
-          //}
+
+          real34Reduce(real34++, &reduced);
+          real34ToString(&reduced, string + len);
+
+          if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+            strcat(string + len, ".");
+          }
         }
         break;
       }
@@ -159,26 +163,40 @@
       case dtComplex34Matrix: {
         dataBlock_t* dblock = REGISTER_COMPLEX34_MATRIX_DBLOCK(regist);
         complex34_t *complex34 = REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist);
-        real34_t *imag34;
+        real34_t reduced;
         int rows, columns, len;
 
-        complex34MatrixToDisplayString(regist, string);
         rows = dblock->matrixRows;
         columns = dblock->matrixColumns;
+        sprintf(string, "%dx%d", rows, columns);
+
         for(int i=0; i<rows*columns; i++, complex34++) {
           strcat(string, LINEBREAK);
           len = strlen(string);
-          real34ToString((real34_t *)complex34, string + len);
-          imag34 = ((real34_t *)complex34) + 1;
-          if(real34IsNegative(imag34)) {
-            sprintf(string + len + strlen(string + len), " - %sx", COMPLEX_UNIT);
-            real34SetPositiveSign(imag34);
-            real34ToString(imag34, string + len + strlen(string + len));
-            real34SetNegativeSign(imag34);
+
+          // Real part
+          real34Reduce((real34_t *)complex34, &reduced);
+          real34ToString(&reduced, string + len);
+          if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+            strcat(string + len, ".");
+          }
+          len = strlen(string);
+
+          // Imaginary part
+          real34Reduce(((real34_t *)complex34) + 1, &reduced);
+          if(real34IsNegative(&reduced)) {
+            sprintf(string + len, " - %sx", COMPLEX_UNIT);
+            len += 5;
+            real34SetPositiveSign(&reduced);
+            real34ToString(&reduced, string + len);
           }
           else {
             sprintf(string + len + strlen(string + len), " + %sx", COMPLEX_UNIT);
-            real34ToString(imag34, string + len + strlen(string + len));
+            len += 5;
+            real34ToString(&reduced, string + len);
+          }
+          if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+            strcat(string + len, ".");
           }
         }
         break;
@@ -208,27 +226,49 @@
         strcpy(string, errorMessage + n);
         break;
 
-      case dtReal34:
-        real34ToString(REGISTER_REAL34_DATA(regist), string);
+      case dtReal34: {
+        real34_t reduced;
+
+        real34Reduce(REGISTER_REAL34_DATA(regist), &reduced);
+        real34ToString(&reduced, string);
         if(strchr(string, '.') == NULL && strchr(string, 'E') == NULL) {
           strcat(string, ".");
         }
         angularUnitToString(getRegisterAngularMode(regist), string + strlen(string));
         break;
+      }
 
-      case dtComplex34:
-        real34ToString(REGISTER_REAL34_DATA(regist), string);
-        if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
+      case dtComplex34: {
+        real34_t reduced;
+        int len;
+
+        // Real part
+        real34Reduce(REGISTER_REAL34_DATA(regist), &reduced);
+        real34ToString(&reduced, string);
+        if(strchr(string, '.') == NULL && strchr(string, 'E') == NULL) {
+          strcat(string, ".");
+        }
+        len = strlen(string);
+
+        // Imaginary part
+        real34Reduce(REGISTER_IMAG34_DATA(regist), &reduced);
+        if(real34IsNegative(&reduced)) {
           sprintf(string, " - %sx", COMPLEX_UNIT);
-          real34SetPositiveSign(REGISTER_IMAG34_DATA(regist));
-          real34ToString(REGISTER_IMAG34_DATA(regist), string + strlen(string));
-          real34SetNegativeSign(REGISTER_IMAG34_DATA(regist));
+          len += 5;
+          real34SetPositiveSign(&reduced);
+          real34ToString(&reduced, string + len);
         }
         else {
           sprintf(string, " + %sx", COMPLEX_UNIT);
-          real34ToString(REGISTER_IMAG34_DATA(regist), string + strlen(string));
+          len += 5;
+          real34ToString(&reduced, string + len);
         }
+        if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+          strcat(string + len, ".");
+        }
+
         break;
+      }
 
       case dtConfig:
         xcopy(string, "Configuration data", 19);

@@ -115,36 +115,74 @@
     longInteger_t lgInt;
     int16_t base, sign, n;
     uint64_t shortInt;
+    char string[30000];
 
     switch(getRegisterDataType(regist)) {
       case dtLongInteger:
         convertLongIntegerRegisterToLongInteger(regist, lgInt);
-        longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
+        longIntegerToAllocatedString(lgInt, string, 30000);
         longIntegerFree(lgInt);
         break;
 
       case dtTime:
-        timeToDisplayString(regist, tmpString + TMP_STR_LENGTH/2, false);
-        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+        timeToDisplayString(regist, string, false);
         break;
 
       case dtDate:
-        dateToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
-        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+        dateToDisplayString(regist, string);
         break;
 
       case dtString:
-        xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
-        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+        xcopy(string, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
         break;
 
-      case dtReal34Matrix:
-        real34MatrixToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
-        break;
+      case dtReal34Matrix: {
+        dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+        real34_t *real34 = REGISTER_REAL34_MATRIX_M_ELEMENTS(regist);
+        int rows, columns, len;
 
-      case dtComplex34Matrix:
-        complex34MatrixToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
+        real34MatrixToDisplayString(regist, string);
+        rows = dblock->matrixRows;
+        columns = dblock->matrixColumns;
+        for(int i=0; i<rows*columns; i++) {
+          strcat(string, LINEBREAK);
+          len = strlen(string);
+          real34ToString(real34++, string + len);
+          // The following 3 lines to distinguish between a long integer and a real
+          //if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+          //  strcat(string + len, ".");
+          //}
+        }
         break;
+      }
+
+      case dtComplex34Matrix: {
+        dataBlock_t* dblock = REGISTER_COMPLEX34_MATRIX_DBLOCK(regist);
+        complex34_t *complex34 = REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist);
+        real34_t *imag34;
+        int rows, columns, len;
+
+        complex34MatrixToDisplayString(regist, string);
+        rows = dblock->matrixRows;
+        columns = dblock->matrixColumns;
+        for(int i=0; i<rows*columns; i++, complex34++) {
+          strcat(string, LINEBREAK);
+          len = strlen(string);
+          real34ToString((real34_t *)complex34, string + len);
+          imag34 = ((real34_t *)complex34) + 1;
+          if(real34IsNegative(imag34)) {
+            sprintf(string + len + strlen(string + len), " - %sx", COMPLEX_UNIT);
+            real34SetPositiveSign(imag34);
+            real34ToString(imag34, string + len + strlen(string + len));
+            real34SetNegativeSign(imag34);
+          }
+          else {
+            sprintf(string + len + strlen(string + len), " + %sx", COMPLEX_UNIT);
+            real34ToString(imag34, string + len + strlen(string + len));
+          }
+        }
+        break;
+      }
 
       case dtShortInteger:
         convertShortIntegerRegisterToUInt64(regist, &sign, &shortInt);
@@ -167,56 +205,54 @@
         }
         n++;
 
-        strcpy(tmpString, errorMessage + n);
+        strcpy(string, errorMessage + n);
         break;
 
       case dtReal34:
-        real34ToString(REGISTER_REAL34_DATA(regist), tmpString + TMP_STR_LENGTH/2);
-        if(strchr(tmpString + TMP_STR_LENGTH/2, '.') == NULL && strchr(tmpString + TMP_STR_LENGTH/2, 'E') == NULL) {
-          strcat(tmpString + TMP_STR_LENGTH/2, ".");
+        real34ToString(REGISTER_REAL34_DATA(regist), string);
+        if(strchr(string, '.') == NULL && strchr(string, 'E') == NULL) {
+          strcat(string, ".");
         }
-        angularUnitToString(getRegisterAngularMode(regist), tmpString + TMP_STR_LENGTH/2 + strlen(tmpString + TMP_STR_LENGTH/2));
-        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+        angularUnitToString(getRegisterAngularMode(regist), string + strlen(string));
         break;
 
       case dtComplex34:
-        real34ToString(REGISTER_REAL34_DATA(regist), tmpString);
+        real34ToString(REGISTER_REAL34_DATA(regist), string);
         if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
-          strcat(tmpString, " - ix");
+          sprintf(string, " - %sx", COMPLEX_UNIT);
           real34SetPositiveSign(REGISTER_IMAG34_DATA(regist));
-          real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + strlen(tmpString));
+          real34ToString(REGISTER_IMAG34_DATA(regist), string + strlen(string));
           real34SetNegativeSign(REGISTER_IMAG34_DATA(regist));
         }
         else {
-          strcat(tmpString, " + ix");
-          real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + strlen(tmpString));
+          sprintf(string, " + %sx", COMPLEX_UNIT);
+          real34ToString(REGISTER_IMAG34_DATA(regist), string + strlen(string));
         }
         break;
 
       case dtConfig:
-        xcopy(tmpString, "Configuration data", 19);
+        xcopy(string, "Configuration data", 19);
         break;
 
       default:
-        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
+        sprintf(string, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
     }
 
-    strcpy(clipboardString, tmpString);
+    stringToUtf8(string, (uint8_t *)clipboardString);
   }
 
 
 
   void copyRegisterXToClipboard(void) {
     GtkClipboard *clipboard;
-    char clipboardString[3000];
+    char clipboardString[30000];
 
     clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
     gtk_clipboard_clear(clipboard);
     gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
 
     copyRegisterToClipboardString(REGISTER_X, clipboardString);
-
-    gtk_clipboard_set_text(clipboard, tmpString, -1);
+    gtk_clipboard_set_text(clipboard, clipboardString, -1);
   }
 
 

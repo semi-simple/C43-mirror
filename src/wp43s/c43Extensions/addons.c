@@ -1216,7 +1216,7 @@ int16_t getD(const real34_t *val) {
     realToDouble1(&val_r, &x);
 
     long m[2][2];
-    long maxden = 999;
+    long maxden = (long)denMax; /*999*/
     long ai;
     
     /* initialize matrix */
@@ -1246,13 +1246,21 @@ int16_t getD(const real34_t *val) {
 }
 
 
-static bool_t checkForWholeMultiple(char *displayString, const real34_t *val, const real_t *constant, const real_t *constDiv, const real34_t *tol34, const char *ss, bool_t frontSpace) {
+static bool_t checkForWholeMultiple(char *displayString, const real34_t *val, const real_t *constant, int16_t smallestDenom, const real34_t *tol34, const char *denomStr, const char *constantStr, bool_t frontSpace) {
+//without mixedFraction flag, improper fractions are allowed
+#define  mixedFraction true
   real34_t constant34, diff, val1, result, result_ip, result_fp;  real_t temp;
-  char resstr[30];
+  char tmpres1[30], resstr[50];
   int32_t resint = 0;
   real34Copy(val, &val1);
+  real_t constDiv;
 
-  realDivide(constant, constDiv, &temp, &ctxtReal39);
+//  char endStr;
+  //strcpy(endStr,"");
+
+
+  int32ToReal((int32_t)smallestDenom, &constDiv);
+  realDivide(constant, &constDiv, &temp, &ctxtReal39);
   realToReal34(&temp, &constant34);
 
   //See if there is a whole multiple
@@ -1264,9 +1272,19 @@ static bool_t checkForWholeMultiple(char *displayString, const real34_t *val, co
   real34Subtract(&result, &result_ip, &result_fp);
   resint = real34ToInt32(&result_ip);
   resstr[0]=0;
-  if(abs(resint) > 1 && abs(resint) < 1000 && real34CompareAbsLessThan(&result_fp,tol34)) {
+  if(abs(resint) > 1 && abs(resint) <= (int32_t)denMax /*999*/ && real34CompareAbsLessThan(&result_fp,tol34)) {
     real34Divide(&val1, &result_ip, &val1);
-    sprintf(resstr,"%i" STD_DOT, (int16_t)resint);
+
+    tmpres1[0]=0;
+    if (resint > smallestDenom  &&  smallestDenom > 1  &&  mixedFraction) {
+       int16_t tmp = (int16_t)resint / smallestDenom;
+       resint = resint - (int32_t)(tmp * smallestDenom);
+       if(constantStr[0]==0) sprintf(tmpres1,"%i%s ",           tmp,constantStr);
+       else                  sprintf(tmpres1,"%i" STD_DOT "%s ",tmp,constantStr);
+    }
+
+    if(constantStr[0]==0) sprintf(resstr,"%s%i",         tmpres1, (int16_t)resint);
+    else                  sprintf(resstr,"%s%i" STD_DOT, tmpres1, (int16_t)resint);
   //printf(">>> %s\n",resstr);
   }
 
@@ -1278,52 +1296,48 @@ static bool_t checkForWholeMultiple(char *displayString, const real34_t *val, co
       if(frontSpace) {
         strcat(displayString, " ");
         if(resstr[0]!=0) strcat(displayString, resstr);
-        strcat(displayString, ss);
+        strcat(displayString,constantStr);
+        strcat(displayString, denomStr);
       }
       else {
         if(resstr[0]!=0) strcat(displayString, resstr);
-        strcat(displayString, ss);
+        strcat(displayString,constantStr);
+        strcat(displayString, denomStr);
       }
     }
     else {
       strcat(displayString, "-");
       if(resstr[0]!=0) strcat(displayString, resstr);
-      strcat(displayString, ss);
+      strcat(displayString,constantStr);
+      strcat(displayString, denomStr);
     }
     return true;
-  } else 
+  } 
+  else 
     return false;
 }
 
 
-bool_t checkForAndChange_(char *displayString, const real34_t *val, const real_t *constant, const real34_t *tol34, const char *ss, bool_t frontSpace) {
-  real_t d_r;
+bool_t checkForAndChange_(char *displayString, const real34_t *val, const real_t *constant, const real34_t *tol34, const char *constantStr,  bool_t frontSpace) {
   bool_t status;
-  char ss1[20];
-  char ss2[10];
-  int16_t dd = 1;
-  int16_t cnt = 1;
+  char denomStr[20];
 
-  real34_t d34, v34;
-  realToReal34(constant,&v34);
-  real34Divide(val,&v34,&d34);
-  dd = getD(&d34);                //Get the smallest denominator
-  //printRealToConsole(constant,"constant=","\n");
-  //printf(">>>### %i\n",dd);
+  real34_t multConstant34, constant34;
+  realToReal34(constant,&constant34);
+  real34Divide(val,&constant34,&multConstant34);
+  int16_t smallestDenom = getD(&multConstant34);
+  //printRealToConsole(constant,">>>### constant=","\n");
+  //printf(">>>### smallestDenom=%i\n",smallestDenom);
 
-  while(cnt != 0) {
-    int32ToReal((int32_t)dd, &d_r);
-    ss1[0]=0;
-    if(dd>1) sprintf(ss2,"/%i",dd); else ss2[0]=0;
-    strcat(ss1,ss);
-    strcat(ss1,ss2);
-    status = checkForWholeMultiple(displayString, val, constant, &d_r, tol34, ss1, frontSpace);
-    if(status) return true;
-    dd++;
-    cnt--;
-  }
+  denomStr[0]=0;
+  if(smallestDenom>1) sprintf(denomStr,"/%i",smallestDenom);
+  status = checkForWholeMultiple(displayString, val, constant, smallestDenom, tol34, denomStr, constantStr, frontSpace);
+
+  if(status) return true;
   return false;
 }
+
+
 
 
 void fnConstantR(uint16_t constantAddr, uint16_t *constNr, real_t *rVal) {

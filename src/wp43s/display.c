@@ -366,20 +366,23 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   uint16_t constNr;
 
   //Tolerance declaration 1x10^-32
-  realDivide(const_1e_24, const_8, &c_temp, &ctxtReal39);
-  realToReal34(&c_temp, &tol34);
+  realToReal34(const_1e_32, &tol34);
 
   if(constantFractions && constantFractionsMode != CF_OFF && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
 
-    if (checkForAndChange_(displayString, real34, const_rt3, &tol34, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
-    if (checkForAndChange_(displayString, real34, const_pi , &tol34, STD_pi, frontSpace)) return;
+    if (checkForAndChange_(displayString, real34, const_1, &tol34, "",frontSpace)) return;
 
-    fnConstantR( 8  /*const_eE     */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+    if (checkForAndChange_(displayString, real34, const_rt3, &tol34, STD_SQUARE_ROOT STD_SUB_3,frontSpace)) return;
+    if (checkForAndChange_(displayString, real34, const_pi , &tol34, STD_pi                   ,frontSpace)) return;
+
+    fnConstantR( 8  /*const_eE     */,  &constNr, &c_temp); 
+    if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  indexOfItems[CST_01+constNr].itemCatalogName,frontSpace)) return;
 
   	realMultiply(const_root2on2, const_2, &c_temp, &ctxtReal39);
-  	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,   STD_SQUARE_ROOT STD_SUB_2,frontSpace)) return;
+  	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  STD_SQUARE_ROOT STD_SUB_2                   ,frontSpace)) return;
 
-    fnConstantR( 73 /*const_PHI    */,  &constNr, &c_temp); if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  indexOfItems[CST_01+constNr].itemCatalogName, frontSpace)) return;
+    fnConstantR( 73 /*const_PHI    */,  &constNr, &c_temp); 
+    if (checkForAndChange_(displayString, real34, &c_temp, &tol34,  indexOfItems[CST_01+constNr].itemCatalogName,frontSpace)) return;
 
   	realSquareRoot(const_5, &c_temp, &ctxtReal39);
   	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,   STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;

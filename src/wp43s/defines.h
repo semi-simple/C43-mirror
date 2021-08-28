@@ -593,7 +593,9 @@ typedef enum {
   #else // Unsupported OS
     #error Only Linux, MacOS, and Windows MINGW64 are supported for now
   #endif // OS
-#endif // PC_BUILD
+#else // PC_BUILD
+  #define LINEBREAK                           "\n\r"
+#endif // !PC_BUILD
 
 #define NUMBER_OF_DISPLAY_DIGITS                  16
 #define NUMBER_OF_DATA_TYPES_FOR_CALCULATIONS     10

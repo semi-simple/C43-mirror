@@ -1246,96 +1246,115 @@ int16_t getD(const real34_t *val) {
 }
 
 
-static bool_t checkForWholeMultiple(char *displayString, const real34_t *val, const real_t *constant, int16_t smallestDenom, const real34_t *tol34, const char *denomStr, const char *constantStr, bool_t frontSpace) {
-//without mixedFraction flag, improper fractions are allowed
-#define  mixedFraction true
-  real34_t constant34, diff, val1, result, result_ip, result_fp;  real_t temp;
-  char tmpres1[30], resstr[50];
-  int32_t resint = 0;
-  real34Copy(val, &val1);
-  real_t constDiv;
 
-//  char endStr;
-  //strcpy(endStr,"");
+  //without mixedFraction flag, improper fractions are allowed
+  #define  mixedFraction true
 
+  bool_t checkForAndChange_(char *displayString, const real34_t *value34, const real_t *constant, const real34_t *tol34, const char *constantStr,  bool_t frontSpace) {
+    real34_t multConstant34, constant_34;
+    real34_t newConstant34, val, val1, result, result_ip, result_fp;  real_t temp;
+    real_t constDiv;
+    char denomStr[20], wholePart[30], resstr[50];
+    denomStr[0]=0;
+    wholePart[0]=0;
+    resstr[0]=0;
+    int32_t resultingInteger = 0;
+    real34CopyAbs(value34, &val);
+    real34Copy(value34, &val1);               //initialize val1 as a fallback value
 
-  int32ToReal((int32_t)smallestDenom, &constDiv);
-  realDivide(constant, &constDiv, &temp, &ctxtReal39);
-  realToReal34(&temp, &constant34);
+    char sign[2];
+    if(real34IsPositive(value34)) strcpy(sign,"+"); else strcpy(sign,"-");
 
-  //See if there is a whole multiple
-  real34Divide(val, &constant34, &result);
-  //printReal34ToConsole(&val1,"val="," / ");
-  //printReal34ToConsole(&constant34,"const="," = ");
-  //printReal34ToConsole(&result,"result=","\n");
-  real34ToIntegralValue(&result, &result_ip, DEC_ROUND_HALF_UP);
-  real34Subtract(&result, &result_ip, &result_fp);
-  resint = real34ToInt32(&result_ip);
-  resstr[0]=0;
-  if(abs(resint) > 1 && abs(resint) <= (int32_t)denMax /*999*/ && real34CompareAbsLessThan(&result_fp,tol34)) {
-    real34Divide(&val1, &result_ip, &val1);
+    realToReal34(constant,&constant_34);
+    real34Divide(&val,&constant_34,&multConstant34);
 
-    tmpres1[0]=0;
-    if (resint > smallestDenom  &&  smallestDenom > 1  &&  mixedFraction) {
-       int16_t tmp = (int16_t)resint / smallestDenom;
-       resint = resint - (int32_t)(tmp * smallestDenom);
-       if(constantStr[0]==0) sprintf(tmpres1,"%i%s ",           tmp,constantStr);
-       else                  sprintf(tmpres1,"%i" STD_DOT "%s ",tmp,constantStr);
+    //See if the multiplier to the constant has a whole denominator
+    //printReal34ToConsole(&multConstant34,"Check n/d :","\n");
+    int16_t smallestDenom = getD(&multConstant34);
+    if(smallestDenom>1) sprintf(denomStr,"/%i",smallestDenom);
+    //printf(">>># %i\n",smallestDenom);
+
+    //Create a new constant comprising the constant divided by the whole denominator
+    int32ToReal((int32_t)smallestDenom, &constDiv);
+    realDivide(constant, &constDiv, &temp, &ctxtReal39);
+    realToReal34(&temp, &newConstant34);
+
+    //See if there is a whole multiple of the new constant
+    real34Divide(&val, &newConstant34, &result);
+
+    real34ToIntegralValue(&result, &result_ip, DEC_ROUND_HALF_UP);
+    real34Subtract(&result, &result_ip, &result_fp);
+    resultingInteger = abs(real34ToInt32(&result_ip));
+
+    if (resultingInteger > (int32_t)denMax /*999*/ )  return false;
+
+    if(resultingInteger > 1 && resultingInteger <= (int32_t)denMax /*999*/ && real34CompareAbsLessThan(&result_fp,tol34)) {
+      //a whole multiple of the constant exists
+      real34Divide(&val, &result_ip, &val1);
+      //printf(">>>Resultinginteger:%i SmallestDenom:%i\n",resultingInteger,smallestDenom);
+      if (resultingInteger > smallestDenom  &&  smallestDenom > 1  && resultingInteger != 0 &&  mixedFraction) {
+         int16_t tmp = (int16_t)resultingInteger / smallestDenom;
+         resultingInteger = resultingInteger - (int32_t)(tmp * smallestDenom);
+         if(constantStr[0]==0) {
+             sprintf(wholePart,"%i%s",  tmp,sign);
+         }
+         else {
+           if(tmp == 1)
+             sprintf(wholePart,"%s%s",constantStr,sign);
+           else
+             sprintf(wholePart,"%i%s%s%s",tmp,PRODUCT_SIGN,constantStr,sign);
+         }
+      }
+
+      if(constantStr[0]==0) 
+        sprintf(resstr,"%s%i",     wholePart, (int16_t)resultingInteger);
+      else {
+        if(resultingInteger == 1)
+          sprintf(resstr,"%s", wholePart);
+        else
+          sprintf(resstr,"%s%i%s",  wholePart, (int16_t)resultingInteger,PRODUCT_SIGN);
+      }
+    //printf(">>> %s\n",resstr);
     }
 
-    if(constantStr[0]==0) sprintf(resstr,"%s%i",         tmpres1, (int16_t)resint);
-    else                  sprintf(resstr,"%s%i" STD_DOT, tmpres1, (int16_t)resint);
-  //printf(">>> %s\n",resstr);
-  }
+    char tmp[50];
+    if((resstr[stringByteLength(resstr)-1]==' ' || resstr[stringByteLength(resstr)-1]==0) &&  denomStr[0]=='/' && constantStr[0]==0) {
+      sprintf(tmp,"1%s",denomStr);
+      strcpy(denomStr,tmp);
+    }
+    //printf(">>>@@@ §%s§%s§%s§\n",resstr,constantStr,denomStr);
 
-  real34Subtract(&val1, &constant34, &diff);
 
-  displayString[0]=0;
-  if(real34CompareAbsLessThan(&diff,tol34)) {
-    if(real34IsPositive(&val1)) {
-      if(frontSpace) {
-        strcat(displayString, " ");
-        if(resstr[0]!=0) strcat(displayString, resstr);
-        strcat(displayString,constantStr);
-        strcat(displayString, denomStr);
+    displayString[0]=0;
+    if(real34CompareAbsLessThan(&result_fp,tol34)) {
+      if(sign[0]=='+') {
+        if(frontSpace) {
+          strcat(displayString, " ");
+          if(resstr[0]!=0) strcat(displayString, resstr);
+          strcat(displayString,constantStr);
+          strcat(displayString,denomStr);
+        }
+        else {
+          if(resstr[0]!=0) strcat(displayString, resstr);
+          strcat(displayString,constantStr);
+          strcat(displayString,denomStr);
+        }
       }
       else {
+        strcat(displayString, "-");
         if(resstr[0]!=0) strcat(displayString, resstr);
         strcat(displayString,constantStr);
-        strcat(displayString, denomStr);
+        strcat(displayString,denomStr);
       }
-    }
+      if(real34IsZero(&result_fp)) strcat(displayString,"");
+      else strcat(displayString," " STD_ALMOST_EQUAL);
+      
+      return true;
+    } 
     else {
-      strcat(displayString, "-");
-      if(resstr[0]!=0) strcat(displayString, resstr);
-      strcat(displayString,constantStr);
-      strcat(displayString, denomStr);
+      return false;
     }
-    return true;
-  } 
-  else 
-    return false;
-}
-
-
-bool_t checkForAndChange_(char *displayString, const real34_t *val, const real_t *constant, const real34_t *tol34, const char *constantStr,  bool_t frontSpace) {
-  bool_t status;
-  char denomStr[20];
-
-  real34_t multConstant34, constant34;
-  realToReal34(constant,&constant34);
-  real34Divide(val,&constant34,&multConstant34);
-  int16_t smallestDenom = getD(&multConstant34);
-  //printRealToConsole(constant,">>>### constant=","\n");
-  //printf(">>>### smallestDenom=%i\n",smallestDenom);
-
-  denomStr[0]=0;
-  if(smallestDenom>1) sprintf(denomStr,"/%i",smallestDenom);
-  status = checkForWholeMultiple(displayString, val, constant, smallestDenom, tol34, denomStr, constantStr, frontSpace);
-
-  if(status) return true;
-  return false;
-}
+  }
 
 
 

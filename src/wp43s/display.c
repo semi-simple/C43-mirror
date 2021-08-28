@@ -366,7 +366,7 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   uint16_t constNr;
 
   //Tolerance declaration 1x10^-32
-  realToReal34(const_1e_32, &tol34);
+  realToReal34(const_1e_24, &tol34);
 
   if(constantFractions && constantFractionsMode != CF_OFF && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
 

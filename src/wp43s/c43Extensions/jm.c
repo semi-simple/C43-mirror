@@ -230,6 +230,12 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
     fnRefreshState();                                 //drJM
     break;
 
+  case JC_EXFRAC:                                      //JM
+    constantFractions = !constantFractions;
+    if(constantFractions) clearSystemFlag(FLAG_FRACT);
+    fnRefreshState();                                 //drJM
+    break;
+
    case RX_COMMA:               //DONR
      fnClearFlag(FLAG_DECIMP);
      break;

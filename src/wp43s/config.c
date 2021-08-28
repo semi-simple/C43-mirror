@@ -361,23 +361,17 @@ void fnAngularMode(uint16_t am) {
 
 
 void fnFractionType(uint16_t unusedButMandatoryParameter) {
-  if(!constantFractions && !getSystemFlag(FLAG_FRACT)) { //JM v
-    constantFractions = true;
-    clearSystemFlag(FLAG_FRACT);
-    clearSystemFlag(FLAG_PROPFR);
-  } else
   if(constantFractions) {
-    constantFractions = false;
-    setSystemFlag(FLAG_FRACT);
-    setSystemFlag(FLAG_PROPFR);
-  } else                                                                              //JM ^
-  if(getSystemFlag(FLAG_PROPFR)) {  //this means constantfractiosn is off AND FLAG_FRACT is on
-    clearSystemFlag(FLAG_PROPFR);
-  }
-  else {
-    constantFractions = true;
+    flipSystemFlag(FLAG_PROPFR);
     clearSystemFlag(FLAG_FRACT);
-    clearSystemFlag(FLAG_PROPFR);
+  } else {
+    if(getSystemFlag(FLAG_FRACT)) {
+      flipSystemFlag(FLAG_PROPFR);
+    }
+    else {
+      setSystemFlag(FLAG_FRACT);
+      setSystemFlag(FLAG_PROPFR);
+    }
   }
 }
 
@@ -417,8 +411,8 @@ void fnRange(uint16_t unusedButMandatoryParameter) {
   if(longIntegerCompareInt(longInt, 6145) > 0) {
     exponentLimit = 6145;
   }
-  else if(longIntegerCompareInt(longInt, 9) < 0) {
-    exponentLimit = 9;                                //JM changed from 99 to 9
+  else if(longIntegerCompareInt(longInt, 99) < 0) {
+    exponentLimit = 99;
   }
   else {
     exponentLimit = (int16_t)(longInt->_mp_d[0]); // OK for 32 and 64 bit limbs
@@ -942,7 +936,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_106q+"
+#define VERSION1 "_106q++"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2

@@ -2121,8 +2121,9 @@
 #define ITM_T_HYPF                    2049
 #define ITM_T_ROOTF                   2050
 #define ITM_RSTF                      2051
+#define ITM_EXFRAC                    2052
 
-#define LAST_ITEM                     2052   //JM
+#define LAST_ITEM                     2053   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

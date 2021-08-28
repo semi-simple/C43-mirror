@@ -447,7 +447,6 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) { //DONE          //JM SIGFI
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-//  constantFractions=false;
   SigFigMode = displayFormatN; //JM SIGFIG
   UNITDisplay = false;         //JM SIGFIG display Reset
 
@@ -463,7 +462,6 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) { //DONE           //JM UNIT
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
-//  constantFractions=false;
   SigFigMode = 0;     //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
   UNITDisplay = true; //JM UNIT display
 
@@ -1247,14 +1245,69 @@ int16_t getD(const real34_t *val) {
 
 
 
+void changeToSup(char *str){
+  char strtmp[100];
+  strcpy(strtmp,str);
+  int16_t u, src = 0;
+  int16_t insertAt = 0;
+  while (strtmp[src]!=0) {
+      u = strtmp[src]-48;   
+      if(u <= 1 && u >= 0) {
+        str[insertAt]     = STD_SUP_0[0];
+        str[insertAt + 1] = STD_SUP_0[1];
+        str[insertAt + 1] += u;
+        insertAt += 2;
+      }
+      else if(u <= 3 && u >= 0) {
+        str[insertAt]     = STD_SUP_2[0];
+        str[insertAt + 1] = STD_SUP_2[1];
+        str[insertAt + 1] += u - 2;
+        insertAt += 2;
+      }
+      else if(u <= 9 && u >= 0) {
+        str[insertAt]     = STD_SUP_4[0];
+        str[insertAt + 1] = STD_SUP_4[1];
+        str[insertAt + 1] += u - 4;
+        insertAt += 2;
+      } else {
+        str[insertAt]     = strtmp[src];
+        insertAt ++;
+      }
+      src++;
+    }
+  str[insertAt]=0;
+}
+
+void changeToSub(char *str){
+  char strtmp[100];
+  strcpy(strtmp,str);
+  int16_t u, src = 0;
+  int16_t insertAt = 0;
+  while (strtmp[src]!=0) {
+      u = strtmp[src]-48;   
+      if(u <= 9 && u >= 0) {
+        str[insertAt]     = STD_SUB_0[0];
+        str[insertAt + 1] = STD_SUB_0[1];
+        str[insertAt + 1] += u;
+        insertAt += 2;
+      } else {
+        str[insertAt]     = strtmp[src];
+        insertAt ++;
+      }
+      src++;
+    }
+  str[insertAt]=0;
+}
+
+
   //without mixedFraction flag, improper fractions are allowed
-  #define  mixedFraction true
 
   bool_t checkForAndChange_(char *displayString, const real34_t *value34, const real_t *constant, const real34_t *tol34, const char *constantStr,  bool_t frontSpace) {
+    bool_t mixedFraction = !getSystemFlag(FLAG_PROPFR);
     real34_t multConstant34, constant_34;
     real34_t newConstant34, val, val1, result, result_ip, result_fp;  real_t temp;
     real_t constDiv;
-    char denomStr[20], wholePart[30], resstr[50];
+    char denomStr[20], wholePart[30], resstr[100], tmpstr[50];
     denomStr[0]=0;
     wholePart[0]=0;
     resstr[0]=0;
@@ -1305,23 +1358,29 @@ int16_t getD(const real34_t *val) {
              sprintf(wholePart,"%i%s%s%s",tmp,PRODUCT_SIGN,constantStr,sign);
          }
       }
-
-      if(constantStr[0]==0) 
-        sprintf(resstr,"%s%i",     wholePart, (int16_t)resultingInteger);
+      if(constantStr[0]==0) {
+        sprintf(tmpstr,"%i",(int16_t)resultingInteger);
+        changeToSup(tmpstr);
+        sprintf(resstr,"%s%s",wholePart,tmpstr);
+      }
       else {
-        if(resultingInteger == 1)
+        if(resultingInteger == 1) {
           sprintf(resstr,"%s", wholePart);
-        else
-          sprintf(resstr,"%s%i%s",  wholePart, (int16_t)resultingInteger,PRODUCT_SIGN);
+        }
+        else {
+          sprintf(tmpstr,"%i%s",(int16_t)resultingInteger,PRODUCT_SIGN);
+//          changeToSup(tmpstr);
+          sprintf(resstr,"%s%s",wholePart,tmpstr);
+        }
       }
     //printf(">>> %s\n",resstr);
     }
 
-    char tmp[50];
     if((resstr[stringByteLength(resstr)-1]==' ' || resstr[stringByteLength(resstr)-1]==0) &&  denomStr[0]=='/' && constantStr[0]==0) {
-      sprintf(tmp,"1%s",denomStr);
-      strcpy(denomStr,tmp);
+      sprintf(tmpstr,"1%s",denomStr);
+      strcpy(denomStr,tmpstr);
     }
+    changeToSub(denomStr);
     //printf(">>>@@@ §%s§%s§%s§\n",resstr,constantStr,denomStr);
 
 
@@ -1346,8 +1405,11 @@ int16_t getD(const real34_t *val) {
         strcat(displayString,constantStr);
         strcat(displayString,denomStr);
       }
-      if(real34IsZero(&result_fp)) strcat(displayString,"");
-      else strcat(displayString," " STD_ALMOST_EQUAL);
+
+//Add this portion to indicate exact or not. Removed due to silly behaviour with complex numbers
+//if needed, it would require another disable flag from complex number display
+//      if(real34IsZero(&result_fp)) strcat(displayString,"");
+//      else strcat(displayString," " STD_ALMOST_EQUAL);
       
       return true;
     } 

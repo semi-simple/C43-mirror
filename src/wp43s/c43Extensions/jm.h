@@ -223,6 +223,8 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 #define JC_GAUSS_FITTING       63
 #define JC_ORTHOGONAL_FITTING  64
 
+#define JC_EXFRAC              65
+
 
 #ifdef PC_BUILD
 //keyboard.c

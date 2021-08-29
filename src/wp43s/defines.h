@@ -161,10 +161,11 @@
 #undef WP43S_ON_C43_USER_MODE       //Default setting
 
 
-//constantFractionsMode
+//constantFractionsMode         //JM
 #define CF_OFF                   0
 #define CF_NORMAL                1
-  
+#define CF_COMPLEX1              2
+#define CF_COMPLEX2              3
 
 
 //*********************************

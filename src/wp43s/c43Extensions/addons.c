@@ -447,6 +447,7 @@ void fnDisplayFormatSigFig(uint16_t displayFormatN) { //DONE          //JM SIGFI
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractionsOn = false; //JM
   SigFigMode = displayFormatN; //JM SIGFIG
   UNITDisplay = false;         //JM SIGFIG display Reset
 
@@ -462,6 +463,7 @@ void fnDisplayFormatUnit(uint16_t displayFormatN) { //DONE           //JM UNIT
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractionsOn = false; //JM
   SigFigMode = 0;     //JM UNIT Sigfig works in FIX mode and it makes not sense in UNIT (ENG) mode
   UNITDisplay = true; //JM UNIT display
 
@@ -1300,10 +1302,11 @@ void changeToSub(char *str){
 }
 
 
-  //without mixedFraction flag, improper fractions are allowed
-
+  //without mixedNumber flag, improper fractions are allowed: In WP43S misnomer: FLAG_PROPFR = MixedNumber = a b/c
+  real34_t result_fp1;
   bool_t checkForAndChange_(char *displayString, const real34_t *value34, const real_t *constant, const real34_t *tol34, const char *constantStr,  bool_t frontSpace) {
-    bool_t mixedFraction = !getSystemFlag(FLAG_PROPFR);
+    bool_t mixedNumber = getSystemFlag(FLAG_PROPFR) && !(constantFractionsMode == CF_COMPLEX1 || constantFractionsMode == CF_COMPLEX2);
+    //printf(">>>## mixedNumber %u\n",mixedNumber);
     real34_t multConstant34, constant_34;
     real34_t newConstant34, val, val1, result, result_ip, result_fp;  real_t temp;
     real_t constDiv;
@@ -1345,7 +1348,7 @@ void changeToSub(char *str){
       //a whole multiple of the constant exists
       real34Divide(&val, &result_ip, &val1);
       //printf(">>>Resultinginteger:%i SmallestDenom:%i\n",resultingInteger,smallestDenom);
-      if (resultingInteger > smallestDenom  &&  smallestDenom > 1  && resultingInteger != 0 &&  mixedFraction) {
+      if (resultingInteger > smallestDenom  &&  smallestDenom > 1  && resultingInteger != 0 &&  mixedNumber) {
          int16_t tmp = (int16_t)resultingInteger / smallestDenom;
          resultingInteger = resultingInteger - (int32_t)(tmp * smallestDenom);
          if(constantStr[0]==0) {
@@ -1376,11 +1379,12 @@ void changeToSub(char *str){
     //printf(">>> %s\n",resstr);
     }
 
-    if((resstr[stringByteLength(resstr)-1]==' ' || resstr[stringByteLength(resstr)-1]==0) &&  denomStr[0]=='/' && constantStr[0]==0) {
-      sprintf(tmpstr,"1%s",denomStr);
+    //printf(">>>@@@ §%s§%s§%s§ %i %i\n",resstr,constantStr,denomStr, (int16_t)stringByteLength(resstr)-1, resstr[stringByteLength(resstr)-1]);
+    changeToSub(denomStr);
+    if((resstr[stringByteLength(resstr)-1]==' ' || resstr[max(0,stringByteLength(resstr)-1)]==0) &&  denomStr[0]=='/' && constantStr[0]==0) {
+      sprintf(tmpstr,STD_SUP_1 "%s",denomStr);
       strcpy(denomStr,tmpstr);
     }
-    changeToSub(denomStr);
     //printf(">>>@@@ §%s§%s§%s§\n",resstr,constantStr,denomStr);
 
 
@@ -1406,14 +1410,32 @@ void changeToSub(char *str){
         strcat(displayString,denomStr);
       }
 
-//Add this portion to indicate exact or not. Removed due to silly behaviour with complex numbers
-//if needed, it would require another disable flag from complex number display
-//      if(real34IsZero(&result_fp)) strcat(displayString,"");
-//      else strcat(displayString," " STD_ALMOST_EQUAL);
-      
+      if(constantFractionsMode == CF_COMPLEX1) {
+        real34Copy(&result_fp,&result_fp1);
+      }
+      else {
+        if (constantFractionsMode == CF_COMPLEX2) {
+          if (real34IsZero(&result_fp1) && real34IsZero(&result_fp)) {
+          }
+          else {
+            strcat(displayString,STD_ALMOST_EQUAL);
+          }
+        }
+        else {
+          if(real34IsZero(&result_fp)) {
+            strcat(displayString,"");
+          }
+          else { 
+            strcat(displayString,"" STD_ALMOST_EQUAL);
+          }
+        }
+      }
+
+      constantFractionsMode = CF_NORMAL;
       return true;
     } 
     else {
+      constantFractionsMode = CF_NORMAL;
       return false;
     }
   }

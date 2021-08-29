@@ -273,6 +273,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
     save(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
     save(&constantFractions,                  sizeof(constantFractions),                  BACKUP);
+    save(&constantFractionsMode,              sizeof(constantFractionsMode),              BACKUP);
+    save(&constantFractionsOn,                sizeof(constantFractionsOn),                BACKUP);
     save(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
     save(&indic_x,                            sizeof(indic_x),                            BACKUP);
     save(&indic_y,                            sizeof(indic_y),                            BACKUP);
@@ -509,6 +511,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&graph_ymax,                         sizeof(graph_ymax),                         BACKUP);
       restore(&jm_LARGELI,                         sizeof(jm_LARGELI),                         BACKUP);
       restore(&constantFractions,                  sizeof(constantFractions),                  BACKUP);
+      restore(&constantFractionsMode,              sizeof(constantFractionsMode),              BACKUP);
+      restore(&constantFractionsOn,                sizeof(constantFractionsOn),                BACKUP);
       restore(&running_program_jm,                 sizeof(running_program_jm),                 BACKUP);
       restore(&indic_x,                            sizeof(indic_x),                            BACKUP);
       restore(&indic_y,                            sizeof(indic_y),                            BACKUP);

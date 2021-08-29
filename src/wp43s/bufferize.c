@@ -1864,6 +1864,8 @@ void kill_ASB_icon(void) {
     if(!getSystemFlag(FLAG_FRACT)) {
       setSystemFlag(FLAG_FRACT);
     }
+    constantFractionsOn = false; //JM
+
 
     lg = strlen(aimBuffer);
 

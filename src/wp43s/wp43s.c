@@ -160,6 +160,7 @@ bool_t                jm_HOME_FIX;                             //JMHOME
 bool_t                jm_LARGELI;
 bool_t                constantFractions;                       //JM
 uint8_t               constantFractionsMode;
+bool_t                constantFractionsOn;                     //JM
 uint8_t               SigFigMode;                              //JM SIGFIG
 bool_t                eRPN;                                    //JM eRPN Create a flag to enable or disable eRPN. See bufferize.c
 bool_t                HOME3;                                   //JM HOME Create a flag to enable or disable triple shift HOME3.

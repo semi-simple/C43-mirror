@@ -111,6 +111,7 @@ void reset_jm_defaults(int16_t toload) {
     jm_LARGELI=true;
     constantFractions=false;                                   //JM
     constantFractionsMode = CF_NORMAL;
+    constantFractionsOn=false;
     running_program_jm=false;                                  //JM program is running flag
     indic_x=0;                                                 //JM program progress indicators
     indic_y=0;                                                 //JM program progress indicators
@@ -232,7 +233,10 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
 
   case JC_EXFRAC:                                      //JM
     constantFractions = !constantFractions;
-    if(constantFractions) clearSystemFlag(FLAG_FRACT);
+    constantFractionsOn = constantFractions;
+    if(constantFractions) {
+      clearSystemFlag(FLAG_FRACT);
+    }
     fnRefreshState();                                 //drJM
     break;
 

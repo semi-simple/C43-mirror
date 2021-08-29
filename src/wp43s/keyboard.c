@@ -1958,6 +1958,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
     switch(calcMode) {
       case CM_NORMAL:
+        constantFractionsOn = false; //JM
         if(getSystemFlag(FLAG_FRACT)) {
           clearSystemFlag(FLAG_FRACT);
         }

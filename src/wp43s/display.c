@@ -56,6 +56,7 @@ void fnDisplayFormatFix(uint16_t displayFormatN) {
   displayFormat = DF_FIX;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractionsOn = false; //JM
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
   if(getRegisterDataType(REGISTER_X) == dtTime || getRegisterDataType(REGISTER_Y) == dtTime || getRegisterDataType(REGISTER_Z) == dtTime || getRegisterDataType(REGISTER_T) == dtTime) {     //JM let FIX operate on time as well
@@ -77,6 +78,7 @@ void fnDisplayFormatSci(uint16_t displayFormatN) {
   displayFormat = DF_SCI;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractionsOn = false; //JM
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -95,6 +97,7 @@ void fnDisplayFormatEng(uint16_t displayFormatN) {
   displayFormat = DF_ENG;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractionsOn = false; //JM
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG 
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -114,6 +117,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
   displayFormat = DF_ALL;
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+  constantFractionsOn = false; //JM
   SigFigMode = 0;                                                //JM SIGFIG Reset SIGFIG
   UNITDisplay = false;                                           //JM UNIT display Reset
 
@@ -131,6 +135,7 @@ void fnDisplayFormatAll(uint16_t displayFormatN) {
 void fnDisplayFormatDsp(uint16_t displayFormatN) {
   displayFormatDigits = displayFormatN;
   clearSystemFlag(FLAG_FRACT);
+//  constantFractionsOn = false; //JM
 }
 
 
@@ -360,10 +365,10 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   real_t value, c_temp;
   uint16_t constNr;
 
-  //Tolerance declaration 1x10^-32
-  realToReal34(const_1e_24, &tol34);
+  realToReal34(const_1e_24, &tol34);   //Tolerance declaration 1x10^-32
 
-  if(constantFractions && constantFractionsMode != CF_OFF && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
+  //printf(">>>## flag_proper %u\n",getSystemFlag(FLAG_PROPFR));
+  if(constantFractions && constantFractionsOn && !getSystemFlag(FLAG_FRACT) && constantFractionsMode != CF_OFF && !real34CompareAbsLessThan(real34,const34_1e_6) && !real34IsAnInteger(real34)) {
 
     if (checkForAndChange_(displayString, real34, const_1, &tol34, "",frontSpace)) return;
 
@@ -382,7 +387,6 @@ void real34ToDisplayString2(const real34_t *real34, char *displayString, int16_t
   	realSquareRoot(const_5, &c_temp, &ctxtReal39);
   	if (checkForAndChange_(displayString, real34, &c_temp, &tol34,   STD_SQUARE_ROOT STD_SUB_5,frontSpace)) return;
   }
-  constantFractionsMode = CF_NORMAL;
 
 // JM^^ ***********************
 
@@ -1089,6 +1093,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   real34_t real34, imag34;
   real_t real, imagIc;
 
+
   if(getSystemFlag(FLAG_POLAR)) { // polar mode
     real34ToReal(VARIABLE_REAL34_DATA(complex34), &real);
     real34ToReal(VARIABLE_IMAG34_DATA(complex34), &imagIc);
@@ -1102,6 +1107,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     real34Copy(VARIABLE_IMAG34_DATA(complex34), &imag34);
   }
 
+  constantFractionsMode = CF_COMPLEX1;  //JM
   real34ToDisplayString2(&real34, displayString, displayHasNDigits, limitExponent, separator, false, frontSpace);
 
   if(updateDisplayValueX) {
@@ -1113,6 +1119,7 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
     }
   }
 
+  constantFractionsMode = CF_COMPLEX2;  //JM
   real34ToDisplayString2(&imag34, displayString + i, displayHasNDigits, limitExponent, separator, false, false);
 
   if(getSystemFlag(FLAG_POLAR)) { // polar mode

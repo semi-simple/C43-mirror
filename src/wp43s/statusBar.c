@@ -179,19 +179,32 @@ void showFracMode(void) {
     }
     return;
   }                                                                                //JM^^
+    
+    char divStr[10];                    //vJM
+    if(getSystemFlag(FLAG_FRACT) || (constantFractions && constantFractionsOn)) {
+      if(!getSystemFlag(FLAG_PROPFR)) 
+        strcpy(divStr,"b/");
+      else
+        strcpy(divStr,"a+b/");
+    } else
+        strcpy(divStr,"/");             //^JM
+    compressString = 1;
+
+
     if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {
-      showString("/max", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
+      sprintf(errorMessage,"%smax",divStr);
+      showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
     }
     else {
       uint32_t x = 0;
 
       if((getSystemFlag(FLAG_DENANY) && denMax != MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
-        sprintf(errorMessage, "/%" PRIu32, denMax);
+        sprintf(errorMessage, "%s%" PRIu32, divStr,denMax);
         x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
       }
 
       #define ex 0
-      #define ey 2+9
+      #define ey 2+9+5
       if(constantFractions && constantFractionsOn && !getSystemFlag(FLAG_FRACT)) {
         //X
         plotline2(x+ex,ey-9,  x+ex+5,ey-9+5);
@@ -200,26 +213,6 @@ void showFracMode(void) {
         plotline2(x+ex+7,ey-9,  x+ex+7+3,ey-9  );
         plotline2(x+ex+7,ey-9+3,x+ex+7+3,ey-9+3);
         plotline2(x+ex+7,ey-9,  x+ex+7,  ey-9+6);
-
-        if(!getSystemFlag(FLAG_PROPFR)) {         //In WP43S misnomer: FLAG_PROPFR = MixedNumber = a b/c
-          //I Improper fractions eg. 6/5
-          plotline2(x+ex+3,ey  ,  x+ex+3+6,ey  );
-          plotline2(x+ex+3,ey+6,  x+ex+3+6,ey+6  );
-          plotline2(x+ex+3+3,ey,  x+ex+3+3,ey+6  );
-        } else {
-          //M Mixed fractions
-          plotline2(x+ex+2, ey,x+ex+2, ey+6);
-          plotline2(x+ex+10,ey,x+ex+10,ey+6);
-          plotline2(x+ex+2, ey,x+ex+6, ey+3);
-          plotline2(x+ex+10,ey,x+ex+6, ey+3);
-        
-/*
-          //P proper fraction
-          plotline2(x+ex+5,ey,x+ex+5,ey+3);
-          plotline2(x+ex,ey,  x+ex+3,ey  );
-          plotline2(x+ex,ey+4,x+ex+3,ey+4);
-          plotline2(x+ex,ey,  x+ex,  ey+6);
-*/        }
       }
       else {
         if(!getSystemFlag(FLAG_DENANY)) {

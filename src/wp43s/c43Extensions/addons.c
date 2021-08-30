@@ -1188,7 +1188,7 @@ void fnToTime(uint16_t unusedButMandatoryParameter) {
 
 // *******************************************************************
 
-int16_t getD(const real34_t *val) {
+int32_t getD(const real34_t *val) {
 /*
 ** Adapted from:
 ** https://www.ics.uci.edu/~eppstein/numth/frap.c
@@ -1209,11 +1209,11 @@ int16_t getD(const real34_t *val) {
 ** we just keep the last partial product of these matrices.
 */
 
-    double x = 11.0/840.0;
+    double x;
 
     real_t val_r;
     real34ToReal(val, &val_r);
-    realToDouble1(&val_r, &x);
+    realToDouble1(&val_r, &x);  //This only provides a float, into a double
 
     long m[2][2];
     long maxden = (long)denMax; /*999*/
@@ -1237,9 +1237,9 @@ int16_t getD(const real34_t *val) {
             if(x>(double)0x7FFFFFFF) break;  // AF: representation failure
       } 
 
-    //int nn = (double) m[0][0];
-    int dd = (double) m[1][0];
-    //printf("%i / %i \n",nn,dd);
+//int nn = (double) m[0][0];
+    int32_t dd = (double) m[1][0];
+//printf(">>> %i / %i \n",nn,dd);
 
     if(dd == 0) dd = 1;
     return dd;
@@ -1305,6 +1305,7 @@ void changeToSub(char *str){
   //without mixedNumber flag, improper fractions are allowed: In WP43S misnomer: FLAG_PROPFR = MixedNumber = a b/c
   real34_t result_fp1;
   bool_t checkForAndChange_(char *displayString, const real34_t *value34, const real_t *constant, const real34_t *tol34, const char *constantStr,  bool_t frontSpace) {
+    //printf(">>> constantFractionsMode %i\n",constantFractionsMode);
     bool_t mixedNumber = getSystemFlag(FLAG_PROPFR) && !(constantFractionsMode == CF_COMPLEX1 || constantFractionsMode == CF_COMPLEX2);
     //printf(">>>## mixedNumber %u\n",mixedNumber);
     real34_t multConstant34, constant_34;
@@ -1324,14 +1325,24 @@ void changeToSub(char *str){
     realToReal34(constant,&constant_34);
     real34Divide(&val,&constant_34,&multConstant34);
 
+
+    real34_t tmpr34;
+    uInt32ToReal34(2097151,&tmpr34);
+    //printReal34ToConsole(&multConstant34,"multConstant34="," > ");
+    //printReal34ToConsole(&tmpr34,"tmpr34="," \n");
+    if(real34CompareAbsGreaterThan(&multConstant34,&tmpr34)) {
+    //printf("<<< break0 >>>\n");
+      return false;
+    }
+
     //See if the multiplier to the constant has a whole denominator
     //printReal34ToConsole(&multConstant34,"Check n/d :","\n");
-    int16_t smallestDenom = getD(&multConstant34);
+    int32_t smallestDenom = getD(&multConstant34);
     if(smallestDenom>1) sprintf(denomStr,"/%i",smallestDenom);
     //printf(">>># %i\n",smallestDenom);
 
     //Create a new constant comprising the constant divided by the whole denominator
-    int32ToReal((int32_t)smallestDenom, &constDiv);
+    int32ToReal(smallestDenom, &constDiv);
     realDivide(constant, &constDiv, &temp, &ctxtReal39);
     realToReal34(&temp, &newConstant34);
 
@@ -1341,18 +1352,26 @@ void changeToSub(char *str){
     real34ToIntegralValue(&result, &result_ip, DEC_ROUND_HALF_UP);
     real34Subtract(&result, &result_ip, &result_fp);
     resultingInteger = abs(real34ToInt32(&result_ip));
+    //printf(">>> %i ",resultingInteger);
+    //if /*&& resultingInteger > (int32_t)denMax 999*/
 
-    if (resultingInteger > (int32_t)denMax /*999*/ )  return false;
+    uInt32ToReal34(2147483647,&tmpr34); //3355443
+    //printReal34ToConsole(&result_ip,"result_ip="," > ");
+    //printReal34ToConsole(&tmpr34,"tmpr34="," \n");
+    if(real34CompareAbsGreaterThan(&result_ip,&tmpr34)) {
+    //printf("<<< break1 >>>\n");
+      return false;
+    }
 
-    if(resultingInteger > 1 && resultingInteger <= (int32_t)denMax /*999*/ && real34CompareAbsLessThan(&result_fp,tol34)) {
+    if(resultingInteger > 1 && real34CompareAbsLessThan(&result_fp,tol34)) {
       //a whole multiple of the constant exists
       real34Divide(&val, &result_ip, &val1);
       //printf(">>>Resultinginteger:%i SmallestDenom:%i\n",resultingInteger,smallestDenom);
       if (resultingInteger > smallestDenom  &&  smallestDenom > 1  && resultingInteger != 0 &&  mixedNumber) {
-         int16_t tmp = (int16_t)resultingInteger / smallestDenom;
-         resultingInteger = resultingInteger - (int32_t)(tmp * smallestDenom);
+         int32_t tmp = resultingInteger / smallestDenom;
+         resultingInteger = resultingInteger - (tmp * smallestDenom);
          if(constantStr[0]==0) {
-             sprintf(wholePart,"%i%s",  tmp,sign);
+             sprintf(wholePart,"%i%s",tmp,sign);
          }
          else {
            if(tmp == 1)
@@ -1362,7 +1381,7 @@ void changeToSub(char *str){
          }
       }
       if(constantStr[0]==0) {
-        sprintf(tmpstr,"%i",(int16_t)resultingInteger);
+        sprintf(tmpstr,"%i",resultingInteger);
         changeToSup(tmpstr);
         sprintf(resstr,"%s%s",wholePart,tmpstr);
       }
@@ -1371,7 +1390,7 @@ void changeToSub(char *str){
           sprintf(resstr,"%s", wholePart);
         }
         else {
-          sprintf(tmpstr,"%i%s",(int16_t)resultingInteger,PRODUCT_SIGN);
+          sprintf(tmpstr,"%i%s",resultingInteger,PRODUCT_SIGN);
 //          changeToSup(tmpstr);
           sprintf(resstr,"%s%s",wholePart,tmpstr);
         }
@@ -1431,11 +1450,9 @@ void changeToSub(char *str){
         }
       }
 
-      constantFractionsMode = CF_NORMAL;
       return true;
     } 
     else {
-      constantFractionsMode = CF_NORMAL;
       return false;
     }
   }

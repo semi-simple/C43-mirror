@@ -233,7 +233,7 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
 
   case JC_EXFRAC:                                      //JM
     constantFractions = !constantFractions;
-    constantFractionsOn = constantFractions;
+    //constantFractionsOn = constantFractions;         //Removed automatic switch-on
     if(constantFractions) {
       clearSystemFlag(FLAG_FRACT);
     }

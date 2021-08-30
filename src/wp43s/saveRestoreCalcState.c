@@ -36,7 +36,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         58  // exponentHideLimit now will be saved
+#define BACKUP_VERSION         258  // EXFRAC from 58 to 258
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 

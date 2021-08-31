@@ -236,6 +236,10 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
     //constantFractionsOn = constantFractions;         //Removed automatic switch-on
     if(constantFractions) {
       clearSystemFlag(FLAG_FRACT);
+      constantFractionsOn = true;
+    } else {
+      setSystemFlag(FLAG_FRACT);
+      constantFractionsOn = false;
     }
     fnRefreshState();                                 //drJM
     break;

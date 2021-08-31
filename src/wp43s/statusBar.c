@@ -24,6 +24,7 @@
 #include "c43Extensions/jm.h"
 #include "plotstat.h"
 #include "screen.h"
+#include "softmenus.h"
 #include <string.h>
 
 #include "wp43s.h"
@@ -203,16 +204,41 @@ void showFracMode(void) {
         x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
       }
 
-      #define ex 0
+      #define ex -3
       #define ey 2+9+5
+      #define ex2 ex+9
+      #define ey2 ey-7
       if(constantFractions && constantFractionsOn && !getSystemFlag(FLAG_FRACT)) {
-        //X
-        plotline2(x+ex,ey-9,  x+ex+5,ey-9+5);
-        plotline2(x+ex,ey-9+5,x+ex+5,ey-9  );
+
+        //Circle
+        plotline2(5+ex2+x,0+ey2,5+ex2+x,-2+ey2);
+        plotline2(5+ex2+x,-2+ey2,4+ex2+x,-3+ey2);
+        plotline2(4+ex2+x,-3+ey2,3+ex2+x,-4+ey2);
+        plotline2(3+ex2+x,-4+ey2,2+ex2+x,-5+ey2);
+        plotline2(2+ex2+x,-5+ey2,0+ex2+x,-5+ey2);
+        plotline2(0+ex2+x,-5+ey2,-2+ex2+x,-5+ey2);
+        plotline2(-2+ex2+x,-5+ey2,-3+ex2+x,-4+ey2);
+        plotline2(-3+ex2+x,-4+ey2,-4+ex2+x,-3+ey2);
+        plotline2(-4+ex2+x,-3+ey2,-5+ex2+x,-2+ey2);
+        plotline2(-5+ex2+x,-2+ey2,-5+ex2+x,2+ey2);
+        plotline2(-5+ex2+x,0+ey2,-5+ex2+x,2+ey2);
+        plotline2(-5+ex2+x,2+ey2,-5+ex2+x,4+ey2);
+        plotline2(-5+ex2+x,4+ey2,-4+ex2+x,5+ey2);
+        plotline2(-4+ex2+x,5+ey2,-3+ex2+x,6+ey2);
+        plotline2(-3+ex2+x,6+ey2,-2+ex2+x,7+ey2);
+        plotline2(-2+ex2+x,7+ey2,0+ex2+x,7+ey2);
+        plotline2(0+ex2+x,7+ey2,2+ex2+x,7+ey2);
+        plotline2(2+ex2+x,7+ey2,3+ex2+x,6+ey2);
+        plotline2(3+ex2+x,6+ey2,4+ex2+x,5+ey2);
+        plotline2(4+ex2+x,5+ey2,5+ex2+x,4+ey2);
+        plotline2(5+ex2+x,4+ey2,5+ex2+x,2+ey2);
+        plotline2(5+ex2+x,2+ey2,5+ex2+x,0+ey2);
+
         //F
         plotline2(x+ex+7,ey-9,  x+ex+7+3,ey-9  );
         plotline2(x+ex+7,ey-9+3,x+ex+7+3,ey-9+3);
         plotline2(x+ex+7,ey-9,  x+ex+7,  ey-9+6);
+
       }
       else {
         if(!getSystemFlag(FLAG_DENANY)) {

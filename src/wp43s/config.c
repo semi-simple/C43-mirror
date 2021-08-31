@@ -367,6 +367,7 @@ void fnFractionType(uint16_t unusedButMandatoryParameter) {
     }
     else {
       constantFractionsOn = true;
+      setSystemFlag(FLAG_PROPFR);
     }
     clearSystemFlag(FLAG_FRACT);
   } else {
@@ -375,7 +376,7 @@ void fnFractionType(uint16_t unusedButMandatoryParameter) {
     }
     else {
       setSystemFlag(FLAG_FRACT);
-      //setSystemFlag(FLAG_PROPFR);
+      setSystemFlag(FLAG_PROPFR);
     }
   }
 }

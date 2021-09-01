@@ -1071,6 +1071,7 @@ uint8_t  displaymode = stdNoEnlarge;
 
 
   uint8_t  compressString = 0;                                                              //JM compressString
+  uint8_t  raiseString = 0;                                                                 //JM compressString
 
   uint32_t showString(const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
     uint16_t ch, lg;
@@ -1097,9 +1098,10 @@ uint8_t  displaymode = stdNoEnlarge;
         sec = true;
       }
 
-      x = showGlyphCode(charCodeFromString(string, &ch), font, x, y, videoMode, slc, sec) - compressString;
+      x = showGlyphCode(charCodeFromString(string, &ch), font, x, y - raiseString, videoMode, slc, sec) - compressString;
     }
     compressString = 0;        //JM compressString
+    raiseString = 0;
     return x;
   }
 
@@ -1350,7 +1352,7 @@ uint32_t showStringEdC43(uint32_t lastline, int16_t offset, int16_t edcursor, co
     }
 
     maxiC = 1;                                                                            //JM
-      if(y!=(uint32_t)(-100)) x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
+      if(y!=(uint32_t)(-100)) x = showGlyphCode(charCode, font, x, y - raiseString, videoMode, slc, sec) - compressString;        //JM compressString
     maxiC = 0;                                                                            //JM
 
   }
@@ -1359,6 +1361,7 @@ uint32_t showStringEdC43(uint32_t lastline, int16_t offset, int16_t edcursor, co
   xCursor = x;
   yCursor = y;
   compressString = 0;                                                                     //JM compressString
+  raiseString = 0;
   return xCursor;
 }
 

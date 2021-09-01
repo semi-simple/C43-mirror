@@ -181,64 +181,42 @@ void showFracMode(void) {
     return;
   }                                                                                //JM^^
     
-    char divStr[10];                    //vJM
+    
+    x = X_FRAC_MODE;                    //vJM
+    char divStr[10];
     if(getSystemFlag(FLAG_FRACT) || (constantFractions && constantFractionsOn)) {
-      if(!getSystemFlag(FLAG_PROPFR)) 
-        strcpy(divStr,"b/");
-      else
-        strcpy(divStr,"a+b/");
-    } else
-        strcpy(divStr,"/");             //^JM
-    compressString = 1;
+      if(!getSystemFlag(FLAG_PROPFR)) {
+        raiseString = 9;
+        strcpy(divStr,STD_SUB_b);
+        x = showString(divStr, &standardFont, x, 0, vmNormal, true, true)-2;
+        strcpy(divStr,"/");
+      }
+      else {
+        raiseString = 9;
+        strcpy(divStr,STD_SUB_a STD_SPACE_4_PER_EM STD_SUB_b);
+        x = showString(divStr, &standardFont, x, 0, vmNormal, true, true)-2;
+        strcpy(divStr,"/");
+      }
+    } else {
+        strcpy(divStr,"/");
+      }
+    compressString = 1;             //^JM
 
 
     if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {
       sprintf(errorMessage,"%smax",divStr);
-      showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
+      x = showString(errorMessage, &standardFont, x, 0, vmNormal, true, true);
     }
     else {
-      uint32_t x = 0;
-
       if((getSystemFlag(FLAG_DENANY) && denMax != MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
         sprintf(errorMessage, "%s%" PRIu32, divStr,denMax);
-        x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
+        x = showString(errorMessage, &standardFont, x, 0, vmNormal, true, true);
       }
 
-      #define ex -3
-      #define ey 2+9+5
-      #define ex2 ex+9
-      #define ey2 ey-7
       if(constantFractions && constantFractionsOn && !getSystemFlag(FLAG_FRACT)) {
-
-        //Circle
-        plotline2(5+ex2+x,0+ey2,5+ex2+x,-2+ey2);
-        plotline2(5+ex2+x,-2+ey2,4+ex2+x,-3+ey2);
-        plotline2(4+ex2+x,-3+ey2,3+ex2+x,-4+ey2);
-        plotline2(3+ex2+x,-4+ey2,2+ex2+x,-5+ey2);
-        plotline2(2+ex2+x,-5+ey2,0+ex2+x,-5+ey2);
-        plotline2(0+ex2+x,-5+ey2,-2+ex2+x,-5+ey2);
-        plotline2(-2+ex2+x,-5+ey2,-3+ex2+x,-4+ey2);
-        plotline2(-3+ex2+x,-4+ey2,-4+ex2+x,-3+ey2);
-        plotline2(-4+ex2+x,-3+ey2,-5+ex2+x,-2+ey2);
-        plotline2(-5+ex2+x,-2+ey2,-5+ex2+x,2+ey2);
-        plotline2(-5+ex2+x,0+ey2,-5+ex2+x,2+ey2);
-        plotline2(-5+ex2+x,2+ey2,-5+ex2+x,4+ey2);
-        plotline2(-5+ex2+x,4+ey2,-4+ex2+x,5+ey2);
-        plotline2(-4+ex2+x,5+ey2,-3+ex2+x,6+ey2);
-        plotline2(-3+ex2+x,6+ey2,-2+ex2+x,7+ey2);
-        plotline2(-2+ex2+x,7+ey2,0+ex2+x,7+ey2);
-        plotline2(0+ex2+x,7+ey2,2+ex2+x,7+ey2);
-        plotline2(2+ex2+x,7+ey2,3+ex2+x,6+ey2);
-        plotline2(3+ex2+x,6+ey2,4+ex2+x,5+ey2);
-        plotline2(4+ex2+x,5+ey2,5+ex2+x,4+ey2);
-        plotline2(5+ex2+x,4+ey2,5+ex2+x,2+ey2);
-        plotline2(5+ex2+x,2+ey2,5+ex2+x,0+ey2);
-
-        //F
-        plotline2(x+ex+7,ey-9,  x+ex+7+3,ey-9  );
-        plotline2(x+ex+7,ey-9+3,x+ex+7+3,ey-9+3);
-        plotline2(x+ex+7,ey-9,  x+ex+7,  ey-9+6);
-
+        raiseString = 1;
+        strcpy(divStr,"c");
+        x = showString(divStr, &standardFont, x, 0, vmNormal, true, true);
       }
       else {
         if(!getSystemFlag(FLAG_DENANY)) {

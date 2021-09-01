@@ -105,6 +105,7 @@
 //  uint8_t  combinationFonts;    //TO REMOVE from .h
 //  uint8_t  maxiC;               //TO REMOVE from .h                                                                                            //JM global flags for character control:  enlarged letters
   extern uint8_t  compressString;                                                                               //JM global flags for character control: compressString
+  extern uint8_t  raiseString;                                                                               //JM global flags for character control: raiseString
   extern uint8_t  lines;
   extern uint16_t current_cursor_x;
   extern uint16_t current_cursor_y;

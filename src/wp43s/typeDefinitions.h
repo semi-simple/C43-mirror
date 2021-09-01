@@ -206,6 +206,7 @@ typedef struct {
   bool_t jm_LARGELI;
   bool_t constantFractions;
   uint8_t constantFractionsMode;
+  bool_t constantFractionsOn;
   uint8_t displayStackSHOIDISP;                                             //JMCFG^^
 
 } dtConfigDescriptor_t;

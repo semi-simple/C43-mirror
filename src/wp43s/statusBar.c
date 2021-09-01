@@ -22,7 +22,9 @@
 #include "fonts.h"
 #include "gui.h"
 #include "c43Extensions/jm.h"
+#include "plotstat.h"
 #include "screen.h"
+#include "softmenus.h"
 #include <string.h>
 
 #include "wp43s.h"
@@ -178,25 +180,55 @@ void showFracMode(void) {
     }
     return;
   }                                                                                //JM^^
+    
+    
+    x = X_FRAC_MODE;                    //vJM
+    char divStr[10];
+    if(getSystemFlag(FLAG_FRACT) || (constantFractions && constantFractionsOn)) {
+      if(!getSystemFlag(FLAG_PROPFR)) {
+        raiseString = 9;
+        strcpy(divStr,STD_SUB_b);
+        x = showString(divStr, &standardFont, x, 0, vmNormal, true, true)-2;
+        strcpy(divStr,"/");
+      }
+      else {
+        raiseString = 9;
+        strcpy(divStr,STD_SUB_a STD_SPACE_4_PER_EM STD_SUB_b);
+        x = showString(divStr, &standardFont, x, 0, vmNormal, true, true)-2;
+        strcpy(divStr,"/");
+      }
+    } else {
+        strcpy(divStr,"/");
+      }
+    compressString = 1;             //^JM
+
+
     if(getSystemFlag(FLAG_DENANY) && denMax == MAX_DENMAX) {
-      showString("/max", &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
+      sprintf(errorMessage,"%smax",divStr);
+      x = showString(errorMessage, &standardFont, x, 0, vmNormal, true, true);
     }
     else {
-      uint32_t x = 0;
-
       if((getSystemFlag(FLAG_DENANY) && denMax != MAX_DENMAX) || !getSystemFlag(FLAG_DENANY)) {
-        sprintf(errorMessage, "/%" PRIu32, denMax);
-        x = showString(errorMessage, &standardFont, X_FRAC_MODE, 0, vmNormal, true, true);
+        sprintf(errorMessage, "%s%" PRIu32, divStr,denMax);
+        x = showString(errorMessage, &standardFont, x, 0, vmNormal, true, true);
       }
 
-      if(!getSystemFlag(FLAG_DENANY)) {
-        if(getSystemFlag(FLAG_DENFIX)) {
-          showGlyphCode('f',  &standardFont, x, 0, vmNormal, true, false); // f is 0+7+3 pixel wide
-        }
-        else {
-          showString(PRODUCT_SIGN, &standardFont, x, 0, vmNormal, true, false); // STD_DOT is 0+3+2 pixel wide and STD_CROSS is 0+7+2 pixel wide
+      if(constantFractions && constantFractionsOn && !getSystemFlag(FLAG_FRACT)) {
+        raiseString = 1;
+        strcpy(divStr,"c");
+        x = showString(divStr, &standardFont, x, 0, vmNormal, true, true);
+      }
+      else {
+        if(!getSystemFlag(FLAG_DENANY)) {
+          if(getSystemFlag(FLAG_DENFIX)) {
+            showGlyphCode('f',  &standardFont, x, 0, vmNormal, true, false); // f is 0+7+3 pixel wide
+          }
+          else {
+            showString(PRODUCT_SIGN, &standardFont, x, 0, vmNormal, true, false); // STD_DOT is 0+3+2 pixel wide and STD_CROSS is 0+7+2 pixel wide
+          }
         }
       }
+
     }
   }
 

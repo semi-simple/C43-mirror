@@ -361,23 +361,23 @@ void fnAngularMode(uint16_t am) {
 
 
 void fnFractionType(uint16_t unusedButMandatoryParameter) {
-  if(!constantFractions && !getSystemFlag(FLAG_FRACT)) { //JM v
-    constantFractions = true;
-    clearSystemFlag(FLAG_FRACT);
-    clearSystemFlag(FLAG_PROPFR);
-  } else
   if(constantFractions) {
-    constantFractions = false;
-    setSystemFlag(FLAG_FRACT);
-    setSystemFlag(FLAG_PROPFR);
-  } else                                                                              //JM ^
-  if(getSystemFlag(FLAG_PROPFR)) {  //this means constantfractiosn is off AND FLAG_FRACT is on
-    clearSystemFlag(FLAG_PROPFR);
-  }
-  else {
-    constantFractions = true;
+    if(constantFractionsOn) {
+      flipSystemFlag(FLAG_PROPFR);
+    }
+    else {
+      constantFractionsOn = true;
+      setSystemFlag(FLAG_PROPFR);
+    }
     clearSystemFlag(FLAG_FRACT);
-    clearSystemFlag(FLAG_PROPFR);
+  } else {
+    if(getSystemFlag(FLAG_FRACT)) {
+      flipSystemFlag(FLAG_PROPFR);
+    }
+    else {
+      setSystemFlag(FLAG_FRACT);
+      setSystemFlag(FLAG_PROPFR);
+    }
   }
 }
 
@@ -417,8 +417,8 @@ void fnRange(uint16_t unusedButMandatoryParameter) {
   if(longIntegerCompareInt(longInt, 6145) > 0) {
     exponentLimit = 6145;
   }
-  else if(longIntegerCompareInt(longInt, 9) < 0) {
-    exponentLimit = 9;                                //JM changed from 99 to 9
+  else if(longIntegerCompareInt(longInt, 99) < 0) {
+    exponentLimit = 99;
   }
   else {
     exponentLimit = (int16_t)(longInt->_mp_d[0]); // OK for 32 and 64 bit limbs
@@ -436,6 +436,25 @@ void fnGetRange(uint16_t unusedButMandatoryParameter) {
 
   longIntegerInit(range);
   uIntToLongInteger(exponentLimit, range);
+  convertLongIntegerToLongIntegerRegister(range, REGISTER_X);
+  longIntegerFree(range);
+}
+
+
+
+void fnHide(uint16_t digits) {
+  if(digits >= 12 || digits == 0) exponentHideLimit = digits;
+}
+
+
+
+void fnGetHide(uint16_t unusedButMandatoryParameter) {
+  longInteger_t range;
+
+  liftStack();
+
+  longIntegerInit(range);
+  uIntToLongInteger(exponentHideLimit, range);
   convertLongIntegerToLongIntegerRegister(range, REGISTER_X);
   longIntegerFree(range);
 }
@@ -806,6 +825,7 @@ void fnReset(uint16_t confirmation) {
     memset(lastCatalogPosition, 0, NUMBER_OF_CATALOGS * sizeof(lastCatalogPosition[0]));
     firstGregorianDay = 2361222 /* 14 Sept 1752 */;
     exponentLimit = 6145;
+    exponentHideLimit = 0;
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
 
@@ -922,7 +942,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_106q+"
+#define VERSION1 "_106r+"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2

@@ -1817,7 +1817,7 @@
 #define ITM_XIN                       1754
 #define ITM_XOUT                      1755
 #define ITM_PLOT_CENTRL               1756
-#define ITM_1757                      1757
+#define ITM_HIDE                      1757
 #define ITM_SMI                       1758
 #define ITM_PLOT_LR                   1759
 #define ITM_PLOT_NXT                  1760
@@ -1826,7 +1826,7 @@
 #define ITM_Fphik                     1763
 #define ITM_Ephik                     1764
 #define ITM_ZETAphik                  1765
-#define ITM_1766                      1766
+#define ITM_GETHIDE                   1766
 #define ITM_1767                      1767
 #define ITM_1768                      1768
 
@@ -2121,8 +2121,9 @@
 #define ITM_T_HYPF                    2049
 #define ITM_T_ROOTF                   2050
 #define ITM_RSTF                      2051
+#define ITM_EXFRAC                    2052
 
-#define LAST_ITEM                     2052   //JM
+#define LAST_ITEM                     2053   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

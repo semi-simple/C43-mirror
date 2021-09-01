@@ -251,8 +251,8 @@ infinite:
 void realToFloat(const real_t *vv, float *v) {
   *v = fnRealToFloat(vv);
   #ifdef PC_BUILD
-    char tmpString1[100];                      //allow for 75 digits
-    realToString(vv, tmpString1);
+    //char tmpString1[100];                      //allow for 75 digits
+    //realToString(vv, tmpString1);
     //printf("Convert vv REAL %s --> Float %f\n",tmpString1,*v);
   #endif
 }
@@ -260,8 +260,8 @@ void realToFloat(const real_t *vv, float *v) {
 void realToDouble1(const real_t *vv, double *v) {
   *v = fnRealToFloat(vv);
   #ifdef PC_BUILD
-    char tmpString1[100];                      //allow for 75 digits
-    realToString(vv, tmpString1);
+    //char tmpString1[100];                      //allow for 75 digits
+    //realToString(vv, tmpString1);
     //printf("Convert vv REAL %s --> Double %lf\n",tmpString1,*v);
   #endif
 }

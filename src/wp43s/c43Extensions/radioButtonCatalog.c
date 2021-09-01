@@ -127,6 +127,7 @@ TO_QSPI const radiocb_t indexOfRadioCbEepromItems[] = {
 /* 1745 */  { ITM_H_REPLCA,         JC_H_MIR,               CB_JC },  //fnSetSetJM
 /* 1746 */  { ITM_H_FIXED,          JC_H_FIX,               CB_JC },  //fnSetSetJM
 /*      */  { ITM_LARGELI,          JC_LARGELI,             CB_JC },  //fnSetSetJM
+/*      */  { ITM_EXFRAC,           JC_EXFRAC,              CB_JC },  //fnSetSetJM
 /*      */  { ITM_EXTX,             JC_EXTENTX,             CB_JC },  //fnSetSetJM
 /*      */  { ITM_EXTY,             JC_EXTENTY,             CB_JC },  //fnSetSetJM
 /* 1892 */  { ITM_TEST,             JC_ITM_TST,             CB_JC },  //fnSetInlineTest
@@ -381,6 +382,11 @@ int8_t fnCbIsSet(int16_t item) {
         }
         break;
 
+        case JC_EXFRAC: {
+          cb_param = constantFractions;
+        }
+        break;
+
         case JC_EXTENTX: {
           cb_param = extentx;
         }
@@ -548,6 +554,10 @@ int16_t fnItemShowValue(int16_t item) {
 
   case ITM_RNG:     //
     result = exponentLimit;
+    break;
+
+  case ITM_HIDE:     //
+    result = exponentHideLimit;
     break;
 
 //  case ITM_BESTF:     //

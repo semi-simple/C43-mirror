@@ -118,64 +118,113 @@
   }
 
 
+  #define CLIPSTR 30000
+
+  void addApostrophies(char * str) {
+    char tmp2[CLIPSTR];                            //JMCSV    
+    tmp2[0]=0;                                     //JMCSV add apostrophies
+    strcat(tmp2,"\"");                             //JMCSV
+    strcat(tmp2,str);                           //JMCSV
+    //strcpy(string,tmp2);                         //JMCSV
+    tmp2[CLIPSTR-1]=0;                             //JMCSV trying a better way, in case the terminating 0 is not copied
+    xcopy(str,tmp2,min(CLIPSTR-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
+    strcat(str,"\"");                           //JMCSV
+  }
 
   void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
     longInteger_t lgInt;
     int16_t base, sign, n;
     uint64_t shortInt;
-    char tmp2[TMP_STR_LENGTH];                           //JMCSV
+    char string[CLIPSTR];
 
     switch(getRegisterDataType(regist)) {
       case dtLongInteger:
         convertLongIntegerRegisterToLongInteger(regist, lgInt);
-        longIntegerToAllocatedString(lgInt, tmpString, TMP_STR_LENGTH);
+        longIntegerToAllocatedString(lgInt, string, CLIPSTR);
         longIntegerFree(lgInt);
-        tmp2[0]=0;                                         //JMCSV add apostrophies
-        strcat(tmp2,"\"");                                 //JMCSV
-        strcat(tmp2,tmpString);                           //JMCSV
-        //strcpy(tmpString,tmp2);                         //JMCSV
-        tmp2[TMP_STR_LENGTH-1]=0;                          //JMCSV trying a better way, in case the terminating 0 is not copied
-        xcopy(tmpString,tmp2,min(TMP_STR_LENGTH-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
-        strcat(tmpString,"\"");                           //JMCSV
+        addApostrophies(string);   //JMCSV
         break;
 
       case dtTime:
-        timeToDisplayString(regist, tmpString + TMP_STR_LENGTH/2, false);
-        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
-        tmp2[0]=0;                                         //JMCSV add apostrophies
-        strcat(tmp2,"\"");                                 //JMCSV
-        strcat(tmp2,tmpString);                           //JMCSV
-        strcpy(tmpString,tmp2);                           //JMCSV
-        strcat(tmpString,"\"");                           //JMCSV
+        timeToDisplayString(regist, string, false);
+        addApostrophies(string);   //JMCSV
         break;
 
       case dtDate:
-        dateToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
-        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
-        tmp2[0]=0;                                         //JMCSV add apostrophies
-        strcat(tmp2,"\"");                                 //JMCSV
-        strcat(tmp2,tmpString);                           //JMCSV
-        strcpy(tmpString,tmp2);                           //JMCSV
-        strcat(tmpString,"\"");                           //JMCSV
+        dateToDisplayString(regist, string);
+        addApostrophies(string);   //JMCSV
         break;
 
       case dtString:
-        xcopy(tmpString + TMP_STR_LENGTH/2, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
-        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
-        tmp2[0]=0;                                         //JMCSV add apostrophies
-        strcat(tmp2,"\"");                                 //JMCSV
-        strcat(tmp2,tmpString);                           //JMCSV
-        strcpy(tmpString,tmp2);                           //JMCSV
-        strcat(tmpString,"\"");                           //JMCSV
+        xcopy(string, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
+        addApostrophies(string);   //JMCSV
         break;
 
-      case dtReal34Matrix:
-        real34MatrixToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
-        break;
+      case dtReal34Matrix: {
+        dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+        real34_t *real34 = REGISTER_REAL34_MATRIX_M_ELEMENTS(regist);
+        real34_t reduced;
+        int rows, columns, len;
 
-      case dtComplex34Matrix:
-        complex34MatrixToDisplayString(regist, tmpString + TMP_STR_LENGTH/2);
+        rows = dblock->matrixRows;
+        columns = dblock->matrixColumns;
+        sprintf(string, "%dx%d", rows, columns);
+
+        for(int i=0; i<rows*columns; i++) {
+          strcat(string, LINEBREAK);
+          len = strlen(string);
+
+          real34Reduce(real34++, &reduced);
+          real34ToString(&reduced, string + len);
+
+          if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+            strcat(string + len, ".");
+          }
+        }
         break;
+      }
+
+      case dtComplex34Matrix: {
+        dataBlock_t* dblock = REGISTER_COMPLEX34_MATRIX_DBLOCK(regist);
+        complex34_t *complex34 = REGISTER_COMPLEX34_MATRIX_M_ELEMENTS(regist);
+        real34_t reduced;
+        int rows, columns, len;
+
+        rows = dblock->matrixRows;
+        columns = dblock->matrixColumns;
+        sprintf(string, "%dx%d", rows, columns);
+
+        for(int i=0; i<rows*columns; i++, complex34++) {
+          strcat(string, LINEBREAK);
+          len = strlen(string);
+
+          // Real part
+          real34Reduce((real34_t *)complex34, &reduced);
+          real34ToString(&reduced, string + len);
+          if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+            strcat(string + len, ".");
+          }
+          len = strlen(string);
+
+          // Imaginary part
+          real34Reduce(((real34_t *)complex34) + 1, &reduced);
+          if(real34IsNegative(&reduced)) {
+            sprintf(string + len, " - %sx", COMPLEX_UNIT);
+            len += 5;
+            real34SetPositiveSign(&reduced);
+            real34ToString(&reduced, string + len);
+          }
+          else {
+            sprintf(string + len + strlen(string + len), " + %sx", COMPLEX_UNIT);
+            len += 5;
+            real34ToString(&reduced, string + len);
+          }
+          if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+            strcat(string + len, ".");
+          }
+        }
+        break;
+      }
 
       case dtShortInteger:
         convertShortIntegerRegisterToUInt64(regist, &sign, &shortInt);
@@ -198,41 +247,62 @@
         }
         n++;
 
-        strcpy(tmpString, errorMessage + n);
+        strcpy(string, errorMessage + n);
         break;
 
-      case dtReal34:
-        real34ToString(REGISTER_REAL34_DATA(regist), tmpString + TMP_STR_LENGTH/2);
-        if(strchr(tmpString + TMP_STR_LENGTH/2, '.') == NULL && strchr(tmpString + TMP_STR_LENGTH/2, 'E') == NULL) {
-          strcat(tmpString + TMP_STR_LENGTH/2, ".");
+      case dtReal34: {
+        real34_t reduced;
+
+        real34Reduce(REGISTER_REAL34_DATA(regist), &reduced);
+        real34ToString(&reduced, string);
+        if(strchr(string, '.') == NULL && strchr(string, 'E') == NULL) {
+          strcat(string, ".");
         }
-        angularUnitToString(getRegisterAngularMode(regist), tmpString + TMP_STR_LENGTH/2 + strlen(tmpString + TMP_STR_LENGTH/2));
-        stringToUtf8(tmpString + TMP_STR_LENGTH/2, (uint8_t *)tmpString);
+        angularUnitToString(getRegisterAngularMode(regist), string + strlen(string));
         break;
+      }
 
-      case dtComplex34:
-        real34ToString(REGISTER_REAL34_DATA(regist), tmpString);
-        if(real34IsNegative(REGISTER_IMAG34_DATA(regist))) {
-          strcat(tmpString, " - ix");
-          real34SetPositiveSign(REGISTER_IMAG34_DATA(regist));
-          real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + strlen(tmpString));
-          real34SetNegativeSign(REGISTER_IMAG34_DATA(regist));
+      case dtComplex34: {
+        real34_t reduced;
+        int len;
+
+        // Real part
+        real34Reduce(REGISTER_REAL34_DATA(regist), &reduced);
+        real34ToString(&reduced, string);
+        if(strchr(string, '.') == NULL && strchr(string, 'E') == NULL) {
+          strcat(string, ".");
+        }
+        len = strlen(string);
+
+        // Imaginary part
+        real34Reduce(REGISTER_IMAG34_DATA(regist), &reduced);
+        if(real34IsNegative(&reduced)) {
+          sprintf(string, " - %sx", COMPLEX_UNIT);
+          len += 5;
+          real34SetPositiveSign(&reduced);
+          real34ToString(&reduced, string + len);
         }
         else {
-          strcat(tmpString, " + ix");
-          real34ToString(REGISTER_IMAG34_DATA(regist), tmpString + strlen(tmpString));
+          sprintf(string, " + %sx", COMPLEX_UNIT);
+          len += 5;
+          real34ToString(&reduced, string + len);
         }
+        if(strchr(string + len, '.') == NULL && strchr(string + len, 'E') == NULL) {
+          strcat(string + len, ".");
+        }
+
         break;
+      }
 
       case dtConfig:
-        xcopy(tmpString, "Configuration data", 19);
+        xcopy(string, "Configuration data", 19);
         break;
 
       default:
-        sprintf(tmpString, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
+        sprintf(string, "In function copyRegisterXToClipboard, the data type %" PRIu32 " is unknown! Please try to reproduce and submit a bug.", getRegisterDataType(regist));
     }
 
-    strcpy(clipboardString, tmpString);
+    stringToUtf8(string, (uint8_t *)clipboardString);
   }
 
   #endif                                                //JMCSV
@@ -241,15 +311,14 @@
 
   void copyRegisterXToClipboard(void) {
     GtkClipboard *clipboard;
-    char clipboardString[3000];
+    char clipboardString[CLIPSTR];
 
     clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
     gtk_clipboard_clear(clipboard);
     gtk_clipboard_set_text(clipboard, "", 0); //JM FOUND TIP TO PROPERLY CLEAR CLIPBOARD: https://stackoverflow.com/questions/2418487/clear-the-system-clipboard-using-the-gtk-lib-in-c/2419673#2419673
 
     copyRegisterToClipboardString(REGISTER_X, clipboardString);
-
-    gtk_clipboard_set_text(clipboard, tmpString, -1);
+    gtk_clipboard_set_text(clipboard, clipboardString, -1);
   }
 
 
@@ -1002,6 +1071,7 @@ uint8_t  displaymode = stdNoEnlarge;
 
 
   uint8_t  compressString = 0;                                                              //JM compressString
+  uint8_t  raiseString = 0;                                                                 //JM compressString
 
   uint32_t showString(const char *string, const font_t *font, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols) {
     uint16_t ch, lg;
@@ -1028,9 +1098,10 @@ uint8_t  displaymode = stdNoEnlarge;
         sec = true;
       }
 
-      x = showGlyphCode(charCodeFromString(string, &ch), font, x, y, videoMode, slc, sec) - compressString;
+      x = showGlyphCode(charCodeFromString(string, &ch), font, x, y - raiseString, videoMode, slc, sec) - compressString;
     }
     compressString = 0;        //JM compressString
+    raiseString = 0;
     return x;
   }
 
@@ -1281,7 +1352,7 @@ uint32_t showStringEdC43(uint32_t lastline, int16_t offset, int16_t edcursor, co
     }
 
     maxiC = 1;                                                                            //JM
-      if(y!=(uint32_t)(-100)) x = showGlyphCode(charCode, font, x, y, videoMode, slc, sec) - compressString;        //JM compressString
+      if(y!=(uint32_t)(-100)) x = showGlyphCode(charCode, font, x, y - raiseString, videoMode, slc, sec) - compressString;        //JM compressString
     maxiC = 0;                                                                            //JM
 
   }
@@ -1290,6 +1361,7 @@ uint32_t showStringEdC43(uint32_t lastline, int16_t offset, int16_t edcursor, co
   xCursor = x;
   yCursor = y;
   compressString = 0;                                                                     //JM compressString
+  raiseString = 0;
   return xCursor;
 }
 

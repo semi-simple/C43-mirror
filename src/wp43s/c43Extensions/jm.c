@@ -30,6 +30,7 @@
 #include "c43Extensions/graphText.h"
 #include "items.h"
 #include "c43Extensions/keyboardTweak.h"
+#include "keyboard.h"
 #include "mathematics/mathematics.h"
 #include "memory.h"
 #include "c43Extensions/radioButtonCatalog.h"
@@ -871,6 +872,12 @@ void fnJM(uint16_t JM_OPCODE) {
   strcpy(line1,"XEQC43 ERPN STO 99 INDEX 99 DROP 1 ENTER 1 STOIJ DROP DROP RCLEL I+ RCLEL I+ RCLEL ");
   fnXEQMexecute(line1);
     }
+
+
+  if(JM_OPCODE == 48) {                                         //f.g
+    btnClicked(NULL, "27");
+    }
+
 
   
 #endif //SAVE_SPACE_DM42_6

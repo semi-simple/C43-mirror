@@ -55,7 +55,6 @@ void     shiftCutoff         (uint16_t unusedButMandatoryParameter);     //dr - 
 void     Check_MultiPresses  (int16_t  * result, int8_t key_no);
 void     Setup_MultiPresses  (int16_t  result                 );
 int16_t  nameFunction        (int16_t  fn, int16_t itemShift  );   //JM LONGPRESS FN
-
 #endif
 
 uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t SHFT, bool_t GSHFT);
@@ -64,10 +63,13 @@ bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t SHFT, bo
 #ifdef PC_BUILD
 void     btnFnPressed_StateMachine (GtkWidget *unused, gpointer data);
 void     btnFnReleased_StateMachine(GtkWidget *unused, gpointer data);
-
 #endif
-#ifdef DMCP_BUILD
 
+#ifndef TESTSUITE_BUILD
+int16_t determineFunctionKeyItem_C43(const char *data);
+#endif
+
+#ifdef DMCP_BUILD
 #define BUFFER_FAIL     0                                   //vv dr - internal keyBuffer POC
 #define BUFFER_SUCCESS  1
 #define BUFFER_MASK (BUFFER_SIZE-1) // Klammern auf keinen Fall vergessen

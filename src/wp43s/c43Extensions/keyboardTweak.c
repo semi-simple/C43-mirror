@@ -39,6 +39,38 @@
 
 
 
+int16_t determineFunctionKeyItem_C43(const char *data) {
+
+  int16_t item = ITM_NOP;
+  int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));
+  int16_t fn = *(data) - '0';
+  int16_t menuId = softmenuStack[0].softmenuId;
+
+  #ifdef PC_BUILD
+    char tmp[200]; sprintf(tmp,"^^^^determineFunctionKeyItem_C43(%d): itemShift=%d menuId=%d menuItem=%d", fn, itemShift, menuId, -softmenu[menuId].menuItem); jm_show_comment(tmp);
+  #endif //PC_BUILD
+
+  if(!(menuId==0 && jm_NO_BASE_SCREEN) ) {
+     item = determineFunctionKeyItem(data, itemShift);
+  }
+  else {              //if there is no SoftMenu showing
+    if(fn>=1 && fn<=6) {
+      if(itemShift == 0) {
+      //FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
+        temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
+      }
+      else {
+      //FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
+        temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
+      }
+    }
+    else {
+      item = 0;
+    }
+  }
+  return item;
+}
+
 
 void keyClick(uint8_t length){  //Debugging on scope, a pulse after every key edge. !!!!! Destroys the prior volume setting
 #ifdef DMCP_BUILD
@@ -453,37 +485,34 @@ void Check_MultiPresses(int16_t *result, int8_t key_no) { //Set up longpress
 //******************* JM LONGPRESS & JM DOUBLE CLICK START *******************************
 
 int16_t nameFunction(int16_t fn, int16_t itemShift) { //JM LONGPRESS vv
-  int16_t row, func;
+  int16_t func = 0;
   int16_t ix_fn; //JMXXX
-  func = 0;
-  const softmenu_t *sm;
 
-  //JMTOCHECK2
-  if(/*softmenuStackPointer > 0*/ true) {
-    sm = &softmenu[softmenuStack[0].softmenuId];
-    row = min(3, (sm->numItems + modulo(softmenuStack[0].firstItem - sm->numItems, 6)) / 6 - softmenuStack[0].firstItem / 6) - 1;
+  char str[3];
+  str[0] = '0' + fn;
 
-    if(itemShift / 6 <= row && softmenuStack[0].firstItem + itemShift + (fn - 1) < sm->numItems) {
-      func = (sm->softkeyItem)[softmenuStack[0].firstItem + itemShift + (fn - 1)];
-/*XXX*/
-      ix_fn = 0;
-      if(func_lookup(fn, itemShift, &ix_fn)) {
-      //printf("---%d\n",ix_fn);
-        func = ix_fn;
-      }
-/*XXX*/
+  func = determineFunctionKeyItem(str, itemShift);
 
-      if(func == ITM_PROD_SIGN) {
-        func = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
-      }
+  #ifdef PC_BUILD
+    printf(">>> nameFunction fn=%i itemShift=%i\n",fn, itemShift);
+  #endif //PC_BUILD
 
-      if(func < 0)  {
-        func = -func;
-      }
-    }
+
+  ix_fn = 0;
+  if(func_lookup(fn, itemShift, &ix_fn)) {
+    #ifdef PC_BUILD
+      printf(">>> nameFunction fn=%i itemShift=%i ix_fn=%i\n",fn, itemShift, ix_fn);
+    #endif //PC_BUILD
+    func = ix_fn;
   }
 
-  return func % 10000;
+//XXX JM
+  if(func < 0)  {
+    func = -func;
+  }
+//    }
+
+  return func;
 }
 
 
@@ -746,7 +775,6 @@ void btnFnReleased_StateMachine(void *unused, void *data) {
 void execFnTimeout(uint16_t key) {                          //dr - delayed call of the primary function key
   char charKey[3];
   sprintf(charKey, "%c", key + 11);
-
   btnFnClicked(NULL, (char *)charKey);
 }
 

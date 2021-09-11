@@ -33,6 +33,7 @@
 #include "wp43s.h"
 
 
+#ifndef TESTSUITE_BUILD
 static bool_t isStatsMatrix(uint16_t *rows) {
   *rows = 0;
   calcRegister_t regStats = findNamedVariable("STATS");
@@ -168,6 +169,7 @@ static void addSigma(real_t *x, real_t *y) {
 
   graph_sigmaplus(+1, x, y);
 }
+#endif //TESTSUITE_|BUILD
 
 
 
@@ -220,6 +222,7 @@ void initStatisticalSums(void) {
 
 
 void calcSigma(void) {
+#ifndef TESTSUITE_BUILD
   clearStatisticalSums();
   calcRegister_t regStats = findNamedVariable("STATS");
   if(regStats != INVALID_VARIABLE) {
@@ -228,20 +231,25 @@ void calcSigma(void) {
     linkToRealMatrixRegister(regStats, &stats);
     const uint16_t rows = stats.header.matrixRows, cols = stats.header.matrixColumns;
 
+#ifdef PC_BUILD
 printf(">>> Recalculating sums:\n");                                  //temporary debugging matrix display
+#endif
     real_t x, y;
     for(uint16_t i = 0; i < rows; i++) {
       real34ToReal(&stats.matrixElements[i * cols    ], &x);
       real34ToReal(&stats.matrixElements[i * cols + 1], &y);
+#ifdef PC_BUILD
 printReal34ToConsole(&stats.matrixElements[i * cols    ],">>> x:",", ");  //temporary debugging matrix display
 printReal34ToConsole(&stats.matrixElements[i * cols +1 ],"y:","\n");  //temporary debugging matrix display
+#endif
       addSigma(&x, &y);
     }
   }
+#endif //TESTSUITE_BUILD
 }
 
 
-
+#ifndef TESTSUITE_BUILD
 static void AddtoStatsMatrix(real_t *x, real_t *y) {
   uint16_t rows = 0, cols;
   calcRegister_t regStats = findNamedVariable("STATS");
@@ -307,7 +315,7 @@ static void removeFromStatsMatrix(void) {
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
-
+#endif //TESTSUITE_BUILD
 
 
 void fnClSigma(uint16_t unusedButMandatoryParameter) {
@@ -327,6 +335,7 @@ void fnClSigma(uint16_t unusedButMandatoryParameter) {
 
 
 void fnSigma(uint16_t plusMinus) {
+#ifndef TESTSUITE_BUILD
   real_t x, y;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
 
@@ -368,7 +377,6 @@ void fnSigma(uint16_t plusMinus) {
 
       temporaryInformation = TI_STATISTIC_SUMS;
     }
-  #ifndef TESTSUITE_BUILD
     else if(getRegisterDataType(REGISTER_X) == dtReal34Matrix && plusMinus == 1) {
       real34Matrix_t matrix;
       linkToRealMatrixRegister(REGISTER_X, &matrix);
@@ -402,7 +410,6 @@ void fnSigma(uint16_t plusMinus) {
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
     }
-  #endif // TESTSUITE_BUILD
     else {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -411,6 +418,7 @@ void fnSigma(uint16_t plusMinus) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
+#endif // TESTSUITE_BUILD
 }
 
 

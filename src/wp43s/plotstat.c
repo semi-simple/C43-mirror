@@ -188,8 +188,10 @@ void graph_setupmemory(void) {
 }
 
 void graph_end(void) {
-  free(gr_x);
-  free(gr_y);
+  if(telltale == MEM_INITIALIZED) {
+    free(gr_x);
+    free(gr_y);
+  }
   telltale = 0;
 }
 

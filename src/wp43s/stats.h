@@ -63,5 +63,5 @@ void   fnClSigma             (uint16_t unusedButMandatoryParameter);
  */
 bool_t checkMinimumDataPoints(const real_t *n);
 void   initStatisticalSums   (void);
-
+void   calcSigma             (void);
 #endif // STATS_H

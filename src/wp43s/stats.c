@@ -320,6 +320,10 @@ static void removeFromStatsMatrix(void) {
 
 void fnClSigma(uint16_t unusedButMandatoryParameter) {
   calcRegister_t regStats = findNamedVariable("STATS");
+  if(regStats == INVALID_VARIABLE) {
+    allocateNamedVariable("STATS", dtReal34, REAL34_SIZE);
+    regStats = findNamedVariable("STATS");
+  }
   clearRegister(regStats);                  // this should change to delete the named variable STATS once the delete function is available. Until then write 0.0 into STATS.
   graph_end();                              // release plot memory
   lrChosen = 0;                             // linear regression selection

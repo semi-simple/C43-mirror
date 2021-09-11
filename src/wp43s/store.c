@@ -23,6 +23,7 @@
 #include "matrix.h"
 #include "registerValueConversions.h"
 #include "registers.h"
+#include "stats.h"
 
 #include "wp43s.h"
 
@@ -145,6 +146,7 @@ static bool_t storeIjComplex(complex34Matrix_t *matrix) {
 void fnStore(uint16_t regist) {
   if(regInRange(regist)) {
     copySourceRegisterToDestRegister(REGISTER_X, regist);
+    if(regist == findNamedVariable("STATS")) calcSigma();
   }
 }
 
@@ -165,6 +167,7 @@ void fnStoreAdd(uint16_t regist) {
     copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X);
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
+    if(regist == findNamedVariable("STATS")) calcSigma();
   }
 }
 
@@ -185,6 +188,7 @@ void fnStoreSub(uint16_t regist) {
     copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X);
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
+    if(regist == findNamedVariable("STATS")) calcSigma();
   }
 }
 
@@ -205,6 +209,7 @@ void fnStoreMult(uint16_t regist) {
     copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X);
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
+    if(regist == findNamedVariable("STATS")) calcSigma();
   }
 }
 
@@ -225,6 +230,7 @@ void fnStoreDiv(uint16_t regist) {
     copySourceRegisterToDestRegister(SAVED_REGISTER_X, REGISTER_X);
 
     adjustResult(REGISTER_X, false, true, REGISTER_X, regist, -1);
+    if(regist == findNamedVariable("STATS")) calcSigma();
   }
 }
 
@@ -302,6 +308,7 @@ void fnStoreElement(uint16_t unusedButMandatoryParameter) {
       convertReal34MatrixRegisterToComplex34MatrixRegister(matrixIndex, matrixIndex);
     }
     callByIndexedMatrix(storeElementReal, storeElementComplex);
+    if(matrixIndex == findNamedVariable("STATS")) calcSigma();
   }
 #endif // TESTSUITE_BUILD
 }
@@ -319,6 +326,7 @@ void fnStoreIJ(uint16_t unusedButMandatoryParameter) {
   }
   else {
     callByIndexedMatrix(storeIjReal, storeIjComplex);
+    if(matrixIndex == findNamedVariable("STATS")) calcSigma();
   }
 #endif // TESTSUITE_BUILD
 }

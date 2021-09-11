@@ -1647,7 +1647,7 @@
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
-              sprintf(prefix, "Data point %03" PRId16, w);
+              sprintf(prefix, "Data points: %03" PRId16, w);
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
             }

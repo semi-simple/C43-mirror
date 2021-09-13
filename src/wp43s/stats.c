@@ -33,8 +33,10 @@
 #include "wp43s.h"
 
 
-static void calcMax(uint16_t maxOffset);
-static void calcMin(uint16_t maxOffset);
+#ifndef TESTSUITE_BUILD //TESTSUITE_BUILD
+  static void calcMax(uint16_t maxOffset);
+  static void calcMin(uint16_t maxOffset);
+#endif
 
 
 #ifndef TESTSUITE_BUILD
@@ -188,9 +190,11 @@ static void addSigma(real_t *x, real_t *y) {
 
 static bool_t ignoreMaxIfValid(real_t *r1, real_t *r2){
   if(realIsNaN (r1) || realIsNaN (r2) || realIsInfinite (r1) || realIsInfinite (r2) || !realCompareEqual(r1, r2)) {
+#ifdef PC_BUILD
 printf(">>> spawning calcMax %u %u %u %u ", realIsNaN (r1) , realIsNaN (r2) , realIsInfinite (r1) , realIsInfinite (r2));
 printRealToConsole(r1,"  r1 ",", ");
 printRealToConsole(r2,"  r2 ","\n ");
+#endif
   calcMax(1);
     return false;
   }
@@ -200,9 +204,11 @@ printf(">>> ignoring calcMax\n");
 
 static bool_t ignoreMinIfValid(real_t *r1, real_t *r2){
   if(realIsNaN (r1) || realIsNaN (r2) || realIsInfinite (r1) || realIsInfinite (r2) || !realCompareEqual(r1, r2)) {
+#ifdef PC_BUILD
 printf(">>> spawning calcMin %u %u %u %u ", realIsNaN (r1) , realIsNaN (r2) , realIsInfinite (r1) , realIsInfinite (r2));
 printRealToConsole(r1,"  r1 ",", ");
 printRealToConsole(r2,"  r2 ","\n ");
+#endif
   calcMin(1);
     return false;
   }
@@ -228,8 +234,10 @@ static void subSigma(real_t *x, real_t *y) {
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
  // SIGMA-
 
+#ifdef PC_BUILD
 printRealToConsole(x,">>> subsigma: x:", " ");
 printRealToConsole(y,"  y:", "\n");
+#endif
 
   // xmax
   if(!ignoreMaxIfValid(x, SIGMA_XMAX)) goto endMax;
@@ -403,8 +411,8 @@ void initStatisticalSums(void) {
 
 
 
-static void calcMax(uint16_t maxOffset) {
 #ifndef TESTSUITE_BUILD
+static void calcMax(uint16_t maxOffset) {
 
   realCopy(const_minusInfinity, SIGMA_XMAX);
   realCopy(const_minusInfinity, SIGMA_YMAX);
@@ -429,12 +437,10 @@ printReal34ToConsole(&stats.matrixElements[i * cols +1 ],"y:","\n");  //temporar
       addMax(&x, &y);
     }
   }
-#endif //TESTSUITE_BUILD
 }
 
 
 static void calcMin(uint16_t maxOffset) {
-#ifndef TESTSUITE_BUILD
 
   realCopy(const_plusInfinity,  SIGMA_XMIN);
   realCopy(const_plusInfinity,  SIGMA_YMIN);
@@ -459,8 +465,8 @@ printReal34ToConsole(&stats.matrixElements[i * cols +1 ],"y:","\n");  //temporar
       addMin(&x, &y);
     }
   }
-#endif //TESTSUITE_BUILD
 }
+#endif //TESTSUITE_BUILD
 
 
 
@@ -505,8 +511,10 @@ static void getLastRowStatsMatrix(real_t *x, real_t *y) {
 printf(">>> STATS matrix: rows=0-%u cols=0-%u\n",rows-1,cols-1);
     real34ToReal(&stats.matrixElements[(rows-1) * cols    ], x);
     real34ToReal(&stats.matrixElements[(rows-1) * cols + 1], y);
+#ifdef PC_BUILD
 printRealToConsole(x,"   x-element:",", ");
 printRealToConsole(y,"   y-element:","\n");
+#endif
   }
   else {
     displayCalcErrorMessage(ERROR_NO_SUMMATION_DATA, ERR_REGISTER_LINE, REGISTER_X); // Invalid input data type for this operation

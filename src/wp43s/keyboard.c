@@ -914,7 +914,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       case CM_MIM:
         if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_M_EDIT) {
           mimEnter(true);
-          if(matrixIndex == findNamedVariable("STATS")) calcSigma();
+          if(matrixIndex == findNamedVariable("STATS")) calcSigma(0);
           mimFinalize();
           calcModeNormal();
           updateMatrixHeightCache();

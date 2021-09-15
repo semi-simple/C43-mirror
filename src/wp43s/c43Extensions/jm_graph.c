@@ -307,11 +307,6 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
   cancelFilename = true;
   runFunction(ITM_CLSTK);
 
-  if(telltale != MEM_INITIALIZED) {
-    graph_setupmemory();
-    runFunction(ITM_CLSIGMA);
-  }
-
   runFunction(ITM_RAD);
 
   //  for(x=x_min; x<=x_max; x+=(x_max-x_min)/SCREEN_WIDTH_GRAPH) {
@@ -408,10 +403,6 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
 
   //Start STAT/GRAPH memory
   runFunction(ITM_CLSTK);
-  if(telltale != MEM_INITIALIZED) {
-    graph_setupmemory();
-    runFunction(ITM_CLSIGMA);
-  }
   runFunction(ITM_RAD);
 
 

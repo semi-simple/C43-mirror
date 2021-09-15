@@ -236,10 +236,8 @@ void fnPlotLS(uint16_t unusedButMandatoryParameter) {
 
 void fnListXY(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-    if(telltale == MEM_INITIALIZED) {
       calcMode = CM_LISTXY; //Used to view graph/listing
       ListXYposition = 0;
-    }
   #endif
 }
 
@@ -536,15 +534,11 @@ void graph_plotmem(void) {
 
   if(PLOT_VECT || PLOT_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
-  if(telltale == MEM_INITIALIZED && checkMinimumDataPoints(const_2)) {
+  if(checkMinimumDataPoints(const_2)) {
 
     runFunction(ITM_NSIGMA);
 
-    if(plotmode != _VECT) {
-      realToInt32(SIGMA_N, statnum);
-    } else {
-      statnum = ix_count;
-    }
+    realToInt32(SIGMA_N, statnum);
    
     runFunction(ITM_DROP);
 
@@ -560,7 +554,7 @@ void graph_plotmem(void) {
 
 
 
-  if(telltale == MEM_INITIALIZED && statnum >= 2) {
+  if(statnum >= 2) {
     //GRAPH SETUP
 //    if(!Aspect_Square) {
 //      clearScreen();
@@ -964,6 +958,7 @@ void graph_plotmem(void) {
 
 
 
+
 //-----------------------------------------------------//-----------------------------------------------------
 
 
@@ -972,22 +967,14 @@ void fnStatList() {
   char tmpstr1[100], tmpstr2[100];
   int16_t ix, ixx, statnum;
 
-    if(telltale == MEM_INITIALIZED) {
-      clearScreen();
-      refreshStatusBar();
-    }
+  clearScreen();
+  refreshStatusBar();
 
   if(PLOT_VECT || PLOT_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
-  if(telltale == MEM_INITIALIZED) {
     runFunction(ITM_NSIGMA);
-    if(plotmode != _VECT) {
-      realToInt32(SIGMA_N, statnum);
-      sprintf(tmpString, "Stat data: N = %d",statnum);
-    } else {
-      statnum = ix_count;
-      sprintf(tmpString, "Stat data: Vector IndexCount = %d",statnum);
-    }
+    realToInt32(SIGMA_N, statnum);
+    sprintf(tmpString, "Stat data: N = %d",statnum);
 
     runFunction(ITM_DROP);
     print_linestr(tmpString,true);
@@ -1018,7 +1005,6 @@ void fnStatList() {
         printf("%d:%s\n",ixx,tmpstr1);
       #endif
     }
-  }
   #endif
 }
 

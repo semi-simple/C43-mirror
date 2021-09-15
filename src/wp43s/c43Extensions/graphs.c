@@ -236,8 +236,10 @@ void fnPlotLS(uint16_t unusedButMandatoryParameter) {
 
 void fnListXY(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
+    if(checkMinimumDataPoints(const_1)) {
       calcMode = CM_LISTXY; //Used to view graph/listing
       ListXYposition = 0;
+    }
   #endif
 }
 
@@ -972,6 +974,7 @@ void fnStatList() {
 
   if(PLOT_VECT || PLOT_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
+  if(checkMinimumDataPoints(const_1)) {
     runFunction(ITM_NSIGMA);
     realToInt32(SIGMA_N, statnum);
     sprintf(tmpString, "Stat data: N = %d",statnum);
@@ -1005,6 +1008,7 @@ void fnStatList() {
         printf("%d:%s\n",ixx,tmpstr1);
       #endif
     }
+  }
   #endif
 }
 

@@ -184,7 +184,6 @@ static void addSigma(real_t *x, real_t *y) {
   realDivide(const_1, y, &tmpReal1, realContext);
   realAdd(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext);
 
-  graph_sigmaplus(+1, x, y);
 }
 
 
@@ -351,7 +350,6 @@ printRealToConsole(y,"  y:", "\n");
   if(!realSubtractIfValid(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext)) goto toReturn;
 
   toReturn:
-  graph_sigmaplus(-1, x, y);
 printf(" >>>\n");
 }
 
@@ -401,11 +399,8 @@ void initStatisticalSums(void) {
     statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     clearStatisticalSums();
     }
-    else {
-      lastErrorCode = ERROR_RAM_FULL;
-    }
-  if(telltale != MEM_INITIALIZED) {
-    graph_setupmemory();
+  else {
+    lastErrorCode = ERROR_RAM_FULL;
   }
 }
 
@@ -599,7 +594,6 @@ void fnClSigma(uint16_t unusedButMandatoryParameter) {
     regStats = findNamedVariable("STATS");
   }
   clearRegister(regStats);                  // this should change to delete the named variable STATS once the delete function is available. Until then write 0.0 into STATS.
-  graph_end();                              // release plot memory
   lrChosen = 0;                             // linear regression selection
   lastPlotMode = PLOT_NOTHING;              // last selected  plotmode
   plotSelection = 0;                        // Currently selected linear regression mode
@@ -702,7 +696,6 @@ void fnSigma(uint16_t plusMinus) {
     removeLastRowFromStatsMatrix();
 
     if(statisticalSumsPointer != NULL) temporaryInformation = TI_STATISTIC_SUMS;
-    //graph_sigmaplus(-1, &x, &y);
   } 
 
 #endif // TESTSUITE_BUILD

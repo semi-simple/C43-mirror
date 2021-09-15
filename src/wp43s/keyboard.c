@@ -871,6 +871,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
     if(catalog) {
       leaveAsmMode();
       popSoftmenu();
+      if(tam.mode) {
+        numberOfTamMenusToPop--;
+      }
       return;
     }
 

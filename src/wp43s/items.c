@@ -394,7 +394,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnVersion                   (uint16_t unusedButMandatoryParameter) {}
   void fnSquare                    (uint16_t unusedButMandatoryParameter) {}
   void fnCube                      (uint16_t unusedButMandatoryParameter) {}
-  void fnStatDemoA/*fnFactorial*/                 (uint16_t unusedButMandatoryParameter) {}
+  void fnFactorial                 (uint16_t unusedButMandatoryParameter) {}
   void fnSwapX                     (uint16_t unusedButMandatoryParameter) {}
   void fnSwapY                     (uint16_t unusedButMandatoryParameter) {}
   void fnSwapZ                     (uint16_t unusedButMandatoryParameter) {}
@@ -817,7 +817,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /*  105 */  { fnMagnitude,                  NOPARAM,                     "|x|",                                         "|x|",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  106 */  { fnNeighb,                     NOPARAM,                     "NEIGHB",                                      "NEIGHB",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  107 */  { fnNextPrime,                  NOPARAM,                     "NEXTP",                                       "NEXTP",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/*  108 */  { fnStatDemoA/*fnFactorial*/,                  NOPARAM,                     "x!",                                          "x!",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/*  108 */  { fnFactorial,                  NOPARAM,                     "x!",                                          "x!",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  109 */  { fnPi,                         NOPARAM,                     STD_pi,                                        STD_pi,                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /*  110 */  { fnClearFlag,                  TM_FLAGW,                    "CF",                                          "CF",                                          (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /*  111 */  { fnSetFlag,                    TM_FLAGW,                    "SF",                                          "SF",                                          (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

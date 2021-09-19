@@ -1413,35 +1413,6 @@ void fnPlotZoom(uint16_t unusedButMandatoryParameter){
 
 
 
-//DEMO: Randomized linear
-void fnStatDemoA(uint16_t unusedButMandatoryParameter){
-  #ifndef TESTSUITE_BUILD
-    int16_t ix;
-    runFunction(ITM_CLSIGMA);
-    plotSelection = 0;
-    srand((unsigned int)time(NULL));
-    for(ix=0; ix!=100; ix++) {
-      runFunction(ITM_RAN);
-      setSystemFlag(FLAG_ASLIFT);
-      liftStack();
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-      int32ToReal34(10.0+10.0*((ix+4.0)/101)*((ix+4.0)/101.0),REGISTER_REAL34_DATA(REGISTER_X));
-      runFunction(ITM_ADD);
-      runFunction(ITM_RAN);
-      setSystemFlag(FLAG_ASLIFT);
-      liftStack();
-      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-      int32ToReal34(ix*10,REGISTER_REAL34_DATA(REGISTER_X));
-      runFunction(ITM_ADD);
-      runFunction(ITM_SIGMAPLUS);
-      }
-    fnCurveFitting(0);
-    runFunction(ITM_LR);
-    runFunction(ITM_PLOT_LR);
-  #endif //TESTSUITE_BUILD
-}
-
-
 /*
 //DEMO: Arbitrary distribution to test. Close to a Normal.
 void fnStatDemo0(uint16_t unusedButMandatoryParameter){

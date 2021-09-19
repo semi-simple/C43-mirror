@@ -102,7 +102,11 @@
   }
 
 
+    #define CLIPSTR 30000                                                //JMCSV
+  #else
+    #define CLIPSTR TMP_STR_LENGTH                                       //JMCSV
   #endif                                                //JMCSV
+
   #if defined (PC_BUILD) || defined (DMCP_BUILD)        //JMCSV
 
   static void angularUnitToString(angularMode_t angularMode, char *string) {
@@ -118,19 +122,6 @@
   }
 
 
-  #define CLIPSTR 30000
-
-  void addApostrophies(char * str) {
-    char tmp2[CLIPSTR];                            //JMCSV    
-    tmp2[0]=0;                                     //JMCSV add apostrophies
-    strcat(tmp2,"\"");                             //JMCSV
-    strcat(tmp2,str);                           //JMCSV
-    //strcpy(string,tmp2);                         //JMCSV
-    tmp2[CLIPSTR-1]=0;                             //JMCSV trying a better way, in case the terminating 0 is not copied
-    xcopy(str,tmp2,min(CLIPSTR-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
-    strcat(str,"\"");                           //JMCSV
-  }
-
   void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
     longInteger_t lgInt;
     int16_t base, sign, n;
@@ -142,22 +133,18 @@
         convertLongIntegerRegisterToLongInteger(regist, lgInt);
         longIntegerToAllocatedString(lgInt, string, CLIPSTR);
         longIntegerFree(lgInt);
-        addApostrophies(string);   //JMCSV
         break;
 
       case dtTime:
         timeToDisplayString(regist, string, false);
-        addApostrophies(string);   //JMCSV
         break;
 
       case dtDate:
         dateToDisplayString(regist, string);
-        addApostrophies(string);   //JMCSV
         break;
 
       case dtString:
         xcopy(string, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
-        addApostrophies(string);   //JMCSV
         break;
 
       case dtReal34Matrix: {
@@ -231,7 +218,7 @@
         base = getRegisterShortIntegerBase(regist);
 
         n = ERROR_MESSAGE_LENGTH - 100;
-        sprintf(errorMessage + n--, "#%d%s (word size = %u)", base, CSV_TAB, shortIntegerWordSize);  //JMCSV added comma
+        sprintf(errorMessage + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
 
         if(shortInt == 0) {
           errorMessage[n--] = '0';
@@ -265,25 +252,26 @@
       case dtComplex34: {
         real34_t reduced;
         int len;
+        char tmpStr[100];
 
         // Real part
         real34Reduce(REGISTER_REAL34_DATA(regist), &reduced);
-        real34ToString(&reduced, string);
-        if(strchr(string, '.') == NULL && strchr(string, 'E') == NULL) {
-          strcat(string, ".");
+        real34ToString(&reduced, tmpStr);
+        if(strchr(tmpStr, '.') == NULL && strchr(tmpStr, 'E') == NULL) {
+          strcat(tmpStr, ".");
         }
-        len = strlen(string);
+        len = strlen(tmpStr);
 
         // Imaginary part
         real34Reduce(REGISTER_IMAG34_DATA(regist), &reduced);
         if(real34IsNegative(&reduced)) {
-          sprintf(string, " - %sx", COMPLEX_UNIT);
+          sprintf(string, "%s - %sx", tmpStr, COMPLEX_UNIT);
           len += 5;
           real34SetPositiveSign(&reduced);
           real34ToString(&reduced, string + len);
         }
         else {
-          sprintf(string, " + %sx", COMPLEX_UNIT);
+          sprintf(string, "%s + %sx", tmpStr, COMPLEX_UNIT);
           len += 5;
           real34ToString(&reduced, string + len);
         }

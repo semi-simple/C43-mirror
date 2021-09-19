@@ -29,12 +29,14 @@
 
 #include "charString.h"
 #include "c43Extensions/graphText.h"
+#include "registers.h"
 #include "screen.h"
 #include <string.h>
+#include "typeDefinitions.h"
 
 #include "wp43s.h"
 
-  uint8_t reg_Name(uint16_t no) {
+  uint8_t reg_Name(int16_t no) {
     switch(no) {
       case 100:   return 'X'; break;
       case 101:   return 'Y'; break;
@@ -52,48 +54,119 @@
     }
   }
 
+
+
+void addChrBothSides(uint8_t t, char * str) {
+    char tt[4];
+    tt[0]=t;
+    tt[1]=0;
+    xcopy(str + 1, str, stringByteLength(str) + 1);
+    str[0] = t;
+    strcat(str,tt);
+  }
+
+void addStrBothSides(char * str, char * str_b, char * str_e) {
+    xcopy(str + stringByteLength(str_b), str, stringByteLength(str) + 1);
+    xcopy(str, str_b, stringByteLength(str_b));
+    xcopy(str + stringByteLength(str), str_e, stringByteLength(str_e) + 1);
+  }
+
+
+void copyRegisterToClipboardString2(calcRegister_t regist, char *clipboardString) {
+    switch(getRegisterDataType(regist)) {
+      case dtLongInteger:
+      case dtTime:
+      case dtDate:
+      case dtString:
+      case dtShortInteger: {
+        copyRegisterToClipboardString(regist, clipboardString);
+        addChrBothSides(34,clipboardString);   //JMCSV
+        break;
+      }
+      case dtReal34Matrix: {
+        dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+        int rows, columns;
+        rows = dblock->matrixRows;
+        columns = dblock->matrixColumns;
+        if(rows*columns*46 < TMP_STR_LENGTH) {
+          copyRegisterToClipboardString(regist, clipboardString);
+          //printf(">>>:: %u ?? %u\n",rows*columns*46,stringByteLength(clipboardString));
+        } else {
+          sprintf(clipboardString, "Real matrix %dx%d too large for transfer", rows, columns);
+        }
+      break;
+      }
+
+      case dtComplex34Matrix: {
+        dataBlock_t* dblock = REGISTER_REAL34_MATRIX_DBLOCK(regist);
+        int rows, columns;
+        rows = dblock->matrixRows;
+        columns = dblock->matrixColumns;
+        if(rows*columns*92 < TMP_STR_LENGTH) {
+          copyRegisterToClipboardString(regist, clipboardString);
+          //printf(">>>:: %u ?? %u\n",rows*columns*92,stringByteLength(clipboardString));
+        } else {
+          sprintf(clipboardString, "Complex matrix %dx%d too large for transfer", rows, columns);
+        }
+      break;
+      }
+
+      default:
+        copyRegisterToClipboardString(regist, clipboardString);
+        break;
+    }
+}
+
+
+
+//USING tmpString !!
+
 void stackregister_csv_out(int16_t reg_b, int16_t reg_e) {
 #ifndef TESTSUITE_BUILD
+  char tmp_b[100], tmp_e[100];
 
-  char csv[TMP_STR_LENGTH];
-  char tmp[TMP_STR_LENGTH];
-  tmp[0] = 0;
-
-  int16_t ix;
-  ix = reg_b;
+  int16_t ix = reg_b;
   while (ix <= reg_e) {
+    tmpString[0]=0;
+    tmp_b[0]=0;
+    tmp_e[0]=0;
     if((ix>=100)&&(ix<=111)) {
-      csv[1]=0;
-      csv[0]=reg_Name(ix);
-      strcat(csv, CSV_TAB);
-      #if (VERBOSE_LEVEL >= 1) 
-        print_linestr("-2b",false);
-      #endif
-      copyRegisterToClipboardString(ix, tmp);
-      #if (VERBOSE_LEVEL >= 1) 
-        print_linestr("-2c",false);
-      #endif
-      strcat(csv, tmp);
-      strcat(csv, CSV_NEWLINE);
+      tmp_b[1]=0;
+      tmp_b[0]=reg_Name(ix);
+      strcat(tmp_b, CSV_TAB);
       } else
     if((ix>=0)&&(ix<=99)) {
-      sprintf(csv, "%sR%02d%s%s", CSV_STR, ix, CSV_STR, CSV_TAB);
-      copyRegisterToClipboardString(ix, tmp);
-      strcat(csv, tmp);
-      strcat(csv, CSV_NEWLINE);
+      sprintf(tmp_b, "%sR%02d%s%s", CSV_STR, ix, CSV_STR, CSV_TAB);
     } else
     if((ix>=112)&&(ix<=112+100)) {
-      sprintf(csv, "%sU%02d%s%s", CSV_STR, ix-100, CSV_STR, CSV_TAB);
-      copyRegisterToClipboardString(ix, tmp);
-      strcat(csv, tmp);
-      strcat(csv, CSV_NEWLINE);
+      sprintf(tmp_b, "%sU%02d%s%s", CSV_STR, ix-100, CSV_STR, CSV_TAB);
     }
 
-    export_append_line(csv);                    //Output append to CSV file
+    #if (VERBOSE_LEVEL >= 1) 
+      print_linestr("-2b",false);
+    #endif
+    copyRegisterToClipboardString2((calcRegister_t)ix, tmpString);
+    #if (VERBOSE_LEVEL >= 1) 
+      char tmpTmp[TMP_STR_LENGTH+100];
+      sprintf(tmpTmp,"-2c: len=%u:%s",(uint16_t)stringByteLength(tmpString),tmpString);
+      print_linestr(tmpTmp,false);
+    #endif
+    strcat(tmp_e, CSV_NEWLINE);
+
+    //printf(">>>: §%s§%s§%s§\n",tmp_b,tmp,tmp_e);
+    addStrBothSides(tmpString,tmp_b,tmp_e);
+    //printf(">>>: §%s§\n",tmp);
 
     #if (VERBOSE_LEVEL >= 1) 
-      strcat(csv,"------------------>");
-      print_linestr(csv,false);
+      sprintf(tmpTmp,"-2d: len=%u:%s",(uint16_t)stringByteLength(tmpString),tmpString);
+      print_linestr(tmpTmp,false);
+    #endif
+
+    export_append_line(tmpString);                    //Output append to CSV file
+
+    #if (VERBOSE_LEVEL >= 1) 
+      sprintf(tmpString,":(ix=%u)------->",ix);
+      print_linestr(tmpString,false);
     #endif
 
     ++ix;
@@ -262,17 +335,14 @@ void print_inlinestr(const char *line1, bool_t endline) {
 
 
 
-void print_Register_line(calcRegister_t regist, const char *before, const char *after, bool_t line_init) {
+void print_Register_line(calcRegister_t regist, char *before, char *after, bool_t line_init) {
 #ifndef TESTSUITE_BUILD
-    char str[200];
-    char dest[1000];
+    char str[TMP_STR_LENGTH];
 
-    strcpy(dest,before);
-    copyRegisterToClipboardString(regist, str);
-    strcat(dest,str);
-    strcat(dest,after);
+    copyRegisterToClipboardString2(regist, str);
+    addStrBothSides(str, before, after);
 
-    print_numberstr(dest, line_init);
+    print_numberstr(str, line_init);
 
 #endif
 }

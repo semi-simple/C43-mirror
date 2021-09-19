@@ -36,6 +36,7 @@
 #include "softmenus.h"
 #include "stack.h"
 #include "statusBar.h"
+#include "timer.h"
 #include "c43Extensions/textfiles.h"
 #include <string.h>
 
@@ -1372,7 +1373,7 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec, bool_t scan
   import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback,!SCAN);
 
   #if (VERBOSE_LEVEL >= 1) 
-   sprintf(tmp, " B: XEQMENU mapping Loaded: %lu bytes.\n",stringByteLength(line1) );
+   sprintf(tmp, " B: XEQMENU mapping Loaded: %u bytes.\n",(uint16_t)stringByteLength(line1) );
    print_linestr(tmp,false);
   #endif
 
@@ -1428,14 +1429,14 @@ void XEQMENU_Selection(uint16_t selection, char *line1, bool_t exec, bool_t scan
   import_string_from_filename(line1,pgmpath,fn_short,fn_long,fallback,scanning); 
 
   #if (VERBOSE_LEVEL >= 1) 
-   sprintf(tmp, " D: PGM Loaded: %lu bytes.\n",stringByteLength(line1) );
+   sprintf(tmp, " D: PGM Loaded: %u bytes.\n",(uint16_t)stringByteLength(line1) );
    print_linestr(tmp,false);
   #endif
 
   replaceFF(nn,line1); 
 
   #if (VERBOSE_LEVEL >= 1) 
-   sprintf(tmp, " E: FF: %lu bytes.\n",stringByteLength(line1) );
+   sprintf(tmp, " E: FF: %u bytes.\n",(uint16_t)stringByteLength(line1) );
    print_linestr(tmp,false);
    print_linestr(line1,false);
   #endif

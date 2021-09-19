@@ -241,25 +241,26 @@
       case dtComplex34: {
         real34_t reduced;
         int len;
+        char tmpStr[100];
 
         // Real part
         real34Reduce(REGISTER_REAL34_DATA(regist), &reduced);
-        real34ToString(&reduced, string);
-        if(strchr(string, '.') == NULL && strchr(string, 'E') == NULL) {
-          strcat(string, ".");
+        real34ToString(&reduced, tmpStr);
+        if(strchr(tmpStr, '.') == NULL && strchr(tmpStr, 'E') == NULL) {
+          strcat(tmpStr, ".");
         }
-        len = strlen(string);
+        len = strlen(tmpStr);
 
         // Imaginary part
         real34Reduce(REGISTER_IMAG34_DATA(regist), &reduced);
         if(real34IsNegative(&reduced)) {
-          sprintf(string, " - %sx", COMPLEX_UNIT);
+          sprintf(string, "%s - %sx", tmpStr, COMPLEX_UNIT);
           len += 5;
           real34SetPositiveSign(&reduced);
           real34ToString(&reduced, string + len);
         }
         else {
-          sprintf(string, " + %sx", COMPLEX_UNIT);
+          sprintf(string, "%s + %sx", tmpStr, COMPLEX_UNIT);
           len += 5;
           real34ToString(&reduced, string + len);
         }

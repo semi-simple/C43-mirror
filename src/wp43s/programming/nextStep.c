@@ -1004,6 +1004,7 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_Kk:             //  1726
         case ITM_Ek:             //  1727
         case ITM_PInk:           //  1728
+        case ITM_ANGLE:          //  1739
         case ITM_SHOW:           //  1742
         case ITM_DMStoD:         //  1744
         case ITM_VANGLE:         //  1745

@@ -20,6 +20,8 @@
 #ifndef SOLVE_H
 #define SOLVE_H
 
+#include <stdint.h>
+
 void fnPgmSlv(uint16_t label);
 void fnSolve (uint16_t label);
 

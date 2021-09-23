@@ -43,6 +43,7 @@
 #include "saveRestoreCalcState.h"
 #include "screen.h"
 #include "softmenus.h"
+#include "solver/solver.h"
 #include "stack.h"
 #include "stats.h"
 #include "statusBar.h"
@@ -702,6 +703,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnEllipticFphi              (uint16_t unusedButMandatoryParameter) {}
   void fnEllipticEphi              (uint16_t unusedButMandatoryParameter) {}
   void fnJacobiZeta                (uint16_t unusedButMandatoryParameter) {}
+  void fnPgmSlv                    (uint16_t unusedButMandatoryParameter) {}
+  void fnSolve                     (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2293,7 +2296,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1544 */  { fnDropY,                      NOPARAM,                     "DROPy",                                       "DROPy",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1545 */  { fnStoreMin,                   NOPARAM,                     "STO" STD_DOWN_ARROW,                          "Min",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1546 */  { itemToBeCoded,                NOPARAM,                     "PGMINT",                                      "PGMINT",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1547 */  { itemToBeCoded,                NOPARAM,                     "PGMSLV",                                      "PGMSLV",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1547 */  { fnPgmSlv,                     TM_LABEL,                    "PGMSLV",                                      "PGMSLV",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1548 */  { itemToBeCoded,                NOPARAM,                     "PIXEL",                                       "PIXEL",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1549 */  { fnPlotStat,                   PLOT_START,                  "PLOT",                                        "PLOT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1550 */  { fnLegendre,                   NOPARAM,                     "P" STD_SUB_n,                                 "P" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
@@ -2354,7 +2357,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1605 */  { fnStandardError,              NOPARAM,                     "s" STD_SUB_m,                                 "s" STD_SUB_m,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1606 */  { fnGetIntegerSignMode,         NOPARAM,                     "ISM?",                                        "ISM?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1607 */  { fnWeightedStandardError,      NOPARAM,                     "s" STD_SUB_m STD_SUB_w,                       "s" STD_SUB_m STD_SUB_w,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1608 */  { itemToBeCoded,                NOPARAM,                     "SOLVE",                                       "SOLVE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1608 */  { fnSolve,                      NOPARAM,                     "SOLVE",                                       "SOLVE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1609 */  { fnGetStackSize,               NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1610 */  { flagBrowser,                  NOPARAM,                     "STATUS",                                      "STATUS",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED},
 /* 1611 */  { fnStoreConfig,                NOPARAM,                     "STOCFG",                                      "Config",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

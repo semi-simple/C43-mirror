@@ -439,7 +439,7 @@
       char *buffer = (forcedVar ? forcedVar : aimBuffer);
       bool_t tryAllocate = ((tam.function == ITM_STO || tam.function == ITM_M_DIM) && !tam.indirect);
       int16_t value;
-      if(tam.mode == TM_LABEL) {
+      if(tam.mode == TM_LABEL || tam.mode == TM_SOLVE) {
         value = findNamedLabel(buffer);
         if(value == INVALID_VARIABLE) {
           displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
@@ -538,6 +538,10 @@
 
       case TM_LABEL:
         showSoftmenu(-MNU_TAMLABEL);
+        break;
+
+      case TM_SOLVE:
+        showSoftmenu(-MNU_PROG);
         break;
 
       default:

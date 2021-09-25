@@ -22,7 +22,8 @@
 
 #include <stdint.h>
 
-void fnPgmSlv(uint16_t label);
-void fnSolve (uint16_t label);
+void fnPgmSlv  (uint16_t label);
+void fnSolve   (uint16_t labelOrVariable);
+void fnSolveVar(uint16_t unusedButMandatoryParameter);
 
 #endif // SOLVE_H

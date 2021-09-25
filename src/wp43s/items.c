@@ -705,6 +705,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnJacobiZeta                (uint16_t unusedButMandatoryParameter) {}
   void fnPgmSlv                    (uint16_t unusedButMandatoryParameter) {}
   void fnSolve                     (uint16_t unusedButMandatoryParameter) {}
+  void fnSolveVar                  (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -1880,7 +1881,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1146 */  { addItemToBuffer,              NOPARAM,                     "HEX",                                         "H",                                           (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1147 */  { fnGoToRow,                    TM_VALUE,                    "GOTO Row",                                    "GOTO",                                        (0 << TAM_MAX_BITS) |  9999, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1148 */  { fnGoToColumn,                 TM_VALUE,                    "GOTO Column",                                 "GOTO",                                        (0 << TAM_MAX_BITS) |  9999, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
-/* 1149 */  { itemToBeCoded,                NOPARAM,                     "1149",                                        "1149",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
+/* 1149 */  { fnSolveVar,                   NOPARAM,                     "SOLVE Var",                                   "SOLVE",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1150 */  { itemToBeCoded,                NOPARAM,                     "1150",                                        "1150",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1151 */  { itemToBeCoded,                NOPARAM,                     "1151",                                        "1151",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1152 */  { itemToBeCoded,                NOPARAM,                     "1152",                                        "1152",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
@@ -2145,7 +2146,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1395 */  { itemToBeCoded,                NOPARAM,                     "PLOT.ST",                                     "PLOT.ST",                                     (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1396 */  { itemToBeCoded,                NOPARAM,                     "PLOT.LR",                                     "PLOT.LR",                                     (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1397 */  { itemToBeCoded,                NOPARAM,                     "ELLIPT",                                      "Ellipt",                                      (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED},
-/* 1398 */  { itemToBeCoded,                NOPARAM,                     "1398",                                        "1398",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
+/* 1398 */  { fnSolveVar,                   NOPARAM,                     "MVAR",                                        "MVAR",                                        (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED}, // solver variables
 /* 1399 */  { itemToBeCoded,                NOPARAM,                     "1399",                                        "1399",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1400 */  { itemToBeCoded,                NOPARAM,                     "1400",                                        "1400",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
 /* 1401 */  { itemToBeCoded,                NOPARAM,                     "1401",                                        "1401",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED},
@@ -2357,7 +2358,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1605 */  { fnStandardError,              NOPARAM,                     "s" STD_SUB_m,                                 "s" STD_SUB_m,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1606 */  { fnGetIntegerSignMode,         NOPARAM,                     "ISM?",                                        "ISM?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1607 */  { fnWeightedStandardError,      NOPARAM,                     "s" STD_SUB_m STD_SUB_w,                       "s" STD_SUB_m STD_SUB_w,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
-/* 1608 */  { fnSolve,                      NOPARAM,                     "SOLVE",                                       "SOLVE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1608 */  { fnSolve,                      TM_SOLVE,                    "SOLVE",                                       "SOLVE",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1609 */  { fnGetStackSize,               NOPARAM,                     "SSIZE?",                                      "SSIZE?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1610 */  { flagBrowser,                  NOPARAM,                     "STATUS",                                      "STATUS",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED},
 /* 1611 */  { fnStoreConfig,                NOPARAM,                     "STOCFG",                                      "Config",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },

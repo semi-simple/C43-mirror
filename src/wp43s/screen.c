@@ -1665,6 +1665,14 @@
              }
            }
 
+          else if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
           else if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
           real34ToDisplayString(REGISTER_REAL34_DATA(regist), getRegisterAngularMode(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION, true);
 
@@ -1677,7 +1685,15 @@
         }
 
         else if(getRegisterDataType(regist) == dtComplex34) {
-          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
+          if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
           complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH - prefixWidth, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION, true);
 
           w = stringWidth(tmpString, &numericFont, false, true);
@@ -1747,6 +1763,14 @@
         }
 
         else if(getRegisterDataType(regist) == dtLongInteger) {
+          if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
           if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
           longIntegerRegisterToDisplayString(regist, tmpString, TMP_STR_LENGTH, SCREEN_WIDTH - prefixWidth, 50, STD_SPACE_PUNCTUATION);
 
@@ -2020,6 +2044,18 @@
         }
         if(calcMode == CM_MIM) {
           showMatrixEditor();
+        }
+        if(currentSolverStatus & SOLVER_STATUS_INTERACTIVE) {
+          bool_t mvarMenu = false;
+          for(int i = 0; i < SOFTMENU_STACK_SIZE; i++) {
+            if(softmenu[softmenuStack[i].softmenuId].menuItem == -MNU_MVAR) {
+              mvarMenu = true;
+              break;
+            }
+          }
+          if(!mvarMenu) {
+            showSoftmenu(-MNU_MVAR);
+          }
         }
 
         displayShiftAndTamBuffer();

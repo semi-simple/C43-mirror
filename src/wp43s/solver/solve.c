@@ -20,17 +20,47 @@
 
 #include "solver/solve.h"
 
+#include "defines.h"
 #include "items.h"
+#include "registers.h"
+#include "softmenus.h"
+#include "wp43s.h"
 
 void fnPgmSlv(uint16_t label) {
-  /* mockup */
+  currentSolverProgram = label - FIRST_LABEL;
 }
 
-void fnSolve(uint16_t label) {
-  if(label == NOPARAM) {
-    /* mockup */
+void fnSolve(uint16_t labelOrVariable) {
+  if(labelOrVariable >= FIRST_LABEL && labelOrVariable <= LAST_LABEL) {
+    // Interactive mode
+    currentSolverProgram = labelOrVariable - FIRST_LABEL;
+    currentSolverStatus = SOLVER_STATUS_INTERACTIVE;
+  }
+  else if(labelOrVariable >= FIRST_NAMED_VARIABLE && labelOrVariable <= LAST_NAMED_VARIABLE) {
+    // Execute
+    currentSolverVariable = labelOrVariable;
+    printf("Solver to be coded\n");
+    fflush(stdout);
+    temporaryInformation = TI_SOLVER_VARIABLE;
   }
   else {
     /* mockup */
+  }
+}
+
+void fnSolveVar(uint16_t unusedButMandatoryParameter) {
+  const char *var = (char *)getNthString(dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent, dynamicMenuItem);
+  const uint16_t regist = findOrAllocateNamedVariable(var);
+  printf("fnSolveVar:\n       softmenuId = %d\n  dynamicMenuItem = %d\n", softmenuStack[0].softmenuId, dynamicMenuItem);
+  printf("%d %s\n", regist, var);
+  fflush(stdout);
+  if(currentSolverStatus & SOLVER_STATUS_READY_TO_EXECUTE) {
+    reallyRunFunction(ITM_SOLVE, regist);
+  }
+  else {
+    currentSolverVariable = regist;
+    reallyRunFunction(ITM_STO, regist);
+    currentSolverStatus |= SOLVER_STATUS_READY_TO_EXECUTE;
+    temporaryInformation = TI_SOLVER_VARIABLE;
   }
 }

@@ -3290,7 +3290,7 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = '-';
     *(currentStep++) = '2';
 
-    *(currentStep++) = ITM_MULT;
+    *(currentStep++) = ITM_DIV;
 
     *(currentStep++) = ITM_RCLMULT;
     *(currentStep++) = STRING_LABEL_VARIABLE;

@@ -49,6 +49,7 @@ void fnSolve(uint16_t labelOrVariable) {
 }
 
 void fnSolveVar(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
   const char *var = (char *)getNthString(dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent, dynamicMenuItem);
   const uint16_t regist = findOrAllocateNamedVariable(var);
   printf("fnSolveVar:\n       softmenuId = %d\n  dynamicMenuItem = %d\n", softmenuStack[0].softmenuId, dynamicMenuItem);
@@ -63,4 +64,5 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter) {
     currentSolverStatus |= SOLVER_STATUS_READY_TO_EXECUTE;
     temporaryInformation = TI_SOLVER_VARIABLE;
   }
+#endif /* TESTSUITE_BUILD */
 }

@@ -70,9 +70,8 @@ void fnSolve(uint16_t labelOrVariable) {
       real34Copy(&z, REGISTER_REAL34_DATA(REGISTER_Z));
       real34Copy(&y, REGISTER_REAL34_DATA(REGISTER_Y));
       real34Copy(&x, REGISTER_REAL34_DATA(REGISTER_X));
+      int32ToReal34(resultCode, REGISTER_REAL34_DATA(REGISTER_T));
       clearSystemFlag(FLAG_SOLVING);
-      currentSolverStatus &= ~SOLVER_STATUS_ERROR_MASK;
-      currentSolverStatus |= temporaryInformation << SOLVER_STATUS_ERROR_SHIFT;
       temporaryInformation = (resultCode == SOLVER_RESULT_NORMAL) ? TI_SOLVER_VARIABLE : TI_SOLVER_FAILED;
     }
     else {

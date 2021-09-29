@@ -1126,7 +1126,7 @@
       }
 
       else if(temporaryInformation == TI_SOLVER_FAILED && regist == REGISTER_X) {
-        switch((currentSolverStatus & SOLVER_STATUS_ERROR_MASK) >> SOLVER_STATUS_ERROR_SHIFT) {
+        switch(real34ToInt32(REGISTER_T)) {
           case SOLVER_RESULT_SIGN_REVERSAL:
             strcpy(tmpString, "Sign reversal");
             break;

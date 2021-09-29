@@ -565,6 +565,7 @@ typedef enum {
 #define TI_UNDO_DISABLED                          45
 #define TI_VIEW                                   46
 #define TI_SOLVER_VARIABLE                        47
+#define TI_SOLVER_FAILED                          48
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -766,6 +767,14 @@ typedef enum {
 
 #define SOLVER_STATUS_READY_TO_EXECUTE             0x0001
 #define SOLVER_STATUS_INTERACTIVE                  0x0002
+#define SOLVER_STATUS_ERROR_MASK                   0x001c
+#define SOLVER_STATUS_ERROR_SHIFT                  2
+
+#define SOLVER_RESULT_NORMAL                       0
+#define SOLVER_RESULT_SIGN_REVERSAL                1
+#define SOLVER_RESULT_EXTREMUM                     2
+#define SOLVER_RESULT_BAD_GUESS                    3
+#define SOLVER_RESULT_CONSTANT                     4
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

@@ -804,6 +804,8 @@
     bool_t done;
     char *strBase;
 
+    currentSolverStatus &= ~SOLVER_STATUS_READY_TO_EXECUTE;
+
     if(calcMode == CM_NORMAL) {
       switch(item) {
         case ITM_EXPONENT :

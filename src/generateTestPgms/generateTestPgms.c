@@ -11587,6 +11587,21 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = (ITM_TRANS >> 8) | 0x80;
     *(currentStep++) =  ITM_TRANS       & 0xff;
 
+    *(currentStep++) = (ITM_HIDE >> 8) | 0x80;
+    *(currentStep++) =  ITM_HIDE       & 0xff;
+
+    *(currentStep++) = (ITM_Ephik >> 8) | 0x80;
+    *(currentStep++) =  ITM_Ephik       & 0xff;
+
+    *(currentStep++) = (ITM_Fphik >> 8) | 0x80;
+    *(currentStep++) =  ITM_Fphik       & 0xff;
+
+    *(currentStep++) = (ITM_ZETAphik >> 8) | 0x80;
+    *(currentStep++) =  ITM_ZETAphik       & 0xff;
+
+    *(currentStep++) = (ITM_GETHIDE >> 8) | 0x80;
+    *(currentStep++) =  ITM_GETHIDE       & 0xff;
+
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;
   }

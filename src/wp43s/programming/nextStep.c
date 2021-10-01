@@ -1016,6 +1016,11 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_DET:            //  1751
         case ITM_INVRT:          //  1752
         case ITM_TRANS:          //  1753
+        case ITM_HIDE:           //  1757
+        case ITM_Fphik:          //  1763
+        case ITM_Ephik:          //  1764
+        case ITM_ZETAphik:       //  1765
+        case ITM_GETHIDE:        //  1766
           return step;
 
         case 0x7fff:             // 32767 .END.

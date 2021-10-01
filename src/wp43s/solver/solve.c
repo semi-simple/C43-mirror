@@ -199,8 +199,10 @@ static void _executeSolver(calcRegister_t variable, const real34_t *val, real34_
   reallyRunFunction(ITM_STO, variable);
   fnFillStack(NOPARAM);
   _solverIteration(res);
-  printReal34ToConsole(val, "b = ", ", ");
-  printReal34ToConsole(res, "fb = ", "\n");
+  #ifdef PC_BUILD
+    printReal34ToConsole(val, "b = ", ", ");
+    printReal34ToConsole(res, "fb = ", "\n");
+  #endif /* PC_BUILD */
 }
 #endif /* TESTSUITE_BUILD */
 
@@ -271,16 +273,20 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     realMultiply(&ss, &fbb, &ss, &ctxtReal39);
     realSubtract(&bb, &ss, &ss, &ctxtReal39);
     realToReal34(&ss, &s);
-    printReal34ToConsole(&s, "s = ", "\n");
+    #ifdef PC_BUILD
+      printReal34ToConsole(&s, "s = ", "\n");
+    #endif /* PC_BUILD */
 
     // bisection
     realAdd(&aa, &bb, &mm, &ctxtReal39);
     realMultiply(&mm, const_1on2, &mm, &ctxtReal39);
     realToReal34(&mm, &m);
-    printReal34ToConsole(&m, "m = ", "\n");
+    #ifdef PC_BUILD
+      printReal34ToConsole(&m, "m = ", "\n");
 
-    printRealToConsole(&secantSlopeA, "slope(fa) = ", "\n");
-    printRealToConsole(&secantSlopeB, "slope(fb) = ", "\n");
+      printRealToConsole(&secantSlopeA, "slope(fa) = ", "\n");
+      printRealToConsole(&secantSlopeB, "slope(fb) = ", "\n");
+    #endif /* PC_BUILD */
 
     // next point
     if(extendRange) {
@@ -357,10 +363,12 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
           originallyLevel = false;
         }
       }
-      printReal34ToConsole(&a, "a = ", ", ");
-      printReal34ToConsole(&fa, "fa = ", "\n");
-      printReal34ToConsole(bp1, "-> b = ", ", ");
-      printReal34ToConsole(&fbp1, "fb = ", "\n");
+      #ifdef PC_BUILD
+        printReal34ToConsole(&a, "a = ", ", ");
+        printReal34ToConsole(&fa, "fa = ", "\n");
+        printReal34ToConsole(bp1, "-> b = ", ", ");
+        printReal34ToConsole(&fbp1, "fb = ", "\n");
+      #endif /* PC_BUILD */
 
       if(real34CompareAbsLessThan(&fa, &fbp1)) {
         real34Copy(bp1, &tmp); real34Copy(&a, bp1); real34Copy(&tmp, &a);
@@ -377,31 +385,43 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
       result = SOLVER_RESULT_CONSTANT;
     }
     else if(extendRange) {
-      printf("extendedRange extremum\n"); fflush(stdout);
+      #ifdef PC_BUILD
+        printf("extendedRange extremum\n"); fflush(stdout);
+      #endif /* PC_BUILD */
       extendRange = false;
       originallyLevel = false;
       extremum = true;
     }
     else if(real34IsNegative(&fa) != real34IsNegative(&fb)) {
-      printf("SOLVER_RESULT_SIGN_REVERSAL\n"); fflush(stdout);
+      #ifdef PC_BUILD
+        printf("SOLVER_RESULT_SIGN_REVERSAL\n"); fflush(stdout);
+      #endif /* PC_BUILD */
       result = SOLVER_RESULT_SIGN_REVERSAL;
     }
     else {
-      printf("SOLVER_RESULT_EXTREMUM\n"); fflush(stdout);
+      #ifdef PC_BUILD
+        printf("SOLVER_RESULT_EXTREMUM\n"); fflush(stdout);
+      #endif /* PC_BUILD */
       result = SOLVER_RESULT_EXTREMUM;
     }
   } while(result == SOLVER_RESULT_NORMAL && (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0))));
-  printReal34ToConsole(&b, "b = ", ", ");
-  printReal34ToConsole(&fb, "fb = ", "\n");
+  #ifdef PC_BUILD
+    printReal34ToConsole(&b, "b = ", ", ");
+    printReal34ToConsole(&fb, "fb = ", "\n");
+  #endif /* PC_BUILD */
 
   if((extendRange && !originallyLevel) || extremum) {
     result = SOLVER_RESULT_EXTREMUM;
   }
 
-  fflush(stdout);
+  #ifdef PC_BUILD
+    fflush(stdout);
+  #endif /* PC_BUILD */
   real34Copy(&fb, resZ);
   real34Copy(&b1, resY);
   real34Copy(&b, resX);
-#endif /* TESTSUITE_BUILD */
   return result;
+#else /* TESTSUITE_BUILD */
+  return SOLVER_RESULT_NORMAL;
+#endif /* TESTSUITE_BUILD */
 }

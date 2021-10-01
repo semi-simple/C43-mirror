@@ -1126,21 +1126,21 @@
       }
 
       else if(temporaryInformation == TI_SOLVER_FAILED && regist == REGISTER_X) {
-        switch(real34ToInt32(REGISTER_T)) {
+        switch(real34ToInt32(REGISTER_REAL34_DATA(REGISTER_T))) {
           case SOLVER_RESULT_SIGN_REVERSAL:
-            strcpy(tmpString, "Sign reversal");
+            sprintf(tmpString, "Sign reversal");
             break;
           case SOLVER_RESULT_EXTREMUM:
-            strcpy(tmpString, "Extremum");
+            sprintf(tmpString, "Extremum");
             break;
           case SOLVER_RESULT_BAD_GUESS:
-            strcpy(tmpString, "Bad guess");
+            sprintf(tmpString, "Bad guess");
             break;
           case SOLVER_RESULT_CONSTANT:
-            strcpy(tmpString, "Constant?");
+            sprintf(tmpString, "Constant?");
             break;
           default:
-            strcpy(tmpString, "Something went wrong with the solver");
+            sprintf(tmpString, "Something went wrong with the solver");
             break;
         }
         showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);

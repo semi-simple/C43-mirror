@@ -208,16 +208,19 @@ static void _executeSolver(calcRegister_t variable, const real34_t *val, real34_
 
 int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34_t *resZ, real34_t *resY, real34_t *resX) {
 #ifndef TESTSUITE_BUILD
-  real34_t a, b, b1, fa, fb, fb1, m, s, *bp1, fbp1, tmp;
-  real_t aa, bb, bb1, faa, fbb, fbb1, mm, ss, secantSlopeA, secantSlopeB;
+  real34_t a, b, b1, b2, fa, fb, fb1, m, s, *bp1, fbp1, tmp;
+  real_t aa, bb, bb1, bb2, faa, fbb, fbb1, mm, ss, secantSlopeA, secantSlopeB, delta, deltaB, smb;
   bool_t extendRange = false;
   bool_t originallyLevel = false;
   bool_t extremum = false;
   int result = SOLVER_RESULT_NORMAL;
 
+  realCopy(const_0, &delta);
+
   real34Copy(y, &a);
   real34Copy(y, &b1);
   real34Copy(x, &b);
+  realToReal34(const_NaN, &b2);
 
   real34Subtract(&b, &a, &s);
   if(real34CompareAbsLessThan(&s, const34_1e_32)) {
@@ -257,9 +260,18 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     real34ToReal(&a, &aa);
     real34ToReal(&b, &bb);
     real34ToReal(&b1, &bb1);
+    real34ToReal(&b2, &bb2);
     real34ToReal(&fa, &faa);
     real34ToReal(&fb, &fbb);
     real34ToReal(&fb1, &fbb1);
+
+    if(realIsSpecial(&bb2)) {
+      realSubtract(&bb, &bb1, &deltaB, &ctxtReal39);
+    }
+    else {
+      realSubtract(&bb1, &bb2, &deltaB, &ctxtReal39);
+    }
+    realSetPositiveSign(&deltaB);
 
     realSubtract(&aa, &bb, &ss, &ctxtReal39);
     realSubtract(&faa, &fbb, &mm, &ctxtReal39);
@@ -276,6 +288,10 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     #ifdef PC_BUILD
       printReal34ToConsole(&s, "s = ", "\n");
     #endif /* PC_BUILD */
+
+    realSubtract(&ss, &bb, &smb, &ctxtReal39);
+    realMultiply(&smb, const_2, &smb, &ctxtReal39);
+    realSetPositiveSign(&smb);
 
     // bisection
     realAdd(&aa, &bb, &mm, &ctxtReal39);
@@ -327,7 +343,10 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
       bp1 = &m;
     }
     else if(!real34IsSpecial(&s) && ((real34CompareLessThan(&b, &s) && real34CompareLessThan(&s, &m)) || (real34CompareLessThan(&m, &s) && real34CompareLessThan(&s, &m)))) {
-      bp1 = &s;
+      if(realCompareLessThan(&delta, &deltaB) && realCompareLessThan(&smb, &deltaB))
+        bp1 = &s;
+      else
+        bp1 = &m;
     }
     else {
       bp1 = &m;
@@ -373,12 +392,28 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
       if(real34CompareAbsLessThan(&fa, &fbp1)) {
         real34Copy(bp1, &tmp); real34Copy(&a, bp1); real34Copy(&tmp, &a);
         real34Copy(&fbp1, &tmp); real34Copy(&fa, &fbp1); real34Copy(&tmp, &fa);
+        real34Copy(&a, &b); real34Copy(&fa, &fb);
       }
 
+      if(bp1 == &s) {
+        realToReal34(const_NaN, &b2);
+      }
+      else {
+        real34Copy(&b1, &b2);
+      }
       real34Copy(&b, &b1);
       real34Copy(&fb, &fb1);
       real34Copy(bp1, &b);
       real34Copy(&fbp1, &fb);
+      #ifdef PC_BUILD
+        printReal34ToConsole(&a, "...a = ", ", ");
+        printReal34ToConsole(&fa, "fa = ", "\n");
+        printReal34ToConsole(&b, "...b = ", ", ");
+        printReal34ToConsole(&fb, "fb = ", "\n");
+        printReal34ToConsole(&b1, "...b1 = ", ", ");
+        printReal34ToConsole(&fb1, "fb1 = ", "\n");
+        printReal34ToConsole(&b2, "...b2 = ", "\n");
+      #endif /* PC_BUILD */
     }
 
     else if(originallyLevel && (real34IsInfinite(&b) || real34IsInfinite(&a))) {
@@ -404,7 +439,7 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
       #endif /* PC_BUILD */
       result = SOLVER_RESULT_EXTREMUM;
     }
-  } while(result == SOLVER_RESULT_NORMAL && (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0))));
+  } while(result == SOLVER_RESULT_NORMAL && (real34IsSpecial(&b2) || !real34CompareEqual(&b1, &b2)) && (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0))));
   #ifdef PC_BUILD
     printReal34ToConsole(&b, "b = ", ", ");
     printReal34ToConsole(&fb, "fb = ", "\n");

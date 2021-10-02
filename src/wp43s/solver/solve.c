@@ -92,9 +92,6 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   const char *var = (char *)getNthString(dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent, dynamicMenuItem);
   const uint16_t regist = findOrAllocateNamedVariable(var);
-  printf("fnSolveVar:\n       softmenuId = %d\n  dynamicMenuItem = %d\n", softmenuStack[0].softmenuId, dynamicMenuItem);
-  printf("%d %s\n", regist, var);
-  fflush(stdout);
   if(currentSolverStatus & SOLVER_STATUS_READY_TO_EXECUTE) {
     reallyRunFunction(ITM_SOLVE, regist);
   }
@@ -116,8 +113,6 @@ static bool_t _executeStep(uint8_t **step) {
   //
   uint16_t op = **step;
   if(op & 0x80) op = ((op << 8) | *(*step + 1)) & 0x7fff;
-  printf("OPCODE %u\n", op);
-  fflush(stdout);
   switch(op) {
     case ITM_MVAR:
     case ITM_RTN:
@@ -144,10 +139,12 @@ static bool_t _executeStep(uint8_t **step) {
         convertLongIntegerToLongIntegerRegister(val, REGISTER_X);
         longIntegerFree(val);
       }
+      #ifdef PC_BUILD
       else {
         printf("***Unimplemented type %u!\n", *(*step + 1));
         fflush(stdout);
       }
+      #endif /* PC_BUILD */
       *step = findNextStep(*step);
       break;
     case ITM_RCL:
@@ -159,15 +156,19 @@ static bool_t _executeStep(uint8_t **step) {
         tmpString[*(*step + 2)] = 0;
         reallyRunFunction(op, findNamedVariable(tmpString));
       }
+      #ifdef PC_BUILD
       else {
         printf("***Not a named variable %u!\n", *(*step + 1));
         fflush(stdout);
       }
+      #endif /* PC_BUILD */
       *step = findNextStep(*step);
       break;
+    #ifdef PC_BUILD
     default:
       printf("***Unimplemented opcode %u!\n", op);
       fflush(stdout);
+    #endif /* PC_BUILD */
   }
   return lastErrorCode == ERROR_NONE;
 }
@@ -178,8 +179,6 @@ static void _solverIteration(real34_t *res) {
   //  Replace with the complete programming system when ready.
   //
   uint8_t *step = labelList[currentSolverProgram].instructionPointer;
-  printf("Solver to be coded\n");
-  fflush(stdout);
   lastErrorCode = ERROR_NONE;
   while(_executeStep(&step)) {}
   if(lastErrorCode == ERROR_OVERFLOW_PLUS_INF) {
@@ -210,10 +209,6 @@ static void _executeSolver(calcRegister_t variable, const real34_t *val, real34_
   reallyRunFunction(ITM_STO, variable);
   fnFillStack(NOPARAM);
   _solverIteration(res);
-  #ifdef PC_BUILD
-    printReal34ToConsole(val, "b = ", ", ");
-    printReal34ToConsole(res, "fb = ", "\n");
-  #endif /* PC_BUILD */
 }
 #endif /* TESTSUITE_BUILD */
 
@@ -296,9 +291,6 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     realMultiply(&ss, &fbb, &ss, &ctxtReal39);
     realSubtract(&bb, &ss, &ss, &ctxtReal39);
     realToReal34(&ss, &s);
-    #ifdef PC_BUILD
-      printReal34ToConsole(&s, "s = ", "\n");
-    #endif /* PC_BUILD */
 
     realSubtract(&ss, &bb, &smb, &ctxtReal39);
     realMultiply(&smb, const_2, &smb, &ctxtReal39);
@@ -308,12 +300,6 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     realAdd(&aa, &bb, &mm, &ctxtReal39);
     realMultiply(&mm, const_1on2, &mm, &ctxtReal39);
     realToReal34(&mm, &m);
-    #ifdef PC_BUILD
-      printReal34ToConsole(&m, "m = ", "\n");
-
-      printRealToConsole(&secantSlopeA, "slope(fa) = ", "\n");
-      printRealToConsole(&secantSlopeB, "slope(fb) = ", "\n");
-    #endif /* PC_BUILD */
 
     // next point
     if(extendRange) {
@@ -393,12 +379,6 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
           originallyLevel = false;
         }
       }
-      #ifdef PC_BUILD
-        printReal34ToConsole(&a, "a = ", ", ");
-        printReal34ToConsole(&fa, "fa = ", "\n");
-        printReal34ToConsole(bp1, "-> b = ", ", ");
-        printReal34ToConsole(&fbp1, "fb = ", "\n");
-      #endif /* PC_BUILD */
 
       if(real34CompareAbsLessThan(&fa, &fbp1)) {
         real34Copy(bp1, &tmp); real34Copy(&a, bp1); real34Copy(&tmp, &a);
@@ -416,53 +396,28 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
       real34Copy(&fb, &fb1);
       real34Copy(bp1, &b);
       real34Copy(&fbp1, &fb);
-      #ifdef PC_BUILD
-        printReal34ToConsole(&a, "...a = ", ", ");
-        printReal34ToConsole(&fa, "fa = ", "\n");
-        printReal34ToConsole(&b, "...b = ", ", ");
-        printReal34ToConsole(&fb, "fb = ", "\n");
-        printReal34ToConsole(&b1, "...b1 = ", ", ");
-        printReal34ToConsole(&fb1, "fb1 = ", "\n");
-        printReal34ToConsole(&b2, "...b2 = ", "\n");
-      #endif /* PC_BUILD */
     }
 
     else if(originallyLevel && (real34IsInfinite(&b) || real34IsInfinite(&a))) {
       result = SOLVER_RESULT_CONSTANT;
     }
     else if(extendRange) {
-      #ifdef PC_BUILD
-        printf("extendedRange extremum\n"); fflush(stdout);
-      #endif /* PC_BUILD */
       extendRange = false;
       originallyLevel = false;
       extremum = true;
     }
     else if(real34IsNegative(&fa) != real34IsNegative(&fb)) {
-      #ifdef PC_BUILD
-        printf("SOLVER_RESULT_SIGN_REVERSAL\n"); fflush(stdout);
-      #endif /* PC_BUILD */
       result = SOLVER_RESULT_SIGN_REVERSAL;
     }
     else {
-      #ifdef PC_BUILD
-        printf("SOLVER_RESULT_EXTREMUM\n"); fflush(stdout);
-      #endif /* PC_BUILD */
       result = SOLVER_RESULT_EXTREMUM;
     }
   } while(result == SOLVER_RESULT_NORMAL && (real34IsSpecial(&b2) || !real34CompareEqual(&b1, &b2)) && (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0))));
-  #ifdef PC_BUILD
-    printReal34ToConsole(&b, "b = ", ", ");
-    printReal34ToConsole(&fb, "fb = ", "\n");
-  #endif /* PC_BUILD */
 
   if((extendRange && !originallyLevel) || extremum) {
     result = SOLVER_RESULT_EXTREMUM;
   }
 
-  #ifdef PC_BUILD
-    fflush(stdout);
-  #endif /* PC_BUILD */
   real34Copy(&fb, resZ);
   real34Copy(&b1, resY);
   real34Copy(&b, resX);

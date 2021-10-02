@@ -544,7 +544,7 @@
         if(func == ITM_SOLVE && calcMode == CM_PEM)
           showSoftmenu(-MNU_TAM);
         else
-          showSoftmenu(-MNU_SLVPROG);
+          showSoftmenu(-MNU_PROG);
         break;
 
       default:

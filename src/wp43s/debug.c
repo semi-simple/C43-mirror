@@ -637,7 +637,6 @@ void debugNIM(void) {
     if(alsm == CATALOG_REALS)    return "CATALOG_REALS";
     if(alsm == CATALOG_CPXS)     return "CATALOG_CPXS";
     if(alsm == CATALOG_MVAR)     return "CATALOG_MVAR";
-    if(alsm == CATALOG_SLVPROG)  return "CATALOG_SLVPROG";
 
     return "CATALOG_????";
   }

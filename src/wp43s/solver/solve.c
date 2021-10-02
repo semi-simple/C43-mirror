@@ -108,6 +108,69 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter) {
 }
 
 #ifndef TESTSUITE_BUILD
+static bool_t _executeStep(uint8_t **step) {
+  //
+  //  NOT A COMPLETE ENGINE: TESTING PURPOSE ONLY!!
+  //  The following decoder is minimally implemented ad hoc engine for testing of SOLVE feature.
+  //  Replace with the complete programming system when ready.
+  //
+  uint16_t op = **step;
+  if(op & 0x80) op = ((op << 8) | *(*step + 1)) & 0x7fff;
+  printf("OPCODE %u\n", op);
+  fflush(stdout);
+  switch(op) {
+    case ITM_MVAR:
+    case ITM_RTN:
+      *step = findNextStep(*step);
+      break;
+    case ITM_END:
+    case 0x7fff: // .END.
+      return false;
+    case CST_18:
+    case ITM_ADD:
+    case ITM_DIV:
+      runFunction(op);
+      *step = findNextStep(*step);
+      break;
+    case ITM_LITERAL:
+      if(*(*step + 1) == STRING_LONG_INTEGER) {
+        longInteger_t val;
+        setSystemFlag(FLAG_ASLIFT);
+        longIntegerInit(val);
+        xcopy(tmpString, *step + 3, *(*step + 2));
+        tmpString[*(*step + 2)] = 0;
+        stringToLongInteger(tmpString, 10, val);
+        liftStack();
+        convertLongIntegerToLongIntegerRegister(val, REGISTER_X);
+        longIntegerFree(val);
+      }
+      else {
+        printf("***Unimplemented type %u!\n", *(*step + 1));
+        fflush(stdout);
+      }
+      *step = findNextStep(*step);
+      break;
+    case ITM_RCL:
+    case ITM_RCLMULT:
+    case ITM_RCLADD:
+    case ITM_RCLSUB:
+      if(*(*step + 1) == STRING_LABEL_VARIABLE) {
+        xcopy(tmpString, *step + 3, *(*step + 2));
+        tmpString[*(*step + 2)] = 0;
+        reallyRunFunction(op, findNamedVariable(tmpString));
+      }
+      else {
+        printf("***Not a named variable %u!\n", *(*step + 1));
+        fflush(stdout);
+      }
+      *step = findNextStep(*step);
+      break;
+    default:
+      printf("***Unimplemented opcode %u!\n", op);
+      fflush(stdout);
+  }
+  return lastErrorCode == ERROR_NONE;
+}
 static void _solverIteration(real34_t *res) {
   //
   //  NOT A COMPLETE ENGINE: TESTING PURPOSE ONLY!!
@@ -119,58 +182,7 @@ static void _solverIteration(real34_t *res) {
   printf("Solver to be coded\n");
   fflush(stdout);
   lastErrorCode = ERROR_NONE;
-  do {
-    op = *step;
-    if(op & 0x80) op = ((op << 8) | *(step + 1)) & 0x7fff;
-    printf("OPCODE %u\n", op);
-    fflush(stdout);
-    switch(op) {
-      case ITM_MVAR:
-      case ITM_RTN:
-      case ITM_END:
-        break;
-      case CST_18:
-      case ITM_ADD:
-      case ITM_DIV:
-        runFunction(op);
-        break;
-      case ITM_LITERAL:
-        if(*(step + 1) == STRING_LONG_INTEGER) {
-          longInteger_t val;
-          setSystemFlag(FLAG_ASLIFT);
-          longIntegerInit(val);
-          xcopy(tmpString, step + 3, *(step + 2));
-          tmpString[*(step + 2)] = 0;
-          stringToLongInteger(tmpString, 10, val);
-          liftStack();
-          convertLongIntegerToLongIntegerRegister(val, REGISTER_X);
-          longIntegerFree(val);
-        }
-        else {
-          printf("***Unimplemented type %u!\n", *(step + 1));
-          fflush(stdout);
-        }
-        break;
-      case ITM_RCL:
-      case ITM_RCLMULT:
-      case ITM_RCLADD:
-      case ITM_RCLSUB:
-        if(*(step + 1) == STRING_LABEL_VARIABLE) {
-          xcopy(tmpString, step + 3, *(step + 2));
-          tmpString[*(step + 2)] = 0;
-          reallyRunFunction(op, findNamedVariable(tmpString));
-        }
-        else {
-          printf("***Not a named variable %u!\n", *(step + 1));
-          fflush(stdout);
-        }
-        break;
-      default:
-        printf("***Unimplemented opcode %u!\n", op);
-        fflush(stdout);
-    }
-    step = findNextStep(step);
-  } while(op != ITM_END && op != 0x7fff && lastErrorCode == ERROR_NONE);
+  while(_executeStep(&step)) {}
   if(lastErrorCode == ERROR_OVERFLOW_PLUS_INF) {
     realToReal34(const_plusInfinity, res);
     lastErrorCode = ERROR_NONE;

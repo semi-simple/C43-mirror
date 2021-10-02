@@ -178,7 +178,6 @@ static void _solverIteration(real34_t *res) {
   //  Replace with the complete programming system when ready.
   //
   uint8_t *step = labelList[currentSolverProgram].instructionPointer;
-  uint16_t op;
   printf("Solver to be coded\n");
   fflush(stdout);
   lastErrorCode = ERROR_NONE;

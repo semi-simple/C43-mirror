@@ -541,7 +541,10 @@
         break;
 
       case TM_SOLVE:
-        showSoftmenu(-MNU_SLVPROG);
+        if(func == ITM_SOLVE && calcMode == CM_PEM)
+          showSoftmenu(-MNU_TAM);
+        else
+          showSoftmenu(-MNU_SLVPROG);
         break;
 
       default:

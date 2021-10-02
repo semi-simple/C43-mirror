@@ -352,7 +352,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               16
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               17
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar
@@ -601,7 +601,8 @@ typedef enum {
 #define CATALOG_REALS                             16
 #define CATALOG_CPXS                              17
 #define CATALOG_MVAR                              18
-#define NUMBER_OF_CATALOGS                        19
+#define CATALOG_SLVPROG                           19
+#define NUMBER_OF_CATALOGS                        20
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1

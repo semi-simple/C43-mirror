@@ -1473,6 +1473,7 @@
       case MNU_REALS:     catalog = CATALOG_REALS;   break;
       case MNU_CPXS:      catalog = CATALOG_CPXS;    break;
       case MNU_MVAR:      catalog = CATALOG_MVAR;    break;
+      case MNU_SLVPROG:   catalog = CATALOG_SLVPROG; break;
       default:            catalog = CATALOG_NONE;
     }
 

@@ -541,7 +541,7 @@
         break;
 
       case TM_SOLVE:
-        showSoftmenu(-MNU_PROG);
+        showSoftmenu(-MNU_SLVPROG);
         break;
 
       default:

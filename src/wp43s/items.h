@@ -1455,7 +1455,7 @@
 #define MNU_PLOT_LR                   1396
 #define MNU_ELLIPT                    1397
 #define MNU_MVAR                      1398
-#define MNU_1399                      1399
+#define MNU_SLVPROG                   1399
 #define MNU_1400                      1400
 #define MNU_1401                      1401
 #define MNU_1402                      1402

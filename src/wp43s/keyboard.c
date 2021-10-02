@@ -56,6 +56,7 @@
 
     switch(-softmenu[menuId].menuItem) {
       case MNU_PROG:
+      case MNU_SLVPROG:
       case MNU_VAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
@@ -877,7 +878,12 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       currentSolverStatus &= ~SOLVER_STATUS_INTERACTIVE;
     }
 
-    if(catalog) {
+    if(catalog == CATALOG_SLVPROG) {
+      leaveAsmMode();
+      numberOfTamMenusToPop--;
+      tamLeaveMode();
+    }
+    else if(catalog) {
       leaveAsmMode();
       popSoftmenu();
       if(tam.mode) {

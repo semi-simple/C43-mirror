@@ -63,7 +63,6 @@ void fnSolve(uint16_t labelOrVariable) {
     real34_t z, y, x;
     int resultCode = 0;
     if(_realSolverFirstGuesses(REGISTER_Y, &y) && _realSolverFirstGuesses(REGISTER_X, &x)) {
-      setSystemFlag(FLAG_SOLVING);
       currentSolverVariable = labelOrVariable;
       resultCode = solver(labelOrVariable, &y, &x, &z, &y, &x);
       fnClearStack(NOPARAM); // reset stack to 0.
@@ -72,7 +71,6 @@ void fnSolve(uint16_t labelOrVariable) {
       real34Copy(&x, REGISTER_REAL34_DATA(REGISTER_X));
       int32ToReal34(resultCode, REGISTER_REAL34_DATA(REGISTER_T));
       lastErrorCode = ERROR_NONE;
-      clearSystemFlag(FLAG_SOLVING);
       temporaryInformation = (resultCode == SOLVER_RESULT_NORMAL) ? TI_SOLVER_VARIABLE : TI_SOLVER_FAILED;
     }
     else {
@@ -220,6 +218,9 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
   bool_t originallyLevel = false;
   bool_t extremum = false;
   int result = SOLVER_RESULT_NORMAL;
+
+  ++currentSolverNestingDepth;
+  setSystemFlag(FLAG_SOLVING);
 
   realCopy(const_0, &delta);
 
@@ -417,6 +418,9 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
   if((extendRange && !originallyLevel) || extremum) {
     result = SOLVER_RESULT_EXTREMUM;
   }
+
+  if((--currentSolverNestingDepth) == 0)
+    clearSystemFlag(FLAG_SOLVING);
 
   real34Copy(&fb, resZ);
   real34Copy(&b1, resY);

@@ -413,7 +413,14 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     else {
       result = SOLVER_RESULT_EXTREMUM;
     }
-  } while(result == SOLVER_RESULT_NORMAL && (real34IsSpecial(&b2) || !real34CompareEqual(&b1, &b2)) && (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0))));
+
+    real34ToReal(&b, &bb);
+    real34ToReal(&b1, &bb1);
+
+  } while(result == SOLVER_RESULT_NORMAL &&
+          (real34IsSpecial(&b2) || !real34CompareEqual(&b1, &b2) || !(extendRange || extremum || WP34S_RelativeError(&bb, &bb1, const_1e_32, &ctxtReal39))) &&
+          (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0)))
+         );
 
   if((extendRange && !originallyLevel) || extremum) {
     result = SOLVER_RESULT_EXTREMUM;

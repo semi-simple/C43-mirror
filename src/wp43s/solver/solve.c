@@ -77,19 +77,19 @@ void fnSolve(uint16_t labelOrVariable) {
           break;
         case SOLVER_RESULT_SIGN_REVERSAL:
           temporaryInformation = TI_SOLVER_FAILED;
-          lastErrorCode = ERROR_LARGE_DELTA_AND_OPPOSITE_SIGN;
+          displayCalcErrorMessage(ERROR_LARGE_DELTA_AND_OPPOSITE_SIGN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
           break;
         case SOLVER_RESULT_EXTREMUM:
           temporaryInformation = TI_SOLVER_FAILED;
-          lastErrorCode = ERROR_SOLVER_REACHED_LOCAL_EXTREMUM;
+          displayCalcErrorMessage(ERROR_SOLVER_REACHED_LOCAL_EXTREMUM, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
           break;
         case SOLVER_RESULT_BAD_GUESS:
           temporaryInformation = TI_SOLVER_FAILED;
-          lastErrorCode = ERROR_INITIAL_GUESS_OUT_OF_DOMAIN;
+          displayCalcErrorMessage(ERROR_INITIAL_GUESS_OUT_OF_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
           break;
         case SOLVER_RESULT_CONSTANT:
           temporaryInformation = TI_SOLVER_FAILED;
-          lastErrorCode = ERROR_FUNCTION_VALUES_LOOK_CONSTANT;
+          displayCalcErrorMessage(ERROR_FUNCTION_VALUES_LOOK_CONSTANT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
           break;
       }
       saveForUndo();

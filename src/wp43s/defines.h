@@ -123,9 +123,13 @@
 #define ERROR_NO_MATRIX_INDEXED                   38
 #define ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX    39
 #define ERROR_NO_ERRORS_CALCULABLE                40
-#define ERROR_BAD_INPUT                           41 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_LARGE_DELTA_AND_OPPOSITE_SIGN       41
+#define ERROR_SOLVER_REACHED_LOCAL_EXTREMUM       42
+#define ERROR_INITIAL_GUESS_OUT_OF_DOMAIN         43
+#define ERROR_FUNCTION_VALUES_LOOK_CONSTANT       44
+#define ERROR_BAD_INPUT                           45 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     42
+#define NUMBER_OF_ERROR_CODES                     46
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111

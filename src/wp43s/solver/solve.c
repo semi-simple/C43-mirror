@@ -70,8 +70,29 @@ void fnSolve(uint16_t labelOrVariable) {
       real34Copy(&y, REGISTER_REAL34_DATA(REGISTER_Y));
       real34Copy(&x, REGISTER_REAL34_DATA(REGISTER_X));
       int32ToReal34(resultCode, REGISTER_REAL34_DATA(REGISTER_T));
-      lastErrorCode = ERROR_NONE;
-      temporaryInformation = (resultCode == SOLVER_RESULT_NORMAL) ? TI_SOLVER_VARIABLE : TI_SOLVER_FAILED;
+      switch(resultCode) {
+        case SOLVER_RESULT_NORMAL:
+          temporaryInformation = TI_SOLVER_VARIABLE;
+          lastErrorCode = ERROR_NONE;
+          break;
+        case SOLVER_RESULT_SIGN_REVERSAL:
+          temporaryInformation = TI_SOLVER_FAILED;
+          lastErrorCode = ERROR_LARGE_DELTA_AND_OPPOSITE_SIGN;
+          break;
+        case SOLVER_RESULT_EXTREMUM:
+          temporaryInformation = TI_SOLVER_FAILED;
+          lastErrorCode = ERROR_SOLVER_REACHED_LOCAL_EXTREMUM;
+          break;
+        case SOLVER_RESULT_BAD_GUESS:
+          temporaryInformation = TI_SOLVER_FAILED;
+          lastErrorCode = ERROR_INITIAL_GUESS_OUT_OF_DOMAIN;
+          break;
+        case SOLVER_RESULT_CONSTANT:
+          temporaryInformation = TI_SOLVER_FAILED;
+          lastErrorCode = ERROR_FUNCTION_VALUES_LOOK_CONSTANT;
+          break;
+      }
+      saveForUndo();
     }
     else {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);

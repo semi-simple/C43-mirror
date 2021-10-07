@@ -29,6 +29,7 @@
 #include "longIntegerType.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/wp34s.h"
+#include "programming/manage.h"
 #include "programming/nextStep.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -37,7 +38,39 @@
 #include "wp43s.h"
 
 void fnPgmSlv(uint16_t label) {
-  currentSolverProgram = label - FIRST_LABEL;
+  if(label >= FIRST_LABEL && label <= LAST_LABEL) {
+    currentSolverProgram = label - FIRST_LABEL;
+  }
+  else if(label >= REGISTER_X && label <= REGISTER_T) {
+    // Interactive mode
+    char buf[4];
+    switch(label) {
+      case REGISTER_X:        buf[0] = 'X'; break;
+      case REGISTER_Y:        buf[0] = 'Y'; break;
+      case REGISTER_Z:        buf[0] = 'Z'; break;
+      case REGISTER_T:        buf[0] = 'T'; break;
+      default: /* unlikely */ buf[0] = 0;
+    }
+    buf[1] = 0;
+    label = findNamedLabel(buf);
+    if(label == INVALID_VARIABLE) {
+      displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "string '%s' is not a named label", buf);
+        moreInfoOnError("In function fnPgmSlv:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      currentSolverProgram = label - FIRST_LABEL;
+    }
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "unexpected parameter %u", label);
+      moreInfoOnError("In function fnPgmSlv:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
 }
 
 static bool_t _realSolverFirstGuesses(calcRegister_t regist, real34_t *val) {
@@ -53,10 +86,11 @@ static bool_t _realSolverFirstGuesses(calcRegister_t regist, real34_t *val) {
 }
 
 void fnSolve(uint16_t labelOrVariable) {
-  if(labelOrVariable >= FIRST_LABEL && labelOrVariable <= LAST_LABEL) {
+  if((labelOrVariable >= FIRST_LABEL && labelOrVariable <= LAST_LABEL) || (labelOrVariable >= REGISTER_X && labelOrVariable <= REGISTER_T)) {
     // Interactive mode
-    currentSolverProgram = labelOrVariable - FIRST_LABEL;
-    currentSolverStatus = SOLVER_STATUS_INTERACTIVE;
+    fnPgmSlv(labelOrVariable);
+    if(lastErrorCode == ERROR_NONE)
+      currentSolverStatus = SOLVER_STATUS_INTERACTIVE;
   }
   else if(labelOrVariable >= FIRST_NAMED_VARIABLE && labelOrVariable <= LAST_NAMED_VARIABLE) {
     // Execute
@@ -103,7 +137,11 @@ void fnSolve(uint16_t labelOrVariable) {
     }
   }
   else {
-    /* mockup */
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "unexpected parameter %u", labelOrVariable);
+      moreInfoOnError("In function fnPgmSlv:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 

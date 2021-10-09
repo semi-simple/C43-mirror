@@ -191,7 +191,7 @@ void initStatisticalSums(void) {
       realCopy(const_minusInfinity, SIGMA_YMAX);
     }
     else {
-      lastErrorCode = ERROR_RAM_FULL;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     }
   }
   if(telltale != MEM_INITIALIZED) {

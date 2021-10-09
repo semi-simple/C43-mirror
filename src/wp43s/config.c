@@ -36,6 +36,7 @@
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
+#include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "solver/equation.h"
@@ -179,14 +180,7 @@ TO_QSPI const enum rounding roundingModeTable[7] = {
 
 
 void fnGetIntegerSignMode(uint16_t unusedButMandatoryParameter) {
-  longInteger_t ism;
-
-  liftStack();
-
-  longIntegerInit(ism);
-  uIntToLongInteger((shortIntegerMode==SIM_2COMPL ? 2 : (shortIntegerMode==SIM_1COMPL ? 1 : (shortIntegerMode==SIM_UNSIGN ? 0 : -1))), ism);
-  convertLongIntegerToLongIntegerRegister(ism, REGISTER_X);
-  longIntegerFree(ism);
+  fnRecall(RESERVED_VARIABLE_ISM);
 }
 
 

@@ -123,9 +123,13 @@
 #define ERROR_NO_MATRIX_INDEXED                   38
 #define ERROR_NOT_ENOUGH_MEMORY_FOR_NEW_MATRIX    39
 #define ERROR_NO_ERRORS_CALCULABLE                40
-#define ERROR_BAD_INPUT                           41 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_LARGE_DELTA_AND_OPPOSITE_SIGN       41
+#define ERROR_SOLVER_REACHED_LOCAL_EXTREMUM       42
+#define ERROR_INITIAL_GUESS_OUT_OF_DOMAIN         43
+#define ERROR_FUNCTION_VALUES_LOOK_CONSTANT       44
+#define ERROR_BAD_INPUT                           45 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     42
+#define NUMBER_OF_ERROR_CODES                     46
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
@@ -352,7 +356,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               15
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               16
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar
@@ -401,7 +405,7 @@ typedef enum {
 #define NUMBER_OF_CONSTANTS_39                   189
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
-#define NUMBER_OF_CONSTANTS_34                    42
+#define NUMBER_OF_CONSTANTS_34                    43
 
 #define MAX_FREE_REGION                           50 // Maximum number of free memory regions
 
@@ -501,7 +505,8 @@ typedef enum {
 #define TM_M_DIM                               10007
 #define TM_SHUFFLE                             10008
 #define TM_LABEL                               10009
-#define TM_CMP                                 10010 // TM_CMP must be the last in this list
+#define TM_SOLVE                               10010
+#define TM_CMP                                 10011 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -563,6 +568,8 @@ typedef enum {
 #define TI_INACCURATE                             44
 #define TI_UNDO_DISABLED                          45
 #define TI_VIEW                                   46
+#define TI_SOLVER_VARIABLE                        47
+#define TI_SOLVER_FAILED                          48
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -597,7 +604,8 @@ typedef enum {
 #define CATALOG_LINTS                             15
 #define CATALOG_REALS                             16
 #define CATALOG_CPXS                              17
-#define NUMBER_OF_CATALOGS                        18
+#define CATALOG_MVAR                              18
+#define NUMBER_OF_CATALOGS                        19
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1
@@ -760,6 +768,15 @@ typedef enum {
 #define QF_DISCRETE_CDF_GEOMETRIC                  2
 #define QF_DISCRETE_CDF_NEGBINOM                   3
 #define QF_DISCRETE_CDF_HYPERGEOMETRIC             4
+
+#define SOLVER_STATUS_READY_TO_EXECUTE             0x0001
+#define SOLVER_STATUS_INTERACTIVE                  0x0002
+
+#define SOLVER_RESULT_NORMAL                       0
+#define SOLVER_RESULT_SIGN_REVERSAL                1
+#define SOLVER_RESULT_EXTREMUM                     2
+#define SOLVER_RESULT_BAD_GUESS                    3
+#define SOLVER_RESULT_CONSTANT                     4
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

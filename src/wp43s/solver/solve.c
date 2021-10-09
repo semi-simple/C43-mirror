@@ -310,12 +310,11 @@ static void _inverseQuadraticInterpolation(const real_t *a, const real_t *b, con
 
 int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34_t *resZ, real34_t *resY, real34_t *resX) {
 #ifndef TESTSUITE_BUILD
-  real34_t a, b, b1, b2, fa, fb, fb1, fb2, m, s, *bp1, fbp1, tmp;
-  real_t aa, bb, bb1, bb2, faa, fbb, fbb1, fbb2, mm, ss, secantSlopeA, secantSlopeB, delta, deltaB, smb;
+  real34_t a, b, b1, b2, fa, fb, fb1, m, s, *bp1, fbp1, tmp;
+  real_t aa, bb, bb1, bb2, faa, fbb, fbb1, mm, ss, secantSlopeA, secantSlopeB, delta, deltaB, smb;
   bool_t extendRange = false;
   bool_t originallyLevel = false;
   bool_t extremum = false;
-  bool_t b2Flag = true;
   int result = SOLVER_RESULT_NORMAL;
 
   ++currentSolverNestingDepth;
@@ -341,7 +340,6 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     result = SOLVER_RESULT_BAD_GUESS;
   }
   real34Copy(&fb1, &fa);
-  realToReal34(const_NaN, &fb2);
 
   // calculation
   _executeSolver(variable, &b, &fb);
@@ -372,10 +370,9 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     real34ToReal(&fa, &faa);
     real34ToReal(&fb, &fbb);
     real34ToReal(&fb1, &fbb1);
-    real34ToReal(&fb2, &fbb2);
 
     // pre-calculation
-    if(b2Flag) {
+    if(realIsSpecial(&bb2)) {
       realSubtract(&bb, &bb1, &deltaB, &ctxtReal39);
     }
     else {
@@ -388,7 +385,7 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     // interpolation
     if(!(realCompareEqual(&faa, &fbb) || realCompareEqual(&faa, &fbb1) || realCompareEqual(&fbb, &fbb1))) { // inverse quadratic interpolation
       _linearInterpolation(&bb, &bb1, &fbb, &fbb1, NULL, &secantSlopeB, &ctxtReal39);
-      _inverseQuadraticInterpolation(&bb, &bb1, &bb2, &fbb, &fbb1, &fbb2, &ss, &ctxtReal39);
+      _inverseQuadraticInterpolation(&aa, &bb, &bb1, &faa, &fbb, &fbb1, &ss, &ctxtReal39);
     }
     else { // linear interpolation
       _linearInterpolation(&bb, &bb1, &fbb, &fbb1, &ss, &secantSlopeB, &ctxtReal39);
@@ -489,9 +486,12 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
         real34Copy(&a, &b); real34Copy(&fa, &fb);
       }
 
-      b2Flag = (bp1 == &s);
-      real34Copy(&b1, &b2);
-      real34Copy(&fb1, &fb2);
+      if(bp1 == &s) {
+        realToReal34(const_NaN, &b2);
+      }
+      else {
+        real34Copy(&b1, &b2);
+      }
       real34Copy(&b, &b1);
       real34Copy(&fb, &fb1);
       real34Copy(bp1, &b);
@@ -517,7 +517,7 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
     real34ToReal(&b1, &bb1);
 
   } while(result == SOLVER_RESULT_NORMAL &&
-          (b2Flag || !real34CompareEqual(&b1, &b2) || !(extendRange || extremum || WP34S_RelativeError(&bb, &bb1, const_1e_32, &ctxtReal39))) &&
+          (real34IsSpecial(&b2) || !real34CompareEqual(&b1, &b2) || !(extendRange || extremum || WP34S_RelativeError(&bb, &bb1, const_1e_32, &ctxtReal39))) &&
           (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0)))
          );
 

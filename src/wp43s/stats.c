@@ -469,6 +469,7 @@ void calcSigma(uint16_t maxOffset) {
 #ifndef TESTSUITE_BUILD
 
   clearStatisticalSums();
+  if(!statisticalSumsPointer) initStatisticalSums();
   calcRegister_t regStats = findNamedVariable("STATS");
   if(regStats != INVALID_VARIABLE) {
     real34Matrix_t stats;

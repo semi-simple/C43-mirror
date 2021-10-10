@@ -211,46 +211,48 @@ void realToDouble1(const real_t *vv, double *v) {
 
 
 
-float grf_x(int i) {
-  float xf=0;
-  real_t xr;
-  if (PLOT_NVECT) {
-//    return gr_y[i];
-  }
-  else {
+#ifndef TESTSUITE_BUILD
+  float grf_x(int i) {
+    float xf=0;
+    real_t xr;
+    if (PLOT_NVECT) {
+  //    return gr_y[i];
+    }
+    else {
 
-    calcRegister_t regStats = findNamedVariable("STATS");
-    if(regStats != INVALID_VARIABLE) {
-      real34Matrix_t stats;
-      linkToRealMatrixRegister(regStats, &stats);
-      const uint16_t cols = stats.header.matrixColumns;
-      real34ToReal(&stats.matrixElements[i * cols    ], &xr);
-      realToFloat(&xr, &xf);
-    } 
-    else xf = 0;
+      calcRegister_t regStats = findNamedVariable("STATS");
+      if(regStats != INVALID_VARIABLE) {
+        real34Matrix_t stats;
+        linkToRealMatrixRegister(regStats, &stats);
+        const uint16_t cols = stats.header.matrixColumns;
+        real34ToReal(&stats.matrixElements[i * cols    ], &xr);
+        realToFloat(&xr, &xf);
+      } 
+      else xf = 0;
+    }
+    return xf;
   }
-  return xf;
-}
 
-float grf_y(int i) {
-  float yf=0;
-  real_t yr;
-  if (PLOT_NVECT) {
-//    return gr_x[i];
+  float grf_y(int i) {
+    float yf=0;
+    real_t yr;
+    if (PLOT_NVECT) {
+  //    return gr_x[i];
+    }
+    else {
+      calcRegister_t regStats = findNamedVariable("STATS");
+      if(regStats != INVALID_VARIABLE) {
+        real34Matrix_t stats;
+        linkToRealMatrixRegister(regStats, &stats);
+        const uint16_t cols = stats.header.matrixColumns;
+        real34ToReal(&stats.matrixElements[i * cols + 1], &yr);
+        realToFloat(&yr, &yf);
+      } 
+      else yf = 0;
+    }
+    return yf;
   }
-  else {
-    calcRegister_t regStats = findNamedVariable("STATS");
-    if(regStats != INVALID_VARIABLE) {
-      real34Matrix_t stats;
-      linkToRealMatrixRegister(regStats, &stats);
-      const uint16_t cols = stats.header.matrixColumns;
-      real34ToReal(&stats.matrixElements[i * cols + 1], &yr);
-      realToFloat(&yr, &yf);
-    } 
-    else yf = 0;
-  }
-  return yf;
-}
+#endif //TESTSUITE_BUILD
 
 
 #ifndef TESTSUITE_BUILD

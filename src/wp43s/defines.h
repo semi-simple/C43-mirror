@@ -52,16 +52,16 @@
 
 #if defined(DMCP_BUILD) || (SCREEN_800X480 == 1)
 //  #define SAVE_SPACE_DM42    //014984 bytes: Startup test values in registers; KEYS (USER_V43LT, USER_V43, USER_C43, USER_43S); STAT DEMOS 0,1,2; 
-//  #define SAVE_SPACE_DM42_1  //001568 bytes: STAT DEMOS 105-107-109
+  #define SAVE_SPACE_DM42_1  //001568 bytes: STAT DEMOS 105-107-109
 //  #define SAVE_SPACE_DM42_2  //005672 bytes: XEQM
   #define SAVE_SPACE_DM42_4  //000736 bytes: XY GRAPHDEMOS
   #define SAVE_SPACE_DM42_3  //002680 SOLVER (already excluded by XY GRAPHDEMOS)
-  #define SAVE_SPACE_DM42_5  //001168 bytes: SHOW (old WP43S on VIEW)
+  #define SAVE_SPACE_DM42_5  //001168 bytes: SHOW (old WP43S on VIEW) (I tink irrelevant now)
 //  #define SAVE_SPACE_DM42_6  //001648 bytes: ELEC functions
 //  #define SAVE_SPACE_DM42_7  //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
-//  #define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
+  #define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
 //  #define SAVE_SPACE_DM42_9  //004448 bytes: SHOW (new C43)
-    #define SAVE_SPACE_DM42_10 // 005800  WP43S programming ...
+//    #define SAVE_SPACE_DM42_10 // 005800  WP43S programming ...
 //    #define SAVE_SPACE_DM42_11 //001552 Matrix function on entry ...
     #define SAVE_SPACE_DM42_12 // Standard extra 43S math: SLVQ, PRIME, BESSEL, ELLIPTIC, ZETA, BETA, ORTHO_POLY
 

@@ -35,7 +35,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         58  // exponentHideLimit now will be saved
+#define BACKUP_VERSION         59  // states around VIEW and SOLVE now will be saved
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -244,6 +244,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&xzero,                              sizeof(xzero),                              BACKUP);
     save(&yzero,                              sizeof(yzero),                              BACKUP);
     save(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
+    save(&currentViewRegister,                sizeof(currentViewRegister),                BACKUP);
+    save(&currentSolverStatus,                sizeof(currentSolverStatus),                BACKUP);
+    save(&currentSolverProgram,               sizeof(currentSolverProgram),               BACKUP);
+    save(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
 
 
     fclose(BACKUP);
@@ -440,6 +444,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&xzero,                              sizeof(xzero),                              BACKUP);
       restore(&yzero,                              sizeof(yzero),                              BACKUP);
       restore(&matrixIndex,                        sizeof(matrixIndex),                        BACKUP);
+      restore(&currentViewRegister,                sizeof(currentViewRegister),                BACKUP);
+      restore(&currentSolverStatus,                sizeof(currentSolverStatus),                BACKUP);
+      restore(&currentSolverProgram,               sizeof(currentSolverProgram),               BACKUP);
+      restore(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
 
       fclose(BACKUP);
       printf("End of calc's restoration\n");

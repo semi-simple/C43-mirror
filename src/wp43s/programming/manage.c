@@ -255,6 +255,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
 
     if(calcMode != CM_PEM) {
       calcMode = CM_PEM;
+      hourGlassIconEnabled = false;
       return;
     }
 

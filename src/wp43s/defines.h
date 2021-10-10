@@ -512,6 +512,8 @@ typedef enum {
 #define RESERVED_VARIABLE_PV                    2026
 #define LAST_RESERVED_VARIABLE                  2026
 #define INVALID_VARIABLE                        2027
+#define FIRST_LABEL                             2028
+#define LAST_LABEL                              6999
 
 #define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 

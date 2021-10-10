@@ -29,8 +29,6 @@
 
 #include "wp43s.h"
 
-
-
 #ifndef TESTSUITE_BUILD
   void refreshStatusBar(void) {
     #if (DEBUG_INSTEAD_STATUS_BAR == 1)
@@ -276,7 +274,7 @@ void showFracMode(void) {
 
   void showHideAlphaMode(void) {
     int status=0;
-    if(calcMode == CM_AIM || catalog || (tam.mode != 0 && tam.alpha)) {
+    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR) || (tam.mode != 0 && tam.alpha)) {
 
       if(numLock && !shiftF && !shiftG) {
           if(alphaCase == AC_UPPER)              { status = 3 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else

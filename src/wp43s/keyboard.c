@@ -37,6 +37,7 @@
 #include "screen.h"
 #include "softmenus.h"
 #include "stack.h"
+#include "stats.h"
 #include "timer.h"
 #include "ui/tam.h"
 #if (REAL34_WIDTH_TEST == 1)
@@ -46,25 +47,27 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-  int16_t determineFunctionKeyItem(const char *data) {
+  int16_t determineFunctionKeyItem(const char *data, int16_t itemShift) { //Added itemshift param JM
     int16_t item = ITM_NOP;
 
     dynamicMenuItem = -1;
 
-    int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));
+    //int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));    //removed JM
     int16_t fn = *(data) - '0';
     const softmenu_t *sm;
     int16_t row, menuId = softmenuStack[0].softmenuId;
     int16_t firstItem = softmenuStack[0].firstItem;
-  #ifdef PC_BUILD
-    char tmp[200]; sprintf(tmp,"^^^^determineFunctionKeyItem(%d): itemShift=%d menuId=%d menuItem=%d", fn, itemShift, menuId, -softmenu[menuId].menuItem); jm_show_comment(tmp); //JM
-  #endif //PC_BUILD
-    if(!(menuId==0 && jm_NO_BASE_SCREEN) ) { //JM
+
     switch(-softmenu[menuId].menuItem) {
       case MNU_PROG:
       case MNU_VAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
+        break;
+
+      case MNU_MVAR:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_SOLVE_VAR);
         break;
 
       case MNU_MATRS:
@@ -86,32 +89,12 @@
         if(itemShift/6 <= row && firstItem + itemShift + (fn - 1) < sm->numItems) {
           item = (sm->softkeyItem)[firstItem + itemShift + (fn - 1)] % 10000;
 
-          int16_t ix_fn = 0;                                 /*JMEXEC XXX vv*/
-          if(func_lookup(fn,itemShift,&ix_fn)) item = ix_fn;
-                                                             /*JMEXEC XXX ^^*/
-
           if(item == ITM_PROD_SIGN) {
             item = (getSystemFlag(FLAG_MULTx) ? ITM_DOT : ITM_CROSS);
           }
         }
-      }
     }
 
-    else {              //if there is no SoftMenu showing  //JMvv
-      if(fn>=1 && fn<=6) {
-        if(itemShift == 0) {
-        //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
-          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
-        }
-        else {
-        //JM FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
-          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
-        }
-      }
-      else {
-        item = 0;
-      }
-    }  //JM^^
     return item;
   }
 
@@ -123,7 +106,6 @@
   #ifdef DMCP_BUILD
     void btnFnClicked(void *notUsed, void *data) {
   #endif
-    
       executeFunction(data, 0);
     }
     
@@ -182,7 +164,7 @@ bool_t lastshiftG = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
-        int16_t item = determineFunctionKeyItem((char *)data);
+        int16_t item = determineFunctionKeyItem_C43((char *)data);
 
     //    resetShiftState();                                 //JM still needs the shifts active prior to cancelling them
         if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
@@ -242,7 +224,7 @@ bool_t lastshiftG = false;
     if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
   
       if(data[0] == 0) { item = item_; }
-      else             { item = determineFunctionKeyItem((char *)data); }
+      else             { item = determineFunctionKeyItem_C43((char *)data); }
 
       resetShiftState();                               //shift cancelling delayed to this point after state machine
 
@@ -268,7 +250,7 @@ bool_t lastshiftG = false;
             refreshScreen();
             return;
           }
-          else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
+          else if(calcMode == CM_PEM && catalog && catalog != CATALOG_MVAR) { // TODO: is that correct
             runFunction(item);
             refreshScreen();
             return;
@@ -289,7 +271,7 @@ bool_t lastshiftG = false;
   //KYK HIER. TOFIX
   //CLASH WITH ARROWS !!
   //          }
-          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && (!catalog || catalog == CATALOG_MVAR)) {
             addItemToNimBuffer(item);
           }
           else if((calcMode == CM_NIM) && ((item==ITM_DRG || item == ITM_DMS2 || item == ITM_dotD) && !catalog)) {   //JM
@@ -469,7 +451,7 @@ bool_t allowShiftsToClearError = false;
     }
     else                                                                                                                        //JM^^
 
-    if(calcMode == CM_AIM || (catalog && calcMode != CM_NIM) || tam.alpha) {
+    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR && calcMode != CM_NIM) || tam.alpha) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
@@ -1006,7 +988,7 @@ bool_t lowercaseselected;
 
       default:
       {
-        if(catalog) {
+        if(catalog && catalog != CATALOG_MVAR) {
           if(ITM_A <= item && item <= ITM_Z && lowercaseselected) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
@@ -1377,6 +1359,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         }
         break;
 */
+
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
@@ -1412,7 +1395,11 @@ ram_full:
 
 
 void fnKeyExit(uint16_t unusedButMandatoryParameter) {
-#ifndef TESTSUITE_BUILD
+  #ifndef TESTSUITE_BUILD
+    if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_MVAR) {
+      currentSolverStatus &= ~SOLVER_STATUS_INTERACTIVE;
+    }
+
     int16_t tmp1 = softmenu[softmenuStack[0].softmenuId].menuItem;            //JM
     int16_t tmp2 = softmenu[softmenuStack[1].softmenuId].menuItem;            //JM
     int16_t tmp3 = softmenu[softmenuStack[2].softmenuId].menuItem;            //JM
@@ -1431,6 +1418,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
     if(catalog) {
       leaveAsmMode();
       popSoftmenu();
+      if(tam.mode) {
+        numberOfTamMenusToPop--;
+      }
       return;
     }
 
@@ -1479,6 +1469,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       case CM_MIM:
         if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_M_EDIT) {
           mimEnter(true);
+          if(matrixIndex == findNamedVariable("STATS")) calcSigma(0);
           mimFinalize();
           calcModeNormal();
           updateMatrixHeightCache();
@@ -1639,7 +1630,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_AIM:
-        if(catalog) {
+        if(catalog && catalog != CATALOG_MVAR) {
           if(stringByteLength(aimBuffer) > 0) {
             lg = stringLastGlyph(aimBuffer);
             aimBuffer[lg] = 0;

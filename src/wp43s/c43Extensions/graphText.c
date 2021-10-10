@@ -32,6 +32,7 @@
 #include "screen.h"
 #include "time.h"
 #include "timer.h"
+#include "c43Extensions/textfiles.h"
 #include "c43Extensions/xeqm.h"
 #include <string.h>
 
@@ -213,7 +214,7 @@ bool_t               cancelFilename = false;
 
 //DMCP_BUILD
 int16_t export_append_string_to_file(const char line1[TMP_STR_LENGTH], uint8_t mode, const char filedir[40]) { //DMCP_BUILD 
-char line[100];               /* Line buffer */
+char line[200];               /* Line buffer */
     FIL fil;                      /* File object */
     int fr;                   /* FatFs return code */
 
@@ -431,7 +432,7 @@ void create_filename(char *fn){ //DMCP_BUILD //fn must be in format ".STAT.TSV"
 
 //DMCP_BUILD
 int16_t export_xy_to_file(float x, float y){
-  char line[100];               /* Line buffer */
+  char line[200];               /* Line buffer */
   create_filename(".STAT.TSV");
   sprintf(line,"%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
   if(export_append_string_to_file(line, APPEND, filename_csv) != 0) {
@@ -443,8 +444,8 @@ int16_t export_xy_to_file(float x, float y){
 
 
 // /DMCP_BUILD
-int16_t export_append_line(char *inputstring){ //DMCP_BUILD 
-char line[100];               /* Line buffer */
+int16_t export_append_line_short(char *inputstring){ //DMCP_BUILD 
+char line[200];               /* Line buffer */
     FIL fil;                      /* File object */
     int fr;                   /* FatFs return code */
 
@@ -482,7 +483,12 @@ char line[100];               /* Line buffer */
     #if (VERBOSE_LEVEL >= 1) 
       sprintf(line,"wrote %d, %s\n",fr,inputstring);        print_linestr(line,false);
     #endif
-
+    if(fr == 0) {
+      sprintf(line,"Write error--> %d    \n",fr);            print_linestr(line,false);
+      f_close(&fil);
+      sys_disk_write_enable(0);
+      return (int)fr;
+    }
 
     /* close the file */
     fr = f_close(&fil);
@@ -494,9 +500,36 @@ char line[100];               /* Line buffer */
     }
 
     sys_disk_write_enable(0);
+
+
+    #if (VERBOSE_LEVEL >= 1) 
+      print_linestr("-closed return-",false);
+    #endif
+
  
     return 0;
   }
+
+
+int16_t export_append_line(char *inputstring){ //DMCP_BUILD 
+int ix=0;
+char tmp[200];
+int fr;
+#define linesize 128
+
+  while(stringByteLength(inputstring + ix) > linesize) {
+     xcopy(tmp, inputstring + ix, linesize);
+     tmp[linesize]=0;
+     fr = export_append_line_short(tmp);
+     if(fr) return (int)fr;
+     ix += linesize;
+  }
+  if(stringByteLength(inputstring + ix) > 0) {
+     fr = export_append_line_short(inputstring + ix);
+     if(fr) return (int)fr;
+  }
+  return 0;
+}
 
 
 //ENDIF DMCP_BUILD
@@ -508,7 +541,7 @@ int16_t export_string_to_filename(const char line1[TMP_STR_LENGTH], uint8_t mode
   FILE *outfile;
   char dirfile[40];
   uint16_t fr = 0;
-  char line[100];               /* Line buffer */
+  char line[200];               /* Line buffer */
 
   strcpy(dirfile,dirname);
   strcat(dirfile,"/");
@@ -661,7 +694,7 @@ int16_t export_append_line(char *inputstring){  //PC_BUILD
 
   #if !defined(__MINGW64__)
     uint16_t fr = 0;
-    char line[100];               /* Line buffer */
+    char line[200];               /* Line buffer */
     fr = fputs(inputstring, outfile);
     if (fr == 0) {
       sprintf(line,"Write error ID012 --> %d %s\n",fr,inputstring);            
@@ -700,7 +733,7 @@ void create_filename(char *fn){  //PC_BUILD //fn must be in format ".STAT.TSV"
 
 
 int16_t export_xy_to_file(float x, float y) { //PC_BUILD
-  char line[100];               /* Line buffer */
+  char line[200];               /* Line buffer */
   create_filename(".STAT.TSV");
   sprintf(line, "%.16e%s%.16e%s",x,CSV_TAB,y,CSV_NEWLINE);
   export_append_line(line);
@@ -734,12 +767,12 @@ void print_linestr(const char *line1, bool_t line_init) {
     strcat(l1,"-");
     ixx = stringByteLength(line1);
     while(ix<ixx && ix<98 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12-g_line_x) {
-       xcopy(l1 + 1, line1, ix+1);
+       xcopy(l1, line1, ix+1);
        l1[ix+1+1]=0;
        ix = stringNextGlyph(line1, ix);
     }
     while(stringByteLength(l1) < 200 && stringWidth(l1, &standardFont, true, true) < SCREEN_WIDTH-12-g_line_x) {
-       strcat(l1," ");
+       strcat(l1,".");
     }
 
     if(g_line_y < SCREEN_HEIGHT) { 

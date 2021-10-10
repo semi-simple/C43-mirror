@@ -30,6 +30,7 @@
 #include "c43Extensions/graphText.h"
 #include "items.h"
 #include "c43Extensions/keyboardTweak.h"
+#include "keyboard.h"
 #include "mathematics/mathematics.h"
 #include "memory.h"
 #include "c43Extensions/radioButtonCatalog.h"
@@ -233,13 +234,16 @@ void fnSetSetJM(uint16_t jmConfig) {                //DONE        //JM Set/Reset
 
   case JC_EXFRAC:                                      //JM
     constantFractions = !constantFractions;
-    //constantFractionsOn = constantFractions;         //Removed automatic switch-on
     if(constantFractions) {
-      clearSystemFlag(FLAG_FRACT);
-      constantFractionsOn = true;
+      if(getSystemFlag(FLAG_FRACT)) {
+        clearSystemFlag(FLAG_FRACT);
+        constantFractionsOn = true;
+      }
     } else {
-      setSystemFlag(FLAG_FRACT);
-      constantFractionsOn = false;
+      if(constantFractionsOn) {
+        setSystemFlag(FLAG_FRACT);
+        constantFractionsOn = false;
+      }
     }
     fnRefreshState();                                 //drJM
     break;
@@ -868,6 +872,12 @@ void fnJM(uint16_t JM_OPCODE) {
   strcpy(line1,"XEQC43 ERPN STO 99 INDEX 99 DROP 1 ENTER 1 STOIJ DROP DROP RCLEL I+ RCLEL I+ RCLEL ");
   fnXEQMexecute(line1);
     }
+
+
+  if(JM_OPCODE == 48) {                                         //f.g
+    btnClicked(NULL, "27");
+    }
+
 
   
 #endif //SAVE_SPACE_DM42_6

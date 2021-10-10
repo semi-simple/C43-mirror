@@ -26,6 +26,12 @@
   #include <gdk/gdk.h>
 #endif // PC_BUILD
 
+
+#ifndef TESTSUITE_BUILD
+  int16_t determineFunctionKeyItem(const char *data, int16_t itemShift);
+#endif
+
+
 void leavePem        (void);
 void processKeyAction(int16_t item);
 /**

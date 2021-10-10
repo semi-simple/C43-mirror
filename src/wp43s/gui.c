@@ -4302,6 +4302,7 @@ if(!tam.mode) {
       case MNU_LINTS:     catalog = CATALOG_LINTS;   break;
       case MNU_REALS:     catalog = CATALOG_REALS;   break;
       case MNU_CPXS:      catalog = CATALOG_CPXS;    break;
+      case MNU_MVAR:      catalog = CATALOG_MVAR;    break;
       default:            catalog = CATALOG_NONE;
     }
     #ifdef PC_BUILD
@@ -4322,7 +4323,8 @@ if(!tam.mode) {
       resetAlphaSelectionBuffer();
 
       #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-        calcModeAimGui();
+        if(catalog != CATALOG_MVAR)
+          calcModeAimGui();
       #endif // PC_BUILD && (SCREEN_800X480 == 0)
     }
   }

@@ -301,10 +301,11 @@ void kill_ASB_icon(void) {
       displayBugScreen("In function addItemToBuffer: item should not be NOPARAM=7654!");
     }
     else {
+      currentSolverStatus &= ~SOLVER_STATUS_READY_TO_EXECUTE;
       if(calcMode == CM_NORMAL && fnKeyInCatalog && isAlphabeticSoftmenu()) {
         fnAim(NOPARAM);
       }
-      if((fnKeyInCatalog || !catalog) && (calcMode == CM_AIM || tam.alpha)) {
+      if((fnKeyInCatalog || !catalog || catalog == CATALOG_MVAR) && (calcMode == CM_AIM || tam.alpha)) {
         item = convertItemToSubOrSup(item, nextChar);
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
@@ -331,7 +332,7 @@ void kill_ASB_icon(void) {
         }
       }
 
-      if(catalog && !fnKeyInCatalog) {
+      if(catalog && catalog != CATALOG_MVAR && !fnKeyInCatalog) {
 
         if(item == ITM_BACKSPACE) {
           calcModeNormal();
@@ -887,6 +888,8 @@ void kill_ASB_icon(void) {
     uint8_t savedNimNumberPart;
     bool_t done;
     char *strBase;
+
+    currentSolverStatus &= ~SOLVER_STATUS_READY_TO_EXECUTE;
 
     if(calcMode == CM_NORMAL) {
       switch(item) {

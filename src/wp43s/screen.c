@@ -102,7 +102,11 @@
   }
 
 
+    #define CLIPSTR 30000                                                //JMCSV
+  #else
+    #define CLIPSTR TMP_STR_LENGTH                                       //JMCSV
   #endif                                                //JMCSV
+
   #if defined (PC_BUILD) || defined (DMCP_BUILD)        //JMCSV
 
   static void angularUnitToString(angularMode_t angularMode, char *string) {
@@ -118,18 +122,6 @@
   }
 
 
-  #define CLIPSTR 30000
-
-  void addApostrophies(char * str) {
-    char tmp2[CLIPSTR];                            //JMCSV    
-    tmp2[0]=0;                                     //JMCSV add apostrophies
-    strcat(tmp2,"\"");                             //JMCSV
-    strcat(tmp2,str);                           //JMCSV
-    //strcpy(string,tmp2);                         //JMCSV
-    tmp2[CLIPSTR-1]=0;                             //JMCSV trying a better way, in case the terminating 0 is not copied
-    xcopy(str,tmp2,min(CLIPSTR-3,stringByteLength(tmp2)+1 ));  //JMCSV trying a better way
-    strcat(str,"\"");                           //JMCSV
-  }
 
   void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
     longInteger_t lgInt;
@@ -142,22 +134,18 @@
         convertLongIntegerRegisterToLongInteger(regist, lgInt);
         longIntegerToAllocatedString(lgInt, string, CLIPSTR);
         longIntegerFree(lgInt);
-        addApostrophies(string);   //JMCSV
         break;
 
       case dtTime:
         timeToDisplayString(regist, string, false);
-        addApostrophies(string);   //JMCSV
         break;
 
       case dtDate:
         dateToDisplayString(regist, string);
-        addApostrophies(string);   //JMCSV
         break;
 
       case dtString:
         xcopy(string, REGISTER_STRING_DATA(regist), stringByteLength(REGISTER_STRING_DATA(regist)) + 1);
-        addApostrophies(string);   //JMCSV
         break;
 
       case dtReal34Matrix: {
@@ -231,7 +219,7 @@
         base = getRegisterShortIntegerBase(regist);
 
         n = ERROR_MESSAGE_LENGTH - 100;
-        sprintf(errorMessage + n--, "#%d%s (word size = %u)", base, CSV_TAB, shortIntegerWordSize);  //JMCSV added comma
+        sprintf(errorMessage + n--, "#%d (word size = %u)", base, shortIntegerWordSize);
 
         if(shortInt == 0) {
           errorMessage[n--] = '0';
@@ -265,25 +253,26 @@
       case dtComplex34: {
         real34_t reduced;
         int len;
+        char tmpStr[100];
 
         // Real part
         real34Reduce(REGISTER_REAL34_DATA(regist), &reduced);
-        real34ToString(&reduced, string);
-        if(strchr(string, '.') == NULL && strchr(string, 'E') == NULL) {
-          strcat(string, ".");
+        real34ToString(&reduced, tmpStr);
+        if(strchr(tmpStr, '.') == NULL && strchr(tmpStr, 'E') == NULL) {
+          strcat(tmpStr, ".");
         }
-        len = strlen(string);
+        len = strlen(tmpStr);
 
         // Imaginary part
         real34Reduce(REGISTER_IMAG34_DATA(regist), &reduced);
         if(real34IsNegative(&reduced)) {
-          sprintf(string, " - %sx", COMPLEX_UNIT);
+          sprintf(string, "%s - %sx", tmpStr, COMPLEX_UNIT);
           len += 5;
           real34SetPositiveSign(&reduced);
           real34ToString(&reduced, string + len);
         }
         else {
-          sprintf(string, " + %sx", COMPLEX_UNIT);
+          sprintf(string, "%s + %sx", tmpStr, COMPLEX_UNIT);
           len += 5;
           real34ToString(&reduced, string + len);
         }
@@ -2416,7 +2405,10 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
-              sprintf(prefix, "Data point %03" PRId32, w);                
+              if(w == 1) 
+                sprintf(prefix, "%03" PRId32 " data point", w);
+              else
+                sprintf(prefix, "%03" PRId32 " data points", w);
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
             }
@@ -2433,6 +2425,14 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
                //lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
              }
            }
+
+          else if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
 
           else if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
 
@@ -2515,7 +2515,16 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           //JM else if(getRegisterDataType(regist) == dtComplex34) {                                                                                                      //JM EE Removed and replaced with the below
           //JM complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);   //JM EE Removed and replaced with the below
         else if(getRegisterDataType(regist) == dtComplex34) { 
-          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
+
+          if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
 
            else  if(temporaryInformation == TI_ABC) {                             //JM EE \/
               if(regist == REGISTER_X) {
@@ -2727,9 +2736,16 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
               }
 
-      else if(getRegisterDataType(regist) == dtLongInteger) {
+        else if(getRegisterDataType(regist) == dtLongInteger) {
+          if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
 
-             if(temporaryInformation == TI_ms) {                             //JMms vv
+            else if(temporaryInformation == TI_ms) {                             //JMms vv
               if(regist == REGISTER_X) {
                 strcpy(prefix, "t (ms)" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
@@ -3046,6 +3062,18 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         }
         if(calcMode == CM_MIM) {
           showMatrixEditor();
+        }
+        if(currentSolverStatus & SOLVER_STATUS_INTERACTIVE) {
+          bool_t mvarMenu = false;
+          for(int i = 0; i < SOFTMENU_STACK_SIZE; i++) {
+            if(softmenu[softmenuStack[i].softmenuId].menuItem == -MNU_MVAR) {
+              mvarMenu = true;
+              break;
+            }
+          }
+          if(!mvarMenu) {
+            showSoftmenu(-MNU_MVAR);
+          }
         }
 
 #ifdef INLINE_TEST

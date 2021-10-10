@@ -562,6 +562,19 @@ void fnDRG(uint16_t unusedButMandatoryParameter) {
     default:      break;
     }
     fnCvtFromCurrentAngularMode(dest);
+  } else 
+    if(getRegisterDataType(REGISTER_X) == dtComplex34) {
+      uint16_t dest = currentAngularMode;
+      switch(dest) {
+      case amNone:      dest = currentAngularMode;  break; //converts from to the same, i.e. get to current angle mode
+      case amRadian:    dest = amGrad;              break;
+      case amMultPi:    dest = amDMS;               break;
+      case amGrad:      dest = amMultPi;            break;
+      case amDegree:    dest = amRadian;            break;
+      case amDMS:       dest = amDegree;            break;
+      default:      break;    
+    }
+    currentAngularMode = dest;
   }
 }
 

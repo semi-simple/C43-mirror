@@ -65,6 +65,11 @@
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
         break;
 
+      case MNU_MVAR:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_SOLVE_VAR);
+        break;
+
       case MNU_MATRS:
       case MNU_STRINGS:
       case MNU_DATES:
@@ -92,7 +97,6 @@
 
     return item;
   }
-
 
 
 
@@ -246,7 +250,7 @@ bool_t lastshiftG = false;
             refreshScreen();
             return;
           }
-          else if(calcMode == CM_PEM && catalog) { // TODO: is that correct
+          else if(calcMode == CM_PEM && catalog && catalog != CATALOG_MVAR) { // TODO: is that correct
             runFunction(item);
             refreshScreen();
             return;
@@ -267,7 +271,7 @@ bool_t lastshiftG = false;
   //KYK HIER. TOFIX
   //CLASH WITH ARROWS !!
   //          }
-          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && !catalog) {
+          else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && (!catalog || catalog == CATALOG_MVAR)) {
             addItemToNimBuffer(item);
           }
           else if((calcMode == CM_NIM) && ((item==ITM_DRG || item == ITM_DMS2 || item == ITM_dotD) && !catalog)) {   //JM
@@ -447,7 +451,7 @@ bool_t allowShiftsToClearError = false;
     }
     else                                                                                                                        //JM^^
 
-    if(calcMode == CM_AIM || (catalog && calcMode != CM_NIM) || tam.alpha) {
+    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR && calcMode != CM_NIM) || tam.alpha) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
@@ -984,7 +988,7 @@ bool_t lowercaseselected;
 
       default:
       {
-        if(catalog) {
+        if(catalog && catalog != CATALOG_MVAR) {
           if(ITM_A <= item && item <= ITM_Z && lowercaseselected) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
@@ -1355,6 +1359,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         }
         break;
 */
+
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
@@ -1390,7 +1395,11 @@ ram_full:
 
 
 void fnKeyExit(uint16_t unusedButMandatoryParameter) {
-#ifndef TESTSUITE_BUILD
+  #ifndef TESTSUITE_BUILD
+    if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_MVAR) {
+      currentSolverStatus &= ~SOLVER_STATUS_INTERACTIVE;
+    }
+
     int16_t tmp1 = softmenu[softmenuStack[0].softmenuId].menuItem;            //JM
     int16_t tmp2 = softmenu[softmenuStack[1].softmenuId].menuItem;            //JM
     int16_t tmp3 = softmenu[softmenuStack[2].softmenuId].menuItem;            //JM
@@ -1621,7 +1630,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_AIM:
-        if(catalog) {
+        if(catalog && catalog != CATALOG_MVAR) {
           if(stringByteLength(aimBuffer) > 0) {
             lg = stringLastGlyph(aimBuffer);
             aimBuffer[lg] = 0;

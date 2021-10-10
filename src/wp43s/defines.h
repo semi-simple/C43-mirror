@@ -547,7 +547,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               15
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               16
 #define MY_ALPHA_MENU_CNST                         1  //JM This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT                           23
 
@@ -607,7 +607,7 @@ typedef enum {
 #define NUMBER_OF_CONSTANTS_39                   189+2   //JM 2 additionalconstants
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
-#define NUMBER_OF_CONSTANTS_34                    42
+#define NUMBER_OF_CONSTANTS_34                    43
 
 #define MAX_FREE_REGION                           50 // Maximum number of free memory regions
 
@@ -711,7 +711,8 @@ typedef enum {
 #define TM_M_DIM                               10007
 #define TM_SHUFFLE                             10008
 #define TM_LABEL                               10009
-#define TM_CMP                                 10010 // TM_CMP must be the last in this list
+#define TM_SOLVE                               10010
+#define TM_CMP                                 10011 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -773,6 +774,8 @@ typedef enum {
 #define TI_INACCURATE                             44
 #define TI_UNDO_DISABLED                          45
 #define TI_VIEW                                   46
+#define TI_SOLVER_VARIABLE                        47
+#define TI_SOLVER_FAILED                          48
 
 // Register browser mode
 #define RBR_GLOBAL                                 0 // Global registers are browsed
@@ -807,7 +810,8 @@ typedef enum {
 #define CATALOG_LINTS                             15
 #define CATALOG_REALS                             16
 #define CATALOG_CPXS                              17
-#define NUMBER_OF_CATALOGS                        18
+#define CATALOG_MVAR                              18
+#define NUMBER_OF_CATALOGS                        19
 
 // String comparison type
 #define CMP_CLEANED_STRING_ONLY                    1
@@ -975,6 +979,15 @@ typedef enum {
 #define QF_DISCRETE_CDF_GEOMETRIC                  2
 #define QF_DISCRETE_CDF_NEGBINOM                   3
 #define QF_DISCRETE_CDF_HYPERGEOMETRIC             4
+
+#define SOLVER_STATUS_READY_TO_EXECUTE             0x0001
+#define SOLVER_STATUS_INTERACTIVE                  0x0002
+
+#define SOLVER_RESULT_NORMAL                       0
+#define SOLVER_RESULT_SIGN_REVERSAL                1
+#define SOLVER_RESULT_EXTREMUM                     2
+#define SOLVER_RESULT_BAD_GUESS                    3
+#define SOLVER_RESULT_CONSTANT                     4
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

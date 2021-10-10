@@ -122,6 +122,7 @@
   }
 
 
+
   void copyRegisterToClipboardString(calcRegister_t regist, char *clipboardString) {
     longInteger_t lgInt;
     int16_t base, sign, n;
@@ -1757,6 +1758,27 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         showString("Not enough memory for undo", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
       }
 
+      else if(temporaryInformation == TI_SOLVER_FAILED && regist == REGISTER_X) {
+        switch(real34ToInt32(REGISTER_REAL34_DATA(REGISTER_T))) {
+          case SOLVER_RESULT_SIGN_REVERSAL:
+            sprintf(tmpString, "Sign reversal");
+            break;
+          case SOLVER_RESULT_EXTREMUM:
+            sprintf(tmpString, "Extremum");
+            break;
+          case SOLVER_RESULT_BAD_GUESS:
+            sprintf(tmpString, "Bad guess");
+            break;
+          case SOLVER_RESULT_CONSTANT:
+            sprintf(tmpString, "Constant?");
+            break;
+          default:
+            sprintf(tmpString, "Something went wrong with the solver");
+            break;
+        }
+        showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
+      }
+
 //Original SHOW
 
       else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_T) { // L1
@@ -2425,6 +2447,14 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
              }
            }
 
+          else if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
           else if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
 
 
@@ -2506,7 +2536,16 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
           //JM else if(getRegisterDataType(regist) == dtComplex34) {                                                                                                      //JM EE Removed and replaced with the below
           //JM complex34ToDisplayString(REGISTER_COMPLEX34_DATA(regist), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, true, STD_SPACE_PUNCTUATION);   //JM EE Removed and replaced with the below
         else if(getRegisterDataType(regist) == dtComplex34) { 
-          if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
+
+          if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+            }
+          }
+
+          else if(temporaryInformation == TI_VIEW && origRegist == REGISTER_T) viewRegName(prefix, &prefixWidth);
 
            else  if(temporaryInformation == TI_ABC) {                             //JM EE \/
               if(regist == REGISTER_X) {
@@ -2720,7 +2759,15 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
       else if(getRegisterDataType(regist) == dtLongInteger) {
 
-             if(temporaryInformation == TI_ms) {                             //JMms vv
+            if(temporaryInformation == TI_SOLVER_VARIABLE) {
+              if(regist == REGISTER_X) {
+                memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+                strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+              }
+            }
+
+            else if(temporaryInformation == TI_ms) {                             //JMms vv
               if(regist == REGISTER_X) {
                 strcpy(prefix, "t (ms)" STD_SPACE_FIGURE "=");
                 prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
@@ -3037,6 +3084,18 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         }
         if(calcMode == CM_MIM) {
           showMatrixEditor();
+        }
+        if(currentSolverStatus & SOLVER_STATUS_INTERACTIVE) {
+          bool_t mvarMenu = false;
+          for(int i = 0; i < SOFTMENU_STACK_SIZE; i++) {
+            if(softmenu[softmenuStack[i].softmenuId].menuItem == -MNU_MVAR) {
+              mvarMenu = true;
+              break;
+            }
+          }
+          if(!mvarMenu) {
+            showSoftmenu(-MNU_MVAR);
+          }
         }
 
 #ifdef INLINE_TEST

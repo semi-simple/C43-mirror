@@ -20,9 +20,29 @@
 #ifndef SOLVE_H
 #define SOLVE_H
 
+#include "realType.h"
+#include "typeDefinitions.h"
 #include <stdint.h>
 
-void fnPgmSlv(uint16_t label);
-void fnSolve (uint16_t label);
+void fnPgmSlv  (uint16_t label);
+void fnSolve   (uint16_t labelOrVariable);
+void fnSolveVar(uint16_t unusedButMandatoryParameter);
+
+/**
+ * Solves an equation f(x) = 0 stored as a program.
+ *
+ * \param[in]  variable   Register number where the unknown is stored
+ * \param[in]  y          1st guess of the unknown
+ * \param[in]  x          2nd guess of the unknown
+ * \param[out] resZ       The last value f(x)
+ * \param[out] resY       The 2nd last root tested
+ * \param[out] resX       The resulting root x
+ * \return                0 if a root found,
+ *                        1 if sign reversal,
+ *                        2 if an extremum found,
+ *                        3 if bad guess,
+ *                        4 if constant
+ */
+int solver     (calcRegister_t variable, const real34_t *y, const real34_t *x, real34_t *resZ, real34_t *resY, real34_t *resX);
 
 #endif // SOLVE_H

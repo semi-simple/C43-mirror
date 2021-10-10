@@ -34,6 +34,7 @@
 #include "screen.h"
 #include "softmenus.h"
 #include "stack.h"
+#include "stats.h"
 #include "timer.h"
 #include "ui/tam.h"
 #if (REAL34_WIDTH_TEST == 1)
@@ -925,6 +926,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       case CM_MIM:
         if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_M_EDIT) {
           mimEnter(true);
+          if(matrixIndex == findNamedVariable("STATS")) calcSigma(0);
           mimFinalize();
           calcModeNormal();
           updateMatrixHeightCache();

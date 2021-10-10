@@ -400,9 +400,9 @@ void initStatisticalSums(void) {
     clearStatisticalSums();
     }
   else {
-    lastErrorCode = ERROR_RAM_FULL;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    }
   }
-}
 
 
 
@@ -607,8 +607,6 @@ void fnClSigma(uint16_t unusedButMandatoryParameter) {
 
 
 
-
-
 void fnSigma(uint16_t plusMinus) {
 #ifndef TESTSUITE_BUILD
   real_t x, y;
@@ -626,21 +624,21 @@ void fnSigma(uint16_t plusMinus) {
         if(lastErrorCode != ERROR_NONE) return;
       }
 
-      if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
-        convertLongIntegerRegisterToReal(REGISTER_X, &x, realContext);
-        convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
-      }
-      else {
-        real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
-      }
+    if(getRegisterDataType(REGISTER_X) == dtLongInteger) {
+      convertLongIntegerRegisterToReal(REGISTER_X, &x, realContext);
+      convertLongIntegerRegisterToReal34Register(REGISTER_X, REGISTER_X);
+    }
+    else {
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_X), &x);
+    }
 
-      if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
-        convertLongIntegerRegisterToReal(REGISTER_Y, &y, realContext);
-        convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
-      }
-      else {
-        real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
-      }
+    if(getRegisterDataType(REGISTER_Y) == dtLongInteger) {
+      convertLongIntegerRegisterToReal(REGISTER_Y, &y, realContext);
+      convertLongIntegerRegisterToReal34Register(REGISTER_Y, REGISTER_Y);
+    }
+    else {
+      real34ToReal(REGISTER_REAL34_DATA(REGISTER_Y), &y);
+    }
 
       addSigma(&x, &y);
       AddtoStatsMatrix(&x, &y);
@@ -652,11 +650,11 @@ void fnSigma(uint16_t plusMinus) {
       real34Matrix_t matrix;
       linkToRealMatrixRegister(REGISTER_X, &matrix);
 
-      if(matrix.header.matrixColumns == 2) {
-        if(statisticalSumsPointer == NULL) {
-          initStatisticalSums();
-          if(lastErrorCode != ERROR_NONE) return;
-        }
+    if(matrix.header.matrixColumns == 2) {
+      if(statisticalSumsPointer == NULL) {
+        initStatisticalSums();
+        if(lastErrorCode != ERROR_NONE) return;
+      }
 
         if(!saveLastX()) return;
         for(uint16_t i = 0; i < matrix.header.matrixRows; ++i) {

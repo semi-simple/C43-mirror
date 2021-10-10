@@ -543,7 +543,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
     }
     else {
       currentSubroutineLevelData = oldSubroutineLevelData;
-      lastErrorCode = ERROR_RAM_FULL;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       return;
     }
   }
@@ -603,7 +603,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
             currentLocalFlags = currentSubroutineLevelData + 3;
             currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
             currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
-            lastErrorCode = ERROR_RAM_FULL;
+            displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             return;
           }
         }
@@ -612,7 +612,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
       }
       else {
         currentSubroutineLevelData = oldSubroutineLevelData;
-        lastErrorCode = ERROR_RAM_FULL;
+        displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
         return;
       }
     }
@@ -629,7 +629,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
       }
       else {
         currentSubroutineLevelData = oldSubroutineLevelData;
-        lastErrorCode = ERROR_RAM_FULL;
+        displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
         return;
       }
     }
@@ -667,7 +667,7 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
       regist = 0;
     }
     else { // unlikely but possible
-      lastErrorCode = ERROR_RAM_FULL;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       return;
     }
   }
@@ -687,7 +687,7 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
     }
     else {
       allNamedVariables = origNamedVariables;
-      lastErrorCode = ERROR_RAM_FULL;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       return;
     }
   }
@@ -740,7 +740,7 @@ calcRegister_t findOrAllocateNamedVariable(const char *variableName) {
     else {
       // Failed attempt to allocate a new named variable: there is not enough memory.
       // It is impossible to reach the limitation of number of named variables.
-      lastErrorCode = ERROR_RAM_FULL;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       return INVALID_VARIABLE;
     }
   }
@@ -1624,7 +1624,7 @@ void reallocateRegister(calcRegister_t regist, uint32_t dataType, uint16_t dataS
 #ifdef PC_BUILD
       printf("In function reallocateRegister: required %" PRIu16 " blocks for register #%" PRId16 " but no data blocks with enough size are available!\n", dataSizeWithoutDataLenBlocks, regist); fflush(stdout);
 #endif // PC_BUILD
-      lastErrorCode = ERROR_RAM_FULL;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       return;
     }
     freeRegisterData(regist);
@@ -1806,6 +1806,9 @@ void fnRegClr(uint16_t unusedButMandatoryParameter) {
       clearRegister(i);
     }
   }
+  else {
+    displayCalcErrorMessage(lastErrorCode, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+  }
 }
 
 
@@ -1856,7 +1859,7 @@ static void sortReg(uint16_t range_start, uint16_t range_end) {
       freeWp43s(sortedReg, TO_BLOCKS(sizeof(registerHeader_t)) * (range_end - range_start + 1));
     }
     else { // unlikely
-      lastErrorCode = ERROR_RAM_FULL;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     }
   }
 }
@@ -1872,7 +1875,7 @@ void fnRegSort(uint16_t unusedButMandatoryParameter) {
       case dtReal34:
         for(int i = s + 1; i < (s + n); ++i) {
           if((getRegisterDataType(i) != dtLongInteger) && (getRegisterDataType(i) != dtShortInteger) && (getRegisterDataType(i) != dtReal34)) {
-            lastErrorCode = ERROR_INVALID_DATA_TYPE_FOR_OP;
+            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             break;
           }
         }
@@ -1882,7 +1885,7 @@ void fnRegSort(uint16_t unusedButMandatoryParameter) {
       case dtString:
         for(int i = s + 1; i < (s + n); ++i) {
           if(getRegisterDataType(i) != getRegisterDataType(s)) {
-            lastErrorCode = ERROR_INVALID_DATA_TYPE_FOR_OP;
+            displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             break;
           }
         }
@@ -1891,6 +1894,9 @@ void fnRegSort(uint16_t unusedButMandatoryParameter) {
     if(lastErrorCode == ERROR_NONE) {
       sortReg(s, s + n - 1);
     }
+  }
+  else {
+    displayCalcErrorMessage(lastErrorCode, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
   }
 }
 
@@ -1918,6 +1924,9 @@ void fnRegCopy(uint16_t unusedButMandatoryParameter) {
       }
     }
   }
+  else {
+    displayCalcErrorMessage(lastErrorCode, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+  }
 }
 
 
@@ -1926,7 +1935,7 @@ void fnRegSwap(uint16_t unusedButMandatoryParameter) {
 
   if((lastErrorCode = getRegParam(NULL, &s, &n, &d)) == ERROR_NONE) {
     if((d < s + n) && (s < d + n)) { // overlap
-      lastErrorCode = ERROR_OUT_OF_RANGE;
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     }
     else {
       for(int i = 0; i < n; ++i) {
@@ -1935,5 +1944,8 @@ void fnRegSwap(uint16_t unusedButMandatoryParameter) {
         globalRegister[d + i] = savedRegisterHeader;
       }
     }
+  }
+  else {
+    displayCalcErrorMessage(lastErrorCode, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
   }
 }

@@ -317,6 +317,8 @@ typedef enum {
 #define RESERVED_VARIABLE_PV                    2026
 #define LAST_RESERVED_VARIABLE                  2026
 #define INVALID_VARIABLE                        2027
+#define FIRST_LABEL                             2028
+#define LAST_LABEL                              6999
 
 #define NUMBER_OF_RESERVED_VARIABLES        (LAST_RESERVED_VARIABLE - FIRST_RESERVED_VARIABLE + 1)
 
@@ -677,7 +679,7 @@ typedef enum {
 #define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_YMAX  )) // could be a real34
 
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
-#define NUMBER_OF_GLYPH_ROWS                     100 // Used in the font browser application
+#define NUMBER_OF_GLYPH_ROWS                     101 // Used in the font browser application
 
 #define MAX_DENMAX                              9999 // Biggest denominator in fraction display mode
 

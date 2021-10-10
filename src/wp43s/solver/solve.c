@@ -29,6 +29,7 @@
 #include "longIntegerType.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/wp34s.h"
+#include "programming/manage.h"
 #include "programming/nextStep.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -37,7 +38,39 @@
 #include "wp43s.h"
 
 void fnPgmSlv(uint16_t label) {
-  currentSolverProgram = label - FIRST_LABEL;
+  if(label >= FIRST_LABEL && label <= LAST_LABEL) {
+    currentSolverProgram = label - FIRST_LABEL;
+  }
+  else if(label >= REGISTER_X && label <= REGISTER_T) {
+    // Interactive mode
+    char buf[4];
+    switch(label) {
+      case REGISTER_X:        buf[0] = 'X'; break;
+      case REGISTER_Y:        buf[0] = 'Y'; break;
+      case REGISTER_Z:        buf[0] = 'Z'; break;
+      case REGISTER_T:        buf[0] = 'T'; break;
+      default: /* unlikely */ buf[0] = 0;
+    }
+    buf[1] = 0;
+    label = findNamedLabel(buf);
+    if(label == INVALID_VARIABLE) {
+      displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "string '%s' is not a named label", buf);
+        moreInfoOnError("In function fnPgmSlv:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      currentSolverProgram = label - FIRST_LABEL;
+    }
+  }
+  else {
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "unexpected parameter %u", label);
+      moreInfoOnError("In function fnPgmSlv:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
 }
 
 static bool_t _realSolverFirstGuesses(calcRegister_t regist, real34_t *val) {
@@ -53,17 +86,17 @@ static bool_t _realSolverFirstGuesses(calcRegister_t regist, real34_t *val) {
 }
 
 void fnSolve(uint16_t labelOrVariable) {
-  if(labelOrVariable >= FIRST_LABEL && labelOrVariable <= LAST_LABEL) {
+  if((labelOrVariable >= FIRST_LABEL && labelOrVariable <= LAST_LABEL) || (labelOrVariable >= REGISTER_X && labelOrVariable <= REGISTER_T)) {
     // Interactive mode
-    currentSolverProgram = labelOrVariable - FIRST_LABEL;
-    currentSolverStatus = SOLVER_STATUS_INTERACTIVE;
+    fnPgmSlv(labelOrVariable);
+    if(lastErrorCode == ERROR_NONE)
+      currentSolverStatus = SOLVER_STATUS_INTERACTIVE;
   }
   else if(labelOrVariable >= FIRST_NAMED_VARIABLE && labelOrVariable <= LAST_NAMED_VARIABLE) {
     // Execute
     real34_t z, y, x;
     int resultCode = 0;
     if(_realSolverFirstGuesses(REGISTER_Y, &y) && _realSolverFirstGuesses(REGISTER_X, &x)) {
-      setSystemFlag(FLAG_SOLVING);
       currentSolverVariable = labelOrVariable;
       resultCode = solver(labelOrVariable, &y, &x, &z, &y, &x);
       fnClearStack(NOPARAM); // reset stack to 0.
@@ -71,9 +104,29 @@ void fnSolve(uint16_t labelOrVariable) {
       real34Copy(&y, REGISTER_REAL34_DATA(REGISTER_Y));
       real34Copy(&x, REGISTER_REAL34_DATA(REGISTER_X));
       int32ToReal34(resultCode, REGISTER_REAL34_DATA(REGISTER_T));
-      lastErrorCode = ERROR_NONE;
-      clearSystemFlag(FLAG_SOLVING);
-      temporaryInformation = (resultCode == SOLVER_RESULT_NORMAL) ? TI_SOLVER_VARIABLE : TI_SOLVER_FAILED;
+      switch(resultCode) {
+        case SOLVER_RESULT_NORMAL:
+          temporaryInformation = TI_SOLVER_VARIABLE;
+          lastErrorCode = ERROR_NONE;
+          break;
+        case SOLVER_RESULT_SIGN_REVERSAL:
+          temporaryInformation = TI_SOLVER_FAILED;
+          displayCalcErrorMessage(ERROR_LARGE_DELTA_AND_OPPOSITE_SIGN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          break;
+        case SOLVER_RESULT_EXTREMUM:
+          temporaryInformation = TI_SOLVER_FAILED;
+          displayCalcErrorMessage(ERROR_SOLVER_REACHED_LOCAL_EXTREMUM, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          break;
+        case SOLVER_RESULT_BAD_GUESS:
+          temporaryInformation = TI_SOLVER_FAILED;
+          displayCalcErrorMessage(ERROR_INITIAL_GUESS_OUT_OF_DOMAIN, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          break;
+        case SOLVER_RESULT_CONSTANT:
+          temporaryInformation = TI_SOLVER_FAILED;
+          displayCalcErrorMessage(ERROR_FUNCTION_VALUES_LOOK_CONSTANT, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          break;
+      }
+      saveForUndo();
     }
     else {
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -84,7 +137,11 @@ void fnSolve(uint16_t labelOrVariable) {
     }
   }
   else {
-    /* mockup */
+    displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      sprintf(errorMessage, "unexpected parameter %u", labelOrVariable);
+      moreInfoOnError("In function fnPgmSlv:", errorMessage, NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 
@@ -92,9 +149,6 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
   const char *var = (char *)getNthString(dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent, dynamicMenuItem);
   const uint16_t regist = findOrAllocateNamedVariable(var);
-  printf("fnSolveVar:\n       softmenuId = %d\n  dynamicMenuItem = %d\n", softmenuStack[0].softmenuId, dynamicMenuItem);
-  printf("%d %s\n", regist, var);
-  fflush(stdout);
   if(currentSolverStatus & SOLVER_STATUS_READY_TO_EXECUTE) {
     reallyRunFunction(ITM_SOLVE, regist);
   }
@@ -108,6 +162,73 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter) {
 }
 
 #ifndef TESTSUITE_BUILD
+static bool_t _executeStep(uint8_t **step) {
+  //
+  //  NOT A COMPLETE ENGINE: TESTING PURPOSE ONLY!!
+  //  The following decoder is minimally implemented ad hoc engine for testing of SOLVE feature.
+  //  Replace with the complete programming system when ready.
+  //
+  uint16_t op = **step;
+  if(op & 0x80) op = ((op << 8) | *(*step + 1)) & 0x7fff;
+  switch(op) {
+    case ITM_MVAR:
+    case ITM_RTN:
+      *step = findNextStep(*step);
+      break;
+    case ITM_END:
+    case 0x7fff: // .END.
+      return false;
+    case CST_18:
+    case ITM_ADD:
+    case ITM_DIV:
+      runFunction(op);
+      *step = findNextStep(*step);
+      break;
+    case ITM_LITERAL:
+      if(*(*step + 1) == STRING_LONG_INTEGER) {
+        longInteger_t val;
+        setSystemFlag(FLAG_ASLIFT);
+        longIntegerInit(val);
+        xcopy(tmpString, *step + 3, *(*step + 2));
+        tmpString[*(*step + 2)] = 0;
+        stringToLongInteger(tmpString, 10, val);
+        liftStack();
+        convertLongIntegerToLongIntegerRegister(val, REGISTER_X);
+        longIntegerFree(val);
+      }
+      #ifdef PC_BUILD
+      else {
+        printf("***Unimplemented type %u!\n", *(*step + 1));
+        fflush(stdout);
+      }
+      #endif /* PC_BUILD */
+      *step = findNextStep(*step);
+      break;
+    case ITM_RCL:
+    case ITM_RCLMULT:
+    case ITM_RCLADD:
+    case ITM_RCLSUB:
+      if(*(*step + 1) == STRING_LABEL_VARIABLE) {
+        xcopy(tmpString, *step + 3, *(*step + 2));
+        tmpString[*(*step + 2)] = 0;
+        reallyRunFunction(op, findNamedVariable(tmpString));
+      }
+      #ifdef PC_BUILD
+      else {
+        printf("***Not a named variable %u!\n", *(*step + 1));
+        fflush(stdout);
+      }
+      #endif /* PC_BUILD */
+      *step = findNextStep(*step);
+      break;
+    #ifdef PC_BUILD
+    default:
+      printf("***Unimplemented opcode %u!\n", op);
+      fflush(stdout);
+    #endif /* PC_BUILD */
+  }
+  return lastErrorCode == ERROR_NONE;
+}
 static void _solverIteration(real34_t *res) {
   //
   //  NOT A COMPLETE ENGINE: TESTING PURPOSE ONLY!!
@@ -115,62 +236,8 @@ static void _solverIteration(real34_t *res) {
   //  Replace with the complete programming system when ready.
   //
   uint8_t *step = labelList[currentSolverProgram].instructionPointer;
-  uint16_t op;
-  printf("Solver to be coded\n");
-  fflush(stdout);
   lastErrorCode = ERROR_NONE;
-  do {
-    op = *step;
-    if(op & 0x80) op = ((op << 8) | *(step + 1)) & 0x7fff;
-    printf("OPCODE %u\n", op);
-    fflush(stdout);
-    switch(op) {
-      case ITM_MVAR:
-      case ITM_RTN:
-      case ITM_END:
-        break;
-      case CST_18:
-      case ITM_ADD:
-      case ITM_DIV:
-        runFunction(op);
-        break;
-      case ITM_LITERAL:
-        if(*(step + 1) == STRING_LONG_INTEGER) {
-          longInteger_t val;
-          setSystemFlag(FLAG_ASLIFT);
-          longIntegerInit(val);
-          xcopy(tmpString, step + 3, *(step + 2));
-          tmpString[*(step + 2)] = 0;
-          stringToLongInteger(tmpString, 10, val);
-          liftStack();
-          convertLongIntegerToLongIntegerRegister(val, REGISTER_X);
-          longIntegerFree(val);
-        }
-        else {
-          printf("***Unimplemented type %u!\n", *(step + 1));
-          fflush(stdout);
-        }
-        break;
-      case ITM_RCL:
-      case ITM_RCLMULT:
-      case ITM_RCLADD:
-      case ITM_RCLSUB:
-        if(*(step + 1) == STRING_LABEL_VARIABLE) {
-          xcopy(tmpString, step + 3, *(step + 2));
-          tmpString[*(step + 2)] = 0;
-          reallyRunFunction(op, findNamedVariable(tmpString));
-        }
-        else {
-          printf("***Not a named variable %u!\n", *(step + 1));
-          fflush(stdout);
-        }
-        break;
-      default:
-        printf("***Unimplemented opcode %u!\n", op);
-        fflush(stdout);
-    }
-    step = findNextStep(step);
-  } while(op != ITM_END && op != 0x7fff && lastErrorCode == ERROR_NONE);
+  while(_executeStep(&step)) {}
   if(lastErrorCode == ERROR_OVERFLOW_PLUS_INF) {
     realToReal34(const_plusInfinity, res);
     lastErrorCode = ERROR_NONE;
@@ -199,23 +266,66 @@ static void _executeSolver(calcRegister_t variable, const real34_t *val, real34_
   reallyRunFunction(ITM_STO, variable);
   fnFillStack(NOPARAM);
   _solverIteration(res);
-  printReal34ToConsole(val, "b = ", ", ");
-  printReal34ToConsole(res, "fb = ", "\n");
+}
+
+static void _linearInterpolation(const real_t *a, const real_t *b, const real_t *fa, const real_t *fb, real_t *res, real_t *slope, realContext_t *realContext) {
+  real_t amb, famfb;
+  realSubtract(a, b, &amb, realContext);
+  realSubtract(fa, fb, &famfb, realContext);
+  if(slope) realDivide(&famfb, &amb, slope, realContext);
+  if(res) {
+    realDivide(&amb, &famfb, &amb, realContext);
+    realMultiply(&amb, fb, &amb, realContext);
+    realSubtract(b, &amb, res, realContext);
+  }
+}
+
+static void _inverseQuadraticInterpolation(const real_t *a, const real_t *b, const real_t *c, const real_t *fa, const real_t *fb, const real_t *fc, real_t *res, realContext_t *realContext) {
+  real_t val, num, den, tmp;
+
+  realMultiply(fb, fc, &num, realContext);
+  realMultiply(&num, a, &num, realContext);
+  realSubtract(fa, fb, &den, realContext);
+  realSubtract(fa, fc, &tmp, realContext);
+  realMultiply(&den, &tmp, &den, realContext);
+  realDivide(&num, &den, &val, realContext);
+
+  realMultiply(fa, fc, &num, realContext);
+  realMultiply(&num, b, &num, realContext);
+  realSubtract(fb, fa, &den, realContext);
+  realSubtract(fb, fc, &tmp, realContext);
+  realMultiply(&den, &tmp, &den, realContext);
+  realDivide(const_1, &den, &den, realContext);
+  realFMA(&num, &den, &val, &val, realContext);
+
+  realMultiply(fa, fb, &num, realContext);
+  realMultiply(&num, c, &num, realContext);
+  realSubtract(fc, fa, &den, realContext);
+  realSubtract(fc, fb, &tmp, realContext);
+  realMultiply(&den, &tmp, &den, realContext);
+  realDivide(const_1, &den, &den, realContext);
+  realFMA(&num, &den, &val, res, realContext);
 }
 #endif /* TESTSUITE_BUILD */
 
 int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34_t *resZ, real34_t *resY, real34_t *resX) {
 #ifndef TESTSUITE_BUILD
-  real34_t a, b, b1, fa, fb, fb1, m, s, *bp1, fbp1, tmp;
-  real_t aa, bb, bb1, faa, fbb, fbb1, mm, ss, secantSlopeA, secantSlopeB;
+  real34_t a, b, b1, b2, fa, fb, fb1, m, s, *bp1, fbp1, tmp;
+  real_t aa, bb, bb1, bb2, faa, fbb, fbb1, mm, ss, secantSlopeA, secantSlopeB, delta, deltaB, smb;
   bool_t extendRange = false;
   bool_t originallyLevel = false;
   bool_t extremum = false;
   int result = SOLVER_RESULT_NORMAL;
 
+  ++currentSolverNestingDepth;
+  setSystemFlag(FLAG_SOLVING);
+
+  realCopy(const_0, &delta);
+
   real34Copy(y, &a);
   real34Copy(y, &b1);
   real34Copy(x, &b);
+  realToReal34(const_NaN, &b2);
 
   real34Subtract(&b, &a, &s);
   if(real34CompareAbsLessThan(&s, const34_1e_32)) {
@@ -252,35 +362,44 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
   }
 
   do {
+    // convert real34 to real
     real34ToReal(&a, &aa);
     real34ToReal(&b, &bb);
     real34ToReal(&b1, &bb1);
+    real34ToReal(&b2, &bb2);
     real34ToReal(&fa, &faa);
     real34ToReal(&fb, &fbb);
     real34ToReal(&fb1, &fbb1);
 
-    realSubtract(&aa, &bb, &ss, &ctxtReal39);
-    realSubtract(&faa, &fbb, &mm, &ctxtReal39);
-    realDivide(&mm, &ss, &secantSlopeA, &ctxtReal39);
+    // pre-calculation
+    if(realIsSpecial(&bb2)) {
+      realSubtract(&bb, &bb1, &deltaB, &ctxtReal39);
+    }
+    else {
+      realSubtract(&bb1, &bb2, &deltaB, &ctxtReal39);
+    }
+    realSetPositiveSign(&deltaB);
 
-    // linear interpolation
-    realSubtract(&bb, &bb1, &ss, &ctxtReal39);
-    realSubtract(&fbb, &fbb1, &mm, &ctxtReal39);
-    realDivide(&mm, &ss, &secantSlopeB, &ctxtReal39);
-    realDivide(&ss, &mm, &ss, &ctxtReal39);
-    realMultiply(&ss, &fbb, &ss, &ctxtReal39);
-    realSubtract(&bb, &ss, &ss, &ctxtReal39);
+    _linearInterpolation(&aa, &bb, &faa, &fbb, NULL, &secantSlopeA, &ctxtReal39);
+
+    // interpolation
+    if(!(realCompareEqual(&faa, &fbb) || realCompareEqual(&faa, &fbb1) || realCompareEqual(&fbb, &fbb1))) { // inverse quadratic interpolation
+      _linearInterpolation(&bb, &bb1, &fbb, &fbb1, NULL, &secantSlopeB, &ctxtReal39);
+      _inverseQuadraticInterpolation(&aa, &bb, &bb1, &faa, &fbb, &fbb1, &ss, &ctxtReal39);
+    }
+    else { // linear interpolation
+      _linearInterpolation(&bb, &bb1, &fbb, &fbb1, &ss, &secantSlopeB, &ctxtReal39);
+    }
     realToReal34(&ss, &s);
-    printReal34ToConsole(&s, "s = ", "\n");
+
+    realSubtract(&ss, &bb, &smb, &ctxtReal39);
+    realMultiply(&smb, const_2, &smb, &ctxtReal39);
+    realSetPositiveSign(&smb);
 
     // bisection
     realAdd(&aa, &bb, &mm, &ctxtReal39);
     realMultiply(&mm, const_1on2, &mm, &ctxtReal39);
     realToReal34(&mm, &m);
-    printReal34ToConsole(&m, "m = ", "\n");
-
-    printRealToConsole(&secantSlopeA, "slope(fa) = ", "\n");
-    printRealToConsole(&secantSlopeB, "slope(fb) = ", "\n");
 
     // next point
     if(extendRange) {
@@ -321,7 +440,10 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
       bp1 = &m;
     }
     else if(!real34IsSpecial(&s) && ((real34CompareLessThan(&b, &s) && real34CompareLessThan(&s, &m)) || (real34CompareLessThan(&m, &s) && real34CompareLessThan(&s, &m)))) {
-      bp1 = &s;
+      if(realCompareLessThan(&delta, &deltaB) && realCompareLessThan(&smb, &deltaB))
+        bp1 = &s;
+      else
+        bp1 = &m;
     }
     else {
       bp1 = &m;
@@ -357,16 +479,19 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
           originallyLevel = false;
         }
       }
-      printReal34ToConsole(&a, "a = ", ", ");
-      printReal34ToConsole(&fa, "fa = ", "\n");
-      printReal34ToConsole(bp1, "-> b = ", ", ");
-      printReal34ToConsole(&fbp1, "fb = ", "\n");
 
       if(real34CompareAbsLessThan(&fa, &fbp1)) {
         real34Copy(bp1, &tmp); real34Copy(&a, bp1); real34Copy(&tmp, &a);
         real34Copy(&fbp1, &tmp); real34Copy(&fa, &fbp1); real34Copy(&tmp, &fa);
+        real34Copy(&a, &b); real34Copy(&fa, &fb);
       }
 
+      if(bp1 == &s) {
+        realToReal34(const_NaN, &b2);
+      }
+      else {
+        real34Copy(&b1, &b2);
+      }
       real34Copy(&b, &b1);
       real34Copy(&fb, &fb1);
       real34Copy(bp1, &b);
@@ -377,31 +502,37 @@ int solver(calcRegister_t variable, const real34_t *y, const real34_t *x, real34
       result = SOLVER_RESULT_CONSTANT;
     }
     else if(extendRange) {
-      printf("extendedRange extremum\n"); fflush(stdout);
       extendRange = false;
       originallyLevel = false;
       extremum = true;
     }
     else if(real34IsNegative(&fa) != real34IsNegative(&fb)) {
-      printf("SOLVER_RESULT_SIGN_REVERSAL\n"); fflush(stdout);
       result = SOLVER_RESULT_SIGN_REVERSAL;
     }
     else {
-      printf("SOLVER_RESULT_EXTREMUM\n"); fflush(stdout);
       result = SOLVER_RESULT_EXTREMUM;
     }
-  } while(result == SOLVER_RESULT_NORMAL && (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0))));
-  printReal34ToConsole(&b, "b = ", ", ");
-  printReal34ToConsole(&fb, "fb = ", "\n");
+
+    real34ToReal(&b, &bb);
+    real34ToReal(&b1, &bb1);
+
+  } while(result == SOLVER_RESULT_NORMAL &&
+          (real34IsSpecial(&b2) || !real34CompareEqual(&b1, &b2) || !(extendRange || extremum || WP34S_RelativeError(&bb, &bb1, const_1e_32, &ctxtReal39))) &&
+          (originallyLevel || !(real34CompareEqual(&b, &b1) || real34CompareEqual(&fb, const34_0)))
+         );
 
   if((extendRange && !originallyLevel) || extremum) {
     result = SOLVER_RESULT_EXTREMUM;
   }
 
-  fflush(stdout);
+  if((--currentSolverNestingDepth) == 0)
+    clearSystemFlag(FLAG_SOLVING);
+
   real34Copy(&fb, resZ);
   real34Copy(&b1, resY);
   real34Copy(&b, resX);
-#endif /* TESTSUITE_BUILD */
   return result;
+#else /* TESTSUITE_BUILD */
+  return SOLVER_RESULT_NORMAL;
+#endif /* TESTSUITE_BUILD */
 }

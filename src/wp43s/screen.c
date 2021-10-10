@@ -1758,27 +1758,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         showString("Not enough memory for undo", &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
       }
 
-      else if(temporaryInformation == TI_SOLVER_FAILED && regist == REGISTER_X) {
-        switch(real34ToInt32(REGISTER_REAL34_DATA(REGISTER_T))) {
-          case SOLVER_RESULT_SIGN_REVERSAL:
-            sprintf(tmpString, "Sign reversal");
-            break;
-          case SOLVER_RESULT_EXTREMUM:
-            sprintf(tmpString, "Extremum");
-            break;
-          case SOLVER_RESULT_BAD_GUESS:
-            sprintf(tmpString, "Bad guess");
-            break;
-          case SOLVER_RESULT_CONSTANT:
-            sprintf(tmpString, "Constant?");
-            break;
-          default:
-            sprintf(tmpString, "Something went wrong with the solver");
-            break;
-        }
-        showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X) + 6, vmNormal, true, true);
-      }
-
 //Original SHOW
 
       else if(temporaryInformation == TI_SHOW_REGISTER && regist == REGISTER_T) { // L1
@@ -2757,15 +2736,14 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
               }
 
-      else if(getRegisterDataType(regist) == dtLongInteger) {
-
-            if(temporaryInformation == TI_SOLVER_VARIABLE) {
-              if(regist == REGISTER_X) {
-                memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
-                strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
-                prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
-              }
+        else if(getRegisterDataType(regist) == dtLongInteger) {
+          if(temporaryInformation == TI_SOLVER_VARIABLE) {
+            if(regist == REGISTER_X) {
+              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
+          }
 
             else if(temporaryInformation == TI_ms) {                             //JMms vv
               if(regist == REGISTER_X) {

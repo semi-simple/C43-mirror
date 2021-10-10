@@ -988,13 +988,11 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     uint8_t *step = labelList[currentSolverProgram].instructionPointer;
     memset(tmpString, 0, TMP_STR_LENGTH);
 
-    while(!(*step == ((ITM_END >> 8) | 0x80) && *(step + 1) == (ITM_END & 0xff)) && !(*step == 0xff && *(step + 1) == 0xff)) {
-      if(*step == ((ITM_MVAR >> 8) | 0x80) && *(step + 1) == (ITM_MVAR & 0xff) && *(step + 2) == STRING_LABEL_VARIABLE) {
-        xcopy(tmpString + numberOfBytes, step + 4, *(step + 3));
-        (void)findOrAllocateNamedVariable(tmpString + numberOfBytes);
-        numberOfBytes += *(step + 3) + 1;
-        numberOfVars++;
-      }
+    while(*step == ((ITM_MVAR >> 8) | 0x80) && *(step + 1) == (ITM_MVAR & 0xff) && *(step + 2) == STRING_LABEL_VARIABLE) {
+      xcopy(tmpString + numberOfBytes, step + 4, *(step + 3));
+      (void)findOrAllocateNamedVariable(tmpString + numberOfBytes);
+      numberOfBytes += *(step + 3) + 1;
+      numberOfVars++;
       step = findNextStep(step);
     }
 

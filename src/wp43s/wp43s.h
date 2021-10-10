@@ -271,6 +271,7 @@
   extern uint16_t               currentSolverStatus;
   extern uint16_t               currentSolverProgram;
   extern uint16_t               currentSolverVariable;
+  extern uint16_t               currentSolverNestingDepth;
   #if (REAL34_WIDTH_TEST == 1)
     extern uint16_t               largeur;
   #endif // (REAL34_WIDTH_TEST == 1)

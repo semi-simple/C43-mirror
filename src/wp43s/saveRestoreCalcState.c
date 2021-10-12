@@ -35,7 +35,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         59  // states around VIEW and SOLVE now will be saved
+#define BACKUP_VERSION         60  // Save formulae
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -114,6 +114,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
     save(&numberOfNamedVariables,             sizeof(numberOfNamedVariables),             BACKUP);
     ramPtr = TO_WP43SMEMPTR(allNamedVariables);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(allFormulae);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -248,6 +250,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&currentSolverStatus,                sizeof(currentSolverStatus),                BACKUP);
     save(&currentSolverProgram,               sizeof(currentSolverProgram),               BACKUP);
     save(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
+    save(&numberOfFormulae,                   sizeof(numberOfFormulae),                   BACKUP);
+    save(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
 
 
     fclose(BACKUP);
@@ -311,6 +315,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&numberOfNamedVariables,             sizeof(numberOfNamedVariables),             BACKUP);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       allNamedVariables = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      allFormulae = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -448,6 +454,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&currentSolverStatus,                sizeof(currentSolverStatus),                BACKUP);
       restore(&currentSolverProgram,               sizeof(currentSolverProgram),               BACKUP);
       restore(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
+      restore(&numberOfFormulae,                   sizeof(numberOfFormulae),                   BACKUP);
+      restore(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
 
       fclose(BACKUP);
       printf("End of calc's restoration\n");

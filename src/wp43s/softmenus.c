@@ -23,6 +23,7 @@
 #include "programming/nextStep.h"
 #include "registers.h"
 #include "screen.h"
+#include "solver/equation.h"
 #include "sort.h"
 #include <string.h>
 #include <stdlib.h>
@@ -853,6 +854,11 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
             }
           }
         }
+      }
+      if(softmenu[m].menuItem == -MNU_EQN) {
+        showEquation(currentFormula, 0, EQUATION_NO_CURSOR);
+        dottedTopLine = (numberOfFormulae >= 2);
+        yDotted = 2;
       }
     }
 

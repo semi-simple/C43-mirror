@@ -27,6 +27,7 @@
 #include "debug.h"
 #include "display.h"
 #include "error.h"
+#include "fonts.h"
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
@@ -37,6 +38,7 @@
 #include "programming/manage.h"
 #include "registers.h"
 #include "registerValueConversions.h"
+#include "solver/equation.h"
 #include "stack.h"
 #include "stats.h"
 #include <stdlib.h>
@@ -857,6 +859,21 @@ void fnReset(uint16_t confirmation) {
     //allocateNamedVariable("Z" STD_a_DIARESIS "hler");
     //allocateNamedVariable(STD_omega STD_SUB_1);
     //allocateNamedVariable(STD_omega STD_SUB_2);
+
+    // Test formulae
+    numberOfFormulae = 4;
+    currentFormula = 0;
+    allFormulae = wp43sAllocate(TO_BLOCKS(sizeof(registerHeader_t)) * numberOfFormulae);
+
+    for(int i = 0; i < numberOfFormulae; ++i) {
+      allFormulae[i].sizeInBlocks = 0;
+      allFormulae[i].pointerToFormulaData = WP43S_NULL;
+    }
+
+    setEquation(0, "Equation mockup");
+    setEquation(1, "Formula here");
+    setEquation(2, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed");
+    setEquation(3, "height=v" STD_SUB_0 STD_DOT "time-g" STD_SUB_EARTH_b "/2" STD_DOT "time" STD_SUP_2);
 
     #if (DEBUG_PANEL == 1)
       debugWindow = DBG_REGISTERS;

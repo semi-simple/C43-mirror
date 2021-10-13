@@ -81,6 +81,12 @@
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_RCL);
         break;
 
+      case MNU_EQN:
+        if(numberOfFormulae == 0 && (firstItem + itemShift + (fn - 1)) > 0) {
+          break;
+        }
+        /* fallthrough */
+
       default:
         sm = &softmenu[menuId];
         row = min(3, (sm->numItems + modulo(firstItem - sm->numItems, 6))/6 - firstItem/6) - 1;

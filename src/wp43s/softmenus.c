@@ -756,6 +756,9 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       initVariableSoftmenu(m);
       numberOfItems = dynamicSoftmenu[m].numItems;
     }
+    else if(softmenu[m].menuItem == -MNU_EQN && numberOfFormulae == 0) {
+      numberOfItems = 1;
+    }
     else { // Static softmenu
       numberOfItems = softmenu[m].numItems;
     }

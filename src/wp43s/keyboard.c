@@ -852,7 +852,10 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
         if(aimBuffer[0] != 0) {
           setEquation(currentFormula, aimBuffer);
         }
-        if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_EQ_EDIT) calcModeNormal();
+        if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_EQ_EDIT) {
+          calcModeNormal();
+          if(allFormulae[currentFormula].pointerToFormulaData == WP43S_NULL) deleteEquation(currentFormula);
+        }
         popSoftmenu();
         break;
 
@@ -967,7 +970,10 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           lastErrorCode = 0;
         }
         else {
-          if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_EQ_EDIT) calcModeNormal();
+          if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_EQ_EDIT) {
+            calcModeNormal();
+            if(allFormulae[currentFormula].pointerToFormulaData == WP43S_NULL) deleteEquation(currentFormula);
+          }
           popSoftmenu();
         }
         break;

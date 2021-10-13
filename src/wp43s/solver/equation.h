@@ -27,6 +27,7 @@
 
 #define EQUATION_NO_CURSOR  0xffff
 
+void   fnEqNew        (uint16_t unusedButMandatoryParameter);
 void   fnEqEdit       (uint16_t unusedButMandatoryParameter);
 void   fnEqDelete     (uint16_t unusedButMandatoryParameter);
 void   fnEqCursorLeft (uint16_t unusedButMandatoryParameter);

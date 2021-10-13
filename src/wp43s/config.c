@@ -863,7 +863,7 @@ void fnReset(uint16_t confirmation) {
     // Test formulae
     numberOfFormulae = 4;
     currentFormula = 0;
-    allFormulae = wp43sAllocate(TO_BLOCKS(sizeof(registerHeader_t)) * numberOfFormulae);
+    allFormulae = wp43sAllocate(TO_BLOCKS(sizeof(formulaHeader_t)) * numberOfFormulae);
 
     for(int i = 0; i < numberOfFormulae; ++i) {
       allFormulae[i].sizeInBlocks = 0;

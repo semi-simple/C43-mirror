@@ -22,23 +22,67 @@
 
 #include "charString.h"
 #include "defines.h"
+#include "error.h"
 #include "flags.h"
 #include "fonts.h"
 #include "gui.h"
+#include "items.h"
 #include "memory.h"
 #include "screen.h"
 #include "wp43s.h"
 
 
 
+void fnEqNew(uint16_t unusedButMandatoryParameter) {
+  if(numberOfFormulae == 0) {
+    allFormulae = wp43sAllocate(TO_BLOCKS(sizeof(formulaHeader_t)));
+    if(allFormulae) {
+      numberOfFormulae = 1;
+      currentFormula = 0;
+      allFormulae[0].pointerToFormulaData = WP43S_NULL;
+      allFormulae[0].sizeInBlocks = 0;
+    }
+    else {
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnEqNew:", "there is not enough memory for a new equation!", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+    }
+  }
+  else {
+    formulaHeader_t *newPtr = wp43sAllocate(TO_BLOCKS(sizeof(formulaHeader_t)) * (numberOfFormulae + 1));
+    if(newPtr) {
+      for(uint32_t i = 0; i < numberOfFormulae; ++i) {
+        newPtr[i + (i > currentFormula ? 1 : 0)] = allFormulae[i];
+      }
+      ++currentFormula;
+      newPtr[currentFormula].pointerToFormulaData = WP43S_NULL;
+      newPtr[currentFormula].sizeInBlocks = 0;
+      wp43sFree(allFormulae, TO_BLOCKS(sizeof(formulaHeader_t)) * (numberOfFormulae));
+      allFormulae = newPtr;
+      ++numberOfFormulae;
+    }
+    else {
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnEqNew:", "there is not enough memory for a new equation!", NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+    }
+  }
+  fnEqEdit(NOPARAM);
+}
+
 void fnEqEdit(uint16_t unusedButMandatoryParameter) {
   const char *equationString = TO_PCMEMPTR(allFormulae[currentFormula].pointerToFormulaData);
-  xcopy(aimBuffer, equationString, stringByteLength(equationString) + 1);
+  if(equationString) xcopy(aimBuffer, equationString, stringByteLength(equationString) + 1);
+  else               aimBuffer[0] = 0;
   calcMode = CM_EIM;
   alphaCase = AC_UPPER;
   setSystemFlag(FLAG_ALPHA);
   yCursor = 0;
-  xCursor = stringGlyphLength(equationString);
+  xCursor = equationString ? stringGlyphLength(equationString) : 0;
   #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
     calcModeAimGui();
   #endif // PC_BUILD && (SCREEN_800X480 == 0)
@@ -60,11 +104,22 @@ void fnEqCursorRight(uint16_t unusedButMandatoryParameter) {
 
 void setEquation(uint16_t equationId, const char *equationString) {
   uint32_t newSizeInBlocks = TO_BLOCKS(stringByteLength(equationString) + 1);
+  uint8_t *newPtr;
   if(allFormulae[equationId].sizeInBlocks == 0) {
-    allFormulae[equationId].pointerToFormulaData = TO_WP43SMEMPTR(wp43sAllocate(newSizeInBlocks));
+    newPtr = wp43sAllocate(newSizeInBlocks);
   }
   else {
-    allFormulae[equationId].pointerToFormulaData = TO_WP43SMEMPTR(wp43sReallocate(TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData), allFormulae[equationId].sizeInBlocks, newSizeInBlocks));
+    newPtr = wp43sReallocate(TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData), allFormulae[equationId].sizeInBlocks, newSizeInBlocks);
+  }
+  if(newPtr) {
+    allFormulae[equationId].pointerToFormulaData = TO_WP43SMEMPTR(newPtr);
+  }
+  else {
+    displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function setEquation:", "there is not enough memory for a new equation!", NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
   }
   allFormulae[equationId].sizeInBlocks = newSizeInBlocks;
   xcopy(TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData), equationString, stringByteLength(equationString) + 1);
@@ -76,7 +131,7 @@ void deleteEquation(uint16_t equationId) {
       wp43sFree(TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData), allFormulae[equationId].sizeInBlocks);
     for(uint16_t i = equationId + 1; i < numberOfFormulae; ++i)
       allFormulae[i - 1] = allFormulae[i];
-    wp43sFree(allFormulae + (--numberOfFormulae), TO_BLOCKS(sizeof(registerHeader_t)));
+    wp43sFree(allFormulae + (--numberOfFormulae), TO_BLOCKS(sizeof(formulaHeader_t)));
     if(numberOfFormulae == 0)
       allFormulae = NULL;
     if(numberOfFormulae > 0 && currentFormula >= numberOfFormulae)

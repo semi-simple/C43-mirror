@@ -485,6 +485,7 @@ typedef enum {
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
 #define CM_MIM                                    12 // Matrix imput mode tbd reorder
+#define CM_EIM                                    13 // Equation imput mode
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0

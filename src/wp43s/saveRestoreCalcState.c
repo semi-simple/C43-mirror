@@ -478,6 +478,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_PEM)                   {}
         else if(calcMode == CM_PLOT_STAT)             {}
         else if(calcMode == CM_MIM)                   {mimRestore();}
+        else if(calcMode == CM_EIM)                   {}
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);
@@ -492,6 +493,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
         else if(calcMode == CM_PLOT_STAT)              calcModeNormalGui();
         else if(calcMode == CM_MIM)                   {calcModeNormalGui(); mimRestore();}
+        else if(calcMode == CM_EIM)                   {calcModeAimGui();}
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);

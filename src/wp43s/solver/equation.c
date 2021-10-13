@@ -22,17 +22,39 @@
 
 #include "charString.h"
 #include "defines.h"
+#include "flags.h"
 #include "fonts.h"
+#include "gui.h"
 #include "memory.h"
 #include "screen.h"
 #include "wp43s.h"
 
 
 
+void fnEqEdit(uint16_t unusedButMandatoryParameter) {
+  const char *equationString = TO_PCMEMPTR(allFormulae[currentFormula].pointerToFormulaData);
+  xcopy(aimBuffer, equationString, stringByteLength(equationString) + 1);
+  calcMode = CM_EIM;
+  alphaCase = AC_UPPER;
+  setSystemFlag(FLAG_ALPHA);
+  yCursor = 0;
+  xCursor = stringGlyphLength(equationString);
+  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+    calcModeAimGui();
+  #endif // PC_BUILD && (SCREEN_800X480 == 0)
+}
+
 void fnEqDelete(uint16_t unusedButMandatoryParameter) {
   deleteEquation(currentFormula);
 }
 
+void fnEqCursorLeft(uint16_t unusedButMandatoryParameter) {
+  if(xCursor > 0) --xCursor;
+}
+
+void fnEqCursorRight(uint16_t unusedButMandatoryParameter) {
+  if(xCursor < (uint32_t)stringGlyphLength(aimBuffer)) ++xCursor;
+}
 
 
 
@@ -65,9 +87,9 @@ void deleteEquation(uint16_t equationId) {
 
 
 bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
-  if(equationId < numberOfFormulae) {
+  if(equationId < numberOfFormulae || equationId == EQUATION_AIM_BUFFER) {
     char *bufPtr = tmpString;
-    char *strPtr = (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
+    const char *strPtr = equationId == EQUATION_AIM_BUFFER ? aimBuffer : (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
     uint16_t strLength = 0;
     int16_t strWidth = 0;
     int16_t glyphWidth = 0;
@@ -82,7 +104,7 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
       strWidth += stringWidth(bufPtr, &standardFont, true, true);
       bufPtr += 2;
     }
-    else if(startAt > 0) {
+    if(startAt == cursorAt) {
       *bufPtr       = STD_CURSOR[0];
       *(bufPtr + 1) = STD_CURSOR[1];
       *(bufPtr + 2) = 0;
@@ -153,15 +175,14 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
           cursorShown = true;
         }
         if(strWidth > (SCREEN_WIDTH - 2)) {
-          *bufPtr = 0;
-          strWidth -= glyphWidth;
           glyphWidth = stringWidth(STD_ELLIPSIS, &standardFont, true, true);
-          while((strWidth + glyphWidth) > (SCREEN_WIDTH - 2)) {
-            doubleBytednessHistory >>= 1;
-            bufPtr -= (doubleBytednessHistory & 0x00000001) ? 2 : 1;
+          while(1) {
             if(*bufPtr == STD_CURSOR[0] && *(bufPtr + 1) == STD_CURSOR[1]) cursorShown = false;
             strWidth -= stringWidth(bufPtr, &standardFont, true, true);
             *bufPtr = 0;
+            if((strWidth + glyphWidth) <= (SCREEN_WIDTH - 2)) break;
+            doubleBytednessHistory >>= 1;
+            bufPtr -= (doubleBytednessHistory & 0x00000001) ? 2 : 1;
           }
           *bufPtr       = STD_ELLIPSIS[0];
           *(bufPtr + 1) = STD_ELLIPSIS[1];
@@ -173,7 +194,8 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
       strPtr += ((*strPtr) & 0x80) ? 2 : 1;
     }
 
-    showString(tmpString, &standardFont, 1, SCREEN_HEIGHT - SOFTMENU_HEIGHT * 3 + 2 , vmNormal, true, true);
+    if(cursorShown || cursorAt == EQUATION_NO_CURSOR)
+      showString(tmpString, &standardFont, 1, SCREEN_HEIGHT - SOFTMENU_HEIGHT * 3 + 2 , vmNormal, true, true);
     return cursorShown;
   }
   else return false;

@@ -355,6 +355,8 @@ TO_QSPI const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU
 TO_QSPI const int16_t menu_TamShuffle[]  = { ITM_REG_X,                     ITM_REG_Y,                  ITM_REG_Z,                ITM_REG_T,             ITM_NULL,                    ITM_NULL,                     };
 TO_QSPI const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,                  ITM_REG_X,                ITM_REG_Y,             ITM_REG_Z,                   ITM_REG_T                     };
 
+TO_QSPI const int16_t menu_Eim[]         = { ITM_EQ_LEFT,                   ITM_PAIR_OF_PARENTHESES,    ITM_CIRCUMFLEX,           ITM_COLON,             ITM_EQUAL,                   ITM_EQ_RIGHT                  };
+
 #include "softmenuCatalogs.h"
 
 TO_QSPI const softmenu_t softmenu[] = {
@@ -457,7 +459,8 @@ TO_QSPI const softmenu_t softmenu[] = {
 /*  96 */  {.menuItem = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
 /*  97 */  {.menuItem = -MNU_TAMSHUFFLE,  .numItems = sizeof(menu_TamShuffle )/sizeof(int16_t), .softkeyItem = menu_TamShuffle  },
 /*  98 */  {.menuItem = -MNU_TAMLABEL,    .numItems = sizeof(menu_TamLabel   )/sizeof(int16_t), .softkeyItem = menu_TamLabel    },
-/*  99 */  {.menuItem =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
+/*  99 */  {.menuItem = -MNU_EQ_EDIT,     .numItems = sizeof(menu_Eim        )/sizeof(int16_t), .softkeyItem = menu_Eim         },
+/* 100 */  {.menuItem =  0,               .numItems = 0,                                        .softkeyItem = NULL             }
 };
 
 
@@ -859,6 +862,12 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
         showEquation(currentFormula, 0, EQUATION_NO_CURSOR);
         dottedTopLine = (numberOfFormulae >= 2);
         yDotted = 2;
+      }
+      if(softmenu[m].menuItem == -MNU_EQ_EDIT) {
+        while(!showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor)) {
+          if(yCursor > xCursor) --yCursor;
+          else                  ++yCursor;
+        }
       }
     }
 

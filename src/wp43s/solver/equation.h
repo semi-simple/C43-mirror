@@ -25,13 +25,22 @@
 
 #define EQUATION_NO_CURSOR 0xffff
 
+void   fnEqDelete    (uint16_t unusedButMandatoryParameter);
+
 /**
  * Stores a formula. This function reallocates memory for the formula.
  *
  * \param[in]  equationId       Equation ID
  * \param[in]  equationString   Equation in null-terminated string
  */
-void   setEquation (uint16_t equationId, const char *equationString);
+void   setEquation   (uint16_t equationId, const char *equationString);
+
+/**
+ * Deletes a formula. This function frees memory for the formula and shifts equation ID.
+ *
+ * \param[in]  equationId       Equation ID
+ */
+void   deleteEquation(uint16_t equationId);
 
 /**
  * Shows a formula at the softmenu.
@@ -41,6 +50,6 @@ void   setEquation (uint16_t equationId, const char *equationString);
  * \param[in]  cursorAt     Position of cursor, in number of glyphs, alternatively `EQUATION_NO_CURSOR` to hide cursor
  * \return                  true if the cursor is shown, false otherwise
  */
-bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt);
+bool_t showEquation  (uint16_t equationId, uint16_t startAt, uint16_t cursorAt);
 
 #endif // EQUATION_H

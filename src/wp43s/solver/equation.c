@@ -27,6 +27,15 @@
 #include "screen.h"
 #include "wp43s.h"
 
+
+
+void fnEqDelete(uint16_t unusedButMandatoryParameter) {
+  deleteEquation(currentFormula);
+}
+
+
+
+
 void setEquation(uint16_t equationId, const char *equationString) {
   uint32_t newSizeInBlocks = TO_BLOCKS(stringByteLength(equationString) + 1);
   if(allFormulae[equationId].sizeInBlocks == 0) {
@@ -38,6 +47,22 @@ void setEquation(uint16_t equationId, const char *equationString) {
   allFormulae[equationId].sizeInBlocks = newSizeInBlocks;
   xcopy(TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData), equationString, stringByteLength(equationString) + 1);
 }
+
+void deleteEquation(uint16_t equationId) {
+  if(equationId < numberOfFormulae) {
+    if(allFormulae[equationId].sizeInBlocks > 0)
+      wp43sFree(TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData), allFormulae[equationId].sizeInBlocks);
+    for(uint16_t i = equationId + 1; i < numberOfFormulae; ++i)
+      allFormulae[i - 1] = allFormulae[i];
+    wp43sFree(allFormulae + (--numberOfFormulae), TO_BLOCKS(sizeof(registerHeader_t)));
+    if(numberOfFormulae == 0)
+      allFormulae = NULL;
+    if(numberOfFormulae > 0 && currentFormula >= numberOfFormulae)
+      currentFormula = numberOfFormulae - 1;
+  }
+}
+
+
 
 bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
   if(equationId < numberOfFormulae) {

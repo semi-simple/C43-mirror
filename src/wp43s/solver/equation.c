@@ -28,6 +28,7 @@
 #include "gui.h"
 #include "items.h"
 #include "memory.h"
+#include "registers.h"
 #include "screen.h"
 #include "wp43s.h"
 
@@ -254,4 +255,152 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
     return cursorShown;
   }
   else return false;
+}
+
+
+
+static int32_t _compareChar(const char *char1, const char *char2) {
+  int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0]) | 0x7f) << 8) | char1[1]) : char1[0];
+  int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0]) | 0x7f) << 8) | char2[1]) : char2[0];
+  return code2 - code1;
+}
+
+static int32_t _compareStr(const char *str1, const char *str2) {
+  while(1) {
+    int32_t cmpChr = _compareChar(str1, str2);
+    if((*str1 == 0) && (*str2 == 0)) {
+      return 0;
+    }
+    else if(cmpChr != 0) {
+      return cmpChr;
+    }
+    else {
+      str1 += ((*str1) & 0x80) ? 2 : 1;
+      str2 += ((*str2) & 0x80) ? 2 : 1;
+    }
+  }
+}
+
+#define PARSER_HINT_NUMERIC  0
+#define PARSER_HINT_OPERATOR 1
+#define PARSER_HINT_FUNCTION 2
+#define PARSER_HINT_VARIABLE 3
+#define PARSER_HINT_REGULAR (stringGlyphLength(buffer) == numericCount ? PARSER_HINT_NUMERIC : PARSER_HINT_VARIABLE)
+static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, char *mvarBuffer) {
+  switch(parseMode) {
+    case EQUATION_PARSER_MVAR:
+      if(parserHint == PARSER_HINT_VARIABLE) {
+        char *bufPtr = mvarBuffer;
+        if(_compareStr(STD_pi, strPtr) == 0) { // check for pi
+          return;
+        }
+        while(*bufPtr != 0) { // check for duplicates
+          if(_compareStr(bufPtr, strPtr) == 0) {
+            return;
+          }
+          bufPtr += stringByteLength(bufPtr) + 1;
+        }
+        for(uint32_t i = CST_01; i <= CST_79; ++i) { // check for constants
+          if(_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0) {
+            return;
+          }
+        }
+        (void)findOrAllocateNamedVariable(strPtr);
+        xcopy(bufPtr, strPtr, stringByteLength(strPtr) + 1);
+        bufPtr[stringByteLength(strPtr) + 1] = 0;
+      }
+      break;
+    case EQUATION_PARSER_XEQ:
+      printf("***Mockup for formula evaluation!\n");
+      fflush(stdout);
+      break;
+    default:
+      displayBugScreen("In function _parseWord: Unknown mode of formula parser!");
+  }
+}
+
+void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *mvarBuffer) {
+  const char *strPtr = (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
+  char *bufPtr = buffer;
+  int16_t numericCount = 0;
+
+  if(parseMode == EQUATION_PARSER_MVAR) {
+    mvarBuffer[0] = mvarBuffer[1] = 0;
+  }
+
+  while(*strPtr != 0) {
+    switch(*strPtr) {
+      case '(':
+        if(bufPtr != buffer) {
+          *(bufPtr++) = 0;
+          ++strPtr;
+          if(stringGlyphLength(buffer) == numericCount) {
+            displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              moreInfoOnError("In function parseEquation:", "attempt to call a number as a function!", NULL, NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            return;
+          }
+          else {
+            _parseWord(buffer, parseMode, PARSER_HINT_FUNCTION, mvarBuffer);
+            bufPtr = buffer;
+            numericCount = 0;
+            break;
+          }
+        }
+        /* fallthrough */
+      case '=':
+      case '+':
+      case '-':
+      case '/':
+      case ')':
+      case '^':
+        if(bufPtr != buffer) {
+          *(bufPtr++) = 0;
+          _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
+        }
+        buffer[0] = *(strPtr++);
+        buffer[1] = 0;
+        _parseWord(buffer, parseMode, PARSER_HINT_OPERATOR, mvarBuffer);
+        bufPtr = buffer;
+        numericCount = 0;
+        break;
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+      case '.':
+        ++numericCount;
+        /* fallthrough */
+      default:
+        if(_compareChar(strPtr, STD_CROSS) == 0 || _compareChar(strPtr, STD_DOT) == 0) {
+          *(bufPtr++) = 0;
+          _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
+          buffer[0] = *(strPtr++);
+          buffer[1] = *(strPtr++);
+          buffer[2] = 0;
+          _parseWord(buffer, parseMode, PARSER_HINT_OPERATOR, mvarBuffer);
+          bufPtr = buffer;
+          numericCount = 0;
+        }
+        else {
+          *(bufPtr++) = *strPtr;
+          if((*(strPtr++)) & 0x80) {
+            *(bufPtr++) = *(strPtr++);
+          }
+        }
+    }
+    fflush(stdout);
+  }
+  if(bufPtr != buffer) {
+    *(bufPtr++) = 0;
+    _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
+  }
+  fflush(stdout);
 }

@@ -873,7 +873,7 @@ void fnReset(uint16_t confirmation) {
     setEquation(0, "Equation mockup");
     setEquation(1, "Formula here");
     setEquation(2, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed");
-    setEquation(3, "height=v" STD_SUB_0 STD_DOT "time-g" STD_SUB_EARTH_b "/2" STD_DOT "time" STD_SUP_2);
+    setEquation(3, "height=v" STD_SUB_0 STD_CROSS "time-g" STD_SUB_EARTH "/2" STD_CROSS "time^2");
 
     #if (DEBUG_PANEL == 1)
       debugWindow = DBG_REGISTERS;

@@ -549,15 +549,26 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
   static void _dynmenuConstructMVars(int16_t menu) {
     uint16_t numberOfBytes = 0;
     uint16_t numberOfVars = 0;
-    uint8_t *step = labelList[currentSolverProgram].instructionPointer;
     memset(tmpString, 0, TMP_STR_LENGTH);
 
-    while(*step == ((ITM_MVAR >> 8) | 0x80) && *(step + 1) == (ITM_MVAR & 0xff) && *(step + 2) == STRING_LABEL_VARIABLE) {
-      xcopy(tmpString + numberOfBytes, step + 4, *(step + 3));
-      (void)findOrAllocateNamedVariable(tmpString + numberOfBytes);
-      numberOfBytes += *(step + 3) + 1;
-      numberOfVars++;
-      step = findNextStep(step);
+    if(currentSolverStatus | SOLVER_STATUS_USES_FORMULA) {
+      char *bufPtr = tmpString;
+      parseEquation(currentFormula, EQUATION_PARSER_MVAR, tmpString + TMP_STR_LENGTH - AIM_BUFFER_LENGTH, tmpString);
+      while(*bufPtr != 0) {
+        numberOfVars += 1;
+        numberOfBytes += stringByteLength(bufPtr) + 1;
+        bufPtr += stringByteLength(bufPtr) + 1;
+      }
+    }
+    else {
+      uint8_t *step = labelList[currentSolverProgram].instructionPointer;
+      while(*step == ((ITM_MVAR >> 8) | 0x80) && *(step + 1) == (ITM_MVAR & 0xff) && *(step + 2) == STRING_LABEL_VARIABLE) {
+        xcopy(tmpString + numberOfBytes, step + 4, *(step + 3));
+        (void)findOrAllocateNamedVariable(tmpString + numberOfBytes);
+        numberOfBytes += *(step + 3) + 1;
+        numberOfVars++;
+        step = findNextStep(step);
+      }
     }
 
     dynamicSoftmenu[menu].menuContent = malloc(numberOfBytes);
@@ -952,6 +963,11 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     }
     else if(id == -MNU_ALPHA_OMEGA && alphaCase == AC_LOWER) { // alpha...omega
       id = -MNU_alpha_omega;
+    }
+    else if(id == -MNU_Solver) {
+      currentSolverStatus = SOLVER_STATUS_USES_FORMULA | SOLVER_STATUS_INTERACTIVE;
+      parseEquation(currentFormula, EQUATION_PARSER_MVAR, aimBuffer, tmpString);
+      id = -MNU_MVAR;
     }
 
     m = 0;

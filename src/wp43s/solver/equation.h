@@ -23,9 +23,12 @@
 #include "typeDefinitions.h"
 #include <stdint.h>
 
-#define EQUATION_AIM_BUFFER 0xffff
+#define EQUATION_AIM_BUFFER  0xffff
 
-#define EQUATION_NO_CURSOR  0xffff
+#define EQUATION_NO_CURSOR   0xffff
+
+#define EQUATION_PARSER_MVAR 0
+#define EQUATION_PARSER_XEQ  1
 
 void   fnEqNew        (uint16_t unusedButMandatoryParameter);
 void   fnEqEdit       (uint16_t unusedButMandatoryParameter);
@@ -57,5 +60,15 @@ void   deleteEquation (uint16_t equationId);
  * \return                  true if the cursor is shown, false otherwise
  */
 bool_t showEquation   (uint16_t equationId, uint16_t startAt, uint16_t cursorAt);
+
+/**
+ * Parses a formula.
+ *
+ * \param[in]  equationId   Equation ID
+ * \param[in]  parseMode    `EQUATION_PARSER_MVAR` to make `MVAR` menu, `EQUATION_PARSER_XEQ` to evaluate
+ * \param[out] buffer       Working buffer
+ * \param[out] mvarBuffer   Resulting `MVAR` list
+ */
+void   parseEquation  (uint16_t equationId, uint16_t parseMode, char *buffer, char *mvarBuffer);
 
 #endif // EQUATION_H

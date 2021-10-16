@@ -142,6 +142,52 @@ void deleteEquation(uint16_t equationId) {
 
 
 
+static void _showExponent(char **bufPtr, const char **strPtr) {
+  switch(*(++(*strPtr))) {
+    case '1':
+      **bufPtr         = STD_SUP_1[0];
+      *((*bufPtr) + 1) = STD_SUP_1[1];
+      break;
+    case '2':
+      **bufPtr         = STD_SUP_2[0];
+      *((*bufPtr) + 1) = STD_SUP_2[1];
+      break;
+    case '3':
+      **bufPtr         = STD_SUP_3[0];
+      *((*bufPtr) + 1) = STD_SUP_3[1];
+      break;
+    default:
+      **bufPtr         = STD_SUP_0[0];
+      *((*bufPtr) + 1) = STD_SUP_0[1] + ((**strPtr) - '0');
+  }
+  (*bufPtr) += 2;
+}
+static uint32_t _checkExponent(const char *strPtr) {
+  uint32_t digits = 0;
+  while(1) {
+    switch(*strPtr) {
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        ++digits;
+        ++strPtr;
+        break;
+      case '^':
+      case '.':
+        return 0;
+      default:
+        return digits;
+    }
+  }
+}
+
 bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
   if(equationId < numberOfFormulae || equationId == EQUATION_AIM_BUFFER) {
     char *bufPtr = tmpString;
@@ -150,6 +196,7 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
     int16_t strWidth = 0;
     int16_t glyphWidth = 0;
     uint32_t doubleBytednessHistory = 0;
+    uint32_t tmpVal = 0;
     bool_t labelFound = false;
     bool_t cursorShown = false;
 
@@ -173,7 +220,7 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
       if((++strLength) > startAt) {
         doubleBytednessHistory <<= 1;
         *bufPtr = *strPtr;
-        if((*strPtr) == ':' && !labelFound && strLength <= 8) {
+        if(((*strPtr) == ':' && !labelFound && strLength <= 8) || (*strPtr) == '(') {
           *(bufPtr + 1) = STD_SPACE_4_PER_EM[0];
           *(bufPtr + 2) = STD_SPACE_4_PER_EM[1];
           *(bufPtr + 3) = 0;
@@ -181,7 +228,26 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
           doubleBytednessHistory |= 1;
           bufPtr += 1;
         }
-        else if((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/') {
+        else if((*strPtr) == ')') {
+          *bufPtr       = STD_SPACE_4_PER_EM[0];
+          *(bufPtr + 1) = STD_SPACE_4_PER_EM[1];
+          *(bufPtr + 2) = *strPtr;
+          *(bufPtr + 3) = 0;
+          doubleBytednessHistory <<= 1;
+          doubleBytednessHistory |= 2;
+          bufPtr += 2;
+        }
+        else if(cursorAt == EQUATION_NO_CURSOR && (*strPtr) == '^' && (tmpVal = _checkExponent(strPtr + 1))) {
+          for(uint32_t i = 0; i < tmpVal; ++i)
+            _showExponent(&bufPtr, &strPtr);
+          *bufPtr = 0;
+          doubleBytednessHistory |= 1;
+          for(uint32_t i = 1; i < tmpVal; ++i) {
+            doubleBytednessHistory <<= 1;
+            doubleBytednessHistory |= 1;
+          }
+        }
+        else if((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '^') {
           *bufPtr       = STD_SPACE_4_PER_EM[0];
           *(bufPtr + 1) = STD_SPACE_4_PER_EM[1];
           *(bufPtr + 2) = *strPtr;
@@ -197,8 +263,14 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
         else if(((*strPtr) == STD_CROSS[0] && (*(strPtr + 1)) == STD_CROSS[1]) || ((*strPtr) == STD_DOT[0] && (*(strPtr + 1)) == STD_DOT[1])) {
           *bufPtr       = STD_SPACE_4_PER_EM[0];
           *(bufPtr + 1) = STD_SPACE_4_PER_EM[1];
-          *(bufPtr + 2) = *strPtr;
-          *(bufPtr + 3) = *(strPtr + 1);
+          if(getSystemFlag(FLAG_MULTx)) {
+            *(bufPtr + 2) = STD_CROSS[0];
+            *(bufPtr + 3) = STD_CROSS[1];
+          }
+          else {
+            *(bufPtr + 2) = STD_DOT[0];
+            *(bufPtr + 3) = STD_DOT[1];
+          }
           *(bufPtr + 4) = 0;
           strWidth += stringWidth(bufPtr, &standardFont, true, true);
           *(bufPtr + 4) = STD_SPACE_4_PER_EM[0];

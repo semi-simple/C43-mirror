@@ -28,8 +28,10 @@
 #include "gui.h"
 #include "items.h"
 #include "memory.h"
+#include "realType.h"
 #include "registers.h"
 #include "screen.h"
+#include "stack.h"
 #include "wp43s.h"
 
 
@@ -102,7 +104,7 @@ void fnEqCursorRight(uint16_t unusedButMandatoryParameter) {
 }
 
 void fnEqCalc(uint16_t unusedButMandatoryParameter) {
-  parseEquation(currentFormula, EQUATION_PARSER_XEQ, tmpString, NULL);
+  parseEquation(currentFormula, EQUATION_PARSER_XEQ, tmpString, tmpString + AIM_BUFFER_LENGTH);
 }
 
 
@@ -366,10 +368,106 @@ static void _menuF6(char *bufPtr) {
 #define PARSER_HINT_OPERATOR 1
 #define PARSER_HINT_FUNCTION 2
 #define PARSER_HINT_VARIABLE 3
-#define PARSER_HINT_REGULAR (stringGlyphLength(buffer) == numericCount ? PARSER_HINT_NUMERIC : PARSER_HINT_VARIABLE)
+#define PARSER_HINT_REGULAR  (stringGlyphLength(buffer) == numericCount ? PARSER_HINT_NUMERIC : PARSER_HINT_VARIABLE)
+
+//#define PARSER_OPERATOR_STACK_SIZE (getSystemFlag(FLAG_SSIZE8) ? 8 : 4)
+#define PARSER_OPERATOR_STACK_SIZE (getSystemFlag(FLAG_SSIZE8) ? 8 : 4)
+
+#define PARSER_OPERATOR_ITM_PARENTHESIS_LEFT  5000
+#define PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT 5001
+#define PARSER_OPERATOR_ITM_EQUAL             5002
+#define PARSER_OPERATOR_ITM_END_OF_FORMULA    5003
+
+static uint32_t _operatorPriority(uint16_t func) {
+  // priority of operator: smaller number represents higher priority 
+  // associative property: even number represents left-associativity, odd number represents right-associativity.
+  switch(func) {
+    case ITM_MULT:
+    case ITM_DIV:
+      return 6;
+    case ITM_ADD:
+    case ITM_SUB:
+      return 8;
+    case ITM_YX:
+      return 5;
+    case PARSER_OPERATOR_ITM_PARENTHESIS_LEFT:
+    case PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT:
+    case PARSER_OPERATOR_ITM_EQUAL:
+      return 1;
+    default:
+      return 3;
+  }
+}
+static void _processOperator(uint16_t func, char *mvarBuffer) {
+  for(uint32_t i = 0; i <= PARSER_OPERATOR_STACK_SIZE; ++i) {
+    if(i == PARSER_OPERATOR_STACK_SIZE || ((uint16_t *)mvarBuffer)[i] == 0) {
+      if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT || func == PARSER_OPERATOR_ITM_EQUAL || func == PARSER_OPERATOR_ITM_END_OF_FORMULA) {
+        for(int32_t j = (int32_t)i - 1; j >= 0; --j) {
+          if(((uint16_t *)mvarBuffer)[j] != PARSER_OPERATOR_ITM_PARENTHESIS_LEFT)
+            runFunction(((uint16_t *)mvarBuffer)[j]);
+          switch(((uint16_t *)mvarBuffer)[j]) {
+            case ITM_ADD:
+            case ITM_SUB:
+            case ITM_MULT:
+            case ITM_DIV:
+            case ITM_YX:
+              ((uint16_t *)mvarBuffer)[j] = 0;
+              break;
+            default:
+              ((uint16_t *)mvarBuffer)[j] = 0;
+              if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT) return;
+              displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                moreInfoOnError("In function parseEquation:", "parentheses mismatch!", "parenthesis not closed", NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+              break;
+          }
+        }
+        if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT) {
+          displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            moreInfoOnError("In function parseEquation:", "parentheses mismatch!", "no corresponding opening parenthesis", NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        }
+        else if(func == PARSER_OPERATOR_ITM_EQUAL) {
+          fnToReal(NOPARAM);
+          real34Copy(REGISTER_REAL34_DATA(REGISTER_X), (real34_t *)(mvarBuffer + PARSER_OPERATOR_STACK_SIZE * 2));
+        }
+        else {
+          setSystemFlag(FLAG_ASLIFT);
+          liftStack();
+          reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+          real34Copy((real34_t *)(mvarBuffer + PARSER_OPERATOR_STACK_SIZE * 2), REGISTER_REAL34_DATA(REGISTER_X));
+          runFunction(ITM_SUB);
+        }
+      }
+      else if(i == 0 ||
+        (_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) < 4) || /* parenthesis */
+        (_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) & (~1u)) > (_operatorPriority(func) & (~1u)) || /* higher priority */
+        ((_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) & (~1u)) == (_operatorPriority(func) & (~1u)) && (_operatorPriority(func) & 1) /* same priority and right-associative */ )
+      ) {
+        if(i < PARSER_OPERATOR_STACK_SIZE) {
+          ((uint16_t *)mvarBuffer)[i] = func;
+        }
+        else {
+          displayCalcErrorMessage(ERROR_EQUATION_TOO_COMPLEX, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            moreInfoOnError("In function parseEquation:", "operator stack overflow!", NULL, NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        }
+      }
+      else {
+        runFunction(((uint16_t *)mvarBuffer)[i - 1]);
+        ((uint16_t *)mvarBuffer)[i - 1] = func;
+      }
+      return;
+    }
+  }
+}
 static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, char *mvarBuffer) {
   uint32_t tmpVal = 0;
   switch(parseMode) {
+
     case EQUATION_PARSER_MVAR:
       if(parserHint == PARSER_HINT_VARIABLE) {
         char *bufPtr = mvarBuffer;
@@ -397,10 +495,78 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         }
       }
       break;
+
     case EQUATION_PARSER_XEQ:
-      printf("***Mockup for formula evaluation!\n");
-      fflush(stdout);
+      if(parserHint == PARSER_HINT_VARIABLE) {
+        if(_compareStr(STD_pi, strPtr) == 0) { // check for pi
+          runFunction(ITM_CONSTpi);
+          return;
+        }
+        for(uint32_t i = CST_01; i <= CST_79; ++i) { // check for constants
+          if(_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0) {
+            runFunction(i);
+            return;
+          }
+        }
+        reallyRunFunction(ITM_RCL, findNamedVariable(strPtr));
+      }
+      else if(parserHint == PARSER_HINT_NUMERIC) {
+        liftStack();
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+        stringToReal34(strPtr, REGISTER_REAL34_DATA(REGISTER_X));
+      }
+      else if(parserHint == PARSER_HINT_OPERATOR) {
+        if(_compareStr("+", strPtr) == 0) {
+          _processOperator(ITM_ADD, mvarBuffer);
+        }
+        else if(_compareStr("-", strPtr) == 0) {
+          _processOperator(ITM_SUB, mvarBuffer);
+        }
+        else if(_compareStr(STD_CROSS, strPtr) == 0 || _compareStr(STD_DOT, strPtr) == 0) {
+          _processOperator(ITM_MULT, mvarBuffer);
+        }
+        else if(_compareStr("/", strPtr) == 0) {
+          _processOperator(ITM_DIV, mvarBuffer);
+        }
+        else if(_compareStr("^", strPtr) == 0) {
+          _processOperator(ITM_YX, mvarBuffer);
+        }
+        else if(_compareStr("(", strPtr) == 0) {
+          _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_LEFT, mvarBuffer);
+        }
+        else if(_compareStr(")", strPtr) == 0) {
+          _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT, mvarBuffer);
+        }
+        else if(_compareStr("=", strPtr) == 0) {
+          _processOperator(PARSER_OPERATOR_ITM_EQUAL, mvarBuffer);
+        }
+        else if(_compareStr(":", strPtr) == 0) {
+          // label will be skipped
+        }
+        else {
+          displayBugScreen("In function _parseWord: Unknown operator appeared!");
+        }
+      }
+      else if(parserHint == PARSER_HINT_FUNCTION) {
+        for(uint32_t i = 1; i < LAST_ITEM; ++i) {
+          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0)) {
+            _processOperator(i, mvarBuffer);
+            return;
+          }
+        }
+        for(uint32_t i = 1; i < LAST_ITEM; ++i) {
+          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemSoftmenuName, strPtr) == 0)) {
+            _processOperator(i, mvarBuffer);
+            return;
+          }
+        }
+        displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function parseEquation:", "parentheses mismatch!", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
       break;
+
     default:
       displayBugScreen("In function _parseWord: Unknown mode of formula parser!");
   }
@@ -410,13 +576,35 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
   const char *strPtr = (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
   char *bufPtr = buffer;
   int16_t numericCount = 0;
+  bool_t equalAppeared = false, labeled = false;
 
-  if(parseMode == EQUATION_PARSER_MVAR) {
-    mvarBuffer[0] = mvarBuffer[1] = 0;
+  for(uint32_t i = 0; i < (PARSER_OPERATOR_STACK_SIZE * 2); ++i) mvarBuffer[i] = 0;
+  real34Zero((real34_t *)(mvarBuffer + PARSER_OPERATOR_STACK_SIZE * 2));
+  if(parseMode == EQUATION_PARSER_XEQ) {
+    fnClearStack(NOPARAM);
+  }
+
+  for(uint32_t i = 0; i < 7; ++i) {
+    strPtr += ((*strPtr) & 0x80) ? 2 : 1;
+    if(*strPtr == ':') {
+      labeled = true;
+      ++strPtr;
+      break;
+    }
+  }
+  if(!labeled) {
+    strPtr = (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
   }
 
   while(*strPtr != 0) {
     switch(*strPtr) {
+      case ':':
+        displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function parseEquation:", "unexpected \":\"", "label too long or \":\" appeared more than once", NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
+
       case '(':
         if(bufPtr != buffer) {
           *(bufPtr++) = 0;
@@ -442,10 +630,31 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
       case '/':
       case ')':
       case '^':
-        if(bufPtr != buffer) {
-          *(bufPtr++) = 0;
-          _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
+        if(equalAppeared && (*strPtr == '=')) {
+          displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            moreInfoOnError("In function parseEquation:", "= appears more than once", NULL, NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+          return;
         }
+        else if(bufPtr != buffer) {
+          *(bufPtr++) = 0;
+          if(*strPtr != ':')
+            _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
+        }
+        else if(*strPtr == '-') {
+          buffer[0] = '0';
+          buffer[1] = 0;
+          _parseWord(buffer, parseMode, PARSER_HINT_NUMERIC, mvarBuffer);
+        }
+        else {
+          displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            moreInfoOnError("In function parseEquation:", "unexpected operator", NULL, NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+          return;
+        }
+        if(*strPtr == '=') equalAppeared = true;
         buffer[0] = *(strPtr++);
         buffer[1] = 0;
         _parseWord(buffer, parseMode, PARSER_HINT_OPERATOR, mvarBuffer);
@@ -504,5 +713,8 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
     if(tmpVal == 5) {
       _menuF6(bufPtr);
     }
+  }
+  if(parseMode == EQUATION_PARSER_XEQ) {
+    _processOperator(PARSER_OPERATOR_ITM_END_OF_FORMULA, mvarBuffer);
   }
 }

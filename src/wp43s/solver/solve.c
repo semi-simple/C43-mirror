@@ -237,7 +237,7 @@ static void _solverIteration(real34_t *res) {
   //  Replace with the complete programming system when ready.
   //
   if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
-    parseEquation(currentFormula, EQUATION_PARSER_XEQ, tmpString, NULL);
+    parseEquation(currentFormula, EQUATION_PARSER_XEQ, tmpString, tmpString + AIM_BUFFER_LENGTH);
   }
   else {
     uint8_t *step = labelList[currentSolverProgram].instructionPointer;

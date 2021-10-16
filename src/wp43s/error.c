@@ -75,7 +75,8 @@ TO_QSPI const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /* 43 */  STD_GREATER_EQUAL "1 initial guess lies out of the domain",
 /* 44 */  "The function value look constant",
 /* 45 */  "Syntax error in this equation",
-/* 46 */  "Bad input", // This error is not in ReM and cannot occur (theoretically).
+/* 46 */  "This equation formula is too complex",
+/* 47 */  "Bad input", // This error is not in ReM and cannot occur (theoretically).
 };
 
 

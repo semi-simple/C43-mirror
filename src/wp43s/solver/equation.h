@@ -68,7 +68,7 @@ bool_t showEquation   (uint16_t equationId, uint16_t startAt, uint16_t cursorAt)
  * \param[in]  equationId   Equation ID
  * \param[in]  parseMode    `EQUATION_PARSER_MVAR` to make `MVAR` menu, `EQUATION_PARSER_XEQ` to evaluate
  * \param[out] buffer       Working buffer
- * \param[out] mvarBuffer   Resulting `MVAR` list
+ * \param[out] mvarBuffer   For `EQUATION_PARSER_MVAR`, resulting `MVAR` list. for `EQUATION_PARSER_XEQ`, operator buffer.
  */
 void   parseEquation  (uint16_t equationId, uint16_t parseMode, char *buffer, char *mvarBuffer);
 

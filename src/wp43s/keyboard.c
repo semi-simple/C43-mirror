@@ -209,6 +209,10 @@
 
           if(item < 0) { // softmenu
             showSoftmenu(item);
+            if(item == -MNU_Solver && lastErrorCode != 0) {
+              popSoftmenu();
+              currentSolverStatus &= ~SOLVER_STATUS_INTERACTIVE;
+            }
             refreshScreen();
             return;
           }
@@ -901,7 +905,7 @@ ram_full:
 
 void fnKeyExit(uint16_t unusedButMandatoryParameter) {
   #ifndef TESTSUITE_BUILD
-    if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_MVAR) {
+    if(lastErrorCode == 0 && softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_MVAR) {
       currentSolverStatus &= ~SOLVER_STATUS_INTERACTIVE;
     }
 

@@ -551,14 +551,17 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     uint16_t numberOfVars = 0;
     memset(tmpString, 0, TMP_STR_LENGTH);
 
-    if(currentSolverStatus | SOLVER_STATUS_USES_FORMULA) {
+    if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
       char *bufPtr = tmpString;
+      uint8_t errorCode = lastErrorCode;
+      lastErrorCode = ERROR_NONE;
       parseEquation(currentFormula, EQUATION_PARSER_MVAR, tmpString + TMP_STR_LENGTH - AIM_BUFFER_LENGTH, tmpString);
       while(*bufPtr != 0 || numberOfVars < 6) {
         numberOfVars += 1;
         numberOfBytes += stringByteLength(bufPtr) + 1;
         bufPtr += stringByteLength(bufPtr) + 1;
       }
+      lastErrorCode = errorCode;
     }
     else {
       uint8_t *step = labelList[currentSolverProgram].instructionPointer;

@@ -775,6 +775,7 @@ typedef enum {
 #define SOLVER_STATUS_READY_TO_EXECUTE             0x0001
 #define SOLVER_STATUS_INTERACTIVE                  0x0002
 #define SOLVER_STATUS_USES_FORMULA                 0x0100
+#define SOLVER_STATUS_MVAR_BEING_OPENED            0x0200
 
 #define SOLVER_RESULT_NORMAL                       0
 #define SOLVER_RESULT_SIGN_REVERSAL                1

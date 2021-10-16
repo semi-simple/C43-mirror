@@ -2059,7 +2059,12 @@
             }
           }
           if(!mvarMenu) {
-            showSoftmenu(-MNU_MVAR);
+            if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
+              showSoftmenu(-MNU_Solver);
+            }
+            else {
+              showSoftmenu(-MNU_MVAR);
+            }
           }
         }
         if(calcMode == CM_EIM) {

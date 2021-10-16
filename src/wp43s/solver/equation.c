@@ -466,6 +466,14 @@ static void _processOperator(uint16_t func, char *mvarBuffer) {
 }
 static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, char *mvarBuffer) {
   uint32_t tmpVal = 0;
+  if(parserHint != PARSER_HINT_NUMERIC && stringGlyphLength(strPtr) > 7) {
+    displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function parseEquation:", "token too long!", NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+
   switch(parseMode) {
 
     case EQUATION_PARSER_MVAR:
@@ -647,6 +655,9 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           buffer[1] = 0;
           _parseWord(buffer, parseMode, PARSER_HINT_NUMERIC, mvarBuffer);
         }
+        else if(*strPtr == ')') {
+          // do nothing
+        }
         else {
           displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -692,13 +703,20 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           }
         }
     }
-    fflush(stdout);
+    if(lastErrorCode != ERROR_NONE) return;
   }
   if(bufPtr != buffer) {
     *(bufPtr++) = 0;
     _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
   }
-  fflush(stdout);
+
+  if(stringGlyphLength(buffer) > 7) {
+    displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function parseEquation:", "token too long!", NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
 
   if(parseMode == EQUATION_PARSER_MVAR) {
     uint32_t tmpVal = 0;

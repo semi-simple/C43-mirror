@@ -266,6 +266,7 @@
           for(; aimBottomPos >= aimCursorPos; --aimBottomPos) *(aimBottomPos + itemLen) = *aimBottomPos; 
           xcopy(aimCursorPos, addChar, itemLen);
           ++xCursor;
+          if(item == ITM_PAIR_OF_PARENTHESES) ++xCursor;
         }
         else {
           xcopy(aimBuffer + stringByteLength(aimBuffer), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);

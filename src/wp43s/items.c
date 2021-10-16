@@ -711,6 +711,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnEqNew                     (uint16_t unusedButMandatoryParameter) {}
   void fnEqCursorLeft              (uint16_t unusedButMandatoryParameter) {}
   void fnEqCursorRight             (uint16_t unusedButMandatoryParameter) {}
+  void fnEqCalc                    (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2525,6 +2526,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1764 */  { fnEllipticEphi,               NOPARAM,                     "E(" STD_phi ",m)",                            "E(" STD_phi ",m)",                            (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1765 */  { fnJacobiZeta,                 NOPARAM,                     STD_ZETA "(" STD_phi ",m)",                    STD_ZETA "(" STD_phi ",m)",                    (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 1766 */  { fnGetHide,                    NOPARAM,                     "HIDE?",                                       "HIDE?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+/* 1767 */  { fnEqCalc,                     NOPARAM,                     "Calc",                                        "Calc",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 
-/* 1767 */  { itemToBeCoded,                NOPARAM,                    "",                                            "Last item",                                    (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 1768 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

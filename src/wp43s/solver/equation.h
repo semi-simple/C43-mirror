@@ -35,6 +35,7 @@ void   fnEqEdit       (uint16_t unusedButMandatoryParameter);
 void   fnEqDelete     (uint16_t unusedButMandatoryParameter);
 void   fnEqCursorLeft (uint16_t unusedButMandatoryParameter);
 void   fnEqCursorRight(uint16_t unusedButMandatoryParameter);
+void   fnEqCalc       (uint16_t unusedButMandatoryParameter);
 
 /**
  * Stores a formula. This function reallocates memory for the formula.

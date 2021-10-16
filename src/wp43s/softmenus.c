@@ -554,7 +554,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     if(currentSolverStatus | SOLVER_STATUS_USES_FORMULA) {
       char *bufPtr = tmpString;
       parseEquation(currentFormula, EQUATION_PARSER_MVAR, tmpString + TMP_STR_LENGTH - AIM_BUFFER_LENGTH, tmpString);
-      while(*bufPtr != 0) {
+      while(*bufPtr != 0 || numberOfVars < 6) {
         numberOfVars += 1;
         numberOfBytes += stringByteLength(bufPtr) + 1;
         bufPtr += stringByteLength(bufPtr) + 1;
@@ -811,11 +811,15 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
         for(y=0; y<3; y++) {
           for(x=0; x<6; x++) {
             if(x + 6*y + currentFirstItem < numberOfItems) {
-              showSoftkey((char *)ptr, x, y, vmNormal, true, true);
+              if(*ptr != 0)
+                showSoftkey((char *)ptr, x, y, vmNormal, true, true);
               ptr += stringByteLength((char *)ptr) + 1;
             }
           }
         }
+      }
+      if(softmenu[m].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE)) {
+        showEquation(currentFormula, 0, EQUATION_NO_CURSOR);
       }
     }
     else {

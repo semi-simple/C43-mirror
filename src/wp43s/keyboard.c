@@ -65,7 +65,15 @@
 
       case MNU_MVAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
-        item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_SOLVE_VAR);
+        if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && dynamicMenuItem == 5) {
+          item = ITM_CALC;
+        }
+        else if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && *getNthString(dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent, dynamicMenuItem) == 0) {
+          item = ITM_NOP;
+        }
+        else {
+          item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_SOLVE_VAR);
+        }
         break;
 
       case MNU_MATRS:

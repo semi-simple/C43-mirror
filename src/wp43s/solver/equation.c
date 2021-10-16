@@ -101,6 +101,10 @@ void fnEqCursorRight(uint16_t unusedButMandatoryParameter) {
   if(xCursor < (uint32_t)stringGlyphLength(aimBuffer)) ++xCursor;
 }
 
+void fnEqCalc(uint16_t unusedButMandatoryParameter) {
+  parseEquation(currentFormula, EQUATION_PARSER_XEQ, tmpString, NULL);
+}
+
 
 
 void setEquation(uint16_t equationId, const char *equationString) {
@@ -353,12 +357,18 @@ static int32_t _compareStr(const char *str1, const char *str2) {
   }
 }
 
+static void _menuF6(char *bufPtr) {
+  xcopy(bufPtr, "Calc", 5);
+  bufPtr[5] = 0;
+}
+
 #define PARSER_HINT_NUMERIC  0
 #define PARSER_HINT_OPERATOR 1
 #define PARSER_HINT_FUNCTION 2
 #define PARSER_HINT_VARIABLE 3
 #define PARSER_HINT_REGULAR (stringGlyphLength(buffer) == numericCount ? PARSER_HINT_NUMERIC : PARSER_HINT_VARIABLE)
 static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, char *mvarBuffer) {
+  uint32_t tmpVal = 0;
   switch(parseMode) {
     case EQUATION_PARSER_MVAR:
       if(parserHint == PARSER_HINT_VARIABLE) {
@@ -371,6 +381,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
             return;
           }
           bufPtr += stringByteLength(bufPtr) + 1;
+          ++tmpVal;
         }
         for(uint32_t i = CST_01; i <= CST_79; ++i) { // check for constants
           if(_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0) {
@@ -379,7 +390,11 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         }
         (void)findOrAllocateNamedVariable(strPtr);
         xcopy(bufPtr, strPtr, stringByteLength(strPtr) + 1);
-        bufPtr[stringByteLength(strPtr) + 1] = 0;
+        bufPtr += stringByteLength(strPtr) + 1;
+        bufPtr[0] = 0;
+        if(tmpVal == 4) {
+          _menuF6(bufPtr);
+        }
       }
       break;
     case EQUATION_PARSER_XEQ:
@@ -475,4 +490,19 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
     _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
   }
   fflush(stdout);
+
+  if(parseMode == EQUATION_PARSER_MVAR) {
+    uint32_t tmpVal = 0;
+    bufPtr = mvarBuffer;
+    while(*bufPtr != 0) {
+      bufPtr += stringByteLength(bufPtr) + 1;
+      ++tmpVal;
+    }
+    for(; tmpVal < 5; ++tmpVal) {
+      *(bufPtr++) = 0;
+    }
+    if(tmpVal == 5) {
+      _menuF6(bufPtr);
+    }
+  }
 }

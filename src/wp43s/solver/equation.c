@@ -428,49 +428,69 @@ static uint32_t _operatorPriority(uint16_t func) {
   }
 }
 static void _processOperator(uint16_t func, char *mvarBuffer) {
+  uint32_t opStackTop = 0xffffffffu;
   for(uint32_t i = 0; i <= PARSER_OPERATOR_STACK_SIZE; ++i) {
-    if(i == PARSER_OPERATOR_STACK_SIZE || ((uint16_t *)mvarBuffer)[i] == 0) {
-      if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT || func == PARSER_OPERATOR_ITM_EQUAL || func == PARSER_OPERATOR_ITM_END_OF_FORMULA) {
-        for(int32_t j = (int32_t)i - 1; j >= 0; --j) {
-          if(((uint16_t *)mvarBuffer)[j] != PARSER_OPERATOR_ITM_PARENTHESIS_LEFT)
-            runFunction(((uint16_t *)mvarBuffer)[j]);
-          switch(((uint16_t *)mvarBuffer)[j]) {
-            case ITM_ADD:
-            case ITM_SUB:
-            case ITM_MULT:
-            case ITM_DIV:
-            case ITM_YX:
-              ((uint16_t *)mvarBuffer)[j] = 0;
-              break;
-            default:
-              ((uint16_t *)mvarBuffer)[j] = 0;
-              if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT) return;
-              displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-                moreInfoOnError("In function parseEquation:", "parentheses mismatch!", "parenthesis not closed", NULL);
-              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-              break;
-          }
-        }
-        if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT) {
-          displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            moreInfoOnError("In function parseEquation:", "parentheses mismatch!", "no corresponding opening parenthesis", NULL);
-          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-        }
-        else if(func == PARSER_OPERATOR_ITM_EQUAL) {
-          fnToReal(NOPARAM);
-          real34Copy(REGISTER_REAL34_DATA(REGISTER_X), (real34_t *)(mvarBuffer + PARSER_OPERATOR_STACK_SIZE * 2));
-        }
-        else {
-          setSystemFlag(FLAG_ASLIFT);
-          liftStack();
-          reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-          real34Copy((real34_t *)(mvarBuffer + PARSER_OPERATOR_STACK_SIZE * 2), REGISTER_REAL34_DATA(REGISTER_X));
-          runFunction(ITM_SUB);
+    if((i == PARSER_OPERATOR_STACK_SIZE) || (((uint16_t *)mvarBuffer)[i] == 0)) {
+      opStackTop = i;
+      break;
+    }
+  }
+  if(opStackTop != 0xffffffffu) {
+    /* flush operator stack */
+    /* closing parenthesis, equal, or end of formula */
+    if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT || func == PARSER_OPERATOR_ITM_EQUAL || func == PARSER_OPERATOR_ITM_END_OF_FORMULA) {
+      for(int32_t i = (int32_t)opStackTop - 1; i >= 0; --i) {
+        if(((uint16_t *)mvarBuffer)[i] != PARSER_OPERATOR_ITM_PARENTHESIS_LEFT)
+          runFunction(((uint16_t *)mvarBuffer)[i]);
+        switch(((uint16_t *)mvarBuffer)[i]) {
+          case ITM_ADD:
+          case ITM_SUB:
+          case ITM_MULT:
+          case ITM_DIV:
+          case ITM_YX:
+            ((uint16_t *)mvarBuffer)[i] = 0;
+            break;
+          default:
+            ((uint16_t *)mvarBuffer)[i] = 0;
+            if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT) return;
+            displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              moreInfoOnError("In function parseEquation:", "parentheses mismatch!", "parenthesis not closed", NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            break;
         }
       }
-      else if(i == 0 ||
+      if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT) {
+        displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function parseEquation:", "parentheses mismatch!", "no corresponding opening parenthesis", NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+      else if(func == PARSER_OPERATOR_ITM_EQUAL) {
+        fnToReal(NOPARAM);
+        real34Copy(REGISTER_REAL34_DATA(REGISTER_X), (real34_t *)(mvarBuffer + PARSER_OPERATOR_STACK_SIZE * 2));
+      }
+      else {
+        setSystemFlag(FLAG_ASLIFT);
+        liftStack();
+        reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+        real34Copy((real34_t *)(mvarBuffer + PARSER_OPERATOR_STACK_SIZE * 2), REGISTER_REAL34_DATA(REGISTER_X));
+        runFunction(ITM_SUB);
+      }
+      return;
+    }
+
+    /* stack is empty */
+    if(opStackTop == 0) {
+      ((uint16_t *)mvarBuffer)[0] = func;
+      return;
+    }
+
+    /* other cases */
+    for(uint32_t i = opStackTop; i > 0; --i) {
+
+      /* push an operator */
+      if(
         (_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) < 4) || /* parenthesis */
         (_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) & (~1u)) > (_operatorPriority(func) & (~1u)) || /* higher priority */
         ((_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) & (~1u)) == (_operatorPriority(func) & (~1u)) && (_operatorPriority(func) & 1) /* same priority and right-associative */ )
@@ -484,13 +504,28 @@ static void _processOperator(uint16_t func, char *mvarBuffer) {
             moreInfoOnError("In function parseEquation:", "operator stack overflow!", NULL, NULL);
           #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
         }
+        return;
       }
+
+      /* pop an operator */
       else {
         runFunction(((uint16_t *)mvarBuffer)[i - 1]);
-        ((uint16_t *)mvarBuffer)[i - 1] = func;
+        if(i == 1) {
+          ((uint16_t *)mvarBuffer)[i - 1] = func;
+          return;
+        }
+        else {
+          ((uint16_t *)mvarBuffer)[i - 1] = 0;
+        }
       }
-      return;
+
     }
+  }
+  else {
+    displayCalcErrorMessage(ERROR_EQUATION_TOO_COMPLEX, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function parseEquation:", "operator stack overflow!", NULL, NULL);
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }
 static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, char *mvarBuffer) {

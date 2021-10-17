@@ -205,6 +205,17 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
     uint32_t tmpVal = 0;
     bool_t labelFound = false;
     bool_t cursorShown = false;
+    const char *tmpPtr = strPtr;
+
+    for(uint32_t i = 0; i < 7; ++i) {
+      tmpPtr += ((*tmpPtr) & 0x80) ? 2 : 1;
+      if(*tmpPtr == ':') {
+        labelFound = true;
+        tmpVal = i;
+        break;
+      }
+    }
+    bufPtr = tmpString;
 
     if(startAt > 0) {
       *bufPtr       = STD_ELLIPSIS[0];
@@ -226,7 +237,24 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
       if((++strLength) > startAt) {
         doubleBytednessHistory <<= 1;
         *bufPtr = *strPtr;
-        if(((*strPtr) == ':' && !labelFound && strLength <= 8) || (*strPtr) == '(') {
+        if(labelFound && (uint32_t)(strLength - 1) <= tmpVal) {
+          if((*strPtr) & 0x80) {
+            *(bufPtr + 1) = *(strPtr + 1);
+            *(bufPtr + 2) = 0;
+            doubleBytednessHistory |= 1;
+          }
+          else {
+            *(bufPtr + 1) = 0;
+          }
+        }
+        else if((*strPtr) == ':' && labelFound && strLength <= 8) {
+          *(bufPtr + 1) = ' ';
+          *(bufPtr + 2) = 0;
+          doubleBytednessHistory <<= 1;
+          bufPtr += 1;
+          labelFound = false;
+        }
+        else if((*strPtr) == '(') {
           *(bufPtr + 1) = STD_SPACE_4_PER_EM[0];
           *(bufPtr + 2) = STD_SPACE_4_PER_EM[1];
           *(bufPtr + 3) = 0;
@@ -247,6 +275,7 @@ bool_t showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt) {
           for(uint32_t i = 0; i < tmpVal; ++i)
             _showExponent(&bufPtr, &strPtr);
           *bufPtr = 0;
+          bufPtr -= 2;
           doubleBytednessHistory |= 1;
           for(uint32_t i = 1; i < tmpVal; ++i) {
             doubleBytednessHistory <<= 1;

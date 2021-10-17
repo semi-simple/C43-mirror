@@ -860,20 +860,10 @@ void fnReset(uint16_t confirmation) {
     //allocateNamedVariable(STD_omega STD_SUB_1);
     //allocateNamedVariable(STD_omega STD_SUB_2);
 
-    // Test formulae
-    numberOfFormulae = 4;
+    // Equation formulae
+    allFormulae = NULL;
+    numberOfFormulae = 0;
     currentFormula = 0;
-    allFormulae = wp43sAllocate(TO_BLOCKS(sizeof(formulaHeader_t)) * numberOfFormulae);
-
-    for(int i = 0; i < numberOfFormulae; ++i) {
-      allFormulae[i].sizeInBlocks = 0;
-      allFormulae[i].pointerToFormulaData = WP43S_NULL;
-    }
-
-    setEquation(0, "Equation mockup");
-    setEquation(1, "Formula here");
-    setEquation(2, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed");
-    setEquation(3, "height=v" STD_SUB_0 STD_CROSS "time-g" STD_SUB_EARTH "/2" STD_CROSS "time^2");
 
     #if (DEBUG_PANEL == 1)
       debugWindow = DBG_REGISTERS;

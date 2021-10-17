@@ -55,12 +55,14 @@ void   deleteEquation (uint16_t equationId);
 /**
  * Shows a formula at the softmenu.
  *
- * \param[in]  equationId   Equation ID
- * \param[in]  startAt      From which character the formula shall be shown, in number of glyphs
- * \param[in]  cursorAt     Position of cursor, in number of glyphs, alternatively `EQUATION_NO_CURSOR` to hide cursor
- * \return                  true if the cursor is shown, false otherwise
+ * \param[in]  equationId      Equation ID
+ * \param[in]  startAt         From which character the formula shall be shown, in number of glyphs
+ * \param[in]  cursorAt        Position of cursor, in number of glyphs, alternatively `EQUATION_NO_CURSOR` to hide cursor
+ * \param[in]  dryRun          Set `true` to make sure no output displayed (performs dry run if `true`)
+ * \param[out] cursorShown     Unless `NULL` is specified, returns whether the cursor has been (or would be) shown
+ * \param[out] rightEllipsis   Unless `NULL` is specified, returns whether the right ellipsis has been (or would be) shown
  */
-bool_t showEquation   (uint16_t equationId, uint16_t startAt, uint16_t cursorAt);
+void   showEquation   (uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool_t dryRun, bool_t *cursorShown, bool_t *rightEllipsis);
 
 /**
  * Parses a formula.

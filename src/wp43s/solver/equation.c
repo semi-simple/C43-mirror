@@ -148,6 +148,7 @@ void deleteEquation(uint16_t equationId) {
 
 
 
+#ifndef TESTSUITE_BUILD
 static void _showExponent(char **bufPtr, const char **strPtr) {
   switch(*(++(*strPtr))) {
     case '1':
@@ -193,8 +194,10 @@ static uint32_t _checkExponent(const char *strPtr) {
     }
   }
 }
+#endif /* TESTSUITE_BUILD */
 
 void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool_t dryRun, bool_t *cursorShown, bool_t *rightEllipsis) {
+#ifndef TESTSUITE_BUILD
   if(equationId < numberOfFormulae || equationId == EQUATION_AIM_BUFFER) {
     char *bufPtr = tmpString;
     const char *strPtr = equationId == EQUATION_AIM_BUFFER ? aimBuffer : (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
@@ -366,10 +369,12 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
     if((!dryRun) && (*cursorShown || cursorAt == EQUATION_NO_CURSOR))
       showString(tmpString, &standardFont, 1, SCREEN_HEIGHT - SOFTMENU_HEIGHT * 3 + 2 , vmNormal, true, true);
   }
+#endif /* TESTSUITE_BUILD */
 }
 
 
 
+#ifndef TESTSUITE_BUILD
 static int32_t _compareChar(const char *char1, const char *char2) {
   int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0]) | 0x7f) << 8) | char1[1]) : char1[0];
   int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0]) | 0x7f) << 8) | char2[1]) : char2[0];
@@ -647,8 +652,10 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
       displayBugScreen("In function _parseWord: Unknown mode of formula parser!");
   }
 }
+#endif /* TESTSUITE_BUILD */
 
 void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *mvarBuffer) {
+#ifndef TESTSUITE_BUILD
   const char *strPtr = (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
   char *bufPtr = buffer;
   int16_t numericCount = 0;
@@ -803,4 +810,5 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
   if(parseMode == EQUATION_PARSER_XEQ) {
     _processOperator(PARSER_OPERATOR_ITM_END_OF_FORMULA, mvarBuffer);
   }
+#endif /* TESTSUITE_BUILD */
 }

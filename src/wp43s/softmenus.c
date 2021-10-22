@@ -879,31 +879,33 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
           }
         }
       }
-      if(softmenu[m].menuItem == -MNU_EQN) {
-        showEquation(currentFormula, 0, EQUATION_NO_CURSOR, false, NULL, NULL);
-        dottedTopLine = (numberOfFormulae >= 2);
-        yDotted = 2;
-      }
-      if(softmenu[m].menuItem == -MNU_EQ_EDIT) {
-        bool_t cursorShown;
-        bool_t rightEllipsis;
-        while(1) {
-          showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor, true, &cursorShown, &rightEllipsis);
-          if(cursorShown) break;
-          if(yCursor > xCursor) --yCursor;
-          else                  ++yCursor;
+      if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE)) {
+        if(softmenu[m].menuItem == -MNU_EQN) {
+          showEquation(currentFormula, 0, EQUATION_NO_CURSOR, false, NULL, NULL);
+          dottedTopLine = (numberOfFormulae >= 2);
+          yDotted = 2;
         }
-        if(!rightEllipsis && yCursor > 0) {
-          do {
-            --yCursor;
+        if(softmenu[m].menuItem == -MNU_EQ_EDIT) {
+          bool_t cursorShown;
+          bool_t rightEllipsis;
+          while(1) {
             showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor, true, &cursorShown, &rightEllipsis);
-            if((!cursorShown) || rightEllipsis) {
-              ++yCursor;
-              break;
-            }
-          } while(yCursor > 0);
+            if(cursorShown) break;
+            if(yCursor > xCursor) --yCursor;
+            else                  ++yCursor;
+          }
+          if(!rightEllipsis && yCursor > 0) {
+            do {
+              --yCursor;
+              showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor, true, &cursorShown, &rightEllipsis);
+              if((!cursorShown) || rightEllipsis) {
+                ++yCursor;
+                break;
+              }
+            } while(yCursor > 0);
+          }
+          showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor, false, NULL, NULL);
         }
-        showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor, false, NULL, NULL);
       }
     }
 

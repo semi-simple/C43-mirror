@@ -170,6 +170,9 @@
             fnKeyInCatalog = 1;
             addItemToBuffer(item);
             fnKeyInCatalog = 0;
+            if(calcMode == CM_EIM && isAlphabeticSoftmenu()) {
+              popSoftmenu();
+            }
             refreshScreen();
           }
 

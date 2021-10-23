@@ -194,6 +194,20 @@ static uint32_t _checkExponent(const char *strPtr) {
     }
   }
 }
+static void _addSpace(char **bufPtr, int16_t *strWidth, uint32_t *doubleBytednessHistory) { // space between an operand and an operator
+  bool_t spaceShallBeAdded = true;
+  if(((*bufPtr) >= (tmpString + 2)) && (strncmp((*bufPtr) - 2, STD_SPACE_PUNCTUATION, 2) == 0)) spaceShallBeAdded = false;
+  if(((*bufPtr) >= (tmpString + 1)) && (((*doubleBytednessHistory) & 1) == 0 && *((*bufPtr) - 1) == ' ')) spaceShallBeAdded = false;
+  if(spaceShallBeAdded) {
+    **bufPtr         = STD_SPACE_PUNCTUATION[0];
+    *((*bufPtr) + 1) = STD_SPACE_PUNCTUATION[1];
+    *((*bufPtr) + 2) = 0;
+    *strWidth += stringWidth(*bufPtr, &standardFont, true, true);
+    *bufPtr += 2;
+    *doubleBytednessHistory |= 1;
+    *doubleBytednessHistory <<= 1;
+  }
+}
 #endif /* TESTSUITE_BUILD */
 
 void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool_t dryRun, bool_t *cursorShown, bool_t *rightEllipsis) {
@@ -206,24 +220,12 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
     int16_t glyphWidth = 0;
     uint32_t doubleBytednessHistory = 0;
     uint32_t tmpVal = 0;
-    bool_t labelFound = false;
-    const char *tmpPtr = strPtr;
 
     bool_t _cursorShown, _rightEllipsis;
     if(cursorShown == NULL)   cursorShown   = &_cursorShown;
     if(rightEllipsis == NULL) rightEllipsis = &_rightEllipsis;
     *cursorShown = false;
     *rightEllipsis = false;
-
-    for(uint32_t i = 0; i < 7; ++i) {
-      tmpPtr += ((*tmpPtr) & 0x80) ? 2 : 1;
-      if(*tmpPtr == ':') {
-        labelFound = true;
-        tmpVal = i;
-        break;
-      }
-    }
-    bufPtr = tmpString;
 
     if(startAt > 0) {
       *bufPtr       = STD_ELLIPSIS[0];
@@ -245,39 +247,19 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
       if((++strLength) > startAt) {
         doubleBytednessHistory <<= 1;
         *bufPtr = *strPtr;
-        if(labelFound && (uint32_t)(strLength - 1) <= tmpVal) {
-          if((*strPtr) & 0x80) {
-            *(bufPtr + 1) = *(strPtr + 1);
-            *(bufPtr + 2) = 0;
-            doubleBytednessHistory |= 1;
-          }
-          else {
-            *(bufPtr + 1) = 0;
-          }
-        }
-        else if((*strPtr) == ':' && labelFound && strLength <= 8) {
+        if((*strPtr) == ':') {
           *(bufPtr + 1) = ' ';
           *(bufPtr + 2) = 0;
           doubleBytednessHistory <<= 1;
           bufPtr += 1;
-          labelFound = false;
         }
         else if((*strPtr) == '(') {
-          *(bufPtr + 1) = STD_SPACE_4_PER_EM[0];
-          *(bufPtr + 2) = STD_SPACE_4_PER_EM[1];
+          *(bufPtr + 1) = STD_SPACE_PUNCTUATION[0];
+          *(bufPtr + 2) = STD_SPACE_PUNCTUATION[1];
           *(bufPtr + 3) = 0;
           doubleBytednessHistory <<= 1;
           doubleBytednessHistory |= 1;
           bufPtr += 1;
-        }
-        else if((*strPtr) == ')') {
-          *bufPtr       = STD_SPACE_4_PER_EM[0];
-          *(bufPtr + 1) = STD_SPACE_4_PER_EM[1];
-          *(bufPtr + 2) = *strPtr;
-          *(bufPtr + 3) = 0;
-          doubleBytednessHistory <<= 1;
-          doubleBytednessHistory |= 2;
-          bufPtr += 2;
         }
         else if(cursorAt == EQUATION_NO_CURSOR && (*strPtr) == '^' && (tmpVal = _checkExponent(strPtr + 1))) {
           for(uint32_t i = 0; i < tmpVal; ++i)
@@ -290,38 +272,41 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
             doubleBytednessHistory |= 1;
           }
         }
-        else if((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '^') {
-          *bufPtr       = STD_SPACE_4_PER_EM[0];
-          *(bufPtr + 1) = STD_SPACE_4_PER_EM[1];
-          *(bufPtr + 2) = *strPtr;
-          *(bufPtr + 3) = 0;
+        else if((*strPtr) == ')' || (*strPtr) == '^') {
+          _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
+          *bufPtr       = *strPtr;
+          *(bufPtr + 1) = 0;
+        }
+        else if((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '!') {
+          _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
+          *bufPtr       = *strPtr;
+          *(bufPtr + 1) = 0;
           strWidth += stringWidth(bufPtr, &standardFont, true, true);
-          *(bufPtr + 3) = STD_SPACE_4_PER_EM[0];
-          *(bufPtr + 4) = STD_SPACE_4_PER_EM[1];
-          *(bufPtr + 5) = 0;
-          doubleBytednessHistory <<= 2;
-          doubleBytednessHistory |= 5;
-          bufPtr += 3;
+          *(bufPtr + 1) = STD_SPACE_PUNCTUATION[0];
+          *(bufPtr + 2) = STD_SPACE_PUNCTUATION[1];
+          *(bufPtr + 3) = 0;
+          doubleBytednessHistory <<= 1;
+          doubleBytednessHistory |= 1;
+          bufPtr += 1;
         }
         else if(((*strPtr) == STD_CROSS[0] && (*(strPtr + 1)) == STD_CROSS[1]) || ((*strPtr) == STD_DOT[0] && (*(strPtr + 1)) == STD_DOT[1])) {
-          *bufPtr       = STD_SPACE_4_PER_EM[0];
-          *(bufPtr + 1) = STD_SPACE_4_PER_EM[1];
+          _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           if(getSystemFlag(FLAG_MULTx)) {
-            *(bufPtr + 2) = STD_CROSS[0];
-            *(bufPtr + 3) = STD_CROSS[1];
+            *bufPtr       = STD_CROSS[0];
+            *(bufPtr + 1) = STD_CROSS[1];
           }
           else {
-            *(bufPtr + 2) = STD_DOT[0];
-            *(bufPtr + 3) = STD_DOT[1];
+            *bufPtr       = STD_DOT[0];
+            *(bufPtr + 1) = STD_DOT[1];
           }
-          *(bufPtr + 4) = 0;
+          *(bufPtr + 2) = 0;
           strWidth += stringWidth(bufPtr, &standardFont, true, true);
-          *(bufPtr + 4) = STD_SPACE_4_PER_EM[0];
-          *(bufPtr + 5) = STD_SPACE_4_PER_EM[1];
-          *(bufPtr + 6) = 0;
-          doubleBytednessHistory <<= 2;
-          doubleBytednessHistory |= 7;
-          bufPtr += 4;
+          *(bufPtr + 2) = STD_SPACE_PUNCTUATION[0];
+          *(bufPtr + 3) = STD_SPACE_PUNCTUATION[1];
+          *(bufPtr + 4) = 0;
+          doubleBytednessHistory <<= 1;
+          doubleBytednessHistory |= 3;
+          bufPtr += 2;
         }
         else if((*strPtr) & 0x80) {
           *(bufPtr + 1) = *(strPtr + 1);

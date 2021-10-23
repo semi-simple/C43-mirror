@@ -399,7 +399,8 @@ static void _menuF6(char *bufPtr) {
 #define PARSER_OPERATOR_ITM_PARENTHESIS_LEFT  5000
 #define PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT 5001
 #define PARSER_OPERATOR_ITM_EQUAL             5002
-#define PARSER_OPERATOR_ITM_END_OF_FORMULA    5003
+#define PARSER_OPERATOR_ITM_YX                5003
+#define PARSER_OPERATOR_ITM_END_OF_FORMULA    5004
 
 static uint32_t _operatorPriority(uint16_t func) {
   // priority of operator: smaller number represents higher priority 
@@ -407,11 +408,13 @@ static uint32_t _operatorPriority(uint16_t func) {
   switch(func) {
     case ITM_MULT:
     case ITM_DIV:
-      return 6;
+      return 8;
     case ITM_ADD:
     case ITM_SUB:
-      return 8;
-    case ITM_YX:
+      return 10;
+    case PARSER_OPERATOR_ITM_YX:
+      return 7;
+    case ITM_XFACT:
       return 5;
     case PARSER_OPERATOR_ITM_PARENTHESIS_LEFT:
     case PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT:
@@ -434,14 +437,21 @@ static void _processOperator(uint16_t func, char *mvarBuffer) {
     /* closing parenthesis, equal, or end of formula */
     if(func == PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT || func == PARSER_OPERATOR_ITM_EQUAL || func == PARSER_OPERATOR_ITM_END_OF_FORMULA) {
       for(int32_t i = (int32_t)opStackTop - 1; i >= 0; --i) {
-        if(((uint16_t *)mvarBuffer)[i] != PARSER_OPERATOR_ITM_PARENTHESIS_LEFT)
-          runFunction(((uint16_t *)mvarBuffer)[i]);
+        switch(((uint16_t *)mvarBuffer)[i]) {
+          case PARSER_OPERATOR_ITM_PARENTHESIS_LEFT:
+            break;
+          case PARSER_OPERATOR_ITM_YX:
+            runFunction(ITM_YX);
+            break;
+          default:
+            runFunction(((uint16_t *)mvarBuffer)[i]);
+        }
         switch(((uint16_t *)mvarBuffer)[i]) {
           case ITM_ADD:
           case ITM_SUB:
           case ITM_MULT:
           case ITM_DIV:
-          case ITM_YX:
+          case PARSER_OPERATOR_ITM_YX:
             ((uint16_t *)mvarBuffer)[i] = 0;
             break;
           default:
@@ -483,8 +493,14 @@ static void _processOperator(uint16_t func, char *mvarBuffer) {
     /* other cases */
     for(uint32_t i = opStackTop; i > 0; --i) {
 
+      /* factorial */
+      if(func == ITM_XFACT) {
+        runFunction(ITM_XFACT);
+        return;
+      }
+
       /* push an operator */
-      if(
+      else if(
         (_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) < 4) || /* parenthesis */
         (_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) & (~1u)) > (_operatorPriority(func) & (~1u)) || /* higher priority */
         ((_operatorPriority(((uint16_t *)mvarBuffer)[i - 1]) & (~1u)) == (_operatorPriority(func) & (~1u)) && (_operatorPriority(func) & 1) /* same priority and right-associative */ )
@@ -503,7 +519,7 @@ static void _processOperator(uint16_t func, char *mvarBuffer) {
 
       /* pop an operator */
       else {
-        runFunction(((uint16_t *)mvarBuffer)[i - 1]);
+        runFunction(((uint16_t *)mvarBuffer)[i - 1] == PARSER_OPERATOR_ITM_YX ? ITM_YX : ((uint16_t *)mvarBuffer)[i - 1]);
         if(i == 1) {
           ((uint16_t *)mvarBuffer)[i - 1] = func;
           return;
@@ -529,6 +545,9 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
       moreInfoOnError("In function parseEquation:", "token too long!", NULL, NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    return;
+  }
+  if(strPtr[0] == 0) {
     return;
   }
 
@@ -595,7 +614,10 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           _processOperator(ITM_DIV, mvarBuffer);
         }
         else if(_compareStr("^", strPtr) == 0) {
-          _processOperator(ITM_YX, mvarBuffer);
+          _processOperator(PARSER_OPERATOR_ITM_YX, mvarBuffer);
+        }
+        else if(_compareStr("!", strPtr) == 0) {
+          _processOperator(ITM_XFACT, mvarBuffer);
         }
         else if(_compareStr("(", strPtr) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_LEFT, mvarBuffer);
@@ -608,6 +630,9 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         }
         else if(_compareStr(":", strPtr) == 0) {
           // label will be skipped
+        }
+        else if(_compareStr(" ", strPtr) == 0) {
+          // nothing to do
         }
         else {
           displayBugScreen("In function _parseWord: Unknown operator appeared!");
@@ -644,7 +669,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
   const char *strPtr = (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
   char *bufPtr = buffer;
   int16_t numericCount = 0;
-  bool_t equalAppeared = false, labeled = false;
+  bool_t equalAppeared = false, labeled = false, afterClosingParenthesis = false;
 
   for(uint32_t i = 0; i < (PARSER_OPERATOR_STACK_SIZE * 2); ++i) mvarBuffer[i] = 0;
   real34Zero((real34_t *)(mvarBuffer + PARSER_OPERATOR_STACK_SIZE * 2));
@@ -698,6 +723,8 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
       case '/':
       case ')':
       case '^':
+      case '!':
+      case ' ':
         if(equalAppeared && (*strPtr == '=')) {
           displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
@@ -709,14 +736,19 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           *(bufPtr++) = 0;
           if(*strPtr != ':')
             _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
+          afterClosingParenthesis = (*strPtr == ')');
         }
         else if(*strPtr == '-') {
           buffer[0] = '0';
           buffer[1] = 0;
           _parseWord(buffer, parseMode, PARSER_HINT_NUMERIC, mvarBuffer);
+          afterClosingParenthesis = false;
+        }
+        else if(afterClosingParenthesis && *strPtr != '(' && *strPtr != ' ') {
+          afterClosingParenthesis = false;
         }
         else if(*strPtr == ')') {
-          // do nothing
+          afterClosingParenthesis = true;
         }
         else {
           displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -762,6 +794,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
             *(bufPtr++) = *(strPtr++);
           }
         }
+        afterClosingParenthesis = false;
     }
     if(lastErrorCode != ERROR_NONE) return;
   }

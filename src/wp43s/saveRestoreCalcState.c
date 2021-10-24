@@ -748,7 +748,7 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   }
 
   // Other configuration stuff
-  sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n15\n");
+  sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n16\n");
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "firstGregorianDay\n%" PRIu32 "\n", firstGregorianDay);
   save(tmpString, strlen(tmpString), BACKUP);
@@ -1363,13 +1363,12 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
         else if(strcmp(aimBuffer, "notBestF") == 0) {
           lrSelection = stringToUint16(tmpString);
         }
-
-
       }
     }
+    return false; //Signal that this was the last section loaded and no more sections to follow
   }
 
-  return true;
+  return true; //Signal to continue loading the next section
 }
 
 

@@ -30,6 +30,7 @@
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
+#include "solver/equation.h"
 #include "stats.h"
 #include <string.h>
 
@@ -757,6 +758,16 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
+  // Equations
+  sprintf(tmpString, "EQUATIONS\n%" PRIu16 "\n", numberOfFormulae);
+  save(tmpString, strlen(tmpString), BACKUP);
+
+  for(i=0; i<numberOfFormulae; i++) {
+    stringToUtf8(TO_PCMEMPTR(allFormulae[i].pointerToFormulaData), (uint8_t *)tmpString);
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+
   // Other configuration stuff
   sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n15\n");
   save(tmpString, strlen(tmpString), BACKUP);
@@ -1309,6 +1320,36 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
     }
 
     scanLabelsAndPrograms();
+  }
+
+  else if(strcmp(tmpString, "EQUATIONS") == 0) {
+    uint16_t formulae;
+
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      for(i = numberOfFormulae; i > 0; --i) {
+        deleteEquation(i - 1);
+      }
+    }
+
+    readLine(stream, tmpString); // Number of formulae
+    formulae = stringToUint16(tmpString);
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      allFormulae = wp43sAllocate(TO_BLOCKS(sizeof(formulaHeader_t)) * formulae);
+      numberOfFormulae = formulae;
+      currentFormula = 0;
+      for(i = 0; i < formulae; i++) {
+        allFormulae[i].pointerToFormulaData = WP43S_NULL;
+        allFormulae[i].sizeInBlocks = 0;
+      }
+    }
+
+    for(i = 0; i < formulae; i++) {
+      readLine(stream, tmpString); // One formula
+      if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+        utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
+        setEquation(i, tmpString + TMP_STR_LENGTH / 2);
+      }
+    }
   }
 
   else if(strcmp(tmpString, "OTHER_CONFIGURATION_STUFF") == 0) {

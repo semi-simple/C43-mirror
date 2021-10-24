@@ -653,7 +653,8 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         }
         displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          moreInfoOnError("In function parseEquation:", "parentheses mismatch!", NULL, NULL);
+          stringToUtf8(strPtr, (uint8_t *)errorMessage);
+          moreInfoOnError("In function parseEquation:", errorMessage, "is not recognized as a function", NULL);
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       break;

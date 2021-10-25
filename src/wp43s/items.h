@@ -1828,8 +1828,9 @@
 #define ITM_ZETAphik                  1765
 #define ITM_GETHIDE                   1766
 #define ITM_CALC                      1767
+#define ITM_SQRT                      1768
 
-#define LAST_ITEM                     1768
+#define LAST_ITEM                     1769
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

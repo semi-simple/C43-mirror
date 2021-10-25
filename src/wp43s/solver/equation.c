@@ -249,12 +249,24 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
     int16_t glyphWidth = 0;
     uint32_t doubleBytednessHistory = 0;
     uint32_t tmpVal = 0;
+    bool_t inLabel = false;
+    const char *tmpPtr = strPtr;
 
     bool_t _cursorShown, _rightEllipsis;
     if(cursorShown == NULL)   cursorShown   = &_cursorShown;
     if(rightEllipsis == NULL) rightEllipsis = &_rightEllipsis;
     *cursorShown = false;
     *rightEllipsis = false;
+
+    for(uint32_t i = 0; i < 7; ++i) {
+      tmpPtr += ((*tmpPtr) & 0x80) ? 2 : 1;
+      if(*tmpPtr == ':') {
+        inLabel = true;
+        tmpVal = i;
+        break;
+      }
+    }
+    bufPtr = tmpString;
 
     if(startAt > 0) {
       *bufPtr       = STD_ELLIPSIS[0];
@@ -281,8 +293,9 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           *(bufPtr + 2) = 0;
           doubleBytednessHistory <<= 1;
           bufPtr += 1;
+          inLabel = false;
         }
-        else if((*strPtr) == '(') {
+        else if((!inLabel) && (*strPtr) == '(') {
           *(bufPtr + 1) = STD_SPACE_PUNCTUATION[0];
           *(bufPtr + 2) = STD_SPACE_PUNCTUATION[1];
           *(bufPtr + 3) = 0;
@@ -290,7 +303,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory |= 1;
           bufPtr += 1;
         }
-        else if(cursorAt == EQUATION_NO_CURSOR && (*strPtr) == '^' && (tmpVal = _checkExponent(strPtr + 1))) {
+        else if((!inLabel) && (cursorAt == EQUATION_NO_CURSOR && (*strPtr) == '^' && (tmpVal = _checkExponent(strPtr + 1)))) {
           for(uint32_t i = 0; i < tmpVal; ++i)
             _showExponent(&bufPtr, &strPtr);
           *bufPtr = 0;
@@ -301,12 +314,12 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
             doubleBytednessHistory |= 1;
           }
         }
-        else if((*strPtr) == ')' || (*strPtr) == '^') {
+        else if((!inLabel) && ((*strPtr) == ')' || (*strPtr) == '^')) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
         }
-        else if((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '!') {
+        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '!')) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
@@ -318,7 +331,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory |= 1;
           bufPtr += 1;
         }
-        else if(((*strPtr) == STD_CROSS[0] && (*(strPtr + 1)) == STD_CROSS[1]) || ((*strPtr) == STD_DOT[0] && (*(strPtr + 1)) == STD_DOT[1])) {
+        else if((!inLabel) && (((*strPtr) == STD_CROSS[0] && (*(strPtr + 1)) == STD_CROSS[1]) || ((*strPtr) == STD_DOT[0] && (*(strPtr + 1)) == STD_DOT[1]))) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           if(getSystemFlag(FLAG_MULTx)) {
             *bufPtr       = STD_CROSS[0];

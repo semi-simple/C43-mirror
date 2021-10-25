@@ -36,6 +36,35 @@
 
 
 
+#ifndef TESTSUITE_BUILD
+  typedef struct {
+    char     name[16];
+    uint16_t opCode;
+    uint16_t unused;
+  } functionAlias_t;
+  TO_QSPI static const functionAlias_t functionAlias[] = {
+    //name             opCode           padding
+    { STD_CUBE_ROOT,   ITM_CUBEROOT,    0}, // Cube root
+    { "cn",            ITM_cn,          0}, // Cosinus amplitudinis
+    { "dn",            ITM_dn,          0}, // Delta amplitudinis
+    { "E",             ITM_Ek,          0}, // Complete or incomplete elliptic integral of 2nd kind
+    { "F",             ITM_Fphik,       0}, // Incomplete elliptic integral of 1st kind
+    { "J" STD_SUB_y,   ITM_JYX,         0}, // Bessel function
+    { "K",             ITM_Kk,          0}, // Complete elliptic integral of 1st kind
+    { "sn",            ITM_sn,          0}, // Sinus amplitudinis
+    { "Y" STD_SUB_y,   ITM_YYX,         0}, // Bessel function
+    { STD_beta,        ITM_BETAXY,      0}, // Beta function
+    { STD_GAMMA,       ITM_GAMMAX,      0}, // Gamma function
+    { STD_zeta,        ITM_zetaX,       0}, // Riemann zeta function
+    { STD_ZETA,        ITM_ZETAphik,    0}, // Jacobi zeta function
+    { STD_PI,          ITM_PInk,        0}, // Complete elliptic integral of 3rd kind
+    { STD_psi,         ITM_am,          0}, // Jacobi amplitude
+    { STD_SQUARE_ROOT, ITM_SQUAREROOTX, 0}, // Square root (available through f SQRT in EIM)
+    { "",              0,               0}  // Sentinel
+  };
+#endif /* TESTSUITE_BUILD */
+
+
 void fnEqNew(uint16_t unusedButMandatoryParameter) {
   if(numberOfFormulae == 0) {
     allFormulae = wp43sAllocate(TO_BLOCKS(sizeof(formulaHeader_t)));
@@ -639,6 +668,12 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         }
       }
       else if(parserHint == PARSER_HINT_FUNCTION) {
+        for(uint32_t i = 0; functionAlias[i].name[0] != 0; ++i) {
+          if(_compareStr(functionAlias[i].name, strPtr) == 0) {
+            _processOperator(functionAlias[i].opCode, mvarBuffer);
+            return;
+          }
+        }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
           if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0)) {
             _processOperator(i, mvarBuffer);

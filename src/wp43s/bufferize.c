@@ -258,7 +258,7 @@
           displayBugScreen(errorMessage);
         }
         else if(calcMode == CM_EIM) {
-          const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" : indexOfItems[item].itemSoftmenuName;
+          const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" : item == ITM_CHECK_MARK ? STD_SQUARE_ROOT : indexOfItems[item].itemSoftmenuName;
           char *aimCursorPos = aimBuffer;
           char *aimBottomPos = aimBuffer + stringByteLength(aimBuffer);
           uint32_t itemLen = stringByteLength(addChar);

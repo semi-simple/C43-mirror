@@ -223,9 +223,16 @@ static uint32_t _checkExponent(const char *strPtr) {
     }
   }
 }
+
+static int32_t _compareChar(const char *char1, const char *char2) {
+  int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0]) | 0x7f) << 8) | char1[1]) : char1[0];
+  int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0]) | 0x7f) << 8) | char2[1]) : char2[0];
+  return code2 - code1;
+}
+
 static void _addSpace(char **bufPtr, int16_t *strWidth, uint32_t *doubleBytednessHistory) { // space between an operand and an operator
   bool_t spaceShallBeAdded = true;
-  if(((*bufPtr) >= (tmpString + 2)) && (strncmp((*bufPtr) - 2, STD_SPACE_PUNCTUATION, 2) == 0)) spaceShallBeAdded = false;
+  if(((*bufPtr) >= (tmpString + 2)) && (_compareChar((*bufPtr) - 2, STD_SPACE_PUNCTUATION) == 0)) spaceShallBeAdded = false;
   if(((*bufPtr) >= (tmpString + 1)) && (((*doubleBytednessHistory) & 1) == 0 && *((*bufPtr) - 1) == ' ')) spaceShallBeAdded = false;
   if(spaceShallBeAdded) {
     **bufPtr         = STD_SPACE_PUNCTUATION[0];
@@ -402,12 +409,6 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
 
 
 #ifndef TESTSUITE_BUILD
-static int32_t _compareChar(const char *char1, const char *char2) {
-  int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0]) | 0x7f) << 8) | char1[1]) : char1[0];
-  int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0]) | 0x7f) << 8) | char2[1]) : char2[0];
-  return code2 - code1;
-}
-
 static int32_t _compareStr(const char *str1, const char *str2) {
   while(1) {
     int32_t cmpChr = _compareChar(str1, str2);

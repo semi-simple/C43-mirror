@@ -639,6 +639,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
       }
       else if(parserHint == PARSER_HINT_NUMERIC) {
         liftStack();
+        setSystemFlag(FLAG_ASLIFT);
         reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
         stringToReal34(strPtr, REGISTER_REAL34_DATA(REGISTER_X));
       }
@@ -674,7 +675,16 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           // label will be skipped
         }
         else if(_compareStr(" ", strPtr) == 0) {
-          // nothing to do
+          uint32_t opStackTop = 0xffffffffu;
+          for(uint32_t i = 0; i <= PARSER_OPERATOR_STACK_SIZE; ++i) {
+            if((i == PARSER_OPERATOR_STACK_SIZE) || (((uint16_t *)mvarBuffer)[i] == 0)) {
+              opStackTop = i;
+              break;
+            }
+          }
+          if((opStackTop != 0) && (((uint16_t *)mvarBuffer)[opStackTop - 1] == ITM_Ek)) {
+            ((uint16_t *)mvarBuffer)[opStackTop - 1] = ITM_Ephik;
+          }
         }
         else {
           displayBugScreen("In function _parseWord: Unknown operator appeared!");

@@ -824,6 +824,9 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         else if(afterClosingParenthesis && *strPtr != '(' && *strPtr != ' ') {
           afterClosingParenthesis = false;
         }
+        else if(*strPtr == '(') {
+          afterClosingParenthesis = false;
+        }
         else if(*strPtr == ')') {
           afterClosingParenthesis = true;
         }

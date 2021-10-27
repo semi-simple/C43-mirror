@@ -257,6 +257,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
     uint32_t doubleBytednessHistory = 0;
     uint32_t tmpVal = 0;
     bool_t inLabel = false;
+    bool_t unaryMinus = true;
     const char *tmpPtr = strPtr;
 
     bool_t _cursorShown, _rightEllipsis;
@@ -300,7 +301,18 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           *(bufPtr + 2) = 0;
           doubleBytednessHistory <<= 1;
           bufPtr += 1;
-          inLabel = false;
+          inLabel = true;
+        }
+        else if((!inLabel) && (*strPtr) == ' ') {
+          *bufPtr       = *strPtr;
+          *(bufPtr + 1) = 0;
+          unaryMinus = true;
+        }
+        else if((!inLabel) && unaryMinus && (*strPtr) == '-') {
+          if(strLength > 1) _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
+          *bufPtr       = *strPtr;
+          *(bufPtr + 1) = 0;
+          unaryMinus = false;
         }
         else if((!inLabel) && (*strPtr) == '(') {
           *(bufPtr + 1) = STD_SPACE_PUNCTUATION[0];
@@ -309,6 +321,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory <<= 1;
           doubleBytednessHistory |= 1;
           bufPtr += 1;
+          unaryMinus = true;
         }
         else if((!inLabel) && (cursorAt == EQUATION_NO_CURSOR && (*strPtr) == '^' && (tmpVal = _checkExponent(strPtr + 1)))) {
           for(uint32_t i = 0; i < tmpVal; ++i)
@@ -320,11 +333,13 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
             doubleBytednessHistory <<= 1;
             doubleBytednessHistory |= 1;
           }
+          unaryMinus = false;
         }
         else if((!inLabel) && ((*strPtr) == ')' || (*strPtr) == '^')) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
+          unaryMinus = false;
         }
         else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '!')) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
@@ -337,6 +352,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory <<= 1;
           doubleBytednessHistory |= 1;
           bufPtr += 1;
+          unaryMinus = false;
         }
         else if((!inLabel) && (((*strPtr) == STD_CROSS[0] && (*(strPtr + 1)) == STD_CROSS[1]) || ((*strPtr) == STD_DOT[0] && (*(strPtr + 1)) == STD_DOT[1]))) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
@@ -356,14 +372,17 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory <<= 1;
           doubleBytednessHistory |= 3;
           bufPtr += 2;
+          unaryMinus = false;
         }
         else if((*strPtr) & 0x80) {
           *(bufPtr + 1) = *(strPtr + 1);
           *(bufPtr + 2) = 0;
           doubleBytednessHistory |= 1;
+          unaryMinus = false;
         }
         else {
           *(bufPtr + 1) = 0;
+          unaryMinus = false;
         }
 
         glyphWidth = stringWidth(bufPtr, &standardFont, true, true);
@@ -799,9 +818,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           afterClosingParenthesis = (*strPtr == ')');
         }
         else if(*strPtr == '-') {
-          buffer[0] = '0';
-          buffer[1] = 0;
-          _parseWord(buffer, parseMode, PARSER_HINT_NUMERIC, mvarBuffer);
+          /* unary minus */
           afterClosingParenthesis = false;
         }
         else if(afterClosingParenthesis && *strPtr != '(' && *strPtr != ' ') {
@@ -818,12 +835,15 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           return;
         }
         if(*strPtr == '=') equalAppeared = true;
-        buffer[0] = *(strPtr++);
-        buffer[1] = 0;
-        _parseWord(buffer, parseMode, PARSER_HINT_OPERATOR, mvarBuffer);
-        bufPtr = buffer;
-        numericCount = 0;
-        break;
+        if(bufPtr != buffer || (*strPtr) != '-') {
+          buffer[0] = *(strPtr++);
+          buffer[1] = 0;
+          _parseWord(buffer, parseMode, PARSER_HINT_OPERATOR, mvarBuffer);
+          bufPtr = buffer;
+          numericCount = 0;
+          break;
+        }
+        /* fallthrough */
       case '0':
       case '1':
       case '2':

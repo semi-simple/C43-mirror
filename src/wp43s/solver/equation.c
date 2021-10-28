@@ -178,7 +178,7 @@ void deleteEquation(uint16_t equationId) {
 
 
 #ifndef TESTSUITE_BUILD
-static void _showExponent(char **bufPtr, const char **strPtr) {
+static void _showExponent(char **bufPtr, const char **strPtr, int16_t *strWidth) {
   switch(*(++(*strPtr))) {
     case '1':
       **bufPtr         = STD_SUP_1[0];
@@ -196,6 +196,8 @@ static void _showExponent(char **bufPtr, const char **strPtr) {
       **bufPtr         = STD_SUP_0[0];
       *((*bufPtr) + 1) = STD_SUP_0[1] + ((**strPtr) - '0');
   }
+  *((*bufPtr) + 2) = 0;
+  (*strWidth) += stringWidth(*bufPtr, &standardFont, true, true);
   (*bufPtr) += 2;
 }
 static uint32_t _checkExponent(const char *strPtr) {
@@ -296,25 +298,37 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
       if((++strLength) > startAt) {
         doubleBytednessHistory <<= 1;
         *bufPtr = *strPtr;
+
+        /* End of label */
         if((*strPtr) == ':') {
+          *(bufPtr + 1) = 0;
+          strWidth += stringWidth(bufPtr, &standardFont, true, true);
           *(bufPtr + 1) = ' ';
           *(bufPtr + 2) = 0;
           doubleBytednessHistory <<= 1;
           bufPtr += 1;
           inLabel = true;
         }
+
+        /* Argument separator */
         else if((!inLabel) && (*strPtr) == ' ') {
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
           unaryMinus = true;
         }
+
+        /* Unary minus */
         else if((!inLabel) && unaryMinus && (*strPtr) == '-') {
           if(strLength > 1) _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
           unaryMinus = false;
         }
+
+        /* Opening parenthesis */
         else if((!inLabel) && (*strPtr) == '(') {
+          *(bufPtr + 1) = 0;
+          strWidth += stringWidth(bufPtr, &standardFont, true, true);
           *(bufPtr + 1) = STD_SPACE_PUNCTUATION[0];
           *(bufPtr + 2) = STD_SPACE_PUNCTUATION[1];
           *(bufPtr + 3) = 0;
@@ -323,11 +337,14 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           bufPtr += 1;
           unaryMinus = true;
         }
+
+        /* Power (if not editing) */
         else if((!inLabel) && (cursorAt == EQUATION_NO_CURSOR && (*strPtr) == '^' && (tmpVal = _checkExponent(strPtr + 1)))) {
           for(uint32_t i = 0; i < tmpVal; ++i)
-            _showExponent(&bufPtr, &strPtr);
+            _showExponent(&bufPtr, &strPtr, &strWidth);
           *bufPtr = 0;
           bufPtr -= 2;
+          strWidth -= stringWidth(bufPtr, &standardFont, true, true);
           doubleBytednessHistory |= 1;
           for(uint32_t i = 1; i < tmpVal; ++i) {
             doubleBytednessHistory <<= 1;
@@ -335,12 +352,16 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           }
           unaryMinus = false;
         }
+
+        /* Closing parenthesis or power (when editing) */
         else if((!inLabel) && ((*strPtr) == ')' || (*strPtr) == '^')) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
           unaryMinus = false;
         }
+
+        /* Operators */
         else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '!')) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
@@ -354,6 +375,8 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           bufPtr += 1;
           unaryMinus = false;
         }
+
+        /* Multiply */
         else if((!inLabel) && (((*strPtr) == STD_CROSS[0] && (*(strPtr + 1)) == STD_CROSS[1]) || ((*strPtr) == STD_DOT[0] && (*(strPtr + 1)) == STD_DOT[1]))) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           if(getSystemFlag(FLAG_MULTx)) {
@@ -374,19 +397,26 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           bufPtr += 2;
           unaryMinus = false;
         }
+
+        /* Other double-byte characters */
         else if((*strPtr) & 0x80) {
           *(bufPtr + 1) = *(strPtr + 1);
           *(bufPtr + 2) = 0;
           doubleBytednessHistory |= 1;
           unaryMinus = false;
         }
+
+        /* Other single-byte characters */
         else {
           *(bufPtr + 1) = 0;
           unaryMinus = false;
         }
 
+        /* Add the character */
         glyphWidth = stringWidth(bufPtr, &standardFont, true, true);
         strWidth += glyphWidth;
+
+        /* Cursor */
         if(strLength == cursorAt) {
           bufPtr += (doubleBytednessHistory & 0x00000001) ? 2 : 1;
           *bufPtr       = STD_CURSOR[0];
@@ -398,6 +428,8 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory |= 1;
           *cursorShown = true;
         }
+
+        /* Trailing ellipsis */
         if(strWidth > (SCREEN_WIDTH - 2)) {
           glyphWidth = stringWidth(STD_ELLIPSIS, &standardFont, true, true);
           while(1) {
@@ -414,6 +446,8 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           *rightEllipsis = true;
           break;
         }
+
+        /* Increment bufPtr */
         bufPtr += (doubleBytednessHistory & 0x00000001) ? 2 : 1;
       }
       strPtr += ((*strPtr) & 0x80) ? 2 : 1;

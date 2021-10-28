@@ -875,7 +875,9 @@ void fnJM(uint16_t JM_OPCODE) {
 
 
   if(JM_OPCODE == 48) {                                         //f.g
-    btnClicked(NULL, "27");
+    #ifndef TESTSUITE_BUILD
+      btnClicked(NULL, "27");
+    #endif
     }
 
 

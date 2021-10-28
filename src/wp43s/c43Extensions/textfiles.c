@@ -73,6 +73,7 @@ void addStrBothSides(char * str, char * str_b, char * str_e) {
 
 
 void copyRegisterToClipboardString2(calcRegister_t regist, char *clipboardString) {
+  #ifndef TESTSUITE_BUILD
     switch(getRegisterDataType(regist)) {
       case dtLongInteger:
       case dtTime:
@@ -115,6 +116,7 @@ void copyRegisterToClipboardString2(calcRegister_t regist, char *clipboardString
         copyRegisterToClipboardString(regist, clipboardString);
         break;
     }
+  #endif
 }
 
 

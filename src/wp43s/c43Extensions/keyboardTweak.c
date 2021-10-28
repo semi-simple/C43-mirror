@@ -40,35 +40,36 @@
 
 
 int16_t determineFunctionKeyItem_C43(const char *data) {
+  #ifndef TESTSUITE_BUILD
+    int16_t item = ITM_NOP;
+    int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));
+    int16_t fn = *(data) - '0';
+    int16_t menuId = softmenuStack[0].softmenuId;
 
-  int16_t item = ITM_NOP;
-  int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));
-  int16_t fn = *(data) - '0';
-  int16_t menuId = softmenuStack[0].softmenuId;
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^determineFunctionKeyItem_C43(%d): itemShift=%d menuId=%d menuItem=%d", fn, itemShift, menuId, -softmenu[menuId].menuItem); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
-  #ifdef PC_BUILD
-    char tmp[200]; sprintf(tmp,"^^^^determineFunctionKeyItem_C43(%d): itemShift=%d menuId=%d menuItem=%d", fn, itemShift, menuId, -softmenu[menuId].menuItem); jm_show_comment(tmp);
-  #endif //PC_BUILD
-
-  if(!(menuId==0 && jm_NO_BASE_SCREEN) ) {
-     item = determineFunctionKeyItem(data, itemShift);
-  }
-  else {              //if there is no SoftMenu showing
-    if(fn>=1 && fn<=6) {
-      if(itemShift == 0) {
-      //FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
-        temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
+    if(!(menuId==0 && jm_NO_BASE_SCREEN) ) {
+       item = determineFunctionKeyItem(data, itemShift);
+    }
+    else {              //if there is no SoftMenu showing
+      if(fn>=1 && fn<=6) {
+        if(itemShift == 0) {
+        //FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the yellow label underneath it, even if USER keys were selected.
+          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].fShifted) : (kbd_usr[fn-1].fShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.      
+        }
+        else {
+        //FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
+          temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
+        }
       }
       else {
-      //FN KEYS DIRECTLY ACCESSIBLE IF NO MENUS ARE UP;                       // FN Key will be the same as the blue label underneath it, even if USER keys were selected.
-        temporaryInformation = TI_NO_INFO; item = ( !getSystemFlag(FLAG_USER) ? (kbd_std[fn-1].gShifted) : (kbd_usr[fn-1].gShifted) );  //Function key follows if the yellow key top 4 buttons are changed from default.              
+        item = 0;
       }
     }
-    else {
-      item = 0;
-    }
-  }
-  return item;
+    return item;
+  #endif
 }
 
 

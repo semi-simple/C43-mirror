@@ -2109,7 +2109,7 @@ void complex34MatrixToDisplayString(calcRegister_t regist, char *displayString) 
 }
 
 void fnShow(uint16_t unusedButMandatoryParameter) {
-#ifndef SAVE_SPACE_DM42_5
+#if (!defined SAVE_SPACE_DM42_5) || (defined SAVE_SPACE_DM42_9)
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
   uint8_t savedSigFigMode = SigFigMode;           //JM
   bool_t savedUNITDisplay = UNITDisplay;          //JM
@@ -2311,197 +2311,306 @@ void checkAndEat(int16_t *source, int16_t last, int16_t *dest) {
 void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified by JM from the original fnShow
 #ifndef SAVE_SPACE_DM42_9
 
-#ifndef TESTSUITE_BUILD
-  uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
-  bool_t savedUNITDisplay = UNITDisplay;
-  bool_t thereIsANextLine;
-  int16_t source, dest, last, d, maxWidth, i, offset, bytesProcessed, aa, aa2=0, aa3=0, aa4=0;
-  uint64_t nn;
-  real34_t real34;
-  char *separator;
-
-  displayFormat = DF_ALL;
-  displayFormatDigits = 0;
-
-  #define lowest_SHOW REGISTER_X //0                // Lowest register. Change to 0 for all registers, or use REGISTER_X 
-  switch(fnShow_param) {
-    case NOPARAM:
-    case 0:  SHOWregis = REGISTER_X;
-             break;
-    case 1:  if(SHOWregis==9999) {SHOWregis = REGISTER_X;}
-             else
-             {
-               SHOWregis++;                         //Activated by KEY_UP
-               if(SHOWregis > REGISTER_K) {
-                 SHOWregis = lowest_SHOW;  
-               }
-             }
-             break;   
-    case 2:  if(SHOWregis==9999) {SHOWregis = REGISTER_X;}
-             else
-             {
-               SHOWregis--;                         //Activate by Key_DOWN
-               if(SHOWregis < lowest_SHOW) {
-                 SHOWregis = REGISTER_K;  
-               } 
-             }
-             break; 
-    case 99:                                        //RESET every time a key is pressed.
-             SHOWregis = REGISTER_X;
-             return;
-             break;
-    default: 
-      break;
-  }
-
-
-
   #ifndef TESTSUITE_BUILD
-    #ifdef PC_BUILD
-    printf(">>> ---- clearScreen_old from display.c fnShow_SCROLL\n");
-    #endif
-    clearScreen_old(false, true, false); //Clear screen content while NEW SHOW
-  #endif
-  SHOW_reset();
-  
-  switch(getRegisterDataType(SHOWregis)) {
-    case dtLongInteger:
+    uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits, savedSigFigMode = SigFigMode;
+    bool_t savedUNITDisplay = UNITDisplay;
+    bool_t thereIsANextLine;
+    int16_t source, dest, last, d, maxWidth, i, offset, bytesProcessed, aa, aa2=0, aa3=0, aa4=0;
+    uint64_t nn;
+    real34_t real34;
+    char *separator;
 
-      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-        printf("SHOW:Longint\n");
+    displayFormat = DF_ALL;
+    displayFormatDigits = 0;
+
+    #define lowest_SHOW REGISTER_X //0                // Lowest register. Change to 0 for all registers, or use REGISTER_X 
+    switch(fnShow_param) {
+      case NOPARAM:
+      case 0:  SHOWregis = REGISTER_X;
+               break;
+      case 1:  if(SHOWregis==9999) {SHOWregis = REGISTER_X;}
+               else
+               {
+                 SHOWregis++;                         //Activated by KEY_UP
+                 if(SHOWregis > REGISTER_K) {
+                   SHOWregis = lowest_SHOW;  
+                 }
+               }
+               break;   
+      case 2:  if(SHOWregis==9999) {SHOWregis = REGISTER_X;}
+               else
+               {
+                 SHOWregis--;                         //Activate by Key_DOWN
+                 if(SHOWregis < lowest_SHOW) {
+                   SHOWregis = REGISTER_K;  
+                 } 
+               }
+               break; 
+      case 99:                                        //RESET every time a key is pressed.
+               SHOWregis = REGISTER_X;
+               return;
+               break;
+      default: 
+        break;
+    }
+
+
+
+    #ifndef TESTSUITE_BUILD
+      #ifdef PC_BUILD
+      printf(">>> ---- clearScreen_old from display.c fnShow_SCROLL\n");
       #endif
-
-      strcpy(errorMessage,tmpString + 2100);
-      separator = STD_SPACE_4_PER_EM;
-      longIntegerRegisterToDisplayString(SHOWregis, errorMessage + 3, WRITE_BUFFER_LEN, 4*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
-
-      last = stringByteLength(errorMessage);
-      source = 0;
-      dest = 0;
-
- 
-      { //printf("2: %d\n",stringGlyphLength(tmpString + 2100));
-        temporaryInformation = TI_SHOW_REGISTER_BIG;
-        if(groupingGap == 0) {
-          maxWidth = SCREEN_WIDTH - stringWidth("0", &numericFont, true, true);
-        }
-        else {
-          char tmp[4];
-          strcpy(tmp,"0");
-          strcat(tmp,separator);
-          maxWidth = SCREEN_WIDTH - stringWidth(tmp , &numericFont, true, true);          //Add the separator that gets added to the last character
-        }
-
-        for(d=0; d<=1200 ; d+=300) {                                                      //LARGE font, fill 7 lines at 0, 300, 600, 900, 1200
-                                                                                          //   fill all lines, and check if the 5th line  contains any characters.
-          dest = d;
-          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <=  maxWidth) {
-            tmpString[dest] = errorMessage[source];
-            if(tmpString[dest] & 0x80) {
-              tmpString[++dest] = errorMessage[++source];
-            }
-            source++;
-            tmpString[++dest] = 0;
-          }
-
-          while (source < last && groupingGap!=0 && !(tmpString[dest-2] & 0x80)) //Not in the last line. Eat away characters at the end to line up the last space.
-            {
-              dest--; 
-              source--;
-            }
-          tmpString[dest] = 0;
-
-          if(!(source < last) && groupingGap!=0 && (tmpString[dest+0] != 0) && !(tmpString[dest+0] == *(separator + 0) && (tmpString[dest+1] == *(separator + 1)))) {               //Last line
-            tmpString[dest+0] = *(separator + 0); //0xa0;       //Add a space to the very end to space last line nicely.
-            tmpString[dest+1] = *(separator + 1); //0x05;
-            tmpString[dest+2] = 0;
-            dest+=2;
-          }
-        }
-      }      
-
-      //printf("### %d %d %d\n",(uint8_t) tmpString[1200],(uint8_t)  tmpString[1201],(uint8_t) tmpString[1202]);
-      if(tmpString[1200] != 0) {
+      clearScreen_old(false, true, false); //Clear screen content while NEW SHOW
+    #endif
+    SHOW_reset();
+    
+    switch(getRegisterDataType(SHOWregis)) {
+      case dtLongInteger:
 
         #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-          printf("SHOW:Longint too long\n");
+          printf("SHOW:Longint\n");
         #endif
-          
-        SHOW_reset();
+
         strcpy(errorMessage,tmpString + 2100);
-        longIntegerRegisterToDisplayString(SHOWregis, errorMessage + 3, WRITE_BUFFER_LEN, 7*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
+        separator = STD_SPACE_4_PER_EM;
+        longIntegerRegisterToDisplayString(SHOWregis, errorMessage + 3, WRITE_BUFFER_LEN, 4*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
 
         last = stringByteLength(errorMessage);
         source = 0;
         dest = 0;
 
-        //printf("1: %d\n",stringGlyphLength(tmpString + 2100));
+   
+        { //printf("2: %d\n",stringGlyphLength(tmpString + 2100));
+          temporaryInformation = TI_SHOW_REGISTER_BIG;
+          if(groupingGap == 0) {
+            maxWidth = SCREEN_WIDTH - stringWidth("0", &numericFont, true, true);
+          }
+          else {
+            char tmp[4];
+            strcpy(tmp,"0");
+            strcat(tmp,separator);
+            maxWidth = SCREEN_WIDTH - stringWidth(tmp , &numericFont, true, true);          //Add the separator that gets added to the last character
+          }
 
-        if(groupingGap == 0) {
-          maxWidth = SCREEN_WIDTH - stringWidth("0", &standardFont, true, true);
-        }
-        else {
-          maxWidth = SCREEN_WIDTH - stringWidth("0", &standardFont, true, true)*groupingGap - stringWidth(separator, &standardFont, true, true);
-        }
-
-        for(d=0; d<=1800 ; d+=300) {                                                      //Small font, fill 7 lines at 0, 300, 600, 900, 1200, 1500, 1800
-          dest = d;
-          while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= maxWidth) {
-            do {
+          for(d=0; d<=1200 ; d+=300) {                                                      //LARGE font, fill 7 lines at 0, 300, 600, 900, 1200
+                                                                                            //   fill all lines, and check if the 5th line  contains any characters.
+            dest = d;
+            while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <=  maxWidth) {
               tmpString[dest] = errorMessage[source];
               if(tmpString[dest] & 0x80) {
                 tmpString[++dest] = errorMessage[++source];
               }
               source++;
               tmpString[++dest] = 0;
-            } while(source < last && groupingGap > 0 && (errorMessage[source] != *separator || errorMessage[source + 1] != *(separator + 1)));
+            }
+
+            while (source < last && groupingGap!=0 && !(tmpString[dest-2] & 0x80)) //Not in the last line. Eat away characters at the end to line up the last space.
+              {
+                dest--; 
+                source--;
+              }
+            tmpString[dest] = 0;
+
+            if(!(source < last) && groupingGap!=0 && (tmpString[dest+0] != 0) && !(tmpString[dest+0] == *(separator + 0) && (tmpString[dest+1] == *(separator + 1)))) {               //Last line
+              tmpString[dest+0] = *(separator + 0); //0xa0;       //Add a space to the very end to space last line nicely.
+              tmpString[dest+1] = *(separator + 1); //0x05;
+              tmpString[dest+2] = 0;
+              dest+=2;
+            }
           }
-        }
-        if(source < last) { // The long integer is too long
-          xcopy(tmpString + dest - 2, STD_ELLIPSIS, 2);
-          xcopy(tmpString + dest, STD_SPACE_6_PER_EM, 2);
-          tmpString[dest + 2] = 0;
-        }
-      } 
-      break;
+        }      
 
+        //printf("### %d %d %d\n",(uint8_t) tmpString[1200],(uint8_t)  tmpString[1201],(uint8_t) tmpString[1202]);
+        if(tmpString[1200] != 0) {
 
-    case dtReal34:
-      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-        printf("SHOW:Real\n");
-      #endif
-      temporaryInformation = TI_SHOW_REGISTER_BIG;
-      separator = STD_SPACE_4_PER_EM;
-      real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), getRegisterAngularMode(SHOWregis), tmpString + 2103, &numericFont, 2000, 34, false, separator, false);
-      last = 2100 + stringByteLength(tmpString + 2100);
-      source = 2100;
-      for(d=0; d<=900 ; d+=300) {
-        dest = d;
-        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
-          tmpString[dest] = tmpString[source];
-          if(tmpString[dest] & 0x80) {
-            tmpString[++dest] = tmpString[++source];
+          #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+            printf("SHOW:Longint too long\n");
+          #endif
+            
+          SHOW_reset();
+          strcpy(errorMessage,tmpString + 2100);
+          longIntegerRegisterToDisplayString(SHOWregis, errorMessage + 3, WRITE_BUFFER_LEN, 7*400, 350, STD_SPACE_4_PER_EM, false);  //JM added last parameter: Allow LARGELI
+
+          last = stringByteLength(errorMessage);
+          source = 0;
+          dest = 0;
+
+          //printf("1: %d\n",stringGlyphLength(tmpString + 2100));
+
+          if(groupingGap == 0) {
+            maxWidth = SCREEN_WIDTH - stringWidth("0", &standardFont, true, true);
           }
-          source++;
-          tmpString[++dest] = 0;
-        }
-      }
+          else {
+            maxWidth = SCREEN_WIDTH - stringWidth("0", &standardFont, true, true)*groupingGap - stringWidth(separator, &standardFont, true, true);
+          }
 
-      if(getRegisterAngularMode(SHOWregis) != amNone) {
-        aa = getRegisterAngularMode(SHOWregis);
-        switch(getRegisterAngularMode(SHOWregis)) {
-          case amDegree: aa = amDMS; break;
-          case amRadian: aa = amDegree; break;
-          case amGrad: aa = amRadian; break;
-          case amMultPi: aa = amRadian; break;
-          case amDMS: aa = amDegree; break;
-          default:break;
-        }
-        real34Copy(REGISTER_REAL34_DATA(SHOWregis), &real34);
-        convertAngle34FromTo(&real34, getRegisterAngularMode(SHOWregis), aa);
-        real34ToDisplayString(&real34, aa, tmpString + 2103, &numericFont, 2000, 34, false, separator, false);
+          for(d=0; d<=1800 ; d+=300) {                                                      //Small font, fill 7 lines at 0, 300, 600, 900, 1200, 1500, 1800
+            dest = d;
+            while(source < last && stringWidth(tmpString + d, &standardFont, true, true) <= maxWidth) {
+              do {
+                tmpString[dest] = errorMessage[source];
+                if(tmpString[dest] & 0x80) {
+                  tmpString[++dest] = errorMessage[++source];
+                }
+                source++;
+                tmpString[++dest] = 0;
+              } while(source < last && groupingGap > 0 && (errorMessage[source] != *separator || errorMessage[source + 1] != *(separator + 1)));
+            }
+          }
+          if(source < last) { // The long integer is too long
+            xcopy(tmpString + dest - 2, STD_ELLIPSIS, 2);
+            xcopy(tmpString + dest, STD_SPACE_6_PER_EM, 2);
+            tmpString[dest + 2] = 0;
+          }
+        } 
+        break;
+
+
+      case dtReal34:
+        #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+          printf("SHOW:Real\n");
+        #endif
+        temporaryInformation = TI_SHOW_REGISTER_BIG;
+        separator = STD_SPACE_4_PER_EM;
+        real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), getRegisterAngularMode(SHOWregis), tmpString + 2103, &numericFont, 2000, 34, false, separator, false);
         last = 2100 + stringByteLength(tmpString + 2100);
         source = 2100;
+        for(d=0; d<=900 ; d+=300) {
+          dest = d;
+          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
+            }
+            source++;
+            tmpString[++dest] = 0;
+          }
+        }
+
+        if(getRegisterAngularMode(SHOWregis) != amNone) {
+          aa = getRegisterAngularMode(SHOWregis);
+          switch(getRegisterAngularMode(SHOWregis)) {
+            case amDegree: aa = amDMS; break;
+            case amRadian: aa = amDegree; break;
+            case amGrad: aa = amRadian; break;
+            case amMultPi: aa = amRadian; break;
+            case amDMS: aa = amDegree; break;
+            default:break;
+          }
+          real34Copy(REGISTER_REAL34_DATA(SHOWregis), &real34);
+          convertAngle34FromTo(&real34, getRegisterAngularMode(SHOWregis), aa);
+          real34ToDisplayString(&real34, aa, tmpString + 2103, &numericFont, 2000, 34, false, separator, false);
+          last = 2100 + stringByteLength(tmpString + 2100);
+          source = 2100;
+          for(d=600; d<=900 ; d+=300) {
+            dest = d;
+            while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+              tmpString[dest] = tmpString[source];
+              if(tmpString[dest] & 0x80) {
+                tmpString[++dest] = tmpString[++source];
+              }
+              source++;
+              tmpString[++dest] = 0;
+            }
+          }
+        }
+        
+
+        break;
+
+
+      case dtComplex34:
+        #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+          printf("SHOW:Complex\n");
+        #endif
+        temporaryInformation = TI_SHOW_REGISTER_BIG;
+
+        // Real part into +0
+        separator = STD_SPACE_4_PER_EM;
+        real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), amNone, tmpString, &numericFont, 2000, 34, false, separator,false);
+        for(i=stringByteLength(tmpString) - 1; i>0; i--) {
+          if(tmpString[i] == 0x08) {
+            tmpString[i] = 0x05;
+          }
+        }
+    
+        // +/- i× into +300
+        real34Copy(REGISTER_IMAG34_DATA(SHOWregis), &real34);
+        last = 300;
+        while(tmpString[last]) last++;
+        xcopy(tmpString + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
+        xcopy(tmpString + last++, COMPLEX_UNIT, 1);
+        xcopy(tmpString + last,   PRODUCT_SIGN, 3);
+
+        // Imaginary part into +600
+        real34SetPositiveSign(&real34);
+        real34ToDisplayString(&real34, amNone, tmpString + 600, &numericFont, 2000, 34, false, separator,false);
+        for(i=stringByteLength(tmpString + 600) - 1; i>0; i--) {
+          if(tmpString[600 + i] == 0x08) {
+            tmpString[600 + i] = 0x05;
+          }
+        }
+    
+  //vv      strncat(tmpString + 300, tmpString +  600, 299); //add +i. and imag
+  //vv      tmpString[600] = 0;
+
+        //Concatenate +ix and IMAG into 300
+        last = 300;
+        while(tmpString[last]) last++;
+        xcopy(tmpString + last, tmpString + 600,  strlen(tmpString + 600) + 1);
+        tmpString[600] = 0;
+  //^^
+        //Check if REAL + IMAG fits into two lines
+        if(stringWidth(tmpString, &numericFont, true, true) + stringWidth(tmpString + 300, &numericFont, true, true) <= 2*SCREEN_WIDTH) {
+        //  if it fits, copy all into +0
+          int xx = stringByteLength(tmpString) + stringByteLength(tmpString + 300);
+  //        strncat(tmpString, tmpString +  300, 299);
+          xcopy(tmpString + stringByteLength(tmpString), tmpString + 300,stringByteLength(tmpString + 300));
+          tmpString[xx] = 0;
+          tmpString[300] = 0;
+        }
+    
+  //vv      strncat(tmpString + 2103, tmpString + 0, 299-3);  //COPY REAL
+  //vv      tmpString[0] = 0;
+
+
+        //copy +0 REAL or REAL+IMAG result into destination 2100 (label already in 2100-2102)
+        last = 2100;
+        while(tmpString[last]) last++; 
+        xcopy(tmpString + last, tmpString + 0,  strlen(tmpString + 0) + 1);
+        tmpString[0] = 0;
+  //^^
+    
+  //vv      strcpy(tmpString + 2400, tmpString + 300);        //COPY IMAG
+  //vv      tmpString[300] = 0;
+  //new
+
+        //copy IMAG result into +2400
+        last = 2400;
+  //      while(tmpString[last]) last++;
+        xcopy(tmpString + last, tmpString + 300,  strlen(tmpString + 300) + 1);
+        tmpString[300] = 0;
+  //^^
+    
+
+        //write 2100+ into two lines, 0+ and 300+
+        last = 2100 + stringByteLength(tmpString + 2100);
+        source = 2100;
+        for(d=0; d<=300 ; d+=300) {
+          dest = d;
+          while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
+            tmpString[dest] = tmpString[source];
+            if(tmpString[dest] & 0x80) {
+              tmpString[++dest] = tmpString[++source];
+            }
+            source++;
+            tmpString[++dest] = 0;
+          }
+        }
+        
+        //write 2400+ into two lines, 300+ and 900+
+        last = 2400 + stringByteLength(tmpString + 2400);
+        source = 2400;
         for(d=600; d<=900 ; d+=300) {
           dest = d;
           while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
@@ -2513,214 +2622,60 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
             tmpString[++dest] = 0;
           }
         }
-      }
-      
-
-      break;
-
-
-    case dtComplex34:
-      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-        printf("SHOW:Complex\n");
-      #endif
-      temporaryInformation = TI_SHOW_REGISTER_BIG;
-
-      // Real part into +0
-      separator = STD_SPACE_4_PER_EM;
-      real34ToDisplayString(REGISTER_REAL34_DATA(SHOWregis), amNone, tmpString, &numericFont, 2000, 34, false, separator,false);
-      for(i=stringByteLength(tmpString) - 1; i>0; i--) {
-        if(tmpString[i] == 0x08) {
-          tmpString[i] = 0x05;
+    
+        if (tmpString[300]==0) {                          //shift up if line is empty
+          //vv new       strcpy(tmpString + 300, tmpString + 600);
+          xcopy(tmpString + 300, tmpString + 600,  min(300,strlen(tmpString + 600) + 1));
+          //vv new        strcpy(tmpString + 600, tmpString + 900);
+          xcopy(tmpString + 600, tmpString + 900,  min(300,strlen(tmpString + 900) + 1));
+          tmpString[900] = 0;
         }
-      }
-  
-      // +/- i× into +300
-      real34Copy(REGISTER_IMAG34_DATA(SHOWregis), &real34);
-      last = 300;
-      while(tmpString[last]) last++;
-      xcopy(tmpString + last++, (real34IsNegative(&real34) ? "-" : "+"), 1);
-      xcopy(tmpString + last++, COMPLEX_UNIT, 1);
-      xcopy(tmpString + last,   PRODUCT_SIGN, 3);
-
-      // Imaginary part into +600
-      real34SetPositiveSign(&real34);
-      real34ToDisplayString(&real34, amNone, tmpString + 600, &numericFont, 2000, 34, false, separator,false);
-      for(i=stringByteLength(tmpString + 600) - 1; i>0; i--) {
-        if(tmpString[600 + i] == 0x08) {
-          tmpString[600 + i] = 0x05;
+    
+        if (tmpString[600]==0) {                          //shift up if line is empty
+          //vv new        strcpy(tmpString + 600, tmpString + 900);
+          xcopy(tmpString + 600, tmpString + 900,  min(300,strlen(tmpString + 900) + 1));
+          tmpString[900] = 0;
         }
-      }
-  
-//vv      strncat(tmpString + 300, tmpString +  600, 299); //add +i. and imag
-//vv      tmpString[600] = 0;
-
-      //Concatenate +ix and IMAG into 300
-      last = 300;
-      while(tmpString[last]) last++;
-      xcopy(tmpString + last, tmpString + 600,  strlen(tmpString + 600) + 1);
-      tmpString[600] = 0;
-//^^
-      //Check if REAL + IMAG fits into two lines
-      if(stringWidth(tmpString, &numericFont, true, true) + stringWidth(tmpString + 300, &numericFont, true, true) <= 2*SCREEN_WIDTH) {
-      //  if it fits, copy all into +0
-        int xx = stringByteLength(tmpString) + stringByteLength(tmpString + 300);
-//        strncat(tmpString, tmpString +  300, 299);
-        xcopy(tmpString + stringByteLength(tmpString), tmpString + 300,stringByteLength(tmpString + 300));
-        tmpString[xx] = 0;
-        tmpString[300] = 0;
-      }
-  
-//vv      strncat(tmpString + 2103, tmpString + 0, 299-3);  //COPY REAL
-//vv      tmpString[0] = 0;
+        break;
 
 
-      //copy +0 REAL or REAL+IMAG result into destination 2100 (label already in 2100-2102)
-      last = 2100;
-      while(tmpString[last]) last++; 
-      xcopy(tmpString + last, tmpString + 0,  strlen(tmpString + 0) + 1);
-      tmpString[0] = 0;
-//^^
-  
-//vv      strcpy(tmpString + 2400, tmpString + 300);        //COPY IMAG
-//vv      tmpString[300] = 0;
-//new
+      case dtShortInteger:
+        #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+          printf("SHOW:Shortint\n");
+        #endif
+        temporaryInformation = TI_SHOW_REGISTER_BIG;
 
-      //copy IMAG result into +2400
-      last = 2400;
-//      while(tmpString[last]) last++;
-      xcopy(tmpString + last, tmpString + 300,  strlen(tmpString + 300) + 1);
-      tmpString[300] = 0;
-//^^
-  
-
-      //write 2100+ into two lines, 0+ and 300+
-      last = 2100 + stringByteLength(tmpString + 2100);
-      source = 2100;
-      for(d=0; d<=300 ; d+=300) {
-        dest = d;
-        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
-          tmpString[dest] = tmpString[source];
-          if(tmpString[dest] & 0x80) {
-            tmpString[++dest] = tmpString[++source];
-          }
-          source++;
-          tmpString[++dest] = 0;
-        }
-      }
-      
-      //write 2400+ into two lines, 300+ and 900+
-      last = 2400 + stringByteLength(tmpString + 2400);
-      source = 2400;
-      for(d=600; d<=900 ; d+=300) {
-        dest = d;
-        while(source < last && stringWidth(tmpString + d, &numericFont, true, true) <= SCREEN_WIDTH - 8*2) {
-          tmpString[dest] = tmpString[source];
-          if(tmpString[dest] & 0x80) {
-            tmpString[++dest] = tmpString[++source];
-          }
-          source++;
-          tmpString[++dest] = 0;
-        }
-      }
-  
-      if (tmpString[300]==0) {                          //shift up if line is empty
-        //vv new       strcpy(tmpString + 300, tmpString + 600);
-        xcopy(tmpString + 300, tmpString + 600,  min(300,strlen(tmpString + 600) + 1));
-        //vv new        strcpy(tmpString + 600, tmpString + 900);
-        xcopy(tmpString + 600, tmpString + 900,  min(300,strlen(tmpString + 900) + 1));
-        tmpString[900] = 0;
-      }
-  
-      if (tmpString[600]==0) {                          //shift up if line is empty
-        //vv new        strcpy(tmpString + 600, tmpString + 900);
-        xcopy(tmpString + 600, tmpString + 900,  min(300,strlen(tmpString + 900) + 1));
-        tmpString[900] = 0;
-      }
-      break;
-
-
-    case dtShortInteger:
-      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-        printf("SHOW:Shortint\n");
-      #endif
-      temporaryInformation = TI_SHOW_REGISTER_BIG;
-
-      shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true); //jm include X: 
-/*
-      if(getRegisterTag(SHOWregis) == 2) {
-        source = 2100;
-        dest = 2400;
-        while(tmpString[source] !=0 ) {
-          if((uint8_t)(tmpString[source]) == 160 && (uint8_t)(tmpString[source+1]) == 39) {
-            source++;
-            tmpString[dest++]=49;
-          } else
-            if((uint8_t)(tmpString[source]) == 162 && (uint8_t)(tmpString[source+1]) == 14) {
+        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true); //jm include X: 
+  /*
+        if(getRegisterTag(SHOWregis) == 2) {
+          source = 2100;
+          dest = 2400;
+          while(tmpString[source] !=0 ) {
+            if((uint8_t)(tmpString[source]) == 160 && (uint8_t)(tmpString[source+1]) == 39) {
               source++;
-              tmpString[dest++]=48;
-            } else {
-              tmpString[dest++] = tmpString[source];
-            }
-          source++;
-        }
-        tmpString[dest]=0;
-      } 
-*/
-//      else {
-        strcpy(tmpString + 2400,tmpString + 2100);
-//      }
- 	
-      last = 2400 + stringByteLength(tmpString + 2400);
-      source = 2400;
-      tmpString[0]=0;
-      for(d=0; d<=900 ; d+=300) {
-        dest = d;
-        if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-        while(source < last) {
-          tmpString[dest] = tmpString[source];
-          if(tmpString[dest] & 0x80) {
-            tmpString[++dest] = tmpString[++source];
+              tmpString[dest++]=49;
+            } else
+              if((uint8_t)(tmpString[source]) == 162 && (uint8_t)(tmpString[source+1]) == 14) {
+                source++;
+                tmpString[dest++]=48;
+              } else {
+                tmpString[dest++] = tmpString[source];
+              }
+            source++;
           }
-          source++;
-          tmpString[++dest] = 0;
-        }
-        checkAndEat(&source, last, &dest);
-      }
-
-      convertShortIntegerRegisterToUInt64(SHOWregis, &aa, &nn);
-      aa = getRegisterTag(SHOWregis);
-
-      switch(aa){
-        case  2: aa2=10;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
-        case  4: aa2= 2;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
-        case  8: aa2= 2;  aa3=10;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
-        case 10: aa2= 2;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
-        case 16: aa2= 2;  aa3= 8;  aa4=10; break;   //Keeping the 2 8 16 sequence where possible
-
-        case  3:
-        case  5:
-        case  6:
-        case  7:
-        case  9:
-        case 11:
-        case 12:
-        case 13:
-        case 14: 
-        case 15: aa2=10;  aa3= 8;  aa4=16; break;
-      }
-
-
-      if(aa2){
-        setRegisterTag(SHOWregis,aa2);
-        RegName();
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
-        strcpy(tmpString + 2400,tmpString + 2100);
+          tmpString[dest]=0;
+        } 
+  */
+  //      else {
+          strcpy(tmpString + 2400,tmpString + 2100);
+  //      }
+   	
         last = 2400 + stringByteLength(tmpString + 2400);
         source = 2400;
-        tmpString[300]=0;
-        for(d=300; d<=900 ; d+=300) {
+        tmpString[0]=0;
+        for(d=0; d<=900 ; d+=300) {
           dest = d;
-          if(dest != 300){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+          if(dest != 0){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
           while(source < last) {
             tmpString[dest] = tmpString[source];
             if(tmpString[dest] & 0x80) {
@@ -2731,166 +2686,213 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
           }
           checkAndEat(&source, last, &dest);
         }
-      }
-      if(aa3){
-        RegName();
-        setRegisterTag(SHOWregis,aa3);
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
-        strcpy(tmpString + 2400,tmpString + 2100);
-        last = 2400 + stringByteLength(tmpString + 2400);
-        source = 2400;
-        tmpString[600]=0;
-        for(d=600; d<=900 ; d+=300) {
-          dest = d;
-          if(dest != 600){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-          while(source < last) {
-            tmpString[dest] = tmpString[source];
-            if(tmpString[dest] & 0x80) {
-              tmpString[++dest] = tmpString[++source];
+
+        convertShortIntegerRegisterToUInt64(SHOWregis, &aa, &nn);
+        aa = getRegisterTag(SHOWregis);
+
+        switch(aa){
+          case  2: aa2=10;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+          case  4: aa2= 2;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+          case  8: aa2= 2;  aa3=10;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+          case 10: aa2= 2;  aa3= 8;  aa4=16; break;   //Keeping the 2 8 16 sequence where possible
+          case 16: aa2= 2;  aa3= 8;  aa4=10; break;   //Keeping the 2 8 16 sequence where possible
+
+          case  3:
+          case  5:
+          case  6:
+          case  7:
+          case  9:
+          case 11:
+          case 12:
+          case 13:
+          case 14: 
+          case 15: aa2=10;  aa3= 8;  aa4=16; break;
+        }
+
+
+        if(aa2){
+          setRegisterTag(SHOWregis,aa2);
+          RegName();
+          shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
+          strcpy(tmpString + 2400,tmpString + 2100);
+          last = 2400 + stringByteLength(tmpString + 2400);
+          source = 2400;
+          tmpString[300]=0;
+          for(d=300; d<=900 ; d+=300) {
+            dest = d;
+            if(dest != 300){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+            while(source < last) {
+              tmpString[dest] = tmpString[source];
+              if(tmpString[dest] & 0x80) {
+                tmpString[++dest] = tmpString[++source];
+              }
+              source++;
+              tmpString[++dest] = 0;
             }
-            source++;
-            tmpString[++dest] = 0;
+            checkAndEat(&source, last, &dest);
           }
-          checkAndEat(&source, last, &dest);
         }
-      }
-      if(aa4){
-        RegName();
-        setRegisterTag(SHOWregis,aa4);
-        shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
-        strcpy(tmpString + 2400,tmpString + 2100);
-        last = 2400 + stringByteLength(tmpString + 2400);
-        source = 2400;
-        tmpString[900]=0;
-        for(d=900; d<=900 ; d+=300) {
-          dest = d;
-          if(dest != 900){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
-          while(source < last) {
-            tmpString[dest] = tmpString[source];
-            if(tmpString[dest] & 0x80) {
-              tmpString[++dest] = tmpString[++source];
+        if(aa3){
+          RegName();
+          setRegisterTag(SHOWregis,aa3);
+          shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
+          strcpy(tmpString + 2400,tmpString + 2100);
+          last = 2400 + stringByteLength(tmpString + 2400);
+          source = 2400;
+          tmpString[600]=0;
+          for(d=600; d<=900 ; d+=300) {
+            dest = d;
+            if(dest != 600){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+            while(source < last) {
+              tmpString[dest] = tmpString[source];
+              if(tmpString[dest] & 0x80) {
+                tmpString[++dest] = tmpString[++source];
+              }
+              source++;
+              tmpString[++dest] = 0;
             }
-            source++;
-            tmpString[++dest] = 0;
+            checkAndEat(&source, last, &dest);
           }
-          checkAndEat(&source, last, &dest);
         }
-      }
-      setRegisterTag(SHOWregis,aa);
-      break;
-
-    case dtTime:
-      //SHOW_reset();
-      strcpy(tmpString, tmpString + 2100);
-      temporaryInformation = TI_SHOW_REGISTER_BIG;
-      timeToDisplayString(SHOWregis, tmpString + 3, true);
-      break;
-
-    case dtDate:
-      //SHOW_reset();
-      strcpy(tmpString, tmpString + 2100);
-      temporaryInformation = TI_SHOW_REGISTER_BIG;
-      dateToDisplayString(SHOWregis, tmpString + 3);
-      break;
-
-
-    case dtString:
-      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-        printf("SHOW:String\n");
-      #endif //VERBOSE_SCREEN
-
-      SHOW_reset();
-      temporaryInformation = TI_SHOW_REGISTER_BIG; //First try one line of big font.
-      offset = 0;
-      thereIsANextLine = true;
-      bytesProcessed = 2100;
-      strcat(tmpString + 2100, "'");
-      strcat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
-      strcat(tmpString + 2100, "'");
-      while(thereIsANextLine) {
-        xcopy(tmpString + offset, tmpString + bytesProcessed, stringByteLength(tmpString + bytesProcessed) + 1);
-        thereIsANextLine = false;
-        #if defined VERBOSE_SCREEN && defined PC_BUILD
-          uint32_t tmp = 0;
-          printf("^^^0 %4u",tmp);
-          printf("^^^^$$ %s %d\n",tmpString + 2100,stringWidthC43(tmpString + 2100, stdnumEnlarge, nocompress, false, true));
-        #endif //VERBOSE_SCREEN
-        while(stringWidthC43(tmpString + offset, stdnumEnlarge, nocompress, false, true) >= SCREEN_WIDTH) {
-          tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
-          thereIsANextLine = true;
-          #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-            printf("^^^A %4u",tmp++);
-            printf("^^^^$$ %s %d\n",tmpString + offset,stringWidthC43(tmpString + offset, stdnumEnlarge, nocompress, false, true));
-          #endif //VERBOSE_SCREEN
+        if(aa4){
+          RegName();
+          setRegisterTag(SHOWregis,aa4);
+          shortIntegerToDisplayString(SHOWregis, tmpString + 2100, true);
+          strcpy(tmpString + 2400,tmpString + 2100);
+          last = 2400 + stringByteLength(tmpString + 2400);
+          source = 2400;
+          tmpString[900]=0;
+          for(d=900; d<=900 ; d+=300) {
+            dest = d;
+            if(dest != 900){strcat(tmpString + dest,"  ");dest+=2;}               //space below the T:
+            while(source < last) {
+              tmpString[dest] = tmpString[source];
+              if(tmpString[dest] & 0x80) {
+                tmpString[++dest] = tmpString[++source];
+              }
+              source++;
+              tmpString[++dest] = 0;
+            }
+            checkAndEat(&source, last, &dest);
+          }
         }
-        bytesProcessed += stringByteLength(tmpString + offset);
-        offset += 300;
-        tmpString[offset] = 0;
-      }
-      if(offset <= 1200) break; //else continue on the small font
+        setRegisterTag(SHOWregis,aa);
+        break;
+
+      case dtTime:
+        //SHOW_reset();
+        strcpy(tmpString, tmpString + 2100);
+        temporaryInformation = TI_SHOW_REGISTER_BIG;
+        timeToDisplayString(SHOWregis, tmpString + 3, true);
+        break;
+
+      case dtDate:
+        //SHOW_reset();
+        strcpy(tmpString, tmpString + 2100);
+        temporaryInformation = TI_SHOW_REGISTER_BIG;
+        dateToDisplayString(SHOWregis, tmpString + 3);
+        break;
 
 
-      SHOW_reset();
-      temporaryInformation = TI_SHOW_REGISTER_SMALL;
-      offset = 0;
-      thereIsANextLine = true;
-      bytesProcessed = 2100;
-      strcat(tmpString + 2100, "'");
-      strcat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
-      strcat(tmpString + 2100, "'");
-      #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-        uint32_t tmp2 = 0;
-      #endif //VERBOSE_SCREEN
-      while(thereIsANextLine) {
-        xcopy(tmpString + offset, tmpString + bytesProcessed, stringByteLength(tmpString + bytesProcessed) + 1);
-        thereIsANextLine = false;
+      case dtString:
         #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-          tmp =0;
+          printf("SHOW:String\n");
         #endif //VERBOSE_SCREEN
-        while(stringWidth(tmpString + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
-          tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
-          thereIsANextLine = true;
-          #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-            printf("^^^B %4u %4u",tmp2, tmp++);
-            printf("^^^^$$ %s %d\n",tmpString + offset,stringWidth(tmpString + offset, &standardFont, false, true));
+
+        SHOW_reset();
+        temporaryInformation = TI_SHOW_REGISTER_BIG; //First try one line of big font.
+        offset = 0;
+        thereIsANextLine = true;
+        bytesProcessed = 2100;
+        strcat(tmpString + 2100, "'");
+        strcat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
+        strcat(tmpString + 2100, "'");
+        while(thereIsANextLine) {
+          xcopy(tmpString + offset, tmpString + bytesProcessed, stringByteLength(tmpString + bytesProcessed) + 1);
+          thereIsANextLine = false;
+          #if defined VERBOSE_SCREEN && defined PC_BUILD
+            uint32_t tmp = 0;
+            printf("^^^0 %4u",tmp);
+            printf("^^^^$$ %s %d\n",tmpString + 2100,stringWidthC43(tmpString + 2100, stdnumEnlarge, nocompress, false, true));
           #endif //VERBOSE_SCREEN
+          while(stringWidthC43(tmpString + offset, stdnumEnlarge, nocompress, false, true) >= SCREEN_WIDTH) {
+            tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
+            thereIsANextLine = true;
+            #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+              printf("^^^A %4u",tmp++);
+              printf("^^^^$$ %s %d\n",tmpString + offset,stringWidthC43(tmpString + offset, stdnumEnlarge, nocompress, false, true));
+            #endif //VERBOSE_SCREEN
+          }
+          bytesProcessed += stringByteLength(tmpString + offset);
+          offset += 300;
+          tmpString[offset] = 0;
         }
+        if(offset <= 1200) break; //else continue on the small font
+
+
+        SHOW_reset();
+        temporaryInformation = TI_SHOW_REGISTER_SMALL;
+        offset = 0;
+        thereIsANextLine = true;
+        bytesProcessed = 2100;
+        strcat(tmpString + 2100, "'");
+        strcat(tmpString + 2100, REGISTER_STRING_DATA(SHOWregis));//, stringByteLength(REGISTER_STRING_DATA(SHOWregis)) + 4+1);
+        strcat(tmpString + 2100, "'");
         #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-          tmp2++;
+          uint32_t tmp2 = 0;
         #endif //VERBOSE_SCREEN
-        bytesProcessed += stringByteLength(tmpString + offset);
-        offset += 300;
-        tmpString[offset] = 0;
-      }
-      break;
+        while(thereIsANextLine) {
+          xcopy(tmpString + offset, tmpString + bytesProcessed, stringByteLength(tmpString + bytesProcessed) + 1);
+          thereIsANextLine = false;
+          #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+            tmp =0;
+          #endif //VERBOSE_SCREEN
+          while(stringWidth(tmpString + offset, &standardFont, false, true) >= SCREEN_WIDTH) {
+            tmpString[offset + stringLastGlyph(tmpString + offset)] = 0;
+            thereIsANextLine = true;
+            #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+              printf("^^^B %4u %4u",tmp2, tmp++);
+              printf("^^^^$$ %s %d\n",tmpString + offset,stringWidth(tmpString + offset, &standardFont, false, true));
+            #endif //VERBOSE_SCREEN
+          }
+          #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+            tmp2++;
+          #endif //VERBOSE_SCREEN
+          bytesProcessed += stringByteLength(tmpString + offset);
+          offset += 300;
+          tmpString[offset] = 0;
+        }
+        break;
 
 
-    case dtConfig:
-      temporaryInformation = TI_SHOW_REGISTER_BIG;
-      xcopy(tmpString, "Configuration data", 19);
-      break;
+      case dtConfig:
+        temporaryInformation = TI_SHOW_REGISTER_BIG;
+        xcopy(tmpString, "Configuration data", 19);
+        break;
 
 
-    default:
-      temporaryInformation = TI_NO_INFO;
-      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, SHOWregis);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        sprintf(errorMessage, "cannot SHOW %s%s", tmpString + 2100, getRegisterDataTypeName(SHOWregis, true, false));
-        moreInfoOnError("In function fnShow:", errorMessage, NULL, NULL);
-      #endif
-      return;
-  }
+      default:
+        temporaryInformation = TI_NO_INFO;
+        displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, SHOWregis);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "cannot SHOW %s%s", tmpString + 2100, getRegisterDataTypeName(SHOWregis, true, false));
+          moreInfoOnError("In function fnShow:", errorMessage, NULL, NULL);
+        #endif
+        return;
+    }
 
 
-  displayFormat = savedDisplayFormat;
-  displayFormatDigits = savedDisplayFormatDigits;
-  SigFigMode = savedSigFigMode;                            //JM SIGFIG
-  UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
-  #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
-    printf("SHOW:Done |%s|\n",tmpString);
-  #endif
+    displayFormat = savedDisplayFormat;
+    displayFormatDigits = savedDisplayFormatDigits;
+    SigFigMode = savedSigFigMode;                            //JM SIGFIG
+    UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
+    #if defined (VERBOSE_SCREEN) && defined (PC_BUILD)
+      printf("SHOW:Done |%s|\n",tmpString);
+    #endif
 
-#endif //TESTSUITE_BUILD
+  #endif //TESTSUITE_BUILD
+#else
+      fnShow(0);
 #endif //#ifndef SAVE_SPACE_DM42_9
 }
 

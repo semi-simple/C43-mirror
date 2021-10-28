@@ -307,7 +307,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           *(bufPtr + 2) = 0;
           doubleBytednessHistory <<= 1;
           bufPtr += 1;
-          inLabel = true;
+          inLabel = false;
         }
 
         /* Argument separator */

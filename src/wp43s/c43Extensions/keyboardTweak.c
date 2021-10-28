@@ -40,8 +40,8 @@
 
 
 int16_t determineFunctionKeyItem_C43(const char *data) {
+  int16_t item = ITM_NOP;
   #ifndef TESTSUITE_BUILD
-    int16_t item = ITM_NOP;
     int16_t itemShift = (shiftF ? 6 : (shiftG ? 12 : 0));
     int16_t fn = *(data) - '0';
     int16_t menuId = softmenuStack[0].softmenuId;
@@ -68,8 +68,8 @@ int16_t determineFunctionKeyItem_C43(const char *data) {
         item = 0;
       }
     }
-    return item;
   #endif
+  return item;
 }
 
 

@@ -1462,9 +1462,10 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
         }
       }
     }
+    return false; //Signal that this was the last section loaded and no more sections to follow
   }
 
-  return true;
+  return true; //Signal to continue loading the next section
 }
 
 

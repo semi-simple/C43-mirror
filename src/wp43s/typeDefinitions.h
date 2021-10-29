@@ -47,6 +47,7 @@ typedef struct {
   int16_t fShiftedAim; ///< ID of the f shifted AIM function:
   int16_t gShiftedAim; ///< ID of the g shifted AIM function: greek letters
   int16_t primaryTam;  ///< ID of the primary TAM function of the key
+  int16_t fShiftedEim; ///< ID of the f shifted EIM function:
 } calcKey_t;
 
 

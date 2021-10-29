@@ -42,6 +42,12 @@
    */
   void calcModeNim                 (uint16_t unusedButMandatoryParameter);
   /**
+   * Sets the calc mode to equation input mode.
+   *
+   * \param[in] unusedButMandatoryParameter
+   */
+  void calcModeEim                 (uint16_t unusedButMandatoryParameter);
+  /**
    * Sets the calc mode to alpha selection menu if needed.
    */
   void enterAsmModeIfMenuIsACatalog(int16_t id);
@@ -60,6 +66,7 @@
     void calcModeNormalGui         (void);
     void calcModeAimGui            (void);
     void calcModeTamGui            (void);
+    void calcModeEimGui            (void);
   #endif // SCREEN_800X480
 #endif // PC_BUILD
 

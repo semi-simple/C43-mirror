@@ -110,14 +110,8 @@ void fnEqEdit(uint16_t unusedButMandatoryParameter) {
   const char *equationString = TO_PCMEMPTR(allFormulae[currentFormula].pointerToFormulaData);
   if(equationString) xcopy(aimBuffer, equationString, stringByteLength(equationString) + 1);
   else               aimBuffer[0] = 0;
-  calcMode = CM_EIM;
-  alphaCase = AC_UPPER;
-  setSystemFlag(FLAG_ALPHA);
-  yCursor = 0;
+  calcModeEim(NOPARAM);
   xCursor = equationString ? stringGlyphLength(equationString) : 0;
-  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-    calcModeAimGui();
-  #endif // PC_BUILD && (SCREEN_800X480 == 0)
 }
 
 void fnEqDelete(uint16_t unusedButMandatoryParameter) {
@@ -362,8 +356,9 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         }
 
         /* Operators */
-        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '!')) {
-          _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
+        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '!' || (*strPtr) == '|')) {
+          if((*strPtr) != '|' || (strLength > (startAt + 1)))
+            _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
           strWidth += stringWidth(bufPtr, &standardFont, true, true);

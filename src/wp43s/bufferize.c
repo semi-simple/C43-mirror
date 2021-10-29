@@ -258,15 +258,26 @@
           displayBugScreen(errorMessage);
         }
         else if(calcMode == CM_EIM) {
-          const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" : item == ITM_CHECK_MARK ? STD_SQUARE_ROOT : indexOfItems[item].itemSoftmenuName;
+          const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" :
+                                item == ITM_PAIR_OF_BARS        ? "||" :
+                                indexOfItems[item].itemSoftmenuName;
           char *aimCursorPos = aimBuffer;
           char *aimBottomPos = aimBuffer + stringByteLength(aimBuffer);
           uint32_t itemLen = stringByteLength(addChar);
           for(uint32_t i = 0; i < xCursor; ++i) aimCursorPos += (*aimCursorPos & 0x80) ? 2 : 1;
           for(; aimBottomPos >= aimCursorPos; --aimBottomPos) *(aimBottomPos + itemLen) = *aimBottomPos; 
           xcopy(aimCursorPos, addChar, itemLen);
-          ++xCursor;
-          if(item == ITM_PAIR_OF_PARENTHESES) ++xCursor;
+          switch(item) {
+            case ITM_ROOT_PARENTHESES:
+              xCursor += 3;
+              break;
+            case ITM_PAIR_OF_PARENTHESES:
+            case ITM_PAIR_OF_BARS:
+              xCursor += 2;
+              break;
+            default:
+              xCursor += 1;
+          }
         }
         else {
           xcopy(aimBuffer + stringByteLength(aimBuffer), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);

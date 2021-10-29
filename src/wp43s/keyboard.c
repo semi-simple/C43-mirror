@@ -316,7 +316,13 @@
       return ITM_NOP;
     }
 
-    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR && calcMode != CM_NIM) || calcMode == CM_EIM || tam.alpha) {
+    if(calcMode == CM_EIM) {
+      result = shiftF ? key->fShiftedEim :
+               shiftG ? key->gShiftedAim :
+                        key->primaryAim;
+
+    }
+    else if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR && calcMode != CM_NIM) || tam.alpha) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;

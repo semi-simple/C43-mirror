@@ -107,11 +107,13 @@ void fnEqNew(uint16_t unusedButMandatoryParameter) {
 }
 
 void fnEqEdit(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
   const char *equationString = TO_PCMEMPTR(allFormulae[currentFormula].pointerToFormulaData);
   if(equationString) xcopy(aimBuffer, equationString, stringByteLength(equationString) + 1);
   else               aimBuffer[0] = 0;
   calcModeEim(NOPARAM);
   xCursor = equationString ? stringGlyphLength(equationString) : 0;
+#endif /* TESTSUITE_BUILD */
 }
 
 void fnEqDelete(uint16_t unusedButMandatoryParameter) {

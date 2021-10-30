@@ -259,7 +259,7 @@
         }
         else if(calcMode == CM_EIM) {
           const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" :
-                                item == ITM_BARS                ? "||" :
+                                item == ITM_VERTICAL_BAR        ? "||" :
                                 item == ITM_ROOT_SIGN           ? STD_SQUARE_ROOT "()" :
                                 indexOfItems[item].itemSoftmenuName;
           char *aimCursorPos = aimBuffer;
@@ -273,7 +273,7 @@
               xCursor += 3;
               break;
             case ITM_PAIR_OF_PARENTHESES:
-            case ITM_BARS:
+            case ITM_VERTICAL_BAR:
               xCursor += 2;
               break;
             default:

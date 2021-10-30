@@ -1197,7 +1197,7 @@
 #define ITM_EQ_LEFT                   1150
 #define ITM_EQ_RIGHT                  1151
 #define ITM_PAIR_OF_PARENTHESES       1152
-#define ITM_BARS                      1153
+#define ITM_VERTICAL_BAR              1153
 #define ITM_1154                      1154
 #define ITM_1155                      1155
 #define ITM_1156                      1156

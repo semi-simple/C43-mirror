@@ -780,6 +780,10 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
 
     if(numberOfItems <= 18) {
       dottedTopLine = false;
+      if(catalog != CATALOG_NONE) {
+        currentFirstItem = softmenuStack[0].firstItem = 0;
+        setCatalogLastPos();
+      }
     }
     else {
       dottedTopLine = true;

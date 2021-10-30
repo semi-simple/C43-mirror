@@ -111,8 +111,14 @@ void fnEqEdit(uint16_t unusedButMandatoryParameter) {
   const char *equationString = TO_PCMEMPTR(allFormulae[currentFormula].pointerToFormulaData);
   if(equationString) xcopy(aimBuffer, equationString, stringByteLength(equationString) + 1);
   else               aimBuffer[0] = 0;
-  calcModeEim(NOPARAM);
+  calcMode = CM_EIM;
+  alphaCase = AC_UPPER;
+  setSystemFlag(FLAG_ALPHA);
+  yCursor = 0;
   xCursor = equationString ? stringGlyphLength(equationString) : 0;
+  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+    calcModeAimGui();
+  #endif // PC_BUILD && (SCREEN_800X480 == 0)
 #endif /* TESTSUITE_BUILD */
 }
 

@@ -583,9 +583,6 @@
       else if(calcMode == CM_AIM) {
         calcModeAimGui();
       }
-      else if(calcMode == CM_EIM) {
-        calcModeEimGui();
-      }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
   }
 

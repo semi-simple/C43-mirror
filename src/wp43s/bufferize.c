@@ -259,7 +259,8 @@
         }
         else if(calcMode == CM_EIM) {
           const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" :
-                                item == ITM_PAIR_OF_BARS        ? "||" :
+                                item == ITM_BARS                ? "||" :
+                                item == ITM_ROOT_SIGN           ? STD_SQUARE_ROOT "()" :
                                 indexOfItems[item].itemSoftmenuName;
           char *aimCursorPos = aimBuffer;
           char *aimBottomPos = aimBuffer + stringByteLength(aimBuffer);
@@ -268,11 +269,11 @@
           for(; aimBottomPos >= aimCursorPos; --aimBottomPos) *(aimBottomPos + itemLen) = *aimBottomPos; 
           xcopy(aimCursorPos, addChar, itemLen);
           switch(item) {
-            case ITM_ROOT_PARENTHESES:
+            case ITM_ROOT_SIGN:
               xCursor += 3;
               break;
             case ITM_PAIR_OF_PARENTHESES:
-            case ITM_PAIR_OF_BARS:
+            case ITM_BARS:
               xCursor += 2;
               break;
             default:

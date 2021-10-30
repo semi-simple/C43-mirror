@@ -778,7 +778,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     }
     currentFirstItem = softmenuStack[0].firstItem;
 
-    if(numberOfItems <= 18) {
+    if(numberOfItems <= ((softmenu[m].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE)) ? 12 : 18)) {
       dottedTopLine = false;
       if(catalog != CATALOG_NONE) {
         currentFirstItem = softmenuStack[0].firstItem = 0;
@@ -825,7 +825,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
           }
         }
       }
-      if(softmenu[m].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE)) {
+      if(softmenu[m].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && ((currentFirstItem + 12) >= numberOfItems)) {
         showEquation(currentFormula, 0, EQUATION_NO_CURSOR, false, NULL, NULL);
       }
     }
@@ -1031,9 +1031,10 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
 
   bool_t currentSoftmenuScrolls(void) {
     int16_t menuId = softmenuStack[0].softmenuId;
+    bool_t isEquationVars = (softmenu[menuId].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE));
     return (menuId > 1 &&
-      (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
-       || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18)));
+      (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > (isEquationVars ? 12 : 18))
+       || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > (isEquationVars ? 12 : 18))));
   }
 
   bool_t isAlphabeticSoftmenu(void) {

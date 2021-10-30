@@ -778,7 +778,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     }
     currentFirstItem = softmenuStack[0].firstItem;
 
-    if(numberOfItems <= ((softmenu[m].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE)) ? 12 : 18)) {
+    if(numberOfItems <= 18) {
       dottedTopLine = false;
       if(catalog != CATALOG_NONE) {
         currentFirstItem = softmenuStack[0].firstItem = 0;
@@ -825,7 +825,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
           }
         }
       }
-      if(softmenu[m].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && ((currentFirstItem + 12) >= numberOfItems)) {
+      if(softmenu[m].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE)) {
         showEquation(currentFormula, 0, EQUATION_NO_CURSOR, false, NULL, NULL);
       }
     }
@@ -991,9 +991,17 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       id = -MNU_alpha_omega;
     }
     else if(id == -MNU_Solver) {
+      int32_t numberOfVars = -1;
       currentSolverStatus = SOLVER_STATUS_USES_FORMULA | SOLVER_STATUS_INTERACTIVE;
       parseEquation(currentFormula, EQUATION_PARSER_MVAR, aimBuffer, tmpString);
       id = -MNU_MVAR;
+      while((getNthString((uint8_t *)tmpString, ++numberOfVars))[0] != 0) {}
+      if(numberOfVars > 12) {
+        displayCalcErrorMessage(ERROR_EQUATION_TOO_COMPLEX, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function showSoftmenu:", "there are more than 11 variables in this equation!", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
     }
 
     m = 0;
@@ -1031,10 +1039,9 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
 
   bool_t currentSoftmenuScrolls(void) {
     int16_t menuId = softmenuStack[0].softmenuId;
-    bool_t isEquationVars = (softmenu[menuId].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE));
     return (menuId > 1 &&
-      (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > (isEquationVars ? 12 : 18))
-       || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > (isEquationVars ? 12 : 18))));
+      (   (menuId <  NUMBER_OF_DYNAMIC_SOFTMENUS && dynamicSoftmenu[menuId].numItems > 18)
+       || (menuId >= NUMBER_OF_DYNAMIC_SOFTMENUS &&        softmenu[menuId].numItems > 18)));
   }
 
   bool_t isAlphabeticSoftmenu(void) {

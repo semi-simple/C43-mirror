@@ -850,7 +850,6 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         }
         else if(*strPtr == '-') {
           /* unary minus */
-          afterClosingParenthesis = false;
         }
         else if(afterClosingParenthesis && *strPtr != '(' && *strPtr != ' ') {
           afterClosingParenthesis = false;
@@ -869,7 +868,10 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           return;
         }
         if(*strPtr == '=') equalAppeared = true;
-        if(bufPtr != buffer || (*strPtr) != '-') {
+        if(bufPtr != buffer || (*strPtr) != '-' || afterClosingParenthesis) {
+          if(afterClosingParenthesis && *strPtr == '-') {
+            afterClosingParenthesis = false;
+          }
           buffer[0] = *(strPtr++);
           buffer[1] = 0;
           _parseWord(buffer, parseMode, PARSER_HINT_OPERATOR, mvarBuffer);

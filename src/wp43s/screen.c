@@ -1681,8 +1681,14 @@
 
           else if(temporaryInformation == TI_SOLVER_VARIABLE) {
             if(regist == REGISTER_X) {
-              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
-              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              if(currentSolverVariable >= FIRST_RESERVED_VARIABLE) {
+                memcpy(prefix, allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName + 1, allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName[0]);
+                strcpy(prefix + allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName[0], " =");
+              }
+              else {
+                memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+                strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              }
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }

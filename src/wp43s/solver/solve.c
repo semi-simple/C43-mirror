@@ -35,6 +35,7 @@
 #include "registerValueConversions.h"
 #include "softmenus.h"
 #include "solver/equation.h"
+#include "solver/tvm.h"
 #include "stack.h"
 #include "wp43s.h"
 
@@ -236,15 +237,18 @@ static bool_t _executeStep(uint8_t **step) {
   return lastErrorCode == ERROR_NONE;
 }
 static void _solverIteration(real34_t *res) {
-  //
-  //  NOT A COMPLETE ENGINE: TESTING PURPOSE ONLY!!
-  //  The following decoder is minimally implemented ad hoc engine for testing of SOLVE feature.
-  //  Replace with the complete programming system when ready.
-  //
-  if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
+  if(currentSolverStatus & SOLVER_STATUS_TVM_APPLICATION) {
+    tvmEquation();
+  }
+  else if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
     parseEquation(currentFormula, EQUATION_PARSER_XEQ, tmpString, tmpString + AIM_BUFFER_LENGTH);
   }
   else {
+    //
+    //  NOT A COMPLETE ENGINE: TESTING PURPOSE ONLY!!
+    //  The following decoder is minimally implemented ad hoc engine for testing of SOLVE feature.
+    //  Replace with the complete programming system when ready.
+    //
     uint8_t *step = labelList[currentSolverProgram].instructionPointer;
     lastErrorCode = ERROR_NONE;
     while(_executeStep(&step)) {}
@@ -274,8 +278,13 @@ static void _solverIteration(real34_t *res) {
 static void _executeSolver(calcRegister_t variable, const real34_t *val, real34_t *res) {
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
   real34Copy(val, REGISTER_REAL34_DATA(REGISTER_X));
-  reallyRunFunction(ITM_STO, variable);
-  fnFillStack(NOPARAM);
+  if(currentSolverStatus & SOLVER_STATUS_TVM_APPLICATION) {
+    copySourceRegisterToDestRegister(REGISTER_X, variable);
+  }
+  else {
+    reallyRunFunction(ITM_STO, variable);
+    fnFillStack(NOPARAM);
+  }
   _solverIteration(res);
 }
 

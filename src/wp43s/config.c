@@ -769,6 +769,7 @@ void fnReset(uint16_t confirmation) {
     setSystemFlag(FLAG_YMD);   // date format = yyyy-mm-dd
     setSystemFlag(FLAG_ASLIFT);
     setSystemFlag(FLAG_PROPFR);
+    setSystemFlag(FLAG_ENDPMT);// TVM application = END mode
 
     hourGlassIconEnabled = false;
     watchIconEnabled = false;

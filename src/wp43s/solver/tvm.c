@@ -25,6 +25,7 @@
 #include "error.h"
 #include "flags.h"
 #include "items.h"
+#include "mathematics/comparisonReals.h"
 #include "realType.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -52,13 +53,27 @@ void fnTvmVar(uint16_t variable) {
         liftStack();
         real34Multiply(REGISTER_REAL34_DATA(variable), const34_2, &y);
         real34Multiply(REGISTER_REAL34_DATA(variable), const34_1on2, &x);
-        if(variable == RESERVED_VARIABLE_PV && real34IsZero(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV))) {
-          real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV), const34_2, &y);
-          real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV), const34_1on2, &x);
-        }
-        else if(variable == RESERVED_VARIABLE_FV && real34IsZero(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV))) {
-          real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV), const34_2, &y);
-          real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV), const34_1on2, &x);
+        switch(variable) {
+          case RESERVED_VARIABLE_PV:
+            if(real34IsZero(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV))) {
+              real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV), const34_2, &y);
+              real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV), const34_1on2, &x);
+            }
+            break;
+          case RESERVED_VARIABLE_FV:
+            if(real34IsZero(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV))) {
+              real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV), const34_2, &y);
+              real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV), const34_1on2, &x);
+            }
+            break;
+          case RESERVED_VARIABLE_NPER:
+          case RESERVED_VARIABLE_IPONA:
+          case RESERVED_VARIABLE_PERONA:
+            if(real34CompareLessThan(REGISTER_REAL34_DATA(variable), const34_1)) {
+              real34Copy(const34_2, &y);
+              real34Copy(const34_1, &y);
+            }
+            break;
         }
         if((variable == RESERVED_VARIABLE_PV || variable == RESERVED_VARIABLE_FV) && real34IsNegative(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV)) == real34IsNegative(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV))) {
           real34ChangeSign(&y);

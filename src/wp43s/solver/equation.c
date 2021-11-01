@@ -136,6 +136,7 @@ void fnEqCursorRight(uint16_t unusedButMandatoryParameter) {
 
 void fnEqCalc(uint16_t unusedButMandatoryParameter) {
   parseEquation(currentFormula, EQUATION_PARSER_XEQ, tmpString, tmpString + AIM_BUFFER_LENGTH);
+  adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 
 

@@ -127,8 +127,7 @@ void tvmEquation(void) {
   realDivide(&iA, const_100, &i, &ctxtReal39);
   realDivide(&i, &perA, &i, &ctxtReal39);
 
-  realChangeSign(&fv);
-  realChangeSign(&pmt);
+  realChangeSign(&pv);
 
   realAdd(&i, const_1, &i1nPer, &ctxtReal39);
   realPower(&i1nPer, &nPer, &i1nPer, &ctxtReal39);

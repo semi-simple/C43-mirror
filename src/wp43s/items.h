@@ -1142,7 +1142,7 @@
 #define ITM_CONTOUR_INTEGRAL          1093
 #define ITM_SURFACE_INTEGRAL          1094
 #define ITM_RATIO                     1095
-#define ITM_CHECK_MARK                1096
+#define ITM_ROOT_SIGN                 1096
 #define ITM_ASYMPOTICALLY_EQUAL       1097
 #define ITM_ALMOST_EQUAL              1098
 #define ITM_COLON_EQUALS              1099
@@ -1199,7 +1199,7 @@
 #define ITM_EQ_LEFT                   1150
 #define ITM_EQ_RIGHT                  1151
 #define ITM_PAIR_OF_PARENTHESES       1152
-#define ITM_1153                      1153
+#define ITM_VERTICAL_BAR              1153
 #define ITM_1154                      1154
 #define ITM_1155                      1155
 #define ITM_1156                      1156

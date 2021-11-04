@@ -1587,6 +1587,10 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
 
     if(numberOfItems <= 18) {
       dottedTopLine = false;
+      if(catalog != CATALOG_NONE) {
+        currentFirstItem = softmenuStack[0].firstItem = 0;
+        setCatalogLastPos();
+      }
     }
     else {
       dottedTopLine = true;
@@ -2027,9 +2031,17 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
       id = -MNU_alpha_omega;
     }
     else if(id == -MNU_Solver) {
+      int32_t numberOfVars = -1;
       currentSolverStatus = SOLVER_STATUS_USES_FORMULA | SOLVER_STATUS_INTERACTIVE;
       parseEquation(currentFormula, EQUATION_PARSER_MVAR, aimBuffer, tmpString);
       id = -MNU_MVAR;
+      while((getNthString((uint8_t *)tmpString, ++numberOfVars))[0] != 0) {}
+      if(numberOfVars > 12) {
+        displayCalcErrorMessage(ERROR_EQUATION_TOO_COMPLEX, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          moreInfoOnError("In function showSoftmenu:", "there are more than 11 variables in this equation!", NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
     }
 
     m = 0;

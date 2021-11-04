@@ -28,6 +28,7 @@
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "screen.h"
+#include "solver/equation.h"
 #include "sort.h"
 #include "c43Extensions/xeqm.h"
 #include <string.h>
@@ -441,6 +442,9 @@ TO_QSPI const int16_t menu_TamStoRcl[]   = { ITM_INDIRECTION,               -MNU
 TO_QSPI const int16_t menu_TamShuffle[]  = { ITM_REG_X,                     ITM_REG_Y,                  ITM_REG_Z,                ITM_REG_T,             ITM_NULL,                    ITM_NULL,                     };
 TO_QSPI const int16_t menu_TamLabel[]    = { ITM_INDIRECTION,               -MNU_PROG,                  ITM_REG_X,                ITM_REG_Y,             ITM_REG_Z,                   ITM_REG_T                     };
 
+TO_QSPI const int16_t menu_Eim[]         = { ITM_EQ_LEFT,                   ITM_PAIR_OF_PARENTHESES,    ITM_CIRCUMFLEX,           ITM_COLON,             ITM_EQUAL,                   ITM_EQ_RIGHT                  };
+
+
 TO_QSPI const int16_t menu_BASE[]        = { ITM_IP,                        ITM_HASH_JM,                ITM_2HEX,                 ITM_2DEC,              ITM_2OCT,                    ITM_2BIN,                           //JM BASE MENU ADDED
                                              -MNU_BITS,                     -MNU_INTS,                  ITM_LOGICALAND,           ITM_LOGICALOR,         ITM_LOGICALXOR,              ITM_LOGICALNOT,    
                                              ITM_CB_LEADING_ZERO,           ITM_WSIZE,                  ITM_WS64,                 ITM_WS32,              ITM_WS16,                    ITM_WS8,
@@ -788,7 +792,7 @@ TO_QSPI const softmenu_t softmenu[] = {
 /*   0 */  {.menuItem = -MNU_MyMenu,      .numItems = 0,                                        .softkeyItem = NULL             }, // MyMenu must be the 1st
 /*   1 */  {.menuItem = -MNU_MyAlpha,     .numItems = 0,                                        .softkeyItem = NULL             }, // Myalpha must be the 2nd
 /*   2 */  {.menuItem = -MNU_RAM,         .numItems = 0,                                        .softkeyItem = NULL             },
-/*   3 */  {.menuItem = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             }, // The 15 first menus are
+/*   3 */  {.menuItem = -MNU_FLASH,       .numItems = 0,                                        .softkeyItem = NULL             }, // The 16 first menus are
 /*   4 */  {.menuItem = -MNU_VAR,         .numItems = 0,                                        .softkeyItem = NULL             }, // variable softmenus and
 /*   5 */  {.menuItem = -MNU_PROG,        .numItems = 0,                                        .softkeyItem = NULL             }, // MUST be in the same
 /*   6 */  {.menuItem = -MNU_MATRS,       .numItems = 0,                                        .softkeyItem = NULL             }, // order as the
@@ -884,6 +888,7 @@ TO_QSPI const softmenu_t softmenu[] = {
 /*  96 */  {.menuItem = -MNU_TAMSTORCL,   .numItems = sizeof(menu_TamStoRcl  )/sizeof(int16_t), .softkeyItem = menu_TamStoRcl   },
 /*  97 */  {.menuItem = -MNU_TAMSHUFFLE,  .numItems = sizeof(menu_TamShuffle )/sizeof(int16_t), .softkeyItem = menu_TamShuffle  },
 /*  98 */  {.menuItem = -MNU_TAMLABEL,    .numItems = sizeof(menu_TamLabel   )/sizeof(int16_t), .softkeyItem = menu_TamLabel    },
+/*  99 */  {.menuItem = -MNU_EQ_EDIT,     .numItems = sizeof(menu_Eim        )/sizeof(int16_t), .softkeyItem = menu_Eim         },
 
 /*     */  {.menuItem = -MNU_ASN_N,       .numItems = sizeof(menu_ASN_N      )/sizeof(int16_t), .softkeyItem = menu_ASN_N       },  //JM USER NORMAL
 /*     */  {.menuItem = -MNU_ASN,         .numItems = sizeof(menu_ASN        )/sizeof(int16_t), .softkeyItem = menu_ASN         },  //JM USER
@@ -987,15 +992,29 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
   static void _dynmenuConstructMVars(int16_t menu) {
     uint16_t numberOfBytes = 0;
     uint16_t numberOfVars = 0;
-    uint8_t *step = labelList[currentSolverProgram].instructionPointer;
     memset(tmpString, 0, TMP_STR_LENGTH);
 
-    while(*step == ((ITM_MVAR >> 8) | 0x80) && *(step + 1) == (ITM_MVAR & 0xff) && *(step + 2) == STRING_LABEL_VARIABLE) {
-      xcopy(tmpString + numberOfBytes, step + 4, *(step + 3));
-      (void)findOrAllocateNamedVariable(tmpString + numberOfBytes);
-      numberOfBytes += *(step + 3) + 1;
-      numberOfVars++;
-      step = findNextStep(step);
+    if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
+      char *bufPtr = tmpString;
+      uint8_t errorCode = lastErrorCode;
+      lastErrorCode = ERROR_NONE;
+      parseEquation(currentFormula, EQUATION_PARSER_MVAR, tmpString + TMP_STR_LENGTH - AIM_BUFFER_LENGTH, tmpString);
+      while(*bufPtr != 0 || numberOfVars < 6) {
+        numberOfVars += 1;
+        numberOfBytes += stringByteLength(bufPtr) + 1;
+        bufPtr += stringByteLength(bufPtr) + 1;
+      }
+      lastErrorCode = errorCode;
+    }
+    else {
+      uint8_t *step = labelList[currentSolverProgram].instructionPointer;
+      while(*step == ((ITM_MVAR >> 8) | 0x80) && *(step + 1) == (ITM_MVAR & 0xff) && *(step + 2) == STRING_LABEL_VARIABLE) {
+        xcopy(tmpString + numberOfBytes, step + 4, *(step + 3));
+        (void)findOrAllocateNamedVariable(tmpString + numberOfBytes);
+        numberOfBytes += *(step + 3) + 1;
+        numberOfVars++;
+        step = findNextStep(step);
+      }
     }
 
     dynamicSoftmenu[menu].menuContent = malloc(numberOfBytes);
@@ -1543,6 +1562,9 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
       initVariableSoftmenu(m);
       numberOfItems = dynamicSoftmenu[m].numItems;
     }
+    else if(softmenu[m].menuItem == -MNU_EQN && numberOfFormulae == 0) {
+      numberOfItems = 1;
+    }
     else { // Static softmenu
       numberOfItems = softmenu[m].numItems;
     }
@@ -1604,6 +1626,9 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
             }
           }
         }
+      }
+      if(softmenu[m].menuItem == -MNU_MVAR && (currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE)) {
+        showEquation(currentFormula, 0, EQUATION_NO_CURSOR, false, NULL, NULL);
       }
     }
     else {
@@ -2000,6 +2025,11 @@ void fnMenuDump(uint16_t menu, uint16_t item) {                              //J
     }
     else if(id == -MNU_ALPHA_OMEGA && alphaCase == AC_LOWER) { // alpha...omega
       id = -MNU_alpha_omega;
+    }
+    else if(id == -MNU_Solver) {
+      currentSolverStatus = SOLVER_STATUS_USES_FORMULA | SOLVER_STATUS_INTERACTIVE;
+      parseEquation(currentFormula, EQUATION_PARSER_MVAR, aimBuffer, tmpString);
+      id = -MNU_MVAR;
     }
 
     m = 0;

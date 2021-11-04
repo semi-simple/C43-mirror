@@ -274,7 +274,17 @@ void showFracMode(void) {
 
   void showHideAlphaMode(void) {
     int status=0;
-    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR) || (tam.mode != 0 && tam.alpha)) {
+    if(calcMode == CM_AIM || calcMode == CM_EIM || (catalog && catalog != CATALOG_MVAR) || (tam.mode != 0 && tam.alpha)) {
+
+//WP43S
+//      if(alphaCase == AC_UPPER) {
+//        showString(STD_ALPHA, &standardFont, X_ALPHA_MODE, 0, vmNormal, true, false); // STD_ALPHA is 0+9+2 pixel wide
+//        setSystemFlag(FLAG_alphaCAP);
+//      }
+//      else {
+//        showString(STD_alpha, &standardFont, X_ALPHA_MODE, 0, vmNormal, true, false); // STD_alpha is 0+9+2 pixel wide
+//        clearSystemFlag(FLAG_alphaCAP);
+
 
       if(numLock && !shiftF && !shiftG) {
           if(alphaCase == AC_UPPER)              { status = 3 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else

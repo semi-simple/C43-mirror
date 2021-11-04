@@ -153,6 +153,7 @@
   extern labelList_t           *labelList;
   extern programList_t         *programList;
   extern angularMode_t          currentAngularMode;
+  extern formulaHeader_t       *allFormulae;
 
   extern char                  *tmpString;
   extern char                  *tmpStringLabelOrVariableName;
@@ -272,6 +273,8 @@
   extern uint16_t               currentSolverProgram;
   extern uint16_t               currentSolverVariable;
   extern uint16_t               currentSolverNestingDepth;
+  extern uint16_t               numberOfFormulae;
+  extern uint16_t               currentFormula;
   #if (REAL34_WIDTH_TEST == 1)
     extern uint16_t               largeur;
   #endif // (REAL34_WIDTH_TEST == 1)

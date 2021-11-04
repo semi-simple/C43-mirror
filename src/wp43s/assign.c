@@ -80,7 +80,7 @@ TO_QSPI const calcKey_t kbd_std[37] = {
   //keyID,   primary,           fShifted,          gShifted,          keyLblAim,         primaryAim,        fShiftedAim,       gShiftedAim,       primaryTam         
       {21,   ITM_SIGMAPLUS,     ITM_RI,            ITM_TGLFRT,        ITM_NULL,          ITM_A,             ITM_a,             ITM_ALPHA,         ITM_REG_A          },
       {22,   ITM_1ONX,          ITM_YX,            ITM_HASH_JM,       ITM_NUMBER_SIGN,   ITM_B,             ITM_b,             ITM_BETA,          ITM_REG_B          },
-      {23,   ITM_SQUAREROOTX,   ITM_SQUARE,        ITM_ms,            ITM_CHECK_MARK,    ITM_C,             ITM_c,             ITM_CHI,           ITM_REG_C          },
+      {23,   ITM_SQUAREROOTX,   ITM_SQUARE,        ITM_ms,            ITM_ROOT_SIGN,     ITM_C,             ITM_c,             ITM_CHI,           ITM_REG_C          },
       {24,   ITM_LOG10,         ITM_10x,           ITM_dotD,          ITM_NULL,          ITM_D,             ITM_d,             ITM_DELTA,         ITM_REG_D          },
       {25,   ITM_LN,            ITM_EXP,           ITM_toREC2,        ITM_NULL,          ITM_E,             ITM_e,             ITM_EPSILON,       ITM_NULL           },
       {26,   ITM_XEQ,           ITM_AIM,           ITM_toPOL2,        ITM_NULL,          ITM_F,             ITM_f,             ITM_DIGAMMA,       ITM_alpha          },
@@ -130,7 +130,7 @@ TO_QSPI const calcKey_t kbd_std[37] = {
   //keyID,   primary,           fShifted,          gShifted,          keyLblAim,         primaryAim,        fShiftedAim,       gShiftedAim,       primaryTam         
       {21,   ITM_SIGMAPLUS,     ITM_SIGMAMINUS,    ITM_TGLFRT,        ITM_NULL,          ITM_A,             ITM_a,             ITM_ALPHA,         ITM_REG_A          },
       {22,   ITM_1ONX,          ITM_YX,            ITM_HASH_JM,       ITM_NUMBER_SIGN,   ITM_B,             ITM_b,             ITM_BETA,          ITM_REG_B          },
-      {23,   ITM_SQUAREROOTX,   ITM_SQUARE,        ITM_ms,            ITM_CHECK_MARK,    ITM_C,             ITM_c,             ITM_CHI,           ITM_REG_C          },
+      {23,   ITM_SQUAREROOTX,   ITM_SQUARE,        ITM_ms,            ITM_ROOT_SIGN,     ITM_C,             ITM_c,             ITM_CHI,           ITM_REG_C          },
       {24,   ITM_LOG10,         ITM_10x,           ITM_dotD,          ITM_NULL,          ITM_D,             ITM_d,             ITM_DELTA,         ITM_REG_D          },
       {25,   ITM_LN,            ITM_EXP,           ITM_toREC2,        ITM_NULL,          ITM_E,             ITM_e,             ITM_EPSILON,       ITM_NULL           },
       {26,   ITM_XEQ,           ITM_GTO,           ITM_toPOL2,        ITM_NULL,          ITM_F,             ITM_f,             ITM_DIGAMMA,       ITM_alpha          },

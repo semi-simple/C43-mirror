@@ -196,7 +196,7 @@
 #define FLAG_SOLVING                          0xc026
 #define FLAG_VMDISP                           0xc027
 #define FLAG_USB                              0xc028
-#define FLAG_ENDPMT                           0x8029
+#define FLAG_ENDPMT                           0xc029
 #define NUMBER_OF_SYSTEM_FLAGS                    42
 
 typedef enum {

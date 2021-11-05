@@ -22,8 +22,10 @@
 
 #include <stdint.h>
 
-void fnTvmVar   (uint16_t variable);
+void fnTvmVar      (uint16_t variable);
+void fnTvmBeginMode(uint16_t unusedButMandatoryParameter);
+void fnTvmEndMode  (uint16_t unusedButMandatoryParameter);
 
-void tvmEquation(void);
+void tvmEquation   (void);
 
 #endif // TVM_H

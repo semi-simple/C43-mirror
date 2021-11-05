@@ -114,6 +114,17 @@ void fnTvmVar(uint16_t variable) {
 
 
 
+void fnTvmBeginMode(uint16_t unusedButMandatoryParameter) {
+  clearSystemFlag(FLAG_ENDPMT);
+}
+
+void fnTvmEndMode(uint16_t unusedButMandatoryParameter) {
+  setSystemFlag(FLAG_ENDPMT);
+}
+
+
+
+
 void tvmEquation(void) {
   real_t fv, iA, nPer, perA, pmt, pv, i;
   real_t i1nPer, val, tmp;

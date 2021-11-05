@@ -799,7 +799,7 @@
       gtk_fixed_put(GTK_FIXED(grid), backgroundImage, 0, 0);
 
       bezelImage = gtk_image_new_from_file("res/artwork/normal.png");
-      gtk_fixed_put(GTK_FIXED(grid), bezelImage, (calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT) - 13, calcLandscape ? 3 : 423);
+      gtk_fixed_put(GTK_FIXED(grid), bezelImage, (calcLandscape ? X_LEFT_LANDSCAPE : X_LEFT_PORTRAIT) - 16, calcLandscape ? 4 : 422);
 
       // Areas for the g shifted softkeys
       lblGSoftkeyArea = gtk_label_new("");

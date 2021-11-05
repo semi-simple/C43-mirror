@@ -609,6 +609,8 @@ void fnReset(uint16_t confirmation) {
     firstFreeProgramByte          = beginOfProgramMemory + 2;
     firstDisplayedStep            = beginOfProgramMemory;
     firstDisplayedLocalStepNumber = 0;
+    labelList                     = NULL;
+    programList                   = NULL;
     *(beginOfProgramMemory + 0) = (ITM_END >> 8) | 0x80;
     *(beginOfProgramMemory + 1) =  ITM_END       & 0xff;
     *(beginOfProgramMemory + 2) = 255; // .END.

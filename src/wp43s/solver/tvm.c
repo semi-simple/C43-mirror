@@ -66,18 +66,26 @@ void fnTvmVar(uint16_t variable) {
               real34Multiply(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV), const34_1on2, &x);
             }
             break;
-          case RESERVED_VARIABLE_NPER:
           case RESERVED_VARIABLE_IPONA:
+            if(real34CompareLessThan(REGISTER_REAL34_DATA(variable), const34_1)) {
+              real34Copy(const34_100, &y);
+              real34Copy(const34_1, &x);
+            }
+            break;
+          case RESERVED_VARIABLE_NPER:
           case RESERVED_VARIABLE_PERONA:
             if(real34CompareLessThan(REGISTER_REAL34_DATA(variable), const34_1)) {
               real34Copy(const34_2, &y);
-              real34Copy(const34_1, &y);
+              real34Copy(const34_1, &x);
             }
             break;
         }
-        if((variable == RESERVED_VARIABLE_PV || variable == RESERVED_VARIABLE_FV) && real34IsNegative(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV)) == real34IsNegative(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV))) {
-          real34ChangeSign(&y);
-          real34ChangeSign(&x);
+        if((variable == RESERVED_VARIABLE_PV || variable == RESERVED_VARIABLE_FV) &&
+          !real34IsZero(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV)) &&
+          !real34IsZero(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV)) &&
+          real34IsNegative(REGISTER_REAL34_DATA(RESERVED_VARIABLE_PV)) == real34IsNegative(REGISTER_REAL34_DATA(RESERVED_VARIABLE_FV))) {
+            real34ChangeSign(&y);
+            real34ChangeSign(&x);
         }
         if(solver(variable, &y, &x, &resZ, &resY, &resX) == SOLVER_RESULT_NORMAL) {
           reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);

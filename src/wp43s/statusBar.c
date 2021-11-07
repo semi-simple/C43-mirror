@@ -47,7 +47,7 @@
       if(calcMode == CM_MIM) {
         showMatrixMode();
       }
-      else if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_TVM) {
+      else if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_TVM || softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_FIN) { //JM added FIN
         showTvmMode();
       }
       else {

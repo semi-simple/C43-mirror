@@ -1501,6 +1501,10 @@ uint8_t   displayStack_m = 255;                                                 
       memcpy(prefix, allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName[0]);
       strcpy(prefix + allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName[0], " =");
     }
+    else if(currentViewRegister >= FIRST_RESERVED_VARIABLE && currentViewRegister <= LAST_RESERVED_VARIABLE) {
+      memcpy(prefix, allReservedVariables[currentViewRegister - FIRST_RESERVED_VARIABLE].reservedVariableName + 1, allReservedVariables[currentViewRegister - FIRST_RESERVED_VARIABLE].reservedVariableName[0]);
+      strcpy(prefix + allReservedVariables[currentViewRegister - FIRST_RESERVED_VARIABLE].reservedVariableName[0], " =");
+    }
     else {
       sprintf(prefix, "? =");
     }
@@ -1878,7 +1882,13 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
         const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((temporaryInformation == TI_VIEW && regist == REGISTER_T) ? 0 : (getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) ? 4 - displayStack : 0));
         calcRegister_t origRegist = regist;
         if(temporaryInformation == TI_VIEW && regist == REGISTER_T) {
-          regist = currentViewRegister;
+          if(currentViewRegister >= FIRST_RESERVED_VARIABLE && currentViewRegister < LAST_RESERVED_VARIABLE && allReservedVariables[currentViewRegister - FIRST_RESERVED_VARIABLE].header.pointerToRegisterData == WP43S_NULL) {
+            copySourceRegisterToDestRegister(currentViewRegister, TEMP_REGISTER_1);
+            regist = TEMP_REGISTER_1;
+          }
+          else {
+            regist = currentViewRegister;
+          }
         }
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
@@ -2428,8 +2438,14 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
           else if(temporaryInformation == TI_SOLVER_VARIABLE) {
             if(regist == REGISTER_X) {
-              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
-              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              if(currentSolverVariable >= FIRST_RESERVED_VARIABLE) {
+                memcpy(prefix, allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName + 1, allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName[0]);
+                strcpy(prefix + allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName[0], " =");
+              }
+              else {
+                memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+                strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              }
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }

@@ -34,6 +34,7 @@
 #include "wp43s.h"
 
 
+
 #ifndef TESTSUITE_BUILD
 #ifndef SAVE_SPACE_DM42_8
   static void oneSystemFlag(uint16_t systemFlag, const char *systemFlagNamename, int16_t *line, bool_t *firstSystemFlag) {
@@ -262,6 +263,7 @@
       oneSystemFlag(FLAG_AUTXEQ,  "AUTXEQ",  &line, &firstFlag);
       oneSystemFlag(FLAG_CPXj,    "CPXj",    &line, &firstFlag);
       oneSystemFlag(FLAG_CPXRES,  "CPXRES",  &line, &firstFlag);  //JM
+      oneSystemFlag(FLAG_ENDPMT,  "ENDPMT",  &line, &firstFlag);
       oneSystemFlag(FLAG_FRACT,   "FRACT",   &line, &firstFlag);
       oneSystemFlag(FLAG_GROW,    "GROW",    &line, &firstFlag);
       oneSystemFlag(FLAG_IGN1ER,  "IGN1ER",  &line, &firstFlag);
@@ -410,4 +412,3 @@
   #endif //SAVE_SPACE_DM42_8
   }
 #endif // TESTSUITE_BUILD
-

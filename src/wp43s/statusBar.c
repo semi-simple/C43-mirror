@@ -20,6 +20,7 @@
 #include "dateTime.h"
 #include "flags.h"
 #include "fonts.h"
+#include "items.h"
 #include "gui.h"
 #include "c43Extensions/jm.h"
 #include "plotstat.h"
@@ -45,6 +46,9 @@
       showFracMode();
       if(calcMode == CM_MIM) {
         showMatrixMode();
+      }
+      else if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_TVM) {
+        showTvmMode();
       }
       else {
         showIntegerMode();
@@ -254,6 +258,19 @@ void showFracMode(void) {
     }
 
     showString(errorMessage, &standardFont, X_INTEGER_MODE - 2, 0, vmNormal, true, true);
+  }
+
+
+
+  void showTvmMode(void) {
+    if(getSystemFlag(FLAG_ENDPMT)) {
+      sprintf(errorMessage, "END");
+    }
+    else {
+      sprintf(errorMessage, "BEG");
+    }
+
+    showString(errorMessage, &standardFont, X_INTEGER_MODE, 0, vmNormal, true, true);
   }
 
 

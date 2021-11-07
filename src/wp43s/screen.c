@@ -2983,6 +2983,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 int16_t refreshScreenCounter = 0;        //JM
 //uint8_t last_CM = 255;
+
 void refreshScreen(void) {
 if (running_program_jm) return;          //JM TEST PROGRAM!
 #ifdef PC_BUILD
@@ -3001,27 +3002,27 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   switch(calcMode) {
     case CM_FLAG_BROWSER:
       last_CM = calcMode;
-      clearScreen();
+      //clearScreen();
       flagBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_FONT_BROWSER:
       last_CM = calcMode;
-      clearScreen();
+      //clearScreen();
       fontBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_REGISTER_BROWSER:
       last_CM = calcMode;
-      clearScreen();
+      //clearScreen();
       registerBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_PEM:
-      clearScreen();
+      //clearScreen();
       showSoftmenuCurrentPart();
       fnPem(NOPARAM);
       displayShiftAndTamBuffer();
@@ -3035,7 +3036,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       case CM_EIM:
       case CM_ASSIGN:
       case CM_ERROR_MESSAGE:
-    case CM_CONFIRMATION:
+      case CM_CONFIRMATION:
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
@@ -3110,6 +3111,9 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
                                         //jm v
       hourGlassIconEnabled = false;
       refreshStatusBar();
+        #if (REAL34_WIDTH_TEST == 1)
+          for(int y=Y_POSITION_OF_REGISTER_Y_LINE; y<Y_POSITION_OF_REGISTER_Y_LINE + 2*REGISTER_LINE_HEIGHT; y++ ) setBlackPixel(SCREEN_WIDTH - largeur - 1, y); // For the real34 width test
+        #endif // (REAL34_WIDTH_TEST == 1)
                                         //jm ^
 
 
@@ -3142,7 +3146,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         graph_plotmem();
         hourGlassIconEnabled = false;
         refreshStatusBar();
-        //for(int y=Y_POSITION_OF_REGISTER_Y_LINE; y<Y_POSITION_OF_REGISTER_Y_LINE + 2*REGISTER_LINE_HEIGHT; y++ ) setBlackPixel(SCREEN_WIDTH - largeur - 1, y); // For the real34 width test
       }
       break;
 

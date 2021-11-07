@@ -441,6 +441,7 @@ void debugNIM(void) {
   char * getCalcModeName(uint16_t cm) {
     if(cm == CM_NORMAL)                return "normal ";
     if(cm == CM_AIM)                   return "aim    ";
+    if(cm == CM_EIM)                   return "eim    ";
     if(cm == CM_PEM)                   return "pem    ";
     if(cm == CM_NIM)                   return "nim    ";
     if(cm == CM_ASSIGN)                return "assign ";

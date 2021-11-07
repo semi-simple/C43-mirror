@@ -22,9 +22,11 @@
 
 #include "constantPointers.h"
 #include "defines.h"
+#include "error.h"
 #include "items.h"
 #include "mathematics/integerPart.h"
 #include "mathematics/iteration.h"
+#include "programming/manage.h"
 #include "realType.h"
 #include "registers.h"
 #include "solver/solve.h"

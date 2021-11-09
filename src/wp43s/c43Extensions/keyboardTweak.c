@@ -1268,93 +1268,95 @@ bool_t emptyKeyBuffer()
 
 void fnT_ARROW(uint16_t command) {
 #ifndef TESTSUITE_BUILD
-  uint16_t ixx;
-  uint16_t current_cursor_x_old;
-  uint16_t current_cursor_y_old;
+  #ifdef TEXT_MULTILINE_EDIT
+    uint16_t ixx;
+    uint16_t current_cursor_x_old;
+    uint16_t current_cursor_y_old;
 
-  #ifdef PC_BUILD
-    char tmp[200]; sprintf(tmp,"^^^^fnT_ARROW: command=%d current_cursor_x=%d current_cursor_y=%d \n",command,current_cursor_x, current_cursor_y); jm_show_comment(tmp);
-  #endif //PC_BUILD
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^fnT_ARROW: command=%d current_cursor_x=%d current_cursor_y=%d \n",command,current_cursor_x, current_cursor_y); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
 
-  switch (command) {
+    switch (command) {
 
-     case ITM_T_LEFT_ARROW /*STD_LEFT_ARROW */ : 
-        T_cursorPos = stringPrevGlyph(aimBuffer, T_cursorPos);
-        break;
+       case ITM_T_LEFT_ARROW /*STD_LEFT_ARROW */ : 
+          T_cursorPos = stringPrevGlyph(aimBuffer, T_cursorPos);
+          break;
 
-     case ITM_T_RIGHT_ARROW /*STD_RIGHT_ARROW*/ : 
+       case ITM_T_RIGHT_ARROW /*STD_RIGHT_ARROW*/ : 
 
-        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
-        break;
+          T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
+          break;
 
-     case ITM_T_LLEFT_ARROW /*STD_FARLEFT_ARROW */ :
-        ixx = 0;
-        while(ixx<10) {
-          fnT_ARROW(ITM_T_LEFT_ARROW);
-          ixx++;
-        }
-        break;
+       case ITM_T_LLEFT_ARROW /*STD_FARLEFT_ARROW */ :
+          ixx = 0;
+          while(ixx<10) {
+            fnT_ARROW(ITM_T_LEFT_ARROW);
+            ixx++;
+          }
+          break;
 
-     case ITM_T_RRIGHT_ARROW /*STD_FARRIGHT_ARROW*/ :
-        ixx = 0;
-        while(ixx<10) {
+       case ITM_T_RRIGHT_ARROW /*STD_FARRIGHT_ARROW*/ :
+          ixx = 0;
+          while(ixx<10) {
+            fnT_ARROW(ITM_T_RIGHT_ARROW);
+            ixx++;
+          }
+          break;
+
+
+       case ITM_T_UP_ARROW /*UP */ :                      //JMCURSOR try make the cursor upo be more accurate. Add up the char widths...
+          ixx = 0;
+          current_cursor_x_old = current_cursor_x;
+          current_cursor_y_old = current_cursor_y;
           fnT_ARROW(ITM_T_RIGHT_ARROW);
-          ixx++;
-        }
-        break;
+          while(ixx < 75 && (current_cursor_x >= current_cursor_x_old+5 || current_cursor_y == current_cursor_y_old)) {
+            fnT_ARROW(ITM_T_LEFT_ARROW);
+            showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, -100, vmNormal, true, true, true);  //display up to the cursor
+
+            //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
+            ixx++;
+          }
+          break;
 
 
-     case ITM_T_UP_ARROW /*UP */ :                      //JMCURSOR try make the cursor upo be more accurate. Add up the char widths...
-        ixx = 0;
-        current_cursor_x_old = current_cursor_x;
-        current_cursor_y_old = current_cursor_y;
-        fnT_ARROW(ITM_T_RIGHT_ARROW);
-        while(ixx < 75 && (current_cursor_x >= current_cursor_x_old+5 || current_cursor_y == current_cursor_y_old)) {
+       case ITM_T_DOWN_ARROW /*DN*/ :
+          ixx = 0;
+          current_cursor_x_old = current_cursor_x;
+          current_cursor_y_old = current_cursor_y;
           fnT_ARROW(ITM_T_LEFT_ARROW);
-          showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, -100, vmNormal, true, true, true);  //display up to the cursor
+          while(ixx < 75 && (current_cursor_x+5 <= current_cursor_x_old || current_cursor_y == current_cursor_y_old)) {
+            fnT_ARROW(ITM_T_RIGHT_ARROW);
+            showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, -100, vmNormal, true, true, true);  //display up to the cursor
+            ixx++;
 
-          //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
-          ixx++;
-        }
-        break;
+            //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
+          }
+          break;
 
 
-     case ITM_T_DOWN_ARROW /*DN*/ :
-        ixx = 0;
-        current_cursor_x_old = current_cursor_x;
-        current_cursor_y_old = current_cursor_y;
-        fnT_ARROW(ITM_T_LEFT_ARROW);
-        while(ixx < 75 && (current_cursor_x+5 <= current_cursor_x_old || current_cursor_y == current_cursor_y_old)) {
+
+       case ITM_UP1 /*HOME */ :
+          T_cursorPos = 0;
+          break;
+
+
+       case ITM_DOWN1 /*END*/ :
+          T_cursorPos = stringByteLength(aimBuffer) - 1;
+          T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
           fnT_ARROW(ITM_T_RIGHT_ARROW);
-          showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, -100, vmNormal, true, true, true);  //display up to the cursor
-          ixx++;
-
-          //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
-        }
-        break;
+          break;
 
 
-
-     case ITM_UP1 /*HOME */ :
-        T_cursorPos = 0;
-        break;
-
-
-     case ITM_DOWN1 /*END*/ :
-        T_cursorPos = stringByteLength(aimBuffer) - 1;
-        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
-        fnT_ARROW(ITM_T_RIGHT_ARROW);
-        break;
-
-
-     default: break;
-  }
-  //printf(">>> T_cursorPos %d",T_cursorPos);
-  if(T_cursorPos > stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer))) T_cursorPos = stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer));
-  if(T_cursorPos < 0) T_cursorPos = 0;
-  //printf(">>> T_cursorPos limits %d\n",T_cursorPos);
-#endif
+       default: break;
+    }
+    //printf(">>> T_cursorPos %d",T_cursorPos);
+    if(T_cursorPos > stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer))) T_cursorPos = stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer));
+    if(T_cursorPos < 0) T_cursorPos = 0;
+    //printf(">>> T_cursorPos limits %d\n",T_cursorPos);
+  #endif //TEXT_MULTILINE_EDIT
+#endif //TESTSUITE_BUILD
 }
 
 

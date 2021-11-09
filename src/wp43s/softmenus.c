@@ -1787,6 +1787,36 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
             }
           }
         }
+
+
+      if(softmenu[m].menuItem == -MNU_EQN) {
+        showEquation(currentFormula, 0, EQUATION_NO_CURSOR, false, NULL, NULL);
+        dottedTopLine = (numberOfFormulae >= 2);
+        yDotted = 2;
+      }
+      if(softmenu[m].menuItem == -MNU_EQ_EDIT && softmenu[softmenuStack[1].softmenuId].menuItem == -MNU_EQN) {
+        bool_t cursorShown;
+        bool_t rightEllipsis;
+        while(1) {
+          showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor, true, &cursorShown, &rightEllipsis);
+          if(cursorShown) break;
+          if(yCursor > xCursor) --yCursor;
+          else                  ++yCursor;
+        }
+        if(!rightEllipsis && yCursor > 0) {
+          do {
+            --yCursor;
+            showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor, true, &cursorShown, &rightEllipsis);
+            if((!cursorShown) || rightEllipsis) {
+              ++yCursor;
+              break;
+            }
+          } while(yCursor > 0);
+        }
+        showEquation(EQUATION_AIM_BUFFER, yCursor, xCursor, false, NULL, NULL);
+      }
+
+
       }
 
     if(0 <= yDotted && yDotted <= 2) {

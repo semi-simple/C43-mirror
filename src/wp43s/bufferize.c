@@ -338,6 +338,7 @@ T_cursorPos = xCursor;
 printf(">>> %s %i\n",aimBuffer,T_cursorPos);
         }
         else {
+#ifdef TEXT_MULTILINE_EDIT
           //JMCURSOR vv ADD THE CHARACTER MID-STRING =======================================================
           uint16_t ix = 0; 
           uint16_t in = 0;
@@ -355,8 +356,9 @@ printf(">>> %s %i\n",aimBuffer,T_cursorPos);
           T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);  //place the cursor at the next glyph boundary
           //JMCURSOR ^^ REPLACES THE FOLLOWING XCOPY, WHICH NORMALLY JUST ADDS A CHARACTER TO THE END OF THE STRING
           // xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
-//          xcopy(aimBuffer + stringByteLength(aimBuffer), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
-
+#else
+          xcopy(aimBuffer + stringByteLength(aimBuffer), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
+#endif
         }
       }
 

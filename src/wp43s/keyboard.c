@@ -1686,6 +1686,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         }
         else if(stringByteLength(aimBuffer) > 0) {
 
+#ifdef TEXT_MULTILINE_EDIT
 //JMCURSORvv SPLIT STRING AT CURSOR POSITION
           uint8_t T_cursorPos_tmp;
           T_cursorPos_tmp = aimBuffer[T_cursorPos];
@@ -1704,6 +1705,11 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
             fnT_ARROW(ITM_T_LEFT_ARROW);                               //move cursor one left
           }          
 //JMCURSOR^^
+#else
+          lg = stringLastGlyph(aimBuffer);
+          aimBuffer[lg] = 0;
+#endif //TEXT_MULTILINE_EDIT
+
         }
         break;
 

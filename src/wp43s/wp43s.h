@@ -144,6 +144,8 @@
 
   extern namedVariableHeader_t *allNamedVariables;
   extern softmenuStack_t        softmenuStack[SOFTMENU_STACK_SIZE];
+  extern userMenuItem_t         userMenuItems[18];
+  extern userMenuItem_t         userAlphaItems[18];
   extern calcKey_t              kbd_usr[37];
   extern calcRegister_t         errorMessageRegisterLine;
   extern glyph_t                glyphNotFound;
@@ -224,6 +226,7 @@
   extern int16_t                dynamicMenuItem;
   extern int16_t               *menu_RAM;
   extern int16_t                numberOfTamMenusToPop;
+  extern int16_t                itemToBeAssigned;
 
   extern uint16_t               globalFlags[7];
   extern uint16_t               glyphRow[NUMBER_OF_GLYPH_ROWS];

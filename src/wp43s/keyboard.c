@@ -16,6 +16,7 @@
 
 #include "keyboard.h"
 
+#include "assign.h"
 #include "bufferize.h"
 #include "charString.h"
 #include "constants.h"
@@ -57,6 +58,11 @@
     int16_t firstItem = softmenuStack[0].firstItem;
 
     switch(-softmenu[menuId].menuItem) {
+      case MNU_MyMenu:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = userMenuItems[dynamicMenuItem].item;
+        break;
+
       case MNU_PROG:
       case MNU_VAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
@@ -89,6 +95,12 @@
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_RCL);
         break;
 
+      case MNU_RAM:
+      //case MNU_FLASH:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_XEQ);
+        break;
+
       case MNU_EQN:
         if(numberOfFormulae == 0 && (firstItem + itemShift + (fn - 1)) > 0) {
           break;
@@ -107,7 +119,30 @@
         }
     }
 
-    return item;
+    if(calcMode == CM_ASSIGN && item != ITM_NOP && item != ITM_NULL) {
+      switch(-softmenu[menuId].menuItem) {
+        case MNU_PROG:
+        case MNU_RAM:
+        case MNU_FLASH:
+          return findNamedLabel((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem)) - FIRST_LABEL + ASSIGN_LABELS;
+        case MNU_VAR:
+        case MNU_MATRS:
+        case MNU_STRINGS:
+        case MNU_DATES:
+        case MNU_TIMES:
+        case MNU_ANGLES:
+        case MNU_SINTS:
+        case MNU_LINTS:
+        case MNU_REALS:
+        case MNU_CPXS:
+          return findNamedVariable((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem)) - FIRST_NAMED_VARIABLE + ASSIGN_NAMED_VARIABLES;
+        default:
+          return item;
+      }
+    }
+    else {
+      return item;
+    }
   }
 
 
@@ -155,7 +190,10 @@
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
   #endif // DMCP_BUILD
-      if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
+      if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
+        updateAssignTamBuffer();
+      }
+      else if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
         shiftF = false;
@@ -198,7 +236,12 @@
   #ifdef DMCP_BUILD
     void btnFnReleased(void *data) {
   #endif // DMCP_BUILD
-    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
+    if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
+      assignToMyMenu((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
+      calcMode = previousCalcMode;
+      refreshScreen();
+    }
+    else if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
       if(showFunctionNameItem != 0) {
         int16_t item = showFunctionNameItem;
         #if (FN_KEY_TIMEOUT_TO_NOP == 1)
@@ -268,7 +311,12 @@
               else {
                 temporaryInformation = TI_NO_INFO;
               }
-              runFunction(item);
+              if(calcMode == CM_ASSIGN && itemToBeAssigned == 0 && item != ITM_NOP) {
+                itemToBeAssigned = item;
+              }
+              else {
+                runFunction(item);
+              }
             }
           }
           fnKeyInCatalog = 0;
@@ -289,7 +337,7 @@
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
     // Shift f pressed and shift g not active
-    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
+    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN)) {
       if(temporaryInformation == TI_VIEW) {
         temporaryInformation = TI_NO_INFO;
         updateMatrixHeightCache();
@@ -303,7 +351,7 @@
     }
 
     // Shift g pressed and shift f not active
-    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT)) {
+    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN)) {
       if(temporaryInformation == TI_VIEW) {
         temporaryInformation = TI_NO_INFO;
         updateMatrixHeightCache();
@@ -325,7 +373,7 @@
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -552,13 +600,25 @@
 
       case ITM_CC:
       case ITM_dotD:
-        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
+        if(calcMode == CM_ASSIGN) {
+          if(itemToBeAssigned == 0) {
+            itemToBeAssigned = item;
+          }
+          keyActionProcessed = true;
+        }
+        else if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
           keyActionProcessed = true;
         }
         break;
 
       case ITM_ENTER:
-        if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
+        if(calcMode == CM_ASSIGN) {
+          if(itemToBeAssigned == 0) {
+            itemToBeAssigned = item;
+          }
+          keyActionProcessed = true;
+        }
+        else if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
           keyActionProcessed = true;
         }
         else if(tam.mode) {
@@ -568,7 +628,14 @@
         break;
 
       default:
-        if(catalog && catalog != CATALOG_MVAR) {
+        if(calcMode == CM_ASSIGN && itemToBeAssigned != 0 && item == ITM_USERMODE) {
+          while(softmenuStack[0].softmenuId > 1) {
+            popSoftmenu();
+          }
+          leaveAsmMode();
+          keyActionProcessed = true;
+        }
+        else if(catalog && catalog != CATALOG_MVAR) {
           if(ITM_A <= item && item <= ITM_Z && alphaCase == AC_LOWER) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
@@ -725,6 +792,17 @@
               }
               else if(item == ITM_OFF) {
                 fnOff(NOPARAM);
+                keyActionProcessed = true;
+              }
+              break;
+
+            case CM_ASSIGN:
+              if(item == ITM_OFF) {
+                fnOff(NOPARAM);
+                keyActionProcessed = true;
+              }
+              else if(item > 0 && itemToBeAssigned == 0) {
+                itemToBeAssigned = item;
                 keyActionProcessed = true;
               }
               break;
@@ -1017,6 +1095,15 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         temporaryInformation = TI_NO_INFO;
         break;
 
+      case CM_ASSIGN:
+        if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
+          calcMode = previousCalcMode;
+        }
+        else {
+          popSoftmenu();
+        }
+        break;
+
       default:
         sprintf(errorMessage, "In function fnKeyExit: unexpected calcMode value (%" PRIu8 ") while processing key EXIT!", calcMode);
         displayBugScreen(errorMessage);
@@ -1168,6 +1255,15 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         }
         break;
 
+      case CM_ASSIGN:
+        if(itemToBeAssigned == 0) {
+          calcMode = previousCalcMode;
+        }
+        else {
+          itemToBeAssigned = 0;
+        }
+        break;
+
       default:
         sprintf(errorMessage, "In function fnKeyBackspace: unexpected calcMode value (%" PRIu8 ") while processing key BACKSPACE!", calcMode);
         displayBugScreen(errorMessage);
@@ -1255,6 +1351,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_MIM:
+      case CM_ASSIGN:
         if(currentSoftmenuScrolls()) {
           menuUp();
         }
@@ -1347,6 +1444,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_MIM:
+      case CM_ASSIGN:
         if(currentSoftmenuScrolls()) {
           menuDown();
         }
@@ -1416,6 +1514,12 @@ void fnKeyAngle(uint16_t unusedButMandatoryParameter) {
       case CM_PLOT_STAT:
       case CM_MIM:
       case CM_EIM:
+        break;
+
+      case CM_ASSIGN:
+        if(itemToBeAssigned == 0) {
+          itemToBeAssigned = ITM_ANGLE;
+        }
         break;
 
       default:

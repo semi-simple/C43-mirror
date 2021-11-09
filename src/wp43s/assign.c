@@ -15,6 +15,8 @@
  */
 
 #include "assign.h"
+#include "charString.h"
+#include "fonts.h"
 #include "items.h"
 #include "wp43s.h"
 
@@ -66,3 +68,94 @@ TO_QSPI const calcKey_t kbd_std[37] = {
  {85,   ITM_EXIT,       -MNU_CATALOG,     ITM_OFF,         ITM_EXIT,        ITM_EXIT,         -MNU_CATALOG,     ITM_OFF,       ITM_EXIT     }
 //keyId primary          fShifted         gShifted         keyLblAim        primaryAim         fShiftedAim      gShiftedAim    primaryTam
 };
+
+
+
+void fnAssign(uint16_t unusedButMandatoryParameter) {
+  previousCalcMode = calcMode;
+  calcMode = CM_ASSIGN;
+  itemToBeAssigned = 0;
+  updateAssignTamBuffer();
+}
+
+
+
+void updateAssignTamBuffer(void) {
+  char *tbPtr = tamBuffer;
+  tbPtr = stpcpy(tbPtr, "ASSIGN ");
+
+  if(itemToBeAssigned == 0) {
+    tbPtr = stpcpy(tbPtr, "_");
+  }
+  else if(itemToBeAssigned >= ASSIGN_LABELS) {
+    uint8_t *lblPtr = labelList[itemToBeAssigned - ASSIGN_LABELS].labelPointer;
+    uint32_t count = *(lblPtr++);
+    for(uint32_t i = 0; i < count; ++i) {
+      *(tbPtr++) = *(lblPtr++);
+    }
+  }
+  else if(itemToBeAssigned >= ASSIGN_RESERVED_VARIABLES) {
+    tbPtr = stpcpy(tbPtr, (char *)allReservedVariables[itemToBeAssigned - ASSIGN_RESERVED_VARIABLES].reservedVariableName + 1);
+  }
+  else if(itemToBeAssigned >= ASSIGN_NAMED_VARIABLES) {
+    tbPtr = stpcpy(tbPtr, (char *)allNamedVariables[itemToBeAssigned - ASSIGN_NAMED_VARIABLES].variableName + 1);
+  }
+  else if(indexOfItems[itemToBeAssigned].itemCatalogName[0] == 0) {
+    tbPtr = stpcpy(tbPtr, indexOfItems[itemToBeAssigned].itemSoftmenuName);
+  }
+  else if(itemToBeAssigned == ITM_ENTER) {
+    tbPtr = stpcpy(tbPtr, "NULL");
+  }
+  else {
+    tbPtr = stpcpy(tbPtr, indexOfItems[itemToBeAssigned].itemCatalogName);
+  }
+
+  tbPtr = stpcpy(tbPtr, " ");
+  if(itemToBeAssigned != 0 && shiftF) {
+    tbPtr = stpcpy(tbPtr, STD_SUP_f STD_CURSOR);
+  }
+  else if(itemToBeAssigned != 0 && shiftG) {
+    tbPtr = stpcpy(tbPtr, STD_SUP_g STD_CURSOR);
+  }
+  else {
+    tbPtr = stpcpy(tbPtr, "_");
+  }
+}
+
+
+
+static void _assignItem(userMenuItem_t *menuItem) {
+  const uint8_t *lblPtr = NULL;
+  uint32_t l = 0;
+  if(itemToBeAssigned >= ASSIGN_LABELS) {
+    lblPtr                    = labelList[itemToBeAssigned - ASSIGN_LABELS].labelPointer;
+    menuItem->item            = ITM_XEQ;
+  }
+  else if(itemToBeAssigned >= ASSIGN_RESERVED_VARIABLES) {
+    lblPtr                    = allReservedVariables[itemToBeAssigned - ASSIGN_RESERVED_VARIABLES].reservedVariableName;
+    menuItem->item            = ITM_RCL;
+  }
+  else if(itemToBeAssigned >= ASSIGN_NAMED_VARIABLES) {
+    lblPtr                    = allNamedVariables[itemToBeAssigned - ASSIGN_NAMED_VARIABLES].variableName;
+    menuItem->item            = ITM_RCL;
+  }
+  else if(itemToBeAssigned == ITM_ENTER) {
+    menuItem->item            = ITM_NULL;
+    menuItem->argumentName[0] = 0;
+  }
+  else {
+    menuItem->item            = itemToBeAssigned;
+    menuItem->argumentName[0] = 0;
+  }
+  if(lblPtr) {
+    l = (uint32_t)(*(lblPtr++));
+    xcopy(menuItem->argumentName, (char *)lblPtr, l);
+    menuItem->argumentName[l] = 0;
+  }
+}
+
+void assignToMyMenu(uint16_t position) {
+  if(position < 18) {
+    _assignItem(&userMenuItems[position]);
+  }
+}

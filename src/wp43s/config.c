@@ -829,6 +829,9 @@ void fnReset(uint16_t confirmation) {
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
 
+    memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
+    memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);
+
     // The following lines are test data
     addTestPrograms();
     //fnSetFlag(  3);

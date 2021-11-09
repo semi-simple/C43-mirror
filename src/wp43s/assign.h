@@ -18,3 +18,11 @@
  * \file assign.h
  */
 
+#include <stdint.h>
+
+void fnAssign             (uint16_t unusedButMandatoryParameter);
+
+void updateAssignTamBuffer(void);
+
+void assignToMyMenu       (uint16_t position);
+void assignToMyAlpha      (uint16_t position);

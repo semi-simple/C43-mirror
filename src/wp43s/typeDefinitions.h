@@ -356,6 +356,17 @@ typedef struct {
 
 
 /**
+ * \struct userMenuItem_t
+ * Structure keeping the information for one item of MyMenu and MyAlpha.
+ */
+typedef struct {
+  int16_t  item;               ///< Item ID
+  int16_t  unused;             ///< Padding
+  char     argumentName[16];   ///< Name of variable or label
+} userMenuItem_t;
+
+
+/**
  * \struct labelList_t
  * Structure keeping the information for a program label.
  */

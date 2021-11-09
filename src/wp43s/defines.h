@@ -487,8 +487,8 @@ typedef enum {
 #define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
-#define CM_MIM                                    12 // Matrix imput mode tbd reorder
-#define CM_EIM                                    13 // Equation imput mode
+#define CM_MIM                                    12 // Matrix input mode tbd reorder
+#define CM_EIM                                    13 // Equation input mode
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -784,6 +784,10 @@ typedef enum {
 #define SOLVER_RESULT_EXTREMUM                     2
 #define SOLVER_RESULT_BAD_GUESS                    3
 #define SOLVER_RESULT_CONSTANT                     4
+
+#define ASSIGN_NAMED_VARIABLES                 10000
+#define ASSIGN_LABELS                          12000
+#define ASSIGN_RESERVED_VARIABLES                  (ASSIGN_NAMED_VARIABLES + FIRST_RESERVED_VARIABLE - FIRST_NAMED_VARIABLE)
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

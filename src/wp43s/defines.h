@@ -75,6 +75,10 @@
 #endif
 
 
+
+#define TEXT_MULTILINE_EDIT         //5 line buffer
+
+
 //Testing and debugging
 //#define DM42_KEYCLICK              //Add a 1 ms click after key presses and releases, for scope syncing
 

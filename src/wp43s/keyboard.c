@@ -63,6 +63,11 @@
         item = userMenuItems[dynamicMenuItem].item;
         break;
 
+      case MNU_MyAlpha:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = userAlphaItems[dynamicMenuItem].item;
+        break;
+
       case MNU_PROG:
       case MNU_VAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
@@ -201,7 +206,7 @@
         if(item != ITM_NOP && item != ITM_NULL) {
           lastErrorCode = 0;
 
-          if(indexOfItems[item].func == addItemToBuffer) {
+          if(calcMode != CM_ASSIGN && indexOfItems[item].func == addItemToBuffer) {
             // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two
@@ -237,8 +242,16 @@
     void btnFnReleased(void *data) {
   #endif // DMCP_BUILD
     if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
-      assignToMyMenu((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
+      switch(softmenuStack[0].softmenuId) {
+        case 0: // MyMenu
+          assignToMyMenu((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
+          break;
+        case 1: // MyAlpha
+          assignToMyAlpha((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
+          break;
+      }
       calcMode = previousCalcMode;
+      shiftF = shiftG = false;
       refreshScreen();
     }
     else if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
@@ -632,7 +645,15 @@
           while(softmenuStack[0].softmenuId > 1) {
             popSoftmenu();
           }
-          leaveAsmMode();
+          if(previousCalcMode == CM_AIM) {
+            softmenuStack[0].softmenuId = 1;
+            #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+              calcModeAimGui();
+            #endif // PC_BUILD && (SCREEN_800X480 == 0)
+          }
+          else {
+            leaveAsmMode();
+          }
           keyActionProcessed = true;
         }
         else if(catalog && catalog != CATALOG_MVAR) {
@@ -1096,7 +1117,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_ASSIGN:
-        if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
+        if(softmenuStack[0].softmenuId <= 1 && softmenuStack[1].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
           calcMode = previousCalcMode;
         }
         else {

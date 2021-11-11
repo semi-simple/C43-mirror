@@ -599,6 +599,50 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
 
 
 
+  static void _dynmenuConstructUser(int16_t menu) {
+    userMenuItem_t *menuData = (dynamicSoftmenu[menu].menuItem == -MNU_MyAlpha) ? userAlphaItems : userMenuItems;
+    int16_t i, numberOfBytes = 1;
+    uint8_t *ptr;
+
+    for(i = 0; i < 18; i++) {
+      if(menuData[i].argumentName[0] != 0) {
+        numberOfBytes += stringByteLength(menuData[i].argumentName) + 1;
+      }
+      else if(menuData[i].item == ITM_NOP || menuData[i].item == ITM_NULL) {
+        numberOfBytes += 1;
+      }
+      else if(indexOfItems[menuData[i].item].itemCatalogName[0] == 0) {
+        numberOfBytes += stringByteLength(indexOfItems[menuData[i].item].itemSoftmenuName) + 1;
+      }
+      else {
+        numberOfBytes += stringByteLength(indexOfItems[menuData[i].item].itemCatalogName) + 1;
+      }
+    }
+    ptr = malloc(numberOfBytes);
+    dynamicSoftmenu[menu].menuContent = ptr;
+    for(i = 0; i < 18; i++) {
+      const char *lbl;
+      if(menuData[i].argumentName[0] != 0) {
+        lbl = menuData[i].argumentName;
+      }
+      else if(menuData[i].item == ITM_NULL) {
+        lbl = "";
+      }
+      else if(indexOfItems[menuData[i].item].itemCatalogName[0] == 0) {
+        lbl = indexOfItems[menuData[i].item].itemSoftmenuName;
+      }
+      else {
+        lbl = indexOfItems[menuData[i].item].itemCatalogName;
+      }
+      int16_t len = stringByteLength(lbl) + 1;
+      xcopy(ptr, lbl, len);
+      ptr += len;
+    }
+    dynamicSoftmenu[menu].numItems = (numberOfBytes <= 19) ? 0 : 18;
+  }
+
+
+
   static void initVariableSoftmenu(int16_t menu) {
     int16_t i, numberOfBytes, numberOfGlobalLabels;
     uint8_t *ptr;
@@ -606,10 +650,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     free(dynamicSoftmenu[menu].menuContent);
 
     switch(-dynamicSoftmenu[menu].menuItem) {
-      case MNU_MyAlpha: dynamicSoftmenu[menu].menuContent = malloc(17);
-                        //xcopy(dynamicSoftmenu[menu].menuContent, "My" STD_alpha "\000to\000be\000coded", 17);
-                        xcopy(dynamicSoftmenu[menu].menuContent, "", 1);
-                        dynamicSoftmenu[menu].numItems = 0;
+      case MNU_MyAlpha: _dynmenuConstructUser(menu);
                         break;
 
       case MNU_FLASH:   dynamicSoftmenu[menu].menuContent = malloc(18);
@@ -643,42 +684,7 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                         dynamicSoftmenu[menu].numItems = numberOfGlobalLabels;
                         break;
 
-      case MNU_MyMenu:  numberOfBytes = 1;
-                        for(i = 0; i < 18; i++) {
-                          if(userMenuItems[i].argumentName[0] != 0) {
-                            numberOfBytes += stringByteLength(userMenuItems[i].argumentName) + 1;
-                          }
-                          else if(userMenuItems[i].item == ITM_NOP || userMenuItems[i].item == ITM_NULL) {
-                            numberOfBytes += 1;
-                          }
-                          else if(indexOfItems[userMenuItems[i].item].itemCatalogName[0] == 0) {
-                            numberOfBytes += stringByteLength(indexOfItems[userMenuItems[i].item].itemSoftmenuName) + 1;
-                          }
-                          else {
-                            numberOfBytes += stringByteLength(indexOfItems[userMenuItems[i].item].itemCatalogName) + 1;
-                          }
-                        }
-                        ptr = malloc(numberOfBytes);
-                        dynamicSoftmenu[menu].menuContent = ptr;
-                        for(i = 0; i < 18; i++) {
-                          const char *lbl;
-                          if(userMenuItems[i].argumentName[0] != 0) {
-                            lbl = userMenuItems[i].argumentName;
-                          }
-                          else if(userMenuItems[i].item == ITM_NULL) {
-                            lbl = "";
-                          }
-                          else if(indexOfItems[userMenuItems[i].item].itemCatalogName[0] == 0) {
-                            lbl = indexOfItems[userMenuItems[i].item].itemSoftmenuName;
-                          }
-                          else {
-                            lbl = indexOfItems[userMenuItems[i].item].itemCatalogName;
-                          }
-                          int16_t len = stringByteLength(lbl) + 1;
-                          xcopy(ptr, lbl, len);
-                          ptr += len;
-                        }
-                        dynamicSoftmenu[menu].numItems = (numberOfBytes <= 19) ? 0 : 18;
+      case MNU_MyMenu:  _dynmenuConstructUser(menu);
                         break;
 
       case MNU_VAR:     _dynmenuConstructVars(menu, false, 0, false);

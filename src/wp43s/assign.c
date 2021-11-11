@@ -159,3 +159,9 @@ void assignToMyMenu(uint16_t position) {
     _assignItem(&userMenuItems[position]);
   }
 }
+
+void assignToMyAlpha(uint16_t position) {
+  if(position < 18) {
+    _assignItem(&userAlphaItems[position]);
+  }
+}

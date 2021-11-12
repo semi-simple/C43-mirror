@@ -53,6 +53,7 @@
     { "COSH",          ITM_cosh,        0}, // Hyperbolic cosine
     { "dn",            ITM_dn,          0}, // Delta amplitudinis
     { "E",             ITM_Ek,          0}, // Complete or incomplete elliptic integral of 2nd kind
+    { "EXP",           ITM_EXP,         0}, // Natural exponential
     { "F",             ITM_Fphik,       0}, // Incomplete elliptic integral of 1st kind
     { "J" STD_SUB_y,   ITM_JYX,         0}, // Bessel function
     { "K",             ITM_Kk,          0}, // Complete elliptic integral of 1st kind

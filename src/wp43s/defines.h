@@ -129,9 +129,10 @@
 #define ERROR_FUNCTION_VALUES_LOOK_CONSTANT       44
 #define ERROR_SYNTAX_ERROR_IN_EQUATION            45
 #define ERROR_EQUATION_TOO_COMPLEX                46
-#define ERROR_BAD_INPUT                           47 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_WRITE_PROTECTED_PREDEFINED_MENU     47
+#define ERROR_BAD_INPUT                           48 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     48
+#define NUMBER_OF_ERROR_CODES                     49
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111

@@ -196,7 +196,23 @@
     void btnFnPressed(void *data) {
   #endif // DMCP_BUILD
       if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
-        updateAssignTamBuffer();
+        int16_t item = determineFunctionKeyItem((char *)data);
+
+        switch(-softmenu[softmenuStack[0].softmenuId].menuItem) {
+          case MNU_CATALOG:
+          case MNU_CHARS:
+          case MNU_PROGS:
+          case MNU_VARS:
+          case MNU_MENUS:
+            #if (FN_KEY_TIMEOUT_TO_NOP == 1)
+              showFunctionName(item, 1000); // 1000ms = 1s
+            #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
+              showFunctionNameItem = item;
+            #endif // (FN_KEY_TIMEOUT_TO_NOP == 1)
+            break;
+          default:
+            updateAssignTamBuffer();
+        }
       }
       else if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem((char *)data);
@@ -241,20 +257,38 @@
   #ifdef DMCP_BUILD
     void btnFnReleased(void *data) {
   #endif // DMCP_BUILD
-    if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
-      switch(softmenuStack[0].softmenuId) {
-        case 0: // MyMenu
-          assignToMyMenu((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
-          break;
-        case 1: // MyAlpha
-          assignToMyAlpha((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
-          break;
+    if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
+      if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
+        switch(-softmenu[softmenuStack[0].softmenuId].menuItem) {
+          case MNU_MyMenu:
+            assignToMyMenu((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
+            calcMode = previousCalcMode;
+            shiftF = shiftG = false;
+            refreshScreen();
+            return;
+          case MNU_MyAlpha:
+            assignToMyAlpha((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
+            calcMode = previousCalcMode;
+            shiftF = shiftG = false;
+            refreshScreen();
+            return;
+          case MNU_CATALOG:
+          case MNU_CHARS:
+          case MNU_PROGS:
+          case MNU_VARS:
+          case MNU_MENUS:
+            break;
+          default:
+            displayCalcErrorMessage(ERROR_WRITE_PROTECTED_PREDEFINED_MENU, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+            #ifdef PC_BUILD
+              moreInfoOnError("In function btnFnReleased:", "the menu", indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemCatalogName, "is write-protected.");
+            #endif
+            calcMode = previousCalcMode;
+            shiftF = shiftG = false;
+            refreshScreen();
+            return;
+        }
       }
-      calcMode = previousCalcMode;
-      shiftF = shiftG = false;
-      refreshScreen();
-    }
-    else if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
       if(showFunctionNameItem != 0) {
         int16_t item = showFunctionNameItem;
         #if (FN_KEY_TIMEOUT_TO_NOP == 1)
@@ -842,6 +876,10 @@
                   case ITM_SHIFTg:
                   case ITM_USERMODE:
                   case -MNU_CATALOG:
+                  case -MNU_CHARS:
+                  case -MNU_PROGS:
+                  case -MNU_VARS:
+                  case -MNU_MENUS:
                   case ITM_EXIT:
                   case ITM_OFF:
                   case ITM_BACKSPACE:

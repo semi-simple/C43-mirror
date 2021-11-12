@@ -165,3 +165,35 @@ void assignToMyAlpha(uint16_t position) {
     _assignItem(&userAlphaItems[position]);
   }
 }
+
+void assignToKey(const char *data) {
+  calcKey_t *key = kbd_usr + (*data - '0')*10 + *(data+1) - '0';
+  userMenuItem_t tmpMenuItem;
+
+  _assignItem(&tmpMenuItem);
+  if(tmpMenuItem.item == ITM_NULL) {
+    const calcKey_t *stdKey = kbd_std + (*data - '0')*10 + *(data+1) - '0';
+    if(previousCalcMode == CM_AIM) {
+      if(shiftG)      key->gShiftedAim = stdKey->gShiftedAim;
+      else if(shiftF) key->fShiftedAim = stdKey->fShiftedAim;
+      else            key->primaryAim  = stdKey->primaryAim;
+    }
+    else {
+      if(shiftG)      key->gShifted = stdKey->gShifted;
+      else if(shiftF) key->fShifted = stdKey->fShifted;
+      else            key->primary  = stdKey->primary;
+    }
+  }
+  else {
+    if(previousCalcMode == CM_AIM) {
+      if(shiftG)      key->gShiftedAim = tmpMenuItem.item;
+      else if(shiftF) key->fShiftedAim = tmpMenuItem.item;
+      else            key->primaryAim  = tmpMenuItem.item;
+    }
+    else {
+      if(shiftG)      key->gShifted = tmpMenuItem.item;
+      else if(shiftF) key->fShifted = tmpMenuItem.item;
+      else            key->primary  = tmpMenuItem.item;
+    }
+  }
+}

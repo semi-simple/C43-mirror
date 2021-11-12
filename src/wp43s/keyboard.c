@@ -486,7 +486,13 @@
   #endif // DMCP_BUILD
       int16_t item;
 
-      if(showFunctionNameItem != 0) {
+      if(calcMode == CM_ASSIGN && itemToBeAssigned != 0 && tamBuffer[0] == 0) {
+        assignToKey((char *)data);
+        calcMode = previousCalcMode;
+        shiftF = shiftG = false;
+        refreshScreen();
+      }
+      else if(showFunctionNameItem != 0) {
         item = showFunctionNameItem;
         hideFunctionName();
         if(item < 0) {
@@ -825,6 +831,22 @@
               else if(item > 0 && itemToBeAssigned == 0) {
                 itemToBeAssigned = item;
                 keyActionProcessed = true;
+              }
+              else if(item != 0 && itemToBeAssigned != 0) {
+                switch(item) {
+                  case ITM_ENTER:
+                  case ITM_SHIFTf:
+                  case ITM_SHIFTg:
+                  case ITM_USERMODE:
+                  case -MNU_CATALOG:
+                  case ITM_EXIT:
+                  case ITM_OFF:
+                  case ITM_BACKSPACE:
+                    break;
+                  default:
+                    tamBuffer[0] = 0;
+                    keyActionProcessed = true;
+                }
               }
               break;
 

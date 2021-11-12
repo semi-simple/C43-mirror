@@ -170,8 +170,10 @@
             fnKeyInCatalog = 1;
             addItemToBuffer(item);
             fnKeyInCatalog = 0;
-            if(calcMode == CM_EIM && isAlphabeticSoftmenu()) {
-              popSoftmenu();
+            if(calcMode == CM_EIM) {
+              while(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_EQ_EDIT) {
+                popSoftmenu();
+              }
             }
             refreshScreen();
           }
@@ -237,6 +239,12 @@
               fnAim(NOPARAM);
             }
             addItemToBuffer(item);
+          }
+          else if(calcMode == CM_EIM && catalog && catalog != CATALOG_MVAR) {
+            addItemToBuffer(item);
+            while(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_EQ_EDIT) {
+              popSoftmenu();
+            }
           }
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && (!catalog || catalog == CATALOG_MVAR)) {
             addItemToNimBuffer(item);

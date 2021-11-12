@@ -623,6 +623,9 @@
           if(itemToBeAssigned == 0) {
             itemToBeAssigned = item;
           }
+          else {
+            tamBuffer[0] = 0;
+          }
           keyActionProcessed = true;
         }
         else if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {

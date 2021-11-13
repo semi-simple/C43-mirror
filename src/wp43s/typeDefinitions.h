@@ -365,6 +365,15 @@ typedef struct {
   char     argumentName[16];   ///< Name of variable or label
 } userMenuItem_t;
 
+/**
+ * \struct userMenu_t
+ * Structure keeping the information for a user-defined menu.
+ */
+typedef struct {
+  char           menuName[16];  ///< Name of menu
+  userMenuItem_t menuItem[18];  ///< Items
+} userMenu_t;
+
 
 /**
  * \struct labelList_t

@@ -758,6 +758,12 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
                             numberOfBytes += 1 + len;
                           }
                         }
+                        for(i=0; i<numberOfUserMenus; i++) {
+                          int16_t len = stringByteLength(userMenus[i].menuName);
+                          xcopy(tmpString + 15 * numberOfGlobalLabels, userMenus[i].menuName, len);
+                          numberOfGlobalLabels++;
+                          numberOfBytes += 1 + len;
+                        }
 
                         if(numberOfGlobalLabels != 0) {
                           qsort(tmpString, numberOfGlobalLabels, 15, sortMenu);

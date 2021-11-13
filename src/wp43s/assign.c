@@ -19,6 +19,7 @@
 #include "error.h"
 #include "fonts.h"
 #include "items.h"
+#include "memory.h"
 #include "sort.h"
 #include "wp43s.h"
 
@@ -89,10 +90,15 @@ void fnAssign(uint16_t mode) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        moreInfoOnError("In function fnAssign:", "creating a new menu", "is to be coded", NULL);
-      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      if(numberOfUserMenus == 0) {
+        userMenus = allocWp43s(TO_BLOCKS(sizeof(userMenu_t)));
+      }
+      else {
+        userMenus = reallocWp43s(userMenus, TO_BLOCKS(sizeof(userMenu_t)) * numberOfUserMenus, TO_BLOCKS(sizeof(userMenu_t)) * (numberOfUserMenus + 1));
+      }
+      memset(userMenus + numberOfUserMenus, 0, sizeof(userMenu_t));
+      xcopy(userMenus[numberOfUserMenus].menuName, aimBuffer, stringByteLength(aimBuffer));
+      ++numberOfUserMenus;
     }
     aimBuffer[0] = 0;
   }

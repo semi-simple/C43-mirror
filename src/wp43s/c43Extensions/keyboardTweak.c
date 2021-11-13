@@ -845,8 +845,8 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
         case ITM_phi               : * item1 = ITM_5      ; break;
         case ITM_PSI               : * item1 = ITM_6      ; break;
         case ITM_psi               : * item1 = ITM_6      ; break;
-        case ITM_OMEGA             : * item1 = ITM_ASTERISK; break; //ITM_CROSS  ;
-        case ITM_omega             : * item1 = ITM_ASTERISK; break; //ITM_CROSS  ;
+        case ITM_OMEGA             : * item1 = ITM_CROSS  ; break; //ITM_CROSS  ;ITM_ASTERISK
+        case ITM_omega             : * item1 = ITM_CROSS  ; break; //ITM_CROSS  ;ITM_ASTERISK
         case ITM_XI                : * item1 = ITM_1      ; break;
         case ITM_xi                : * item1 = ITM_1      ; break;
         case ITM_UPSILON           : * item1 = ITM_2      ; break;

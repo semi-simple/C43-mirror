@@ -56,7 +56,9 @@
 #include "constantPointers.h"
 #include "c43Extensions/graphs.h"
 #include "c43Extensions/graphText.h"
+#include "solver/equation.h"
 #include "items.h"
+#include "mathematics/invert.h"
 #include "c43Extensions/jm.h"
 #include "plotstat.h"
 #include "registers.h"
@@ -291,6 +293,15 @@ void execute_rpn_function(int16_t nbr){
   } else
   if(nbr == 20) {
     Fn_XXEQ();
+  } else
+  if(nbr == 30) {
+      calcRegister_t regStats = findNamedVariable("xx");
+      if(regStats != INVALID_VARIABLE) {
+        fnStore(regStats);
+        fnEqCalc(0);
+        fnRCL(regStats);
+        printf(">>> Solving xx=%f f(xx)=%f\n",convert_to_double(REGISTER_X),convert_to_double(REGISTER_Y));
+      }
   }
 }
 
@@ -331,6 +342,7 @@ void graph_demo(uint8_t nbr, float x_min, float x_max) {
 
 
 
+#define VERBOSE_SOLVER0  // a lot less text
 //#define VERBOSE_SOLVER1  // a lot less text
 //#define VERBOSE_SOLVER2  // verbose a lot
 
@@ -410,7 +422,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
 
 //###############################################################################################################
 //#################################################### Iteration start ##########################################
-  while(ix<400 && !checkNaN && !checkzero) 
+  while(ix<LIM && !checkNaN && !checkzero) 
   {
     if(lastErrorCode != 0) { printf(">>>> ERROR CODE INITIALLY NON-ZERO = %d <<<<<\n",lastErrorCode); return;}
 
@@ -451,6 +463,9 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
       convergent = max(0,convergent-1);
     }
 
+    #ifdef VERBOSE_SOLVER0
+      printf("##### ix= %d osc= %d  conv= %d n",ix, oscillations, convergent);
+    #endif //VERBOSE_SOLVER1
     #ifdef VERBOSE_SOLVER1
       printf("################################### ix= %d osc= %d  conv= %d ###########################################\n",ix, oscillations, convergent);
     #endif //VERBOSE_SOLVER1
@@ -471,6 +486,9 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
       runFunction(ITM_SQUAREROOTX);                                              //
       doubleToXRegisterReal34(1.0);                           //
       runFunction(ITM_ADD);
+      #ifdef VERBOSE_SOLVER0
+        printf("Kicked %d ",kicker);printf_cpx(REGISTER_X);printf("\n");
+      #endif  //VERBOSE_SOLVER1
       #ifdef VERBOSE_SOLVER1
         printf("Kicked %d ",kicker);printf_cpx(REGISTER_X);printf("\n");
       #endif  //VERBOSE_SOLVER1
@@ -514,7 +532,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
     checkNaN  = checkNaN  ||   real34IsNaN(REGISTER_REAL34_DATA(SREG_X2)) || (getRegisterDataType(SREG_X2) == dtComplex34 ? real34IsNaN(REGISTER_IMAG34_DATA(SREG_X2)) : 0 ) ||
                                real34IsNaN(REGISTER_REAL34_DATA(SREG_Y2)) || (getRegisterDataType(SREG_Y2) == dtComplex34 ? real34IsNaN(REGISTER_IMAG34_DATA(SREG_Y2)) : 0 ) ; 
     #ifdef VERBOSE_SOLVER1
-    if(checkNaN || ix==400 || checkzero) {
+    if(checkNaN || ix==LIM || checkzero) {
        printf("-->A Endflags zero: Y2r:%u Y2i:%u NaN: X2r:%u X2i:%u Y2r:%u Y2i%u \n",
         (uint16_t)real34IsZero(REGISTER_REAL34_DATA(SREG_Y2)),(uint16_t)real34IsZero(REGISTER_IMAG34_DATA(SREG_Y2)),
         (uint16_t)real34IsNaN (REGISTER_REAL34_DATA(SREG_X2)),(uint16_t)real34IsNaN (REGISTER_IMAG34_DATA(SREG_X2)),
@@ -523,7 +541,7 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
     }
     #endif //VERBOSE_SOLVER1
     #ifdef VERBOSE_SOLVER2
-      printf("   ix=%d checkend=%d X2=",ix, checkNaN || ix==400 || checkzero); printf_cpx(SREG_X2); printf(" Y2="); printf_cpx(SREG_Y2); printf("\n");
+      printf("   ix=%d checkend=%d X2=",ix, checkNaN || ix==LIM || checkzero); printf_cpx(SREG_X2); printf(" Y2="); printf_cpx(SREG_Y2); printf("\n");
     #endif //VERBOSE_SOLVER2
 
 
@@ -539,11 +557,11 @@ void graph_solver(uint8_t nbr, float x_min, float x_max) {
 
 
 
+    copySourceRegisterToDestRegister(SREG_DX,SREG_Xold);  // store old DELTA values, for oscillation check
+    copySourceRegisterToDestRegister(SREG_DY,SREG_Yold);  // store old DELTA values, for oscillation check
 
 if(  (ix <=2) /*&& (oscillations <= 2)*/   /*|| (getRegisterDataType(SREG_X2N) == dtComplex34 || getRegisterDataType(SREG_X2N) == dtComplex34)*/ )
 {
-    copySourceRegisterToDestRegister(SREG_DX,SREG_Xold);  // store old DELTA values, for oscillation check
-    copySourceRegisterToDestRegister(SREG_DY,SREG_Yold);  // store old DELTA values, for oscillation check
 
     //Secant and Newton approximation methods
         if( !(ix>2 && convergent >= 2 && oscillations < 2) )
@@ -784,7 +802,7 @@ EndIteration:
     if(checkzero) {
       printf("--B1 Checkzero\n");
     }
-    if(checkNaN || ix==400 || checkzero) {
+    if(checkNaN || ix==LIM || checkzero) {
       printf("-->B2 Endflags zero: |DXr|:%u |DXr<TOL|:%u  |DXi|:%u |DYr<TOL|:%u |DYr|:%u |DYi|:%u NaN: |DXr|:%u |DXi|:%u |DYr|:%u |DYi|%u \n",
         (uint16_t)real34IsZero(REGISTER_REAL34_DATA(REGISTER_X)),
         (uint16_t)(real34CompareAbsLessThan(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(SREG_TOL))),
@@ -804,7 +822,7 @@ EndIteration:
 
 
     #ifdef VERBOSE_SOLVER2
-      if(!checkNaN && !(ix==400) && !checkzero) {
+      if(!checkNaN && !(ix==LIM) && !checkzero) {
         printf("END     ix=%d |DX|<TOL:%d ",ix,real34CompareAbsLessThan(REGISTER_REAL34_DATA(SREG_DX), REGISTER_REAL34_DATA(SREG_TOL)));printf_cpx(SREG_DX); printf("\n");
         printf("END     ix=%d |DY|<TOL:%d ",ix,real34CompareAbsLessThan(REGISTER_REAL34_DATA(SREG_DY), REGISTER_REAL34_DATA(SREG_TOL)));printf_cpx(SREG_DY); printf("\n");
         printf("END     DY=");printf_cpx(REGISTER_Y); printf("\n");
@@ -820,12 +838,10 @@ EndIteration:
       printf("   -------> newX2: ");printf_cpx(SREG_X2N); printf("\n");
     #endif //VERBOSE_SOLVER1
 
-
     copySourceRegisterToDestRegister(SREG_X2N,SREG_X2);  //new x2    
 
-
     //plots the ix vs abs.difference
-    if((!checkNaN && !(ix==400)) || checkzero) {
+    if((!checkNaN && !(ix==LIM)) || checkzero) {
       doubleToXRegisterReal34((double)ix);
       if(getRegisterDataType(REGISTER_X) == dtReal34 && getRegisterDataType(REGISTER_Y) == dtReal34)  {
         runFunction(ITM_SIGMAPLUS);
@@ -942,6 +958,8 @@ void fnGraph (uint16_t func){
 
                 //This is the desired sequence: FORMULA_TEXT, RPN_FORMULA, starting value in X.
 
+                runFunction(ITM_CLSIGMA);
+
                 fnStore(82);
                 fnDrop(0);
 
@@ -954,10 +972,12 @@ void fnGraph (uint16_t func){
                 fnStore(81);
 
                 fnRCL(82);
-                graph_solver(20, graph_xmin, graph_xmax);
+                graph_solver(ix == 20 ? 30:20, graph_xmin, graph_xmax);
                 break;
       #endif //SAVE_SPACE_DM42_4
     case 21: //PLOT
+
+              runFunction(ITM_CLSIGMA);
 
               ix1 = convert_to_double(REGISTER_X);
               ix0 = convert_to_double(REGISTER_Y);
@@ -978,7 +998,7 @@ void fnGraph (uint16_t func){
               fnRCL((int)(ix));
               fnStore(81);
 
-              graph_demo(20, graph_xmin, graph_xmax);
+              graph_demo(ix == 20 ? 30:20, graph_xmin, graph_xmax);
               fnRCL(80);
               break;
 
@@ -986,7 +1006,7 @@ void fnGraph (uint16_t func){
       #ifndef SAVE_SPACE_DM42_4
                 fnStrtoX("DEMO: Rnn Xo X.SOLV:     ");
                 fnStrtoX("DEMO: Rnn X0 X1 X.PLOT:  ");
-                fnStrtoX("(R=10,12,14,16,18) (X0=0 & X1=0 default range)");
+                fnStrtoX("(R=10,12,14,16,18,20) (X0=0 & X1=0 deflt) 20Eqn");
 
                 fnStrtoX("XEQC43 STO 99 X^3 RCL 99  X^2 20 * + RCL 99 3 * + 300 -   RCL 99");
                 fnStore(10);

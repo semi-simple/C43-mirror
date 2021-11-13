@@ -22,6 +22,7 @@
 #include "memory.h"
 #include "sort.h"
 #include "wp43s.h"
+#include <string.h>
 
 //This variable is to store in flash memory
 TO_QSPI const calcKey_t kbd_std[37] = {

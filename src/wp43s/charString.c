@@ -357,27 +357,3 @@ void *xcopy(void *dest, const void *source, int n) {
     return (char *)memcpy(dest, source, l + 1) + l;
   }
 #endif //WIN32
-
-
-
-int32_t charCompare(const char *char1, const char *char2) {
-  int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0]) | 0x7f) << 8) | char1[1]) : char1[0];
-  int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0]) | 0x7f) << 8) | char2[1]) : char2[0];
-  return code2 - code1;
-}
-
-int32_t stringCompare(const char *str1, const char *str2) {
-  while(1) {
-    int32_t cmpChr = charCompare(str1, str2);
-    if((*str1 == 0) && (*str2 == 0)) {
-      return 0;
-    }
-    else if(cmpChr != 0) {
-      return cmpChr;
-    }
-    else {
-      str1 += ((*str1) & 0x80) ? 2 : 1;
-      str2 += ((*str2) & 0x80) ? 2 : 1;
-    }
-  }
-}

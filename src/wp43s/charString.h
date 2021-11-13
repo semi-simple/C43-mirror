@@ -93,22 +93,4 @@ void    *xcopy            (void *dest, const void *source, int n);
 char    *stpcpy           (char *dest, const char *source);
 #endif //WIN32
 
-
-/********************************************//**
- * \brief Compares the first character of each string
- *
- * \param[in] char1 const char*
- * \param[in] char2 const char*
- * \return int32_t              0 if the two strings begins with the same character, positive if `char1` shall be sorted to precede `char2`, negative otherwise
- ***********************************************/
-int32_t  charCompare      (const char *char1, const char *char2);
-
-/********************************************//**
- * \brief Compares the first character of each string
- *
- * \param[in] str1 const char*
- * \param[in] str2 const char*
- * \return int32_t              0 if the two strings match, positive if `str1` shall be sorted to precede `str2`, negative otherwise
- ***********************************************/
-int32_t  stringCompare    (const char *str1, const char *str2);
 #endif // CHARSTRING_H

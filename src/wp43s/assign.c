@@ -19,6 +19,7 @@
 #include "error.h"
 #include "fonts.h"
 #include "items.h"
+#include "sort.h"
 #include "wp43s.h"
 
 //This variable is to store in flash memory
@@ -76,7 +77,7 @@ void fnAssign(uint16_t mode) {
   if(mode) {
     bool_t alreadyInUse = false;
     for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
-      if(stringCompare(aimBuffer, indexOfItems[-softmenu[i].menuItem].itemCatalogName) == 0) {
+      if(compareString(aimBuffer, indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
         alreadyInUse = true;
       }
     }

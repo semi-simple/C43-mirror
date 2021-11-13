@@ -69,6 +69,11 @@
         item = userAlphaItems[dynamicMenuItem].item;
         break;
 
+      case MNU_DYNAMIC:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = userMenus[currentUserMenu].menuItem[dynamicMenuItem].item;
+        break;
+
       case MNU_PROG:
       case MNU_VAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
@@ -114,6 +119,12 @@
           for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
             if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
               item = softmenu[i].menuItem;
+            }
+          }
+          for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
+            if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), userMenus[i].menuName, CMP_BINARY) == 0) {
+              item = -MNU_DYNAMIC;
+              currentUserMenu = i;
             }
           }
         }
@@ -285,6 +296,20 @@
             shiftF = shiftG = false;
             refreshScreen();
             return;
+          case MNU_DYNAMIC:
+            if(itemToBeAssigned < 0) {
+              displayCalcErrorMessage(ERROR_CANNOT_ASSIGN_HERE, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+              #ifdef PC_BUILD
+                moreInfoOnError("In function btnFnReleased:", "cannot assign submenu", indexOfItems[-itemToBeAssigned].itemCatalogName, "in user-created menu.");
+              #endif
+            }
+            else {
+              assignToUserMenu((*((uint8_t *)data) - '1') + (shiftG ? 12 : shiftF ? 6 : 0));
+            }
+            calcMode = previousCalcMode;
+            shiftF = shiftG = false;
+            refreshScreen();
+            return;
           case MNU_CATALOG:
           case MNU_CHARS:
           case MNU_PROGS:
@@ -292,7 +317,7 @@
           case MNU_MENUS:
             break;
           default:
-            displayCalcErrorMessage(ERROR_WRITE_PROTECTED_PREDEFINED_MENU, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+            displayCalcErrorMessage(ERROR_CANNOT_ASSIGN_HERE, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
             #ifdef PC_BUILD
               moreInfoOnError("In function btnFnReleased:", "the menu", indexOfItems[-softmenu[softmenuStack[0].softmenuId].menuItem].itemCatalogName, "is write-protected.");
             #endif

@@ -138,6 +138,9 @@ void updateAssignTamBuffer(void) {
   else if(itemToBeAssigned == ITM_ENTER) {
     tbPtr = stpcpy(tbPtr, "NULL");
   }
+  else if(itemToBeAssigned < 0) {
+    tbPtr = stpcpy(tbPtr, indexOfItems[-itemToBeAssigned].itemCatalogName);
+  }
   else {
     tbPtr = stpcpy(tbPtr, indexOfItems[itemToBeAssigned].itemCatalogName);
   }
@@ -195,6 +198,12 @@ void assignToMyMenu(uint16_t position) {
 void assignToMyAlpha(uint16_t position) {
   if(position < 18) {
     _assignItem(&userAlphaItems[position]);
+  }
+}
+
+void assignToUserMenu(uint16_t position) {
+  if(position < 18) {
+    _assignItem(&userMenus[currentUserMenu].menuItem[position]);
   }
 }
 

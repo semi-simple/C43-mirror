@@ -129,7 +129,7 @@
 #define ERROR_FUNCTION_VALUES_LOOK_CONSTANT       44
 #define ERROR_SYNTAX_ERROR_IN_EQUATION            45
 #define ERROR_EQUATION_TOO_COMPLEX                46
-#define ERROR_WRITE_PROTECTED_PREDEFINED_MENU     47
+#define ERROR_CANNOT_ASSIGN_HERE                  47
 #define ERROR_BAD_INPUT                           48 // This error is not in ReM and cannot occur (theoretically).
 
 #define NUMBER_OF_ERROR_CODES                     49
@@ -360,7 +360,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               17
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               18
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar

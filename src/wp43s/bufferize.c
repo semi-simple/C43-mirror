@@ -337,9 +337,6 @@ void kill_ASB_icon(void) {
             default:
               xCursor += 1;
           }
-//Temporary: try 2021-11-07 to get the formula to display CM_EIM
-T_cursorPos = xCursor;
-printf(">>> %s %i\n",aimBuffer,T_cursorPos);
         }
         else {
 #ifdef TEXT_MULTILINE_EDIT

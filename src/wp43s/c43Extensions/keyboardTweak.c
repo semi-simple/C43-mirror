@@ -92,7 +92,7 @@ void showAlphaModeonGui(void) {
   sprintf(tmp, "^^^^showAlphaModeonGui\n");
   jm_show_comment(tmp);
 #endif                                  //PC_BUILD
-  if(calcMode == CM_AIM || tam.mode) {                      //vv dr JM
+  if(calcMode == CM_AIM || calcMode == CM_EIM || tam.mode) {                      //vv dr JM
 #ifndef TESTSUITE_BUILD
     showHideAlphaMode();
 #endif
@@ -242,7 +242,7 @@ void fg_processing_jm(void) {
               popSoftmenu();                                                    //JM shifts
             }
             else {
-              if(calcMode == CM_AIM) {                                          //JM shifts
+              if(calcMode == CM_AIM || calcMode == CM_EIM) {                                          //JM shifts
                 processKeyAction(CHR_num);
               }
               else {                                                            //JM SHIFTS
@@ -452,6 +452,14 @@ void Check_MultiPresses(int16_t *result, int8_t key_no) { //Set up longpress
     }
   }
   else if(calcMode == CM_AIM) {
+    switch(*result) {
+      case ITM_BACKSPACE:                                             longpressDelayedkey1 = ITM_CLA;   break;    //BACKSPACE longpress clears input buffer
+      case ITM_EXIT1    :                                             longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+      case ITM_ENTER    :                                             longpressDelayedkey1 = ITM_XEDIT; break;
+      default:;
+    }
+  }
+  else if(calcMode == CM_EIM) {
     switch(*result) {
       case ITM_BACKSPACE:                                             longpressDelayedkey1 = ITM_CLA;   break;    //BACKSPACE longpress clears input buffer
       case ITM_EXIT1    :                                             longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
@@ -820,7 +828,7 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
  //Note item1 MUST be set to 0 prior to calling.
  bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t FSHIFT, bool_t GSHIFT) {
  //printf("####B>> %d %d\n",item,* item1);
- if(calcMode == CM_AIM || (tam.mode && tam.alpha) ) {
+ if(calcMode == CM_AIM || calcMode == CM_EIM || (tam.mode && tam.alpha) ) {
    if(!NL && GSHIFT) {
       switch(item) {
         case ITM_PI                : * item1 = ITM_7      ; break;

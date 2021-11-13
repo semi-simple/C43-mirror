@@ -315,6 +315,7 @@ void kill_ASB_icon(void) {
           const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" :
                                 item == ITM_VERTICAL_BAR        ? "||" :
                                 item == ITM_ROOT_SIGN           ? STD_SQUARE_ROOT "()" :
+                                item == ITM_ALOG_SYMBOL         ? "e" STD_SUB_E "^()" :
                                 indexOfItems[item].itemSoftmenuName;
           char *aimCursorPos = aimBuffer;
           char *aimBottomPos = aimBuffer + stringByteLength(aimBuffer);
@@ -323,6 +324,9 @@ void kill_ASB_icon(void) {
           for(; aimBottomPos >= aimCursorPos; --aimBottomPos) *(aimBottomPos + itemLen) = *aimBottomPos; 
           xcopy(aimCursorPos, addChar, itemLen);
           switch(item) {
+            case ITM_ALOG_SYMBOL:
+              xCursor += 5;
+              break;
             case ITM_ROOT_SIGN:
               xCursor += 3;
               break;

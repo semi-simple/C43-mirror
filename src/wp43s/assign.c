@@ -82,6 +82,11 @@ void fnAssign(uint16_t mode) {
         alreadyInUse = true;
       }
     }
+    for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
+      if(compareString(aimBuffer, userMenus[i].menuName, CMP_BINARY) == 0) {
+        alreadyInUse = true;
+      }
+    }
 
     if(alreadyInUse) {
       displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, REGISTER_X);

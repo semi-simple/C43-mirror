@@ -20,7 +20,7 @@
 
 #include <stdint.h>
 
-void fnAssign             (uint16_t unusedButMandatoryParameter);
+void fnAssign             (uint16_t mode);
 
 void updateAssignTamBuffer(void);
 

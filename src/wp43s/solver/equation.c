@@ -229,15 +229,9 @@ static uint32_t _checkExponent(const char *strPtr) {
   }
 }
 
-static int32_t _compareChar(const char *char1, const char *char2) {
-  int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0]) | 0x7f) << 8) | char1[1]) : char1[0];
-  int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0]) | 0x7f) << 8) | char2[1]) : char2[0];
-  return code2 - code1;
-}
-
 static void _addSpace(char **bufPtr, int16_t *strWidth, uint32_t *doubleBytednessHistory) { // space between an operand and an operator
   bool_t spaceShallBeAdded = true;
-  if(((*bufPtr) >= (tmpString + 2)) && (_compareChar((*bufPtr) - 2, STD_SPACE_PUNCTUATION) == 0)) spaceShallBeAdded = false;
+  if(((*bufPtr) >= (tmpString + 2)) && (charCompare((*bufPtr) - 2, STD_SPACE_PUNCTUATION) == 0)) spaceShallBeAdded = false;
   if(((*bufPtr) >= (tmpString + 1)) && (((*doubleBytednessHistory) & 1) == 0 && *((*bufPtr) - 1) == ' ')) spaceShallBeAdded = false;
   if(spaceShallBeAdded) {
     **bufPtr         = STD_SPACE_PUNCTUATION[0];
@@ -466,22 +460,6 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
 
 
 #ifndef TESTSUITE_BUILD
-static int32_t _compareStr(const char *str1, const char *str2) {
-  while(1) {
-    int32_t cmpChr = _compareChar(str1, str2);
-    if((*str1 == 0) && (*str2 == 0)) {
-      return 0;
-    }
-    else if(cmpChr != 0) {
-      return cmpChr;
-    }
-    else {
-      str1 += ((*str1) & 0x80) ? 2 : 1;
-      str2 += ((*str2) & 0x80) ? 2 : 1;
-    }
-  }
-}
-
 static void _menuF6(char *bufPtr) {
   xcopy(bufPtr, "Calc", 5);
   bufPtr[5] = 0;
@@ -684,18 +662,18 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
     case EQUATION_PARSER_MVAR:
       if(parserHint == PARSER_HINT_VARIABLE) {
         char *bufPtr = mvarBuffer;
-        if(_compareStr(STD_pi, strPtr) == 0) { // check for pi
+        if(stringCompare(STD_pi, strPtr) == 0) { // check for pi
           return;
         }
         while(*bufPtr != 0) { // check for duplicates
-          if(_compareStr(bufPtr, strPtr) == 0) {
+          if(stringCompare(bufPtr, strPtr) == 0) {
             return;
           }
           bufPtr += stringByteLength(bufPtr) + 1;
           ++tmpVal;
         }
         for(uint32_t i = CST_01; i <= CST_79; ++i) { // check for constants
-          if(_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0) {
+          if(stringCompare(indexOfItems[i].itemCatalogName, strPtr) == 0) {
             return;
           }
         }
@@ -711,12 +689,12 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
 
     case EQUATION_PARSER_XEQ:
       if(parserHint == PARSER_HINT_VARIABLE) {
-        if(_compareStr(STD_pi, strPtr) == 0) { // check for pi
+        if(stringCompare(STD_pi, strPtr) == 0) { // check for pi
           runFunction(ITM_CONSTpi);
           return;
         }
         for(uint32_t i = CST_01; i <= CST_79; ++i) { // check for constants
-          if(_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0) {
+          if(stringCompare(indexOfItems[i].itemCatalogName, strPtr) == 0) {
             runFunction(i);
             return;
           }
@@ -730,43 +708,43 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         stringToReal34(strPtr, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else if(parserHint == PARSER_HINT_OPERATOR) {
-        if(_compareStr("+", strPtr) == 0) {
+        if(stringCompare("+", strPtr) == 0) {
           _processOperator(ITM_ADD, mvarBuffer);
         }
-        else if(_compareStr("-", strPtr) == 0) {
+        else if(stringCompare("-", strPtr) == 0) {
           _processOperator(ITM_SUB, mvarBuffer);
         }
-        else if(_compareStr(STD_CROSS, strPtr) == 0 || _compareStr(STD_DOT, strPtr) == 0) {
+        else if(stringCompare(STD_CROSS, strPtr) == 0 || stringCompare(STD_DOT, strPtr) == 0) {
           _processOperator(ITM_MULT, mvarBuffer);
         }
-        else if(_compareStr("/", strPtr) == 0) {
+        else if(stringCompare("/", strPtr) == 0) {
           _processOperator(ITM_DIV, mvarBuffer);
         }
-        else if(_compareStr("^", strPtr) == 0) {
+        else if(stringCompare("^", strPtr) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_YX, mvarBuffer);
         }
-        else if(_compareStr("!", strPtr) == 0) {
+        else if(stringCompare("!", strPtr) == 0) {
           _processOperator(ITM_XFACT, mvarBuffer);
         }
-        else if(_compareStr("(", strPtr) == 0) {
+        else if(stringCompare("(", strPtr) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_LEFT, mvarBuffer);
         }
-        else if(_compareStr(")", strPtr) == 0) {
+        else if(stringCompare(")", strPtr) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT, mvarBuffer);
         }
-        else if(_compareStr("|", strPtr) == 0) {
+        else if(stringCompare("|", strPtr) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_VERTICAL_BAR_LEFT, mvarBuffer);
         }
-        else if(_compareStr("|)", strPtr) == 0) {
+        else if(stringCompare("|)", strPtr) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_VERTICAL_BAR_RIGHT, mvarBuffer);
         }
-        else if(_compareStr("=", strPtr) == 0) {
+        else if(stringCompare("=", strPtr) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_EQUAL, mvarBuffer);
         }
-        else if(_compareStr(":", strPtr) == 0) {
+        else if(stringCompare(":", strPtr) == 0) {
           // label will be skipped
         }
-        else if(_compareStr(" ", strPtr) == 0) {
+        else if(stringCompare(" ", strPtr) == 0) {
           uint32_t opStackTop = 0xffffffffu;
           for(uint32_t i = 0; i <= PARSER_OPERATOR_STACK_SIZE; ++i) {
             if((i == PARSER_OPERATOR_STACK_SIZE) || (((uint16_t *)mvarBuffer)[i] == 0)) {
@@ -784,19 +762,19 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
       }
       else if(parserHint == PARSER_HINT_FUNCTION) {
         for(uint32_t i = 0; functionAlias[i].name[0] != 0; ++i) {
-          if(_compareStr(functionAlias[i].name, strPtr) == 0) {
+          if(stringCompare(functionAlias[i].name, strPtr) == 0) {
             _processOperator(functionAlias[i].opCode, mvarBuffer);
             return;
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0)) {
+          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (stringCompare(indexOfItems[i].itemCatalogName, strPtr) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemSoftmenuName, strPtr) == 0)) {
+          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (stringCompare(indexOfItems[i].itemSoftmenuName, strPtr) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
@@ -936,7 +914,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         }
         if(*strPtr == '=') equalAppeared = true;
         if(bufPtr != buffer || (*strPtr) != '-' || afterClosingParenthesis) {
-          if(_compareStr("|)", buffer) != 0) {
+          if(stringCompare("|)", buffer) != 0) {
             buffer[0] = *(strPtr++);
             buffer[1] = 0;
           }
@@ -964,7 +942,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         ++numericCount;
         /* fallthrough */
       default:
-        if(_compareChar(strPtr, STD_CROSS) == 0 || _compareChar(strPtr, STD_DOT) == 0) {
+        if(charCompare(strPtr, STD_CROSS) == 0 || charCompare(strPtr, STD_DOT) == 0) {
           *(bufPtr++) = 0;
           _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
           buffer[0] = *(strPtr++);

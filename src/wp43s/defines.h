@@ -511,7 +511,8 @@ typedef enum {
 #define TM_SHUFFLE                             10008
 #define TM_LABEL                               10009
 #define TM_SOLVE                               10010
-#define TM_CMP                                 10011 // TM_CMP must be the last in this list
+#define TM_NEWMENU                             10011
+#define TM_CMP                                 10012 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0

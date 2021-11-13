@@ -16,6 +16,7 @@
 
 #include "assign.h"
 #include "charString.h"
+#include "error.h"
 #include "fonts.h"
 #include "items.h"
 #include "wp43s.h"
@@ -71,11 +72,35 @@ TO_QSPI const calcKey_t kbd_std[37] = {
 
 
 
-void fnAssign(uint16_t unusedButMandatoryParameter) {
-  previousCalcMode = calcMode;
-  calcMode = CM_ASSIGN;
-  itemToBeAssigned = 0;
-  updateAssignTamBuffer();
+void fnAssign(uint16_t mode) {
+  if(mode) {
+    bool_t alreadyInUse = false;
+    for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
+      if(stringCompare(aimBuffer, indexOfItems[-softmenu[i].menuItem].itemCatalogName) == 0) {
+        alreadyInUse = true;
+      }
+    }
+
+    if(alreadyInUse) {
+      displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnAssign:", "the menu", aimBuffer, "already exists");
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    else {
+      displayCalcErrorMessage(ERROR_ITEM_TO_BE_CODED, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnAssign:", "creating a new menu", "is to be coded", NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
+    aimBuffer[0] = 0;
+  }
+  else {
+    previousCalcMode = calcMode;
+    calcMode = CM_ASSIGN;
+    itemToBeAssigned = 0;
+    updateAssignTamBuffer();
+  }
 }
 
 

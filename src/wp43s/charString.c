@@ -29,15 +29,6 @@
 
 
 
-/********************************************//**
- * \brief Calculates a string width in pixel using a certain font
- *
- * \param[in] str const char*             String whose length is to calculate
- * \param[in] font font_t*                Font
- * \param[in] withLeadingEmptyRows bool_t With the leading empty rows
- * \param[in] withEndingEmptyRows bool_t  With the ending empty rows
- * \return int16_t                        Width in pixel of the string
- ***********************************************/
 int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows) {
   int16_t ch, numPixels, charCode, glyphId;
   const glyph_t *glyph;
@@ -101,13 +92,6 @@ int16_t stringWidth(const char *str, const font_t *font, bool_t withLeadingEmpty
 
 
 
-/********************************************//**
- * \brief Returns a pointer to the glyph after pos a string
- *
- * \param[in] str const char*
- * \param[in] pos int16_t       Location after which search the next glyph
- * \return int16_t              Pointer to the glyph after pos
- ***********************************************/
 int16_t stringNextGlyph(const char *str, int16_t pos) {
   int16_t lg;
 
@@ -128,12 +112,6 @@ int16_t stringNextGlyph(const char *str, int16_t pos) {
 
 
 
-/********************************************//**
- * \brief Returns a pointer to the last glyph of a string
- *
- * \param[in] str const char*
- * \return int16_t              Pointer to the last glyph
- ***********************************************/
 int16_t stringLastGlyph(const char *str) {
   int16_t lastGlyph;
 
@@ -166,12 +144,6 @@ int16_t stringLastGlyph(const char *str) {
 
 
 
-/********************************************//**
- * \brief Returns a string length in byte
- *
- * \param[in] str const char*
- * \return int32_t
- ***********************************************/
 int32_t stringByteLength(const char *str) {
   int32_t len = 0;
 
@@ -190,12 +162,6 @@ int32_t stringByteLength(const char *str) {
 
 
 
-/********************************************//**
- * \brief Returns a string length in glyphs
- *
- * \param[in] str const char*
- * \return int32_t
- ***********************************************/
 int32_t stringGlyphLength(const char *str) {
   int32_t len = 0;
 
@@ -214,13 +180,6 @@ int32_t stringGlyphLength(const char *str) {
 
 
 
-/********************************************//**
- * \brief Converts an unicode code point to utf8
- *
- * \param[in]  codePoint uint32_t Unicode code point
- * \param[out] utf8 uint8_t*      utf8 string
- * \return void
- ***********************************************/
 void codePointToUtf8(uint32_t codePoint, uint8_t *utf8) { // WP43S supports only unicode code points from 0x0000 to 0x7FFF
   if(codePoint <= 0x00007F) {
     utf8[0] = codePoint;
@@ -276,13 +235,6 @@ void codePointToUtf8(uint32_t codePoint, uint8_t *utf8) { // WP43S supports only
 
 
 
-/********************************************//**
- * \brief Converts one utf8 char to an unicode code point
- *
- * \param[in]  utf8 uint8_t*      utf8 string
- * \param[out] codePoint uint32_t Unicode code point
- * \return void
- ***********************************************/
 uint32_t utf8ToCodePoint(const uint8_t *utf8, uint32_t *codePoint) { // WP43S supports only unicode code points from 0x0000 to 0x7FFF
   if((*utf8 & 0x80) == 0) {
     *codePoint = *utf8;
@@ -405,3 +357,27 @@ void *xcopy(void *dest, const void *source, int n) {
     return (char *)memcpy(dest, source, l + 1) + l;
   }
 #endif //WIN32
+
+
+
+int32_t charCompare(const char *char1, const char *char2) {
+  int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0]) | 0x7f) << 8) | char1[1]) : char1[0];
+  int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0]) | 0x7f) << 8) | char2[1]) : char2[0];
+  return code2 - code1;
+}
+
+int32_t stringCompare(const char *str1, const char *str2) {
+  while(1) {
+    int32_t cmpChr = charCompare(str1, str2);
+    if((*str1 == 0) && (*str2 == 0)) {
+      return 0;
+    }
+    else if(cmpChr != 0) {
+      return cmpChr;
+    }
+    else {
+      str1 += ((*str1) & 0x80) ? 2 : 1;
+      str2 += ((*str2) & 0x80) ? 2 : 1;
+    }
+  }
+}

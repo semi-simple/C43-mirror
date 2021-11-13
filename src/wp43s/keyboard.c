@@ -699,6 +699,11 @@
           }
           keyActionProcessed = true;
         }
+        else if(calcMode == CM_ASSIGN && itemToBeAssigned == 0 && item == ITM_USERMODE) {
+          tamEnterMode(ITM_ASSIGN);
+          calcMode = previousCalcMode;
+          keyActionProcessed = true;
+        }
         else if(catalog && catalog != CATALOG_MVAR) {
           if(ITM_A <= item && item <= ITM_Z && alphaCase == AC_LOWER) {
             addItemToBuffer(item + 26);

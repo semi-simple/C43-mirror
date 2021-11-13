@@ -32,6 +32,7 @@
 #include "registers.h"
 #include "screen.h"
 #include "stack.h"
+#include "sort.h"
 #include "wp43s.h"
 
 
@@ -508,22 +509,6 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
 
 
 #ifndef TESTSUITE_BUILD
-static int32_t _compareStr(const char *str1, const char *str2) {
-  while(1) {
-    int32_t cmpChr = _compareChar(str1, str2);
-    if((*str1 == 0) && (*str2 == 0)) {
-      return 0;
-    }
-    else if(cmpChr != 0) {
-      return cmpChr;
-    }
-    else {
-      str1 += ((*str1) & 0x80) ? 2 : 1;
-      str2 += ((*str2) & 0x80) ? 2 : 1;
-    }
-  }
-}
-
 static void _menuF6(char *bufPtr) {
   xcopy(bufPtr, "Calc", 5);
   bufPtr[5] = 0;
@@ -731,18 +716,18 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
     case EQUATION_PARSER_MVAR:
       if(parserHint == PARSER_HINT_VARIABLE) {
         char *bufPtr = mvarBuffer;
-        if(_compareStr(STD_pi, strPtr) == 0) { // check for pi
+        if(compareString(STD_pi, strPtr, CMP_BINARY) == 0) { // check for pi
           return;
         }
         while(*bufPtr != 0) { // check for duplicates
-          if(_compareStr(bufPtr, strPtr) == 0) {
+          if(compareString(bufPtr, strPtr, CMP_BINARY) == 0) {
             return;
           }
           bufPtr += stringByteLength(bufPtr) + 1;
           ++tmpVal;
         }
         for(uint32_t i = CST_01; i <= CST_79; ++i) { // check for constants
-          if(_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0) {
+          if(compareString(indexOfItems[i].itemCatalogName, strPtr, CMP_BINARY) == 0) {
             return;
           }
         }
@@ -758,12 +743,12 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
 
     case EQUATION_PARSER_XEQ:
       if(parserHint == PARSER_HINT_VARIABLE) {
-        if(_compareStr(STD_pi, strPtr) == 0) { // check for pi
+        if(compareString(STD_pi, strPtr, CMP_BINARY) == 0) { // check for pi
           runFunction(ITM_CONSTpi);
           return;
         }
         for(uint32_t i = CST_01; i <= CST_79; ++i) { // check for constants
-          if(_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0) {
+          if(compareString(indexOfItems[i].itemCatalogName, strPtr, CMP_BINARY) == 0) {
             runFunction(i);
             return;
           }
@@ -777,40 +762,40 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         stringToReal34(strPtr, REGISTER_REAL34_DATA(REGISTER_X));
       }
       else if(parserHint == PARSER_HINT_OPERATOR) {
-        if(_compareStr("+", strPtr) == 0) {
+        if(compareString("+", strPtr, CMP_BINARY) == 0) {
           _processOperator(ITM_ADD, mvarBuffer);
         }
-        else if(_compareStr("-", strPtr) == 0) {
+        else if(compareString("-", strPtr, CMP_BINARY) == 0) {
           _processOperator(ITM_SUB, mvarBuffer);
         }
-        else if(_compareStr(STD_CROSS, strPtr) == 0 || _compareStr(STD_DOT, strPtr) == 0) {
+        else if(compareString(STD_CROSS, strPtr, CMP_BINARY) == 0 || compareString(STD_DOT, strPtr, CMP_BINARY) == 0) {
           _processOperator(ITM_MULT, mvarBuffer);
         }
-        else if(_compareStr("/", strPtr) == 0) {
+        else if(compareString("/", strPtr, CMP_BINARY) == 0) {
           _processOperator(ITM_DIV, mvarBuffer);
         }
-        else if(_compareStr("^", strPtr) == 0) {
+        else if(compareString("^", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_YX, mvarBuffer);
         }
-        else if(_compareStr("!", strPtr) == 0) {
+        else if(compareString("!", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_XFACT, mvarBuffer);
         }
-        else if(_compareStr("(", strPtr) == 0) {
+        else if(compareString("(", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_LEFT, mvarBuffer);
         }
-        else if(_compareStr(")", strPtr) == 0) {
+        else if(compareString(")", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT, mvarBuffer);
         }
-        else if(_compareStr("|", strPtr) == 0) {
+        else if(compareString("|", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_VERTICAL_BAR_LEFT, mvarBuffer);
         }
-        else if(_compareStr("|)", strPtr) == 0) {
+        else if(compareString("|)", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_VERTICAL_BAR_RIGHT, mvarBuffer);
         }
-        else if(_compareStr("=", strPtr) == 0) {
+        else if(compareString("=", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_EQUAL, mvarBuffer);
         }
-        else if(_compareStr(":", strPtr) == 0) {
+        else if(compareString(":", strPtr, CMP_BINARY) == 0) {
           // label or parameter separator will be skipped
         }
         else {
@@ -819,19 +804,19 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
       }
       else if(parserHint == PARSER_HINT_FUNCTION) {
         for(uint32_t i = 0; functionAlias[i].name[0] != 0; ++i) {
-          if(_compareStr(functionAlias[i].name, strPtr) == 0) {
+          if(compareString(functionAlias[i].name, strPtr, CMP_BINARY) == 0) {
             _processOperator(functionAlias[i].opCode, mvarBuffer);
             return;
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0)) {
+          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemCatalogName, strPtr, CMP_BINARY) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemSoftmenuName, strPtr) == 0)) {
+          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemSoftmenuName, strPtr, CMP_BINARY) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
@@ -1010,7 +995,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           afterSpace = false;
         }
 
-        if(_compareStr("|)", buffer) != 0) {
+        if(compareString("|)", buffer, CMP_BINARY) != 0) {
           buffer[0] = *(strPtr++);
           buffer[1] = 0;
         }

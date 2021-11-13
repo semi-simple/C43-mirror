@@ -617,6 +617,7 @@ typedef enum {
 #define NUMBER_OF_CATALOGS                        19
 
 // String comparison type
+#define CMP_BINARY                                 0
 #define CMP_CLEANED_STRING_ONLY                    1
 #define CMP_EXTENSIVE                              2
 

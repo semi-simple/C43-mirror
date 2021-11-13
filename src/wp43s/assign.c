@@ -76,35 +76,7 @@ TO_QSPI const calcKey_t kbd_std[37] = {
 
 void fnAssign(uint16_t mode) {
   if(mode) {
-    bool_t alreadyInUse = false;
-    for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
-      if(compareString(aimBuffer, indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
-        alreadyInUse = true;
-      }
-    }
-    for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
-      if(compareString(aimBuffer, userMenus[i].menuName, CMP_BINARY) == 0) {
-        alreadyInUse = true;
-      }
-    }
-
-    if(alreadyInUse) {
-      displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, REGISTER_X);
-      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-        moreInfoOnError("In function fnAssign:", "the menu", aimBuffer, "already exists");
-      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    }
-    else {
-      if(numberOfUserMenus == 0) {
-        userMenus = allocWp43s(TO_BLOCKS(sizeof(userMenu_t)));
-      }
-      else {
-        userMenus = reallocWp43s(userMenus, TO_BLOCKS(sizeof(userMenu_t)) * numberOfUserMenus, TO_BLOCKS(sizeof(userMenu_t)) * (numberOfUserMenus + 1));
-      }
-      memset(userMenus + numberOfUserMenus, 0, sizeof(userMenu_t));
-      xcopy(userMenus[numberOfUserMenus].menuName, aimBuffer, stringByteLength(aimBuffer));
-      ++numberOfUserMenus;
-    }
+    createMenu(aimBuffer);
     aimBuffer[0] = 0;
   }
   else {
@@ -250,5 +222,39 @@ void assignToKey(const char *data) {
       else if(shiftF) key->fShifted = tmpMenuItem.item;
       else            key->primary  = tmpMenuItem.item;
     }
+  }
+}
+
+
+
+void createMenu(const char *name) {
+  bool_t alreadyInUse = false;
+  for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
+    if(compareString(name, indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
+      alreadyInUse = true;
+    }
+  }
+  for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
+    if(compareString(name, userMenus[i].menuName, CMP_BINARY) == 0) {
+      alreadyInUse = true;
+    }
+  }
+
+  if(alreadyInUse) {
+    displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function fnAssign:", "the menu", name, "already exists");
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else {
+    if(numberOfUserMenus == 0) {
+      userMenus = allocWp43s(TO_BLOCKS(sizeof(userMenu_t)));
+    }
+    else {
+      userMenus = reallocWp43s(userMenus, TO_BLOCKS(sizeof(userMenu_t)) * numberOfUserMenus, TO_BLOCKS(sizeof(userMenu_t)) * (numberOfUserMenus + 1));
+    }
+    memset(userMenus + numberOfUserMenus, 0, sizeof(userMenu_t));
+    xcopy(userMenus[numberOfUserMenus].menuName, name, stringByteLength(name));
+    ++numberOfUserMenus;
   }
 }

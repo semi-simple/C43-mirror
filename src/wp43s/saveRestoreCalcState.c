@@ -16,6 +16,7 @@
 
 #include "saveRestoreCalcState.h"
 
+#include "assign.h"
 #include "charString.h"
 #include "config.h"
 #include "display.h"
@@ -119,6 +120,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     ramPtr = TO_WP43SMEMPTR(allNamedVariables);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(allFormulae);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(userMenus);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -255,6 +258,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
     save(&numberOfFormulae,                   sizeof(numberOfFormulae),                   BACKUP);
     save(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
+    save(&numberOfUserMenus,                  sizeof(numberOfUserMenus),                  BACKUP);
+    save(&currentUserMenu,                    sizeof(currentUserMenu),                    BACKUP);
 
 
     fclose(BACKUP);
@@ -322,6 +327,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       allNamedVariables = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       allFormulae = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      userMenus = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -461,6 +468,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
       restore(&numberOfFormulae,                   sizeof(numberOfFormulae),                   BACKUP);
       restore(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
+      restore(&numberOfUserMenus,                  sizeof(numberOfUserMenus),                  BACKUP);
+      restore(&currentUserMenu,                    sizeof(currentUserMenu),                    BACKUP);
 
       fclose(BACKUP);
       printf("End of calc's restoration\n");
@@ -769,6 +778,26 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     }
     strcat(tmpString, "\n");
     save(tmpString, strlen(tmpString), BACKUP);
+  }
+
+  // User menus
+  sprintf(tmpString, "USER_MENUS\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%" PRIu16 "\n", numberOfUserMenus);
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(uint32_t j = 0; j < numberOfUserMenus; ++j) {
+    stringToUtf8(userMenus[j].menuName, (uint8_t *)tmpString);
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+    for(i=0; i<18; i++) {
+      sprintf(tmpString, "%" PRId16, userMenus[j].menuItem[i].item);
+      if(userMenus[j].menuItem[i].argumentName[0] != 0) {
+        strcat(tmpString, " ");
+        stringToUtf8(userMenus[j].menuItem[i].argumentName, (uint8_t *)tmpString + strlen(tmpString));
+      }
+      strcat(tmpString, "\n");
+      save(tmpString, strlen(tmpString), BACKUP);
+    }
   }
 
   // Programs
@@ -1348,6 +1377,46 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
           while(*str == ' ') str++;
           if((*str != '\n') && (*str != 0)) {
             utf8ToString((uint8_t *)str, userAlphaItems[i].argumentName);
+          }
+        }
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "USER_MENUS") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    int16_t numberOfMenus = stringToInt16(tmpString);
+    for(int32_t j=0; j<numberOfMenus; j++) {
+      readLine(stream, tmpString);
+      int16_t target = -1;
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
+        for(i = 0; i < numberOfUserMenus; ++i) {
+          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_BINARY) == 0) {
+            target = i;
+          }
+        }
+        if(target == -1) {
+          createMenu(tmpString + TMP_STR_LENGTH / 2);
+          target = numberOfUserMenus - 1;
+        }
+      }
+
+      readLine(stream, tmpString);
+      numberOfRegs = stringToInt16(tmpString);
+      for(i=0; i<numberOfRegs; i++) {
+        readLine(stream, tmpString); // key
+        if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+          str = tmpString;
+          userMenus[target].menuItem[i].item            = stringToUint16(str);
+          userMenus[target].menuItem[i].argumentName[0] = 0;
+
+          while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+          if(*str == ' ') {
+            while(*str == ' ') str++;
+            if((*str != '\n') && (*str != 0)) {
+              utf8ToString((uint8_t *)str, userMenus[target].menuItem[i].argumentName);
+            }
           }
         }
       }

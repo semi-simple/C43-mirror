@@ -35,6 +35,7 @@
 #include "screen.h"
 #include "softmenus.h"
 #include "solver/equation.h"
+#include "sort.h"
 #include "stack.h"
 #include "stats.h"
 #include "timer.h"
@@ -104,6 +105,18 @@
       //case MNU_FLASH:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_XEQ);
+        break;
+
+      case MNU_MENUS:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = ITM_NOP;
+        if(dynamicMenuItem < dynamicSoftmenu[menuId].numItems) {
+          for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
+            if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
+              item = softmenu[i].menuItem;
+            }
+          }
+        }
         break;
 
       case MNU_EQN:

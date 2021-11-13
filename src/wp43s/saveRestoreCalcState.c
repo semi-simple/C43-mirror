@@ -32,6 +32,7 @@
 #include "registerValueConversions.h"
 #include "screen.h"
 #include "solver/equation.h"
+#include "sort.h"
 #include "stats.h"
 #include <string.h>
 
@@ -1348,7 +1349,7 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       readLine(stream, tmpString); // key
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         str = tmpString;
-        userMenuItems[i].item            = stringToUint16(str);
+        userMenuItems[i].item            = stringToInt16(str);
         userMenuItems[i].argumentName[0] = 0;
 
         while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
@@ -1369,7 +1370,7 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       readLine(stream, tmpString); // key
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         str = tmpString;
-        userAlphaItems[i].item            = stringToUint16(str);
+        userAlphaItems[i].item            = stringToInt16(str);
         userAlphaItems[i].argumentName[0] = 0;
 
         while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
@@ -1408,7 +1409,7 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
         readLine(stream, tmpString); // key
         if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
           str = tmpString;
-          userMenus[target].menuItem[i].item            = stringToUint16(str);
+          userMenus[target].menuItem[i].item            = stringToInt16(str);
           userMenus[target].menuItem[i].argumentName[0] = 0;
 
           while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;

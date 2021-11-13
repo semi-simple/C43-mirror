@@ -614,11 +614,11 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       else if(menuData[i].item == ITM_NOP || menuData[i].item == ITM_NULL) {
         numberOfBytes += 1;
       }
-      else if(indexOfItems[menuData[i].item].itemCatalogName[0] == 0) {
-        numberOfBytes += stringByteLength(indexOfItems[menuData[i].item].itemSoftmenuName) + 1;
+      else if(indexOfItems[abs(menuData[i].item)].itemCatalogName[0] == 0) {
+        numberOfBytes += stringByteLength(indexOfItems[abs(menuData[i].item)].itemSoftmenuName) + 1;
       }
       else {
-        numberOfBytes += stringByteLength(indexOfItems[menuData[i].item].itemCatalogName) + 1;
+        numberOfBytes += stringByteLength(indexOfItems[abs(menuData[i].item)].itemCatalogName) + 1;
       }
     }
     ptr = malloc(numberOfBytes);
@@ -631,11 +631,11 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
       else if(menuData[i].item == ITM_NULL) {
         lbl = "";
       }
-      else if(indexOfItems[menuData[i].item].itemCatalogName[0] == 0) {
-        lbl = indexOfItems[menuData[i].item].itemSoftmenuName;
+      else if(indexOfItems[abs(menuData[i].item)].itemCatalogName[0] == 0) {
+        lbl = indexOfItems[abs(menuData[i].item)].itemSoftmenuName;
       }
       else {
-        lbl = indexOfItems[menuData[i].item].itemCatalogName;
+        lbl = indexOfItems[abs(menuData[i].item)].itemCatalogName;
       }
       int16_t len = stringByteLength(lbl) + 1;
       xcopy(ptr, lbl, len);
@@ -913,8 +913,17 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
         for(y=0; y<3; y++) {
           for(x=0; x<6; x++) {
             if(x + 6*y + currentFirstItem < numberOfItems) {
-              if(*ptr != 0)
-                showSoftkey((char *)ptr, x, y, softmenu[m].menuItem == -MNU_MENUS ? vmReverse : vmNormal, true, true);
+              if(*ptr != 0) {
+                videoMode_t vm;
+                switch(-softmenu[m].menuItem) {
+                  case MNU_MENUS:   vm =                                                            vmReverse;            break;
+                  case MNU_MyMenu:  vm = (                      userMenuItems[x + 6*y].item < 0) ? vmReverse : vmNormal; break;
+                  case MNU_MyAlpha: vm = (                     userAlphaItems[x + 6*y].item < 0) ? vmReverse : vmNormal; break;
+                  case MNU_DYNAMIC: vm = (userMenus[currentUserMenu].menuItem[x + 6*y].item < 0) ? vmReverse : vmNormal; break;
+                  default:          vm =                                                  vmNormal; break;
+                }
+                showSoftkey((char *)ptr, x, y, vm, true, true);
+              }
               ptr += stringByteLength((char *)ptr) + 1;
             }
           }

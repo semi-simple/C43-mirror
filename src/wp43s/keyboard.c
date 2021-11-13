@@ -165,6 +165,19 @@
         case MNU_REALS:
         case MNU_CPXS:
           return findNamedVariable((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem)) - FIRST_NAMED_VARIABLE + ASSIGN_NAMED_VARIABLES;
+        case MNU_MENUS:
+          if(item == -MNU_DYNAMIC) {
+            for(int32_t i = 0; i < numberOfUserMenus; ++i) {
+              if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), userMenus[i].menuName, CMP_BINARY) == 0) {
+                return ASSIGN_USER_MENU - i;
+              }
+            }
+            displayBugScreen("In function determineFunctionKeyItem: nonexistent menu specified!");
+            return item;
+          }
+          else {
+            return item;
+          }
         default:
           return item;
       }
@@ -223,11 +236,16 @@
         int16_t item = determineFunctionKeyItem((char *)data);
 
         switch(-softmenu[softmenuStack[0].softmenuId].menuItem) {
+          case MNU_MENUS:
+            if(item <= ASSIGN_USER_MENU) {
+              currentUserMenu = ASSIGN_USER_MENU - item;
+              item = -MNU_DYNAMIC;
+            }
+            /* fallthrough */
           case MNU_CATALOG:
           case MNU_CHARS:
           case MNU_PROGS:
           case MNU_VARS:
-          case MNU_MENUS:
             #if (FN_KEY_TIMEOUT_TO_NOP == 1)
               showFunctionName(item, 1000); // 1000ms = 1s
             #else // (FN_KEY_TIMEOUT_TO_NOP == 0)
@@ -339,10 +357,15 @@
           lastErrorCode = 0;
 
           if(item < 0) { // softmenu
-            showSoftmenu(item);
-            if(item == -MNU_Solver && lastErrorCode != 0) {
-              popSoftmenu();
-              currentSolverStatus &= ~SOLVER_STATUS_INTERACTIVE;
+            if(calcMode == CM_ASSIGN && itemToBeAssigned == 0 && softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_MENUS) {
+              itemToBeAssigned = item;
+            }
+            else {
+              showSoftmenu(item);
+              if(item == -MNU_Solver && lastErrorCode != 0) {
+                popSoftmenu();
+                currentSolverStatus &= ~SOLVER_STATUS_INTERACTIVE;
+              }
             }
             refreshScreen();
             return;

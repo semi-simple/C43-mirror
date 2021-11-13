@@ -132,14 +132,17 @@ void updateAssignTamBuffer(void) {
   else if(itemToBeAssigned >= ASSIGN_NAMED_VARIABLES) {
     tbPtr = stpcpy(tbPtr, (char *)allNamedVariables[itemToBeAssigned - ASSIGN_NAMED_VARIABLES].variableName + 1);
   }
+  else if(itemToBeAssigned <= ASSIGN_USER_MENU) {
+    tbPtr = stpcpy(tbPtr, userMenus[-(itemToBeAssigned - ASSIGN_USER_MENU)].menuName);
+  }
+  else if(itemToBeAssigned < 0) {
+    tbPtr = stpcpy(tbPtr, indexOfItems[-itemToBeAssigned].itemCatalogName);
+  }
   else if(indexOfItems[itemToBeAssigned].itemCatalogName[0] == 0) {
     tbPtr = stpcpy(tbPtr, indexOfItems[itemToBeAssigned].itemSoftmenuName);
   }
   else if(itemToBeAssigned == ITM_ENTER) {
     tbPtr = stpcpy(tbPtr, "NULL");
-  }
-  else if(itemToBeAssigned < 0) {
-    tbPtr = stpcpy(tbPtr, indexOfItems[-itemToBeAssigned].itemCatalogName);
   }
   else {
     tbPtr = stpcpy(tbPtr, indexOfItems[itemToBeAssigned].itemCatalogName);
@@ -173,6 +176,12 @@ static void _assignItem(userMenuItem_t *menuItem) {
   else if(itemToBeAssigned >= ASSIGN_NAMED_VARIABLES) {
     lblPtr                    = allNamedVariables[itemToBeAssigned - ASSIGN_NAMED_VARIABLES].variableName;
     menuItem->item            = ITM_RCL;
+  }
+  else if(itemToBeAssigned <= ASSIGN_USER_MENU) {
+    lblPtr                    = (uint8_t *)userMenus[-(itemToBeAssigned - ASSIGN_USER_MENU)].menuName;
+    menuItem->item            = -MNU_DYNAMIC;
+    xcopy(menuItem->argumentName, (char *)lblPtr, stringByteLength((char *)lblPtr));
+    lblPtr                    = NULL;
   }
   else if(itemToBeAssigned == ITM_ENTER) {
     menuItem->item            = ITM_NULL;

@@ -37,6 +37,7 @@
 #include "fractions.h"
 #include "c43Extensions/graphs.h"
 #include "gui.h"
+#include "solver/graph.h"
 #include "c43Extensions/inlineTest.h"
 #include "integers.h"
 #include "c43Extensions/jm.h"
@@ -749,6 +750,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnTvmVar                    (uint16_t unusedButMandatoryParameter) {}
   void fnTvmBeginMode              (uint16_t unusedButMandatoryParameter) {}
   void fnTvmEndMode                (uint16_t unusedButMandatoryParameter) {}
+
+  void fnEqSolvGraph               (uint16_t unusedButMandatoryParameter) {}
 
   void fnJM                       (uint16_t unusedButMandatoryParameter) {}           //vv JM
   void fnSetSetJM                 (uint16_t unusedButMandatoryParameter) {}
@@ -2943,7 +2946,10 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 2057 */  { fnCurveFittingReset,          NOPARAM,                     "ResetF",                                      "ResetF",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
 /* 2058 */  { fnSetSetJM,                   JC_EXFRAC,                   "EXFRAC",                                      "EXFRAC",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED},
 
-/* 2059 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 2059 */  { fnEqSolvGraph,                EQ_SOLVE,                    "xxSLV",                                       "xxSLV",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
+/* 2060 */  { fnEqSolvGraph,                EQ_PLOT,                     "xxPLT",                                       "xxPLT",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
+
+/* 2061 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 
 
 };

@@ -24,7 +24,7 @@
 #include "typeDefinitions.h"
 #include <stdint.h>
 
-#define   LIM              400 //100     //Number of points; MUST be multiple of 4
+#define   LIM              100 //100     //Number of points; MUST be multiple of 4
 #define   zoomfactor     0.05f     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line

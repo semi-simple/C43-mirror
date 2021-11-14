@@ -293,15 +293,6 @@ void execute_rpn_function(int16_t nbr){
   } else
   if(nbr == 20) {
     Fn_XXEQ();
-  } else
-  if(nbr == 30) {
-      calcRegister_t regStats = findNamedVariable("xx");
-      if(regStats != INVALID_VARIABLE) {
-        fnStore(regStats);
-        fnEqCalc(0);
-        fnRCL(regStats);
-        printf(">>> Solving xx=%f f(xx)=%f\n",convert_to_double(REGISTER_X),convert_to_double(REGISTER_Y));
-      }
   }
 }
 
@@ -958,7 +949,7 @@ void fnGraph (uint16_t func){
 
                 //This is the desired sequence: FORMULA_TEXT, RPN_FORMULA, starting value in X.
 
-                runFunction(ITM_CLSIGMA);
+                fnClSigma(0);
 
                 fnStore(82);
                 fnDrop(0);
@@ -972,12 +963,12 @@ void fnGraph (uint16_t func){
                 fnStore(81);
 
                 fnRCL(82);
-                graph_solver(ix == 20 ? 30:20, graph_xmin, graph_xmax);
+                graph_solver(20, graph_xmin, graph_xmax);
                 break;
       #endif //SAVE_SPACE_DM42_4
     case 21: //PLOT
 
-              runFunction(ITM_CLSIGMA);
+              fnClSigma(0);
 
               ix1 = convert_to_double(REGISTER_X);
               ix0 = convert_to_double(REGISTER_Y);
@@ -998,7 +989,7 @@ void fnGraph (uint16_t func){
               fnRCL((int)(ix));
               fnStore(81);
 
-              graph_demo(ix == 20 ? 30:20, graph_xmin, graph_xmax);
+              graph_solver(20, graph_xmin, graph_xmax);
               fnRCL(80);
               break;
 
@@ -1006,7 +997,7 @@ void fnGraph (uint16_t func){
       #ifndef SAVE_SPACE_DM42_4
                 fnStrtoX("DEMO: Rnn Xo X.SOLV:     ");
                 fnStrtoX("DEMO: Rnn X0 X1 X.PLOT:  ");
-                fnStrtoX("(R=10,12,14,16,18,20) (X0=0 & X1=0 deflt) 20Eqn");
+                fnStrtoX("(R=10,12,14,16,18) (X0=0 & X1=0 default range)");
 
                 fnStrtoX("XEQC43 STO 99 X^3 RCL 99  X^2 20 * + RCL 99 3 * + 300 -   RCL 99");
                 fnStore(10);

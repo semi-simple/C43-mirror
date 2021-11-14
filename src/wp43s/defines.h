@@ -43,6 +43,9 @@
   #undef SAVE_SPACE_DM42_10
   #undef SAVE_SPACE_DM42_11
   #undef SAVE_SPACE_DM42_12
+  #undef SAVE_SPACE_DM42_20
+  #undef SAVE_SPACE_DM42_21
+
   //Key layout option
   #define SWAP_TO_L42_ON_SIM           //JM SWAP THE BELOW TWO DEFINES TO HAVE THE DM42 VERSION ON SIMULATOR
   #undef  SWAP_TO_L42_ON_SIM
@@ -60,12 +63,14 @@
     #define SAVE_SPACE_DM42_3  //002680 SOLVER (already excluded by XY GRAPHDEMOS)
     #define SAVE_SPACE_DM42_5  //001168 bytes: SHOW (old WP43S on VIEW) (I think irrelevant now)
 //  #define SAVE_SPACE_DM42_6  //001648 bytes: ELEC functions
-//  #define SAVE_SPACE_DM42_7  //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
-//  #define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
+  #define SAVE_SPACE_DM42_7  //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
+  #define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
 //  #define SAVE_SPACE_DM42_9  //004448 bytes: define for original SHOW (WP43S) instead of SHOW (new C43)
 //  #define SAVE_SPACE_DM42_10 //005800 bytes: WP43S programming ...
 //  #define SAVE_SPACE_DM42_11 //001552 bytes: Matrix function on entry ...
     #define SAVE_SPACE_DM42_12 //047246 bytes: Standard extra 43S math: SLVQ, PRIME, BESSEL, ELLIPTIC, ZETA, BETA, ORTHO_POLY
+//    #define SAVE_SPACE_DM42_20 //              New solver guts
+//    #define SAVE_SPACE_DM42_21 //              New eq_solver and eq_plotter
 
   //Key layout options
   #define SWAP_TO_L1_ON_DM42           //JM Normally L2 in on DM42

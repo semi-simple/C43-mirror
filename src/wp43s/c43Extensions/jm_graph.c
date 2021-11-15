@@ -892,7 +892,6 @@ EndIteration:
 }
 
 
-
 //-----------------------------------------------------//-----------------------------------------------------
                     //-----------------------------------------------------//-----------------------------------------------------
 //NOTE SETPIXEL OPERANDS NOT CHANGED TO 32b
@@ -922,7 +921,9 @@ void fnGraph (uint16_t func){
   fnClSigma(0);   //For some strange reason runFunction(ITM_CLSIGMA); does not work in this position !!! Cannot solve the riddle, rarther just call the function directly
 
   running_program_jm = true;
-  double ix, ix0, ix1;  
+  #ifndef SAVE_SPACE_DM42_4
+    double ix, ix0, ix1;  
+  #endif
   switch (func) 
   {
 
@@ -965,9 +966,9 @@ void fnGraph (uint16_t func){
                 fnRCL(82);
                 graph_solver(20, graph_xmin, graph_xmax);
                 break;
-      #endif //SAVE_SPACE_DM42_4
-    case 21: //PLOT
-
+    #endif //SAVE_SPACE_DM42_4
+    #ifndef SAVE_SPACE_DM42_3
+      case 21: //PLOT
               fnClSigma(0);
 
               ix1 = convert_to_double(REGISTER_X);
@@ -992,9 +993,10 @@ void fnGraph (uint16_t func){
               graph_solver(20, graph_xmin, graph_xmax);
               fnRCL(80);
               break;
+      #endif
 
-    case 22:
-      #ifndef SAVE_SPACE_DM42_4
+    #ifndef SAVE_SPACE_DM42_4
+      case 22:
                 fnStrtoX("DEMO: Rnn Xo X.SOLV:     ");
                 fnStrtoX("DEMO: Rnn X0 X1 X.PLOT:  ");
                 fnStrtoX("(R=10,12,14,16,18) (X0=0 & X1=0 default range)");

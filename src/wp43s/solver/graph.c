@@ -48,20 +48,20 @@
 
 
 
-
-static void execute_rpn_function(void){
-  calcRegister_t regStats = findNamedVariable("xx");
-  if(regStats != INVALID_VARIABLE) {
-    fnStore(regStats);
-    fnEqCalc(0);
-    fnRCL(regStats);
-    #if (defined VERBOSE_SOLVER0) && (defined PC_BUILD)
-      printRegisterToConsole(REGISTER_X,">>> Solving xx=","");
-      printRegisterToConsole(REGISTER_Y," f(xx)=","\n");
-    #endif
-  }
-}
-
+#ifndef TESTSUITE_BUILD
+	static void execute_rpn_function(void){
+	  calcRegister_t regStats = findNamedVariable("xx");
+	  if(regStats != INVALID_VARIABLE) {
+	    fnStore(regStats);
+	    fnEqCalc(0);
+	    fnRCL(regStats);
+	    #if (defined VERBOSE_SOLVER0) && (defined PC_BUILD)
+	      printRegisterToConsole(REGISTER_X,">>> Solving xx=","");
+	      printRegisterToConsole(REGISTER_Y," f(xx)=","\n");
+	    #endif
+	  }
+	}
+#endif
 
 
 static void graph_eqn(float x_min, float x_max) {
@@ -92,16 +92,17 @@ static void graph_eqn(float x_min, float x_max) {
 
 
 
-
-static void doubleToXRegisterReal34(double x) { //Convert from double to X register REAL34
-  setSystemFlag(FLAG_ASLIFT);
-  liftStack();
-  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-  snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
-  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
-  //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-  setSystemFlag(FLAG_ASLIFT);
-}
+#ifndef TESTSUITE_BUILD
+	static void doubleToXRegisterReal34(double x) { //Convert from double to X register REAL34
+	  setSystemFlag(FLAG_ASLIFT);
+	  liftStack();
+	  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+	  snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
+	  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+	  //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+	  setSystemFlag(FLAG_ASLIFT);
+	}
+#endif
 
 
 
@@ -147,7 +148,8 @@ void check_osc(uint8_t ii){
    }
    switch (ii) {
      case 0b01001001:
-     case 0b10010010: osc++;
+     case 0b10010010:
+     case 0b00100100: osc++;
      default:;
    }
 }

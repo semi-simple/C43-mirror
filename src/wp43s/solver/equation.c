@@ -43,40 +43,43 @@
     uint16_t unused;
   } functionAlias_t;
   TO_QSPI static const functionAlias_t functionAlias[] = {
-    //name             opCode           padding
-    { STD_CUBE_ROOT,   ITM_CUBEROOT,    0}, // Cube root
-    { "ACOSH",         ITM_arcosh,      0}, // Inverse hyperbolic cosine
-    { "ASINH",         ITM_arsinh,      0}, // Inverse hyperbolic sine
-    { "ATANH",         ITM_artanh,      0}, // Inverse hyperbolic tangent
-    { "cn",            ITM_cn,          0}, // Cosinus amplitudinis
-    { "COS",           ITM_cos,         0}, // Cosine
-    { "COSH",          ITM_cosh,        0}, // Hyperbolic cosine
-    { "dn",            ITM_dn,          0}, // Delta amplitudinis
-    { "E",             ITM_Ek,          0}, // Complete or incomplete elliptic integral of 2nd kind
-    { "EXP",           ITM_EXP,         0}, // Natural exponential
-    { "F",             ITM_Fphik,       0}, // Incomplete elliptic integral of 1st kind
-    { "J" STD_SUB_y,   ITM_JYX,         0}, // Bessel function
-    { "K",             ITM_Kk,          0}, // Complete elliptic integral of 1st kind
-    { "lb",            ITM_LOG2,        0}, // Binary logarithm
-    { "LB",            ITM_LOG2,        0}, // Binary logarithm
-    { "lg",            ITM_LOG10,       0}, // Common logarithm
-    { "LG",            ITM_LOG10,       0}, // Common logarithm
-    { "LOG10",         ITM_LOG10,       0}, // Common logarithm
-    { "LOG2",          ITM_LOG2,        0}, // Binary logarithm
-    { "SIN",           ITM_sin,         0}, // Sine
-    { "SINH",          ITM_sinh,        0}, // Hyperbolic sine
-    { "sn",            ITM_sn,          0}, // Sinus amplitudinis
-    { "TAN",           ITM_tan,         0}, // Tangent
-    { "TANH",          ITM_tanh,        0}, // Hyperbolic tangent
-    { "Y" STD_SUB_y,   ITM_YYX,         0}, // Bessel function
-    { STD_beta,        ITM_BETAXY,      0}, // Beta function
-    { STD_GAMMA,       ITM_GAMMAX,      0}, // Gamma function
-    { STD_zeta,        ITM_zetaX,       0}, // Riemann zeta function
-    { STD_ZETA,        ITM_ZETAphik,    0}, // Jacobi zeta function
-    { STD_PI,          ITM_PInk,        0}, // Complete elliptic integral of 3rd kind
-    { STD_psi,         ITM_am,          0}, // Jacobi amplitude
-    { STD_SQUARE_ROOT, ITM_SQUAREROOTX, 0}, // Square root (available through f SQRT in EIM)
-    { "",              0,               0}  // Sentinel
+    //name                       opCode           padding
+    { STD_CUBE_ROOT,             ITM_CUBEROOT,    0}, // Cube root
+    { "ACOSH",                   ITM_arcosh,      0}, // Inverse hyperbolic cosine
+    { "ASINH",                   ITM_arsinh,      0}, // Inverse hyperbolic sine
+    { "ATANH",                   ITM_artanh,      0}, // Inverse hyperbolic tangent
+    { "cn",                      ITM_cn,          0}, // Cosinus amplitudinis
+    { "COS",                     ITM_cos,         0}, // Cosine
+    { "COSH",                    ITM_cosh,        0}, // Hyperbolic cosine
+    { "dn",                      ITM_dn,          0}, // Delta amplitudinis
+    { "E",                       ITM_Ek,          0}, // Complete or incomplete elliptic integral of 2nd kind
+    { "EXP",                     ITM_EXP,         0}, // Natural exponential
+    { "F",                       ITM_Fphik,       0}, // Incomplete elliptic integral of 1st kind
+    { "J" STD_SUB_y,             ITM_JYX,         0}, // Bessel function
+    { "K",                       ITM_Kk,          0}, // Complete elliptic integral of 1st kind
+    { "LB",                      ITM_LOG2,        0}, // Binary logarithm
+    { "LG",                      ITM_LOG10,       0}, // Common logarithm
+    { "LN",                      ITM_LN,          0}, // Natural logarithm
+    { "LOG10",                   ITM_LOG10,       0}, // Common logarithm
+    { "log10",                   ITM_LOG10,       0}, // Common logarithm
+    { "log" STD_SUB_1 STD_SUB_0, ITM_LOG10,       0}, // Common logarithm
+    { "LOG2",                    ITM_LOG2,        0}, // Binary logarithm
+    { "log2",                    ITM_LOG2,        0}, // Binary logarithm
+    { "log" STD_SUB_2,           ITM_LOG2,        0}, // Binary logarithm
+    { "SIN",                     ITM_sin,         0}, // Sine
+    { "SINH",                    ITM_sinh,        0}, // Hyperbolic sine
+    { "sn",                      ITM_sn,          0}, // Sinus amplitudinis
+    { "TAN",                     ITM_tan,         0}, // Tangent
+    { "TANH",                    ITM_tanh,        0}, // Hyperbolic tangent
+    { "Y" STD_SUB_y,             ITM_YYX,         0}, // Bessel function
+    { STD_beta,                  ITM_BETAXY,      0}, // Beta function
+    { STD_GAMMA,                 ITM_GAMMAX,      0}, // Gamma function
+    { STD_zeta,                  ITM_zetaX,       0}, // Riemann zeta function
+    { STD_ZETA,                  ITM_ZETAphik,    0}, // Jacobi zeta function
+    { STD_PI,                    ITM_PInk,        0}, // Complete elliptic integral of 3rd kind
+    { STD_psi,                   ITM_am,          0}, // Jacobi amplitude
+    { STD_SQUARE_ROOT,           ITM_SQUAREROOTX, 0}, // Square root (available through f SQRT in EIM)
+    { "",                        0,               0}  // Sentinel
   };
 #endif /* TESTSUITE_BUILD */
 

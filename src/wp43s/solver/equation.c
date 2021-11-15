@@ -44,20 +44,15 @@
   } functionAlias_t;
   TO_QSPI static const functionAlias_t functionAlias[] = {
     //name                       opCode           padding
-    { STD_CUBE_ROOT,             ITM_CUBEROOT,    0}, // Cube root
     { "ACOSH",                   ITM_arcosh,      0}, // Inverse hyperbolic cosine
     { "ASINH",                   ITM_arsinh,      0}, // Inverse hyperbolic sine
     { "ATAN2",                   ITM_atan2,       0}, // Binary arctangent
     { "ATANH",                   ITM_artanh,      0}, // Inverse hyperbolic tangent
-    { "cn",                      ITM_cn,          0}, // Cosinus amplitudinis
+    { "CEIL",                    ITM_CEIL,        0}, // Ceiling function
     { "COS",                     ITM_cos,         0}, // Cosine
     { "COSH",                    ITM_cosh,        0}, // Hyperbolic cosine
-    { "dn",                      ITM_dn,          0}, // Delta amplitudinis
-    { "E",                       ITM_Ek,          0}, // Complete or incomplete elliptic integral of 2nd kind
     { "EXP",                     ITM_EXP,         0}, // Natural exponential
-    { "F",                       ITM_Fphik,       0}, // Incomplete elliptic integral of 1st kind
-    { "J" STD_SUB_y,             ITM_JYX,         0}, // Bessel function
-    { "K",                       ITM_Kk,          0}, // Complete elliptic integral of 1st kind
+    { "FLOOR",                   ITM_FLOOR,       0}, // Floor function
     { "LB",                      ITM_LOG2,        0}, // Binary logarithm
     { "LG",                      ITM_LOG10,       0}, // Common logarithm
     { "LN",                      ITM_LN,          0}, // Natural logarithm
@@ -67,18 +62,14 @@
     { "LOG2",                    ITM_LOG2,        0}, // Binary logarithm
     { "log2",                    ITM_LOG2,        0}, // Binary logarithm
     { "log" STD_SUB_2,           ITM_LOG2,        0}, // Binary logarithm
+    { "MAX",                     ITM_Max,         0}, // Maximum
+    { "MIN",                     ITM_Min,         0}, // Minimum
     { "SIN",                     ITM_sin,         0}, // Sine
     { "SINH",                    ITM_sinh,        0}, // Hyperbolic sine
-    { "sn",                      ITM_sn,          0}, // Sinus amplitudinis
     { "TAN",                     ITM_tan,         0}, // Tangent
     { "TANH",                    ITM_tanh,        0}, // Hyperbolic tangent
-    { "Y" STD_SUB_y,             ITM_YYX,         0}, // Bessel function
-    { STD_beta,                  ITM_BETAXY,      0}, // Beta function
     { STD_GAMMA,                 ITM_GAMMAX,      0}, // Gamma function
     { STD_zeta,                  ITM_zetaX,       0}, // Riemann zeta function
-    { STD_ZETA,                  ITM_ZETAphik,    0}, // Jacobi zeta function
-    { STD_PI,                    ITM_PInk,        0}, // Complete elliptic integral of 3rd kind
-    { STD_psi,                   ITM_am,          0}, // Jacobi amplitude
     { STD_SQUARE_ROOT,           ITM_SQUAREROOTX, 0}, // Square root (available through f SQRT in EIM)
     { "",                        0,               0}  // Sentinel
   };
@@ -810,13 +801,13 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0)) {
+          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemCatalogName, strPtr) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemSoftmenuName, strPtr) == 0)) {
+          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (_compareStr(indexOfItems[i].itemSoftmenuName, strPtr) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
@@ -824,7 +815,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
           stringToUtf8(strPtr, (uint8_t *)errorMessage);
-          moreInfoOnError("In function parseEquation:", errorMessage, "is not recognized as a function", NULL);
+          moreInfoOnError("In function parseEquation:", errorMessage, "is not recognized as a function", "or not for equations");
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       break;

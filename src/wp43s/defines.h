@@ -249,6 +249,11 @@ typedef enum {
 #define CAT_AINT                           ( 9 << 4) // Upper case alpha_INTL
 #define CAT_aint                           (10 << 4) // Lower case alpha_intl
 
+// EIM (Equation Input Mode) status (1 bit)
+#define EIM_STATUS                            0x0100
+#define EIM_DISABLED                        (0 << 8) // Function disabled in EIM
+#define EIM_ENABLED                         (1 << 8) // Function enabled in EIM
+
 #define INC_FLAG                                   0
 #define DEC_FLAG                                   1
 

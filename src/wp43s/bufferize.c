@@ -316,6 +316,12 @@ void kill_ASB_icon(void) {
                                 item == ITM_VERTICAL_BAR        ? "||" :
                                 item == ITM_ROOT_SIGN           ? STD_SQUARE_ROOT "()" :
                                 item == ITM_ALOG_SYMBOL         ? "e" STD_SUB_E "^()" :
+                                item == ITM_LG_SIGN             ? "LOG(" :   //JM C43
+                                item == ITM_LN_SIGN             ? "LN("  :   //JM C43
+                                item == ITM_SIN_SIGN            ? "SIN(" :   //JM C43
+                                item == ITM_COS_SIGN            ? "COS(" :   //JM C43
+                                item == ITM_TAN_SIGN            ? "TAN(" :   //JM C43
+                                item == ITM_XX_SIGN             ? "xx "  :   //JM C43
                                 indexOfItems[item].itemSoftmenuName;
           char *aimCursorPos = aimBuffer;
           char *aimBottomPos = aimBuffer + stringByteLength(aimBuffer);
@@ -327,7 +333,15 @@ void kill_ASB_icon(void) {
             case ITM_ALOG_SYMBOL:
               xCursor += 5;
               break;
+            case ITM_LG_SIGN :    //JM C43
+            case ITM_SIN_SIGN :   //JM C43
+            case ITM_COS_SIGN :   //JM C43
+            case ITM_TAN_SIGN :   //JM C43
+              xCursor += 4;
+              break;
             case ITM_ROOT_SIGN:
+            case ITM_LN_SIGN :   //JM C43
+            case ITM_XX_SIGN :   //JM C43
               xCursor += 3;
               break;
             case ITM_PAIR_OF_PARENTHESES:

@@ -2949,7 +2949,15 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 2059 */  { fnEqSolvGraph,                EQ_SOLVE,                    "xxSLV",                                       "xxSLV",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 /* 2060 */  { fnEqSolvGraph,                EQ_PLOT,                     "xxPLT",                                       "xxPLT",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED},
 
-/* 2061 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 2061 */  { addItemToBuffer,              NOPARAM,                     "",                                            "LOG",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED  },
+/* 2062 */  { addItemToBuffer,              NOPARAM,                     "",                                            "LN",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED  },
+/* 2063 */  { addItemToBuffer,              NOPARAM,                     "",                                            "xx",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED  },
+/* 2064 */  { addItemToBuffer,              NOPARAM,                     "",                                            "SIN",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED  },
+/* 2065 */  { addItemToBuffer,              NOPARAM,                     "",                                            "COS",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED  },
+/* 2066 */  { addItemToBuffer,              NOPARAM,                     "",                                            "TAN",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED  },
+
+
+/* 2067 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 
 
 };

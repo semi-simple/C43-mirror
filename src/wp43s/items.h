@@ -2129,7 +2129,14 @@
 #define ITM_XXSLV                     2059
 #define ITM_XXPLT                     2060
 
-#define LAST_ITEM                     2061   //JM
+#define ITM_LG_SIGN                   2061
+#define ITM_LN_SIGN                   2062
+#define ITM_XX_SIGN                   2063
+#define ITM_SIN_SIGN                  2064
+#define ITM_COS_SIGN                  2065
+#define ITM_TAN_SIGN                  2066
+
+#define LAST_ITEM                     2067   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

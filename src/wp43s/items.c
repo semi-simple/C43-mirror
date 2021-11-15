@@ -198,6 +198,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnArcsinh                   (uint16_t unusedButMandatoryParameter) {}
   void fnArctan                    (uint16_t unusedButMandatoryParameter) {}
   void fnArctanh                   (uint16_t unusedButMandatoryParameter) {}
+  void fnAtan2                     (uint16_t unusedButMandatoryParameter) {}
   void fnCos                       (uint16_t unusedButMandatoryParameter) {}
   void fnCosh                      (uint16_t unusedButMandatoryParameter) {}
   void fnSin                       (uint16_t unusedButMandatoryParameter) {}
@@ -2541,5 +2542,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1773 */  { fnRecall,                     RESERVED_VARIABLE_PMT,       "",                                            "PMT",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 /* 1774 */  { fnRecall,                     RESERVED_VARIABLE_PV,        "",                                            "PV",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED  },
 
-/* 1775 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
+/* 1775 */  { fnAtan2,                      NOPARAM,                     "atan2",                                       "atan2",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED  },
+
+/* 1776 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED},
 };

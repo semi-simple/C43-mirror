@@ -47,6 +47,7 @@
     { STD_CUBE_ROOT,             ITM_CUBEROOT,    0}, // Cube root
     { "ACOSH",                   ITM_arcosh,      0}, // Inverse hyperbolic cosine
     { "ASINH",                   ITM_arsinh,      0}, // Inverse hyperbolic sine
+    { "ATAN2",                   ITM_atan2,       0}, // Binary arctangent
     { "ATANH",                   ITM_artanh,      0}, // Inverse hyperbolic tangent
     { "cn",                      ITM_cn,          0}, // Cosinus amplitudinis
     { "COS",                     ITM_cos,         0}, // Cosine

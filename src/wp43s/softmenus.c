@@ -88,7 +88,7 @@ TO_QSPI const int16_t menu_EXP[]         = { ITM_CUBE,                      ITM_
                                              ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
 
 TO_QSPI const int16_t menu_TRI[]         = { ITM_sin,                       ITM_arcsin,                 ITM_cos,                  ITM_arccos,            ITM_tan,                     ITM_arctan,
-                                             ITM_sinc,                      ITM_sincpi,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_NULL,
+                                             ITM_sinc,                      ITM_sincpi,                 ITM_NULL,                 ITM_NULL,              ITM_NULL,                    ITM_atan2,
                                              ITM_sinh,                      ITM_arsinh,                 ITM_cosh,                 ITM_arcosh,            ITM_tanh,                    ITM_artanh                    };
 
 TO_QSPI const int16_t menu_FIN[]         = { ITM_PC,                        ITM_PCMRR,                  ITM_PCT,                  ITM_PCSIGMA,           ITM_PCPMG,                   -MNU_TVM                      };

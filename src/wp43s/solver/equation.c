@@ -289,6 +289,11 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         tmpVal = i;
         break;
       }
+      else if(*tmpPtr == '(') {
+        inLabel = false;
+        tmpVal = i;
+        break;
+      }
     }
     bufPtr = tmpString;
 
@@ -313,8 +318,23 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         doubleBytednessHistory <<= 1;
         *bufPtr = *strPtr;
 
+        /* Argument separator */
+        if((!inLabel) && (*strPtr) == ':') {
+          _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
+          *bufPtr       = *strPtr;
+          *(bufPtr + 1) = 0;
+          strWidth += stringWidth(bufPtr, &standardFont, true, true);
+          *(bufPtr + 1) = STD_SPACE_PUNCTUATION[0];
+          *(bufPtr + 2) = STD_SPACE_PUNCTUATION[1];
+          *(bufPtr + 3) = 0;
+          doubleBytednessHistory <<= 1;
+          doubleBytednessHistory |= 1;
+          bufPtr += 1;
+          unaryMinus = true;
+        }
+
         /* End of label */
-        if((*strPtr) == ':') {
+        else if((*strPtr) == ':') {
           *(bufPtr + 1) = 0;
           strWidth += stringWidth(bufPtr, &standardFont, true, true);
           *(bufPtr + 1) = ' ';
@@ -322,13 +342,6 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory <<= 1;
           bufPtr += 1;
           inLabel = false;
-        }
-
-        /* Argument separator */
-        else if((!inLabel) && (*strPtr) == ' ') {
-          *bufPtr       = *strPtr;
-          *(bufPtr + 1) = 0;
-          unaryMinus = true;
         }
 
         /* Unary minus */
@@ -846,6 +859,10 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
       ++strPtr;
       break;
     }
+    else if(*strPtr == '(') {
+      labeled = false;
+      break;
+    }
   }
   if(!labeled) {
     strPtr = (char *)TO_PCMEMPTR(allFormulae[equationId].pointerToFormulaData);
@@ -853,13 +870,6 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
 
   while(*strPtr != 0) {
     switch(*strPtr) {
-      case ':':
-        displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          moreInfoOnError("In function parseEquation:", "unexpected \":\"", "label too long or \":\" appeared more than once", NULL);
-        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-        return;
-
       case '(':
         if(bufPtr != buffer) {
           *(bufPtr++) = 0;
@@ -888,7 +898,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
       case ')':
       case '^':
       case '!':
-      case ' ':
+      case ':':
       case '|':
         if(equalAppeared && (*strPtr == '=')) {
           displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -910,8 +920,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         }
         else if(bufPtr != buffer) {
           *(bufPtr++) = 0;
-          if(*strPtr != ':')
-            _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
+          _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
           afterClosingParenthesis = (*strPtr == ')');
           unaryMinusCanOccur = false;
         }
@@ -941,7 +950,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           afterClosingParenthesis = true;
           unaryMinusCanOccur = false;
         }
-        else if(afterClosingParenthesis && *strPtr != ' ') {
+        else if(afterClosingParenthesis && *strPtr != ':') {
           afterClosingParenthesis = false;
           unaryMinusCanOccur = false;
         }

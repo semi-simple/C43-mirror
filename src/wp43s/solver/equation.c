@@ -112,7 +112,9 @@ void fnEqEdit(uint16_t unusedButMandatoryParameter) {
   if(equationString) xcopy(aimBuffer, equationString, stringByteLength(equationString) + 1);
   else               aimBuffer[0] = 0;
   calcMode = CM_EIM;
-  alphaCase = AC_UPPER;
+  alphaCase = AC_UPPER;  
+  nextChar = NC_NORMAL;//JM C43
+  numLock = false;     //JM C43
   setSystemFlag(FLAG_ALPHA);
   yCursor = 0;
   xCursor = equationString ? stringGlyphLength(equationString) : 0;

@@ -831,6 +831,11 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
  if(calcMode == CM_AIM || calcMode == CM_EIM || (tam.mode && tam.alpha) ) {
    if(!NL && GSHIFT) {
       switch(item) {
+        case ITM_ADD               : * item1 = ITM_PLUS   ; break;
+        case ITM_SUB               : * item1 = ITM_MINUS  ; break;
+        case ITM_MULT              : * item1 = ITM_CROSS  ; break;
+        case ITM_DIV               : * item1 = ITM_SLASH  ; break;
+        
         case ITM_PI                : * item1 = ITM_7      ; break;
         case ITM_pi                : * item1 = ITM_7      ; break;
         case ITM_QOPPA             : * item1 = ITM_8      ; break;

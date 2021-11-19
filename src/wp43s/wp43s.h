@@ -228,6 +228,7 @@
   extern int16_t               *menu_RAM;
   extern int16_t                numberOfTamMenusToPop;
   extern int16_t                itemToBeAssigned;
+  extern int16_t                cachedDynamicMenu;
 
   extern uint16_t               globalFlags[7];
   extern uint16_t               glyphRow[NUMBER_OF_GLYPH_ROWS];

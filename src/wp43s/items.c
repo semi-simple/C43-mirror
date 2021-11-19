@@ -126,6 +126,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     }
 
     updateMatrixHeightCache();
+    cachedDynamicMenu = 0;
     #ifdef PC_BUILD
       refreshLcd(NULL);
     #endif // PC_BUILD

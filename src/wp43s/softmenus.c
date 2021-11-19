@@ -862,7 +862,10 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     bool_t dottedTopLine;
 
     if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
-      initVariableSoftmenu(m);
+      if(m != cachedDynamicMenu) {
+        initVariableSoftmenu(m);
+        cachedDynamicMenu = m;
+      }
       numberOfItems = dynamicSoftmenu[m].numItems;
     }
     else if(softmenu[m].menuItem == -MNU_EQN && numberOfFormulae == 0) {

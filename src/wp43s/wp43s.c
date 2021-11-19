@@ -151,6 +151,7 @@ int16_t                dynamicMenuItem;
 int16_t               *menu_RAM;
 int16_t                numberOfTamMenusToPop;
 int16_t                itemToBeAssigned;
+int16_t                cachedDynamicMenu;
 
 uint16_t               globalFlags[7];
 uint16_t               freeProgramBytes;

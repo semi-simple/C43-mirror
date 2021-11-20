@@ -403,7 +403,9 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();
-      refreshModeGui();
+      #ifdef PC_BUILD
+        if(calcMode == CM_AIM || calcMode == CM_EIM) refreshModeGui();
+      #endif
 
       return ITM_NOP;
     }
@@ -429,7 +431,9 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();
-      refreshModeGui();
+      #ifdef PC_BUILD
+        if(calcMode == CM_AIM || calcMode == CM_EIM) refreshModeGui();
+      #endif
 
       return ITM_NOP;
     }
@@ -458,7 +462,9 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();                                                                                                         //JM shifts
-      refreshModeGui();
+      #ifdef PC_BUILD
+        if(calcMode == CM_AIM || calcMode == CM_EIM) refreshModeGui();
+      #endif
 
       return ITM_NOP;
     }  

@@ -1926,14 +1926,11 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
     lbl[0] = 0;
   } 
   else {
-    //printf("####### %d %d ",alphaCase,key->primaryAim);
     if( (ITM_A <= key->primaryAim && key->primaryAim <= ITM_Z)) {             //if in upper case, show lower case on yellow
       stringToUtf8(indexOfItems[((max(key->primaryAim, -key->primaryAim)) + ((alphaCase == AC_UPPER) ? 26:0 ))].itemSoftmenuName, lbl);
-      //printf(" 1 %s \n",lbl);
     }
     else {                                                                                               //
       stringToUtf8(indexOfItems[numlockReplacements(1,max(key->primaryAim, -key->primaryAim),!numLock,false,false)].itemSoftmenuName, lbl);
-      //printf(" 2 %s \n",lbl);
     }
   }
 
@@ -1979,12 +1976,11 @@ void labelCaptionAimFaChr(const calcKey_t* key, GtkWidget* lblF, int chrF) {
 
 void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGreek, GtkWidget *lblL) {
   uint8_t lbl[22];
-
   if(key->primaryAim == ITM_NULL) {
     lbl[0] = 0;
   } 
   else {
-    if(alphaCase == AC_LOWER && (ITM_A <= key->primaryAim && key->primaryAim <= ITM_Z)) {
+    if( ((!shiftF && (alphaCase == AC_LOWER)) || ( shiftF && (alphaCase == AC_UPPER))) && (ITM_A <= key->primaryAim && key->primaryAim <= ITM_Z)) {
       stringToUtf8(indexOfItems[numlockReplacements(5,max(key->primaryAim, -key->primaryAim) + 26, numLock, shiftF, shiftG)].itemSoftmenuName, lbl);
     }
     else {

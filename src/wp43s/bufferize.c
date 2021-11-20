@@ -322,6 +322,7 @@ void kill_ASB_icon(void) {
                                 item == ITM_COS_SIGN            ? "COS(" :   //JM C43
                                 item == ITM_TAN_SIGN            ? "TAN(" :   //JM C43
                                 item == ITM_XX_SIGN             ? "xx"  :   //JM C43
+                                item == ITM_OBELUS              ? STD_SLASH  :   //JM C43
                                 indexOfItems[item].itemSoftmenuName;
           char *aimCursorPos = aimBuffer;
           char *aimBottomPos = aimBuffer + stringByteLength(aimBuffer);

@@ -247,15 +247,9 @@ static uint32_t _checkExponent(const char *strPtr) {
   }
 }
 
-static int32_t _compareChar(const char *char1, const char *char2) {
-  int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0]) | 0x7f) << 8) | char1[1]) : char1[0];
-  int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0]) | 0x7f) << 8) | char2[1]) : char2[0];
-  return code2 - code1;
-}
-
 static void _addSpace(char **bufPtr, int16_t *strWidth, uint32_t *doubleBytednessHistory) { // space between an operand and an operator
   bool_t spaceShallBeAdded = true;
-  if(((*bufPtr) >= (tmpString + 2)) && (_compareChar((*bufPtr) - 2, STD_SPACE_PUNCTUATION) == 0)) spaceShallBeAdded = false;
+  if(((*bufPtr) >= (tmpString + 2)) && (compareChar((*bufPtr) - 2, STD_SPACE_PUNCTUATION) == 0)) spaceShallBeAdded = false;
   if(((*bufPtr) >= (tmpString + 1)) && (((*doubleBytednessHistory) & 1) == 0 && *((*bufPtr) - 1) == ' ')) spaceShallBeAdded = false;
   if(spaceShallBeAdded) {
     **bufPtr         = STD_SPACE_PUNCTUATION[0];
@@ -330,7 +324,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         _inToken = ((*strPtr) != '+' && (*strPtr) != '-' && (*strPtr) != ':' && (*strPtr) != '^' &&
                     (*strPtr) != '(' && (*strPtr) != ')' && (*strPtr) != ' ' && (*strPtr) != '=' &&
                     (*strPtr) != ';' && (*strPtr) != '|' &&
-                    _compareChar(strPtr, STD_CROSS) != 0 && _compareChar(strPtr, STD_DOT) != 0);
+                    compareChar(strPtr, STD_CROSS) != 0 && compareChar(strPtr, STD_DOT) != 0);
         _inNumber = (((*strPtr) >= '0' && (*strPtr) <= '9') || (*strPtr) == '.');
 
         /* Argument separator */
@@ -421,7 +415,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         }
 
         /* Multiply */
-        else if((!inLabel) && (_compareChar(strPtr, STD_CROSS) == 0 || _compareChar(strPtr, STD_DOT) == 0)) {
+        else if((!inLabel) && (compareChar(strPtr, STD_CROSS) == 0 || compareChar(strPtr, STD_DOT) == 0)) {
           _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           //if(getSystemFlag(FLAG_MULTx)) {
           //  *bufPtr       = STD_CROSS[0];
@@ -731,12 +725,20 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
             return;
           }
         }
-        (void)findOrAllocateNamedVariable(strPtr);
-        xcopy(bufPtr, strPtr, stringByteLength(strPtr) + 1);
-        bufPtr += stringByteLength(strPtr) + 1;
-        bufPtr[0] = 0;
-        if(tmpVal == 4) {
-          _menuF6(bufPtr);
+        if(validateName(strPtr)) {
+          (void)findOrAllocateNamedVariable(strPtr);
+          xcopy(bufPtr, strPtr, stringByteLength(strPtr) + 1);
+          bufPtr += stringByteLength(strPtr) + 1;
+          bufPtr[0] = 0;
+          if(tmpVal == 4) {
+            _menuF6(bufPtr);
+          }
+        }
+        else {
+          displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            moreInfoOnError("In function parseEquation:", strPtr, "is not a valid name!", NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
         }
       }
       break;
@@ -753,7 +755,15 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
             return;
           }
         }
-        reallyRunFunction(ITM_RCL, findNamedVariable(strPtr));
+        if(validateName(strPtr)) {
+          reallyRunFunction(ITM_RCL, findNamedVariable(strPtr));
+        }
+        else {
+          displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            moreInfoOnError("In function parseEquation:", strPtr, "is not a valid name!", NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        }
       }
       else if(parserHint == PARSER_HINT_NUMERIC) {
         liftStack();
@@ -1019,7 +1029,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         if((*strPtr >= '0' && *strPtr <= '9') || *strPtr == '.') {
           ++numericCount;
         }
-        if(_compareChar(strPtr, STD_CROSS) == 0 || _compareChar(strPtr, STD_DOT) == 0) {
+        if(compareChar(strPtr, STD_CROSS) == 0 || compareChar(strPtr, STD_DOT) == 0) {
           *(bufPtr++) = 0;
           _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
           buffer[0] = *(strPtr++);

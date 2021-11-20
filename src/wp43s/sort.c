@@ -23,6 +23,14 @@
 
 
 
+int32_t compareChar(const char *char1, const char *char2) {
+  int16_t code1 = (char1[0] & 0x80) ? ((((uint16_t)(char1[0] & 0x7f)) << 8) | (uint16_t)((uint8_t)(char1)[1])) : char1[0];
+  int16_t code2 = (char2[0] & 0x80) ? ((((uint16_t)(char2[0] & 0x7f)) << 8) | (uint16_t)((uint8_t)(char2)[1])) : char2[0];
+  return (int32_t)code1 - (int32_t)code2;
+}
+
+
+
 int32_t compareString(const char *stra, const char *strb, int32_t comparisonType) {
   int32_t lga, lgb, i;
   int16_t posa, posb, ranka, rankb;

@@ -190,6 +190,7 @@ bool_t lastshiftG = false;
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two
             fnKeyInCatalog = 1;
+            resetShiftState();   //JM moved down here from above
             addItemToBuffer(item);
             fnKeyInCatalog = 0;
             if(calcMode == CM_EIM && isAlphabeticSoftmenu()) {
@@ -402,6 +403,7 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();
+      refreshModeGui();
 
       return ITM_NOP;
     }
@@ -427,6 +429,7 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();
+      refreshModeGui();
 
       return ITM_NOP;
     }
@@ -455,6 +458,7 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();                                                                                                         //JM shifts
+      refreshModeGui();
 
       return ITM_NOP;
     }  

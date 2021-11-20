@@ -371,6 +371,24 @@ void kill_ASB_icon(void) {
           T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);  //place the cursor at the next glyph boundary
           //JMCURSOR ^^ REPLACES THE FOLLOWING XCOPY, WHICH NORMALLY JUST ADDS A CHARACTER TO THE END OF THE STRING
           // xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
+          switch(item) { // NOTE: cursor must jump on 3 places for the new COS_SIGN etc.
+            case ITM_LG_SIGN :    //JM C43
+            case ITM_SIN_SIGN :   //JM C43
+            case ITM_COS_SIGN :   //JM C43
+            case ITM_TAN_SIGN :   //JM C43
+              T_cursorPos += 2;
+              break;
+            case ITM_ROOT_SIGN:
+            case ITM_LN_SIGN :   //JM C43
+              T_cursorPos += 1;
+              break;
+            case ITM_PAIR_OF_PARENTHESES:
+            case ITM_XX_SIGN :   //JM C43
+              T_cursorPos += 1;
+              break;
+            default:;
+          }
+
 #else
           xcopy(aimBuffer + stringByteLength(aimBuffer), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
 #endif

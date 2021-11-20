@@ -1747,34 +1747,5 @@ void fnXEQNEW (uint16_t unusedButMandatoryParameter) {
 }
 
 
-void fnCla(uint16_t unusedButMandatoryParameter){
-  //Not using calcModeAim becose some modes are reset which should not be
-  aimBuffer[0]=0;
-  T_cursorPos = 0;
-  nextChar = NC_NORMAL;
-  xCursor = 1;
-  yCursor = Y_POSITION_OF_AIM_LINE + 6;
-  cursorFont = &standardFont;
-  cursorEnabled = true;
-  last_CM=252;
-  #ifndef TESTSUITE_BUILD
-    clearRegisterLine(AIM_REGISTER_LINE, true, true);
-    refreshRegisterLine(AIM_REGISTER_LINE);        //JM Execute here, to make sure that the 5/2 line check is done
-  #endif
-  last_CM=253;
-}
-
-
-void fnCln(uint16_t unusedButMandatoryParameter){
-  #ifndef TESTSUITE_BUILD
-    nimNumberPart = NP_EMPTY;
-    calcModeNim(0);
-    last_CM=252;
-    refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
-    last_CM=253;
-    addItemToNimBuffer(ITM_0);
-  #endif
-}
-
 
 

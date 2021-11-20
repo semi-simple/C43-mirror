@@ -107,6 +107,8 @@ void     btnFnPressed_StateMachine (void *unused, void *data);
 void     btnFnReleased_StateMachine(void *unused, void *data);
 #endif
 
+void fnCla                   (uint16_t unusedButMandatoryParameter);
+void fnCln                   (uint16_t unusedButMandatoryParameter);
 
 void fnT_ARROW(uint16_t command);
 

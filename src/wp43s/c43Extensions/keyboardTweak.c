@@ -22,6 +22,7 @@
 
 #include "c43Extensions/keyboardTweak.h"
 
+#include "bufferize.h"
 #include "charString.h"
 #include "flags.h"
 #include "fonts.h"
@@ -836,35 +837,6 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
         case ITM_MULT              : * item1 = ITM_CROSS  ; break;
         case ITM_DIV               : * item1 = ITM_SLASH  ; break;
         
-        case ITM_PI                : * item1 = ITM_7      ; break;
-        case ITM_pi                : * item1 = ITM_7      ; break;
-        case ITM_QOPPA             : * item1 = ITM_8      ; break;
-        case ITM_qoppa             : * item1 = ITM_8      ; break;
-        case ITM_RHO               : * item1 = ITM_9      ; break;
-        case ITM_rho               : * item1 = ITM_9      ; break;
-        case ITM_SIGMA             : * item1 = ITM_SLASH  ; break;//ITM_OBELUS ;
-        case ITM_sigma             : * item1 = ITM_SLASH  ; break; //ITM_OBELUS ;
-        case ITM_TAU               : * item1 = ITM_4      ; break;
-        case ITM_tau               : * item1 = ITM_4      ; break;
-        case ITM_PHI               : * item1 = ITM_5      ; break;
-        case ITM_phi               : * item1 = ITM_5      ; break;
-        case ITM_PSI               : * item1 = ITM_6      ; break;
-        case ITM_psi               : * item1 = ITM_6      ; break;
-        case ITM_OMEGA             : * item1 = ITM_CROSS  ; break; //ITM_CROSS  ;ITM_ASTERISK
-        case ITM_omega             : * item1 = ITM_CROSS  ; break; //ITM_CROSS  ;ITM_ASTERISK
-        case ITM_XI                : * item1 = ITM_1      ; break;
-        case ITM_xi                : * item1 = ITM_1      ; break;
-        case ITM_UPSILON           : * item1 = ITM_2      ; break;
-        case ITM_upsilon           : * item1 = ITM_2      ; break;
-        case ITM_ZETA              : * item1 = ITM_3      ; break;
-        case ITM_zeta              : * item1 = ITM_3      ; break;
-        case ITM_SAMPI             : * item1 = ITM_MINUS  ; break;
-        case ITM_sampi             : * item1 = ITM_MINUS  ; break;
-        case -MNU_ALPHA            : * item1 = ITM_0      ; break;
-        case -MNU_ALPHADOT         : * item1 = ITM_PERIOD ; break;
-        case -MNU_ALPHAMATH        : * item1 = ITM_SLASH  ; break; //ITM_NULL   ;
-        case -MNU_ALPHAINTL        : * item1 = ITM_PLUS   ; break;
-
         default:
            #ifdef PC_BUILD
              jm_show_comment("^^^^processKeyAction0/keyReplacements:CM_AIM: Numlock not active but number not handled");
@@ -1373,4 +1345,41 @@ void fnT_ARROW(uint16_t command) {
 }
 
 
+
+
+void fnCla(uint16_t unusedButMandatoryParameter){
+  if(calcMode == CM_AIM) {
+    //Not using calcModeAim becose some modes are reset which should not be
+    aimBuffer[0]=0;
+    T_cursorPos = 0;
+    nextChar = NC_NORMAL;
+    xCursor = 1;
+    yCursor = Y_POSITION_OF_AIM_LINE + 6;
+    cursorFont = &standardFont;
+    cursorEnabled = true;
+    last_CM=252;
+    #ifndef TESTSUITE_BUILD
+      clearRegisterLine(AIM_REGISTER_LINE, true, true);
+      refreshRegisterLine(AIM_REGISTER_LINE);        //JM Execute here, to make sure that the 5/2 line check is done
+    #endif
+    last_CM=253;
+  } else
+  if(calcMode == CM_EIM) {
+    while (xCursor > 0) {
+      fnKeyBackspace(0);
+    }
+  }
+}
+
+
+void fnCln(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
+    nimNumberPart = NP_EMPTY;
+    calcModeNim(0);
+    last_CM=252;
+    refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+    last_CM=253;
+    addItemToNimBuffer(ITM_0);
+  #endif
+}
 

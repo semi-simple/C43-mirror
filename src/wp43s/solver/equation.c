@@ -43,35 +43,41 @@
     uint16_t unused;
   } functionAlias_t;
   TO_QSPI static const functionAlias_t functionAlias[] = {
-    //name                       opCode           padding
-    { "ACOSH",                   ITM_arcosh,      0}, // Inverse hyperbolic cosine
-    { "ASINH",                   ITM_arsinh,      0}, // Inverse hyperbolic sine
-    { "ATAN2",                   ITM_atan2,       0}, // Binary arctangent
-    { "ATANH",                   ITM_artanh,      0}, // Inverse hyperbolic tangent
-    { "CEIL",                    ITM_CEIL,        0}, // Ceiling function
-    { "COS",                     ITM_cos,         0}, // Cosine
-    { "COSH",                    ITM_cosh,        0}, // Hyperbolic cosine
-    { "EXP",                     ITM_EXP,         0}, // Natural exponential
-    { "FLOOR",                   ITM_FLOOR,       0}, // Floor function
-    { "LB",                      ITM_LOG2,        0}, // Binary logarithm
-    { "LG",                      ITM_LOG10,       0}, // Common logarithm
-    { "LN",                      ITM_LN,          0}, // Natural logarithm
-    { "LOG10",                   ITM_LOG10,       0}, // Common logarithm
-    { "log10",                   ITM_LOG10,       0}, // Common logarithm
-    { "log" STD_SUB_1 STD_SUB_0, ITM_LOG10,       0}, // Common logarithm
-    { "LOG2",                    ITM_LOG2,        0}, // Binary logarithm
-    { "log2",                    ITM_LOG2,        0}, // Binary logarithm
-    { "log" STD_SUB_2,           ITM_LOG2,        0}, // Binary logarithm
-    { "MAX",                     ITM_Max,         0}, // Maximum
-    { "MIN",                     ITM_Min,         0}, // Minimum
-    { "SIN",                     ITM_sin,         0}, // Sine
-    { "SINH",                    ITM_sinh,        0}, // Hyperbolic sine
-    { "TAN",                     ITM_tan,         0}, // Tangent
-    { "TANH",                    ITM_tanh,        0}, // Hyperbolic tangent
-    { STD_GAMMA,                 ITM_GAMMAX,      0}, // Gamma function
-    { STD_zeta,                  ITM_zetaX,       0}, // Riemann zeta function
-    { STD_SQUARE_ROOT,           ITM_SQUAREROOTX, 0}, // Square root (available through f SQRT in EIM)
-    { "",                        0,               0}  // Sentinel
+    //name                                   opCode           padding
+    { "ACOSH",                               ITM_arcosh,      0}, // Inverse hyperbolic cosine
+    { "ASINH",                               ITM_arsinh,      0}, // Inverse hyperbolic sine
+    { "ATAN2",                               ITM_atan2,       0}, // Binary arctangent
+    { "ATANH",                               ITM_artanh,      0}, // Inverse hyperbolic tangent
+    { "CEIL",                                ITM_CEIL,        0}, // Ceiling function
+    { "COS",                                 ITM_cos,         0}, // Cosine
+    { "COSH",                                ITM_cosh,        0}, // Hyperbolic cosine
+    { "EXP",                                 ITM_EXP,         0}, // Natural exponential
+    { "FLOOR",                               ITM_FLOOR,       0}, // Floor function
+    { "gd",                                  ITM_GD,          0}, // Gudermannian function
+    { "gd" STD_SUP_MINUS_1,                  ITM_GDM1,        0}, // Inverse Gudermannian function
+    { "gd" STD_SUP_MINUS STD_SUP_1,          ITM_GDM1,        0}, // Inverse Gudermannian function
+    { "g" STD_SUB_d STD_SUP_MINUS_1,         ITM_GDM1,        0}, // Inverse Gudermannian function
+    { "g" STD_SUB_d STD_SUP_MINUS STD_SUP_1, ITM_GDM1,        0}, // Inverse Gudermannian function
+    { "LB",                                  ITM_LOG2,        0}, // Binary logarithm
+    { "LG",                                  ITM_LOG10,       0}, // Common logarithm
+    { "LN",                                  ITM_LN,          0}, // Natural logarithm
+    { "LOG10",                               ITM_LOG10,       0}, // Common logarithm
+    { "log10",                               ITM_LOG10,       0}, // Common logarithm
+    { "log" STD_SUB_1 STD_SUB_0,             ITM_LOG10,       0}, // Common logarithm
+    { "LOG2",                                ITM_LOG2,        0}, // Binary logarithm
+    { "log2",                                ITM_LOG2,        0}, // Binary logarithm
+    { "log" STD_SUB_2,                       ITM_LOG2,        0}, // Binary logarithm
+    { "MAX",                                 ITM_Max,         0}, // Maximum
+    { "MIN",                                 ITM_Min,         0}, // Minimum
+    { "SIN",                                 ITM_sin,         0}, // Sine
+    { "SINH",                                ITM_sinh,        0}, // Hyperbolic sine
+    { "TAN",                                 ITM_tan,         0}, // Tangent
+    { "TANH",                                ITM_tanh,        0}, // Hyperbolic tangent
+    { "W" STD_SUP_MINUS STD_SUP_1,           ITM_tanh,        0}, // Inverse function of Lambert's W
+    { STD_GAMMA,                             ITM_GAMMAX,      0}, // Gamma function
+    { STD_zeta,                              ITM_zetaX,       0}, // Riemann zeta function
+    { STD_SQUARE_ROOT,                       ITM_SQUAREROOTX, 0}, // Square root (available through f SQRT in EIM)
+    { "",                                    0,               0}  // Sentinel
   };
 #endif /* TESTSUITE_BUILD */
 
@@ -805,19 +811,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           _processOperator(PARSER_OPERATOR_ITM_EQUAL, mvarBuffer);
         }
         else if(_compareStr(":", strPtr) == 0) {
-          // label will be skipped
-        }
-        else if(_compareStr(" ", strPtr) == 0) {
-          uint32_t opStackTop = 0xffffffffu;
-          for(uint32_t i = 0; i <= PARSER_OPERATOR_STACK_SIZE; ++i) {
-            if((i == PARSER_OPERATOR_STACK_SIZE) || (((uint16_t *)mvarBuffer)[i] == 0)) {
-              opStackTop = i;
-              break;
-            }
-          }
-          if((opStackTop != 0) && (((uint16_t *)mvarBuffer)[opStackTop - 1] == ITM_Ek)) {
-            ((uint16_t *)mvarBuffer)[opStackTop - 1] = ITM_Ephik;
-          }
+          // label or parameter separator will be skipped
         }
         else {
           displayBugScreen("In function _parseWord: Unknown operator appeared!");

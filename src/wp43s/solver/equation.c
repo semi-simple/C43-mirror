@@ -538,7 +538,8 @@ static void _menuF6(char *bufPtr) {
 #define PARSER_OPERATOR_ITM_VERTICAL_BAR_RIGHT 5003
 #define PARSER_OPERATOR_ITM_EQUAL              5004
 #define PARSER_OPERATOR_ITM_YX                 5005
-#define PARSER_OPERATOR_ITM_END_OF_FORMULA     5006
+#define PARSER_OPERATOR_ITM_XFACT              5006
+#define PARSER_OPERATOR_ITM_END_OF_FORMULA     5007
 
 static uint32_t _operatorPriority(uint16_t func) {
   // priority of operator: smaller number represents higher priority 
@@ -552,7 +553,7 @@ static uint32_t _operatorPriority(uint16_t func) {
       return 10;
     case PARSER_OPERATOR_ITM_YX:
       return 7;
-    case ITM_XFACT:
+    case PARSER_OPERATOR_ITM_XFACT:
       return 5;
     case PARSER_OPERATOR_ITM_PARENTHESIS_LEFT:
     case PARSER_OPERATOR_ITM_PARENTHESIS_RIGHT:
@@ -656,7 +657,7 @@ static void _processOperator(uint16_t func, char *mvarBuffer) {
     for(uint32_t i = opStackTop; i > 0; --i) {
 
       /* factorial */
-      if(func == ITM_XFACT) {
+      if(func == PARSER_OPERATOR_ITM_XFACT) {
         runFunction(ITM_XFACT);
         return;
       }
@@ -782,7 +783,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           _processOperator(PARSER_OPERATOR_ITM_YX, mvarBuffer);
         }
         else if(_compareStr("!", strPtr) == 0) {
-          _processOperator(ITM_XFACT, mvarBuffer);
+          _processOperator(PARSER_OPERATOR_ITM_XFACT, mvarBuffer);
         }
         else if(_compareStr("(", strPtr) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_LEFT, mvarBuffer);

@@ -695,7 +695,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
   if(parserHint != PARSER_HINT_NUMERIC && stringGlyphLength(strPtr) > 7) {
     displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function parseEquation:", "token too long!", NULL, NULL);
+      moreInfoOnError("In function parseEquation:", strPtr, "token too long!", NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }
@@ -827,8 +827,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         }
         displayCalcErrorMessage(ERROR_FUNCTION_NOT_FOUND, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
         #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-          stringToUtf8(strPtr, (uint8_t *)errorMessage);
-          moreInfoOnError("In function parseEquation:", errorMessage, "is not recognized as a function", "or not for equations");
+          moreInfoOnError("In function parseEquation:", strPtr, "is not recognized as a function", "or not for equations");
         #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       break;
@@ -870,6 +869,14 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
 
   while(*strPtr != 0) {
     switch(*strPtr) {
+      case ';':
+      case ',':
+        displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "%c", *strPtr);
+          moreInfoOnError("In function parseEquation:", errorMessage, "cannot be appeared in equations", NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        return;
       case '(':
         if(bufPtr != buffer) {
           *(bufPtr++) = 0;
@@ -957,7 +964,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         else {
           displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-            moreInfoOnError("In function parseEquation:", "unexpected operator", NULL, NULL);
+            moreInfoOnError("In function parseEquation:", buffer, "unexpected operator", NULL);
           #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
           return;
         }
@@ -1023,7 +1030,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
   if(stringGlyphLength(buffer) > 7) {
     displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function parseEquation:", "token too long!", NULL, NULL);
+      moreInfoOnError("In function parseEquation:", buffer, "token too long!", NULL);
     #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     return;
   }

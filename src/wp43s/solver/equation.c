@@ -599,6 +599,9 @@ static void _processOperator(uint16_t func, char *mvarBuffer) {
           case PARSER_OPERATOR_ITM_YX:
             runFunction(ITM_YX);
             break;
+          case PARSER_OPERATOR_ITM_XFACT:
+            runFunction(ITM_XFACT);
+            break;
           default:
             runFunction(((uint16_t *)mvarBuffer)[i]);
         }
@@ -608,6 +611,7 @@ static void _processOperator(uint16_t func, char *mvarBuffer) {
           case ITM_MULT:
           case ITM_DIV:
           case PARSER_OPERATOR_ITM_YX:
+          case PARSER_OPERATOR_ITM_XFACT:
             ((uint16_t *)mvarBuffer)[i] = 0;
             break;
           default:

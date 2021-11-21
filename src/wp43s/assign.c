@@ -20,6 +20,7 @@
 #include "fonts.h"
 #include "items.h"
 #include "memory.h"
+#include "screen.h"
 #include "sort.h"
 #include "wp43s.h"
 #include <string.h>
@@ -180,18 +181,24 @@ void assignToMyMenu(uint16_t position) {
   if(position < 18) {
     _assignItem(&userMenuItems[position]);
   }
+  cachedDynamicMenu = 0;
+  refreshScreen();
 }
 
 void assignToMyAlpha(uint16_t position) {
   if(position < 18) {
     _assignItem(&userAlphaItems[position]);
   }
+  cachedDynamicMenu = 0;
+  refreshScreen();
 }
 
 void assignToUserMenu(uint16_t position) {
   if(position < 18) {
     _assignItem(&userMenus[currentUserMenu].menuItem[position]);
   }
+  cachedDynamicMenu = 0;
+  refreshScreen();
 }
 
 void assignToKey(const char *data) {

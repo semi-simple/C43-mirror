@@ -20,6 +20,7 @@
 #include "fonts.h"
 #include "items.h"
 #include "memory.h"
+#include "registers.h"
 #include "screen.h"
 #include "sort.h"
 #include "wp43s.h"
@@ -236,33 +237,42 @@ void assignToKey(const char *data) {
 
 
 void createMenu(const char *name) {
-  bool_t alreadyInUse = false;
-  for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
-    if(compareString(name, indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
-      alreadyInUse = true;
-    }
-  }
-  for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
-    if(compareString(name, userMenus[i].menuName, CMP_BINARY) == 0) {
-      alreadyInUse = true;
-    }
-  }
+  if(validateName(name)) {
+    bool_t alreadyInUse = false;
 
-  if(alreadyInUse) {
-    displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, REGISTER_X);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function fnAssign:", "the menu", name, "already exists");
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-  }
-  else {
-    if(numberOfUserMenus == 0) {
-      userMenus = allocWp43s(TO_BLOCKS(sizeof(userMenu_t)));
+    for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
+      if(compareString(name, indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
+        alreadyInUse = true;
+      }
+    }
+    for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
+      if(compareString(name, userMenus[i].menuName, CMP_BINARY) == 0) {
+        alreadyInUse = true;
+      }
+    }
+
+    if(alreadyInUse) {
+      displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        moreInfoOnError("In function fnAssign:", "the menu", name, "already exists");
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
     else {
-      userMenus = reallocWp43s(userMenus, TO_BLOCKS(sizeof(userMenu_t)) * numberOfUserMenus, TO_BLOCKS(sizeof(userMenu_t)) * (numberOfUserMenus + 1));
+      if(numberOfUserMenus == 0) {
+        userMenus = allocWp43s(TO_BLOCKS(sizeof(userMenu_t)));
+      }
+      else {
+        userMenus = reallocWp43s(userMenus, TO_BLOCKS(sizeof(userMenu_t)) * numberOfUserMenus, TO_BLOCKS(sizeof(userMenu_t)) * (numberOfUserMenus + 1));
+      }
+      memset(userMenus + numberOfUserMenus, 0, sizeof(userMenu_t));
+      xcopy(userMenus[numberOfUserMenus].menuName, name, stringByteLength(name));
+      ++numberOfUserMenus;
     }
-    memset(userMenus + numberOfUserMenus, 0, sizeof(userMenu_t));
-    xcopy(userMenus[numberOfUserMenus].menuName, name, stringByteLength(name));
-    ++numberOfUserMenus;
+  }
+  else {
+    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function fnAssign:", "the menu", name, "does not follow the naming convention");
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
   }
 }

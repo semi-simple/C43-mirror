@@ -74,7 +74,7 @@
     { "SINH",                                ITM_sinh,        0}, // Hyperbolic sine
     { "TAN",                                 ITM_tan,         0}, // Tangent
     { "TANH",                                ITM_tanh,        0}, // Hyperbolic tangent
-    { "W" STD_SUP_MINUS STD_SUP_1,           ITM_tanh,        0}, // Inverse function of Lambert's W
+    { "W" STD_SUP_MINUS STD_SUP_1,           ITM_WM1,         0}, // Inverse function of Lambert's W
     { STD_GAMMA,                             ITM_GAMMAX,      0}, // Gamma function
     { STD_zeta,                              ITM_zetaX,       0}, // Riemann zeta function
     { STD_SQUARE_ROOT,                       ITM_SQUAREROOTX, 0}, // Square root (available through f SQRT in EIM)

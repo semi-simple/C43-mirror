@@ -150,6 +150,13 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       if(regist != INVALID_VARIABLE) {
         reallyRunFunction(func, regist);
       }
+      else {
+        displayCalcErrorMessage(ERROR_UNDEF_SOURCE_VAR, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "string '%s' is not a named variable", varCatalogItem);
+          moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
       return;
     }
     else if(func == ITM_XEQ && dynamicMenuItem > -1) {
@@ -157,6 +164,13 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       calcRegister_t regist = findNamedLabel(varCatalogItem);
       if(regist != INVALID_VARIABLE) {
         reallyRunFunction(func, regist);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "string '%s' is not a named label", varCatalogItem);
+          moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       return;
     }

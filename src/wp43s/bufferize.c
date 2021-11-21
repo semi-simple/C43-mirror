@@ -335,7 +335,7 @@ void kill_ASB_icon(void) {
               xCursor += 2;
               break;
             default:
-              xCursor += 1;
+              xCursor += stringGlyphLength(indexOfItems[item].itemSoftmenuName);
           }
         }
         else {

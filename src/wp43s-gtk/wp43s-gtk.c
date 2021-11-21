@@ -93,7 +93,7 @@
     }
 
     if(strcmp(indexOfItems[LAST_ITEM].itemSoftmenuName, "Last item") != 0) {
-      printf("The last item of indexOfItems[] is not \"Last item\"\n");
+      printf("The last item (%u)of indexOfItems[] is not \"Last item\", but is %s\n",LAST_ITEM,indexOfItems[LAST_ITEM].itemSoftmenuName);
       exit(1);
     }
 

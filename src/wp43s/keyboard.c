@@ -192,8 +192,10 @@ bool_t lastshiftG = false;
             fnKeyInCatalog = 1;
             addItemToBuffer(item);
             fnKeyInCatalog = 0;
-            if(calcMode == CM_EIM && isAlphabeticSoftmenu()) {
-              popSoftmenu();
+            if(calcMode == CM_EIM) {
+              while(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_EQ_EDIT) {
+                popSoftmenu();
+              }
             }
             refreshScreen();
           }
@@ -293,6 +295,12 @@ bool_t lastshiftG = false;
   //KYK HIER. TOFIX
   //CLASH WITH ARROWS !!
   //          }
+          else if(calcMode == CM_EIM && catalog && catalog != CATALOG_MVAR) {
+            addItemToBuffer(item);
+            while(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_EQ_EDIT) {
+              popSoftmenu();
+            }
+          }
           else if((calcMode == CM_NORMAL || calcMode == CM_NIM) && (ITM_0<=item && item<=ITM_F) && (!catalog || catalog == CATALOG_MVAR)) {
             addItemToNimBuffer(item);
           }
@@ -1381,7 +1389,8 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         }
         break;
-*/
+--- */
+        
       case CM_EIM:
         if(aimBuffer[0] != 0) {
           setEquation(currentFormula, aimBuffer);

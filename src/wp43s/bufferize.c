@@ -62,9 +62,9 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
 /*JM*/ //nextChar = NC_NORMAL;
 
     if(subOrSup == NC_SUBSCRIPT) {
-      if(item >= ITM_0 && item <= ITM_9) return item + (ITM_SUB_9 - ITM_9); else //JM optimized
-      if(item >= ITM_a && item <= ITM_z) return item + (ITM_SUB_z - ITM_z); else //JM optimized
-      if(item >= ITM_A && item <= ITM_Z) return item + (ITM_SUB_Z - ITM_Z); else //JM optimized
+      if(item >= ITM_0 && item <= ITM_9) return (uint16_t)((int16_t)item + (int16_t)ITM_SUB_0 - (int16_t)ITM_0); else //JM optimized
+      if(item >= ITM_a && item <= ITM_z) return (uint16_t)((int16_t)item + (int16_t)ITM_SUB_a - (int16_t)ITM_a); else //JM optimized
+      if(item >= ITM_A && item <= ITM_Z) return (uint16_t)((int16_t)item + (int16_t)ITM_SUB_A - (int16_t)ITM_A); else //JM optimized
       switch(item) {
         case ITM_alpha    : return ITM_SUB_alpha;
         case ITM_delta    : return ITM_SUB_delta;
@@ -153,7 +153,7 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
         case ITM_6        : 
         case ITM_7        : 
         case ITM_8        : 
-        case ITM_9        : return item + (ITM_SUP_9 - ITM_9);
+        case ITM_9        : return item + (ITM_SUP_0 - ITM_0);
         case ITM_f        : return ITM_SUP_f;
         case ITM_g        : return ITM_SUP_g;
         case ITM_h        : return ITM_SUP_h;
@@ -321,7 +321,6 @@ void kill_ASB_icon(void) {
                                 item == ITM_SIN_SIGN            ? "SIN(" :   //JM C43
                                 item == ITM_COS_SIGN            ? "COS(" :   //JM C43
                                 item == ITM_TAN_SIGN            ? "TAN(" :   //JM C43
-                                item == ITM_XX_SIGN             ? "xx"  :   //JM C43
                                 item == ITM_OBELUS              ? STD_SLASH  :   //JM C43
                                 indexOfItems[item].itemSoftmenuName;
           char *aimCursorPos = aimBuffer;
@@ -346,7 +345,6 @@ void kill_ASB_icon(void) {
               break;
             case ITM_PAIR_OF_PARENTHESES:
             case ITM_VERTICAL_BAR:
-            case ITM_XX_SIGN :   //JM C43
               xCursor += 2;
               break;
             default:
@@ -384,7 +382,6 @@ void kill_ASB_icon(void) {
               T_cursorPos += 1;
               break;
             case ITM_PAIR_OF_PARENTHESES:
-            case ITM_XX_SIGN :   //JM C43
               T_cursorPos += 1;
               break;
             default:;

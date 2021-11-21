@@ -341,7 +341,6 @@ void fnStoreConfig(uint16_t regist) {
   storeToDtConfigDescriptor(SH_BASE_AHOME);
   storeToDtConfigDescriptor(Norm_Key_00_VAR);
   storeToDtConfigDescriptor(Input_Default);
-  storeToDtConfigDescriptor(jm_GGREEK);
   storeToDtConfigDescriptor(jm_FG_LINE);
   storeToDtConfigDescriptor(jm_NO_BASE_SCREEN);
   storeToDtConfigDescriptor(jm_G_DOUBLETAP);

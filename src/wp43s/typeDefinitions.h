@@ -173,7 +173,6 @@ typedef struct {
   bool_t SH_BASE_AHOME;
   int16_t Norm_Key_00_VAR;
   uint8_t Input_Default;
-  bool_t jm_GGREEK;
   bool_t jm_FG_LINE;
   bool_t jm_NO_BASE_SCREEN;
   bool_t jm_G_DOUBLETAP;

@@ -216,7 +216,6 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(SH_BASE_AHOME);    
     recallFromDtConfigDescriptor(Norm_Key_00_VAR); 
     recallFromDtConfigDescriptor(Input_Default);   
-    recallFromDtConfigDescriptor(jm_GGREEK);       
     recallFromDtConfigDescriptor(jm_FG_LINE);       
     recallFromDtConfigDescriptor(jm_NO_BASE_SCREEN);       
     recallFromDtConfigDescriptor(jm_G_DOUBLETAP);   

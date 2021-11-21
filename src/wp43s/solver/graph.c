@@ -50,14 +50,14 @@
 
 #ifndef TESTSUITE_BUILD
 	static void execute_rpn_function(void){
-	  calcRegister_t regStats = findNamedVariable("xx");
+	  calcRegister_t regStats = findNamedVariable("x");
 	  if(regStats != INVALID_VARIABLE) {
 	    fnStore(regStats);
 	    fnEqCalc(0);
 	    fnRCL(regStats);
 	    #if (defined VERBOSE_SOLVER0) && (defined PC_BUILD)
-	      printRegisterToConsole(REGISTER_X,">>> Solving xx=","");
-	      printRegisterToConsole(REGISTER_Y," f(xx)=","\n");
+	      printRegisterToConsole(REGISTER_X,">>> Solving x=","");
+	      printRegisterToConsole(REGISTER_Y," f(x)=","\n");
 	    #endif
 	  }
 	}
@@ -702,10 +702,10 @@ EndIteration:
 
   runFunction(ITM_ADD);
 
-  fnStrtoX(" f(xx)= ");
+  fnStrtoX(" f(x)= ");
   fnRCL(SREG_Y2);
   runFunction(ITM_ADD);
-  fnStrtoX(" at xx= ");
+  fnStrtoX(" at x= ");
   runFunction(ITM_ADD);
   
   fnRCL(SREG_X2);

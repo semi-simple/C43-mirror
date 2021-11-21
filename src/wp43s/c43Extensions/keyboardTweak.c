@@ -845,10 +845,10 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
         case ITM_C             : * item1 = ITM_ROOT_SIGN      ; break;
         case ITM_D             : * item1 = ITM_LG_SIGN        ; break;
         case ITM_E             : * item1 = ITM_LN_SIGN        ; break;
-        case ITM_F             : * item1 = ITM_XX_SIGN        ; break;
+        case ITM_F             : * item1 = ITM_alpha          ; break;
         case ITM_G             : * item1 = ITM_VERTICAL_BAR   ; break;
         case ITM_H             : * item1 = ITM_DELTA          ; break;
-        case ITM_I             : * item1 = ITM_PI             ; break;
+        case ITM_I             : * item1 = ITM_pi             ; break;
         case ITM_J             : * item1 = ITM_SIN_SIGN       ; break;
         case ITM_K             : * item1 = ITM_COS_SIGN       ; break;
         case ITM_L             : * item1 = ITM_TAN_SIGN       ; break;

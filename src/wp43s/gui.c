@@ -187,9 +187,7 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 //JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.
 void btnClicked_NU(GtkWidget *w, gpointer data) {
   bool_t numLock_MEM;
-  bool_t jm_GGREEK_MEM;
   numLock_MEM = numLock;
-  jm_GGREEK_MEM = jm_GGREEK;
 
   numLock = false;
   shiftF = false;       //JM
@@ -197,16 +195,13 @@ void btnClicked_NU(GtkWidget *w, gpointer data) {
   btnClicked(w, data);
 
   numLock = numLock_MEM;
-  jm_GGREEK = jm_GGREEK_MEM;
   refreshStatusBar();
 }
 
 //Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
 void btnClicked_SNU(GtkWidget *w, gpointer data) {
   bool_t numLock_MEM;
-  bool_t jm_GGREEK_MEM;
   numLock_MEM = numLock;
-  jm_GGREEK_MEM = jm_GGREEK;
 
   numLock = false;
   shiftF = true;       //JM
@@ -216,7 +211,6 @@ void btnClicked_SNU(GtkWidget *w, gpointer data) {
 
   //Only : is working at this point
   numLock = numLock_MEM;
-  jm_GGREEK = jm_GGREEK_MEM;
   refreshStatusBar();
 }
 
@@ -2034,14 +2028,14 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     lbl[3] = 0;
     stringToUtf8(indexOfItems[key->gShiftedAim + 36].itemSoftmenuName, lbl + 3);*/
     if(alphaCase == AC_LOWER) {
-      stringToUtf8(indexOfItems[numlockReplacements(8,key->gShiftedAim + 36, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(8,key->gShiftedAim + 36, numLock, false, true)].itemSoftmenuName, lbl);
     }
     else {
-      stringToUtf8(indexOfItems[numlockReplacements(9,key->gShiftedAim, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(9,key->gShiftedAim, numLock, false, true)].itemSoftmenuName, lbl);
     }                                                               //^^
   }
   else {
-    stringToUtf8(indexOfItems[numlockReplacements(10,key->gShiftedAim, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
+    stringToUtf8(indexOfItems[numlockReplacements(10,key->gShiftedAim, numLock, false, true)].itemSoftmenuName, lbl);
   }
 
 //GShift set label
@@ -2069,7 +2063,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
 
 //GShift colours
-  if(key->gShiftedAim < 0 && jm_GGREEK) {
+  if(key->gShiftedAim < 0) {
     gtk_widget_set_name(lblGreek, "gShiftedUnderline");     //dr - new AIM
   }
   else {

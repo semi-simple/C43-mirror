@@ -24,6 +24,7 @@
 #include "display.h"
 #include "error.h"
 #include "flags.h"
+#include "fonts.h"
 #include "items.h"
 #include "mathematics/compare.h"
 #include "mathematics/comparisonReals.h"
@@ -580,6 +581,88 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
 
 
+#define CHARTYPE_PUNCTUATION 0
+#define CHARTYPE_DIGIT       1
+#define CHARTYPE_LETTER      2
+
+static int32_t _charType(const char *variableName) {
+  if(                                                  compareChar(variableName, STD_0                   ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_9          ) > 0 && compareChar(variableName, STD_A                   ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_Z          ) > 0 && compareChar(variableName, STD_a                   ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_z          ) > 0 && compareChar(variableName, STD_SUP_a               ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_SUP_a      ) > 0 && compareChar(variableName, STD_SUP_2               ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_mu_b       ) > 0 && compareChar(variableName, STD_A_GRAVE             ) < 0) return CHARTYPE_PUNCTUATION;
+  if(                                                  compareChar(variableName, STD_CROSS               ) ==0) return CHARTYPE_PUNCTUATION;
+  if(                                                  compareChar(variableName, STD_DIVIDE              ) ==0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_z_CARON    ) > 0 && compareChar(variableName, STD_iota_DIALYTIKA_TONOS) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_omega_TONOS) > 0 && compareChar(variableName, STD_SUP_x               ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_SUP_x      ) > 0 && compareChar(variableName, STD_SUB_alpha           ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_SUB_mu     ) > 0 && compareChar(variableName, STD_SUP_0               ) < 0) return CHARTYPE_PUNCTUATION;
+  if(                                                  compareChar(variableName, STD_SUB_E_OUTLINE       ) ==0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_SUP_9      ) > 0 && compareChar(variableName, STD_SUB_a_b             ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_SUB_t      ) > 0 && compareChar(variableName, STD_SUB_a               ) < 0) return CHARTYPE_PUNCTUATION;
+  if(compareChar(variableName, STD_SUB_Z      ) > 0                                                           ) return CHARTYPE_PUNCTUATION;
+
+  if(compareChar(variableName, STD_A          ) >=0 && compareChar(variableName, STD_SUP_a               ) <=0) return CHARTYPE_LETTER;
+  if(compareChar(variableName, STD_mu_b       ) >=0 && compareChar(variableName, STD_SUB_mu              ) <=0) return CHARTYPE_LETTER;
+  if(compareChar(variableName, STD_SUB_a_b    ) >=0                                                           ) return CHARTYPE_LETTER;
+
+  return CHARTYPE_DIGIT;
+}
+
+bool_t validateName(const char *variableName) {
+  bool_t withLetter = false;
+  int32_t charType;
+
+  if(stringGlyphLength(variableName)  > 7) return false; // Given name is too long
+  if(stringGlyphLength(variableName) == 0) return false; // Given name is empty
+
+  // Check for the 1st character
+  charType = _charType(variableName);
+  if(charType == CHARTYPE_PUNCTUATION) return false;
+  if(charType == CHARTYPE_LETTER     ) withLetter = true;
+
+  // Check for the following characters
+  for(variableName += (*variableName & 0x80) ? 2 : 1; *variableName != 0; variableName += (*variableName & 0x80) ? 2 : 1) {
+    switch(*variableName) {
+      case '+':
+      case '-':
+      case ':':
+      case '^':
+      case '(':
+      case ')':
+      case '=':
+      case ';':
+      case '|':
+      case ' ':
+        return false;
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+      case '.':
+        break;
+      default:
+        if(compareChar(variableName, STD_CROSS) == 0) return false;
+        if(_charType(variableName) == CHARTYPE_LETTER) withLetter = true;
+    }
+  }
+
+  return withLetter;
+}
+
+#undef CHARTYPE_PUNCTUATION
+#undef CHARTYPE_DIGIT
+#undef CHARTYPE_LETTER
+
+
+
 static calcRegister_t _findReservedVariable(const char *variableName) {
   uint8_t len = stringGlyphLength(variableName);
   if(len < 1 || len > 7) {
@@ -609,7 +692,17 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
     return;
   }
 
+  if(!validateName(variableName)) {
+    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "the name %s", variableName);
+      moreInfoOnError("In function allocateNamedVariable:", errorMessage, "is incorrect! The name does not follow", "the naming convention!");
+    #endif // PC_BUILD
+    return;
+  }
+
   if(_findReservedVariable(variableName) != INVALID_VARIABLE) {
+    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #ifdef PC_BUILD
       sprintf(errorMessage, "the name %s", variableName);
       moreInfoOnError("In function allocateNamedVariable:", errorMessage, "clashes with a reserved variable!", NULL);
@@ -631,6 +724,7 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
   else {
     regist = numberOfNamedVariables;
     if(regist == LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE + 1) {
+      displayCalcErrorMessage(ERROR_TOO_MANY_VARIABLES, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       #ifdef PC_BUILD
         sprintf(errorMessage, "%d named variables!", LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE + 1);
         moreInfoOnError("In function allocateNamedVariable:", "you can allocate up to", errorMessage, NULL);
@@ -699,9 +793,8 @@ calcRegister_t findOrAllocateNamedVariable(const char *variableName) {
       real34Zero(REGISTER_REAL34_DATA(regist));
     }
     else {
-      // Failed attempt to allocate a new named variable: there is not enough memory.
+      // Failed attempt to allocate a new named variable: there is not enough memory or the name is invalid.
       // It is impossible to reach the limitation of number of named variables.
-      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       return INVALID_VARIABLE;
     }
   }

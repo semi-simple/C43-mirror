@@ -14,16 +14,24 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * \file sort.h
- * Comparing 2 strings, sorting strings.
- */
-#ifndef SORT_H
-#define SORT_H
+/********************************************//**
+ * \file atan2.h
+ ***********************************************/
+#ifndef ATAN2_H
+#define ATAN2_H
 
+#include "defines.h"
 #include <stdint.h>
 
-int32_t compareChar  (const char *char1, const char *char2);
-int32_t compareString(const char *stra, const char *strb, int32_t comparisonType);
+void fnAtan2      (uint16_t unusedButMandatoryParameter);
+#if (EXTRA_INFO_ON_CALC_ERROR == 1)
+void atan2Error   (void);
+#else // (EXTRA_INFO_ON_CALC_ERROR == 1)
+#define atan2Error typeError
+#endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+void atan2LonILonI(void);
+void atan2RealLonI(void);
+void atan2LonIReal(void);
+void atan2RealReal(void);
 
-#endif // SORT_H
+#endif // ATAN2_H

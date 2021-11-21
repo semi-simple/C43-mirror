@@ -95,6 +95,7 @@ char                  *errorMessage;
 char                  *aimBuffer; // aimBuffer is also used for NIM
 char                  *nimBufferDisplay;
 char                  *tamBuffer;
+char                  *userKeyLabel;
 char                   asmBuffer[5];
 char                   oldTime[8];
 char                   dateTimeString[12];
@@ -177,6 +178,7 @@ uint16_t               numberOfFormulae;
 uint16_t               currentFormula;
 uint16_t               numberOfUserMenus;
 uint16_t               currentUserMenu;
+uint16_t               userKeyLabelSize;
 #if (REAL34_WIDTH_TEST == 1)
   uint16_t               largeur=200;
 #endif // (REAL34_WIDTH_TEST == 1)

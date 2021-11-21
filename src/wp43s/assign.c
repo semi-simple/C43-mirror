@@ -22,6 +22,7 @@
 #include "memory.h"
 #include "registers.h"
 #include "screen.h"
+#include "softmenus.h"
 #include "sort.h"
 #include "wp43s.h"
 #include <string.h>
@@ -203,35 +204,59 @@ void assignToUserMenu(uint16_t position) {
 }
 
 void assignToKey(const char *data) {
-  calcKey_t *key = kbd_usr + (*data - '0')*10 + *(data+1) - '0';
+  int keyCode = (*data - '0')*10 + *(data+1) - '0';
+  calcKey_t *key = kbd_usr + keyCode;
   userMenuItem_t tmpMenuItem;
+  int keyStateCode = ((previousCalcMode) == CM_AIM ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
 
   _assignItem(&tmpMenuItem);
   if(tmpMenuItem.item == ITM_NULL) {
-    const calcKey_t *stdKey = kbd_std + (*data - '0')*10 + *(data+1) - '0';
-    if(previousCalcMode == CM_AIM) {
-      if(shiftG)      key->gShiftedAim = stdKey->gShiftedAim;
-      else if(shiftF) key->fShiftedAim = stdKey->fShiftedAim;
-      else            key->primaryAim  = stdKey->primaryAim;
-    }
-    else {
-      if(shiftG)      key->gShifted = stdKey->gShifted;
-      else if(shiftF) key->fShifted = stdKey->fShifted;
-      else            key->primary  = stdKey->primary;
+    const calcKey_t *stdKey = kbd_std + keyCode;
+    switch(keyStateCode) {
+      case 5: key->gShiftedAim = stdKey->gShiftedAim; break;
+      case 4: key->fShiftedAim = stdKey->fShiftedAim; break;
+      case 3: key->primaryAim  = stdKey->primaryAim;  break;
+      case 2: key->gShifted    = stdKey->gShifted;    break;
+      case 1: key->fShifted    = stdKey->fShifted;    break;
+      case 0: key->primary     = stdKey->primary;     break;
     }
   }
   else {
-    if(previousCalcMode == CM_AIM) {
-      if(shiftG)      key->gShiftedAim = tmpMenuItem.item;
-      else if(shiftF) key->fShiftedAim = tmpMenuItem.item;
-      else            key->primaryAim  = tmpMenuItem.item;
-    }
-    else {
-      if(shiftG)      key->gShifted = tmpMenuItem.item;
-      else if(shiftF) key->fShifted = tmpMenuItem.item;
-      else            key->primary  = tmpMenuItem.item;
+    switch(keyStateCode) {
+      case 5: key->gShiftedAim = tmpMenuItem.item; break;
+      case 4: key->fShiftedAim = tmpMenuItem.item; break;
+      case 3: key->primaryAim  = tmpMenuItem.item; break;
+      case 2: key->gShifted    = tmpMenuItem.item; break;
+      case 1: key->fShifted    = tmpMenuItem.item; break;
+      case 0: key->primary     = tmpMenuItem.item; break;
     }
   }
+
+  setUserKeyArgument(keyCode * 6 + keyStateCode, tmpMenuItem.argumentName);
+}
+
+
+
+void setUserKeyArgument(uint16_t position, const char *name) {
+  char *userKeyLabelPtr1 = (char *)getNthString((uint8_t *)userKeyLabel, position);
+  char *userKeyLabelPtr2 = (char *)getNthString((uint8_t *)userKeyLabel, position + 1);
+  char *userKeyLabelPtr3 = (char *)getNthString((uint8_t *)userKeyLabel, 37 * 6);
+  uint16_t newUserKeyLabelSize = userKeyLabelSize - stringByteLength(userKeyLabelPtr1) + stringByteLength(name);
+  char *newUserKeyLabel = allocWp43s(TO_BLOCKS(newUserKeyLabelSize));
+  char *newUserKeyLabelPtr = newUserKeyLabel;
+
+  xcopy(newUserKeyLabelPtr, userKeyLabel, (int)(userKeyLabelPtr1 - userKeyLabel));
+  newUserKeyLabelPtr += (int)(userKeyLabelPtr1 - userKeyLabel);
+  xcopy(newUserKeyLabelPtr, name, stringByteLength(name));
+  newUserKeyLabelPtr += stringByteLength(name);
+  *(newUserKeyLabelPtr++) = 0;
+  xcopy(newUserKeyLabelPtr, userKeyLabelPtr2, (int)(userKeyLabelPtr3 - userKeyLabelPtr2));
+  newUserKeyLabelPtr += (int)(userKeyLabelPtr3 - userKeyLabelPtr2);
+  *(newUserKeyLabelPtr++) = 0;
+
+  freeWp43s(userKeyLabel, TO_BLOCKS(userKeyLabelSize));
+  userKeyLabel = newUserKeyLabel;
+  userKeyLabelSize = newUserKeyLabelSize;
 }
 
 

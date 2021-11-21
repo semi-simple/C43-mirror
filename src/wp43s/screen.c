@@ -477,6 +477,7 @@
       showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
+        tmpString[0] = 0;
         showFunctionName(ITM_NOP, 0);
       }
     }
@@ -529,6 +530,7 @@
       showFunctionNameCounter -= FAST_SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
+        tmpString[0] = 0;
         showFunctionName(ITM_NOP, 0);
       }
     }
@@ -831,7 +833,10 @@
   void showFunctionName(int16_t item, int16_t delayInMs) {
     uint32_t fcol, frow, gcol, grow;
     char *functionName;
-    if(item != MNU_DYNAMIC) {
+    if(tmpString[0] != 0) {
+      functionName = tmpString;
+    }
+    else if(item != MNU_DYNAMIC) {
       functionName = indexOfItems[abs(item)].itemCatalogName;
     }
     else {
@@ -856,7 +861,7 @@
 
   void hideFunctionName(void) {
     uint32_t col, row;
-    getStringBounds(indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
+    getStringBounds(tmpString[0] != 0 ? tmpString : indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
     lcd_fill_rect(1, Y_POSITION_OF_REGISTER_T_LINE+6, col, row, LCD_SET_VALUE);
     showFunctionNameItem = 0;
     showFunctionNameCounter = 0;

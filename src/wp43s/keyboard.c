@@ -545,6 +545,17 @@
         shiftG = true;
       }
       int16_t item = determineItem((char *)data);
+
+      if(getSystemFlag(FLAG_USER)) {
+        int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+        int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
+        char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
+        xcopy(tmpString, funcParam, stringByteLength(funcParam) + 1);
+      }
+      else {
+        *tmpString = 0;
+      }
+
       showFunctionNameItem = 0;
       if(item != ITM_NOP && item != ITM_NULL) {
         processKeyAction(item);
@@ -568,6 +579,16 @@
         item = determineItem((char *)data);
 //      previousItem = item;
 //    }
+
+      if(getSystemFlag(FLAG_USER)) {
+        int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+        int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
+        char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
+        xcopy(tmpString, funcParam, stringByteLength(funcParam) + 1);
+      }
+      else {
+        *tmpString = 0;
+      }
 
       showFunctionNameItem = 0;
       if(item != ITM_NOP && item != ITM_NULL) {
@@ -602,11 +623,43 @@
           showSoftmenu(item);
         }
         else {
+          int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+          int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
+          char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
+
           if(item != ITM_NOP && tam.alpha && indexOfItems[item].func != addItemToBuffer) {
             // We are in TAM mode so need to cancel first (equivalent to EXIT)
             tamLeaveMode();
           }
-          runFunction(item);
+          if(item == ITM_RCL && funcParam[0] != 0) {
+            calcRegister_t var = findNamedVariable(funcParam);
+            if(var != INVALID_VARIABLE) {
+              reallyRunFunction(item, var);
+            }
+            else {
+              displayCalcErrorMessage(ERROR_UNDEF_SOURCE_VAR, ERR_REGISTER_LINE, REGISTER_X);
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                sprintf(errorMessage, "string '%s' is not a named variable", funcParam);
+                moreInfoOnError("In function btnReleased:", errorMessage, NULL, NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            }
+          }
+          else if(item == ITM_XEQ && funcParam[0] != 0) {
+            calcRegister_t label = findNamedLabel(funcParam);
+            if(label != INVALID_VARIABLE) {
+              reallyRunFunction(item, label);
+            }
+            else {
+              displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                sprintf(errorMessage, "string '%s' is not a named label", funcParam);
+                moreInfoOnError("In function btnReleased:", errorMessage, NULL, NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            }
+          }
+          else {
+            runFunction(item);
+          }
         }
       }
 //#ifdef DMCP_BUILD

@@ -169,6 +169,7 @@
    * part of the screen.
    */
   extern char                  *tamBuffer;
+  extern char                  *userKeyLabel;
   extern char                   asmBuffer[5];
   extern char                   oldTime[8];
   extern char                   dateTimeString[12];
@@ -254,6 +255,7 @@
   extern uint16_t               currentFormula;
   extern uint16_t               numberOfUserMenus;
   extern uint16_t               currentUserMenu;
+  extern uint16_t               userKeyLabelSize;
   #if (REAL34_WIDTH_TEST == 1)
     extern uint16_t               largeur;
   #endif // (REAL34_WIDTH_TEST == 1)

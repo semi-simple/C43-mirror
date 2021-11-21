@@ -261,6 +261,35 @@ static void _addSpace(char **bufPtr, int16_t *strWidth, uint32_t *doubleBytednes
     *doubleBytednessHistory <<= 1;
   }
 }
+
+static bool_t _isLetter(const char* strPtr) {
+  if(                                            compareChar(strPtr, STD_A                   ) < 0) return false;
+  if(compareChar(strPtr, STD_Z          ) > 0 && compareChar(strPtr, STD_a                   ) < 0) return false;
+  if(compareChar(strPtr, STD_z          ) > 0 && compareChar(strPtr, STD_SUP_a               ) < 0) return false;
+  if(compareChar(strPtr, STD_SUP_a      ) > 0 && compareChar(strPtr, STD_mu_b                ) < 0) return false;
+  if(compareChar(strPtr, STD_mu_b       ) > 0 && compareChar(strPtr, STD_A_GRAVE             ) < 0) return false;
+  if(                                            compareChar(strPtr, STD_CROSS               ) ==0) return false;
+  if(                                            compareChar(strPtr, STD_DIVIDE              ) ==0) return false;
+  if(compareChar(strPtr, STD_z_CARON    ) > 0 && compareChar(strPtr, STD_iota_DIALYTIKA_TONOS) < 0) return false;
+  if(compareChar(strPtr, STD_omega_TONOS) > 0 && compareChar(strPtr, STD_SUP_x               ) < 0) return false;
+  if(compareChar(strPtr, STD_SUP_x      ) > 0 && compareChar(strPtr, STD_SUB_alpha           ) < 0) return false;
+  if(compareChar(strPtr, STD_SUB_mu     ) > 0 && compareChar(strPtr, STD_SUB_a_b             ) < 0) return false;
+  if(compareChar(strPtr, STD_SUB_t      ) > 0 && compareChar(strPtr, STD_SUB_a               ) < 0) return false;
+  if(compareChar(strPtr, STD_SUB_Z      ) > 0                                                     ) return false;
+
+  return true;
+}
+
+static bool_t _lookAheadForLetters(const char* strPtr) {
+  for(; *strPtr != 0; strPtr += (*strPtr & 0x80) ? 2 : 1) {
+    if((*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == ':' || (*strPtr) == '^' ||
+       (*strPtr) == '(' || (*strPtr) == ')' || (*strPtr) == ' ' || (*strPtr) == '=' ||
+       (*strPtr) == ';' || (*strPtr) == '|' ||
+       compareChar(strPtr, STD_CROSS) == 0 || compareChar(strPtr, STD_DOT) == 0) return false;
+    if(_isLetter(strPtr)) return true;
+  }
+  return false;
+}
 #endif /* TESTSUITE_BUILD */
 
 void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool_t dryRun, bool_t *cursorShown, bool_t *rightEllipsis) {
@@ -398,7 +427,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         }
 
         /* Operators */
-        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '|' || (((*strPtr) == '/' || (*strPtr) == '!') && (!inToken || inNumber)))) {
+        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '|' || (((*strPtr) == '/' || (*strPtr) == '!') && (!inToken || (inNumber && !_lookAheadForLetters(strPtr)))))) {
           if((*strPtr) != '|' || (strLength > (startAt + 1)))
             _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
@@ -916,7 +945,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
       case '!':
         if(bufPtr != buffer && !afterSpace) {
           *bufPtr = 0;
-          if(stringGlyphLength(buffer) > numericCount) {
+          if(stringGlyphLength(buffer) > numericCount || _lookAheadForLetters(strPtr)) {
             *(bufPtr++) = *(strPtr++);
             afterClosingParenthesis = false;
             unaryMinusCanOccur = false;

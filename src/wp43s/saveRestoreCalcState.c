@@ -1305,39 +1305,39 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       readLine(stream, tmpString); // key
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         str = tmpString;
-        kbd_usr[i].keyId = stringToUint16(str);
+        kbd_usr[i].keyId = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primary = stringToUint16(str);
+        kbd_usr[i].primary = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].fShifted = stringToUint16(str);
+        kbd_usr[i].fShifted = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].gShifted = stringToUint16(str);
+        kbd_usr[i].gShifted = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].keyLblAim = stringToUint16(str);
+        kbd_usr[i].keyLblAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primaryAim = stringToUint16(str);
+        kbd_usr[i].primaryAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].fShiftedAim = stringToUint16(str);
+        kbd_usr[i].fShiftedAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].gShiftedAim = stringToUint16(str);
+        kbd_usr[i].gShiftedAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primaryTam = stringToUint16(str);
+        kbd_usr[i].primaryTam = stringToInt16(str);
       }
     }
   }

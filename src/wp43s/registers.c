@@ -586,8 +586,8 @@ bool_t validateName(const char *variableName) {
   if(stringGlyphLength(variableName) == 0) return false; // Given name is empty
 
   // Check for the 1st character
-  if(                                                  compareChar(variableName, STD_0                   ) < 0) return false;
-  if(compareChar(variableName, STD_9          ) > 0 && compareChar(variableName, STD_A                   ) < 0) return false;
+  if(                                                  compareChar(variableName, STD_A                   ) < 0) return false;
+  if(compareChar(variableName, STD_Z          ) > 0 && compareChar(variableName, STD_a                   ) < 0) return false;
   if(compareChar(variableName, STD_Z          ) > 0 && compareChar(variableName, STD_a                   ) < 0) return false;
   if(compareChar(variableName, STD_z          ) > 0 && compareChar(variableName, STD_A_GRAVE             ) < 0) return false;
   if(                                                  compareChar(variableName, STD_CROSS               ) ==0) return false;
@@ -595,9 +595,7 @@ bool_t validateName(const char *variableName) {
   if(compareChar(variableName, STD_z_CARON    ) > 0 && compareChar(variableName, STD_iota_DIALYTIKA_TONOS) < 0) return false;
   if(compareChar(variableName, STD_omega_TONOS) > 0 && compareChar(variableName, STD_SUP_x               ) < 0) return false;
   if(compareChar(variableName, STD_SUP_x      ) > 0 && compareChar(variableName, STD_SUB_alpha           ) < 0) return false;
-  if(compareChar(variableName, STD_SUB_mu     ) > 0 && compareChar(variableName, STD_SUP_0               ) < 0) return false;
-  if(                                                  compareChar(variableName, STD_SUB_E_OUTLINE       ) ==0) return false;
-  if(compareChar(variableName, STD_SUP_9      ) > 0 && compareChar(variableName, STD_SUB_h               ) < 0) return false;
+  if(compareChar(variableName, STD_SUB_mu     ) > 0 && compareChar(variableName, STD_SUB_h               ) < 0) return false;
   if(compareChar(variableName, STD_SUB_h      ) > 0 && compareChar(variableName, STD_SUB_t               ) < 0) return false;
   if(compareChar(variableName, STD_SUB_t      ) > 0 && compareChar(variableName, STD_SUB_a               ) < 0) return false;
   if(compareChar(variableName, STD_SUB_Z      ) > 0                                                           ) return false;

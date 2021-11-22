@@ -16,6 +16,7 @@
 
 #include "items.h"
 
+#include "assign.h"
 #include "browsers/browsers.h"
 #include "bufferize.h"
 #include "config.h"
@@ -125,6 +126,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     }
 
     updateMatrixHeightCache();
+    cachedDynamicMenu = 0;
     #ifdef PC_BUILD
       refreshLcd(NULL);
     #endif // PC_BUILD
@@ -146,7 +148,29 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       char *varCatalogItem = dynmenuGetLabel(dynamicMenuItem);
       calcRegister_t regist = findNamedVariable(varCatalogItem);
       if(regist != INVALID_VARIABLE) {
-       reallyRunFunction(func, regist);
+        reallyRunFunction(func, regist);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_UNDEF_SOURCE_VAR, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "string '%s' is not a named variable", varCatalogItem);
+          moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      }
+      return;
+    }
+    else if(func == ITM_XEQ && dynamicMenuItem > -1) {
+      char *varCatalogItem = dynmenuGetLabel(dynamicMenuItem);
+      calcRegister_t regist = findNamedLabel(varCatalogItem);
+      if(regist != INVALID_VARIABLE) {
+        reallyRunFunction(func, regist);
+      }
+      else {
+        displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+        #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+          sprintf(errorMessage, "string '%s' is not a named label", varCatalogItem);
+          moreInfoOnError("In function runFunction:", errorMessage, NULL, NULL);
+        #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       }
       return;
     }
@@ -718,6 +742,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnTvmVar                    (uint16_t unusedButMandatoryParameter) {}
   void fnTvmBeginMode              (uint16_t unusedButMandatoryParameter) {}
   void fnTvmEndMode                (uint16_t unusedButMandatoryParameter) {}
+  void fnAssign                    (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2173,7 +2198,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1408 */  { fnAgm,                        NOPARAM,                     "AGM",                                         "AGM",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1409 */  { itemToBeCoded,                NOPARAM,                     "AGRAPH",                                      "AGRAPH",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1410 */  { fnDisplayFormatAll,           TM_VALUE,                    "ALL" ,                                        "ALL",                                         (0 << TAM_MAX_BITS) |    15, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
-/* 1411 */  { itemToBeCoded,                NOPARAM,                     "ASSIGN",                                      "ASN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/* 1411 */  { fnAssign,                     0,                           "ASSIGN",                                      "ASN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1412 */  { itemToBeCoded,                NOPARAM,                     "BACK",                                        "BACK",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1413 */  { fnBatteryVoltage,             NOPARAM,                     "BATT?",                                       "BATT?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1414 */  { fnBeep,                       NOPARAM,                     "BEEP",                                        "BEEP",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},

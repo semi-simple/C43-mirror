@@ -777,15 +777,15 @@ calcRegister_t findOrAllocateNamedVariable(const char *variableName) {
     return regist;
   }
   regist = findNamedVariable(variableName);
-  if(!isUniqueName(variableName)) {
-    displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-    #ifdef PC_BUILD
-      sprintf(errorMessage, "the name %s", variableName);
-      moreInfoOnError("In function allocateNamedVariable:", errorMessage, "is already in use!", NULL);
-    #endif // PC_BUILD
-    return regist;
-  }
-  else if(regist == INVALID_VARIABLE && numberOfNamedVariables <= (LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE)) {
+  if(regist == INVALID_VARIABLE && numberOfNamedVariables <= (LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE)) {
+    if(!isUniqueName(variableName)) {
+      displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #ifdef PC_BUILD
+        sprintf(errorMessage, "the name %s", variableName);
+        moreInfoOnError("In function allocateNamedVariable:", errorMessage, "is already in use!", NULL);
+      #endif // PC_BUILD
+      return regist;
+    }
     allocateNamedVariable(variableName, dtReal34, REAL34_SIZE);
     if(lastErrorCode == ERROR_NONE) {
       // New variables are zero by default - although this might be immediately overridden, it might require an

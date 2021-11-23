@@ -367,7 +367,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               16
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               18
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar
@@ -520,7 +520,8 @@ typedef enum {
 #define TM_SHUFFLE                             10008
 #define TM_LABEL                               10009
 #define TM_SOLVE                               10010
-#define TM_CMP                                 10011 // TM_CMP must be the last in this list
+#define TM_NEWMENU                             10011
+#define TM_CMP                                 10012 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -795,6 +796,11 @@ typedef enum {
 #define SOLVER_RESULT_EXTREMUM                     2
 #define SOLVER_RESULT_BAD_GUESS                    3
 #define SOLVER_RESULT_CONSTANT                     4
+
+#define ASSIGN_NAMED_VARIABLES                 10000
+#define ASSIGN_LABELS                          12000
+#define ASSIGN_RESERVED_VARIABLES                  (ASSIGN_NAMED_VARIABLES + FIRST_RESERVED_VARIABLE - FIRST_NAMED_VARIABLE)
+#define ASSIGN_USER_MENU                     (-10000)
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

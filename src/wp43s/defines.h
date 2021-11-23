@@ -472,6 +472,7 @@ typedef enum {
 #define PLOT_LR                                    3
 #define PLOT_START                                 4
 #define PLOT_NOTHING                               5
+#define PLOT_GRAPH                                 6
 
 // Rounding mode 3 bits
 #define RM_HALF_EVEN                               0
@@ -497,6 +498,7 @@ typedef enum {
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
 #define CM_MIM                                    12 // Matrix imput mode tbd reorder
 #define CM_EIM                                    13 // Equation imput mode
+#define CM_GRAPH                                  14 // Plot graph mode
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0

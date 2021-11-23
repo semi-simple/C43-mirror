@@ -333,7 +333,7 @@
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT) {
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -702,6 +702,7 @@
               keyActionProcessed = true;
               break;
 
+            case CM_GRAPH:
             case CM_PLOT_STAT:
               if(item == ITM_EXIT || item == ITM_BACKSPACE) {
                 fnPlotClose(0);
@@ -888,6 +889,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_ERROR_MESSAGE:
       case CM_BUG_ON_SCREEN:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
         break;
 
       case CM_CONFIRMATION:
@@ -1017,6 +1019,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         calcMode = previousCalcMode;
         break;
 
+      case CM_GRAPH:
       case CM_PLOT_STAT:
         lastPlotMode = PLOT_NOTHING;
         plotSelection = 0;
@@ -1089,6 +1092,7 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
         break;
 
       default:
@@ -1166,6 +1170,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
       case CM_BUG_ON_SCREEN:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
         calcMode = previousCalcMode;
         break;
 
@@ -1394,6 +1399,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
       case CM_MIM:
       case CM_EIM:
         break;
@@ -1427,6 +1433,7 @@ void fnKeyAngle(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
       case CM_MIM:
       case CM_EIM:
         break;

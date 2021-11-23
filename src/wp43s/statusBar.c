@@ -31,7 +31,7 @@
       showString(tmpString, &standardFont, X_DATE, 0, vmNormal, true, true);
     #else // DEBUG_INSTEAD_STATUS_BAR != 1
       showDateTime();
-      if(calcMode == CM_PLOT_STAT) return;    // With graph displayed, only update the time, as the other items are clashing with the graph display screen
+      if(calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH) return;    // With graph displayed, only update the time, as the other items are clashing with the graph display screen
       showRealComplexResult();
       showComplexMode();
       showAngularMode();
@@ -223,7 +223,7 @@
 
   void showHideHourGlass(void) {
     if(hourGlassIconEnabled) {
-      showGlyph(STD_HOURGLASS, &standardFont, calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
+      showGlyph(STD_HOURGLASS, &standardFont, (calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH) ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
     }
   }
 

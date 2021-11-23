@@ -1838,8 +1838,11 @@
 #define ITM_RCL_PV                    1774
 
 #define ITM_atan2                     1775
+#define ITM_XSLV                      1776
+#define ITM_XPLT                      1777
+#define MNU_GRAPH                     1778
 
-#define LAST_ITEM                     1776
+#define LAST_ITEM                     1779
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

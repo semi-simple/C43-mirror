@@ -822,6 +822,11 @@ void eformat_eng2 (char* s02, const char* s01, double inreal, int8_t digits, con
 }
 
 
+#define horOffsetR 109+5 //digit righ side aliognment
+#define autoinc 19 //text line spacing
+#define autoshift -5 //text line spacing
+#define horOffset 1 //labels from the left
+
 
 void graphPlotstat(uint16_t selection){
   #if defined STATDEBUG && defined PC_BUILD
@@ -1008,6 +1013,21 @@ void graphPlotstat(uint16_t selection){
     }
     //#################################################### ^^^ MAIN GRAPH LOOP ^^^
 
+    if(calcMode == CM_GRAPH) {
+        int16_t index = -1;
+        char ss[100], tt[100];
+        int32_t n;
+        eformat_eng2(ss,"(",x_max,2,"");
+        eformat_eng2(tt,radixProcess("#"),y_max,2,")");
+        strcat(tt,ss);                   n = showString(padEquals(ss), &standardFont,160-2 - stringWidth(tt, &standardFont, false, false), Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index + 2       +autoshift, vmNormal, false, false);
+        eformat_eng2(ss,radixProcess("#"),y_max,2,")");
+                                             showString(padEquals(ss), &standardFont,n+3,       Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++      +autoshift + 2, vmNormal, false, false);
+        eformat_eng2(ss,"(",x_min,2,""); n = showString(padEquals(ss), &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index    -2  +autoshift + 2, vmNormal, false, false);
+        eformat_eng2(ss,radixProcess("#"),y_min,2,")");
+                                             showString(padEquals(ss), &standardFont,n+3,       Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -2  +autoshift + 2, vmNormal, false, false);
+       }
+
+
 
   } else {
     calcMode = CM_NORMAL;
@@ -1144,10 +1164,7 @@ void graphDrawLRline(uint16_t selection) {
       #endif
     }
 
-    #define horOffsetR 109+5 //digit righ side aliognment
-    #define autoinc 19 //text line spacing
-    #define autoshift -5 //text line spacing
-    #define horOffset 1 //labels from the left
+
     int16_t index = -1;
     if(selection!=0) {
       strcpy(ss,eatSpacesEnd(getCurveFitModeName(selection)));
@@ -1288,10 +1305,16 @@ if(checkMinimumDataPoints(const_2)) {
     statGraphReset();
     if(plotMode == PLOT_START){
       plotSelection = 0;
-    }
-    if(plotMode == PLOT_LR && lrSelection != 0) {
-      plotSelection = lrSelection;
-    }
+    } else
+      if(plotMode == PLOT_GRAPH){
+        calcMode = CM_GRAPH;
+        plotSelection = 0;
+        PLOT_LINE     = true;
+        PLOT_BOX      = false;
+      } else
+        if(plotMode == PLOT_LR && lrSelection != 0) {
+          plotSelection = lrSelection;
+        }
 
     hourGlassIconEnabled = true;
     showHideHourGlass();
@@ -1303,6 +1326,11 @@ if(checkMinimumDataPoints(const_2)) {
     #endif // DMCP_BUILD
 
     switch(plotMode) {
+      case PLOT_GRAPH:
+           if(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_GRAPH) {
+             showSoftmenu(-MNU_GRAPH);
+           }
+           break;             
       case PLOT_LR:
       case PLOT_NXT:
       case PLOT_REV:

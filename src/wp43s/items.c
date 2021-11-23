@@ -43,6 +43,7 @@
 #include "saveRestoreCalcState.h"
 #include "screen.h"
 #include "softmenus.h"
+#include "solver/graph.h"
 #include "solver/solver.h"
 #include "stack.h"
 #include "stats.h"
@@ -718,6 +719,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnTvmVar                    (uint16_t unusedButMandatoryParameter) {}
   void fnTvmBeginMode              (uint16_t unusedButMandatoryParameter) {}
   void fnTvmEndMode                (uint16_t unusedButMandatoryParameter) {}
+  void fnEqSolvGraph               (uint16_t unusedButMandatoryParameter) {}
+
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2543,6 +2546,9 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1774 */  { fnRecall,                     RESERVED_VARIABLE_PV,        "",                                            "PV",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 
 /* 1775 */  { fnAtan2,                      NOPARAM,                     "atan2",                                       "atan2",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
+/* 1776 */  { fnEqSolvGraph,                EQ_SOLVE,                    "xSLV",                                        "xSLV",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
+/* 1777 */  { fnEqSolvGraph,                EQ_PLOT,                     "xPLT",                                        "xPLT",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
+/* 1778 */  { itemToBeCoded,                NOPARAM,                     "GRAPH",                                       "GRAPH",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 
-/* 1776 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
+/* 1779 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
 };

@@ -3021,27 +3021,27 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   switch(calcMode) {
     case CM_FLAG_BROWSER:
       last_CM = calcMode;
-      //clearScreen();
+      clearScreen();
       flagBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_FONT_BROWSER:
       last_CM = calcMode;
-      //clearScreen();
+      clearScreen();
       fontBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_REGISTER_BROWSER:
       last_CM = calcMode;
-      //clearScreen();
+      clearScreen();
       registerBrowser(NOPARAM);
       refreshStatusBar();
       break;
 
     case CM_PEM:
-      //clearScreen();
+      clearScreen();
       showSoftmenuCurrentPart();
       fnPem(NOPARAM);
       displayShiftAndTamBuffer();

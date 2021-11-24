@@ -782,7 +782,9 @@ bool_t lowercaseselected;
     } //JM ^^
 
     /*2*/ else if(lowercaseselected && ((ITM_ALPHA <= item && item <= ITM_OMEGA) || (ITM_QOPPA <= item && item <= ITM_SAMPI))) {  //JM GREEK
-      addItemToBuffer(item + 36);
+      addItemToBuffer(item); 
+      //addItemToBuffer(item + 36); //JM Remove the ability to shift to lower cap greek
+  //Changed this. Still painting Delta in lower cae.    
       keyActionProcessed = true;
     }
 

@@ -833,6 +833,16 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
  bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t FSHIFT, bool_t GSHIFT) {
  //printf("####B>> %d %d\n",item,* item1);
  if(calcMode == CM_AIM || calcMode == CM_EIM || (tam.mode && tam.alpha) ) {
+
+   if(GSHIFT) {        //ensure that sigma and delta stays uppercase
+      switch(item) {
+        case ITM_sigma         : * item1 = ITM_SIGMA          ; break;
+        case ITM_delta         : * item1 = ITM_DELTA          ; break;
+        default: break;
+      }
+    } else
+
+
    if(GSHIFT) {
       switch(item) {
         case ITM_ADD           : * item1 = ITM_PLUS           ; break;
@@ -870,8 +880,6 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
         case ITM_QUESTION_MARK : * item1 = ITM_SLASH;           break;
         case ITM_COMMA         : * item1 = ITM_PERIOD;          break;
         case ITM_COLON         : * item1 = ITM_0;               break;
-
-
         default: break;
       }
 
@@ -897,7 +905,6 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
        case ITM_QUESTION_MARK : * item1 = ITM_SLASH;            break;
        case ITM_COMMA         : * item1 = ITM_PERIOD;           break;
        case ITM_COLON         : * item1 = ITM_0;                break;
-
        default: break;
      }
    } else

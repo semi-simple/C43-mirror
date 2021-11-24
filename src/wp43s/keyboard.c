@@ -489,7 +489,7 @@
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN) {
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN || calcMode == CM_TIMER) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -784,7 +784,7 @@
           }
           keyActionProcessed = true;
         }
-        else if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER) {
+        else if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_TIMER) {
           keyActionProcessed = true;
         }
         break;
@@ -1018,6 +1018,37 @@
               }
               break;
 
+            case CM_TIMER:
+              printf("ITEM: %d\n", item);
+              switch(item) {
+                case ITM_RS:
+                  fnStartStopTimerApp();
+                  break;
+                case ITM_0:
+                case ITM_1:
+                case ITM_2:
+                case ITM_3:
+                case ITM_4:
+                case ITM_5:
+                case ITM_6:
+                case ITM_7:
+                case ITM_8:
+                case ITM_9:
+                  fnDigitKeyTimerApp(item - ITM_0);
+                  break;
+                case ITM_PERIOD:
+                  fnDotTimerApp();
+                  break;
+                case ITM_ADD:
+                  fnPlusTimerApp();
+                  break;
+                case ITM_RCL:
+                  runFunction(ITM_TIMER_RCL);
+                  break;
+              }
+              keyActionProcessed = true;
+              break;
+
             default:
               sprintf(errorMessage, "In function processKeyAction: %" PRIu8 " is an unexpected value while processing calcMode!", calcMode);
               displayBugScreen(errorMessage);
@@ -1171,6 +1202,10 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_PLOT_STAT:
         break;
 
+      case CM_TIMER:
+        fnEnterTimerApp();
+        break;
+
       case CM_CONFIRMATION:
         calcMode = previousCalcMode;
         confirmedFunction(CONFIRMED);
@@ -1294,6 +1329,15 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         calcMode = previousCalcMode;
         break;
 
+      case CM_TIMER:
+        if(lastErrorCode != 0) {
+          lastErrorCode = 0;
+        }
+        else {
+          fnLeaveTimerApp();
+        }
+        break;
+
       case CM_BUG_ON_SCREEN:
         calcMode = previousCalcMode;
         break;
@@ -1379,6 +1423,7 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_TIMER:
         break;
 
       default:
@@ -1480,6 +1525,15 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         }
         break;
 
+      case CM_TIMER:
+        if(lastErrorCode != 0) {
+          lastErrorCode = 0;
+        }
+        else {
+          fnBackspaceTimerApp();
+        }
+        break;
+
       default:
         sprintf(errorMessage, "In function fnKeyBackspace: unexpected calcMode value (%" PRIu8 ") while processing key BACKSPACE!", calcMode);
         displayBugScreen(errorMessage);
@@ -1571,6 +1625,10 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         if(currentSoftmenuScrolls()) {
           menuUp();
         }
+        break;
+
+      case CM_TIMER:
+        fnUpTimerApp();
         break;
 
       default:
@@ -1666,6 +1724,10 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         }
         break;
 
+      case CM_TIMER:
+        fnDownTimerApp();
+        break;
+
       default:
         sprintf(errorMessage, "In function fnKeyDown: unexpected calcMode value (%" PRIu8 ") while processing key DOWN!", calcMode);
         displayBugScreen(errorMessage);
@@ -1697,6 +1759,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
       case CM_PLOT_STAT:
       case CM_MIM:
       case CM_EIM:
+      case CM_TIMER:
         break;
 
       default:
@@ -1730,6 +1793,7 @@ void fnKeyAngle(uint16_t unusedButMandatoryParameter) {
       case CM_PLOT_STAT:
       case CM_MIM:
       case CM_EIM:
+      case CM_TIMER:
         break;
 
       case CM_ASSIGN:

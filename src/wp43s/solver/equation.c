@@ -816,12 +816,14 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
         if(compareString(STD_pi, strPtr, CMP_BINARY) == 0) { // check for pi
           runFunction(ITM_CONSTpi);
           _pushNumericStack(mvarBuffer, REGISTER_REAL34_DATA(REGISTER_X));
+          fnDrop(NOPARAM);
           return;
         }
         for(uint32_t i = CST_01; i <= CST_79; ++i) { // check for constants
           if(compareString(indexOfItems[i].itemCatalogName, strPtr, CMP_BINARY) == 0) {
             runFunction(i);
             _pushNumericStack(mvarBuffer, REGISTER_REAL34_DATA(REGISTER_X));
+            fnDrop(NOPARAM);
             return;
           }
         }
@@ -829,6 +831,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           reallyRunFunction(ITM_RCL, findNamedVariable(strPtr));
           fnToReal(NOPARAM);
           _pushNumericStack(mvarBuffer, REGISTER_REAL34_DATA(REGISTER_X));
+          fnDrop(NOPARAM);
         }
         else {
           displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);

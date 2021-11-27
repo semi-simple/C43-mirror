@@ -43,7 +43,7 @@
 
 //Verbose directives can be simulataneously selected
 #define VERBOSE_SOLVER00   // minimal text
-#define VERBOSE_SOLVER0  // a lot less text
+#define VERBOSE_SOLVER0    // a lot less text
 //#define VERBOSE_SOLVER1  // a lot less text
 //#define VERBOSE_SOLVER2  // verbose a lot
 
@@ -89,6 +89,7 @@ static void fnStrtoX(char aimBuffer[]) {                             //DONE
 void fnPlot(uint16_t unusedButMandatoryParameter) {
 
   fnPlotStat(PLOT_GRAPH);
+  PLOT_AXIS = true;
 }
 
 
@@ -161,6 +162,7 @@ static double convert_to_double(calcRegister_t regist) { //Convert from X regist
     convertLongIntegerRegisterToReal(regist, &tmpy, &ctxtReal39);
     break;
   case dtReal34:
+  case dtComplex34:
     real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
     break;
   default:
@@ -813,10 +815,13 @@ void fnEqSolvGraph (uint16_t func) {
      case EQ_PLOT: {
             double ix1 = convert_to_double(REGISTER_X);
             double ix0 = convert_to_double(REGISTER_Y);
+            fnDrop(0);
+            fnDrop(0);
             if(ix1>ix0) {
               x_min = ix0;
               x_max = ix1;
             }
+            fnEqCalc(0);
             graph_eqn(x_min, x_max);
             break;
           }

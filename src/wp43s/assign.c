@@ -19,8 +19,14 @@
  ***********************************************/
 
 #include "assign.h"
+#include "charString.h"
+#include "error.h"
+#include "fonts.h"
 #include "items.h"
+#include "memory.h"
+#include "sort.h"
 #include "wp43s.h"
+#include <string.h>
 
 //This variable is to store in flash memory
 TO_QSPI const calcKey_t kbd_std[37] = {
@@ -173,3 +179,190 @@ TO_QSPI const calcKey_t kbd_std[37] = {
 #endif //JM END OF LAYOUT 2 DM42 STRICT.
 
 };
+
+
+
+void fnAssign(uint16_t mode) {
+  if(mode) {
+    createMenu(aimBuffer);
+    aimBuffer[0] = 0;
+  }
+  else {
+    previousCalcMode = calcMode;
+    calcMode = CM_ASSIGN;
+    itemToBeAssigned = 0;
+    updateAssignTamBuffer();
+  }
+}
+
+
+
+void updateAssignTamBuffer(void) {
+  char *tbPtr = tamBuffer;
+  tbPtr = stpcpy(tbPtr, "ASSIGN ");
+
+  if(itemToBeAssigned == 0) {
+    tbPtr = stpcpy(tbPtr, "_");
+  }
+  else if(itemToBeAssigned >= ASSIGN_LABELS) {
+    uint8_t *lblPtr = labelList[itemToBeAssigned - ASSIGN_LABELS].labelPointer;
+    uint32_t count = *(lblPtr++);
+    for(uint32_t i = 0; i < count; ++i) {
+      *(tbPtr++) = *(lblPtr++);
+    }
+  }
+  else if(itemToBeAssigned >= ASSIGN_RESERVED_VARIABLES) {
+    tbPtr = stpcpy(tbPtr, (char *)allReservedVariables[itemToBeAssigned - ASSIGN_RESERVED_VARIABLES].reservedVariableName + 1);
+  }
+  else if(itemToBeAssigned >= ASSIGN_NAMED_VARIABLES) {
+    tbPtr = stpcpy(tbPtr, (char *)allNamedVariables[itemToBeAssigned - ASSIGN_NAMED_VARIABLES].variableName + 1);
+  }
+  else if(itemToBeAssigned <= ASSIGN_USER_MENU) {
+    tbPtr = stpcpy(tbPtr, userMenus[-(itemToBeAssigned - ASSIGN_USER_MENU)].menuName);
+  }
+  else if(itemToBeAssigned < 0) {
+    tbPtr = stpcpy(tbPtr, indexOfItems[-itemToBeAssigned].itemCatalogName);
+  }
+  else if(indexOfItems[itemToBeAssigned].itemCatalogName[0] == 0) {
+    tbPtr = stpcpy(tbPtr, indexOfItems[itemToBeAssigned].itemSoftmenuName);
+  }
+  else if(itemToBeAssigned == ITM_ENTER) {
+    tbPtr = stpcpy(tbPtr, "NULL");
+  }
+  else {
+    tbPtr = stpcpy(tbPtr, indexOfItems[itemToBeAssigned].itemCatalogName);
+  }
+
+  tbPtr = stpcpy(tbPtr, " ");
+  if(itemToBeAssigned != 0 && shiftF) {
+    tbPtr = stpcpy(tbPtr, STD_SUP_f STD_CURSOR);
+  }
+  else if(itemToBeAssigned != 0 && shiftG) {
+    tbPtr = stpcpy(tbPtr, STD_SUP_g STD_CURSOR);
+  }
+  else {
+    tbPtr = stpcpy(tbPtr, "_");
+  }
+}
+
+
+
+static void _assignItem(userMenuItem_t *menuItem) {
+  const uint8_t *lblPtr = NULL;
+  uint32_t l = 0;
+  if(itemToBeAssigned >= ASSIGN_LABELS) {
+    lblPtr                    = labelList[itemToBeAssigned - ASSIGN_LABELS].labelPointer;
+    menuItem->item            = ITM_XEQ;
+  }
+  else if(itemToBeAssigned >= ASSIGN_RESERVED_VARIABLES) {
+    lblPtr                    = allReservedVariables[itemToBeAssigned - ASSIGN_RESERVED_VARIABLES].reservedVariableName;
+    menuItem->item            = ITM_RCL;
+  }
+  else if(itemToBeAssigned >= ASSIGN_NAMED_VARIABLES) {
+    lblPtr                    = allNamedVariables[itemToBeAssigned - ASSIGN_NAMED_VARIABLES].variableName;
+    menuItem->item            = ITM_RCL;
+  }
+  else if(itemToBeAssigned <= ASSIGN_USER_MENU) {
+    lblPtr                    = (uint8_t *)userMenus[-(itemToBeAssigned - ASSIGN_USER_MENU)].menuName;
+    menuItem->item            = -MNU_DYNAMIC;
+    xcopy(menuItem->argumentName, (char *)lblPtr, stringByteLength((char *)lblPtr));
+    lblPtr                    = NULL;
+  }
+  else if(itemToBeAssigned == ITM_ENTER) {
+    menuItem->item            = ITM_NULL;
+    menuItem->argumentName[0] = 0;
+  }
+  else {
+    menuItem->item            = itemToBeAssigned;
+    menuItem->argumentName[0] = 0;
+  }
+  if(lblPtr) {
+    l = (uint32_t)(*(lblPtr++));
+    xcopy(menuItem->argumentName, (char *)lblPtr, l);
+    menuItem->argumentName[l] = 0;
+  }
+}
+
+void assignToMyMenu(uint16_t position) {
+  if(position < 18) {
+    _assignItem(&userMenuItems[position]);
+  }
+}
+
+void assignToMyAlpha(uint16_t position) {
+  if(position < 18) {
+    _assignItem(&userAlphaItems[position]);
+  }
+}
+
+void assignToUserMenu(uint16_t position) {
+  if(position < 18) {
+    _assignItem(&userMenus[currentUserMenu].menuItem[position]);
+  }
+}
+
+void assignToKey(const char *data) {
+  calcKey_t *key = kbd_usr + (*data - '0')*10 + *(data+1) - '0';
+  userMenuItem_t tmpMenuItem;
+
+  _assignItem(&tmpMenuItem);
+  if(tmpMenuItem.item == ITM_NULL) {
+    const calcKey_t *stdKey = kbd_std + (*data - '0')*10 + *(data+1) - '0';
+    if(previousCalcMode == CM_AIM) {
+      if(shiftG)      key->gShiftedAim = stdKey->gShiftedAim;
+      else if(shiftF) key->fShiftedAim = stdKey->fShiftedAim;
+      else            key->primaryAim  = stdKey->primaryAim;
+    }
+    else {
+      if(shiftG)      key->gShifted = stdKey->gShifted;
+      else if(shiftF) key->fShifted = stdKey->fShifted;
+      else            key->primary  = stdKey->primary;
+    }
+  }
+  else {
+    if(previousCalcMode == CM_AIM) {
+      if(shiftG)      key->gShiftedAim = tmpMenuItem.item;
+      else if(shiftF) key->fShiftedAim = tmpMenuItem.item;
+      else            key->primaryAim  = tmpMenuItem.item;
+    }
+    else {
+      if(shiftG)      key->gShifted = tmpMenuItem.item;
+      else if(shiftF) key->fShifted = tmpMenuItem.item;
+      else            key->primary  = tmpMenuItem.item;
+    }
+  }
+}
+
+
+
+void createMenu(const char *name) {
+  bool_t alreadyInUse = false;
+  for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
+    if(compareString(name, indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
+      alreadyInUse = true;
+    }
+  }
+  for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
+    if(compareString(name, userMenus[i].menuName, CMP_BINARY) == 0) {
+      alreadyInUse = true;
+    }
+  }
+
+  if(alreadyInUse) {
+    displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, REGISTER_X);
+    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+      moreInfoOnError("In function fnAssign:", "the menu", name, "already exists");
+    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+  else {
+    if(numberOfUserMenus == 0) {
+      userMenus = allocWp43s(TO_BLOCKS(sizeof(userMenu_t)));
+    }
+    else {
+      userMenus = reallocWp43s(userMenus, TO_BLOCKS(sizeof(userMenu_t)) * numberOfUserMenus, TO_BLOCKS(sizeof(userMenu_t)) * (numberOfUserMenus + 1));
+    }
+    memset(userMenus + numberOfUserMenus, 0, sizeof(userMenu_t));
+    xcopy(userMenus[numberOfUserMenus].menuName, name, stringByteLength(name));
+    ++numberOfUserMenus;
+  }
+}

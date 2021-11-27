@@ -817,7 +817,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           _processOperator(PARSER_OPERATOR_ITM_YX, mvarBuffer);
         }
         else if(compareString("!", strPtr, CMP_BINARY) == 0) {
-          _processOperator(PARSER_OPERATOR_ITM_XFACT, mvarBuffer);
+          _processOperator(ITM_XFACT, mvarBuffer);
         }
         else if(compareString("(", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_LEFT, mvarBuffer);
@@ -835,7 +835,19 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           _processOperator(PARSER_OPERATOR_ITM_EQUAL, mvarBuffer);
         }
         else if(compareString(":", strPtr, CMP_BINARY) == 0) {
-          // label or parameter separator will be skipped
+          // label will be skipped
+        }
+        else if(compareString(" ", strPtr, CMP_BINARY) == 0) {
+          uint32_t opStackTop = 0xffffffffu;
+          for(uint32_t i = 0; i <= PARSER_OPERATOR_STACK_SIZE; ++i) {
+            if((i == PARSER_OPERATOR_STACK_SIZE) || (((uint16_t *)mvarBuffer)[i] == 0)) {
+              opStackTop = i;
+              break;
+            }
+          }
+          if((opStackTop != 0) && (((uint16_t *)mvarBuffer)[opStackTop - 1] == ITM_Ek)) {
+            ((uint16_t *)mvarBuffer)[opStackTop - 1] = ITM_Ephik;
+          }
         }
         else {
           displayBugScreen("In function _parseWord: Unknown operator appeared!");
@@ -849,13 +861,13 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemCatalogName, strPtr, CMP_BINARY) == 0)) {
+          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemCatalogName, strPtr, CMP_BINARY) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemSoftmenuName, strPtr, CMP_BINARY) == 0)) {
+          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemSoftmenuName, strPtr, CMP_BINARY) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }

@@ -858,6 +858,14 @@ void fnReset(uint16_t confirmation) {
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
 
+    memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
+    memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);
+    userMenus = NULL;
+    numberOfUserMenus = 0;
+    currentUserMenu = 0;
+
+
+
       
         clearSystemFlag(FLAG_DENANY);                              //JM Default
         fnDenMax(0);                                               //JM Default

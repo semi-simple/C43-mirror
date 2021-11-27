@@ -16,6 +16,7 @@
 
 #include "saveRestoreCalcState.h"
 
+#include "assign.h"
 #include "charString.h"
 #include "config.h"
 #include "display.h"
@@ -32,12 +33,13 @@
 #include "registerValueConversions.h"
 #include "screen.h"
 #include "solver/equation.h"
+#include "sort.h"
 #include "stats.h"
 #include <string.h>
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         60  // Save formulae
+#define BACKUP_VERSION         61  // Save MyMenu and MyAlpha
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -103,6 +105,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(globalRegister,                      sizeof(globalRegister),                     BACKUP);
     save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
     save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
+    save(userMenuItems,                       sizeof(userMenuItems),                      BACKUP);
+    save(userAlphaItems,                      sizeof(userAlphaItems),                     BACKUP);
     save(&tam.mode,                           sizeof(tam.mode),                           BACKUP);
     save(&tam.function,                       sizeof(tam.function),                       BACKUP);
     save(&tam.alpha,                          sizeof(tam.alpha),                          BACKUP);
@@ -118,6 +122,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     ramPtr = TO_WP43SMEMPTR(allNamedVariables);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(allFormulae);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(userMenus);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -254,6 +260,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
     save(&numberOfFormulae,                   sizeof(numberOfFormulae),                   BACKUP);
     save(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
+    save(&numberOfUserMenus,                  sizeof(numberOfUserMenus),                  BACKUP);
+    save(&currentUserMenu,                    sizeof(currentUserMenu),                    BACKUP);
 
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
     save(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -341,6 +349,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(globalRegister,                      sizeof(globalRegister),                     BACKUP);
       restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
       restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
+      restore(userMenuItems,                       sizeof(userMenuItems),                      BACKUP);
+      restore(userAlphaItems,                      sizeof(userAlphaItems),                     BACKUP);
       restore(&tam.mode,                           sizeof(tam.mode),                           BACKUP);
       restore(&tam.function,                       sizeof(tam.function),                       BACKUP);
       restore(&tam.alpha,                          sizeof(tam.alpha),                          BACKUP);
@@ -357,6 +367,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       allNamedVariables = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       allFormulae = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      userMenus = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -496,6 +508,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
       restore(&numberOfFormulae,                   sizeof(numberOfFormulae),                   BACKUP);
       restore(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
+      restore(&numberOfUserMenus,                  sizeof(numberOfUserMenus),                  BACKUP);
+      restore(&currentUserMenu,                    sizeof(currentUserMenu),                    BACKUP);
 
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
       restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -564,6 +578,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_LISTXY)                {}             //JM
         else if(calcMode == CM_GRAPH)                 {}             //JM
         else if(calcMode == CM_EIM)                   {}
+        else if(calcMode == CM_ASSIGN)                {}
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);
@@ -581,6 +596,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_LISTXY)                 calcModeNormalGui();             //JM
         else if(calcMode == CM_GRAPH)                  calcModeNormalGui();             //JM
         else if(calcMode == CM_EIM)                   {calcModeAimGui();}
+        else if(calcMode == CM_ASSIGN)                {calcModeNormalGui();}
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);
@@ -823,6 +839,52 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
                                                                                                              kbd_usr[i].gShiftedAim,
                                                                                                                          kbd_usr[i].primaryTam);
   save(tmpString, strlen(tmpString), BACKUP);
+  }
+
+  // MyMenu
+  sprintf(tmpString, "MYMENU\n18\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(i=0; i<18; i++) {
+    sprintf(tmpString, "%" PRId16, userMenuItems[i].item);
+    if(userMenuItems[i].argumentName[0] != 0) {
+      strcat(tmpString, " ");
+      stringToUtf8(userMenuItems[i].argumentName, (uint8_t *)tmpString + strlen(tmpString));
+    }
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+
+  // MyAlpha
+  sprintf(tmpString, "MYALPHA\n18\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(i=0; i<18; i++) {
+    sprintf(tmpString, "%" PRId16, userAlphaItems[i].item);
+    if(userAlphaItems[i].argumentName[0] != 0) {
+      strcat(tmpString, " ");
+      stringToUtf8(userAlphaItems[i].argumentName, (uint8_t *)tmpString + strlen(tmpString));
+    }
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+
+  // User menus
+  sprintf(tmpString, "USER_MENUS\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%" PRIu16 "\n", numberOfUserMenus);
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(uint32_t j = 0; j < numberOfUserMenus; ++j) {
+    stringToUtf8(userMenus[j].menuName, (uint8_t *)tmpString);
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+    for(i=0; i<18; i++) {
+      sprintf(tmpString, "%" PRId16, userMenus[j].menuItem[i].item);
+      if(userMenus[j].menuItem[i].argumentName[0] != 0) {
+        strcat(tmpString, " ");
+        stringToUtf8(userMenus[j].menuItem[i].argumentName, (uint8_t *)tmpString + strlen(tmpString));
+      }
+      strcat(tmpString, "\n");
+      save(tmpString, strlen(tmpString), BACKUP);
+    }
   }
 
   // Programs
@@ -1366,6 +1428,88 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
         while(*str != ' ') str++;
         while(*str == ' ') str++;
         kbd_usr[i].primaryTam = stringToUint16(str);
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "MYMENU") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    numberOfRegs = stringToInt16(tmpString);
+    for(i=0; i<numberOfRegs; i++) {
+      readLine(stream, tmpString); // key
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        str = tmpString;
+        userMenuItems[i].item            = stringToInt16(str);
+        userMenuItems[i].argumentName[0] = 0;
+
+        while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+        if(*str == ' ') {
+          while(*str == ' ') str++;
+          if((*str != '\n') && (*str != 0)) {
+            utf8ToString((uint8_t *)str, userMenuItems[i].argumentName);
+          }
+        }
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "MYALPHA") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    numberOfRegs = stringToInt16(tmpString);
+    for(i=0; i<numberOfRegs; i++) {
+      readLine(stream, tmpString); // key
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        str = tmpString;
+        userAlphaItems[i].item            = stringToInt16(str);
+        userAlphaItems[i].argumentName[0] = 0;
+
+        while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+        if(*str == ' ') {
+          while(*str == ' ') str++;
+          if((*str != '\n') && (*str != 0)) {
+            utf8ToString((uint8_t *)str, userAlphaItems[i].argumentName);
+          }
+        }
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "USER_MENUS") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    int16_t numberOfMenus = stringToInt16(tmpString);
+    for(int32_t j=0; j<numberOfMenus; j++) {
+      readLine(stream, tmpString);
+      int16_t target = -1;
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
+        for(i = 0; i < numberOfUserMenus; ++i) {
+          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_BINARY) == 0) {
+            target = i;
+          }
+        }
+        if(target == -1) {
+          createMenu(tmpString + TMP_STR_LENGTH / 2);
+          target = numberOfUserMenus - 1;
+        }
+      }
+
+      readLine(stream, tmpString);
+      numberOfRegs = stringToInt16(tmpString);
+      for(i=0; i<numberOfRegs; i++) {
+        readLine(stream, tmpString); // key
+        if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+          str = tmpString;
+          userMenus[target].menuItem[i].item            = stringToInt16(str);
+          userMenus[target].menuItem[i].argumentName[0] = 0;
+
+          while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+          if(*str == ' ') {
+            while(*str == ' ') str++;
+            if((*str != '\n') && (*str != 0)) {
+              utf8ToString((uint8_t *)str, userMenus[target].menuItem[i].argumentName);
+            }
+          }
+        }
       }
     }
   }

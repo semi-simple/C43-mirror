@@ -760,17 +760,7 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
     return;
   }
 
-  if(!validateName(variableName)) {
-    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-    #ifdef PC_BUILD
-      sprintf(errorMessage, "the name %s", variableName);
-      moreInfoOnError("In function allocateNamedVariable:", errorMessage, "is incorrect! The name does not follow", "the naming convention!");
-    #endif // PC_BUILD
-    return;
-  }
-
   if(_findReservedVariable(variableName) != INVALID_VARIABLE) {
-    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #ifdef PC_BUILD
       sprintf(errorMessage, "the name %s", variableName);
       moreInfoOnError("In function allocateNamedVariable:", errorMessage, "clashes with a reserved variable!", NULL);
@@ -792,7 +782,6 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
   else {
     regist = numberOfNamedVariables;
     if(regist == LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE + 1) {
-      displayCalcErrorMessage(ERROR_TOO_MANY_VARIABLES, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       #ifdef PC_BUILD
         sprintf(errorMessage, "%d named variables!", LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE + 1);
         moreInfoOnError("In function allocateNamedVariable:", "you can allocate up to", errorMessage, NULL);

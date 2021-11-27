@@ -14,13 +14,10 @@
  * along with 43S.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/********************************************//**
- * \file items.c Item list and function to run them
- ***********************************************/
-
 #include "items.h"
 
 #include "c43Extensions/addons.h"
+#include "assign.h"
 #include "browsers/browsers.h"
 #include "bufferize.h"
 #include "config.h"
@@ -176,6 +173,14 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
       calcRegister_t regist = findNamedVariable(varCatalogItem);
       if(regist != INVALID_VARIABLE) {
        reallyRunFunction(func, regist);
+      }
+      return;
+    }
+    else if(func == ITM_XEQ && dynamicMenuItem > -1) {
+      char *varCatalogItem = dynmenuGetLabel(dynamicMenuItem);
+      calcRegister_t regist = findNamedLabel(varCatalogItem);
+      if(regist != INVALID_VARIABLE) {
+        reallyRunFunction(func, regist);
       }
       return;
     }
@@ -751,6 +756,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnTvmVar                    (uint16_t unusedButMandatoryParameter) {}
   void fnTvmBeginMode              (uint16_t unusedButMandatoryParameter) {}
   void fnTvmEndMode                (uint16_t unusedButMandatoryParameter) {}
+  void fnAssign                    (uint16_t unusedButMandatoryParameter) {}
 
   void fnEqSolvGraph               (uint16_t unusedButMandatoryParameter) {}
 
@@ -845,7 +851,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
-
 
 //            function                      parameter                    item in catalog                                item in softmenu                               TAM min                 max  CATALOG    stackLift       UNDO status
 
@@ -2295,7 +2300,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1408 */  { fnAgm,                        NOPARAM,                     "AGM",                                         "AGM",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1409 */  { itemToBeCoded,                NOPARAM,                     "AGRAPH",                                      "AGRAPH",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1410 */  { fnDisplayFormatAll,           TM_VALUE,                    "ALL" ,                                        "ALL",                                         (0 << TAM_MAX_BITS) |    15, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
-/* 1411 */  { itemToBeCoded,                NOPARAM/*#JM#*/,             "ASN",                                         "ASN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
+/* 1411 */  { fnAssign,                     0/*#JM#*/,                   "ASN",                                         "ASN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1412 */  { itemToBeCoded,                NOPARAM,                     "BACK",                                        "BACK",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1413 */  { fnBatteryVoltage,             NOPARAM,                     "BATT?",                                       "BATT?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1414 */  { fnBeep,                       NOPARAM,                     "BEEP",                                        "BEEP",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},

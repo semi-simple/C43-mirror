@@ -261,35 +261,6 @@ static void _addSpace(char **bufPtr, int16_t *strWidth, uint32_t *doubleBytednes
     *doubleBytednessHistory <<= 1;
   }
 }
-
-static bool_t _isLetter(const char* strPtr) {
-  if(                                            compareChar(strPtr, STD_A                   ) < 0) return false;
-  if(compareChar(strPtr, STD_Z          ) > 0 && compareChar(strPtr, STD_a                   ) < 0) return false;
-  if(compareChar(strPtr, STD_z          ) > 0 && compareChar(strPtr, STD_SUP_a               ) < 0) return false;
-  if(compareChar(strPtr, STD_SUP_a      ) > 0 && compareChar(strPtr, STD_mu_b                ) < 0) return false;
-  if(compareChar(strPtr, STD_mu_b       ) > 0 && compareChar(strPtr, STD_A_GRAVE             ) < 0) return false;
-  if(                                            compareChar(strPtr, STD_CROSS               ) ==0) return false;
-  if(                                            compareChar(strPtr, STD_DIVIDE              ) ==0) return false;
-  if(compareChar(strPtr, STD_z_CARON    ) > 0 && compareChar(strPtr, STD_iota_DIALYTIKA_TONOS) < 0) return false;
-  if(compareChar(strPtr, STD_omega_TONOS) > 0 && compareChar(strPtr, STD_SUP_x               ) < 0) return false;
-  if(compareChar(strPtr, STD_SUP_x      ) > 0 && compareChar(strPtr, STD_SUB_alpha           ) < 0) return false;
-  if(compareChar(strPtr, STD_SUB_mu     ) > 0 && compareChar(strPtr, STD_SUB_a_b             ) < 0) return false;
-  if(compareChar(strPtr, STD_SUB_t      ) > 0 && compareChar(strPtr, STD_SUB_a               ) < 0) return false;
-  if(compareChar(strPtr, STD_SUB_Z      ) > 0                                                     ) return false;
-
-  return true;
-}
-
-static bool_t _lookAheadForLetters(const char* strPtr) {
-  for(; *strPtr != 0; strPtr += (*strPtr & 0x80) ? 2 : 1) {
-    if((*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == ':' || (*strPtr) == '^' ||
-       (*strPtr) == '(' || (*strPtr) == ')' || (*strPtr) == ' ' || (*strPtr) == '=' ||
-       (*strPtr) == ';' || (*strPtr) == '|' ||
-       compareChar(strPtr, STD_CROSS) == 0 || compareChar(strPtr, STD_DOT) == 0) return false;
-    if(_isLetter(strPtr)) return true;
-  }
-  return false;
-}
 #endif /* TESTSUITE_BUILD */
 
 void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool_t dryRun, bool_t *cursorShown, bool_t *rightEllipsis) {
@@ -427,7 +398,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         }
 
         /* Operators */
-        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '|' || (((*strPtr) == '/' || (*strPtr) == '!') && (!inToken || (inNumber && !_lookAheadForLetters(strPtr)))))) {
+        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '|' || (((*strPtr) == '/' || (*strPtr) == '!') && (!inToken || inNumber)))) {
           if((*strPtr) != '|' || (strLength > (startAt + 1)))
             _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
@@ -817,7 +788,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           _processOperator(PARSER_OPERATOR_ITM_YX, mvarBuffer);
         }
         else if(compareString("!", strPtr, CMP_BINARY) == 0) {
-          _processOperator(ITM_XFACT, mvarBuffer);
+          _processOperator(PARSER_OPERATOR_ITM_XFACT, mvarBuffer);
         }
         else if(compareString("(", strPtr, CMP_BINARY) == 0) {
           _processOperator(PARSER_OPERATOR_ITM_PARENTHESIS_LEFT, mvarBuffer);
@@ -835,19 +806,7 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           _processOperator(PARSER_OPERATOR_ITM_EQUAL, mvarBuffer);
         }
         else if(compareString(":", strPtr, CMP_BINARY) == 0) {
-          // label will be skipped
-        }
-        else if(compareString(" ", strPtr, CMP_BINARY) == 0) {
-          uint32_t opStackTop = 0xffffffffu;
-          for(uint32_t i = 0; i <= PARSER_OPERATOR_STACK_SIZE; ++i) {
-            if((i == PARSER_OPERATOR_STACK_SIZE) || (((uint16_t *)mvarBuffer)[i] == 0)) {
-              opStackTop = i;
-              break;
-            }
-          }
-          if((opStackTop != 0) && (((uint16_t *)mvarBuffer)[opStackTop - 1] == ITM_Ek)) {
-            ((uint16_t *)mvarBuffer)[opStackTop - 1] = ITM_Ephik;
-          }
+          // label or parameter separator will be skipped
         }
         else {
           displayBugScreen("In function _parseWord: Unknown operator appeared!");
@@ -861,13 +820,13 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemCatalogName, strPtr, CMP_BINARY) == 0)) {
+          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemCatalogName, strPtr, CMP_BINARY) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
         }
         for(uint32_t i = 1; i < LAST_ITEM; ++i) {
-          if(((indexOfItems[i].status & CAT_STATUS) == CAT_FNCT) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemSoftmenuName, strPtr, CMP_BINARY) == 0)) {
+          if(((indexOfItems[i].status & EIM_STATUS) == EIM_ENABLED) && (indexOfItems[i].param <= NOPARAM) && (compareString(indexOfItems[i].itemSoftmenuName, strPtr, CMP_BINARY) == 0)) {
             _processOperator(i, mvarBuffer);
             return;
           }
@@ -957,7 +916,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
       case '!':
         if(bufPtr != buffer && !afterSpace) {
           *bufPtr = 0;
-          if(stringGlyphLength(buffer) > numericCount || _lookAheadForLetters(strPtr)) {
+          if(stringGlyphLength(buffer) > numericCount) {
             *(bufPtr++) = *(strPtr++);
             afterClosingParenthesis = false;
             unaryMinusCanOccur = false;

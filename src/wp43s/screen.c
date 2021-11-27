@@ -508,6 +508,7 @@
       showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
+        tmpString[0] = 0;
         showFunctionName(ITM_NOP, 0);
       }
     }
@@ -567,6 +568,7 @@
       showFunctionNameCounter -= FAST_SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
+        tmpString[0] = 0;
         showFunctionName(ITM_NOP, 0);
       }
     }
@@ -1420,7 +1422,10 @@ void force_refresh(void) {
   }                                                              //JM^^
 
     char *functionName;
-    if(item != MNU_DYNAMIC) {
+    if(tmpString[0] != 0) {
+      functionName = tmpString;
+    }
+    else if(item != MNU_DYNAMIC) {
       functionName = indexOfItems[abs(item)].itemCatalogName;
     }
     else {
@@ -1448,16 +1453,20 @@ void force_refresh(void) {
 
 void hideFunctionName(void) {
 #ifdef CLEARNAME
-  uint32_t col, row;
-  getStringBounds(indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
-  lcd_fill_rect(1, Y_POSITION_OF_REGISTER_T_LINE+6, col, row, LCD_SET_VALUE);
-  showFunctionNameItem = 0;
+// JM Removed the partial cleaning
+
+  if(!running_program_jm && tmpString[0] != 0) {
+    uint32_t col, row;
+      getStringBounds(tmpString[0] != 0 ? tmpString : indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
+    lcd_fill_rect(1, Y_POSITION_OF_REGISTER_T_LINE+6, col, row, LCD_SET_VALUE);
+    showFunctionNameItem = 0;
+  }
 #endif //CLEARNAME
 
+  if(!running_program_jm && (tmpString[0] != 0 || calcMode!=CM_AIM)) refreshRegisterLine(REGISTER_T);      //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
+                                                                                    //Added the tempstring isea, not sure why it is used, but I stay compatible
+  showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
-
-  if(running_program_jm) return;                             //JM
-  if(calcMode!=CM_AIM) refreshRegisterLine(REGISTER_T);      //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
 }
 
 
@@ -2004,7 +2013,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
       }
-
 
         else if(temporaryInformation == TI_NO_INFO
                 && getSystemFlag(FLAG_FRACT)
@@ -3047,13 +3055,13 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       refreshStatusBar();
       break;
 
-    case CM_PEM:
-      //clearScreen();
-      showSoftmenuCurrentPart();
-      fnPem(NOPARAM);
-      displayShiftAndTamBuffer();
-      refreshStatusBar();
-      break;
+      case CM_PEM:
+        //clearScreen();
+        showSoftmenuCurrentPart();
+        fnPem(NOPARAM);
+        displayShiftAndTamBuffer();
+        refreshStatusBar();
+        break;
 
       case CM_NORMAL:
       case CM_AIM:
@@ -3132,6 +3140,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         last_CM = calcMode;
         doRefreshSoftMenu = false;
         displayShiftAndTamBuffer();
+
         showSoftmenuCurrentPart();
       } 
                                         //jm v

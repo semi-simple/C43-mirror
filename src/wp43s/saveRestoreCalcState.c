@@ -32,6 +32,7 @@
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
+#include "softmenus.h"
 #include "solver/equation.h"
 #include "sort.h"
 #include "stats.h"
@@ -124,6 +125,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     ramPtr = TO_WP43SMEMPTR(allFormulae);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(userMenus);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(userKeyLabel);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -262,6 +265,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
     save(&numberOfUserMenus,                  sizeof(numberOfUserMenus),                  BACKUP);
     save(&currentUserMenu,                    sizeof(currentUserMenu),                    BACKUP);
+    save(&userKeyLabelSize,                   sizeof(userKeyLabelSize),                   BACKUP);
 
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
     save(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -369,6 +373,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       allFormulae = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       userMenus = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      userKeyLabel = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -510,6 +516,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
       restore(&numberOfUserMenus,                  sizeof(numberOfUserMenus),                  BACKUP);
       restore(&currentUserMenu,                    sizeof(currentUserMenu),                    BACKUP);
+      restore(&userKeyLabelSize,                   sizeof(userKeyLabelSize),                   BACKUP);
 
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
       restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -839,6 +846,26 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
                                                                                                              kbd_usr[i].gShiftedAim,
                                                                                                                          kbd_usr[i].primaryTam);
   save(tmpString, strlen(tmpString), BACKUP);
+  }
+
+  // Keyboard arguments
+  sprintf(tmpString, "KEYBOARD_ARGUMENTS\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  {
+    uint32_t num = 0;
+    for(i = 0; i < 37 * 6; ++i) {
+      if(*(getNthString((uint8_t *)userKeyLabel, i)) != 0) ++num;
+    }
+    sprintf(tmpString, "%" PRIu32 "\n", num);
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+  for(i = 0; i < 37 * 6; ++i) {
+    if(*(getNthString((uint8_t *)userKeyLabel, i)) != 0) {
+      sprintf(tmpString, "%" PRIu32 " ", i);
+      stringToUtf8((char *)getNthString((uint8_t *)userKeyLabel, i), (uint8_t *)tmpString + strlen(tmpString));
+      strcat(tmpString, "\n");
+      save(tmpString, strlen(tmpString), BACKUP);
+    }
   }
 
   // MyMenu
@@ -1395,39 +1422,67 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       readLine(stream, tmpString); // key
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         str = tmpString;
-        kbd_usr[i].keyId = stringToUint16(str);
+        kbd_usr[i].keyId = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primary = stringToUint16(str);
+        kbd_usr[i].primary = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].fShifted = stringToUint16(str);
+        kbd_usr[i].fShifted = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].gShifted = stringToUint16(str);
+        kbd_usr[i].gShifted = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].keyLblAim = stringToUint16(str);
+        kbd_usr[i].keyLblAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primaryAim = stringToUint16(str);
+        kbd_usr[i].primaryAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].fShiftedAim = stringToUint16(str);
+        kbd_usr[i].fShiftedAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].gShiftedAim = stringToUint16(str);
+        kbd_usr[i].gShiftedAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primaryTam = stringToUint16(str);
+        kbd_usr[i].primaryTam = stringToInt16(str);
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "KEYBOARD_ARGUMENTS") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    numberOfRegs = stringToInt16(tmpString);
+    if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+      freeWp43s(userKeyLabel, TO_BLOCKS(userKeyLabelSize));
+      userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
+      userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
+      memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
+    }
+    for(i=0; i<numberOfRegs; i++) {
+      readLine(stream, tmpString); // key
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        str = tmpString;
+        uint16_t key = stringToUint16(str);
+        userMenuItems[i].argumentName[0] = 0;
+
+        while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+        if(*str == ' ') {
+          while(*str == ' ') str++;
+          if((*str != '\n') && (*str != 0)) {
+            utf8ToString((uint8_t *)str, tmpString + TMP_STR_LENGTH / 2);
+            setUserKeyArgument(key, tmpString + TMP_STR_LENGTH / 2);
+          }
+        }
       }
     }
   }

@@ -295,6 +295,7 @@ bool_t lastshiftG = false;
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two
             fnKeyInCatalog = 1;
+            resetShiftState();   //JM moved down here from above
             addItemToBuffer(item);
             fnKeyInCatalog = 0;
             if(calcMode == CM_EIM && isAlphabeticSoftmenu()) {
@@ -516,8 +517,8 @@ bool_t allowShiftsToClearError = false;
     const calcKey_t *key;
 
     dynamicMenuItem = -1;
-//    key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
-//    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
+//.    key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');  //Latest one, remove and replace below
+//.    key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_NIM)) ? (kbd_usr + stringToKeyNumber(data)) : (kbd_std + stringToKeyNumber(data));    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
     int8_t key_no = stringToKeyNumber(data);
 
@@ -525,10 +526,10 @@ bool_t allowShiftsToClearError = false;
     char tmp[200]; sprintf(tmp,"^^^^^^^keyboard.c: determineitem: key_no: %d:",key_no); jm_show_comment(tmp);
   #endif //PC_BUILD
 
-    if(kbd_usr[36].primaryTam == ITM_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
+//.    if(kbd_usr[36].primaryTam == ITM_EXIT1) //opposite keyboard V43 LT, 43S, V43 RT
       key = getSystemFlag(FLAG_USER) ? (kbd_usr + key_no) : (kbd_std + key_no);
-    else
-      key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_EIM) || (calcMode == CM_PLOT_STAT) || (calcMode == CM_GRAPH) || (calcMode == CM_LISTXY)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
+//.    else
+//.      key = getSystemFlag(FLAG_USER) && ((calcMode == CM_NORMAL) || (calcMode == CM_AIM) || (calcMode == CM_NIM) || (calcMode == CM_EIM) || (calcMode == CM_PLOT_STAT) || (calcMode == CM_GRAPH) || (calcMode == CM_LISTXY)) ? (kbd_usr + key_no) : (kbd_std + key_no);    //JM Added (calcMode == CM_NORMAL) to prevent user substitution in AIM and TAM
 
     fnTimerExec(TO_FN_EXEC);                                  //dr execute queued fn
 
@@ -570,12 +571,16 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();
+      #ifdef PC_BUILD
+        if(calcMode == CM_AIM || calcMode == CM_EIM) refreshModeGui();
+      #endif
 
       return ITM_NOP;
     }
 
-    // Shift g pressed and shift f not active
-    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN)) {
+    // Shift g pressed and JM REMOVED shift f not active
+    else if(key->primary == ITM_SHIFTg && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH || calcMode == CM_ASSIGN)) {
+      if(temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) allowShiftsToClearError = true; //JM
       if(temporaryInformation == TI_VIEW) {
         temporaryInformation = TI_NO_INFO;
         updateMatrixHeightCache();
@@ -594,6 +599,9 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();
+      #ifdef PC_BUILD
+        if(calcMode == CM_AIM || calcMode == CM_EIM) refreshModeGui();
+      #endif
 
       return ITM_NOP;
     }
@@ -622,6 +630,9 @@ bool_t allowShiftsToClearError = false;
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       showShiftState();                                                                                                         //JM shifts
+      #ifdef PC_BUILD
+        if(calcMode == CM_AIM || calcMode == CM_EIM) refreshModeGui();
+      #endif
 
       return ITM_NOP;
     }  
@@ -764,6 +775,17 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       int16_t item = determineItem((char *)data);
+
+      if(getSystemFlag(FLAG_USER)) {
+        int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+        int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
+        char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
+        xcopy(tmpString, funcParam, stringByteLength(funcParam) + 1);
+      }
+      else {
+        *tmpString = 0;
+      }
+
       showFunctionNameItem = 0;
       #ifdef PC_BUILD
         char tmp[200]; sprintf(tmp,"^^^^btnPressed START item=%d data=\'%s\'",item,(char *)data); jm_show_comment(tmp);
@@ -803,6 +825,16 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
         item = determineItem((char *)data);
 //      previousItem = item;
 //    }
+
+      if(getSystemFlag(FLAG_USER)) {
+        int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+        int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
+        char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
+        xcopy(tmpString, funcParam, stringByteLength(funcParam) + 1);
+      }
+      else {
+        *tmpString = 0;
+      }
 
       showFunctionNameItem = 0;
       if(item != ITM_NOP && item != ITM_NULL) {
@@ -848,11 +880,43 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
           showSoftmenu(item);
         }
         else {
+          int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+          int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
+          char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
+
           if(item != ITM_NOP && tam.alpha && indexOfItems[item].func != addItemToBuffer) {
             // We are in TAM mode so need to cancel first (equivalent to EXIT)
             tamLeaveMode();
           }
-          runFunction(item);
+          if(item == ITM_RCL && funcParam[0] != 0) {
+            calcRegister_t var = findNamedVariable(funcParam);
+            if(var != INVALID_VARIABLE) {
+              reallyRunFunction(item, var);
+            }
+            else {
+              displayCalcErrorMessage(ERROR_UNDEF_SOURCE_VAR, ERR_REGISTER_LINE, REGISTER_X);
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                sprintf(errorMessage, "string '%s' is not a named variable", funcParam);
+                moreInfoOnError("In function btnReleased:", errorMessage, NULL, NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            }
+          }
+          else if(item == ITM_XEQ && funcParam[0] != 0) {
+            calcRegister_t label = findNamedLabel(funcParam);
+            if(label != INVALID_VARIABLE) {
+              reallyRunFunction(item, label);
+            }
+            else {
+              displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
+              #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+                sprintf(errorMessage, "string '%s' is not a named label", funcParam);
+                moreInfoOnError("In function btnReleased:", errorMessage, NULL, NULL);
+              #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+            }
+          }
+          else {
+            runFunction(item);
+          }
         }
       }
   #ifdef DMCP_BUILD

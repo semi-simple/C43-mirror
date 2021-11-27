@@ -1654,7 +1654,10 @@ void CB_UNCHECKED(uint32_t xx, uint32_t yy) {
     clearScreen_old(false, false, true); //JM, added to ensure the f/g underlines are deleted
 
     if(m < NUMBER_OF_DYNAMIC_SOFTMENUS) { // Dynamic softmenu
-      initVariableSoftmenu(m);
+      if(softmenu[m].menuItem != cachedDynamicMenu || softmenu[m].menuItem == -MNU_DYNAMIC) {
+        initVariableSoftmenu(m);
+        cachedDynamicMenu = softmenu[m].menuItem;
+      }
       numberOfItems = dynamicSoftmenu[m].numItems;
     }
     else if(softmenu[m].menuItem == -MNU_EQN && numberOfFormulae == 0) {

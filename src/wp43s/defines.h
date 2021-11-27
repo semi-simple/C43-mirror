@@ -307,9 +307,11 @@
 #define ERROR_SYNTAX_ERROR_IN_EQUATION            45
 #define ERROR_EQUATION_TOO_COMPLEX                46
 #define ERROR_CANNOT_ASSIGN_HERE                  47
-#define ERROR_BAD_INPUT                           48 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_INVALID_NAME                        48
+#define ERROR_TOO_MANY_VARIABLES                  49 // unlikely
+#define ERROR_BAD_INPUT                           50 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     49
+#define NUMBER_OF_ERROR_CODES                     51
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111

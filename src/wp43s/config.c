@@ -863,6 +863,9 @@ void fnReset(uint16_t confirmation) {
     userMenus = NULL;
     numberOfUserMenus = 0;
     currentUserMenu = 0;
+    userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
+    userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
+    memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
 
 
 

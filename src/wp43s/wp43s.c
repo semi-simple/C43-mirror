@@ -105,6 +105,7 @@ char                  *errorMessage;
 char                  *aimBuffer; // aimBuffer is also used for NIM
 char                  *nimBufferDisplay;
 char                  *tamBuffer;
+char                  *userKeyLabel;
 char                   asmBuffer[5];
 char                   oldTime[8];
 char                   dateTimeString[12];
@@ -220,6 +221,7 @@ int16_t                dynamicMenuItem;
 int16_t               *menu_RAM;
 int16_t                numberOfTamMenusToPop;
 int16_t                itemToBeAssigned;
+int16_t                cachedDynamicMenu;
 
 uint16_t               globalFlags[7];
 uint16_t               freeProgramBytes;
@@ -245,6 +247,7 @@ uint16_t               numberOfFormulae;
 uint16_t               currentFormula;
 uint16_t               numberOfUserMenus;
 uint16_t               currentUserMenu;
+uint16_t               userKeyLabelSize;
 #if (REAL34_WIDTH_TEST == 1)
   uint16_t               largeur=200;
 #endif // (REAL34_WIDTH_TEST == 1)

@@ -277,8 +277,6 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
     bool_t inLabel = false;
     bool_t unaryMinus = true;
     const char *tmpPtr = strPtr;
-    bool_t inToken = false, _inToken = false;
-    bool_t inNumber = false, _inNumber = false;
 
     bool_t _cursorShown, _rightEllipsis;
     if(cursorShown == NULL)   cursorShown   = &_cursorShown;
@@ -321,12 +319,6 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
       if((++strLength) > startAt) {
         doubleBytednessHistory <<= 1;
         *bufPtr = *strPtr;
-
-        _inToken = ((*strPtr) != '+' && (*strPtr) != '-' && (*strPtr) != ':' && (*strPtr) != '^' &&
-                    (*strPtr) != '(' && (*strPtr) != ')' && (*strPtr) != ' ' && (*strPtr) != '=' &&
-                    (*strPtr) != ';' && (*strPtr) != '|' &&
-                    compareChar(strPtr, STD_CROSS) != 0 && compareChar(strPtr, STD_DOT) != 0);
-        _inNumber = (((*strPtr) >= '0' && (*strPtr) <= '9') || (*strPtr) == '.');
 
         /* Argument separator */
         if((!inLabel) && (*strPtr) == ':') {
@@ -399,7 +391,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         }
 
         /* Operators */
-        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '|' || (((*strPtr) == '/' || (*strPtr) == '!') && (!inToken || inNumber)))) {
+        else if((!inLabel) && ((*strPtr) == '=' || (*strPtr) == '+' || (*strPtr) == '-' || (*strPtr) == '/' || (*strPtr) == '!' || (*strPtr) == '|')) {
           if((*strPtr) != '|' || (strLength > (startAt + 1)))
             _addSpace(&bufPtr, &strWidth, &doubleBytednessHistory);
           *bufPtr       = *strPtr;
@@ -412,7 +404,6 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory |= 1;
           bufPtr += 1;
           unaryMinus = false;
-          _inToken = false;
         }
 
         /* Multiply */
@@ -490,9 +481,6 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
         bufPtr += (doubleBytednessHistory & 0x00000001) ? 2 : 1;
       }
       strPtr += ((*strPtr) & 0x80) ? 2 : 1;
-      if(!inToken && _inToken) inNumber = _inNumber;
-      inToken = _inToken;
-      if(!_inNumber) inNumber = false;
     }
 
     if((!dryRun) && (*cursorShown || cursorAt == EQUATION_NO_CURSOR))
@@ -1001,24 +989,13 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           }
         }
         /* fallthrough */
-      case '/':
-      case '!':
-        if(bufPtr != buffer && !afterSpace) {
-          *bufPtr = 0;
-          if(stringGlyphLength(buffer) > numericCount) {
-            *(bufPtr++) = *(strPtr++);
-            afterClosingParenthesis = false;
-            unaryMinusCanOccur = false;
-            afterSpace = false;
-            break;
-          }
-        }
-        /* fallthrough */
       case '=':
       case '+':
       case '-':
+      case '/':
       case ')':
       case '^':
+      case '!':
       case ':':
       case '|':
         if(equalAppeared && (*strPtr == '=')) {

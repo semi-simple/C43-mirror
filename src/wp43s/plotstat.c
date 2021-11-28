@@ -1283,13 +1283,9 @@ void fnPlotStat(uint16_t plotMode){
 #if defined STATDEBUG && defined PC_BUILD
   printf("fnPlotStat1: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
-  uint16_t i;
   int16_t cnt;
   realToInt32(SIGMA_N, cnt);
-  printf("Stored values\n");
-  for (i = 0; i < LIM && i < cnt; ++i) {
-    printf("i = %3u x = %9f; y = %9f\n",i,gr_x[i],gr_y[i]);
-  }
+  printf("Stored values %i\n",cnt);
 #endif //STATDEBUG
 
 if(checkMinimumDataPoints(const_2)) {

@@ -400,7 +400,8 @@ bool_t lastshiftG = false;
       resetShiftState();                               //shift cancelling delayed to this point after state machine
 
 
-      if(showFunctionNameItem != 0 || softmenuStack[0].softmenuId == 0) {  //JM added C43 condition, for FN keys operating on no menu present
+//TOCHECK: JM Changed showFunctionNameItem to item below, due to something 43S did to the showfunction sequencing
+      if(/*showFunctionNameItem*/item != 0 || softmenuStack[0].softmenuId == 0) {  //JM added C43 condition, for FN keys operating on no menu present
 /* //JM vv Rmove the possibility for error by removing code that may conflict with the state machine
         item = showFunctionNameItem;
       #if (FN_KEY_TIMEOUT_TO_NOP == 1)

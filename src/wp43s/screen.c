@@ -732,7 +732,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         underline_softkey(FN_key_pressed-38,1, false);
         fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
-          printf("Handler 1, KEY=%d \n",FN_key_pressed);
+          printf("Handler 1, KEY=%d =%i\n",FN_key_pressed,nameFunction(FN_key_pressed-37,6));
         #endif
       }
       else if(shiftF && !shiftG) {
@@ -745,7 +745,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         underline_softkey(FN_key_pressed-38,2, false);
         fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
-          printf("Handler 2, KEY=%d \n",FN_key_pressed);
+          printf("Handler 2, KEY=%d =%i\n",FN_key_pressed,nameFunction(FN_key_pressed-37,12));
         #endif
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
@@ -1406,27 +1406,30 @@ void force_refresh(void) {
 
   void showFunctionName(int16_t item, int16_t delayInMs) {
     uint32_t fcol, frow, gcol, grow;
-
-  char padding[20];                                          //JM
-  if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
-    if(longpressDelayedkey2 != 0) {                              //  If a delayed key2 is defined, qeue it
-      item = longpressDelayedkey2; 
-      delayInMs = JM_TO_CL_LONG;
-      longpressDelayedkey2 = 0;
-    } else
-    if(longpressDelayedkey3 != 0) {                              //  If a delayed key3 is defined, qeue it
-      item = longpressDelayedkey3; 
-      delayInMs = JM_TO_CL_LONG;
-      longpressDelayedkey3 = 0;
-    }
-  }                                                              //JM^^
+    
+    char padding[20];                                          //JM
+    if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
+      if(longpressDelayedkey2 != 0) {                              //  If a delayed key2 is defined, qeue it
+        item = longpressDelayedkey2; 
+        delayInMs = JM_TO_CL_LONG;
+        longpressDelayedkey2 = 0;
+      } else
+      if(longpressDelayedkey3 != 0) {                              //  If a delayed key3 is defined, qeue it
+        item = longpressDelayedkey3; 
+        delayInMs = JM_TO_CL_LONG;
+        longpressDelayedkey3 = 0;
+      }
+    }                                                              //JM^^
 
     char *functionName;
-    if(tmpString[0] != 0) {
-      functionName = tmpString;
-    }
-    else if(item != MNU_DYNAMIC) {
+//FIX //REMOVE DISPLAYING TEMP STRING as in C43 the tmpstring does NOT show the last keystroke or whatever. It gets executed from timers
+//    if(tmpString[0] != 0) {
+//      functionName = tmpString;
+//    }
+//    else 
+      if(item != MNU_DYNAMIC) {
       functionName = indexOfItems[abs(item)].itemCatalogName;
+// if(functionName[0]==0) functionName = indexOfItems[abs(item)].itemSoftmenuName; //test functio to show softmenu name if catalogue name not defuned
     }
     else {
       functionName = dynmenuGetLabel(dynamicMenuItem);

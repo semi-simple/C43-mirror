@@ -618,6 +618,8 @@ void btnFnPressed_StateMachine(void *unused, void *data) {
     FN_state =  ST_1_PRESS1;
   }
 
+  FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
+
   if(FN_state == ST_3_PRESS2 && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {  //JM BUGFIX (INVERTED) The first  usage did not work due to the timer which was in stopped mode, not in expired mode.
     //----------------Copied here
     char charKey[3];
@@ -630,30 +632,6 @@ void btnFnPressed_StateMachine(void *unused, void *data) {
     FN_state = ST_1_PRESS1;
   }
 
-  FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
-
-
-/* REVISION 0 OF QUICKKEYS. WORKING ##################
-Replaced this with the2x chages of jm_G_DOUBLETAP && calcMode != CM_AIM
-
-  //BYPASS LONG/DOUBLE CLICK FOR IDENTIFIED QUICK KEYS, i.e. NAV KEYS, ARROWS ETC.
-  int16_t tmp1 = nameFunction(FN_key_pressed-37,0);
-  if( FN_state == ST_1_PRESS1 && 
-       (   tmp1 == ITM_T_RIGHT_ARROW 
-        || tmp1 == ITM_T_LEFT_ARROW 
-        || tmp1 == ITM_T_RRIGHT_ARROW 
-        || tmp1 == ITM_T_LLEFT_ARROW 
-        || tmp1 == ITM_T_DOWN_ARROW
-        || tmp1 == ITM_T_UP_ARROW
-        ) ) {
-     char charKey[3];
-     sprintf(charKey, "%c", FN_key_pressed + 11);
-     btnFnClicked(w, charKey);                                             //Execute    
-     fnTimerStop(TO_FN_EXEC);
-     FN_handle_timed_out_to_EXEC=false;
-     return;
-  }
-   ################################################## */
 
 
   if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {         //vv dr new try

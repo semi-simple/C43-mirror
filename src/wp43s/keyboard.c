@@ -1860,8 +1860,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         break;
 
 
-      case CM_GRAPH:                      //JM vv
-      case CM_LISTXY:                    
+      case CM_LISTXY:                      //JM vv
         calcMode = previousCalcMode;
         softmenuStack[0].firstItem = 0;
         fnUndo(0);
@@ -1869,6 +1868,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
 
 
 
+      case CM_GRAPH:
       case CM_PLOT_STAT:
         lastPlotMode = PLOT_NOTHING;
         plotSelection = 0;
@@ -2409,6 +2409,7 @@ void fnKeyAngle(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
       case CM_MIM:
       case CM_EIM:
         break;

@@ -691,6 +691,7 @@ typedef enum {
 #define PLOT_LR                                    3
 #define PLOT_START                                 4
 #define PLOT_NOTHING                               5
+#define PLOT_GRAPH                                 6
 
 // Rounding mode 3 bits
 #define RM_HALF_EVEN                               0

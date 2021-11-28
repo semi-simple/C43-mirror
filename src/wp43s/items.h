@@ -2127,15 +2127,16 @@
 #define ITM_T_ROOTF                   2057
 #define ITM_RSTF                      2058
 #define ITM_EXFRAC                    2059
-#define ITM_XXSLV                     2060
-#define ITM_XXPLT                     2061
-#define ITM_LG_SIGN                   2062
-#define ITM_LN_SIGN                   2063
-#define ITM_SIN_SIGN                  2064
-#define ITM_COS_SIGN                  2065
-#define ITM_TAN_SIGN                  2066
+#define ITM_XSLV                      2060
+#define ITM_XPLT                      2061
+#define MNU_GRAPH                     2062
+#define ITM_LG_SIGN                   2063
+#define ITM_LN_SIGN                   2064
+#define ITM_SIN_SIGN                  2065
+#define ITM_COS_SIGN                  2066
+#define ITM_TAN_SIGN                  2067
 
-#define LAST_ITEM                     2067   //JM
+#define LAST_ITEM                     2068   //JM
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

@@ -20,19 +20,20 @@
 
 #include "solver/graph.h"
 
-#include "c43Extensions/jm.h"
-
 #include "defines.h"
 #include "mathematics/comparisonReals.h"
+#include "charString.h"
 #include "constantPointers.h"
-#include "solver/equation.h"
 #include "flags.h"
 #include "items.h"
 #include "mathematics/invert.h"
 #include "plotstat.h"
+#include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
+#include "softmenus.h"
+#include "solver/equation.h"
 #include "statusBar.h"
 #include "stack.h"
 #include "stats.h"
@@ -42,25 +43,71 @@
 
 //Verbose directives can be simulataneously selected
 #define VERBOSE_SOLVER00   // minimal text
-#define VERBOSE_SOLVER0  // a lot less text
+#define VERBOSE_SOLVER0    // a lot less text
 //#define VERBOSE_SOLVER1  // a lot less text
 //#define VERBOSE_SOLVER2  // verbose a lot
 
 
 
+
+//TODO
+static void fnRCL(int16_t inp) { //DONE
+  setSystemFlag(FLAG_ASLIFT);
+  if(inp == TEMP_REGISTER_1) {
+    liftStack();
+    copySourceRegisterToDestRegister(inp, REGISTER_X);
+  }
+  else {
+    fnRecall(inp);
+  }
+}
+
+
+
+static void fnStrInputReal34(char inp1[]) { // CONVERT STRING to REAL IN X      //DONE
+  tmpString[0] = 0;
+  strcat(tmpString, inp1);
+  setSystemFlag(FLAG_ASLIFT); // 5
+  liftStack();
+  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+  setSystemFlag(FLAG_ASLIFT);
+}
+
+static void fnStrtoX(char aimBuffer[]) {                             //DONE
+  setSystemFlag(FLAG_ASLIFT); // 5
+  liftStack();
+  int16_t mem = stringByteLength(aimBuffer) + 1;
+  reallocateRegister(REGISTER_X, dtString, TO_BLOCKS(mem), amNone);
+  xcopy(REGISTER_STRING_DATA(REGISTER_X), aimBuffer, mem);
+  setSystemFlag(FLAG_ASLIFT);
+}
+
+//######################
+
+
+static void fnPlot(uint16_t unusedButMandatoryParameter) {
+
+  fnPlotStat(PLOT_GRAPH);
+  PLOT_AXIS = true;
+}
+
+
+
+
 #ifndef TESTSUITE_BUILD
-	static void execute_rpn_function(void){
-	  calcRegister_t regStats = findNamedVariable("x");
-	  if(regStats != INVALID_VARIABLE) {
-	    fnStore(regStats);
-	    fnEqCalc(0);
-	    fnRCL(regStats);
-	    #if (defined VERBOSE_SOLVER0) && (defined PC_BUILD)
-	      printRegisterToConsole(REGISTER_X,">>> Solving x=","");
-	      printRegisterToConsole(REGISTER_Y," f(x)=","\n");
-	    #endif
-	  }
-	}
+  static void execute_rpn_function(void){
+    calcRegister_t regStats = findNamedVariable("x");
+    if(regStats != INVALID_VARIABLE) {
+      fnStore(regStats);
+      fnEqCalc(0);
+      fnRCL(regStats);
+      #if (defined VERBOSE_SOLVER0) && (defined PC_BUILD)
+        printRegisterToConsole(REGISTER_X,">>> Solving x=","");
+        printRegisterToConsole(REGISTER_Y," f(x)=","\n");
+      #endif
+    }
+  }
 #endif
 
 
@@ -79,29 +126,29 @@ static void graph_eqn(float x_min, float x_max) {
 
     //leaving y in Y and x in X
     execute_rpn_function();
-   	runFunction(ITM_SIGMAPLUS);
+    runFunction(ITM_SIGMAPLUS);
     #ifdef PC_BUILD
       if(lastErrorCode == 24) { printf("ERROR CODE CANNOT STAT COMPLEX RESULT, ignored\n"); lastErrorCode = 0;}
     #endif
   }
   runFunction(ITM_CLSTK);
   runFunction(ITM_SIGMAx);
-  runFunction(ITM_PLOT_XY);
+  fnPlot(0);
   #endif
 }
 
 
 
 #ifndef TESTSUITE_BUILD
-	static void doubleToXRegisterReal34(double x) { //Convert from double to X register REAL34
-	  setSystemFlag(FLAG_ASLIFT);
-	  liftStack();
-	  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-	  snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
-	  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
-	  //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
-	  setSystemFlag(FLAG_ASLIFT);
-	}
+  static void doubleToXRegisterReal34(double x) { //Convert from double to X register REAL34
+    setSystemFlag(FLAG_ASLIFT);
+    liftStack();
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
+    stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+    //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+    setSystemFlag(FLAG_ASLIFT);
+  }
 #endif
 
 
@@ -115,6 +162,7 @@ static double convert_to_double(calcRegister_t regist) { //Convert from X regist
     convertLongIntegerRegisterToReal(regist, &tmpy, &ctxtReal39);
     break;
   case dtReal34:
+  case dtComplex34:
     real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
     break;
   default:
@@ -157,9 +205,28 @@ void check_osc(uint8_t ii){
 
 //###################################################################################
 //SOLVER
+
+#define __STARTX 82
+#define __TICKS  83
+#define __TMP    84
+#define __Xold   85
+#define __Yold   86
+#define __Y0     87
+#define __X0     88
+#define __X1     89
+#define __X2     90
+#define __Y1     91
+#define __Y2     92
+#define __X2N    93
+#define __DX     94
+#define __DY     95
+#define __F      96
+#define __TOL    97
+
+
 static void graph_solver(float x_min, float x_max) {
-#ifndef SAVE_SPACE_DM42_20
   #ifndef TESTSUITE_BUILD
+  setSystemFlag(FLAG_CPXRES);
   int16_t ix,ixd;
   int16_t oscillations = 0; 
   int16_t convergent = 0; 
@@ -176,25 +243,25 @@ static void graph_solver(float x_min, float x_max) {
 
   // Initialize all temporary registers
   // Registers 85 to 97; 98 and 99 are being used in the DEMO data programs
-  calcRegister_t SREG_STARTX = 82;
+  calcRegister_t SREG_STARTX = __STARTX;
   copySourceRegisterToDestRegister(REGISTER_X,SREG_STARTX);
   runFunction(ITM_TICKS);
-  calcRegister_t SREG_TICKS = 83; fnStore(SREG_TICKS);
+  calcRegister_t SREG_TICKS = __TICKS; fnStore(SREG_TICKS);
   doubleToXRegisterReal34(0.0);
-  calcRegister_t SREG_TMP  = 84; fnStore(SREG_TMP);
-  calcRegister_t SREG_Xold = 85; fnStore(SREG_Xold);   //85: x old difference
-  calcRegister_t SREG_Yold = 86; fnStore(SREG_Yold);   //86: y old difference
-  calcRegister_t SREG_Y0   = 87; fnStore(SREG_Y0);     //87: y0
-  calcRegister_t SREG_X0   = 88; fnStore(SREG_X0);     //88: x0    //x0 stored but noever recalled
-  calcRegister_t SREG_X1   = 89; fnStore(SREG_X1);     //90: x1
-  calcRegister_t SREG_X2   = 90; fnStore(SREG_X2);     //91: x2
-  calcRegister_t SREG_Y1   = 91; fnStore(SREG_Y1);     //92: y1
-  calcRegister_t SREG_Y2   = 92; fnStore(SREG_Y2);     //93: y2
-  calcRegister_t SREG_X2N  = 93; fnStore(SREG_X2N);    //94: temporary new x2
-  calcRegister_t SREG_DX   = 94;                       //95: x difference
-  calcRegister_t SREG_DY   = 95;                       //96: y difference
-  calcRegister_t SREG_F    = 96;                       //97: faxctor
-  calcRegister_t SREG_TOL  = 97;                       //98: tolerance
+  calcRegister_t SREG_TMP  = __TMP ; fnStore(SREG_TMP);
+  calcRegister_t SREG_Xold = __Xold; fnStore(SREG_Xold);   //85: x old difference
+  calcRegister_t SREG_Yold = __Yold; fnStore(SREG_Yold);   //86: y old difference
+  calcRegister_t SREG_Y0   = __Y0  ; fnStore(SREG_Y0);     //87: y0
+  calcRegister_t SREG_X0   = __X0  ; fnStore(SREG_X0);     //88: x0    //x0 stored but noever recalled
+  calcRegister_t SREG_X1   = __X1  ; fnStore(SREG_X1);     //90: x1
+  calcRegister_t SREG_X2   = __X2  ; fnStore(SREG_X2);     //91: x2
+  calcRegister_t SREG_Y1   = __Y1  ; fnStore(SREG_Y1);     //92: y1
+  calcRegister_t SREG_Y2   = __Y2  ; fnStore(SREG_Y2);     //93: y2
+  calcRegister_t SREG_X2N  = __X2N ; fnStore(SREG_X2N);    //94: temporary new x2
+  calcRegister_t SREG_DX   = __DX  ;                       //95: x difference
+  calcRegister_t SREG_DY   = __DY  ;                       //96: y difference
+  calcRegister_t SREG_F    = __F   ;                       //97: faxctor
+  calcRegister_t SREG_TOL  = __TOL ;                       //98: tolerance
   doubleToXRegisterReal34(1.0);
   fnStore(SREG_F);                                     // factor
   fnStore(SREG_DX);                                    // initial value for difference comparison must be larger than tolerance
@@ -405,13 +472,13 @@ if(  (ix <=2)) {
 
           #if (defined VERBOSE_SOLVER00) || (defined VERBOSE_SOLVER0) || (defined VERBOSE_SOLVER1) || (defined VERBOSE_SOLVER2)
             printf("%3i ---------- Using normal Secant dydx 2-samples -\n",ix);
-          #endif          	
-	          fnRCL  (SREG_X2); fnRCL(SREG_X1); runFunction(ITM_SUB);      // dx
-	          fnStore(SREG_DX);                                     // store difference for later
-	          fnRCL  (SREG_Y2); fnRCL(SREG_Y1); runFunction(ITM_SUB);      // dy
-	          fnStore(SREG_DY);                                     // store difference for later
-	          //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
-	        
+          #endif            
+            fnRCL  (SREG_X2); fnRCL(SREG_X1); runFunction(ITM_SUB);      // dx
+            fnStore(SREG_DX);                                     // store difference for later
+            fnRCL  (SREG_Y2); fnRCL(SREG_Y1); runFunction(ITM_SUB);      // dy
+            fnStore(SREG_DY);                                     // store difference for later
+            //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
+          
           }
 
         else {
@@ -421,37 +488,37 @@ if(  (ix <=2)) {
         //  DX = X2 - X1 in YREGISTER
         //  DY = Y2 - Y1 in XREGISTER
         //###########################
-	          //  The second order accurate one-sided finite difference formula for the first derivative, formule 32, of
-	          //  ChE 205 — Formulas for Numerical Differentiation
-	          //  Handout 5 05/08/02:
-	        
+            //  The second order accurate one-sided finite difference formula for the first derivative, formule 32, of
+            //  ChE 205 — Formulas for Numerical Differentiation
+            //  Handout 5 05/08/02:
+          
           #if (defined VERBOSE_SOLVER00) || (defined VERBOSE_SOLVER0) || (defined VERBOSE_SOLVER1) || (defined VERBOSE_SOLVER2)
             printf("%3i ---------- Using Secant with 3 samples dy/dx --\n",ix);
           #endif
-	          fnRCL      (SREG_X2); fnRCL(SREG_X1); runFunction(ITM_SUB); //Determine x2-x1
-	          fnStore    (SREG_DX);  //store difference DX for later
-	          fnRCL      (SREG_X1);
-	          runFunction(ITM_XexY);
-	          runFunction(ITM_SUB);
-	          fnStore    (SREG_X0);          //determine the new x0 by subtracting DX
-	          execute_rpn_function(); //determine the new f(x0)
-	          copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y0); //set y0 to the result f(x0)
-	          //do DX = 2 (x2-x1)
-	          fnRCL      (SREG_DX);
-	          doubleToXRegisterReal34(2);//calculate 2(x2-x1)
-	          runFunction(ITM_MULT);             // DX = 2 delta x
-	          //do DY = (fi−2 − 4fi−1 + 3fi)
-	          fnRCL      (SREG_Y0);              //y0
-	          fnRCL      (SREG_Y1);
-	          doubleToXRegisterReal34(4); 
-	          runFunction(ITM_MULT);
-	          runFunction(ITM_SUB);               //-4.y1
-	          fnRCL      (SREG_Y2);
-	          doubleToXRegisterReal34(3);
-	          runFunction(ITM_MULT); 
-	          runFunction(ITM_ADD);                    //+3.y2
+            fnRCL      (SREG_X2); fnRCL(SREG_X1); runFunction(ITM_SUB); //Determine x2-x1
+            fnStore    (SREG_DX);  //store difference DX for later
+            fnRCL      (SREG_X1);
+            runFunction(ITM_XexY);
+            runFunction(ITM_SUB);
+            fnStore    (SREG_X0);          //determine the new x0 by subtracting DX
+            execute_rpn_function(); //determine the new f(x0)
+            copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y0); //set y0 to the result f(x0)
+            //do DX = 2 (x2-x1)
+            fnRCL      (SREG_DX);
+            doubleToXRegisterReal34(2);//calculate 2(x2-x1)
+            runFunction(ITM_MULT);             // DX = 2 delta x
+            //do DY = (fi−2 − 4fi−1 + 3fi)
+            fnRCL      (SREG_Y0);              //y0
+            fnRCL      (SREG_Y1);
+            doubleToXRegisterReal34(4); 
+            runFunction(ITM_MULT);
+            runFunction(ITM_SUB);               //-4.y1
+            fnRCL      (SREG_Y2);
+            doubleToXRegisterReal34(3);
+            runFunction(ITM_MULT); 
+            runFunction(ITM_ADD);                    //+3.y2
             fnStore    (SREG_DY);
-	        /*-3-sample slope-*/  //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
+          /*-3-sample slope-*/  //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
         }
 
       //###########################
@@ -553,10 +620,10 @@ if(  (ix <=2)) {
               ( (real34IsNegative(REGISTER_REAL34_DATA(SREG_Y2))) && (real34IsPositive(REGISTER_REAL34_DATA(SREG_Y0))) )
             ) &&
 
-    	   !((real34CompareGreaterEqual(REGISTER_REAL34_DATA(SREG_X2N),REGISTER_REAL34_DATA(SREG_X0)) &&
-    		 real34CompareGreaterEqual(REGISTER_REAL34_DATA(SREG_X2),REGISTER_REAL34_DATA(SREG_X2N)) ) ||
-    		 (real34CompareLessEqual(REGISTER_REAL34_DATA(SREG_X2N),REGISTER_REAL34_DATA(SREG_X0)) &&
-    		 real34CompareLessEqual(REGISTER_REAL34_DATA(SREG_X2),REGISTER_REAL34_DATA(SREG_X2N)) ) )
+         !((real34CompareGreaterEqual(REGISTER_REAL34_DATA(SREG_X2N),REGISTER_REAL34_DATA(SREG_X0)) &&
+         real34CompareGreaterEqual(REGISTER_REAL34_DATA(SREG_X2),REGISTER_REAL34_DATA(SREG_X2N)) ) ||
+         (real34CompareLessEqual(REGISTER_REAL34_DATA(SREG_X2N),REGISTER_REAL34_DATA(SREG_X0)) &&
+         real34CompareLessEqual(REGISTER_REAL34_DATA(SREG_X2),REGISTER_REAL34_DATA(SREG_X2N)) ) )
 
         ) 
       ) { bisect = true;
@@ -660,10 +727,10 @@ EndIteration:
         runFunction(ITM_SIGMAPLUS);
         #ifdef PC_BUILD
           if(lastErrorCode == 24) { 
-          	#ifdef VERBOSE_SOLVER1
-          	printf("ERROR CODE CANNOT STAT COMPLEX ignored\n"); 
-          	#endif //VERBOSE_SOLVER1
-          	lastErrorCode = 0;
+            #ifdef VERBOSE_SOLVER1
+            printf("ERROR CODE CANNOT STAT COMPLEX ignored\n"); 
+            #endif //VERBOSE_SOLVER1
+            lastErrorCode = 0;
           }
         #endif
       }
@@ -681,22 +748,13 @@ EndIteration:
 //Iterations end
 
   runFunction(ITM_CLSTK);
-  fnStrtoX("; Xo= ");
+  fnStrtoX("Xo= ");
   fnRCL(SREG_STARTX);
   runFunction(ITM_ADD);
-  runFunction(ITM_ADD);
-  
 
-  runFunction(ITM_TICKS);       //Calculate time used
-  fnRCL(SREG_TICKS);
-  runFunction(ITM_CHS);
-  runFunction(ITM_ADD);
-  doubleToXRegisterReal34(10);
-  runFunction(ITM_DIV);
-  fnStrtoX(" s for ");
-  runFunction(ITM_ADD);
-
+  fnStrtoX(" ");
   runFunction(ITM_NSIGMA);     //Check number of iterations
+  runFunction(ITM_ADD);
   fnStrtoX(" iterations");
   runFunction(ITM_ADD);
 
@@ -712,8 +770,6 @@ EndIteration:
   
 //  if( ix * 1.0  >  LIM * 0.5) runFunction(ITM_PLOT_XY);
   #endif
-
-#endif //SAVE_SPACE_DM42_20
 }
 
 
@@ -743,26 +799,34 @@ void fnEqSolvGraph (uint16_t func) {
 
   switch (func) 
   {
-    #ifndef SAVE_SPACE_DM42_21
-      case EQ_SOLVE:
-                //calcRegister_t SREG_STARTX = 82; see above
-                fnStore(82);
-                graph_solver(graph_xmin, graph_xmax);
-                break;
-      case EQ_PLOT: {
-              double ix1 = convert_to_double(REGISTER_X);
+    case EQ_SOLVE:
+           //calcRegister_t SREG_STARTX = 82; see above
+             {
+             double ix1 = convert_to_double(REGISTER_X);
               double ix0 = convert_to_double(REGISTER_Y);
-              if(ix1>ix0 && !(ix1==ix0)) {
-                graph_xmin = ix0;
-                graph_xmax = ix1;
+              if(ix1>ix0) {
+                x_min = ix0;
+                x_max = ix1;
               }
-              graph_eqn(graph_xmin, graph_xmax);
-              break;
+             fnStore(__STARTX);
+             graph_solver(x_min, x_max);
+             break;
+          }
+     case EQ_PLOT: {
+            double ix1 = convert_to_double(REGISTER_X);
+            double ix0 = convert_to_double(REGISTER_Y);
+            fnDrop(0);
+            fnDrop(0);
+            if(ix1>ix0) {
+              x_min = ix0;
+              x_max = ix1;
             }
-
-      #endif //SAVE_SPACE_DM42_21
-  	  default:;
-     }
+            fnEqCalc(0);
+            graph_eqn(x_min, x_max);
+            break;
+          }
+     default:;
+    }
 }
 
 

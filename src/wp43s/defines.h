@@ -65,8 +65,8 @@
 //  #define SAVE_SPACE_DM42_6  //001648 bytes: ELEC functions
   #define SAVE_SPACE_DM42_7  //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
   #define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
-//  #define SAVE_SPACE_DM42_9  //004448 bytes: define for original SHOW (WP43S) instead of SHOW (new C43)
-//  #define SAVE_SPACE_DM42_10 //005800 bytes: WP43S programming ...
+  #define SAVE_SPACE_DM42_9  //004448 bytes: define for original SHOW (WP43S) instead of SHOW (new C43)
+  #define SAVE_SPACE_DM42_10 //005800 bytes: WP43S programming ...
 //  #define SAVE_SPACE_DM42_11 //001552 bytes: Matrix function on entry ...
     #define SAVE_SPACE_DM42_12 //047246 bytes: Standard extra 43S math: SLVQ, PRIME, BESSEL, ELLIPTIC, ZETA, BETA, ORTHO_POLY
 //    #define SAVE_SPACE_DM42_20 //              New solver guts
@@ -573,7 +573,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               16
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               18
 #define MY_ALPHA_MENU_CNST                         1  //JM This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT                           23
 
@@ -739,7 +739,8 @@ typedef enum {
 #define TM_SHUFFLE                             10008
 #define TM_LABEL                               10009
 #define TM_SOLVE                               10010
-#define TM_CMP                                 10011 // TM_CMP must be the last in this list
+#define TM_NEWMENU                             10011
+#define TM_CMP                                 10012 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -1019,6 +1020,11 @@ typedef enum {
 #define SOLVER_RESULT_EXTREMUM                     2
 #define SOLVER_RESULT_BAD_GUESS                    3
 #define SOLVER_RESULT_CONSTANT                     4
+
+#define ASSIGN_NAMED_VARIABLES                 10000
+#define ASSIGN_LABELS                          12000
+#define ASSIGN_RESERVED_VARIABLES                  (ASSIGN_NAMED_VARIABLES + FIRST_RESERVED_VARIABLE - FIRST_NAMED_VARIABLE)
+#define ASSIGN_USER_MENU                     (-10000)
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

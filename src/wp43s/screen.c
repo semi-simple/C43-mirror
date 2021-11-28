@@ -16,6 +16,7 @@
 
 #include "screen.h"
 
+#include "assign.h"
 #include "browsers/browsers.h"
 #include "bufferize.h"
 #include "charString.h"
@@ -507,6 +508,7 @@
       showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
+        tmpString[0] = 0;
         showFunctionName(ITM_NOP, 0);
       }
     }
@@ -566,6 +568,7 @@
       showFunctionNameCounter -= FAST_SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
+        tmpString[0] = 0;
         showFunctionName(ITM_NOP, 0);
       }
     }
@@ -729,7 +732,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         underline_softkey(FN_key_pressed-38,1, false);
         fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
-          printf("Handler 1, KEY=%d \n",FN_key_pressed);
+          printf("Handler 1, KEY=%d =%i\n",FN_key_pressed,nameFunction(FN_key_pressed-37,6));
         #endif
       }
       else if(shiftF && !shiftG) {
@@ -742,7 +745,7 @@ void FN_handler() {                          //JM FN LONGPRESS vv Handler FN Key
         underline_softkey(FN_key_pressed-38,2, false);
         fnTimerStart(TO_FN_LONG, TO_FN_LONG, JM_TO_FN_LONG);          //dr
         #ifdef FN_TIME_DEBUG1
-          printf("Handler 2, KEY=%d \n",FN_key_pressed);
+          printf("Handler 2, KEY=%d =%i\n",FN_key_pressed,nameFunction(FN_key_pressed-37,12));
         #endif
       }
       else if((!shiftF && shiftG) || (shiftF && shiftG)) {
@@ -1403,24 +1406,30 @@ void force_refresh(void) {
 
   void showFunctionName(int16_t item, int16_t delayInMs) {
     uint32_t fcol, frow, gcol, grow;
-
-  char padding[20];                                          //JM
-  if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
-    if(longpressDelayedkey2 != 0) {                              //  If a delayed key2 is defined, qeue it
-      item = longpressDelayedkey2; 
-      delayInMs = JM_TO_CL_LONG;
-      longpressDelayedkey2 = 0;
-    } else
-    if(longpressDelayedkey3 != 0) {                              //  If a delayed key3 is defined, qeue it
-      item = longpressDelayedkey3; 
-      delayInMs = JM_TO_CL_LONG;
-      longpressDelayedkey3 = 0;
-    }
-  }                                                              //JM^^
+    
+    char padding[20];                                          //JM
+    if(item == ITM_NOP && delayInMs == 0) {                        //JMvv Handle second and third longpress
+      if(longpressDelayedkey2 != 0) {                              //  If a delayed key2 is defined, qeue it
+        item = longpressDelayedkey2; 
+        delayInMs = JM_TO_CL_LONG;
+        longpressDelayedkey2 = 0;
+      } else
+      if(longpressDelayedkey3 != 0) {                              //  If a delayed key3 is defined, qeue it
+        item = longpressDelayedkey3; 
+        delayInMs = JM_TO_CL_LONG;
+        longpressDelayedkey3 = 0;
+      }
+    }                                                              //JM^^
 
     char *functionName;
-    if(item != MNU_DYNAMIC) {
+//FIX //REMOVE DISPLAYING TEMP STRING as in C43 the tmpstring does NOT show the last keystroke or whatever. It gets executed from timers
+//    if(tmpString[0] != 0) {
+//      functionName = tmpString;
+//    }
+//    else 
+      if(item != MNU_DYNAMIC) {
       functionName = indexOfItems[abs(item)].itemCatalogName;
+// if(functionName[0]==0) functionName = indexOfItems[abs(item)].itemSoftmenuName; //test functio to show softmenu name if catalogue name not defuned
     }
     else {
       functionName = dynmenuGetLabel(dynamicMenuItem);
@@ -1447,16 +1456,20 @@ void force_refresh(void) {
 
 void hideFunctionName(void) {
 #ifdef CLEARNAME
-  uint32_t col, row;
-  getStringBounds(indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
-  lcd_fill_rect(1, Y_POSITION_OF_REGISTER_T_LINE+6, col, row, LCD_SET_VALUE);
-  showFunctionNameItem = 0;
+// JM Removed the partial cleaning
+
+  if(!running_program_jm && tmpString[0] != 0) {
+    uint32_t col, row;
+      getStringBounds(tmpString[0] != 0 ? tmpString : indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
+    lcd_fill_rect(1, Y_POSITION_OF_REGISTER_T_LINE+6, col, row, LCD_SET_VALUE);
+    showFunctionNameItem = 0;
+  }
 #endif //CLEARNAME
 
+  if(!running_program_jm && (tmpString[0] != 0 || calcMode!=CM_AIM)) refreshRegisterLine(REGISTER_T);      //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
+                                                                                    //Added the tempstring isea, not sure why it is used, but I stay compatible
+  showFunctionNameItem = 0;
   showFunctionNameCounter = 0;
-
-  if(running_program_jm) return;                             //JM
-  if(calcMode!=CM_AIM) refreshRegisterLine(REGISTER_T);      //JM DO NOT CHANGE BACK TO CLEARING ONLY A SHORT PIECE. CHANGED IN TWEAKED AS WELL>
 }
 
 
@@ -2975,14 +2988,20 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
   static void displayShiftAndTamBuffer(void) {
-    if(shiftF) {
-      showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-    }
-    else if(shiftG) {
-      showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+    if(calcMode == CM_ASSIGN) {
+      updateAssignTamBuffer();
     }
 
-    if(tam.mode) {
+    if(calcMode != CM_ASSIGN || itemToBeAssigned == 0) {
+      if(shiftF) {
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+      }
+      else if(shiftG) {
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+      }
+    }
+
+    if(tam.mode || calcMode == CM_ASSIGN) {
       if(calcMode == CM_PEM) { // Variable line to display TAM informations
         lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
         showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);

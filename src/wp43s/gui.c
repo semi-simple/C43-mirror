@@ -1970,6 +1970,7 @@ void labelCaptionAimFaChr(const calcKey_t* key, GtkWidget* lblF, int chrF) {
 
 void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGreek, GtkWidget *lblL) {
   uint8_t lbl[22];
+
   if(key->primaryAim == ITM_NULL) {
     lbl[0] = 0;
   } 
@@ -4332,7 +4333,7 @@ if(!tam.mode) {
       else if(calcMode == CM_AIM || (tam.mode && tam.alpha)) {
         calcModeAimGui();
       }
-      else if(calcMode == CM_NORMAL || calcMode == CM_PEM || calcMode == CM_MIM) {
+      else if(calcMode == CM_NORMAL || calcMode == CM_PEM || calcMode == CM_MIM || calcMode == CM_ASSIGN) {
         calcModeNormalGui();
       }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)

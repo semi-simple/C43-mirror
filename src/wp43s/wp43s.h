@@ -145,6 +145,9 @@
 
   extern namedVariableHeader_t *allNamedVariables;
   extern softmenuStack_t        softmenuStack[SOFTMENU_STACK_SIZE];
+  extern userMenuItem_t         userMenuItems[18];
+  extern userMenuItem_t         userAlphaItems[18];
+  extern userMenu_t            *userMenus;
   extern calcKey_t              kbd_usr[37];
   extern calcRegister_t         errorMessageRegisterLine;
   extern glyph_t                glyphNotFound;
@@ -167,6 +170,7 @@
    * part of the screen.
    */
   extern char                  *tamBuffer;
+  extern char                  *userKeyLabel;
   extern char                   asmBuffer[5];
   extern char                   oldTime[8];
   extern char                   dateTimeString[12];
@@ -227,6 +231,8 @@
   extern int16_t                dynamicMenuItem;
   extern int16_t               *menu_RAM;
   extern int16_t                numberOfTamMenusToPop;
+  extern int16_t                itemToBeAssigned;
+  extern int16_t                cachedDynamicMenu;
 
   extern uint16_t               globalFlags[7];
   extern int16_t                longpressDelayedkey2;         //JM
@@ -275,6 +281,9 @@
   extern uint16_t               currentSolverNestingDepth;
   extern uint16_t               numberOfFormulae;
   extern uint16_t               currentFormula;
+  extern uint16_t               numberOfUserMenus;
+  extern uint16_t               currentUserMenu;
+  extern uint16_t               userKeyLabelSize;
   #if (REAL34_WIDTH_TEST == 1)
     extern uint16_t               largeur;
   #endif // (REAL34_WIDTH_TEST == 1)

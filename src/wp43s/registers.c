@@ -613,6 +613,7 @@ bool_t validateName(const char *name) {
       case '=':
       case ';':
       case '|':
+      case '!':
       case ' ':
         return false;
       default:

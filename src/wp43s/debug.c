@@ -441,7 +441,6 @@ void debugNIM(void) {
   char * getCalcModeName(uint16_t cm) {
     if(cm == CM_NORMAL)                return "normal ";
     if(cm == CM_AIM)                   return "aim    ";
-    if(cm == CM_EIM)                   return "eim    ";
     if(cm == CM_PEM)                   return "pem    ";
     if(cm == CM_NIM)                   return "nim    ";
     if(cm == CM_ASSIGN)                return "assign ";
@@ -451,6 +450,9 @@ void debugNIM(void) {
     if(cm == CM_PLOT_STAT)             return "plot.st";
     if(cm == CM_ERROR_MESSAGE)         return "err.msg";
     if(cm == CM_BUG_ON_SCREEN)         return "bug.scr";
+    if(cm == CM_MIM)                   return "mim    ";
+    if(cm == CM_EIM)                   return "eim    ";
+    if(cm == CM_TIMER)                 return "timer  ";
     if(cm == CM_CONFIRMATION)          return "confirm";
     if(cm == CM_GRAPH)                 return "graph  ";    //JM
     if(cm == CM_LISTXY)                return "listxy ";    //JM

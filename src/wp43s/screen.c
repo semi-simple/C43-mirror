@@ -581,9 +581,10 @@
         showDateTime();
       #endif // (DEBUG_INSTEAD_STATUS_BAR != 1)
 
-      if(!getSystemFlag(FLAG_AUTOFF)) {
+      if(!getSystemFlag(FLAG_AUTOFF) || (nextTimerRefresh != 0)) {
         reset_auto_off();
       }
+      fnPollTimerApp();
 
 
     }
@@ -629,6 +630,13 @@
   }
 }
 #endif // PC_BUILD DMCP_BUILD
+
+
+
+void execTimerApp(uint16_t timerType) {
+  fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
+  fnUpdateTimerApp();
+}
 
 
 
@@ -2986,7 +2994,7 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
 
-  static void displayShiftAndTamBuffer(void) {
+  void displayShiftAndTamBuffer(void) {
     if(calcMode == CM_ASSIGN) {
       updateAssignTamBuffer();
     }
@@ -3074,6 +3082,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       case CM_ASSIGN:
       case CM_ERROR_MESSAGE:
       case CM_CONFIRMATION:
+      case CM_TIMER:
 #ifdef INLINE_TEST
   if(testEnabled) { fnSwStart(0); }     //dr
 #endif
@@ -3081,7 +3090,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
           clearScreen();
 
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
-        if(temporaryInformation != TI_VIEW) refreshRegisterLine(REGISTER_T);
+        if(calcMode != CM_TIMER && temporaryInformation != TI_VIEW) refreshRegisterLine(REGISTER_T);
           refreshRegisterLine(REGISTER_Z);
           refreshRegisterLine(REGISTER_Y);
       } else {                             //jm v
@@ -3101,6 +3110,9 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         }
         if(calcMode == CM_MIM) {
           showMatrixEditor();
+        }
+        if(calcMode == CM_TIMER) {
+          fnShowTimerApp();
         }
         if(currentSolverStatus & SOLVER_STATUS_INTERACTIVE) {
           bool_t mvarMenu = false;

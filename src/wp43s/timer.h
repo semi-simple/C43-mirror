@@ -27,8 +27,28 @@
 #endif // PC_BUILD
 
 
-uint32_t getUptimeMs(void);
-void     fnTicks    (uint16_t unusedButMandatoryParameter);
+uint32_t getUptimeMs          (void);
+void     fnTicks              (uint16_t unusedButMandatoryParameter);
+
+
+void     fnItemTimerApp       (uint16_t unusedButMandatoryParameter);
+void     fnAddTimerApp        (uint16_t unusedButMandatoryParameter);
+void     fnDecisecondTimerApp (uint16_t unusedButMandatoryParameter);
+void     fnResetTimerApp      (uint16_t unusedButMandatoryParameter);
+void     fnRecallTimerApp     (uint16_t regist);
+void     fnStartStopTimerApp  (void);
+void     fnStopTimerApp       (void);
+void     fnShowTimerApp       (void);
+void     fnUpdateTimerApp     (void);
+void     fnEnterTimerApp      (void);
+void     fnDotTimerApp        (void);
+void     fnUpTimerApp         (void);
+void     fnDownTimerApp       (void);
+void     fnDigitKeyTimerApp   (uint16_t digit);
+void     fnPlusTimerApp       (void);
+void     fnBackspaceTimerApp  (void);
+void     fnLeaveTimerApp      (void);
+void     fnPollTimerApp       (void);
 
 
 #ifdef PC_BUILD
@@ -46,6 +66,7 @@ void     fnTimerStart         (uint8_t nr, uint16_t param, uint32_t time);      
 void     fnTimerStop          (uint8_t nr);                                     // Stop Timer, 0..n-1
 void     fnTimerExec          (uint8_t nr);                                     // Execute Timer, 0..n-1
 void     fnTimerDel           (uint8_t nr);                                     // Delete Timer, 0..n-1
+uint16_t fnTimerGetParam      (uint8_t nr);
 uint8_t  fnTimerGetStatus     (uint8_t nr);
 
 

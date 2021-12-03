@@ -381,12 +381,15 @@
             refreshScreen();
             return;
           }
+          else if(tam.function == ITM_GTOP && catalog == CATALOG_PROG) {
+            runFunction(item);
+            tamLeaveMode();
+            hourGlassIconEnabled = false;
+            refreshScreen();
+            return;
+          }
           else if(calcMode == CM_PEM && catalog && catalog != CATALOG_MVAR) { // TODO: is that correct
             runFunction(item);
-            if(tam.function == ITM_GTOP) {
-              tamLeaveMode();
-              hourGlassIconEnabled = false;
-            }
             refreshScreen();
             return;
           }

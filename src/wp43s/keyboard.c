@@ -75,6 +75,15 @@
         break;
 
       case MNU_PROG:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        if(tam.function == ITM_GTOP) {
+          item = ITM_GTOP;
+        }
+        else {
+          item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
+        }
+        break;
+
       case MNU_VAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
         item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : MNU_DYNAMIC);
@@ -374,6 +383,10 @@
           }
           else if(calcMode == CM_PEM && catalog && catalog != CATALOG_MVAR) { // TODO: is that correct
             runFunction(item);
+            if(tam.function == ITM_GTOP) {
+              tamLeaveMode();
+              hourGlassIconEnabled = false;
+            }
             refreshScreen();
             return;
           }

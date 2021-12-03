@@ -297,6 +297,7 @@
             }
             reallyRunFunction(ITM_GTOP, tam.value);
             tamLeaveMode();
+            hourGlassIconEnabled = false;
             return;
           }
 
@@ -308,6 +309,7 @@
             tam.value = programList[currentProgramNumber].step;
             reallyRunFunction(ITM_GTOP, tam.value);
             tamLeaveMode();
+            hourGlassIconEnabled = false;
             return;
           }
         }
@@ -319,6 +321,7 @@
             if(item == ITM_dddEL || item == ITM_dddIJ) {
               reallyRunFunction(_tamOperation(), NOPARAM);
               tamLeaveMode();
+              hourGlassIconEnabled = false;
               return;
             }
           }
@@ -382,7 +385,11 @@
     }
     else if(item == ITM_PERIOD) {
       if(tam.function == ITM_GTOP) {
-        tam.value = tam.max;
+        tam.value = programList[numberOfPrograms - 1].step - 1;
+        reallyRunFunction(ITM_GTOP, tam.value);
+        tamLeaveMode();
+        hourGlassIconEnabled = false;
+        return;
       }
       else if(!tam.alpha && !tam.digitsSoFar && !tam.dot && !valueParameter) {
         if(tam.function == ITM_GTO) {

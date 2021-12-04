@@ -272,6 +272,12 @@
         aimBuffer[0] = 0;
         calcModeAim(NOPARAM);
       }
+      else if(!tam.digitsSoFar && tam.function == ITM_GTOP) {
+        tam.alpha = true;
+        setSystemFlag(FLAG_ALPHA);
+        aimBuffer[0] = 0;
+        calcModeAim(NOPARAM);
+      }
       return;
     }
     else if(item==ITM_Max || item==ITM_Min || item==ITM_ADD || item==ITM_SUB || item==ITM_MULT || item==ITM_DIV || item==ITM_Config || item==ITM_Stack || item==ITM_dddEL || item==ITM_dddIJ) { // Operation
@@ -487,10 +493,15 @@
         }
       }
       if(value != INVALID_VARIABLE) {
-        if(calcMode == CM_MIM)
+        if(calcMode == CM_MIM) {
           mimRunFunction(_tamOperation(), value);
-        else
+        }
+        else if(tam.function == ITM_GTOP) {
+          reallyRunFunction(ITM_GTOP, labelList[value - FIRST_LABEL].step);
+        }
+        else {
           reallyRunFunction(_tamOperation(), value);
+        }
       }
       if(_tamOperation() == ITM_M_GOTO_ROW) {
         tamLeaveMode();

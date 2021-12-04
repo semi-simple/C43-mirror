@@ -385,7 +385,7 @@
     }
     else if(item == ITM_PERIOD) {
       if(tam.function == ITM_GTOP) {
-        tam.value = programList[numberOfPrograms - 1].step - 1;
+        tam.value = programList[numberOfPrograms - 1].step;
         reallyRunFunction(ITM_GTOP, tam.value);
         tamLeaveMode();
         hourGlassIconEnabled = false;
@@ -395,7 +395,7 @@
         if(tam.function == ITM_GTO) {
           tam.function = ITM_GTOP;
           tam.min = 1;
-          tam.max = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
+          tam.max = getNumberOfSteps();
         }
         else if(tam.indirect && currentNumberOfLocalRegisters) {
           tam.dot = true;

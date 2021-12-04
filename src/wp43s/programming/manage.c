@@ -425,6 +425,117 @@ void insertStepInProgram(int16_t func) {
     case ITM_SYSTEM:       // 1743
       break;
 
+    // Single-byte, no parameters
+    case ITM_RTN:          //    4
+    case ITM_XEQUP0:       //   13
+    case ITM_XEQUM0:       //   14
+    case ITM_EVEN:         //   22
+    case ITM_ODD:          //   23
+    case ITM_FPQ:          //   24
+    case ITM_INT:          //   25
+    case ITM_CPX:          //   26
+    case ITM_MATR:         //   27
+    case ITM_NAN:          //   28
+    case ITM_REAL:         //   29
+    case ITM_SPEC:         //   30
+    case ITM_STRI:         //   31
+    case ITM_PMINFINITY:   //   32
+    case ITM_PRIME:        //   33
+    case ITM_TOP:          //   34
+    case ITM_ENTER:        //   35
+    case ITM_XexY:         //   36
+    case ITM_DROP:         //   37
+    case ITM_Rup:          //   39
+    case ITM_Rdown:        //   40
+    case ITM_CLX:          //   41
+    case ITM_FILL:         //   42
+    case ITM_COMB:         //   49
+    case ITM_PERM:         //   50
+    case ITM_ENTRY:        //   57
+    case ITM_SQUARE:       //   58
+    case ITM_CUBE:         //   59
+    case ITM_YX:           //   60
+    case ITM_SQUAREROOTX:  //   61
+    case ITM_CUBEROOT:     //   62
+    case ITM_XTHROOT:      //   63
+    case ITM_2X:           //   64
+    case ITM_EXP:          //   65
+    case ITM_ROUND:        //   66
+    case ITM_10x:          //   67
+    case ITM_LOG2:         //   68
+    case ITM_LN:           //   69
+    case ITM_STOP:         //   70
+    case ITM_LOG10:        //   71
+    case ITM_LOGXY:        //   72
+    case ITM_1ONX:         //   73
+    case ITM_cos:          //   74
+    case ITM_cosh:         //   75
+    case ITM_sin:          //   76
+    case ITM_sinh:         //   78
+    case ITM_tan:          //   79
+    case ITM_tanh:         //   80
+    case ITM_arccos:       //   81
+    case ITM_arcosh:       //   82
+    case ITM_arcsin:       //   83
+    case ITM_arsinh:       //   84
+    case ITM_arctan:       //   85
+    case ITM_artanh:       //   86
+    case ITM_CEIL:         //   87
+    case ITM_FLOOR:        //   88
+    case ITM_GCD:          //   89
+    case ITM_LCM:          //   90
+    case ITM_IP:           //   93
+    case ITM_FP:           //   94
+    case ITM_ADD:          //   95
+    case ITM_SUB:          //   96
+    case ITM_CHS:          //   97
+    case ITM_MULT:         //   98
+    case ITM_DIV:          //   99
+    case ITM_IDIV:         //  100
+    case ITM_MOD:          //  102
+    case ITM_MAX:          //  103
+    case ITM_MIN:          //  104
+    case ITM_MAGNITUDE:    //  105
+    case ITM_NEIGHB:       //  106
+    case ITM_NEXTP:        //  107
+    case ITM_XFACT:        //  108
+    case ITM_CONSTpi:      //  109
+    case ITM_M_SQR:        //  113
+    case ITM_toDEG:        //  115
+    case ITM_toDMS:        //  116
+    case ITM_toGRAD:       //  117
+    case ITM_toMULpi:      //  118
+    case ITM_toRAD:        //  119
+    case ITM_DtoR:         //  120
+    case ITM_RtoD:         //  121
+    case ITM_RMD:          //  122
+    case ITM_LOGICALNOT:   //  123
+    case ITM_LOGICALAND:   //  124
+    case ITM_LOGICALOR:    //  125
+    case ITM_LOGICALXOR:   //  126
+      if(freeProgramBytes < 1) {
+        uint8_t *oldBeginOfProgramMemory = beginOfProgramMemory;
+        uint32_t newProgramSizeInBlocks = RAM_SIZE - freeMemoryRegions[numberOfFreeMemoryRegions - 1].address - freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks + 1;
+        freeProgramBytes      += 4;
+        resizeProgramMemory(newProgramSizeInBlocks);
+        fflush(stdout);
+        currentStep           = currentStep           - oldBeginOfProgramMemory + beginOfProgramMemory;
+        firstDisplayedStep    = firstDisplayedStep    - oldBeginOfProgramMemory + beginOfProgramMemory;
+        beginOfCurrentProgram = beginOfCurrentProgram - oldBeginOfProgramMemory + beginOfProgramMemory;
+        endOfCurrentProgram   = endOfCurrentProgram   - oldBeginOfProgramMemory + beginOfProgramMemory;
+      }
+      for(uint8_t *pos = firstFreeProgramByte + 2; pos > currentStep; --pos) {
+        *pos = *(pos - 1);
+      }
+      *(currentStep++) = func;
+      firstFreeProgramByte += 1;
+      freeProgramBytes -= 1;
+      ++currentLocalStepNumber;
+      ++endOfCurrentProgram;
+      scanLabelsAndPrograms();
+      fnGotoDot(currentLocalStepNumber + programList[currentProgramNumber - 1].step - 1);
+      break;
+
     default: {
       #ifndef DMCP_BUILD
         if(stringByteLength(indexOfItems[func].itemCatalogName) != 0) {

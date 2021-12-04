@@ -40,6 +40,7 @@
 #include "store.h"
 #include "wp43s.h"
 #include <math.h>
+#include <string.h>
 
 //Verbose directives can be simulataneously selected
 #define VERBOSE_SOLVER00   // minimal text
@@ -67,12 +68,13 @@ static void fnRCL(int16_t inp) { //DONE
 }
 
 static void fnStrInputReal34(char inp1[]) { // CONVERT STRING to REAL IN X      //DONE
-  tmpString[0] = 0;
-  strcat(tmpString, inp1);
+  char buff[100];
+  buff[0] = 0;
+  strcat(buff, inp1);
   setSystemFlag(FLAG_ASLIFT); // 5
   liftStack();
   reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-  stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+  stringToReal34(buff, REGISTER_REAL34_DATA(REGISTER_X));
   setSystemFlag(FLAG_ASLIFT);
 }
 
@@ -89,8 +91,8 @@ static void fnStrtoX(char aimBuffer[]) {                             //DONE
 
 
 void fnPlot(uint16_t unusedButMandatoryParameter) {
-  fnPlotStat(PLOT_GRAPH);
   PLOT_AXIS = true;
+  fnPlotStat(PLOT_GRAPH);
 }
 
 
@@ -99,7 +101,7 @@ void fnPlot(uint16_t unusedButMandatoryParameter) {
   static void execute_rpn_function(void){
     calcRegister_t regStats = findNamedVariable("x");
     if(regStats != INVALID_VARIABLE) {
-      fnStore(regStats);
+      fnStore(regStats);                  //place X register into x
       fnEqCalc(0);
       fnRCL(regStats);
       #if (defined VERBOSE_SOLVER0) && (defined PC_BUILD)
@@ -111,44 +113,16 @@ void fnPlot(uint16_t unusedButMandatoryParameter) {
 #endif
 
 
-static void graph_eqn(float x_min, float x_max) {
-  #ifndef TESTSUITE_BUILD
-  double x; 
-  int32_t cnt;
-  runFunction(ITM_CLSTK);
-  runFunction(ITM_RAD);
-
-  for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduced the amount of sample data from 400 points to 40 points
-
-    //convert double to X register
-    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
-    stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
-
-    //leaving y in Y and x in X
-    execute_rpn_function();
-    runFunction(ITM_SIGMAPLUS);
-    realToInt32(SIGMA_N, cnt);    
-    #ifdef PC_BUILD
-      printf(" %i \n",cnt);
-      if(lastErrorCode == 24) { printf("ERROR CODE CANNOT STAT COMPLEX RESULT, ignored\n"); lastErrorCode = 0;}
-    #endif
-  }
-  runFunction(ITM_CLSTK);
-  runFunction(ITM_SIGMAx);
-  fnPlot(0);
-  #endif
-}
-
 
 
 #ifndef TESTSUITE_BUILD
   static void doubleToXRegisterReal34(double x) { //Convert from double to X register REAL34
+    char buff[100];
     setSystemFlag(FLAG_ASLIFT);
     liftStack();
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-    snprintf(tmpString, TMP_STR_LENGTH, "%.16e", x);
-    stringToReal34(tmpString, REGISTER_REAL34_DATA(REGISTER_X));
+    snprintf(buff, 100, "%.16e", x);
+    stringToReal34(buff, REGISTER_REAL34_DATA(REGISTER_X));
     //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
     setSystemFlag(FLAG_ASLIFT);
   }
@@ -156,10 +130,11 @@ static void graph_eqn(float x_min, float x_max) {
 
 
 
-
+#define DOUBLEINVALID 123.432f
 static double convert_to_double(calcRegister_t regist) { //Convert from X register to double
   double y;
   real_t tmpy;
+  char buff[100];
   switch(getRegisterDataType(regist)) {
   case dtLongInteger:
     convertLongIntegerRegisterToReal(regist, &tmpy, &ctxtReal39);
@@ -169,11 +144,12 @@ static double convert_to_double(calcRegister_t regist) { //Convert from X regist
     real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
     break;
   default:
-    return 0;
+    printf("XXXXXXXX\n");
+    return DOUBLEINVALID;
     break;
   }
-  realToString(&tmpy, tmpString);
-  y = strtof(tmpString, NULL);
+  realToString(&tmpy, buff);
+  y = strtof(buff, NULL);
   return y;
 }
 
@@ -217,6 +193,42 @@ void check_osc(uint8_t ii){
    }
 }
 
+//###################################################################################
+//PLOTTER
+
+static void graph_eqn(float x_min, float x_max) {
+  #ifndef TESTSUITE_BUILD
+  double x; 
+  char buff[100];
+  runFunction(ITM_CLSTK);
+  runFunction(ITM_RAD);
+
+  for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduced the amount of sample data from 400 points to 40 points
+
+    //convert double to X register
+    reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+    snprintf(buff, 100, "%.16e", x);
+    stringToReal34(buff, REGISTER_REAL34_DATA(REGISTER_X));
+
+    //leaving y in Y and x in X
+    execute_rpn_function();
+    #ifdef PC_BUILD
+      double y = convert_to_double(REGISTER_Y);
+    #endif
+    runFunction(ITM_SIGMAPLUS);
+    #ifdef PC_BUILD
+      int32_t cnt;
+      realToInt32(SIGMA_N, cnt);    
+      printf(">>> Into STATS:%i points; x=%f y=%f\n",cnt,(float)x,(float)y);
+      if(lastErrorCode == 24) { printf("ERROR CODE CANNOT STAT COMPLEX RESULT, ignored\n"); lastErrorCode = 0;}
+    #endif
+  }
+  runFunction(ITM_CLSTK);
+  runFunction(ITM_SIGMAx);
+  fnPlot(0);
+//graph_axis();
+  #endif
+}
 
 //###################################################################################
 //SOLVER
@@ -241,7 +253,7 @@ void check_osc(uint8_t ii){
 #define __L1     98
 
 
-static void graph_solver(float x_min, float x_max) {
+static void graph_solver() {
   #ifndef TESTSUITE_BUILD
 
   calcRegister_t SREG_TMP  = __TMP ;
@@ -306,7 +318,6 @@ static void graph_solver(float x_min, float x_max) {
   fnStore(SREG_DY);                                    // initial value for difference comparison must be larger than tolerance
   doubleToXRegisterReal34(1E-30); 
   fnStore(SREG_TOL);                                   // tolerance
-
 
   fnEqCalc(0);           //initialize
 
@@ -525,6 +536,7 @@ static void graph_solver(float x_min, float x_max) {
 if(ix < CHANGE_TO_MOD_SECANT) {
 
 
+
     //Secant and Newton approximation methods
         if( (ix<5 || oscillations < 4) )  {
 
@@ -612,7 +624,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {
         runFunction(ITM_XexY);
         runFunction(ITM_SUB);       // subtract as per Newton, x1 - f/f'
         fnStore(SREG_X2N);          // store temporarily to new x2n
-} else
+} else {
 
 
 
@@ -703,6 +715,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {
     runFunction(ITM_SUB);        // subtract as per Newton, x1 - f/f'
     fnStore(SREG_X2N);           // store temporarily to new x2n
     }
+  }
 
 
 
@@ -832,7 +845,14 @@ EndIteration:
             printf("ERROR CODE CANNOT STAT COMPLEX ignored\n"); 
             #endif //VERBOSE_SOLVER1
             lastErrorCode = 0;
+          } else
+          if(lastErrorCode != 0) { 
+            #ifdef VERBOSE_SOLVER1
+            printf("ERROR CODE\n"); 
+            #endif //VERBOSE_SOLVER1
+            lastErrorCode = 0;
           }
+
         #endif
       }
     }
@@ -903,32 +923,51 @@ void fnEqSolvGraph (uint16_t func) {
     refreshLcd(NULL);
   #endif // DMCP_BUILD
 
-
-  Aspect_Square = false;
-  PLOT_INTG = false;
-  PLOT_DIFF = false;
-  PLOT_RMS  = false;
-  PLOT_AXIS = true;
-  PLOT_ZMX  = 0;
-  PLOT_ZMY  = 0;
   fnClSigma(0);
-//  runFunction(ITM_CLSIGMA);
+
+  statGraphReset();
+  PLOT_AXIS = true;
+
+
+  //initialize x
+  currentSolverStatus &= ~SOLVER_STATUS_READY_TO_EXECUTE;
+  calcRegister_t regStats = findNamedVariable("x");
+  if(regStats == INVALID_VARIABLE) {
+    allocateNamedVariable("x", dtReal34, REAL34_SIZE);
+  }
 
   switch (func) {
-     case EQ_SOLVE:
-            graph_solver(x_min, x_max);
+     case EQ_SOLVE:{
+            double ix1 = convert_to_double(REGISTER_X);
+            double ix0 = convert_to_double(REGISTER_Y);
+            if(ix1>ix0 && ix1!=DOUBLEINVALID && ix0!=DOUBLEINVALID) { //pre-condition the plotter
+              x_min = ix0;
+              x_max = ix1;
+            }
+            graph_solver();
+            //calcMode = CM_GRAPH;
             break;
+          }
      case EQ_PLOT: {
             double ix1 = convert_to_double(REGISTER_X);
             double ix0 = convert_to_double(REGISTER_Y);
             fnDrop(0);
             fnDrop(0);
+            if(ix1==ix0 && ix1==0 && x_min != x_max) {
+              x_min = -10;
+              x_max =  10;
+            } else
+            if(ix1==ix0 && ix1==0 && x_min != x_max) {
+              x_max = x_min * 2.0f;
+            } else
             if(ix1>ix0) {
               x_min = ix0;
               x_max = ix1;
             }
+      
             fnEqCalc(0);
             graph_eqn(x_min, x_max);
+            calcMode = CM_GRAPH;
             break;
           }
      default:;

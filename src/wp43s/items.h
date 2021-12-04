@@ -26,6 +26,7 @@
 
 
 
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -2135,10 +2136,16 @@
 #define ITM_T_ROOTF                   2061
 #define ITM_RSTF                      2062
 #define ITM_EXFRAC                    2063
-#define ITM_XXSLV                     2064
-#define ITM_XXPLT                     2065
+#define ITM_XSLV                      2064
+#define ITM_XPLT                      2065
+#define MNU_GRAPH                     2066
+#define ITM_LG_SIGN                   2067
+#define ITM_LN_SIGN                   2068
+#define ITM_SIN_SIGN                  2069
+#define ITM_COS_SIGN                  2070
+#define ITM_TAN_SIGN                  2071
 
-#define LAST_ITEM                     2066
+#define LAST_ITEM                     2072
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

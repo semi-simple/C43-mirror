@@ -750,6 +750,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnResetTimerApp             (uint16_t unusedButMandatoryParameter) {}
   void fnRecallTimerApp            (uint16_t unusedButMandatoryParameter) {}
   void fnEqSolvGraph               (uint16_t unusedButMandatoryParameter) {}
+  void graph_eqn                   (uint16_t unusedButMandatoryParameter) {}
 #endif // GENERATE_CATALOGS
 
 TO_QSPI const item_t indexOfItems[] = {
@@ -2584,6 +2585,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1780 */  { fnEqSolvGraph,                EQ_SOLVE,                    "xSLV",                                        "xSLV",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1781 */  { fnEqSolvGraph,                EQ_PLOT,                     "xPLT",                                        "xPLT",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1782 */  { itemToBeCoded,                NOPARAM,                     "GRAPH",                                       "GRAPH",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
+/* 1783 */  { graph_eqn,                    1,                           "rePLT",                                       "rePLT",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 
-/* 1783 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
+/* 1784 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
 };

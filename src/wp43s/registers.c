@@ -674,12 +674,14 @@ bool_t validateName(const char *name) {
       case '+':
       case '-':
       case ':':
+      case '/':
       case '^':
       case '(':
       case ')':
       case '=':
       case ';':
       case '|':
+      case '!':
       case ' ':
         return false;
       default:
@@ -754,9 +756,19 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
   }
 
   if(_findReservedVariable(variableName) != INVALID_VARIABLE) {
+    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
     #ifdef PC_BUILD
       sprintf(errorMessage, "the name %s", variableName);
       moreInfoOnError("In function allocateNamedVariable:", errorMessage, "clashes with a reserved variable!", NULL);
+    #endif // PC_BUILD
+    return;
+  }
+
+  if(!validateName(variableName)) {
+    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "the name %s", variableName);
+      moreInfoOnError("In function allocateNamedVariable:", errorMessage, "is incorrect! The name does not follow", "the naming convention!");
     #endif // PC_BUILD
     return;
   }

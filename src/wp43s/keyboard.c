@@ -1527,7 +1527,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         nextStep = findNextStep(currentStep);
-        if(*nextStep != 255 || *(nextStep + 1) != 255) { // Not the last END
+        if(*currentStep != 255 || *(currentStep + 1) != 255) { // Not the last END
           deleteStepsFromTo(currentStep, nextStep);
         }
         break;

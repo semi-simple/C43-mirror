@@ -200,7 +200,7 @@ void fnClP(uint16_t unusedButMandatoryParameter) {
   else {
     uint16_t savedCurrentProgramNumber = currentProgramNumber;
 
-    deleteStepsFromTo(beginOfCurrentProgram, endOfCurrentProgram);
+    deleteStepsFromTo(beginOfCurrentProgram, endOfCurrentProgram - ((currentProgramNumber == numberOfPrograms) ? 2 : 0));
     scanLabelsAndPrograms();
     // unlikely fails
 
@@ -240,7 +240,7 @@ void defineCurrentProgramFromGlobalStepNumber(uint16_t globalStepNumber) {
   }
 
   if(currentProgramNumber >= numberOfPrograms) {
-    endOfCurrentProgram = programList[currentProgramNumber - 1].instructionPointer + _getProgramSize() - 2;
+    endOfCurrentProgram = programList[currentProgramNumber - 1].instructionPointer + _getProgramSize();
   }
   else {
     endOfCurrentProgram = programList[currentProgramNumber].instructionPointer;
@@ -258,7 +258,7 @@ void defineCurrentProgramFromCurrentStep(void) {
   }
 
   if(currentProgramNumber >= numberOfPrograms) {
-    endOfCurrentProgram = programList[currentProgramNumber - 1].instructionPointer + _getProgramSize() - 2;
+    endOfCurrentProgram = programList[currentProgramNumber - 1].instructionPointer + _getProgramSize();
   }
   else {
     endOfCurrentProgram = programList[currentProgramNumber].instructionPointer;

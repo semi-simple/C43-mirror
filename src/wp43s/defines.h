@@ -597,7 +597,7 @@ typedef enum {
 #define TIMER_IDX_REFRESH_SLEEP                    0 // use timer 0 to wake up for screen refresh
 //#define TIMER_IDX_AUTO_REPEAT                    1 // use timer 1 to wake up for key auto-repeat
 
-#define TMR_NUMBER                                 9
+#define TMR_NUMBER                                10
 
 // timer
 #define TO_FG_LONG                                 0
@@ -608,7 +608,8 @@ typedef enum {
 #define TO_3S_CTFF                                 5
 #define TO_CL_DROP                                 6
 #define TO_AUTO_REPEAT                             7
-#define TO_KB_ACTV                                 8
+#define TO_TIMER_APP                               8
+#define TO_KB_ACTV                                 9
 
 
 
@@ -714,8 +715,9 @@ typedef enum {
 #define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
-#define CM_MIM                                    12 // Matrix imput mode tbd reorder
-#define CM_EIM                                    13 // Equation imput mode
+#define CM_MIM                                    12 // Matrix input mode tbd reorder
+#define CM_EIM                                    13 // Equation input mode
+#define CM_TIMER                                  14 // Timer application
 #define CM_GRAPH                                  97 //JM Display graph       //JM
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
 
@@ -935,6 +937,7 @@ typedef enum {
 #endif
 #define KEY_AUTOREPEAT_FIRST_PERIOD              400 // in milliseconds
 #define KEY_AUTOREPEAT_PERIOD                    200 // in milliseconds
+#define TIMER_APP_PERIOD                         100 // in milliseconds
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
@@ -1025,6 +1028,8 @@ typedef enum {
 #define ASSIGN_LABELS                          12000
 #define ASSIGN_RESERVED_VARIABLES                  (ASSIGN_NAMED_VARIABLES + FIRST_RESERVED_VARIABLE - FIRST_NAMED_VARIABLE)
 #define ASSIGN_USER_MENU                     (-10000)
+
+#define TIMER_APP_STOPPED                          0xFFFFFFFFu
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

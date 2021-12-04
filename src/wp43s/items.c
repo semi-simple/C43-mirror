@@ -277,8 +277,6 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnClearStack                (uint16_t unusedButMandatoryParameter) {}
   void fnClearRegisters            (uint16_t unusedButMandatoryParameter) {}
   void fnTimeFormat                (uint16_t unusedButMandatoryParameter) {}
-  void fnTone                      (uint16_t unusedButMandatoryParameter) {}
-  void fnBeep                      (uint16_t unusedButMandatoryParameter) {}
   void fnSetDateFormat             (uint16_t unusedButMandatoryParameter) {}
   void fnComplexUnit               (uint16_t unusedButMandatoryParameter) {}
   void fnComplexMode               (uint16_t unusedButMandatoryParameter) {}
@@ -633,6 +631,8 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnGetFirstGregorianDay      (uint16_t unusedButMandatoryParameter) {}
   void fnDate                      (uint16_t unusedButMandatoryParameter) {}
   void fnTime                      (uint16_t unusedButMandatoryParameter) {}
+  void fnTone                      (uint16_t unusedButMandatoryParameter) {}
+  void fnBeep                      (uint16_t unusedButMandatoryParameter) {}
   void fnSave                      (uint16_t unusedButMandatoryParameter) {}
   void fnLoad                      (uint16_t unusedButMandatoryParameter) {}
   void fnUndo                      (uint16_t unusedButMandatoryParameter) {}
@@ -772,6 +772,12 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnTvmBeginMode              (uint16_t unusedButMandatoryParameter) {}
   void fnTvmEndMode                (uint16_t unusedButMandatoryParameter) {}
   void fnAssign                    (uint16_t unusedButMandatoryParameter) {}
+  void fnItemTimerApp              (uint16_t unusedButMandatoryParameter) {}
+  void fnAddTimerApp               (uint16_t unusedButMandatoryParameter) {}
+  void fnDecisecondTimerApp        (uint16_t unusedButMandatoryParameter) {}
+  void fnResetTimerApp             (uint16_t unusedButMandatoryParameter) {}
+  void fnRecallTimerApp            (uint16_t unusedButMandatoryParameter) {}
+
 
   void fnEqSolvGraph               (uint16_t unusedButMandatoryParameter) {}
 
@@ -2305,7 +2311,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1397 */  { itemToBeCoded,                NOPARAM,                     "ELLIPT",                                      "Ellipt",                                      (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
 /* 1398 */  { fnSolveVar,                   NOPARAM,                     "MVAR",                                        "MVAR",                                        (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED}, // solver variables
 /* 1399 */  { itemToBeCoded,                NOPARAM,                     "EQ.EDIT",                                     "EQ.EDIT",                                     (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
-/* 1400 */  { itemToBeCoded,                NOPARAM,                     "1400",                                        "1400",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
+/* 1400 */  { itemToBeCoded,                NOPARAM,                     "TIMERF",                                      "TIMERF",                                      (0 << TAM_MAX_BITS) |     0, CAT_MENU | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1401 */  { itemToBeCoded,                NOPARAM,                     "1401",                                        "1401",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
 /* 1402 */  { itemToBeCoded,                NOPARAM,                     "1402",                                        "1402",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
 /* 1403 */  { itemToBeCoded,                NOPARAM,                     "1403",                                        "1403",                                        (0 << TAM_MAX_BITS) |     0, CAT_FREE | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
@@ -2529,7 +2535,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1619 */  { fnDisplayFormatTime,          TM_VALUE,                    "TDISP",                                       "TDISP",                                       (0 << TAM_MAX_BITS) |     6, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1620 */  { fnTicks,                      NOPARAM,                     "TICKS",                                       "TICKS",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1621 */  { fnTime,                       NOPARAM,                     "TIME",                                        "TIME",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
-/* 1622 */  { itemToBeCoded,                NOPARAM,                     "TIMER",                                       "TIMER",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
+/* 1622 */  { fnItemTimerApp,               NOPARAM,                     "TIMER",                                       "TIMER",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1623 */  { fnChebyshevT,                 NOPARAM,                     "T" STD_SUB_n,                                 "T" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_ENABLED },
 /* 1624 */  { fnTone,                       NOPARAM,                     "TONE",                                        "TONE",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1625 */  { fnSwapT,                      TM_REGISTER,                 "t" STD_LEFT_RIGHT_ARROWS,                     "t" STD_LEFT_RIGHT_ARROWS,                     (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
@@ -2665,7 +2671,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1753 */  { fnTranspose,                  NOPARAM,                     "TRANS",                                       "TRANS",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1754 */  { itemToBeCoded,                NOPARAM,                     "xIN",                                         "xIN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1755 */  { itemToBeCoded,                NOPARAM,                     "xOUT",                                        "xOUT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
-/* 1756 */  { fnPlotStat,                   PLOT_ORTHOF,                 "",                                             "CENTRL"               ,                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
+/* 1756 */  { fnPlotStat,                   PLOT_ORTHOF,                 "",                                             "CENTRL",                                     (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1757 */  { fnHide,                       NOPARAM,                     "HIDE",                                        "HIDE",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1758 */  { fnPlotCloseSmi,               NOPARAM,                     "s" STD_SUB_m STD_SUB_i,                       "s" STD_SUB_m STD_SUB_i,                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_ENABLED    | EIM_DISABLED},
 /* 1759 */  { fnPlotStat,                   PLOT_LR,                     "ASSESS",                                      "ASSESS",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
@@ -2678,12 +2684,14 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1766 */  { fnGetHide,                    NOPARAM,                     "HIDE?",                                       "HIDE?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1767 */  { fnEqCalc,                     NOPARAM,                     "Calc",                                        "Calc",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1768 */  { fnSquareRoot,                 NOPARAM,                     "SQRT",                                        "SQRT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_ENABLED },
+
 /* 1769 */  { fnRecall,                     RESERVED_VARIABLE_FV,        "",                                            "RCL FV",                                      (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1770 */  { fnRecall,                     RESERVED_VARIABLE_IPONA,     "",                                            "i%/a",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1771 */  { fnRecall,                     RESERVED_VARIABLE_NPER,      "",                                            "RCL n" STD_SUB_P,                             (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1772 */  { fnRecall,                     RESERVED_VARIABLE_PERONA,    "",                                            "per/a",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1773 */  { fnRecall,                     RESERVED_VARIABLE_PMT,       "",                                            "PMT",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
 /* 1774 */  { fnRecall,                     RESERVED_VARIABLE_PV,        "",                                            "PV",                                          (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_ENABLED    | EIM_DISABLED},
+
 /* 1775 */  { fnAtan2,                      NOPARAM,                     "ATAN2",                                       "ATAN2",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED    | EIM_ENABLED },
 
 
@@ -2974,6 +2982,11 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 2059 */  { fnSetSetJM,                   JC_EXFRAC,                   "EXFRAC",                                      "EXFRAC",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
 /* 2060 */  { fnEqSolvGraph,                EQ_SOLVE,                    "xxSLV",                                       "xxSLV",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
 /* 2061 */  { fnEqSolvGraph,                EQ_PLOT,                     "xxPLT",                                       "xxPLT",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED  | EIM_DISABLED},
+
+/* 1776 */  { fnAddTimerApp,                NOPARAM,                     "",                                            "ADD",                                         (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
+/* 1777 */  { fnDecisecondTimerApp,         NOPARAM,                     "",                                            "0.1s?",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
+/* 1778 */  { fnResetTimerApp,              NOPARAM,                     "",                                            "RESET",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
+/* 1779 */  { fnRecallTimerApp,             TM_REGISTER,                 "RCL",                                         "",                                            (0 << TAM_MAX_BITS) |    99, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 
 /* 2062 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
 };

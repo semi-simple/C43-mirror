@@ -55,6 +55,7 @@
         showOverflowCarry();
       }
       showHideAlphaMode();
+      showHideHourGlass();
       showHidePgmBegin();
       showHideWatch();
       showHideSerialIO();
@@ -379,7 +380,7 @@ void showFracMode(void) {
 
   void showHideWatch(void) {
     if(watchIconEnabled) {
-      showGlyph(STD_WATCH,                    &standardFont, X_WATCH, 0, vmNormal, true, false); // is 0+13+1 pixel wide
+      showGlyph(STD_TIMER, &standardFont, X_WATCH, 0, vmNormal, true, false); // is 0+13+1 pixel wide
     }
   }
 

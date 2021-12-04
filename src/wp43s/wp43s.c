@@ -137,6 +137,7 @@ uint8_t                lastErrorCode;
 uint8_t                temporaryInformation;
 uint8_t                rbrMode;
 uint8_t                numScreensNumericFont;
+uint8_t                timerCraAndDeciseconds = 128u;
 uint8_t               *beginOfProgramMemory;
 uint8_t               *beginOfCurrentProgram;
 uint8_t               *endOfCurrentProgram;
@@ -261,6 +262,9 @@ uint32_t               alphaSelectionTimer;
 uint32_t               xCursor;
 uint32_t               yCursor;
 uint32_t               tamOverPemYPos;
+uint32_t               timerValue;
+uint32_t               timerStartTime = TIMER_APP_STOPPED;
+uint32_t               timerTotalTime;
 
 uint64_t               shortIntegerMask;
 uint64_t               shortIntegerSignBit;
@@ -436,6 +440,7 @@ size_t                 wp43sMemInBlocks;
     fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF);
     fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP);
     fnTimerConfig(TO_AUTO_REPEAT, execAutoRepeat, 0);
+    fnTimerConfig(TO_TIMER_APP, execTimerApp, 0);
     fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV);
     nextTimerRefresh = 0;
 
@@ -564,7 +569,7 @@ size_t                 wp43sMemInBlocks;
       }
 
       // Key is ready -> clear auto off timer
-      if(!key_empty()) {
+      if(!key_empty() || (nextTimerRefresh != 0)) {
         reset_auto_off();
       }
 

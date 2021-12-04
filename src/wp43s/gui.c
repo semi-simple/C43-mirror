@@ -30,6 +30,7 @@
 #include "saveRestoreCalcState.h"
 #include "screen.h"
 #include "stack.h"
+#include "timer.h"
 #include "statusBar.h"
 #include "softmenus.h"
 #include <string.h>
@@ -129,6 +130,7 @@ GtkWidget           *lbl82Fa, *lbl83Fa, *lbl84Fa, *lbl85Fa;             //^^
 
 
   static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
+    fnStopTimerApp();
     saveCalc();
     gtk_main_quit();
 
@@ -4189,6 +4191,8 @@ void setupUI(void) {
   void fnOff(uint16_t unsuedParamButMandatory) {
     shiftF = false;
     shiftG = false;
+
+    fnStopTimerApp();
 
     #ifdef PC_BUILD
       if(matrixIndex != INVALID_VARIABLE) {

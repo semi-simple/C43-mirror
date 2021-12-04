@@ -74,6 +74,16 @@
 
 
 
+  static uint8_t _tamMaxDigits(int16_t max) {
+    if(tam.function == ITM_GTOP) {
+      return (max < 1000 ? 3 : (max < 10000 ? 4 : 5));
+    }
+    else {
+      return (max < 10 ? 1 : (max < 100 ? 2 : (max < 1000 ? 3 : (max < 10000 ? 4 : 5))));
+    }
+  }
+
+
   static void _tamUpdateBuffer() {
     char regists[5];
     char *tbPtr = tamBuffer;
@@ -118,7 +128,7 @@
       else {
         int16_t max = (tam.indirect ? (tam.dot ? currentNumberOfLocalRegisters : 99)
           : (tam.dot ? ((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) ? NUMBER_OF_LOCAL_FLAGS : currentNumberOfLocalRegisters) : tam.max));
-        uint8_t maxDigits = (max < 10 ? 1 : (max < 100 ? 2 : (max < 1000 ? 3 : (max < 10000 ? 4 : 5))));
+        uint8_t maxDigits = _tamMaxDigits(max);
         uint8_t underscores = maxDigits - tam.digitsSoFar;
         int16_t v = tam.value;
         for(int i = tam.digitsSoFar - 1; i >= 0; i--) {
@@ -354,7 +364,7 @@
     }
     else if(ITM_0 <= item && item <= ITM_9) {
       int16_t digit = item - ITM_0;
-      uint8_t maxDigits = (max2 < 10 ? 1 : (max2 < 100 ? 2 : (max2 < 1000 ? 3 : (max2 < 10000 ? 4 : 5))));
+      uint8_t maxDigits = _tamMaxDigits(max2);
       // If the number is below our minimum, prevent further entry of digits
       if(!tam.alpha && (tam.value*10 + digit) <= max2 && tam.digitsSoFar < maxDigits) {
         tam.value = tam.value*10 + digit;
@@ -601,6 +611,10 @@
         calcModeAimGui();
       }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
+
+    if(calcMode == CM_PEM) {
+      hourGlassIconEnabled = false;
+    }
   }
 
 

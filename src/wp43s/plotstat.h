@@ -105,6 +105,7 @@ int16_t screen_window_x(float x_min, float x, float x_max);
 int16_t screen_window_y(float y_min, float y, float y_max);
 #endif
 
+void    statGraphReset     (void);
 void    fnStatDemo0        (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo1        (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo2        (uint16_t unusedButMandatoryParameter);

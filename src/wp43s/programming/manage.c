@@ -452,6 +452,51 @@ void insertStepInProgram(int16_t func) {
     case ITM_SYSTEM:         // 1743
       break;
 
+    // Single-byte, register parameter
+    case ITM_ISE:         //   5
+    case ITM_ISG:         //   6
+    case ITM_ISZ:         //   7
+    case ITM_DSE:         //   8
+    case ITM_DSL:         //   9
+    case ITM_DSZ:         //  10
+    case ITM_INPUT:       //  43
+    case ITM_STO:         //  44
+    case ITM_STOADD:      //  45
+    case ITM_STOSUB:      //  46
+    case ITM_STOMULT:     //  47
+    case ITM_STODIV:      //  48
+    case ITM_RCL:         //  51
+    case ITM_RCLADD:      //  52
+    case ITM_RCLSUB:      //  53
+    case ITM_RCLMULT:     //  54
+    case ITM_RCLDIV:      //  55
+    case ITM_CONVG:       //  56
+    case ITM_KEYQ:        //  77
+    case ITM_DEC:         //  91
+    case ITM_INC:         //  92
+    case ITM_VIEW:        // 101
+    case ITM_Xex:         // 127
+      if(tam.alpha) {
+        uint16_t nameLength = stringByteLength(aimBuffer);
+        tmpString[0] = func;
+        tmpString[1] = tam.indirect ? INDIRECT_VARIABLE : STRING_LABEL_VARIABLE;
+        tmpString[2] = nameLength;
+        xcopy(tmpString + 3, aimBuffer, nameLength);
+        _insertInProgram((uint8_t *)tmpString, nameLength + 3);
+      }
+      else if(tam.indirect) {
+        tmpString[0] = func;
+        tmpString[1] = INDIRECT_REGISTER;
+        tmpString[2] = tam.value;
+        _insertInProgram((uint8_t *)tmpString, 3);
+      }
+      else {
+        tmpString[0] = func;
+        tmpString[1] = tam.value;
+        _insertInProgram((uint8_t *)tmpString, 2);
+      }
+      break;
+
     // Single-byte, no parameters
     case ITM_RTN:            //    4
     case ITM_XEQUP0:         //   13

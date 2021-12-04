@@ -36,7 +36,7 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-  static int16_t _tamOperation(void) {
+  int16_t tamOperation(void) {
     switch(tam.function) {
       case ITM_STO :
         switch(tam.currentOperation) {
@@ -90,7 +90,7 @@
     if(tam.mode == 0) {
       return;
     }
-    tbPtr = stpcpy(tbPtr, indexOfItems[_tamOperation()].itemCatalogName);
+    tbPtr = stpcpy(tbPtr, indexOfItems[tamOperation()].itemCatalogName);
     tbPtr = stpcpy(tbPtr, " ");
     if(tam.mode == TM_SHUFFLE) {
       // Shuffle keeps the source register number for each destination register (X, Y, Z, T) in two bits
@@ -162,7 +162,7 @@
             tam.value |= 1 << (2*i + 8);
             tam.value = (tam.value & ~mask) | (((item-ITM_REG_X) << (2*i)) & mask);
             if(i == 3) {
-              reallyRunFunction(_tamOperation(), tam.value);
+              reallyRunFunction(tamOperation(), tam.value);
               tamLeaveMode();
             }
             break;
@@ -319,7 +319,7 @@
           } else {
             tam.currentOperation = item;
             if(item == ITM_dddEL || item == ITM_dddIJ) {
-              reallyRunFunction(_tamOperation(), NOPARAM);
+              reallyRunFunction(tamOperation(), NOPARAM);
               tamLeaveMode();
               hourGlassIconEnabled = false;
               return;
@@ -444,16 +444,22 @@
             fnGoto(value);
           }
           else {
-            reallyRunFunction(_tamOperation(), value + programList[currentProgramNumber - 1].step - 1);
+            reallyRunFunction(tamOperation(), value + programList[currentProgramNumber - 1].step - 1);
           }
         }
         else if(run) {
-          if(calcMode == CM_MIM)
-            mimRunFunction(_tamOperation(), value);
-          else
-            reallyRunFunction(_tamOperation(), value);
+          switch(calcMode) {
+            case CM_MIM:
+              mimRunFunction(tamOperation(), value);
+              break;
+            case CM_PEM:
+              insertStepInProgram(tamOperation());
+              break;
+            default:
+              reallyRunFunction(tamOperation(), value);
+          }
         }
-        if(_tamOperation() == ITM_M_GOTO_ROW) {
+        if(tamOperation() == ITM_M_GOTO_ROW) {
           tamLeaveMode();
           tamEnterMode(ITM_M_GOTO_COLUMN);
         }
@@ -492,6 +498,9 @@
           #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
         }
       }
+      if(calcMode == CM_PEM) {
+        insertStepInProgram(tamOperation());
+      }
       if(tam.mode != TM_NEWMENU) aimBuffer[0] = 0;
       if(tam.indirect && value != INVALID_VARIABLE) {
         value = indirectAddressing(value, (tam.mode == TM_STORCL || tam.mode == TM_M_DIM), min, max);
@@ -501,16 +510,19 @@
       }
       if(value != INVALID_VARIABLE) {
         if(calcMode == CM_MIM) {
-          mimRunFunction(_tamOperation(), value);
+          mimRunFunction(tamOperation(), value);
         }
         else if(tam.function == ITM_GTOP) {
           reallyRunFunction(ITM_GTOP, labelList[value - FIRST_LABEL].step);
         }
+        else if(calcMode == CM_PEM) {
+          // already done
+        }
         else {
-          reallyRunFunction(_tamOperation(), value);
+          reallyRunFunction(tamOperation(), value);
         }
       }
-      if(_tamOperation() == ITM_M_GOTO_ROW) {
+      if(tamOperation() == ITM_M_GOTO_ROW) {
         tamLeaveMode();
         tamEnterMode(ITM_M_GOTO_COLUMN);
       }

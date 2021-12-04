@@ -389,7 +389,18 @@
             return;
           }
           else if(calcMode == CM_PEM && catalog && catalog != CATALOG_MVAR) { // TODO: is that correct
-            runFunction(item);
+            if(tam.mode) {
+              const char *itmLabel = dynmenuGetLabel(dynamicMenuItem);
+              uint16_t nameLength = stringByteLength(itmLabel);
+              xcopy(aimBuffer, itmLabel, nameLength);
+              tam.alpha = true;
+              insertStepInProgram(tamOperation());
+              tamLeaveMode();
+              hourGlassIconEnabled = false;
+            }
+            else {
+              runFunction(item);
+            }
             refreshScreen();
             return;
           }

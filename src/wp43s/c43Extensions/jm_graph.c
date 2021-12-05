@@ -371,7 +371,6 @@ void fnGraph (uint16_t func){
 
   running_program_jm = true;
   #ifndef SAVE_SPACE_DM42_4
-    double ix, ix0, ix1;  
   #endif
   switch (func) 
   {

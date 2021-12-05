@@ -296,7 +296,12 @@ bool_t lastshiftG = false;
         if(item != ITM_NOP /*&& item != ITM_NULL*/) {        //JM still need to run the longpress even if no function populated in FN, ie NOP or NULL
           lastErrorCode = 0;
 
-          if(calcMode != CM_ASSIGN && indexOfItems[item].func == addItemToBuffer && !((item>=ITM_0 && item <=ITM_9) || item == ITM_EXPONENT) ) { //JM added conditions, toherwise digits in menus do not work
+          if(calcMode != CM_ASSIGN   &&   indexOfItems[item].func == addItemToBuffer
+
+             && !( (item>=ITM_0 && item <=ITM_9) || item == ITM_EXPONENT || -softmenu[softmenuStack[0].softmenuId].menuItem == MNU_EQ_EDIT ) 
+
+            ) { //JM added conditions, toherwise digits in menus do not work
+            
             // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two

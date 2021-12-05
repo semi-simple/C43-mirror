@@ -2109,7 +2109,7 @@
 #define ITM_CLGRF                     2040
 #define ITM_PZOOMX                    2041
 #define ITM_PZOOMY                    2042
-#define ITM_XSOLV                     2043
+#define ITM_2043                      2043
 #define ITM_XPLOT                     2044
 #define ITM_XDEMO                     2045
 #define ITM_PRN                       2046

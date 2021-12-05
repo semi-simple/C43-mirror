@@ -89,35 +89,8 @@
 	  setSystemFlag(FLAG_ASLIFT);
 	}
     // TODO END ######################
-#endif //TESTSUITE_BUILD
 
 
-void fnPlot(uint16_t unusedButMandatoryParameter) {
-  PLOT_AXIS = true;
-  fnPlotStat(PLOT_GRAPH);
-}
-
-
-
-#ifndef TESTSUITE_BUILD
-  static void execute_rpn_function(void){
-    calcRegister_t regStats = findNamedVariable("x");
-    if(regStats != INVALID_VARIABLE) {
-      fnStore(regStats);                  //place X register into x
-      fnEqCalc(0);
-      fnRCL(regStats);
-      #if (defined VERBOSE_SOLVER0) && (defined PC_BUILD)
-        printRegisterToConsole(REGISTER_X,">>> Solving x=","");
-        printRegisterToConsole(REGISTER_Y," f(x)=","\n");
-      #endif
-    }
-  }
-#endif
-
-
-
-
-#ifndef TESTSUITE_BUILD
   static void doubleToXRegisterReal34(double x) { //Convert from double to X register REAL34
     char buff[100];
     setSystemFlag(FLAG_ASLIFT);
@@ -129,7 +102,6 @@ void fnPlot(uint16_t unusedButMandatoryParameter) {
     setSystemFlag(FLAG_ASLIFT);
   }
 #endif
-
 
 
 #define DOUBLEINVALID 123.432f
@@ -146,7 +118,9 @@ static double convert_to_double(calcRegister_t regist) { //Convert from X regist
     real34ToReal(REGISTER_REAL34_DATA(regist), &tmpy);
     break;
   default:
-    printf("XXXXXXXX\n");
+    #ifdef PC_BUILD
+      printf("ERROR IN INPUT\n"); 
+    #endif
     return DOUBLEINVALID;
     break;
   }
@@ -156,9 +130,44 @@ static double convert_to_double(calcRegister_t regist) { //Convert from X regist
 }
 
 
+void fnPlot(uint16_t unusedButMandatoryParameter) {
+  lastPlotMode = PLOT_NOTHING;
+  fnPlotStat(PLOT_GRAPH);
+}
+
+
+static void initialize_function(void){
+  #ifndef TESTSUITE_BUILD
+	  calcRegister_t regStats = findNamedVariable("x");
+	  if(regStats == INVALID_VARIABLE) {
+	    allocateNamedVariable("x", dtReal34, REAL34_SIZE);
+	  }
+    regStats = findNamedVariable("x");
+    if(regStats != INVALID_VARIABLE) {
+      doubleToXRegisterReal34(0.0);
+      fnStore(regStats);                  //place X register into x
+      fnEqCalc(0);
+      fnRCL(regStats);
+    }
+  #endif //TESTSUITE_BUILD
+}
+
 #ifndef TESTSUITE_BUILD
-static bool_t regIsLowerThanTol(calcRegister_t REG, calcRegister_t TOL) {
-  return ( (real34IsZero(REGISTER_REAL34_DATA(REG)) && (getRegisterDataType(REG) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REG)) : 1 )) 
+  static void execute_rpn_function(void){
+    calcRegister_t regStats = findNamedVariable("x");
+    if(regStats != INVALID_VARIABLE) {
+      fnStore(regStats);                  //place X register into x
+      fnEqCalc(0);
+      fnRCL(regStats);
+      #if (defined VERBOSE_SOLVER0) && (defined PC_BUILD)
+        printRegisterToConsole(REGISTER_X,">>> Solving x=","");
+        printRegisterToConsole(REGISTER_Y," f(x)=","\n");
+      #endif
+    }
+  }
+
+  static bool_t regIsLowerThanTol(calcRegister_t REG, calcRegister_t TOL) {
+    return ( (real34IsZero(REGISTER_REAL34_DATA(REG)) && (getRegisterDataType(REG) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REG)) : 1 )) 
 
            ||
            
@@ -166,7 +175,7 @@ static bool_t regIsLowerThanTol(calcRegister_t REG, calcRegister_t TOL) {
                   (getRegisterDataType(REG) == dtComplex34 ? real34CompareAbsLessThan(REGISTER_IMAG34_DATA(REG), REGISTER_REAL34_DATA(TOL)) : 1 ) 
            ) 
          );
-}
+  }
 
 
 #define ADD_RAN true
@@ -201,7 +210,6 @@ static void divFunction(bool_t addRandom, calcRegister_t TOL) {
   }
   runFunction(ITM_DIV);
 }
-#endif //TESTSUITE_BUILD
 
 
 int16_t osc = 0;
@@ -229,6 +237,8 @@ void check_osc(uint8_t ii){
    }
 }
 
+#endif //TESTSUITE_BUILD
+
 //###################################################################################
 //PLOTTER
 
@@ -239,7 +249,9 @@ void graph_eqn(uint16_t mode) {
   runFunction(ITM_CLSTK);
   runFunction(ITM_RAD);
 
-  if(mode == 1) fnClSigma(0);
+  if(mode == 1) {
+    fnClSigma(0);
+  }
   for(x=x_min; x<=x_max; x+=0.99999*(x_max-x_min)/SCREEN_WIDTH_GRAPH*10) {    //Reduced the amount of sample data from 400 points to 40 points
 
     //convert double to X register
@@ -261,9 +273,7 @@ void graph_eqn(uint16_t mode) {
     #endif
   }
   runFunction(ITM_CLSTK);
-  runFunction(ITM_SIGMAx);
   fnPlot(0);
-//graph_axis();
   #endif
 }
 
@@ -290,7 +300,7 @@ void graph_eqn(uint16_t mode) {
 #define __L1     98
 
 
-static void graph_solver() {
+static void graph_solver() {         //Input parameters in registers SREG_STARTX0, SREG_STARTX1
   #ifndef TESTSUITE_BUILD
 
   calcRegister_t SREG_TMP  = __TMP ;
@@ -312,9 +322,6 @@ static void graph_solver() {
   calcRegister_t SREG_STARTX1 = __STARTX1;
   calcRegister_t SREG_TICKS = __TICKS; 
   
-  copySourceRegisterToDestRegister(REGISTER_Y,SREG_STARTX0);
-  copySourceRegisterToDestRegister(REGISTER_X,SREG_STARTX1);
-
   setSystemFlag(FLAG_CPXRES);
   int16_t ix,ixd;
   int16_t oscillations = 0; 
@@ -363,8 +370,6 @@ static void graph_solver() {
   fnStore(SREG_DY);                                    // initial value for difference comparison must be larger than tolerance
   doubleToXRegisterReal34(1E-30); 
   fnStore(SREG_TOL);                                   // tolerance
-
-  fnEqCalc(0);             //initialize
 
   fnRCL(SREG_X0);          //determined third starting point using the slope or secant
   execute_rpn_function();                               
@@ -437,7 +442,7 @@ static void graph_solver() {
   {
                   #ifdef PC_BUILD
                     if(lastErrorCode != 0) { 
-                      printf(">>>> ERROR CODE INITIALLY NON-ZERO = %d <<<<<\n",lastErrorCode); 
+                      printf(">>> ERROR CODE INITIALLY NON-ZERO = %d <<<<<\n",lastErrorCode); 
                       return;
                     }
                   #endif
@@ -994,10 +999,7 @@ void fnEqSolvGraph (uint16_t func) {
   #endif // DMCP_BUILD
 
   fnClSigma(0);
-
   statGraphReset();
-  PLOT_AXIS = true;
-
 
   //initialize x
   currentSolverStatus &= ~SOLVER_STATUS_READY_TO_EXECUTE;
@@ -1010,12 +1012,16 @@ void fnEqSolvGraph (uint16_t func) {
      case EQ_SOLVE:{
             double ix1 = convert_to_double(REGISTER_X);
             double ix0 = convert_to_double(REGISTER_Y);
-            if(ix1>ix0 && ix1!=DOUBLEINVALID && ix0!=DOUBLEINVALID) { //pre-condition the plotter
+            calcRegister_t SREG_STARTX0 = __STARTX0;
+            calcRegister_t SREG_STARTX1 = __STARTX1;
+            copySourceRegisterToDestRegister(REGISTER_Y,SREG_STARTX0);
+            copySourceRegisterToDestRegister(REGISTER_X,SREG_STARTX1);
+            if(ix1>ix0 + 0.01 && ix1!=DOUBLEINVALID && ix0!=DOUBLEINVALID) { //pre-condition the plotter
               x_min = ix0;
               x_max = ix1;
             }
+            initialize_function();
             graph_solver();
-            //calcMode = CM_GRAPH;
             break;
           }
      case EQ_PLOT: {
@@ -1023,21 +1029,17 @@ void fnEqSolvGraph (uint16_t func) {
             double ix0 = convert_to_double(REGISTER_Y);
             fnDrop(0);
             fnDrop(0);
-            if(ix1==ix0 && ix1==0 && x_min != x_max) {
-              x_min = -10;
-              x_max =  10;
-            } else
-            if(ix1==ix0 && ix1==0 && x_min != x_max) {
-              x_max = x_min * 2.0f;
-            } else
-            if(ix1>ix0) {
+            if(ix1>ix0 + 0.01 && ix1!=DOUBLEINVALID && ix0!=DOUBLEINVALID) { //pre-condition the plotter
               x_min = ix0;
               x_max = ix1;
             }
-      
-            fnEqCalc(0);
+            if(x_min > x_max) {
+              float kk = x_max;
+              x_max = x_min;
+              x_min = kk;
+            }
+            initialize_function();
             graph_eqn(0);
-            calcMode = CM_GRAPH;
             break;
           }
      default:;

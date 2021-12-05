@@ -80,10 +80,10 @@ uint8_t   PLOT_ZOOM;
 int8_t    plotmode;
 float     tick_int_x;
 float     tick_int_y;
-float     x_min;
-float     x_max;
-float     y_min;
-float     y_max;
+float     x_min = 0;
+float     x_max = 1;
+float     y_min = 0;
+float     y_max = 1;
 uint32_t  xzero;
 uint32_t  yzero;
 
@@ -115,6 +115,8 @@ void statGraphReset(void){
   plotmode      = _SCAT;      //VECTOR or SCATTER
   tick_int_x    = 0;          //to show axis: tick_in_x & y = 10, PLOT_AXIS = true
   tick_int_y    = 0;
+  y_min         = 0;
+  y_max         = 1;
 }
 
 
@@ -1030,7 +1032,10 @@ void graphPlotstat(uint16_t selection){
         eformat_eng2(ss,"(",x_min,2,""); n = showString(padEquals(ss), &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index    -2  +autoshift + 2, vmNormal, false, false);
         eformat_eng2(ss,radixProcess("#"),y_min,2,")");
                                              showString(padEquals(ss), &standardFont,n+3,       Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -2  +autoshift + 2, vmNormal, false, false);
-       }
+
+        eformat_eng2(ss,"x: ",tick_int_x,2,"/tick"); showString(padEquals(ss), &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ + 2       +autoshift, vmNormal, false, false);
+        eformat_eng2(ss,"y: ",tick_int_y,2,"/tick"); showString(padEquals(ss), &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ + 2       +autoshift, vmNormal, false, false);
+        }
 
 
 
@@ -1307,14 +1312,15 @@ if(checkMinimumDataPoints(const_2)) {
 
     if(plotMode == PLOT_START){
       plotSelection = 0;
-      roundedTicks = false; 
+      roundedTicks = false;
     } else
       if(plotMode == PLOT_GRAPH){
         calcMode = CM_GRAPH;
         plotSelection = 0;
+        PLOT_AXIS     = true;
         PLOT_LINE     = true;
         PLOT_BOX      = false;
-        roundedTicks = true; 
+        roundedTicks  = true;
       } else
         if(plotMode == PLOT_LR && lrSelection != 0) {
           plotSelection = lrSelection;
@@ -1355,7 +1361,7 @@ if(checkMinimumDataPoints(const_2)) {
       default: break;
     }
 
-    if(plotMode != PLOT_START) {
+    if(plotMode != PLOT_START && plotMode != PLOT_GRAPH) {
       fnPlotRegressionLine(plotMode);
     }
     else {

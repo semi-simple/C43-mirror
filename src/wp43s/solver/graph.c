@@ -129,11 +129,12 @@ static double convert_to_double(calcRegister_t regist) { //Convert from X regist
   return y;
 }
 
-
-static void fnPlot(uint16_t unusedButMandatoryParameter) {
-  lastPlotMode = PLOT_NOTHING;
-  fnPlotStat(PLOT_GRAPH);
-}
+#ifndef TESTSUITE_BUILD
+  static void fnPlot(uint16_t unusedButMandatoryParameter) {
+    lastPlotMode = PLOT_NOTHING;
+    fnPlotStat(PLOT_GRAPH);
+  }
+#endif //TESTSUITE
 
 
 static void initialize_function(void){

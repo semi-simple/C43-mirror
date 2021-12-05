@@ -289,9 +289,6 @@ bool_t lastshiftG = false;
             updateAssignTamBuffer();
         }
       }
-
-
-
       else if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
         int16_t item = determineFunctionKeyItem_C43((char *)data);
 
@@ -1300,7 +1297,6 @@ bool_t lowercaseselected;
           calcMode = previousCalcMode;
           keyActionProcessed = true;
         }
-
         else if(catalog && catalog != CATALOG_MVAR) {
           if(ITM_A <= item && item <= ITM_Z && lowercaseselected) {
             addItemToBuffer(item + 26);
@@ -1447,6 +1443,7 @@ bool_t lowercaseselected;
               keyActionProcessed = true;
               break;
 
+            case CM_GRAPH:
             case CM_PLOT_STAT:
               if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
                 fnPlotClose(0);
@@ -1454,7 +1451,6 @@ bool_t lowercaseselected;
               break;
 
             case CM_LISTXY:                     //JM VV
-            case CM_GRAPH:
               if(item == ITM_EXIT1 || item == ITM_BACKSPACE) {
 //                calcMode = previousCalcMode;
                 fnPlotClose(0);
@@ -1572,7 +1568,7 @@ bool_t lowercaseselected;
     #if (REAL34_WIDTH_TEST == 1)
       longIntegerFree(lgInt);
     #endif // (REAL34_WIDTH_TEST == 1)
-  } 
+  }
 
 
 
@@ -1906,7 +1902,6 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         calcMode = previousCalcMode;
         break;
 
-
       case CM_TIMER:
         if(lastErrorCode != 0) {
           lastErrorCode = 0;
@@ -2129,11 +2124,11 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
       case CM_BUG_ON_SCREEN:
       case CM_PLOT_STAT:
+      case CM_GRAPH:                 //TODO maybe move down to the next case
         calcMode = previousCalcMode;
         break;
 
       case CM_LISTXY:                     //JM vv
-      case CM_GRAPH:
         calcMode = previousCalcMode;
         keyActionProcessed = true;
         break;                            //JM ^^
@@ -2453,11 +2448,11 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
       case CM_MIM:
       case CM_EIM:
       case CM_TIMER:
       case CM_LISTXY:                     //JM
-      case CM_GRAPH:                      //JM
         break;
 
       default:

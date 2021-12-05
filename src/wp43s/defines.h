@@ -719,7 +719,7 @@ typedef enum {
 #define CM_MIM                                    12 // Matrix input mode tbd reorder
 #define CM_EIM                                    13 // Equation input mode
 #define CM_TIMER                                  14 // Timer application
-#define CM_GRAPH                                  97 //JM Display graph       //JM
+#define CM_GRAPH                                  15 // Plot graph mode
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
 
 // Next character in AIM 2 bits

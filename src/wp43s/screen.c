@@ -1468,7 +1468,7 @@ void hideFunctionName(void) {
 
   if(!running_program_jm && tmpString[0] != 0) {
     uint32_t col, row;
-      getStringBounds(tmpString[0] != 0 ? tmpString : indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
+    getStringBounds(tmpString[0] != 0 ? tmpString : indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
     lcd_fill_rect(1, Y_POSITION_OF_REGISTER_T_LINE+6, col, row, LCD_SET_VALUE);
     showFunctionNameItem = 0;
   }
@@ -2024,7 +2024,6 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
 
 
       }
-
 
         else if(temporaryInformation == TI_NO_INFO
                 && getSystemFlag(FLAG_FRACT)
@@ -3156,6 +3155,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         last_CM = calcMode;
         doRefreshSoftMenu = false;
         displayShiftAndTamBuffer();
+
         showSoftmenuCurrentPart();
       } 
                                         //jm v

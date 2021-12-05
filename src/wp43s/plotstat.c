@@ -98,10 +98,10 @@ uint8_t   PLOT_ZOOM;
 int8_t    plotmode;
 float     tick_int_x;
 float     tick_int_y;
-float     x_min;
-float     x_max;
-float     y_min;
-float     y_max;
+float     x_min = 0;
+float     x_max = 1;
+float     y_min = 0;
+float     y_max = 1;
 uint32_t  xzero;
 uint32_t  yzero;
 
@@ -133,6 +133,8 @@ void statGraphReset(void){
   plotmode      = _SCAT;      //VECTOR or SCATTER
   tick_int_x    = 0;          //to show axis: tick_in_x & y = 10, PLOT_AXIS = true
   tick_int_y    = 0;
+  y_min         = 0;
+  y_max         = 1;
 }
 
 
@@ -546,11 +548,12 @@ void graphAxisDraw (void){
   if( PLOT_AXIS && !(xzero == SCREEN_WIDTH-1 || xzero == minnx)) {
     //Write North arrow
     if(PLOT_NVECT) {
+      char tmpString2[100];
       showString("N", &standardFont, xzero-4, minny+14, vmNormal, true, true);
-      tmpString[0]=(char)((uint8_t)0x80 | (uint8_t)0x22);
-      tmpString[1]=0x06;
-      tmpString[2]=0;
-      showString(tmpString, &standardFont, xzero-4, minny+0, vmNormal, true, true);
+      tmpString2[0]=(char)((uint8_t)0x80 | (uint8_t)0x22);
+      tmpString2[1]=0x06;
+      tmpString2[2]=0;
+      showString(tmpString2, &standardFont, xzero-4, minny+0, vmNormal, true, true);
     }
 
     //DRAW YAXIS
@@ -621,29 +624,30 @@ void graphAxisDraw (void){
 
 
 float auto_tick(float tick_int_f) {
+  char tmpString2[100];
   if (!roundedTicks) return tick_int_f;
   //Obtain scaling of ticks, to about 20 intervals left to right.
   //graphtype tick_int_f = (x_max-x_min)/20;                                                 //printf("tick interval:%f ",tick_int_f);
-  snprintf(tmpString, TMP_STR_LENGTH, "%.1e", tick_int_f);
+  snprintf(tmpString2, 100, "%.1e", tick_int_f);
   char tx[4];
-  tx[0] = tmpString[0]; //expecting the form 6.5e+01
-  tx[1] = tmpString[1]; //the decimal radix is copied over, so region setting should not affect it
-  tx[2] = tmpString[2]; //the exponent is stripped
+  tx[0] = tmpString2[0]; //expecting the form 6.5e+01
+  tx[1] = tmpString2[1]; //the decimal radix is copied over, so region setting should not affect it
+  tx[2] = tmpString2[2]; //the exponent is stripped
   tx[3] = 0;
   //printf("tick0 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
   tick_int_f = strtof (tx, NULL);
   //tick_int_f = (float)(tx[0]-48) + (float)(tx[2]-48)/10.0f;
   //printf("tick1 %f orgstr %s tx %s \n",tick_int_f, tmpString, tx);
 
-  if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpString[0] = '0'; tmpString[2]='2'; } else
-  if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpString[0] = '0'; tmpString[2]='5'; } else
-  if(tick_int_f > 0.6 && tick_int_f <=  1.3)  {tmpString[0] = '1'; tmpString[2]='0'; } else
-  if(tick_int_f > 1.3 && tick_int_f <=  1.7)  {tmpString[0] = '1'; tmpString[2]='5'; } else
-  if(tick_int_f > 1.7 && tick_int_f <=  3.0)  {tmpString[0] = '2'; tmpString[2]='0'; } else
-  if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpString[0] = '5'; tmpString[2]='0'; } else
-  if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpString[0] = '7'; tmpString[2]='5'; }
+  if(tick_int_f > 0   && tick_int_f <=  0.3)  {tmpString2[0] = '0'; tmpString2[2]='2'; } else
+  if(tick_int_f > 0.3 && tick_int_f <=  0.6)  {tmpString2[0] = '0'; tmpString2[2]='5'; } else
+  if(tick_int_f > 0.6 && tick_int_f <=  1.3)  {tmpString2[0] = '1'; tmpString2[2]='0'; } else
+  if(tick_int_f > 1.3 && tick_int_f <=  1.7)  {tmpString2[0] = '1'; tmpString2[2]='5'; } else
+  if(tick_int_f > 1.7 && tick_int_f <=  3.0)  {tmpString2[0] = '2'; tmpString2[2]='0'; } else
+  if(tick_int_f > 3.0 && tick_int_f <=  6.5)  {tmpString2[0] = '5'; tmpString2[2]='0'; } else
+  if(tick_int_f > 6.5 && tick_int_f <=  9.9)  {tmpString2[0] = '7'; tmpString2[2]='5'; }
 
-  tick_int_f = strtof (tmpString, NULL);                                        //printf("string:%s converted:%f \n",tmpString, tick_int_f);
+  tick_int_f = strtof (tmpString2, NULL);                                        //printf("string:%s converted:%f \n",tmpString2, tick_int_f);
 
   //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
   return tick_int_f;
@@ -858,7 +862,9 @@ void graphPlotstat(uint16_t selection){
   float y;
 
   statnum = 0;
-  roundedTicks = false;
+  if(calcMode == CM_GRAPH) roundedTicks = true; else
+                           roundedTicks = false; 
+
   //  graphAxisDraw();                        //Draw the axis on any uncontrolled scale to start. Maybe optimize by remembering if there is an image on screen Otherwise double axis draw.
   graph_axis();
   plotmode = _SCAT;
@@ -959,7 +965,8 @@ void graphPlotstat(uint16_t selection){
     #endif
 
     //graphAxisDraw();
-    roundedTicks = false;
+  if(calcMode == CM_GRAPH) roundedTicks = true; else
+                           roundedTicks = false; 
     graph_axis();
     yn = screen_window_y(y_min,grf_y(0),y_max);
     xn = screen_window_x(x_min,grf_x(0),x_max);
@@ -1043,7 +1050,10 @@ void graphPlotstat(uint16_t selection){
         eformat_eng2(ss,"(",x_min,2,""); n = showString(padEquals(ss), &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index    -2  +autoshift + 2, vmNormal, false, false);
         eformat_eng2(ss,radixProcess("#"),y_min,2,")");
                                              showString(padEquals(ss), &standardFont,n+3,       Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++  -2  +autoshift + 2, vmNormal, false, false);
-       }
+
+        eformat_eng2(ss,"x: ",tick_int_x,2,"/tick"); showString(padEquals(ss), &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ + 2       +autoshift, vmNormal, false, false);
+        eformat_eng2(ss,"y: ",tick_int_y,2,"/tick"); showString(padEquals(ss), &standardFont,horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc*index++ + 2       +autoshift, vmNormal, false, false);
+        }
 
 
 
@@ -1301,13 +1311,9 @@ void fnPlotStat(uint16_t plotMode){
 #if defined STATDEBUG && defined PC_BUILD
   printf("fnPlotStat1: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
-  uint16_t i;
   int16_t cnt;
   realToInt32(SIGMA_N, cnt);
-  printf("Stored values\n");
-  for (i = 0; i < LIM && i < cnt; ++i) {
-    printf("i = %3u x = %9f; y = %9f\n",i,gr_x[i],gr_y[i]);
-  }
+  printf("Stored values %i\n",cnt);
 #endif //STATDEBUG
 
 if(checkMinimumDataPoints(const_2)) {
@@ -1320,18 +1326,23 @@ if(checkMinimumDataPoints(const_2)) {
       plotMode = lastPlotMode;
     }
     calcMode = CM_PLOT_STAT;
-    statGraphReset();
+    if(plotMode != PLOT_GRAPH) statGraphReset();
+
     if(plotMode == PLOT_START){
       plotSelection = 0;
+      roundedTicks = false;
     } else
       if(plotMode == PLOT_GRAPH){
         calcMode = CM_GRAPH;
         plotSelection = 0;
+        PLOT_AXIS     = true;
         PLOT_LINE     = true;
         PLOT_BOX      = false;
+        roundedTicks  = true;
       } else
         if(plotMode == PLOT_LR && lrSelection != 0) {
           plotSelection = lrSelection;
+          roundedTicks = false; 
         }
 
     hourGlassIconEnabled = true;
@@ -1368,7 +1379,7 @@ if(checkMinimumDataPoints(const_2)) {
       default: break;
     }
 
-    if(plotMode != PLOT_START) {
+    if(plotMode != PLOT_START && plotMode != PLOT_GRAPH) {
       fnPlotRegressionLine(plotMode);
     }
     else {

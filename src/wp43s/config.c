@@ -778,6 +778,10 @@ void fnReset(uint16_t confirmation) {
     lrChosenUndo = 0;
     lastPlotMode = PLOT_NOTHING;
     plotSelection = 0;
+    x_min = -10;
+    x_max = 10;
+    y_min = 0;
+    y_max = 1;
 
 //    shortIntegerMode = SIM_2COMPL;
     fnSetWordSize(64);

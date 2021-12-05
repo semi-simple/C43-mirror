@@ -30,5 +30,6 @@
 
 
 void fnEqSolvGraph (uint16_t func);
+void graph_eqn(uint16_t unusedButMandatoryParameter);
 
 #endif // GRAPH_H

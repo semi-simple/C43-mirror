@@ -35,6 +35,7 @@
 #include "registerValueConversions.h"
 #include "softmenus.h"
 #include "solver/equation.h"
+#include "solver/graph.h"
 #include "solver/tvm.h"
 #include "stack.h"
 #include "wp43s.h"
@@ -157,6 +158,7 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter) {
   const char *var = (char *)getNthString(dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent, dynamicMenuItem);
   const uint16_t regist = findOrAllocateNamedVariable(var);
   if(currentSolverStatus & SOLVER_STATUS_READY_TO_EXECUTE) {
+    graphVariable = regist;
     reallyRunFunction(ITM_SOLVE, regist);
   }
   else {
@@ -164,7 +166,14 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter) {
     reallyRunFunction(ITM_STO, regist);
     currentSolverStatus |= SOLVER_STATUS_READY_TO_EXECUTE;
     temporaryInformation = TI_SOLVER_VARIABLE;
-  }
+    if(graphVariable == 0) { 
+      graphVariable = -regist;
+    } else if(graphVariable < 0 && -graphVariable == regist) {
+        graphVariable = regist;
+        reallyRunFunction(ITM_XPLT, EQ_PLOT);
+//        fnEqSolvGraph(EQ_PLOT);
+      } else graphVariable = -regist;
+    }
 #endif /* TESTSUITE_BUILD */
 }
 

@@ -138,11 +138,18 @@ void fnPlot(uint16_t unusedButMandatoryParameter) {
 
 static void initialize_function(void){
   #ifndef TESTSUITE_BUILD
-	  calcRegister_t regStats = findNamedVariable("x");
-	  if(regStats == INVALID_VARIABLE) {
-	    allocateNamedVariable("x", dtReal34, REAL34_SIZE);
+    calcRegister_t regStats;
+    if(graphVariable > 0) {
+      regStats = graphVariable;
+      reallocateRegister(regStats,  dtReal34, REAL34_SIZE, amNone);
+    }
+    else {
+  	  regStats = findNamedVariable("x");
+  	  if(regStats == INVALID_VARIABLE) {
+  	    allocateNamedVariable("x", dtReal34, REAL34_SIZE);
+        regStats = findNamedVariable("x");
+      }
 	  }
-    regStats = findNamedVariable("x");
     if(regStats != INVALID_VARIABLE) {
       doubleToXRegisterReal34(0.0);
       fnStore(regStats);                  //place X register into x
@@ -998,6 +1005,9 @@ void fnEqSolvGraph (uint16_t func) {
     refreshLcd(NULL);
   #endif // DMCP_BUILD
 
+
+  if(!(currentSolverStatus & SOLVER_STATUS_READY_TO_EXECUTE)) return;
+
   fnClSigma(0);
   statGraphReset();
 
@@ -1037,6 +1047,9 @@ void fnEqSolvGraph (uint16_t func) {
               float kk = x_max;
               x_max = x_min;
               x_min = kk;
+            }
+            if(x_min == y_min) {
+              //
             }
             initialize_function();
             graph_eqn(0);

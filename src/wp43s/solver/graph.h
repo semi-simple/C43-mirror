@@ -27,7 +27,7 @@
 
 #define EQ_SOLVE 0
 #define EQ_PLOT  1
-
+#define EQ_PLOT2 2
 
 void fnEqSolvGraph (uint16_t func);
 void graph_eqn(uint16_t unusedButMandatoryParameter);

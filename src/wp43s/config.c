@@ -875,6 +875,8 @@ void fnReset(uint16_t confirmation) {
     numberOfFormulae = 0;
     currentFormula = 0;
 
+    graphVariable = 0;
+
     // Timer application
     timerCraAndDeciseconds = 0x80u;
     timerValue             = 0u;

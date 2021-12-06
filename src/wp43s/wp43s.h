@@ -252,6 +252,7 @@
   extern uint16_t               currentSolverProgram;
   extern uint16_t               currentSolverVariable;
   extern uint16_t               currentSolverNestingDepth;
+  extern uint16_t               graphVariable;
   extern uint16_t               numberOfFormulae;
   extern uint16_t               currentFormula;
   extern uint16_t               numberOfUserMenus;

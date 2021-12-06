@@ -62,9 +62,9 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
 /*JM*/ //nextChar = NC_NORMAL;
 
     if(subOrSup == NC_SUBSCRIPT) {
-      if(item >= ITM_0 && item <= ITM_9) return item + (ITM_SUB_9 - ITM_9); else //JM optimized
-      if(item >= ITM_a && item <= ITM_z) return item + (ITM_SUB_z - ITM_z); else //JM optimized
-      if(item >= ITM_A && item <= ITM_Z) return item + (ITM_SUB_Z - ITM_Z); else //JM optimized
+      if(item >= ITM_0 && item <= ITM_9) return (uint16_t)((int16_t)item + (int16_t)ITM_SUB_0 - (int16_t)ITM_0); else //JM optimized
+      if(item >= ITM_a && item <= ITM_z) return (uint16_t)((int16_t)item + (int16_t)ITM_SUB_a - (int16_t)ITM_a); else //JM optimized
+      if(item >= ITM_A && item <= ITM_Z) return (uint16_t)((int16_t)item + (int16_t)ITM_SUB_A - (int16_t)ITM_A); else //JM optimized
       switch(item) {
         case ITM_alpha    : return ITM_SUB_alpha;
         case ITM_delta    : return ITM_SUB_delta;
@@ -153,7 +153,7 @@ uint16_t convertItemToSubOrSup(uint16_t item, int16_t subOrSup) {
         case ITM_6        : 
         case ITM_7        : 
         case ITM_8        : 
-        case ITM_9        : return item + (ITM_SUP_9 - ITM_9);
+        case ITM_9        : return item + (ITM_SUP_0 - ITM_0);
         case ITM_f        : return ITM_SUP_f;
         case ITM_g        : return ITM_SUP_g;
         case ITM_h        : return ITM_SUP_h;
@@ -305,13 +305,54 @@ void kill_ASB_icon(void) {
       if(calcMode == CM_NORMAL && fnKeyInCatalog && isAlphabeticSoftmenu()) {
         fnAim(NOPARAM);
       }
-      if((fnKeyInCatalog || !catalog || catalog == CATALOG_MVAR) && (calcMode == CM_AIM || tam.alpha)) {
+      if((fnKeyInCatalog || !catalog || catalog == CATALOG_MVAR) && (calcMode == CM_AIM || calcMode == CM_EIM || tam.alpha)) {
         item = convertItemToSubOrSup(item, nextChar);
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
           displayBugScreen(errorMessage);
         }
+        else if(calcMode == CM_EIM) {
+          const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" :
+                                item == ITM_VERTICAL_BAR        ? "||" :
+                                item == ITM_ROOT_SIGN           ? STD_SQUARE_ROOT "()" :
+                                item == ITM_ALOG_SYMBOL         ? "e" STD_SUB_E "^()" :
+                                item == ITM_LG_SIGN             ? "LOG(" :   //JM C43
+                                item == ITM_LN_SIGN             ? "LN("  :   //JM C43
+                                item == ITM_SIN_SIGN            ? "SIN(" :   //JM C43
+                                item == ITM_COS_SIGN            ? "COS(" :   //JM C43
+                                item == ITM_TAN_SIGN            ? "TAN(" :   //JM C43
+                                item == ITM_OBELUS              ? STD_SLASH  :   //JM C43
+                                indexOfItems[item].itemSoftmenuName;
+          char *aimCursorPos = aimBuffer;
+          char *aimBottomPos = aimBuffer + stringByteLength(aimBuffer);
+          uint32_t itemLen = stringByteLength(addChar);
+          for(uint32_t i = 0; i < xCursor; ++i) aimCursorPos += (*aimCursorPos & 0x80) ? 2 : 1;
+          for(; aimBottomPos >= aimCursorPos; --aimBottomPos) *(aimBottomPos + itemLen) = *aimBottomPos; 
+          xcopy(aimCursorPos, addChar, itemLen);
+          switch(item) {
+            case ITM_ALOG_SYMBOL:
+              xCursor += 5;
+              break;
+            case ITM_LG_SIGN :    //JM C43
+            case ITM_SIN_SIGN :   //JM C43
+            case ITM_COS_SIGN :   //JM C43
+            case ITM_TAN_SIGN :   //JM C43
+              xCursor += 4;
+              break;
+            case ITM_ROOT_SIGN:
+            case ITM_LN_SIGN :   //JM C43
+              xCursor += 3;
+              break;
+            case ITM_PAIR_OF_PARENTHESES:
+            case ITM_VERTICAL_BAR:
+              xCursor += 2;
+              break;
+            default:
+              xCursor += stringGlyphLength(indexOfItems[item].itemSoftmenuName);
+          }
+        }
         else {
+#ifdef TEXT_MULTILINE_EDIT
           //JMCURSOR vv ADD THE CHARACTER MID-STRING =======================================================
           uint16_t ix = 0; 
           uint16_t in = 0;
@@ -329,6 +370,26 @@ void kill_ASB_icon(void) {
           T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);  //place the cursor at the next glyph boundary
           //JMCURSOR ^^ REPLACES THE FOLLOWING XCOPY, WHICH NORMALLY JUST ADDS A CHARACTER TO THE END OF THE STRING
           // xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
+          switch(item) { // NOTE: cursor must jump on 3 places for the new COS_SIGN etc.
+            case ITM_LG_SIGN :    //JM C43
+            case ITM_SIN_SIGN :   //JM C43
+            case ITM_COS_SIGN :   //JM C43
+            case ITM_TAN_SIGN :   //JM C43
+              T_cursorPos += 2;
+              break;
+            case ITM_ROOT_SIGN:
+            case ITM_LN_SIGN :   //JM C43
+              T_cursorPos += 1;
+              break;
+            case ITM_PAIR_OF_PARENTHESES:
+              T_cursorPos += 1;
+              break;
+            default:;
+          }
+
+#else
+          xcopy(aimBuffer + stringByteLength(aimBuffer), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
+#endif
         }
       }
 
@@ -866,13 +927,13 @@ void kill_ASB_icon(void) {
         }
       }
 
-      else if(calcMode != CM_AIM && (item >= ITM_A && item <= ITM_F)) {
+      else if(calcMode != CM_AIM && calcMode != CM_EIM && (item >= ITM_A && item <= ITM_F)) {
         // We are not in NIM, but should enter NIM - this should be handled here
         // unlike digits 0 to 9 which are handled by processKeyAction
         addItemToNimBuffer(item);
       }
 
-      else if(calcMode != CM_AIM) {
+      else if(calcMode != CM_AIM && calcMode != CM_EIM) {
         funcOK = false;
         return;
       }

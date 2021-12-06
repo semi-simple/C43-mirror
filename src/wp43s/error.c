@@ -74,7 +74,12 @@ TO_QSPI const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 /* 42 */  "Solver reached local extremum, no root",
 /* 43 */  STD_GREATER_EQUAL "1 initial guess lies out of the domain",
 /* 44 */  "The function value look constant",
-/* 45 */  "Bad input", // This error is not in ReM and cannot occur (theoretically).
+/* 45 */  "Syntax error in this equation",
+/* 46 */  "This equation formula is too complex",
+/* 47 */  "This item cannot be assigned here",
+/* 48 */  "Invalid name",
+/* 49 */  "Too many variables",
+/* 50 */  "Bad input", // This error is not in ReM and cannot occur (theoretically).
 };
 
 

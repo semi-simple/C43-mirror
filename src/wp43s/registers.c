@@ -24,6 +24,7 @@
 #include "display.h"
 #include "error.h"
 #include "flags.h"
+#include "fonts.h"
 #include "items.h"
 #include "c43Extensions/jm.h"
 #include "mathematics/compare.h"
@@ -648,6 +649,100 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
 
 
 
+bool_t validateName(const char *name) {
+  if(stringGlyphLength(name)  > 7) return false; // Given name is too long
+  if(stringGlyphLength(name) == 0) return false; // Given name is empty
+
+  // Check for the 1st character
+  if(                                          compareChar(name, STD_A                   ) < 0) return false;
+  if(compareChar(name, STD_Z          ) > 0 && compareChar(name, STD_a                   ) < 0) return false;
+  if(compareChar(name, STD_Z          ) > 0 && compareChar(name, STD_a                   ) < 0) return false;
+  if(compareChar(name, STD_z          ) > 0 && compareChar(name, STD_A_GRAVE             ) < 0) return false;
+  if(                                          compareChar(name, STD_CROSS               ) ==0) return false;
+  if(                                          compareChar(name, STD_DIVIDE              ) ==0) return false;
+  if(compareChar(name, STD_z_CARON    ) > 0 && compareChar(name, STD_iota_DIALYTIKA_TONOS) < 0) return false;
+  if(compareChar(name, STD_omega_TONOS) > 0 && compareChar(name, STD_SUP_x               ) < 0) return false;
+  if(compareChar(name, STD_SUP_x      ) > 0 && compareChar(name, STD_SUB_alpha           ) < 0) return false;
+  if(compareChar(name, STD_SUB_mu     ) > 0 && compareChar(name, STD_SUB_h               ) < 0) return false;
+  if(compareChar(name, STD_SUB_h      ) > 0 && compareChar(name, STD_SUB_t               ) < 0) return false;
+  if(compareChar(name, STD_SUB_t      ) > 0 && compareChar(name, STD_SUB_a               ) < 0) return false;
+  if(compareChar(name, STD_SUB_Z      ) > 0                                                           ) return false;
+
+  // Check for the following characters
+  for(name += (*name & 0x80) ? 2 : 1; *name != 0; name += (*name & 0x80) ? 2 : 1) {
+    switch(*name) {
+      case '+':
+      case '-':
+      case ':':
+      case '/':
+      case '^':
+      case '(':
+      case ')':
+      case '=':
+      case ';':
+      case '|':
+      case '!':
+      case ' ':
+        return false;
+      default:
+        if(compareChar(name, STD_CROSS) == 0) return false;
+    }
+  }
+
+  return true;
+}
+
+
+
+bool_t isUniqueName(const char *name) {
+  // Built-in items
+  for(uint32_t i = 0; i < LAST_ITEM; ++i) {
+    switch(indexOfItems[i].status & CAT_STATUS) {
+      case CAT_FNCT:
+      case CAT_MENU:
+      case CAT_CNST:
+      case CAT_RVAR:
+      case CAT_SYFL:
+        if(compareString(name, indexOfItems[i].itemCatalogName, CMP_EXTENSIVE) == 0) {
+          return false;
+        }
+    }
+  }
+
+  // Variable menus
+  if(findNamedVariable(name) != INVALID_VARIABLE) {
+    return false;
+  }
+
+  // User menus
+  for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
+    if(compareString(name, userMenus[i].menuName, CMP_EXTENSIVE) == 0) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+
+static calcRegister_t _findReservedVariable(const char *variableName) {
+  uint8_t len = stringGlyphLength(variableName);
+  if(len < 1 || len > 7) {
+    return INVALID_VARIABLE;
+  }
+
+  for(int i = 0; i < NUMBER_OF_RESERVED_VARIABLES; i++) {
+    if (compareString((char *)(allReservedVariables[i].reservedVariableName + 1), variableName, CMP_EXTENSIVE) == 0) {
+      return i + FIRST_RESERVED_VARIABLE;
+    }
+  }
+
+  return INVALID_VARIABLE;
+}
+
+
+
 void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16_t fullDataSizeInBlocks) {
   calcRegister_t regist;
   uint8_t len;
@@ -656,6 +751,24 @@ void allocateNamedVariable(const char *variableName, dataType_t dataType, uint16
     #ifdef PC_BUILD
       sprintf(errorMessage, "the name %s", variableName);
       moreInfoOnError("In function allocateNamedVariable:", errorMessage, "is incorrect! The length must be", "from 1 to 7 glyphs!");
+    #endif // PC_BUILD
+    return;
+  }
+
+  if(_findReservedVariable(variableName) != INVALID_VARIABLE) {
+    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "the name %s", variableName);
+      moreInfoOnError("In function allocateNamedVariable:", errorMessage, "clashes with a reserved variable!", NULL);
+    #endif // PC_BUILD
+    return;
+  }
+
+  if(!validateName(variableName)) {
+    displayCalcErrorMessage(ERROR_INVALID_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    #ifdef PC_BUILD
+      sprintf(errorMessage, "the name %s", variableName);
+      moreInfoOnError("In function allocateNamedVariable:", errorMessage, "is incorrect! The name does not follow", "the naming convention!");
     #endif // PC_BUILD
     return;
   }
@@ -711,6 +824,10 @@ calcRegister_t findNamedVariable(const char *variableName) {
   if(len < 1 || len > 7) {
     return regist;
   }
+
+  regist = _findReservedVariable(variableName);
+  if(regist != INVALID_VARIABLE) return regist;
+
   for(int i = 0; i < numberOfNamedVariables; i++) {
     if (compareString((char *)(allNamedVariables[i].variableName + 1), variableName, CMP_EXTENSIVE) == 0) {
       regist = i + FIRST_NAMED_VARIABLE;
@@ -730,6 +847,14 @@ calcRegister_t findOrAllocateNamedVariable(const char *variableName) {
   }
   regist = findNamedVariable(variableName);
   if(regist == INVALID_VARIABLE && numberOfNamedVariables <= (LAST_NAMED_VARIABLE - FIRST_NAMED_VARIABLE)) {
+    if(!isUniqueName(variableName)) {
+      displayCalcErrorMessage(ERROR_ENTER_NEW_NAME, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+      #ifdef PC_BUILD
+        sprintf(errorMessage, "the name %s", variableName);
+        moreInfoOnError("In function allocateNamedVariable:", errorMessage, "is already in use!", NULL);
+      #endif // PC_BUILD
+      return regist;
+    }
     allocateNamedVariable(variableName, dtReal34, REAL34_SIZE);
     if(lastErrorCode == ERROR_NONE) {
       // New variables are zero by default - although this might be immediately overridden, it might require an
@@ -738,9 +863,8 @@ calcRegister_t findOrAllocateNamedVariable(const char *variableName) {
       real34Zero(REGISTER_REAL34_DATA(regist));
     }
     else {
-      // Failed attempt to allocate a new named variable: there is not enough memory.
+      // Failed attempt to allocate a new named variable: there is not enough memory or the name is invalid.
       // It is impossible to reach the limitation of number of named variables.
-      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
       return INVALID_VARIABLE;
     }
   }
@@ -1149,6 +1273,60 @@ void adjustResult(calcRegister_t res, bool_t dropY, bool_t setCpxRes, calcRegist
 
 
 void copySourceRegisterToDestRegister(calcRegister_t sourceRegister, calcRegister_t destRegister) {
+  if(destRegister >= RESERVED_VARIABLE_X && destRegister <= RESERVED_VARIABLE_K) {
+    destRegister = destRegister - RESERVED_VARIABLE_X + REGISTER_X;
+  }
+
+  if(sourceRegister >= RESERVED_VARIABLE_X && sourceRegister <= RESERVED_VARIABLE_K) {
+    sourceRegister = sourceRegister - RESERVED_VARIABLE_X + REGISTER_X;
+  }
+  else if(sourceRegister == RESERVED_VARIABLE_ADM) {
+    longInteger_t longIntVar;
+    longIntegerInit(longIntVar);
+    switch(currentAngularMode) {
+      case amDMS:    intToLongInteger(1, longIntVar); break;
+      case amRadian: intToLongInteger(2, longIntVar); break;
+      case amMultPi: intToLongInteger(3, longIntVar); break;
+      case amGrad:   intToLongInteger(4, longIntVar); break;
+      default:       intToLongInteger(0, longIntVar); break;
+    }
+    convertLongIntegerToLongIntegerRegister(longIntVar, destRegister);
+    longIntegerFree(longIntVar);
+    return;
+  }
+  else if(sourceRegister == RESERVED_VARIABLE_DENMAX) {
+    longInteger_t longIntVar;
+    longIntegerInit(longIntVar);
+    uIntToLongInteger(denMax, longIntVar);
+    convertLongIntegerToLongIntegerRegister(longIntVar, destRegister);
+    longIntegerFree(longIntVar);
+    return;
+  }
+  else if(sourceRegister == RESERVED_VARIABLE_ISM) {
+    longInteger_t longIntVar;
+    longIntegerInit(longIntVar);
+    uIntToLongInteger((shortIntegerMode==SIM_2COMPL ? 2 : (shortIntegerMode==SIM_1COMPL ? 1 : (shortIntegerMode==SIM_UNSIGN ? 0 : -1))), longIntVar);
+    convertLongIntegerToLongIntegerRegister(longIntVar, destRegister);
+    longIntegerFree(longIntVar);
+    return;
+  }
+  else if(sourceRegister == RESERVED_VARIABLE_REALDF) {
+    longInteger_t longIntVar;
+    longIntegerInit(longIntVar);
+    uIntToLongInteger(displayFormat, longIntVar);
+    convertLongIntegerToLongIntegerRegister(longIntVar, destRegister);
+    longIntegerFree(longIntVar);
+    return;
+  }
+  else if(sourceRegister == RESERVED_VARIABLE_NDEC) {
+    longInteger_t longIntVar;
+    longIntegerInit(longIntVar);
+    uIntToLongInteger(displayFormatDigits, longIntVar);
+    convertLongIntegerToLongIntegerRegister(longIntVar, destRegister);
+    longIntegerFree(longIntVar);
+    return;
+  }
+
   if(   getRegisterDataType(destRegister) != getRegisterDataType(sourceRegister)
     || getRegisterFullSize(destRegister) != getRegisterFullSize(sourceRegister)) {
     uint32_t sizeInBlocks;

@@ -86,6 +86,9 @@ dataBlock_t           *currentSubroutineLevelData;
 
 namedVariableHeader_t *allNamedVariables;
 softmenuStack_t        softmenuStack[SOFTMENU_STACK_SIZE];
+userMenuItem_t         userMenuItems[18];
+userMenuItem_t         userAlphaItems[18];
+userMenu_t            *userMenus;
 calcKey_t              kbd_usr[37];
 calcRegister_t         errorMessageRegisterLine;
 glyph_t                glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};
@@ -94,6 +97,7 @@ pcg32_random_t         pcg32_global = PCG32_INITIALIZER;
 labelList_t           *labelList = NULL;
 programList_t         *programList = NULL;
 angularMode_t          currentAngularMode;
+formulaHeader_t       *allFormulae;
 
 char                  *tmpString = NULL;
 char                  *tmpStringLabelOrVariableName = NULL;
@@ -101,6 +105,7 @@ char                  *errorMessage;
 char                  *aimBuffer; // aimBuffer is also used for NIM
 char                  *nimBufferDisplay;
 char                  *tamBuffer;
+char                  *userKeyLabel;
 char                   asmBuffer[5];
 char                   oldTime[8];
 char                   dateTimeString[12];
@@ -132,6 +137,7 @@ uint8_t                lastErrorCode;
 uint8_t                temporaryInformation;
 uint8_t                rbrMode;
 uint8_t                numScreensNumericFont;
+uint8_t                timerCraAndDeciseconds = 128u;
 uint8_t               *beginOfProgramMemory;
 uint8_t               *beginOfCurrentProgram;
 uint8_t               *endOfCurrentProgram;
@@ -150,7 +156,6 @@ int16_t                showFunctionNameItem;
 uint8_t               displayStackSHOIDISP;          //JM SHOIDISP
 bool_t                numLock;                       //JM
 bool_t                doRefreshSoftMenu;                       //dr
-bool_t                jm_GGREEK; 
 bool_t                jm_FG_LINE;                              //JM Screen / keyboard operation setup
 bool_t                jm_NO_BASE_SCREEN;                              //JM Screen / keyboard operation setup
 bool_t                jm_G_DOUBLETAP;                          //JM Screen / keyboard operation setup
@@ -215,6 +220,8 @@ int16_t                showFunctionNameCounter;
 int16_t                dynamicMenuItem;
 int16_t               *menu_RAM;
 int16_t                numberOfTamMenusToPop;
+int16_t                itemToBeAssigned;
+int16_t                cachedDynamicMenu;
 
 uint16_t               globalFlags[7];
 uint16_t               freeProgramBytes;
@@ -236,6 +243,11 @@ uint16_t               currentSolverStatus;
 uint16_t               currentSolverProgram;
 uint16_t               currentSolverVariable;
 uint16_t               currentSolverNestingDepth;
+uint16_t               numberOfFormulae;
+uint16_t               currentFormula;
+uint16_t               numberOfUserMenus;
+uint16_t               currentUserMenu;
+uint16_t               userKeyLabelSize;
 #if (REAL34_WIDTH_TEST == 1)
   uint16_t               largeur=200;
 #endif // (REAL34_WIDTH_TEST == 1)
@@ -250,6 +262,9 @@ uint32_t               alphaSelectionTimer;
 uint32_t               xCursor;
 uint32_t               yCursor;
 uint32_t               tamOverPemYPos;
+uint32_t               timerValue;
+uint32_t               timerStartTime = TIMER_APP_STOPPED;
+uint32_t               timerTotalTime;
 
 uint64_t               shortIntegerMask;
 uint64_t               shortIntegerSignBit;
@@ -425,6 +440,7 @@ size_t                 wp43sMemInBlocks;
     fnTimerConfig(TO_3S_CTFF, shiftCutoff, TO_3S_CTFF);
     fnTimerConfig(TO_CL_DROP, fnTimerDummyTest, TO_CL_DROP);
     fnTimerConfig(TO_AUTO_REPEAT, execAutoRepeat, 0);
+    fnTimerConfig(TO_TIMER_APP, execTimerApp, 0);
     fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV);
     nextTimerRefresh = 0;
 
@@ -553,7 +569,7 @@ size_t                 wp43sMemInBlocks;
       }
 
       // Key is ready -> clear auto off timer
-      if(!key_empty()) {
+      if(!key_empty() || (nextTimerRefresh != 0)) {
         reset_auto_off();
       }
 

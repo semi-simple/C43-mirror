@@ -22,6 +22,7 @@
 
 #include "c43Extensions/keyboardTweak.h"
 
+#include "bufferize.h"
 #include "charString.h"
 #include "flags.h"
 #include "fonts.h"
@@ -92,7 +93,7 @@ void showAlphaModeonGui(void) {
   sprintf(tmp, "^^^^showAlphaModeonGui\n");
   jm_show_comment(tmp);
 #endif                                  //PC_BUILD
-  if(calcMode == CM_AIM || tam.mode) {                      //vv dr JM
+  if(calcMode == CM_AIM || calcMode == CM_EIM || tam.mode) {                      //vv dr JM
 #ifndef TESTSUITE_BUILD
     showHideAlphaMode();
 #endif
@@ -152,6 +153,9 @@ void resetShiftState(void) {
     shiftG = false;
     showShiftState();
   }                                                                             //^^
+  #ifdef PC_BUILD
+    if(calcMode == CM_AIM || calcMode == CM_EIM) refreshModeGui();
+  #endif
 }
 
 
@@ -242,7 +246,7 @@ void fg_processing_jm(void) {
               popSoftmenu();                                                    //JM shifts
             }
             else {
-              if(calcMode == CM_AIM) {                                          //JM shifts
+              if(calcMode == CM_AIM || calcMode == CM_EIM) {                                          //JM shifts
                 processKeyAction(CHR_num);
               }
               else {                                                            //JM SHIFTS
@@ -459,6 +463,14 @@ void Check_MultiPresses(int16_t *result, int8_t key_no) { //Set up longpress
       default:;
     }
   }
+  else if(calcMode == CM_EIM) {
+    switch(*result) {
+      case ITM_BACKSPACE:                                             longpressDelayedkey1 = ITM_CLA;   break;    //BACKSPACE longpress clears input buffer
+      case ITM_EXIT1    :                                             longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
+      case ITM_ENTER    :                                             longpressDelayedkey1 = ITM_XEDIT; break;
+      default:;
+    }
+  }
   else {
     switch(*result) {
       case ITM_EXIT1    :                                             longpressDelayedkey1 = ITM_CLAIM; break;    //EXIT longpress DOES CLAIM
@@ -610,6 +622,8 @@ void btnFnPressed_StateMachine(void *unused, void *data) {
     FN_state =  ST_1_PRESS1;
   }
 
+  FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
+
   if(FN_state == ST_3_PRESS2 && fnTimerGetStatus(TO_FN_EXEC) != TMR_RUNNING) {  //JM BUGFIX (INVERTED) The first  usage did not work due to the timer which was in stopped mode, not in expired mode.
     //----------------Copied here
     char charKey[3];
@@ -622,30 +636,6 @@ void btnFnPressed_StateMachine(void *unused, void *data) {
     FN_state = ST_1_PRESS1;
   }
 
-  FN_key_pressed = *((char *)data) - '0' + 37;                            //to render 38-43, as per original keypress
-
-
-/* REVISION 0 OF QUICKKEYS. WORKING ##################
-Replaced this with the2x chages of jm_G_DOUBLETAP && calcMode != CM_AIM
-
-  //BYPASS LONG/DOUBLE CLICK FOR IDENTIFIED QUICK KEYS, i.e. NAV KEYS, ARROWS ETC.
-  int16_t tmp1 = nameFunction(FN_key_pressed-37,0);
-  if( FN_state == ST_1_PRESS1 && 
-       (   tmp1 == ITM_T_RIGHT_ARROW 
-        || tmp1 == ITM_T_LEFT_ARROW 
-        || tmp1 == ITM_T_RRIGHT_ARROW 
-        || tmp1 == ITM_T_LLEFT_ARROW 
-        || tmp1 == ITM_T_DOWN_ARROW
-        || tmp1 == ITM_T_UP_ARROW
-        ) ) {
-     char charKey[3];
-     sprintf(charKey, "%c", FN_key_pressed + 11);
-     btnFnClicked(w, charKey);                                             //Execute    
-     fnTimerStop(TO_FN_EXEC);
-     FN_handle_timed_out_to_EXEC=false;
-     return;
-  }
-   ################################################## */
 
 
   if(fnTimerGetStatus(TO_FN_EXEC) == TMR_RUNNING) {         //vv dr new try
@@ -820,103 +810,98 @@ uint16_t numlockReplacements(uint16_t id, int16_t item, bool_t NL, bool_t FSHIFT
  //Note item1 MUST be set to 0 prior to calling.
  bool_t keyReplacements(int16_t item, int16_t * item1, bool_t NL, bool_t FSHIFT, bool_t GSHIFT) {
  //printf("####B>> %d %d\n",item,* item1);
- if(calcMode == CM_AIM || (tam.mode && tam.alpha) ) {
-   if(!NL && GSHIFT) {
-      switch(item) {
-        case ITM_PI                : * item1 = ITM_7      ; break;
-        case ITM_pi                : * item1 = ITM_7      ; break;
-        case ITM_QOPPA             : * item1 = ITM_8      ; break;
-        case ITM_qoppa             : * item1 = ITM_8      ; break;
-        case ITM_RHO               : * item1 = ITM_9      ; break;
-        case ITM_rho               : * item1 = ITM_9      ; break;
-        case ITM_SIGMA             : * item1 = ITM_SLASH  ; break;//ITM_OBELUS ;
-        case ITM_sigma             : * item1 = ITM_SLASH  ; break; //ITM_OBELUS ;
-        case ITM_TAU               : * item1 = ITM_4      ; break;
-        case ITM_tau               : * item1 = ITM_4      ; break;
-        case ITM_PHI               : * item1 = ITM_5      ; break;
-        case ITM_phi               : * item1 = ITM_5      ; break;
-        case ITM_PSI               : * item1 = ITM_6      ; break;
-        case ITM_psi               : * item1 = ITM_6      ; break;
-        case ITM_OMEGA             : * item1 = ITM_ASTERISK; break; //ITM_CROSS  ;
-        case ITM_omega             : * item1 = ITM_ASTERISK; break; //ITM_CROSS  ;
-        case ITM_XI                : * item1 = ITM_1      ; break;
-        case ITM_xi                : * item1 = ITM_1      ; break;
-        case ITM_UPSILON           : * item1 = ITM_2      ; break;
-        case ITM_upsilon           : * item1 = ITM_2      ; break;
-        case ITM_ZETA              : * item1 = ITM_3      ; break;
-        case ITM_zeta              : * item1 = ITM_3      ; break;
-        case ITM_SAMPI             : * item1 = ITM_MINUS  ; break;
-        case ITM_sampi             : * item1 = ITM_MINUS  ; break;
-        case -MNU_ALPHA            : * item1 = ITM_0      ; break;
-        case -MNU_ALPHADOT         : * item1 = ITM_PERIOD ; break;
-        case -MNU_ALPHAMATH        : * item1 = ITM_SLASH  ; break; //ITM_NULL   ;
-        case -MNU_ALPHAINTL        : * item1 = ITM_PLUS   ; break;
+ if(calcMode == CM_AIM || calcMode == CM_EIM || (tam.mode && tam.alpha) ) {
 
-        default:
-           #ifdef PC_BUILD
-             jm_show_comment("^^^^processKeyAction0/keyReplacements:CM_AIM: Numlock not active but number not handled");
-           #endif //PC_BUILD
-           //item1 = item;     //this is the non-number character which is now handled below.
-           break;
+   if(GSHIFT) {        //ensure that sigma and delta stays uppercase
+      switch(item) {
+        case ITM_sigma         : * item1 = ITM_SIGMA          ; break;
+        case ITM_delta         : * item1 = ITM_DELTA          ; break;
+        default: break;
+      }
+    } else
+
+
+   if(GSHIFT) {
+      switch(item) {
+        case ITM_ADD           : * item1 = ITM_PLUS           ; break;
+        case ITM_SUB           : * item1 = ITM_MINUS          ; break;
+        case ITM_MULT          : * item1 = ITM_CROSS          ; break;
+        case ITM_DIV           : * item1 = ITM_SLASH          ; break;
+
+        case ITM_A             : * item1 = ITM_SIGMA          ; break;
+        case ITM_B             : * item1 = ITM_CIRCUMFLEX     ; break;
+        case ITM_C             : * item1 = ITM_ROOT_SIGN      ; break;
+        case ITM_D             : * item1 = ITM_LG_SIGN        ; break;
+        case ITM_E             : * item1 = ITM_LN_SIGN        ; break;
+        case ITM_F             : * item1 = ITM_alpha          ; break;
+        case ITM_G             : * item1 = ITM_VERTICAL_BAR   ; break;
+        case ITM_H             : * item1 = ITM_DELTA          ; break;
+        case ITM_I             : * item1 = ITM_pi             ; break;
+        case ITM_J             : * item1 = ITM_SIN_SIGN       ; break;
+        case ITM_K             : * item1 = ITM_COS_SIGN       ; break;
+        case ITM_L             : * item1 = ITM_TAN_SIGN       ; break;
+
+        case ITM_P             : * item1 = ITM_7;               break;
+        case ITM_Q             : * item1 = ITM_8;               break;
+        case ITM_R             : * item1 = ITM_9;               break;
+        case ITM_T             : * item1 = ITM_4;               break;
+        case ITM_U             : * item1 = ITM_5;               break;
+        case ITM_V             : * item1 = ITM_6;               break;
+        case ITM_X             : * item1 = ITM_1;               break;
+        case ITM_Y             : * item1 = ITM_2;               break;
+        case ITM_Z             : * item1 = ITM_3;               break;
+        case ITM_O             : * item1 = ITM_EEXCHR;          break; //STD_SUB_E_OUTLINE
+        case ITM_S             : * item1 = ITM_SLASH;           break;
+        case ITM_W             : * item1 = ITM_CROSS;           break;
+        case ITM_UNDERSCORE    : * item1 = ITM_MINUS;           break;
+        case ITM_SPACE         : * item1 = ITM_PLUS;            break;
+        case ITM_QUESTION_MARK : * item1 = ITM_SLASH;           break;
+        case ITM_COMMA         : * item1 = ITM_PERIOD;          break;
+        case ITM_COLON         : * item1 = ITM_0;               break;
+        default: break;
       }
 
    } else
    if(NL && !FSHIFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
      switch(item) {
-       case ITM_P             : * item1 = ITM_7;      break;
-       case ITM_Q             : * item1 = ITM_8;      break;
-       case ITM_R             : * item1 = ITM_9;      break;
-       case ITM_T             : * item1 = ITM_4;      break;
-       case ITM_U             : * item1 = ITM_5;      break;
-       case ITM_V             : * item1 = ITM_6;      break;
-       case ITM_X             : * item1 = ITM_1;      break;
-       case ITM_Y             : * item1 = ITM_2;      break;
-       case ITM_Z             : * item1 = ITM_3;      break;
-       case CHR_num           : * item1 = 0;          break;
-       case CHR_case          : * item1 = 0;          break;
-       case ITM_O             : * item1 = ITM_EEXCHR; break; //STD_SUB_E_OUTLINE
-       case ITM_S             : * item1 = ITM_OBELUS; break;
-       case ITM_W             : * item1 = ITM_MULT;   break;
-       case ITM_UNDERSCORE    : * item1 = ITM_MINUS;  break;
-       case ITM_SPACE         : * item1 = ITM_PLUS;   break;
-       case ITM_QUESTION_MARK : * item1 = ITM_SLASH;  break;
-       case ITM_COMMA         : * item1 = ITM_PERIOD; break;
-       case ITM_COLON         : * item1 = ITM_0;      break;
-
-       default: 
-           #ifdef PC_BUILD
-             jm_show_comment("^^^^processKeyAction1/keyReplacements:CM_AIM: Numlock active but number not handled");
-           #endif //PC_BUILD
-           //item1 = item;     //this is the non-number character which is now handled below.
-           break;
+       case ITM_P             : * item1 = ITM_7;                break;
+       case ITM_Q             : * item1 = ITM_8;                break;
+       case ITM_R             : * item1 = ITM_9;                break;
+       case ITM_T             : * item1 = ITM_4;                break;
+       case ITM_U             : * item1 = ITM_5;                break;
+       case ITM_V             : * item1 = ITM_6;                break;
+       case ITM_X             : * item1 = ITM_1;                break;
+       case ITM_Y             : * item1 = ITM_2;                break;
+       case ITM_Z             : * item1 = ITM_3;                break;
+       case CHR_num           : * item1 = 0;                    break;
+       case CHR_case          : * item1 = 0;                    break;
+       case ITM_O             : * item1 = ITM_EEXCHR;           break; //STD_SUB_E_OUTLINE
+       case ITM_S             : * item1 = ITM_OBELUS;           break;
+       case ITM_W             : * item1 = ITM_MULT;             break;
+       case ITM_UNDERSCORE    : * item1 = ITM_MINUS;            break;
+       case ITM_SPACE         : * item1 = ITM_PLUS;             break;
+       case ITM_QUESTION_MARK : * item1 = ITM_SLASH;            break;
+       case ITM_COMMA         : * item1 = ITM_PERIOD;           break;
+       case ITM_COLON         : * item1 = ITM_0;                break;
+       default: break;
      }
    } else
 
      if(NL && FSHIFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
        switch(item) {
-         case ITM_MINUS  : * item1 = ITM_UNDERSCORE   ;  break;
-         case ITM_PLUS   : * item1 = ITM_SPACE        ;  break;
-         case ITM_SLASH  : * item1 = ITM_QUESTION_MARK;  break;
-         case ITM_PERIOD : * item1 = ITM_COMMA        ;  break;
-         case ITM_0      : * item1 = ITM_COLON        ;  break;
-         default: 
-              #ifdef PC_BUILD
-                jm_show_comment("^^^^processKeyAction2/keyReplacements:CM_AIM: Numlock active but number not handled");
-              #endif //PC_BUILD
-              //item1 = item;     //this is the non-number character which is now handled below.
-              break;
+         case ITM_MINUS       : * item1 = ITM_UNDERSCORE      ; break;
+         case ITM_PLUS        : * item1 = ITM_SPACE           ; break;
+         case ITM_SLASH       : * item1 = ITM_QUESTION_MARK   ; break;
+         case ITM_PERIOD      : * item1 = ITM_COMMA           ; break;
+         case ITM_0           : * item1 = ITM_COLON           ; break;
+         default: break;
        }
      } else//JM Exception, to change 0 to ";", when !NL & FSHIFT-0
 
      if(!NL && FSHIFT) {                           //JMvv Numlock translation: Assumes lower case  is NOT active
        switch(item) {
-         case ITM_0      : * item1 = ITM_SEMICOLON        ;  break;
-         default: 
-              #ifdef PC_BUILD
-                jm_show_comment("^^^^processKeyAction3/keyReplacements:CM_AIM: Numlock active but number not handled");
-              #endif //PC_BUILD
-              //item1 = item;     //this is the non-number character which is now handled below.
-              break;
+         case ITM_0           : * item1 = ITM_SEMICOLON       ; break;
+         default: break;
        }
      }
    }
@@ -1268,94 +1253,133 @@ bool_t emptyKeyBuffer()
 
 void fnT_ARROW(uint16_t command) {
 #ifndef TESTSUITE_BUILD
-  uint16_t ixx;
-  uint16_t current_cursor_x_old;
-  uint16_t current_cursor_y_old;
+  #ifdef TEXT_MULTILINE_EDIT
+    uint16_t ixx;
+    uint16_t current_cursor_x_old;
+    uint16_t current_cursor_y_old;
 
-  #ifdef PC_BUILD
-    char tmp[200]; sprintf(tmp,"^^^^fnT_ARROW: command=%d current_cursor_x=%d current_cursor_y=%d \n",command,current_cursor_x, current_cursor_y); jm_show_comment(tmp);
-  #endif //PC_BUILD
+    #ifdef PC_BUILD
+      char tmp[200]; sprintf(tmp,"^^^^fnT_ARROW: command=%d current_cursor_x=%d current_cursor_y=%d \n",command,current_cursor_x, current_cursor_y); jm_show_comment(tmp);
+    #endif //PC_BUILD
 
 
-  switch (command) {
+    switch (command) {
 
-     case ITM_T_LEFT_ARROW /*STD_LEFT_ARROW */ : 
-        T_cursorPos = stringPrevGlyph(aimBuffer, T_cursorPos);
-        break;
+       case ITM_T_LEFT_ARROW /*STD_LEFT_ARROW */ : 
+          T_cursorPos = stringPrevGlyph(aimBuffer, T_cursorPos);
+          break;
 
-     case ITM_T_RIGHT_ARROW /*STD_RIGHT_ARROW*/ : 
+       case ITM_T_RIGHT_ARROW /*STD_RIGHT_ARROW*/ : 
 
-        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
-        break;
+          T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
+          break;
 
-     case ITM_T_LLEFT_ARROW /*STD_FARLEFT_ARROW */ :
-        ixx = 0;
-        while(ixx<10) {
-          fnT_ARROW(ITM_T_LEFT_ARROW);
-          ixx++;
-        }
-        break;
+       case ITM_T_LLEFT_ARROW /*STD_FARLEFT_ARROW */ :
+          ixx = 0;
+          while(ixx<10) {
+            fnT_ARROW(ITM_T_LEFT_ARROW);
+            ixx++;
+          }
+          break;
 
-     case ITM_T_RRIGHT_ARROW /*STD_FARRIGHT_ARROW*/ :
-        ixx = 0;
-        while(ixx<10) {
+       case ITM_T_RRIGHT_ARROW /*STD_FARRIGHT_ARROW*/ :
+          ixx = 0;
+          while(ixx<10) {
+            fnT_ARROW(ITM_T_RIGHT_ARROW);
+            ixx++;
+          }
+          break;
+
+
+       case ITM_T_UP_ARROW /*UP */ :                      //JMCURSOR try make the cursor upo be more accurate. Add up the char widths...
+          ixx = 0;
+          current_cursor_x_old = current_cursor_x;
+          current_cursor_y_old = current_cursor_y;
           fnT_ARROW(ITM_T_RIGHT_ARROW);
-          ixx++;
-        }
-        break;
+          while(ixx < 75 && (current_cursor_x >= current_cursor_x_old+5 || current_cursor_y == current_cursor_y_old)) {
+            fnT_ARROW(ITM_T_LEFT_ARROW);
+            showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, -100, vmNormal, true, true, true);  //display up to the cursor
+
+            //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
+            ixx++;
+          }
+          break;
 
 
-     case ITM_T_UP_ARROW /*UP */ :                      //JMCURSOR try make the cursor upo be more accurate. Add up the char widths...
-        ixx = 0;
-        current_cursor_x_old = current_cursor_x;
-        current_cursor_y_old = current_cursor_y;
-        fnT_ARROW(ITM_T_RIGHT_ARROW);
-        while(ixx < 75 && (current_cursor_x >= current_cursor_x_old+5 || current_cursor_y == current_cursor_y_old)) {
+       case ITM_T_DOWN_ARROW /*DN*/ :
+          ixx = 0;
+          current_cursor_x_old = current_cursor_x;
+          current_cursor_y_old = current_cursor_y;
           fnT_ARROW(ITM_T_LEFT_ARROW);
-          showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, -100, vmNormal, true, true, true);  //display up to the cursor
+          while(ixx < 75 && (current_cursor_x+5 <= current_cursor_x_old || current_cursor_y == current_cursor_y_old)) {
+            fnT_ARROW(ITM_T_RIGHT_ARROW);
+            showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, -100, vmNormal, true, true, true);  //display up to the cursor
+            ixx++;
 
-          //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
-          ixx++;
-        }
-        break;
+            //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
+          }
+          break;
 
 
-     case ITM_T_DOWN_ARROW /*DN*/ :
-        ixx = 0;
-        current_cursor_x_old = current_cursor_x;
-        current_cursor_y_old = current_cursor_y;
-        fnT_ARROW(ITM_T_LEFT_ARROW);
-        while(ixx < 75 && (current_cursor_x+5 <= current_cursor_x_old || current_cursor_y == current_cursor_y_old)) {
+
+       case ITM_UP1 /*HOME */ :
+          T_cursorPos = 0;
+          break;
+
+
+       case ITM_DOWN1 /*END*/ :
+          T_cursorPos = stringByteLength(aimBuffer) - 1;
+          T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
           fnT_ARROW(ITM_T_RIGHT_ARROW);
-          showStringEdC43(lines ,displayAIMbufferoffset, T_cursorPos, aimBuffer, 1, -100, vmNormal, true, true, true);  //display up to the cursor
-          ixx++;
-
-          //printf("###^^^ %d %d %d %d %d\n",ixx,current_cursor_x, current_cursor_x_old, current_cursor_y, current_cursor_y_old);
-        }
-        break;
+          break;
 
 
-
-     case ITM_UP1 /*HOME */ :
-        T_cursorPos = 0;
-        break;
-
-
-     case ITM_DOWN1 /*END*/ :
-        T_cursorPos = stringByteLength(aimBuffer) - 1;
-        T_cursorPos = stringNextGlyph(aimBuffer, T_cursorPos);
-        fnT_ARROW(ITM_T_RIGHT_ARROW);
-        break;
-
-
-     default: break;
-  }
-  //printf(">>> T_cursorPos %d",T_cursorPos);
-  if(T_cursorPos > stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer))) T_cursorPos = stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer));
-  if(T_cursorPos < 0) T_cursorPos = 0;
-  //printf(">>> T_cursorPos limits %d\n",T_cursorPos);
-#endif
+       default: break;
+    }
+    //printf(">>> T_cursorPos %d",T_cursorPos);
+    if(T_cursorPos > stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer))) T_cursorPos = stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer));
+    if(T_cursorPos < 0) T_cursorPos = 0;
+    //printf(">>> T_cursorPos limits %d\n",T_cursorPos);
+  #endif //TEXT_MULTILINE_EDIT
+#endif //TESTSUITE_BUILD
 }
 
 
+
+
+void fnCla(uint16_t unusedButMandatoryParameter){
+  if(calcMode == CM_AIM) {
+    //Not using calcModeAim becose some modes are reset which should not be
+    aimBuffer[0]=0;
+    T_cursorPos = 0;
+    nextChar = NC_NORMAL;
+    xCursor = 1;
+    yCursor = Y_POSITION_OF_AIM_LINE + 6;
+    cursorFont = &standardFont;
+    cursorEnabled = true;
+    last_CM=252;
+    #ifndef TESTSUITE_BUILD
+      clearRegisterLine(AIM_REGISTER_LINE, true, true);
+      refreshRegisterLine(AIM_REGISTER_LINE);        //JM Execute here, to make sure that the 5/2 line check is done
+    #endif
+    last_CM=253;
+  } else
+  if(calcMode == CM_EIM) {
+    while (xCursor > 0) {
+      fnKeyBackspace(0);
+    }
+  }
+}
+
+
+void fnCln(uint16_t unusedButMandatoryParameter){
+  #ifndef TESTSUITE_BUILD
+    nimNumberPart = NP_EMPTY;
+    calcModeNim(0);
+    last_CM=252;
+    refreshRegisterLine(REGISTER_X);        //JM Execute here, to make sure that the 5/2 line check is done
+    last_CM=253;
+    addItemToNimBuffer(ITM_0);
+  #endif
+}
 

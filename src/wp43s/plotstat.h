@@ -24,7 +24,7 @@
 #include "typeDefinitions.h"
 #include <stdint.h>
 
-#define   LIM              400 //100     //Number of points; MUST be multiple of 4
+#define   LIM              100 //100     //Number of points; MUST be multiple of 4
 #define   zoomfactor     0.05f     // default is 0.05, which is 5% space around the data points. Use 0.05 * 40 for wide view
 #define   numberIntervals   50     // default 50, auto increase if jumps found
 #define   fittedcurveboxes   0     // default 0 = smooth line
@@ -105,6 +105,7 @@ int16_t screen_window_x(float x_min, float x, float x_max);
 int16_t screen_window_y(float y_min, float y, float y_max);
 #endif
 
+void    statGraphReset     (void);
 void    fnStatDemo0        (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo1        (uint16_t unusedButMandatoryParameter);
 void    fnStatDemo2        (uint16_t unusedButMandatoryParameter);

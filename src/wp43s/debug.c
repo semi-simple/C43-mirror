@@ -441,6 +441,7 @@ void debugNIM(void) {
   char * getCalcModeName(uint16_t cm) {
     if(cm == CM_NORMAL)                return "normal ";
     if(cm == CM_AIM)                   return "aim    ";
+    if(cm == CM_EIM)                   return "eim    ";
     if(cm == CM_PEM)                   return "pem    ";
     if(cm == CM_NIM)                   return "nim    ";
     if(cm == CM_ASSIGN)                return "assign ";
@@ -448,8 +449,12 @@ void debugNIM(void) {
     if(cm == CM_FLAG_BROWSER)          return "flg.bro";
     if(cm == CM_FONT_BROWSER)          return "fnt.bro";
     if(cm == CM_PLOT_STAT)             return "plot.st";
+    if(cm == CM_GRAPH)                 return "plot.gr";
     if(cm == CM_ERROR_MESSAGE)         return "err.msg";
     if(cm == CM_BUG_ON_SCREEN)         return "bug.scr";
+    if(cm == CM_MIM)                   return "mim    ";
+    if(cm == CM_EIM)                   return "eim    ";
+    if(cm == CM_TIMER)                 return "timer  ";
     if(cm == CM_CONFIRMATION)          return "confirm";
     if(cm == CM_GRAPH)                 return "graph  ";    //JM
     if(cm == CM_LISTXY)                return "listxy ";    //JM
@@ -970,6 +975,12 @@ void debugNIM(void) {
 
       if(row < DEBUG_LINES) {
         sprintf(string, "FLAG_ASLIFT                               = %s",          getBooleanName(getSystemFlag(FLAG_ASLIFT)));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
+        gtk_widget_show(lbl1[row++]);
+      }
+
+      if(row < DEBUG_LINES) {
+        sprintf(string, "FLAG_ENDPMT                               = %s",          getBooleanName(getSystemFlag(FLAG_ENDPMT)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

@@ -16,6 +16,7 @@
 
 #include "saveRestoreCalcState.h"
 
+#include "assign.h"
 #include "charString.h"
 #include "config.h"
 #include "display.h"
@@ -31,12 +32,15 @@
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
+#include "softmenus.h"
+#include "solver/equation.h"
+#include "sort.h"
 #include "stats.h"
 #include <string.h>
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         59  // states around VIEW and SOLVE now will be saved
+#define BACKUP_VERSION         262  // Save timer application status
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -102,6 +106,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(globalRegister,                      sizeof(globalRegister),                     BACKUP);
     save(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
     save(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
+    save(userMenuItems,                       sizeof(userMenuItems),                      BACKUP);
+    save(userAlphaItems,                      sizeof(userAlphaItems),                     BACKUP);
     save(&tam.mode,                           sizeof(tam.mode),                           BACKUP);
     save(&tam.function,                       sizeof(tam.function),                       BACKUP);
     save(&tam.alpha,                          sizeof(tam.alpha),                          BACKUP);
@@ -115,6 +121,12 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&rbrRegister,                        sizeof(rbrRegister),                        BACKUP);
     save(&numberOfNamedVariables,             sizeof(numberOfNamedVariables),             BACKUP);
     ramPtr = TO_WP43SMEMPTR(allNamedVariables);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(allFormulae);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(userMenus);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(userKeyLabel);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(statisticalSumsPointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -249,6 +261,14 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&currentSolverStatus,                sizeof(currentSolverStatus),                BACKUP);
     save(&currentSolverProgram,               sizeof(currentSolverProgram),               BACKUP);
     save(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
+    save(&numberOfFormulae,                   sizeof(numberOfFormulae),                   BACKUP);
+    save(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
+    save(&numberOfUserMenus,                  sizeof(numberOfUserMenus),                  BACKUP);
+    save(&currentUserMenu,                    sizeof(currentUserMenu),                    BACKUP);
+    save(&userKeyLabelSize,                   sizeof(userKeyLabelSize),                   BACKUP);
+    save(&timerCraAndDeciseconds,             sizeof(timerCraAndDeciseconds),             BACKUP);
+    save(&timerValue,                         sizeof(timerValue),                         BACKUP);
+    save(&timerTotalTime,                     sizeof(timerTotalTime),                     BACKUP);
 
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
     save(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -260,7 +280,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
     save(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
     save(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
-    save(&jm_GGREEK,                          sizeof(jm_GGREEK),                          BACKUP);
     save(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
     save(&jm_NO_BASE_SCREEN,                  sizeof(jm_NO_BASE_SCREEN),                  BACKUP);
     save(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
@@ -336,6 +355,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(globalRegister,                      sizeof(globalRegister),                     BACKUP);
       restore(savedStackRegister,                  sizeof(savedStackRegister),                 BACKUP);
       restore(kbd_usr,                             sizeof(kbd_usr),                            BACKUP);
+      restore(userMenuItems,                       sizeof(userMenuItems),                      BACKUP);
+      restore(userAlphaItems,                      sizeof(userAlphaItems),                     BACKUP);
       restore(&tam.mode,                           sizeof(tam.mode),                           BACKUP);
       restore(&tam.function,                       sizeof(tam.function),                       BACKUP);
       restore(&tam.alpha,                          sizeof(tam.alpha),                          BACKUP);
@@ -350,6 +371,12 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&numberOfNamedVariables,             sizeof(numberOfNamedVariables),             BACKUP);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       allNamedVariables = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      allFormulae = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      userMenus = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      userKeyLabel = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
@@ -487,6 +514,14 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&currentSolverStatus,                sizeof(currentSolverStatus),                BACKUP);
       restore(&currentSolverProgram,               sizeof(currentSolverProgram),               BACKUP);
       restore(&currentSolverVariable,              sizeof(currentSolverVariable),              BACKUP);
+      restore(&numberOfFormulae,                   sizeof(numberOfFormulae),                   BACKUP);
+      restore(&currentFormula,                     sizeof(currentFormula),                     BACKUP);
+      restore(&numberOfUserMenus,                  sizeof(numberOfUserMenus),                  BACKUP);
+      restore(&currentUserMenu,                    sizeof(currentUserMenu),                    BACKUP);
+      restore(&userKeyLabelSize,                   sizeof(userKeyLabelSize),                   BACKUP);
+      restore(&timerCraAndDeciseconds,             sizeof(timerCraAndDeciseconds),             BACKUP);
+      restore(&timerValue,                         sizeof(timerValue),                         BACKUP);
+      restore(&timerTotalTime,                     sizeof(timerTotalTime),                     BACKUP);
 
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
       restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -498,7 +533,6 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&Home3TimerMode,                     sizeof(Home3TimerMode),                     BACKUP);
       restore(&Norm_Key_00_VAR,                    sizeof(Norm_Key_00_VAR),                    BACKUP);
       restore(&Input_Default,                      sizeof(Input_Default),                      BACKUP);
-      restore(&jm_GGREEK,                          sizeof(jm_GGREEK),                          BACKUP);
       restore(&jm_FG_LINE,                         sizeof(jm_FG_LINE),                         BACKUP);
       restore(&jm_NO_BASE_SCREEN,                  sizeof(jm_NO_BASE_SCREEN),                  BACKUP);
       restore(&jm_G_DOUBLETAP,                     sizeof(jm_G_DOUBLETAP),                     BACKUP);
@@ -551,9 +585,13 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
         else if(calcMode == CM_PLOT_STAT)             {}
+        else if(calcMode == CM_GRAPH).                {}
         else if(calcMode == CM_MIM)                   {mimRestore();}
         else if(calcMode == CM_LISTXY)                {}             //JM
         else if(calcMode == CM_GRAPH)                 {}             //JM
+        else if(calcMode == CM_EIM)                   {}
+        else if(calcMode == CM_ASSIGN)                {}
+        else if(calcMode == CM_TIMER)                 {}
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);
@@ -567,9 +605,13 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
         else if(calcMode == CM_PLOT_STAT)              calcModeNormalGui();
+        else if(calcMode == CM_GRAPH)                  calcModeNormalGui();
         else if(calcMode == CM_MIM)                   {calcModeNormalGui(); mimRestore();}
         else if(calcMode == CM_LISTXY)                 calcModeNormalGui();             //JM
         else if(calcMode == CM_GRAPH)                  calcModeNormalGui();             //JM
+        else if(calcMode == CM_EIM)                   {calcModeAimGui();}
+        else if(calcMode == CM_ASSIGN)                {calcModeNormalGui();}
+        else if(calcMode == CM_TIMER)                 {calcModeNormalGui();}
         else {
           sprintf(errorMessage, "In function restoreCalc: %" PRIu8 " is an unexpected value for calcMode", calcMode);
           displayBugScreen(errorMessage);
@@ -814,6 +856,72 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
   save(tmpString, strlen(tmpString), BACKUP);
   }
 
+  // Keyboard arguments
+  sprintf(tmpString, "KEYBOARD_ARGUMENTS\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  {
+    uint32_t num = 0;
+    for(i = 0; i < 37 * 6; ++i) {
+      if(*(getNthString((uint8_t *)userKeyLabel, i)) != 0) ++num;
+    }
+    sprintf(tmpString, "%" PRIu32 "\n", num);
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+  for(i = 0; i < 37 * 6; ++i) {
+    if(*(getNthString((uint8_t *)userKeyLabel, i)) != 0) {
+      sprintf(tmpString, "%" PRIu32 " ", i);
+      stringToUtf8((char *)getNthString((uint8_t *)userKeyLabel, i), (uint8_t *)tmpString + strlen(tmpString));
+      strcat(tmpString, "\n");
+      save(tmpString, strlen(tmpString), BACKUP);
+    }
+  }
+
+  // MyMenu
+  sprintf(tmpString, "MYMENU\n18\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(i=0; i<18; i++) {
+    sprintf(tmpString, "%" PRId16, userMenuItems[i].item);
+    if(userMenuItems[i].argumentName[0] != 0) {
+      strcat(tmpString, " ");
+      stringToUtf8(userMenuItems[i].argumentName, (uint8_t *)tmpString + strlen(tmpString));
+    }
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+
+  // MyAlpha
+  sprintf(tmpString, "MYALPHA\n18\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(i=0; i<18; i++) {
+    sprintf(tmpString, "%" PRId16, userAlphaItems[i].item);
+    if(userAlphaItems[i].argumentName[0] != 0) {
+      strcat(tmpString, " ");
+      stringToUtf8(userAlphaItems[i].argumentName, (uint8_t *)tmpString + strlen(tmpString));
+    }
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+
+  // User menus
+  sprintf(tmpString, "USER_MENUS\n");
+  save(tmpString, strlen(tmpString), BACKUP);
+  sprintf(tmpString, "%" PRIu16 "\n", numberOfUserMenus);
+  save(tmpString, strlen(tmpString), BACKUP);
+  for(uint32_t j = 0; j < numberOfUserMenus; ++j) {
+    stringToUtf8(userMenus[j].menuName, (uint8_t *)tmpString);
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+    for(i=0; i<18; i++) {
+      sprintf(tmpString, "%" PRId16, userMenus[j].menuItem[i].item);
+      if(userMenus[j].menuItem[i].argumentName[0] != 0) {
+        strcat(tmpString, " ");
+        stringToUtf8(userMenus[j].menuItem[i].argumentName, (uint8_t *)tmpString + strlen(tmpString));
+      }
+      strcat(tmpString, "\n");
+      save(tmpString, strlen(tmpString), BACKUP);
+    }
+  }
+
   // Programs
   uint16_t currentSizeInBlocks = RAM_SIZE - freeMemoryRegions[numberOfFreeMemoryRegions - 1].address - freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks;
   sprintf(tmpString, "PROGRAMS\n%" PRIu16 "\n", currentSizeInBlocks);
@@ -833,8 +941,18 @@ void fnSave(uint16_t unusedButMandatoryParameter) {
     save(tmpString, strlen(tmpString), BACKUP);
   }
 
+  // Equations
+  sprintf(tmpString, "EQUATIONS\n%" PRIu16 "\n", numberOfFormulae);
+  save(tmpString, strlen(tmpString), BACKUP);
+
+  for(i=0; i<numberOfFormulae; i++) {
+    stringToUtf8(TO_PCMEMPTR(allFormulae[i].pointerToFormulaData), (uint8_t *)tmpString);
+    strcat(tmpString, "\n");
+    save(tmpString, strlen(tmpString), BACKUP);
+  }
+
   // Other configuration stuff
-  sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n17\n");
+  sprintf(tmpString, "OTHER_CONFIGURATION_STUFF\n18\n");
   save(tmpString, strlen(tmpString), BACKUP);
   sprintf(tmpString, "firstGregorianDay\n%" PRIu32 "\n", firstGregorianDay);
   save(tmpString, strlen(tmpString), BACKUP);
@@ -1312,39 +1430,149 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       readLine(stream, tmpString); // key
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         str = tmpString;
-        kbd_usr[i].keyId = stringToUint16(str);
+        kbd_usr[i].keyId = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primary = stringToUint16(str);
+        kbd_usr[i].primary = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].fShifted = stringToUint16(str);
+        kbd_usr[i].fShifted = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].gShifted = stringToUint16(str);
+        kbd_usr[i].gShifted = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].keyLblAim = stringToUint16(str);
+        kbd_usr[i].keyLblAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primaryAim = stringToUint16(str);
+        kbd_usr[i].primaryAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].fShiftedAim = stringToUint16(str);
+        kbd_usr[i].fShiftedAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].gShiftedAim = stringToUint16(str);
+        kbd_usr[i].gShiftedAim = stringToInt16(str);
 
         while(*str != ' ') str++;
         while(*str == ' ') str++;
-        kbd_usr[i].primaryTam = stringToUint16(str);
+        kbd_usr[i].primaryTam = stringToInt16(str);
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "KEYBOARD_ARGUMENTS") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    numberOfRegs = stringToInt16(tmpString);
+    if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+      freeWp43s(userKeyLabel, TO_BLOCKS(userKeyLabelSize));
+      userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
+      userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
+      memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
+    }
+    for(i=0; i<numberOfRegs; i++) {
+      readLine(stream, tmpString); // key
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        str = tmpString;
+        uint16_t key = stringToUint16(str);
+        userMenuItems[i].argumentName[0] = 0;
+
+        while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+        if(*str == ' ') {
+          while(*str == ' ') str++;
+          if((*str != '\n') && (*str != 0)) {
+            utf8ToString((uint8_t *)str, tmpString + TMP_STR_LENGTH / 2);
+            setUserKeyArgument(key, tmpString + TMP_STR_LENGTH / 2);
+          }
+        }
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "MYMENU") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    numberOfRegs = stringToInt16(tmpString);
+    for(i=0; i<numberOfRegs; i++) {
+      readLine(stream, tmpString); // key
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        str = tmpString;
+        userMenuItems[i].item            = stringToInt16(str);
+        userMenuItems[i].argumentName[0] = 0;
+
+        while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+        if(*str == ' ') {
+          while(*str == ' ') str++;
+          if((*str != '\n') && (*str != 0)) {
+            utf8ToString((uint8_t *)str, userMenuItems[i].argumentName);
+          }
+        }
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "MYALPHA") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    numberOfRegs = stringToInt16(tmpString);
+    for(i=0; i<numberOfRegs; i++) {
+      readLine(stream, tmpString); // key
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        str = tmpString;
+        userAlphaItems[i].item            = stringToInt16(str);
+        userAlphaItems[i].argumentName[0] = 0;
+
+        while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+        if(*str == ' ') {
+          while(*str == ' ') str++;
+          if((*str != '\n') && (*str != 0)) {
+            utf8ToString((uint8_t *)str, userAlphaItems[i].argumentName);
+          }
+        }
+      }
+    }
+  }
+
+  else if(strcmp(tmpString, "USER_MENUS") == 0) {
+    readLine(stream, tmpString); // Number of keys
+    int16_t numberOfMenus = stringToInt16(tmpString);
+    for(int32_t j=0; j<numberOfMenus; j++) {
+      readLine(stream, tmpString);
+      int16_t target = -1;
+      if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+        utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
+        for(i = 0; i < numberOfUserMenus; ++i) {
+          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_BINARY) == 0) {
+            target = i;
+          }
+        }
+        if(target == -1) {
+          createMenu(tmpString + TMP_STR_LENGTH / 2);
+          target = numberOfUserMenus - 1;
+        }
+      }
+
+      readLine(stream, tmpString);
+      numberOfRegs = stringToInt16(tmpString);
+      for(i=0; i<numberOfRegs; i++) {
+        readLine(stream, tmpString); // key
+        if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
+          str = tmpString;
+          userMenus[target].menuItem[i].item            = stringToInt16(str);
+          userMenus[target].menuItem[i].argumentName[0] = 0;
+
+          while((*str != ' ') && (*str != '\n') && (*str != 0)) str++;
+          if(*str == ' ') {
+            while(*str == ' ') str++;
+            if((*str != '\n') && (*str != 0)) {
+              utf8ToString((uint8_t *)str, userMenus[target].menuItem[i].argumentName);
+            }
+          }
+        }
       }
     }
   }
@@ -1389,6 +1617,36 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
     }
 
     scanLabelsAndPrograms();
+  }
+
+  else if(strcmp(tmpString, "EQUATIONS") == 0) {
+    uint16_t formulae;
+
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      for(i = numberOfFormulae; i > 0; --i) {
+        deleteEquation(i - 1);
+      }
+    }
+
+    readLine(stream, tmpString); // Number of formulae
+    formulae = stringToUint16(tmpString);
+    if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+      allFormulae = allocWp43s(TO_BLOCKS(sizeof(formulaHeader_t)) * formulae);
+      numberOfFormulae = formulae;
+      currentFormula = 0;
+      for(i = 0; i < formulae; i++) {
+        allFormulae[i].pointerToFormulaData = WP43S_NULL;
+        allFormulae[i].sizeInBlocks = 0;
+      }
+    }
+
+    for(i = 0; i < formulae; i++) {
+      readLine(stream, tmpString); // One formula
+      if(loadMode == LM_ALL || loadMode == LM_PROGRAMS) {
+        utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
+        setEquation(i, tmpString + TMP_STR_LENGTH / 2);
+      }
+    }
   }
 
   else if(strcmp(tmpString, "OTHER_CONFIGURATION_STUFF") == 0) {

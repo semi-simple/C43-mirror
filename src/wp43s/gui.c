@@ -30,6 +30,7 @@
 #include "saveRestoreCalcState.h"
 #include "screen.h"
 #include "stack.h"
+#include "timer.h"
 #include "statusBar.h"
 #include "softmenus.h"
 #include <string.h>
@@ -129,6 +130,7 @@ GtkWidget           *lbl82Fa, *lbl83Fa, *lbl84Fa, *lbl85Fa;             //^^
 
 
   static gint destroyCalc(GtkWidget* w, GdkEventAny* e, gpointer data) {
+    fnStopTimerApp();
     saveCalc();
     gtk_main_quit();
 
@@ -187,9 +189,7 @@ void btnClicked_UC(GtkWidget *w, gpointer data) {
 //JM NUMERIC SECTION FOR ALPHAMODE - FORCE Numeral - Numbers from PC --> produce numbers.
 void btnClicked_NU(GtkWidget *w, gpointer data) {
   bool_t numLock_MEM;
-  bool_t jm_GGREEK_MEM;
   numLock_MEM = numLock;
-  jm_GGREEK_MEM = jm_GGREEK;
 
   numLock = false;
   shiftF = false;       //JM
@@ -197,16 +197,13 @@ void btnClicked_NU(GtkWidget *w, gpointer data) {
   btnClicked(w, data);
 
   numLock = numLock_MEM;
-  jm_GGREEK = jm_GGREEK_MEM;
   refreshStatusBar();
 }
 
 //Shifted numbers !@#$%^&*() from PC --> activate shift and use numnber 1234567890. Restore case.
 void btnClicked_SNU(GtkWidget *w, gpointer data) {
   bool_t numLock_MEM;
-  bool_t jm_GGREEK_MEM;
   numLock_MEM = numLock;
-  jm_GGREEK_MEM = jm_GGREEK;
 
   numLock = false;
   shiftF = true;       //JM
@@ -216,7 +213,6 @@ void btnClicked_SNU(GtkWidget *w, gpointer data) {
 
   //Only : is working at this point
   numLock = numLock_MEM;
-  jm_GGREEK = jm_GGREEK_MEM;
   refreshStatusBar();
 }
 
@@ -286,7 +282,7 @@ gboolean keyPressed(GtkWidget *w, GdkEventKey *event, gpointer data) {
   //printf("#######%d\n",event_keyval);
 
 //JM ALPHA SECTION FOR ALPHAMODE - TAKE OVER ALPHA KEYBOARD
-if (calcMode == CM_AIM || tam.mode) {
+if (calcMode == CM_AIM || calcMode == CM_EIM || tam.mode) {
 switch (event_keyval) {
 
     case 65507: // left Ctrl
@@ -1926,14 +1922,11 @@ void labelCaptionAimFa(const calcKey_t* key, GtkWidget* lblF) {
     lbl[0] = 0;
   } 
   else {
-    //printf("####### %d %d ",alphaCase,key->primaryAim);
     if( (ITM_A <= key->primaryAim && key->primaryAim <= ITM_Z)) {             //if in upper case, show lower case on yellow
       stringToUtf8(indexOfItems[((max(key->primaryAim, -key->primaryAim)) + ((alphaCase == AC_UPPER) ? 26:0 ))].itemSoftmenuName, lbl);
-      //printf(" 1 %s \n",lbl);
     }
     else {                                                                                               //
       stringToUtf8(indexOfItems[numlockReplacements(1,max(key->primaryAim, -key->primaryAim),!numLock,false,false)].itemSoftmenuName, lbl);
-      //printf(" 2 %s \n",lbl);
     }
   }
 
@@ -1984,7 +1977,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     lbl[0] = 0;
   } 
   else {
-    if(alphaCase == AC_LOWER && (ITM_A <= key->primaryAim && key->primaryAim <= ITM_Z)) {
+    if( ((!shiftF && (alphaCase == AC_LOWER)) || ( shiftF && (alphaCase == AC_UPPER))) && (ITM_A <= key->primaryAim && key->primaryAim <= ITM_Z)) {
       stringToUtf8(indexOfItems[numlockReplacements(5,max(key->primaryAim, -key->primaryAim) + 26, numLock, shiftF, shiftG)].itemSoftmenuName, lbl);
     }
     else {
@@ -2038,14 +2031,14 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
     lbl[3] = 0;
     stringToUtf8(indexOfItems[key->gShiftedAim + 36].itemSoftmenuName, lbl + 3);*/
     if(alphaCase == AC_LOWER) {
-      stringToUtf8(indexOfItems[numlockReplacements(8,key->gShiftedAim + 36, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(8,key->gShiftedAim + 36, numLock, false, true)].itemSoftmenuName, lbl);
     }
     else {
-      stringToUtf8(indexOfItems[numlockReplacements(9,key->gShiftedAim, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
+      stringToUtf8(indexOfItems[numlockReplacements(9,key->gShiftedAim, numLock, false, true)].itemSoftmenuName, lbl);
     }                                                               //^^
   }
   else {
-    stringToUtf8(indexOfItems[numlockReplacements(10,key->gShiftedAim, numLock, false, !jm_GGREEK)].itemSoftmenuName, lbl);
+    stringToUtf8(indexOfItems[numlockReplacements(10,key->gShiftedAim, numLock, false, true)].itemSoftmenuName, lbl);
   }
 
 //GShift set label
@@ -2073,7 +2066,7 @@ void labelCaptionAim(const calcKey_t *key, GtkWidget *button, GtkWidget *lblGree
   gtk_label_set_label(GTK_LABEL(lblGreek), (gchar *)lbl);
 
 //GShift colours
-  if(key->gShiftedAim < 0 && jm_GGREEK) {
+  if(key->gShiftedAim < 0) {
     gtk_widget_set_name(lblGreek, "gShiftedUnderline");     //dr - new AIM
   }
   else {
@@ -4199,6 +4192,8 @@ void setupUI(void) {
     shiftF = false;
     shiftG = false;
 
+    fnStopTimerApp();
+
     #ifdef PC_BUILD
       if(matrixIndex != INVALID_VARIABLE) {
         if(getRegisterDataType(matrixIndex) == dtReal34Matrix) {
@@ -4302,6 +4297,7 @@ if(!tam.mode) {
       case MNU_LINTS:     catalog = CATALOG_LINTS;   break;
       case MNU_REALS:     catalog = CATALOG_REALS;   break;
       case MNU_CPXS:      catalog = CATALOG_CPXS;    break;
+      case MNU_Solver:
       case MNU_MVAR:      catalog = CATALOG_MVAR;    break;
       default:            catalog = CATALOG_NONE;
     }
@@ -4341,7 +4337,7 @@ if(!tam.mode) {
       else if(calcMode == CM_AIM || (tam.mode && tam.alpha)) {
         calcModeAimGui();
       }
-      else if(calcMode == CM_NORMAL || calcMode == CM_PEM || calcMode == CM_MIM) {
+      else if(calcMode == CM_NORMAL || calcMode == CM_PEM || calcMode == CM_MIM || calcMode == CM_ASSIGN) {
         calcModeNormalGui();
       }
     #endif // PC_BUILD && (SCREEN_800X480 == 0)
@@ -4380,7 +4376,7 @@ if(!tam.mode) {
 
   void refreshModeGui(void) {  //JM Added here to force icon update in Gui
   #ifdef PC_BUILD
-    if((calcMode == CM_AIM) && !tam.mode) calcModeAimGui();
+    if( ((calcMode == CM_AIM) || (calcMode == CM_EIM)) && !tam.mode) calcModeAimGui();
   #endif
 
 

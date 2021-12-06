@@ -173,7 +173,6 @@ typedef struct {
   bool_t SH_BASE_AHOME;
   int16_t Norm_Key_00_VAR;
   uint8_t Input_Default;
-  bool_t jm_GGREEK;
   bool_t jm_FG_LINE;
   bool_t jm_NO_BASE_SCREEN;
   bool_t jm_G_DOUBLETAP;
@@ -300,6 +299,17 @@ typedef struct {
 
 
 /**
+ * \struct formulaHeader_t
+ * Header for EQN formulae.
+ */
+typedef struct {
+  uint16_t pointerToFormulaData; ///< Memory block number
+  uint8_t  sizeInBlocks;         ///< Size of allocated memory block
+  uint8_t  unused;               ///< Padding
+} formulaHeader_t;
+
+
+/**
  * \enum videoMode_t
  * Video mode: normal video or reverse video.
  */
@@ -392,6 +402,26 @@ typedef struct {
   //uint8_t  stackLiftStatus;   ///< Stack lift status after item execution.
   //uint8_t  undoStatus;        ///< Undo status after item execution.
 } item_t;
+
+
+/**
+ * \struct userMenuItem_t
+ * Structure keeping the information for one item of MyMenu and MyAlpha.
+ */
+typedef struct {
+  int16_t  item;               ///< Item ID
+  int16_t  unused;             ///< Padding
+  char     argumentName[16];   ///< Name of variable or label
+} userMenuItem_t;
+
+/**
+ * \struct userMenu_t
+ * Structure keeping the information for a user-defined menu.
+ */
+typedef struct {
+  char           menuName[16];  ///< Name of menu
+  userMenuItem_t menuItem[18];  ///< Items
+} userMenu_t;
 
 
 /**

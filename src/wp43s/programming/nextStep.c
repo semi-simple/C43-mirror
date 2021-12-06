@@ -18,6 +18,7 @@
  * \file nextStep.c
  ***********************************************/
 
+#include "programming/manage.h"
 #include "programming/nextStep.h"
 
 #include "items.h"
@@ -1021,6 +1022,7 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_Ephik:          //  1764
         case ITM_ZETAphik:       //  1765
         case ITM_GETHIDE:        //  1766
+        case ITM_SQRT:           //  1768
           return step;
 
         case 0x7fff:             // 32767 .END.
@@ -1084,7 +1086,7 @@ void fnBst(uint16_t unusedButMandatoryParameter) {
     }
   }
   else {
-    uint16_t numberOfSteps = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
+    uint16_t numberOfSteps = getNumberOfSteps();
     currentLocalStepNumber = numberOfSteps;
     if(numberOfSteps <= 6) {
       firstDisplayedLocalStepNumber = 0;
@@ -1106,7 +1108,7 @@ void fnBst(uint16_t unusedButMandatoryParameter) {
 
 
 void fnSst(uint16_t unusedButMandatoryParameter) {
-  uint16_t numberOfSteps = programList[currentProgramNumber].step - programList[currentProgramNumber - 1].step;
+  uint16_t numberOfSteps = getNumberOfSteps();
 
   if(currentLocalStepNumber < numberOfSteps) {
     if(currentLocalStepNumber++ >= 3) {

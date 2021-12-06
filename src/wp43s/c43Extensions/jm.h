@@ -87,7 +87,6 @@ extern bool_t SH_BASE_HOME;                                          //JM BASEHO
 extern bool_t SH_BASE_AHOME;                                         //JM BASEHOME Create a flag to enable or disable triple shift
 extern int16_t Norm_Key_00_VAR;                                      //JM USER NORMAL
 extern uint8_t Input_Default;                                        //JM Input Default
-extern bool_t jm_GGREEK;
 extern bool_t jm_FG_LINE;                                            //JM Screen / keyboard operation setup
 extern bool_t jm_NO_BASE_SCREEN;                                            //JM Screen / keyboard operation setup
 extern bool_t jm_G_DOUBLETAP;                                        //JM Screen / keyboard operation setup
@@ -182,7 +181,6 @@ void fnASSIGN       (int16_t JM_ASN_MODE, int16_t tempkey);
 #define DM_ANY                 16    // DENANY
 #define DM_FIX                 17    // DENFIX
 
-#define JC_GGREEK              19    
 #define JC_FG_LINE             20    // screen setup
 #define JC_NO_BASE_SCREEN      21    // screen setup
 #define JC_G_DOUBLETAP         22    // screen setup

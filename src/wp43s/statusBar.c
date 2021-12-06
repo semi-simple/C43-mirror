@@ -20,6 +20,7 @@
 #include "dateTime.h"
 #include "flags.h"
 #include "fonts.h"
+#include "items.h"
 #include "gui.h"
 #include "c43Extensions/jm.h"
 #include "plotstat.h"
@@ -37,7 +38,7 @@
     #else // DEBUG_INSTEAD_STATUS_BAR != 1
       if(calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH) lcd_fill_rect(0, 0, 158, 20, 0);
       showDateTime();
-      showHideHourGlass();
+      showHideHourGlass(); //TODO check if this belongs here and why JM
       if(calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH) return;    // With graph displayed, only update the time, as the other items are clashing with the graph display screen
       showRealComplexResult();
       showComplexMode();
@@ -46,11 +47,15 @@
       if(calcMode == CM_MIM) {
         showMatrixMode();
       }
+      else if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_TVM || softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_FIN) { //JM added FIN
+        showTvmMode();
+      }
       else {
         showIntegerMode();
         showOverflowCarry();
       }
       showHideAlphaMode();
+      showHideHourGlass();
       showHidePgmBegin();
       showHideWatch();
       showHideSerialIO();
@@ -258,6 +263,19 @@ void showFracMode(void) {
 
 
 
+  void showTvmMode(void) {
+    if(getSystemFlag(FLAG_ENDPMT)) {
+      sprintf(errorMessage, "END");
+    }
+    else {
+      sprintf(errorMessage, "BEG");
+    }
+
+    showString(errorMessage, &standardFont, X_INTEGER_MODE, 0, vmNormal, true, true);
+  }
+
+
+
   void showOverflowCarry(void) {
     showGlyph(STD_OVERFLOW_CARRY, &standardFont, X_OVERFLOW_CARRY, 0, vmNormal, true, false); // STD_OVERFLOW_CARRY is 0+6+3 pixel wide
 
@@ -274,31 +292,38 @@ void showFracMode(void) {
 
   void showHideAlphaMode(void) {
     int status=0;
-    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR) || (tam.mode != 0 && tam.alpha)) {
+    if(calcMode == CM_AIM || calcMode == CM_EIM || (catalog && catalog != CATALOG_MVAR) || (tam.mode != 0 && tam.alpha)) {
+
+//WP43S
+//      if(alphaCase == AC_UPPER) {
+//        showString(STD_ALPHA, &standardFont, X_ALPHA_MODE, 0, vmNormal, true, false); // STD_ALPHA is 0+9+2 pixel wide
+//        setSystemFlag(FLAG_alphaCAP);
+//      }
+//      else {
+//        showString(STD_alpha, &standardFont, X_ALPHA_MODE, 0, vmNormal, true, false); // STD_alpha is 0+9+2 pixel wide
+//        clearSystemFlag(FLAG_alphaCAP);
+
 
       if(numLock && !shiftF && !shiftG) {
-          if(alphaCase == AC_UPPER)              { status = 3 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
-          if(alphaCase == AC_LOWER)              { status = 6 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
+          if(alphaCase == AC_UPPER)                  { status = 3 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
+          if(alphaCase == AC_LOWER)                  { status = 6 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
         } else
-
-      if(alphaCase == AC_LOWER && shiftF){
-        setSystemFlag(FLAG_alphaCAP);              status = 12 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); //A	
-      } else
-		    if(alphaCase == AC_UPPER && shiftF){
-		      clearSystemFlag(FLAG_alphaCAP);          status = 18 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0);   //a	
-		    } else
-		      if(alphaCase == AC_UPPER)  { //UPPER
-		        setSystemFlag(FLAG_alphaCAP);
-		        if(shiftF)                           { status = 12 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
-		        if(shiftG)                           { status =  9 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
-		        if(!shiftG && !shiftF && !numLock)   { status = 12 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
-		      } else
-		        if(alphaCase == AC_LOWER)  { //LOWER
-				      clearSystemFlag(FLAG_alphaCAP);
-              if(shiftF)                         { status = 18 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
-				      if(shiftG)                         { status = 15 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
-				      if(!shiftG && !shiftF && !numLock) { status = 18 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
-				    }
+          if(alphaCase == AC_LOWER && shiftF){
+            setSystemFlag(FLAG_alphaCAP);              status = 12 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); //A	
+          } else
+    		    if(alphaCase == AC_UPPER && shiftF){
+    		      clearSystemFlag(FLAG_alphaCAP);          status = 18 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0);   //a	
+    		    } else //at this point shiftF is false
+    		      if(alphaCase == AC_UPPER)  { //UPPER
+    		        setSystemFlag(FLAG_alphaCAP);
+    		        if(shiftG)                           { status =  9 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
+    		        if(!shiftG && !shiftF && !numLock)   { status = 12 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
+    		      } else
+    		        if(alphaCase == AC_LOWER)  { //LOWER
+    				      clearSystemFlag(FLAG_alphaCAP);
+    				      if(shiftG)                         { status = 15 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); } else
+    				      if(!shiftG && !shiftF && !numLock) { status = 18 - (nextChar == NC_SUBSCRIPT ? 2 : nextChar == NC_SUPERSCRIPT ? 1:0); }
+    				    }
 
       if(status >0 && status <=18) {
         showGlyphCode(' ',    &standardFont, X_ALPHA_MODE, 0, vmNormal, true, true); // is 0+0+10 pixel wide
@@ -311,17 +336,17 @@ void showFracMode(void) {
           case  5: showString(STD_SUB_n, &standardFont, X_ALPHA_MODE,-11, vmNormal, true, false); break; //sup   
           case  6: showString(STD_n,     &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
           
-          case  7: showString(jm_GGREEK || numLock ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sub   
-          case  8: showString(jm_GGREEK || numLock ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sup   
-          case  9: showString(jm_GGREEK || numLock ? STD_OMEGA : STD_THETA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
+          case  7: showString(STD_SIGMA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sub   
+          case  8: showString(STD_SIGMA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sup   
+          case  9: showString(STD_SIGMA, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
           
           case 10: showString(STD_SUB_A, &standardFont, X_ALPHA_MODE, -2, vmNormal, true, false); break; //sub   
           case 11: showString(STD_SUB_A, &standardFont, X_ALPHA_MODE, -11, vmNormal, true, false); break; //sup   //not possible
           case 12: showString(STD_A    , &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
     
-          case 13: showString(jm_GGREEK || numLock ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sub   
-          case 14: showString(jm_GGREEK || numLock ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sup   
-          case 15: showString(jm_GGREEK || numLock ? STD_omega : STD_theta, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
+          case 13: showString(STD_sigma, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sub   
+          case 14: showString(STD_sigma, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //sup   
+          case 15: showString(STD_sigma, &standardFont, X_ALPHA_MODE,  0, vmNormal, true, false); break; //normal
           
           case 16: showString(STD_SUB_a, &standardFont, X_ALPHA_MODE, -2, vmNormal, true, false); break; //sub   
           case 17: showString(STD_SUB_a, &standardFont, X_ALPHA_MODE, -11, vmNormal, true, false); break; //sup    //not possible 
@@ -355,7 +380,7 @@ void showFracMode(void) {
 
   void showHideWatch(void) {
     if(watchIconEnabled) {
-      showGlyph(STD_WATCH,                    &standardFont, X_WATCH, 0, vmNormal, true, false); // is 0+13+1 pixel wide
+      showGlyph(STD_TIMER, &standardFont, X_WATCH, 0, vmNormal, true, false); // is 0+13+1 pixel wide
     }
   }
 

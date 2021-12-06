@@ -27,6 +27,7 @@
 #include "debug.h"
 #include "display.h"
 #include "error.h"
+#include "fonts.h"
 #include "flags.h"
 #include "fractions.h"
 #include "gui.h"
@@ -38,10 +39,12 @@
 #include "plotstat.h"
 #include "programming/manage.h"
 #include "c43Extensions/radioButtonCatalog.h"
+#include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
 #include "softmenus.h"
+#include "solver/equation.h"
 #include "stack.h"
 #include "stats.h"
 #include "store.h"
@@ -186,14 +189,7 @@ TO_QSPI const enum rounding roundingModeTable[7] = {
 
 
 void fnGetIntegerSignMode(uint16_t unusedButMandatoryParameter) {
-  longInteger_t ism;
-
-  liftStack();
-
-  longIntegerInit(ism);
-  uIntToLongInteger((shortIntegerMode==SIM_2COMPL ? 2 : (shortIntegerMode==SIM_1COMPL ? 1 : (shortIntegerMode==SIM_UNSIGN ? 0 : -1))), ism);
-  convertLongIntegerToLongIntegerRegister(ism, REGISTER_X);
-  longIntegerFree(ism);
+  fnRecall(RESERVED_VARIABLE_ISM);
 }
 
 
@@ -532,7 +528,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8557));
+  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8594));
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -640,6 +636,8 @@ void fnReset(uint16_t confirmation) {
     firstFreeProgramByte          = beginOfProgramMemory + 2;
     firstDisplayedStep            = beginOfProgramMemory;
     firstDisplayedLocalStepNumber = 0;
+    labelList                     = NULL;
+    programList                   = NULL;
     *(beginOfProgramMemory + 0) = (ITM_END >> 8) | 0x80;
     *(beginOfProgramMemory + 1) =  ITM_END       & 0xff;
     *(beginOfProgramMemory + 2) = 255; // .END.
@@ -780,6 +778,10 @@ void fnReset(uint16_t confirmation) {
     lrChosenUndo = 0;
     lastPlotMode = PLOT_NOTHING;
     plotSelection = 0;
+    x_min = -10;
+    x_max = 10;
+    y_min = 0;
+    y_max = 1;
 
 //    shortIntegerMode = SIM_2COMPL;
     fnSetWordSize(64);
@@ -802,6 +804,7 @@ void fnReset(uint16_t confirmation) {
     setSystemFlag(FLAG_YMD);   // date format = yyyy-mm-dd
     setSystemFlag(FLAG_ASLIFT);
     setSystemFlag(FLAG_PROPFR);
+    setSystemFlag(FLAG_ENDPMT);// TVM application = END mode
 
     hourGlassIconEnabled = false;
     watchIconEnabled = false;
@@ -858,6 +861,17 @@ void fnReset(uint16_t confirmation) {
     exponentHideLimit = 0;
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
+
+    memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
+    memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);
+    userMenus = NULL;
+    numberOfUserMenus = 0;
+    currentUserMenu = 0;
+    userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
+    userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
+    memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
+
+
 
       
         clearSystemFlag(FLAG_DENANY);                              //JM Default
@@ -961,6 +975,17 @@ void fnReset(uint16_t confirmation) {
     //allocateNamedVariable(STD_omega STD_SUB_1);
     //allocateNamedVariable(STD_omega STD_SUB_2);
 
+    // Equation formulae
+    allFormulae = NULL;
+    numberOfFormulae = 0;
+    currentFormula = 0;
+
+    // Timer application
+    timerCraAndDeciseconds = 0x80u;
+    timerValue             = 0u;
+    timerStartTime         = TIMER_APP_STOPPED;
+    timerTotalTime         = 0u;
+
     #if (DEBUG_PANEL == 1)
       debugWindow = DBG_REGISTERS;
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(chkHexaString), false);
@@ -972,7 +997,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_107_00++"
+#define VERSION1 "_107_04_KEY"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2

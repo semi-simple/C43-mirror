@@ -163,6 +163,10 @@ void fnRecallDiv(uint16_t regist) {
 void fnRecallMin(uint16_t regist) {
   if(regInRange(regist)) {
     if(!saveLastX()) return;
+    if(regist >= FIRST_RESERVED_VARIABLE && regist < LAST_RESERVED_VARIABLE && allReservedVariables[regist - FIRST_RESERVED_VARIABLE].header.pointerToRegisterData == WP43S_NULL) {
+      copySourceRegisterToDestRegister(regist, TEMP_REGISTER_1);
+      regist = TEMP_REGISTER_1;
+    }
     registerMin(REGISTER_X, regist, REGISTER_X);
   }
 }
@@ -172,6 +176,10 @@ void fnRecallMin(uint16_t regist) {
 void fnRecallMax(uint16_t regist) {
   if(regInRange(regist)) {
     if(!saveLastX()) return;
+    if(regist >= FIRST_RESERVED_VARIABLE && regist < LAST_RESERVED_VARIABLE && allReservedVariables[regist - FIRST_RESERVED_VARIABLE].header.pointerToRegisterData == WP43S_NULL) {
+      copySourceRegisterToDestRegister(regist, TEMP_REGISTER_1);
+      regist = TEMP_REGISTER_1;
+    }
     registerMax(REGISTER_X, regist, REGISTER_X);
   }
 }
@@ -208,7 +216,6 @@ void fnRecallConfig(uint16_t regist) {
     recallFromDtConfigDescriptor(SH_BASE_AHOME);    
     recallFromDtConfigDescriptor(Norm_Key_00_VAR); 
     recallFromDtConfigDescriptor(Input_Default);   
-    recallFromDtConfigDescriptor(jm_GGREEK);       
     recallFromDtConfigDescriptor(jm_FG_LINE);       
     recallFromDtConfigDescriptor(jm_NO_BASE_SCREEN);       
     recallFromDtConfigDescriptor(jm_G_DOUBLETAP);   

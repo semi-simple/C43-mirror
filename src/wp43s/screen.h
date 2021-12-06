@@ -99,6 +99,7 @@
   void     invert_Pixel                       (uint32_t x, uint32_t y);                                          //JM
 #endif // DMCP_BUILD
 
+  void     execTimerApp                         (uint16_t timerType);
 #ifndef TESTSUITE_BUILD
 //JM vv
   void     refreshFn                            (uint16_t timerType);                                           //dr - general timeout handler 
@@ -131,7 +132,9 @@
 
   uint32_t showStringC43                      (const char *string, int mode, int comp, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols );
   uint32_t stringWidthC43                     (const char *str,    int mode, int comp,                                                bool_t withLeadingEmptyRows, bool_t withEndingEmptyRows);
+#ifdef TEXT_MULTILINE_EDIT
   uint32_t showStringEdC43                    (uint32_t lastline, int16_t offset, int16_t edcursor, const char *string, uint32_t x, uint32_t y, videoMode_t videoMode, bool_t showLeadingCols, bool_t showEndingCols, bool_t noshow);
+#endif //TEXT_MULTILINE_EDIT
                                                                                                                //JM ^^
   void     underline_softkey                  (int16_t xSoftkey, int16_t ySoftKey, bool_t dontclear);          //JM LONGPRESS
   void     refresh_gui                        (void);                                                          //JM
@@ -215,6 +218,7 @@
    */
   void     refreshRegisterLine                (calcRegister_t regist);
   void     displayNim                         (const char *nim, const char *lastBase, int16_t wLastBaseNumeric, int16_t wLastBaseStandard);
+  void     displayShiftAndTamBuffer           (void);
 #endif // TESTSUITE_BUILD
 
 #endif // SCREEN_H

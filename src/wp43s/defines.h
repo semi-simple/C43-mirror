@@ -63,8 +63,8 @@
     #define SAVE_SPACE_DM42_5  //001168 bytes: old SHOW (old WP43S on VIEW) (I think irrelevant now)
 //  #define SAVE_SPACE_DM42_6  //001648 bytes: ELEC functions
   #define SAVE_SPACE_DM42_7  //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
-  #define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
-  #define SAVE_SPACE_DM42_9  //004448 bytes: define for original SHOW (WP43S) instead of SHOW (new C43)
+#define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
+//#define SAVE_SPACE_DM42_9  //004448 bytes: define for original SHOW (WP43S) instead of SHOW (new C43)
   #define SAVE_SPACE_DM42_10 //005800 bytes: WP43S programming ...
 //  #define SAVE_SPACE_DM42_11 //001552 bytes: Matrix function on entry ...
     #define SAVE_SPACE_DM42_12 //047246 bytes: Standard extra 43S math: SLVQ, PRIME, BESSEL, ELLIPTIC, ZETA, BETA, ORTHO_POLY

@@ -392,7 +392,7 @@
             if(tam.mode) {
               const char *itmLabel = dynmenuGetLabel(dynamicMenuItem);
               uint16_t nameLength = stringByteLength(itmLabel);
-              xcopy(aimBuffer, itmLabel, nameLength);
+              xcopy(aimBuffer, itmLabel, nameLength + 1);
               tam.alpha = true;
               insertStepInProgram(tamOperation());
               tamLeaveMode();

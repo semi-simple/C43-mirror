@@ -368,6 +368,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
 
 
 static void _insertInProgram(const uint8_t *dat, uint16_t size) {
+  int16_t _dynamicMenuItem = dynamicMenuItem;
   if(freeProgramBytes < size) {
     uint8_t *oldBeginOfProgramMemory = beginOfProgramMemory;
     uint32_t programSizeInBlocks = RAM_SIZE - freeMemoryRegions[numberOfFreeMemoryRegions - 1].address - freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks;
@@ -391,12 +392,13 @@ static void _insertInProgram(const uint8_t *dat, uint16_t size) {
   currentLocalStepNumber += 1;
   endOfCurrentProgram    += size;
   scanLabelsAndPrograms();
+  dynamicMenuItem = -1;
   fnGotoDot(currentLocalStepNumber + programList[currentProgramNumber - 1].step - 1);
+  dynamicMenuItem = _dynamicMenuItem;
 }
 
 void insertStepInProgram(int16_t func) {
   switch(func) {
-    case ITM_GTO:            //    2
     case ITM_GTOP:           // 1482
       #ifndef DMCP_BUILD
         stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
@@ -453,6 +455,11 @@ void insertStepInProgram(int16_t func) {
     case ITM_UNDO:           // 1723
     case ITM_SYSTEM:         // 1743
       break;
+
+    // Single-byte, label parameter
+    case ITM_LBL:            //    1
+    case ITM_GTO:            //    2
+    case ITM_XEQ:            //    3
 
     // Single-byte, 8-bit integer parameter
     case ITM_PAUSE:          //   38
@@ -666,6 +673,21 @@ void insertStepInProgram(int16_t func) {
     case ITM_PRINTERDLAY:    // 1710
     case ITM_PRINTERMODE:    // 1712
     case ITM_PRINTERTAB:     // 1717
+
+    // Double-byte, label parameter
+    case ITM_DELITM:         // 1455
+    case ITM_FQX:            // 1475
+    case ITM_FDQX:           // 1476
+    case ITM_INDEX:          // 1486
+    case ITM_LBLQ:           // 1503
+    case ITM_MVAR:           // 1524
+    case ITM_PGMINT:         // 1546
+    case ITM_PGMSLV:         // 1547
+    case ITM_SOLVE:          // 1608
+    case ITM_VARMNU:         // 1630
+    case ITM_PIn:            // 1671
+    case ITM_SIGMAn:         // 1672
+    case ITM_INTEGRAL:       // 1700
 
     // Double-byte, register parameter
     case ITM_CASE:           // 1418

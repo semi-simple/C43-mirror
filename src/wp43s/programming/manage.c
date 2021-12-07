@@ -369,6 +369,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
 
 static void _insertInProgram(const uint8_t *dat, uint16_t size) {
   int16_t _dynamicMenuItem = dynamicMenuItem;
+  uint16_t globalStepNumber;
   if(freeProgramBytes < size) {
     uint8_t *oldBeginOfProgramMemory = beginOfProgramMemory;
     uint32_t programSizeInBlocks = RAM_SIZE - freeMemoryRegions[numberOfFreeMemoryRegions - 1].address - freeMemoryRegions[numberOfFreeMemoryRegions - 1].sizeInBlocks;
@@ -391,9 +392,10 @@ static void _insertInProgram(const uint8_t *dat, uint16_t size) {
   freeProgramBytes       -= size;
   currentLocalStepNumber += 1;
   endOfCurrentProgram    += size;
+  globalStepNumber = currentLocalStepNumber + programList[currentProgramNumber - 1].step - 1;
   scanLabelsAndPrograms();
   dynamicMenuItem = -1;
-  fnGotoDot(currentLocalStepNumber + programList[currentProgramNumber - 1].step - 1);
+  fnGotoDot(globalStepNumber);
   dynamicMenuItem = _dynamicMenuItem;
 }
 

@@ -265,14 +265,13 @@
       return;
     }
     else if(item == ITM_alpha) {
-      // Only allow alpha mode for registers at the moment - we will implement labels later
       if(!tam.digitsSoFar && !tam.dot && !valueParameter && (tam.mode == TM_STORCL || tam.mode == TM_M_DIM)) {
         tam.alpha = true;
         setSystemFlag(FLAG_ALPHA);
         aimBuffer[0] = 0;
         calcModeAim(NOPARAM);
       }
-      else if(!tam.digitsSoFar && tam.function == ITM_GTOP) {
+      else if(!tam.digitsSoFar && (tam.function == ITM_LBL || tam.function == ITM_GTOP)) {
         tam.alpha = true;
         setSystemFlag(FLAG_ALPHA);
         aimBuffer[0] = 0;

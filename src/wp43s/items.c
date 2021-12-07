@@ -756,7 +756,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /*    0 */  { itemToBeCoded,                NOPARAM,                     "",                                            "0000",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED}, // ITM_NULL
 
 // Items from 1 to 127 are 1 byte OP codes
-/*    1 */  { itemToBeCoded,                TM_LABEL,                    "LBL",                                         "LBL",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/*    1 */  { fnNop,                        TM_LABEL,                    "LBL",                                         "LBL",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /*    2 */  { fnGoto,                       TM_LABEL,                    "GTO",                                         "GTO",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /*    3 */  { itemToBeCoded,                TM_LABEL,                    "XEQ",                                         "XEQ",                                         (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /*    4 */  { itemToBeCoded,                NOPARAM,                     "RTN",                                         "RTN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},

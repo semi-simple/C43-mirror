@@ -20,8 +20,10 @@
 
 #include "programming/manage.h"
 
+#include "bufferize.h"
 #include "charString.h"
 #include "config.h"
+#include "defines.h"
 #include "fonts.h"
 #include "items.h"
 #include "memory.h"
@@ -287,6 +289,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
     if(calcMode != CM_PEM) {
       calcMode = CM_PEM;
       hourGlassIconEnabled = false;
+      aimBuffer[0] = 0;
       return;
     }
 
@@ -325,6 +328,12 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
       }
       lblOrEnd = (*step == ITM_LBL) || ((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff)));
       decodeOneStep(step);
+      if((aimBuffer[0] != 0) && (firstDisplayedStepNumber + line - lineOffset == currentStepNumber)) {
+        char *tstr = tmpString + stringByteLength(tmpString);
+        *(tstr++) = STD_CURSOR[0];
+        *(tstr++) = STD_CURSOR[1];
+        *(tstr++) = 0;
+      }
 
       // Split long lines
       int numberOfExtraLines = 0;
@@ -399,7 +408,139 @@ static void _insertInProgram(const uint8_t *dat, uint16_t size) {
   dynamicMenuItem = _dynamicMenuItem;
 }
 
+void pemAddNumber(int16_t item) {
+  if(aimBuffer[0] == 0) {
+    tmpString[0] = ITM_LITERAL;
+    tmpString[1] = STRING_LONG_INTEGER;
+    tmpString[2] = 0;
+    _insertInProgram((uint8_t *)tmpString, 3);
+    memset(nimBufferDisplay, 0, NIM_BUFFER_LENGTH);
+    --currentLocalStepNumber;
+    currentStep = findPreviousStep(currentStep);
+    switch(item) {
+      case ITM_EXPONENT :
+        aimBuffer[0] = '+';
+        aimBuffer[1] = '1';
+        aimBuffer[2] = '.';
+        aimBuffer[3] = 0;
+        nimNumberPart = NP_REAL_FLOAT_PART;
+        lastIntegerBase = 0;
+        break;
+
+      case ITM_PERIOD :
+        aimBuffer[0] = '+';
+        aimBuffer[1] = '0';
+        aimBuffer[2] = 0;
+        nimNumberPart = NP_INT_10;
+        break;
+
+      case ITM_0 :
+      case ITM_1 :
+      case ITM_2 :
+      case ITM_3 :
+      case ITM_4 :
+      case ITM_5 :
+      case ITM_6 :
+      case ITM_7 :
+      case ITM_8 :
+      case ITM_9 :
+      case ITM_A :
+      case ITM_B :
+      case ITM_C :
+      case ITM_D :
+      case ITM_E :
+      case ITM_F :
+        aimBuffer[0] = '+';
+        aimBuffer[1] = 0;
+        nimNumberPart = NP_EMPTY;
+        break;
+    }
+  }
+  addItemToNimBuffer(item);
+
+  if(aimBuffer[0] != '!') {
+    deleteStepsFromTo(currentStep, findNextStep(currentStep));
+    if(aimBuffer[0] != 0) {
+      const char *numBuffer = aimBuffer[0] == '+' ? aimBuffer + 1 : aimBuffer;
+      tmpString[0] = ITM_LITERAL;
+      switch(nimNumberPart) {
+        //case NP_INT_16:
+        //case NP_INT_BASE:
+        //  tmpString[1] = STRING_SHORT_INTEGER;
+        //  break;
+        case NP_REAL_FLOAT_PART:
+        case NP_REAL_EXPONENT:
+        case NP_FRACTION_DENOMINATOR:
+          tmpString[1] = STRING_REAL34;
+          break;
+        case NP_COMPLEX_INT_PART:
+        case NP_COMPLEX_FLOAT_PART:
+        case NP_COMPLEX_EXPONENT:
+          tmpString[1] = STRING_COMPLEX34;
+          break;
+        default:
+          tmpString[1] = STRING_LONG_INTEGER;
+          break;
+      }
+      tmpString[2] = stringByteLength(numBuffer);
+      xcopy(tmpString + 3, numBuffer, stringByteLength(numBuffer));
+      _insertInProgram((uint8_t *)tmpString, stringByteLength(numBuffer) + 3);
+      --currentLocalStepNumber;
+      currentStep = findPreviousStep(currentStep);
+    }
+    calcMode = CM_PEM;
+  }
+  else {
+    aimBuffer[0] = 0;
+  }
+}
+
+void pemCloseNumberInput(void) {
+  deleteStepsFromTo(currentStep, findNextStep(currentStep));
+  if(aimBuffer[0] != 0) {
+    char *numBuffer = aimBuffer[0] == '+' ? aimBuffer + 1 : aimBuffer;
+    char *basePtr = numBuffer;
+    char *tmpPtr = tmpString;
+    *(tmpPtr++) = ITM_LITERAL;
+    switch(nimNumberPart) {
+      //case NP_INT_16:
+      case NP_INT_BASE:
+        *(tmpPtr++) = STRING_SHORT_INTEGER;
+        while(*basePtr != '#') ++basePtr;
+        *(basePtr++) = 0;
+        *(tmpPtr++) = (char)atoi(basePtr);
+        fflush(stdout);
+        break;
+      case NP_REAL_FLOAT_PART:
+      case NP_REAL_EXPONENT:
+      case NP_FRACTION_DENOMINATOR:
+        *(tmpPtr++) = STRING_REAL34;
+        break;
+      case NP_COMPLEX_INT_PART:
+      case NP_COMPLEX_FLOAT_PART:
+      case NP_COMPLEX_EXPONENT:
+        *(tmpPtr++) = STRING_COMPLEX34;
+        break;
+      default:
+        *(tmpPtr++) = STRING_LONG_INTEGER;
+        break;
+    }
+    *(tmpPtr++) = stringByteLength(numBuffer);
+    xcopy(tmpPtr, numBuffer, stringByteLength(numBuffer));
+    _insertInProgram((uint8_t *)tmpString, stringByteLength(numBuffer) + (int32_t)(tmpPtr - tmpString));
+  }
+
+  aimBuffer[0] = '!';
+}
+
 void insertStepInProgram(int16_t func) {
+  if(indexOfItems[func].func == addItemToBuffer || (aimBuffer[0] != 0 && (func == ITM_CHS || func == ITM_toINT || (nimNumberPart == NP_INT_BASE && (func == ITM_YX || func == ITM_LN || func == ITM_RCL))))) {
+    pemAddNumber(func);
+    return;
+  }
+  if(aimBuffer[0] != 0) {
+    pemCloseNumberInput();
+  }
   switch(func) {
     case ITM_GTOP:           // 1482
       #ifndef DMCP_BUILD
@@ -1368,6 +1509,7 @@ void insertStepInProgram(int16_t func) {
       #endif // DMCP_BUILD
     }
   }
+  aimBuffer[0] = 0;
 }
 
 

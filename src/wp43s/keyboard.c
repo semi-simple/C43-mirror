@@ -277,9 +277,15 @@
             // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two
-            fnKeyInCatalog = 1;
-            addItemToBuffer(item);
-            fnKeyInCatalog = 0;
+            if(calcMode == CM_PEM) {
+              pemAddNumber(item);
+              hourGlassIconEnabled = false;
+            }
+            else {
+              fnKeyInCatalog = 1;
+              addItemToBuffer(item);
+              fnKeyInCatalog = 0;
+            }
             if(calcMode == CM_EIM) {
               while(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_EQ_EDIT) {
                 popSoftmenu();
@@ -1012,6 +1018,10 @@
                 fnOff(NOPARAM);
                 keyActionProcessed = true;
               }
+              else if(aimBuffer[0] != 0 && (item == ITM_toINT || (nimNumberPart == NP_INT_BASE && item == ITM_RCL))) {
+                pemAddNumber(item);
+                keyActionProcessed = true;
+              }
               break;
 
             case CM_ASSIGN:
@@ -1330,6 +1340,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           break;
         }
 
+        aimBuffer[0] = 0;
         leavePem();
         calcModeNormal();
         saveForUndo();
@@ -1537,9 +1548,14 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_PEM:
-        nextStep = findNextStep(currentStep);
-        if(*currentStep != 255 || *(currentStep + 1) != 255) { // Not the last END
-          deleteStepsFromTo(currentStep, nextStep);
+        if(aimBuffer[0] == 0) {
+          nextStep = findNextStep(currentStep);
+          if(*currentStep != 255 || *(currentStep + 1) != 255) { // Not the last END
+            deleteStepsFromTo(currentStep, nextStep);
+          }
+        }
+        else {
+          pemAddNumber(ITM_BACKSPACE);
         }
         break;
 
@@ -1643,6 +1659,7 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
           menuUp();
         }
         else {
+          aimBuffer[0] = 0;
           fnBst(NOPARAM);
         }
         break;
@@ -1740,6 +1757,7 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
           menuDown();
         }
         else {
+          aimBuffer[0] = 0;
           fnSst(NOPARAM);
         }
         break;

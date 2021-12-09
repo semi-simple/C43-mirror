@@ -1612,6 +1612,7 @@ void insertStepInProgram(int16_t func) {
     case ITM_ZETAphik:       // 1765
     case ITM_GETHIDE:        // 1766
     case ITM_SQRT:           // 1768
+    case ITM_atan2:          // 1775
       tmpString[0] = (func >> 8) | 0x80;
       tmpString[1] =  func       & 0xff;
       _insertInProgram((uint8_t *)tmpString, 2);

@@ -386,6 +386,12 @@
       if(tam.function == ITM_GTOP) {
         tam.value = programList[numberOfPrograms - 1].step;
         reallyRunFunction(ITM_GTOP, tam.value);
+        if((*currentStep != 0xff) || (*(currentStep + 1) != 0xff)) {
+          currentStep = firstFreeProgramByte;
+          insertStepInProgram(ITM_END);
+          tam.value = programList[numberOfPrograms - 1].step;
+          reallyRunFunction(ITM_GTOP, tam.value);
+        }
         tamLeaveMode();
         hourGlassIconEnabled = false;
         return;

@@ -24,7 +24,9 @@
 #include "charString.h"
 #include "config.h"
 #include "defines.h"
+#include "flags.h"
 #include "fonts.h"
+#include "gui.h"
 #include "items.h"
 #include "memory.h"
 #include "programming/decode.h"
@@ -328,11 +330,21 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
       }
       lblOrEnd = (*step == ITM_LBL) || ((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff)));
       decodeOneStep(step);
-      if((aimBuffer[0] != 0) && (firstDisplayedStepNumber + line - lineOffset == currentStepNumber)) {
-        char *tstr = tmpString + stringByteLength(tmpString);
-        *(tstr++) = STD_CURSOR[0];
-        *(tstr++) = STD_CURSOR[1];
-        *(tstr++) = 0;
+      if(firstDisplayedStepNumber + line - lineOffset == currentStepNumber) {
+        if(getSystemFlag(FLAG_ALPHA)) {
+          char *tstr = tmpString + stringByteLength(tmpString) - 2;
+          *(tstr++) = STD_CURSOR[0];
+          *(tstr++) = STD_CURSOR[1];
+          *(tstr++) = STD_RIGHT_SINGLE_QUOTE[0];
+          *(tstr++) = STD_RIGHT_SINGLE_QUOTE[1];
+          *(tstr++) = 0;
+        }
+        else if(aimBuffer[0] != 0) {
+          char *tstr = tmpString + stringByteLength(tmpString);
+          *(tstr++) = STD_CURSOR[0];
+          *(tstr++) = STD_CURSOR[1];
+          *(tstr++) = 0;
+        }
       }
 
       // Split long lines
@@ -408,7 +420,92 @@ static void _insertInProgram(const uint8_t *dat, uint16_t size) {
   dynamicMenuItem = _dynamicMenuItem;
 }
 
+void pemAlpha(int16_t item) {
+#ifndef TESTSUITE_BUILD
+  if(!getSystemFlag(FLAG_ALPHA)) {
+    shiftF = false;
+    shiftG = false;
+    aimBuffer[0] = 0;
+    alphaCase = AC_UPPER;
+    nextChar = NC_NORMAL;
+
+    if(softmenuStack[0].softmenuId == 0) { // MyMenu
+      softmenuStack[0].softmenuId = 1; // MyAlpha
+    }
+
+    setSystemFlag(FLAG_ALPHA);
+
+    #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+      calcModeAimGui();
+    #endif // PC_BUILD && (SCREEN_800X480 == 0)
+
+    tmpString[0] = ITM_LITERAL;
+    tmpString[1] = STRING_LABEL_VARIABLE;
+    tmpString[2] = 0;
+    _insertInProgram((uint8_t *)tmpString, 3);
+    --currentLocalStepNumber;
+    currentStep = findPreviousStep(currentStep);
+  }
+  if(indexOfItems[item].func == addItemToBuffer) {
+    int32_t len = stringByteLength(aimBuffer);
+    if(alphaCase == AC_LOWER) {
+      if     (ITM_A     <= item && item <= ITM_Z    ) item += 26;
+      else if(ITM_ALPHA <= item && item <= ITM_OMEGA) item += 36;
+    }
+    item = convertItemToSubOrSup(item, nextChar);
+    xcopy(aimBuffer + len, indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
+  }
+  else if(item == ITM_DOWN_ARROW) {
+    nextChar = NC_SUBSCRIPT;
+  }
+  else if(item == ITM_UP_ARROW) {
+    nextChar = NC_SUPERSCRIPT;
+  }
+  else if(item == ITM_BACKSPACE) {
+    if(aimBuffer[0] == 0) {
+      deleteStepsFromTo(currentStep, findNextStep(currentStep));
+      clearSystemFlag(FLAG_ALPHA);
+      #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+        calcModeNormalGui();
+      #endif // PC_BUILD && (SCREEN_800X480 == 0)
+      return;
+    }
+    else {
+      aimBuffer[stringLastGlyph(aimBuffer)] = 0;
+    }
+  }
+  else if(item == ITM_ENTER) {
+    pemCloseAlphaInput();
+    tmpString[0] = ITM_ENTER;
+    _insertInProgram((uint8_t *)tmpString, 1);
+    return;
+  }
+
+  deleteStepsFromTo(currentStep, findNextStep(currentStep));
+  tmpString[0] = ITM_LITERAL;
+  tmpString[1] = STRING_LABEL_VARIABLE;
+  tmpString[2] = stringByteLength(aimBuffer);
+  xcopy(tmpString + 3, aimBuffer, stringByteLength(aimBuffer));
+  _insertInProgram((uint8_t *)tmpString, stringByteLength(aimBuffer) + 3);
+  --currentLocalStepNumber;
+  currentStep = findPreviousStep(currentStep);
+#endif // TESTSUITE_BUILD
+}
+
+void pemCloseAlphaInput(void) {
+#ifndef TESTSUITE_BUILD
+  aimBuffer[0] = 0;
+  clearSystemFlag(FLAG_ALPHA);
+  #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+    calcModeNormalGui();
+  #endif // PC_BUILD && (SCREEN_800X480 == 0)
+  ++currentLocalStepNumber;
+  currentStep = findNextStep(currentStep);
+#endif // TESTSUITE_BUILD
+}
+
 void pemAddNumber(int16_t item) {
+#ifndef TESTSUITE_BUILD
   if(aimBuffer[0] == 0) {
     tmpString[0] = ITM_LITERAL;
     tmpString[1] = STRING_LONG_INTEGER;
@@ -457,6 +554,7 @@ void pemAddNumber(int16_t item) {
     }
   }
   addItemToNimBuffer(item);
+  clearSystemFlag(FLAG_ALPHA);
 
   if(aimBuffer[0] != '!') {
     deleteStepsFromTo(currentStep, findNextStep(currentStep));
@@ -493,9 +591,11 @@ void pemAddNumber(int16_t item) {
   else {
     aimBuffer[0] = 0;
   }
+#endif // TESTSUITE_BUILD
 }
 
 void pemCloseNumberInput(void) {
+#ifndef TESTSUITE_BUILD
   deleteStepsFromTo(currentStep, findNextStep(currentStep));
   if(aimBuffer[0] != 0) {
     char *numBuffer = aimBuffer[0] == '+' ? aimBuffer + 1 : aimBuffer;
@@ -531,9 +631,14 @@ void pemCloseNumberInput(void) {
   }
 
   aimBuffer[0] = '!';
+#endif // TESTSUITE_BUILD
 }
 
 void insertStepInProgram(int16_t func) {
+  if(func == ITM_AIM || getSystemFlag(FLAG_ALPHA)) {
+    pemAlpha(func);
+    return;
+  }
   if(indexOfItems[func].func == addItemToBuffer || (aimBuffer[0] != 0 && (func == ITM_CHS || func == ITM_CC || func == ITM_toINT || (nimNumberPart == NP_INT_BASE && (func == ITM_YX || func == ITM_LN || func == ITM_RCL))))) {
     pemAddNumber(func);
     return;

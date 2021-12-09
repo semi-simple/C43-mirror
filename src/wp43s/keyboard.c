@@ -278,7 +278,12 @@
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two
             if(calcMode == CM_PEM) {
-              pemAddNumber(item);
+              if(getSystemFlag(FLAG_ALPHA)) {
+                pemAlpha(item);
+              }
+              else {
+                pemAddNumber(item);
+              }
               hourGlassIconEnabled = false;
             }
             else {
@@ -513,7 +518,7 @@
       return ITM_NOP;
     }
 
-    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR && calcMode != CM_NIM) || calcMode == CM_EIM || tam.alpha || (calcMode == CM_ASSIGN && (previousCalcMode == CM_AIM || previousCalcMode == CM_EIM))) {
+    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR && calcMode != CM_NIM) || calcMode == CM_EIM || tam.alpha || (calcMode == CM_ASSIGN && (previousCalcMode == CM_AIM || previousCalcMode == CM_EIM)) || (calcMode == CM_PEM && getSystemFlag(FLAG_ALPHA))) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
@@ -863,7 +868,7 @@
           calcMode = previousCalcMode;
           keyActionProcessed = true;
         }
-        else if(catalog && catalog != CATALOG_MVAR) {
+        else if((calcMode != CM_PEM || !getSystemFlag(FLAG_ALPHA)) && catalog && catalog != CATALOG_MVAR) {
           if(ITM_A <= item && item <= ITM_Z && alphaCase == AC_LOWER) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
@@ -1022,7 +1027,7 @@
                 fnOff(NOPARAM);
                 keyActionProcessed = true;
               }
-              else if(aimBuffer[0] != 0 && (item == ITM_toINT || (nimNumberPart == NP_INT_BASE && item == ITM_RCL))) {
+              else if(aimBuffer[0] != 0 && !getSystemFlag(FLAG_ALPHA) && (item == ITM_toINT || (nimNumberPart == NP_INT_BASE && item == ITM_RCL))) {
                 pemAddNumber(item);
                 keyActionProcessed = true;
               }
@@ -1465,7 +1470,7 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_PEM:
-        if(aimBuffer[0] != 0) {
+        if(aimBuffer[0] != 0 && !getSystemFlag(FLAG_ALPHA)) {
           pemAddNumber(ITM_CC);
         }
         break;
@@ -1562,7 +1567,10 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_PEM:
-        if(aimBuffer[0] == 0) {
+        if(getSystemFlag(FLAG_ALPHA)) {
+          pemAlpha(ITM_BACKSPACE);
+        }
+        else if(aimBuffer[0] == 0) {
           nextStep = findNextStep(currentStep);
           if(*currentStep != 255 || *(currentStep + 1) != 255) { // Not the last END
             deleteStepsFromTo(currentStep, nextStep);
@@ -1669,12 +1677,19 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         resetAlphaSelectionBuffer();
-        if(currentSoftmenuScrolls()) {
+        if(getSystemFlag(FLAG_ALPHA) && alphaCase == AC_LOWER) {
+          alphaCase = AC_UPPER;
+          if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_alpha_omega || softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_ALPHAintl) {
+            softmenuStack[0].softmenuId--; // Switch to the upper case menu
+          }
+        }
+        else if(currentSoftmenuScrolls()) {
           menuUp();
         }
         else {
           if(aimBuffer[0] != 0) {
-            pemCloseNumberInput();
+            if(getSystemFlag(FLAG_ALPHA)) pemCloseAlphaInput();
+            else                          pemCloseNumberInput();
             aimBuffer[0] = 0;
             --currentLocalStepNumber;
             currentStep = findPreviousStep(currentStep);
@@ -1772,12 +1787,19 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         resetAlphaSelectionBuffer();
-        if(currentSoftmenuScrolls()) {
+        if(getSystemFlag(FLAG_ALPHA) && alphaCase == AC_UPPER) {
+          alphaCase = AC_LOWER;
+          if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_ALPHA_OMEGA || softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_ALPHAINTL) {
+            softmenuStack[0].softmenuId++; // Switch to the lower case menu
+          }
+        }
+        else if(currentSoftmenuScrolls()) {
           menuDown();
         }
         else {
           if(aimBuffer[0] != 0) {
-            pemCloseNumberInput();
+            if(getSystemFlag(FLAG_ALPHA)) pemCloseAlphaInput();
+            else                          pemCloseNumberInput();
             aimBuffer[0] = 0;
             --currentLocalStepNumber;
             currentStep = findPreviousStep(currentStep);

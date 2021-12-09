@@ -35,6 +35,7 @@
 #include "realType.h"
 #include "registers.h"
 #include "screen.h"
+#include "softmenus.h"
 #include "sort.h"
 #include <stdlib.h>
 
@@ -285,6 +286,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
     //
     uint32_t currentStepNumber, firstDisplayedStepNumber;
     uint16_t line, firstLine;
+    uint16_t stepsThatWouldBeDisplayed = 7;
     uint8_t *step, *nextStep;
     bool_t lblOrEnd;
 
@@ -359,6 +361,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
         xcopy(tmpString + offset + 300, tmpString + 2100 + stringByteLength(tmpString + offset), stringByteLength(tmpString + 2100 + stringByteLength(tmpString + offset)) + 1);
         offset += 300;
       }
+      stepsThatWouldBeDisplayed -= numberOfExtraLines;
 
       showString(tmpString, &standardFont, lblOrEnd ? 42 : 62, Y_POSITION_OF_REGISTER_T_LINE + 21 * line, vmNormal,  false, false);
       offset = 300;
@@ -382,6 +385,17 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
         break;
       }
       step = nextStep;
+    }
+
+    if(currentLocalStepNumber >= (firstDisplayedLocalStepNumber + stepsThatWouldBeDisplayed)) {
+      firstDisplayedLocalStepNumber = currentLocalStepNumber - stepsThatWouldBeDisplayed + 1;
+      firstDisplayedStep = programList[currentProgramNumber - 1].instructionPointer;
+      for(uint16_t i = 1; i < firstDisplayedLocalStepNumber; ++i) {
+        firstDisplayedStep = findNextStep(firstDisplayedStep);
+      }
+      clearScreen();
+      showSoftmenuCurrentPart();
+      fnPem(NOPARAM);
     }
   #endif // TESTSUITE_BUILD
 }

@@ -534,12 +534,13 @@ void pemCloseNumberInput(void) {
 }
 
 void insertStepInProgram(int16_t func) {
-  if(indexOfItems[func].func == addItemToBuffer || (aimBuffer[0] != 0 && (func == ITM_CHS || func == ITM_toINT || (nimNumberPart == NP_INT_BASE && (func == ITM_YX || func == ITM_LN || func == ITM_RCL))))) {
+  if(indexOfItems[func].func == addItemToBuffer || (aimBuffer[0] != 0 && (func == ITM_CHS || func == ITM_CC || func == ITM_toINT || (nimNumberPart == NP_INT_BASE && (func == ITM_YX || func == ITM_LN || func == ITM_RCL))))) {
     pemAddNumber(func);
     return;
   }
-  if(aimBuffer[0] != 0) {
+  if(!tam.alpha && aimBuffer[0] != 0) {
     pemCloseNumberInput();
+    aimBuffer[0] = 0;
   }
   switch(func) {
     case ITM_GTOP:           // 1482

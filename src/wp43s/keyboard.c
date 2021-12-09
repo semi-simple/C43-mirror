@@ -820,6 +820,10 @@
         else if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_TIMER) {
           keyActionProcessed = true;
         }
+        else if(calcMode == CM_PEM && item == ITM_dotD && aimBuffer[0] == 0) {
+          insertStepInProgram(ITM_toREAL);
+          keyActionProcessed = true;
+        }
         break;
 
       case ITM_ENTER:
@@ -1020,6 +1024,10 @@
               }
               else if(aimBuffer[0] != 0 && (item == ITM_toINT || (nimNumberPart == NP_INT_BASE && item == ITM_RCL))) {
                 pemAddNumber(item);
+                keyActionProcessed = true;
+              }
+              else if(item == ITM_RS) {
+                insertStepInProgram(ITM_STOP);
                 keyActionProcessed = true;
               }
               break;
@@ -1456,6 +1464,12 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
         mimAddNumber(ITM_CC);
         break;
 
+      case CM_PEM:
+        if(aimBuffer[0] != 0) {
+          pemAddNumber(ITM_CC);
+        }
+        break;
+
       case CM_EIM:
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
@@ -1659,7 +1673,12 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
           menuUp();
         }
         else {
-          aimBuffer[0] = 0;
+          if(aimBuffer[0] != 0) {
+            pemCloseNumberInput();
+            aimBuffer[0] = 0;
+            --currentLocalStepNumber;
+            currentStep = findPreviousStep(currentStep);
+          }
           fnBst(NOPARAM);
         }
         break;
@@ -1757,7 +1776,12 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
           menuDown();
         }
         else {
-          aimBuffer[0] = 0;
+          if(aimBuffer[0] != 0) {
+            pemCloseNumberInput();
+            aimBuffer[0] = 0;
+            --currentLocalStepNumber;
+            currentStep = findPreviousStep(currentStep);
+          }
           fnSst(NOPARAM);
         }
         break;

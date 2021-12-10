@@ -3404,7 +3404,7 @@ int main(int argc, char* argv[]) {
     *(currentStep++) =  ITM_MVAR       & 0xff;
     *(currentStep++) = STRING_LABEL_VARIABLE;
     *(currentStep++) = 1; // String length
-    *(currentStep++) = 'X';
+    *(currentStep++) = 'x';
 
     *(currentStep++) = ITM_LITERAL;
     *(currentStep++) = STRING_LONG_INTEGER;
@@ -3435,17 +3435,17 @@ int main(int argc, char* argv[]) {
     *(currentStep++) =  ITM_MVAR       & 0xff;
     *(currentStep++) = STRING_LABEL_VARIABLE;
     *(currentStep++) = 1; // String length
-    *(currentStep++) = 'X';
+    *(currentStep++) = 'x';
 
     *(currentStep++) = ITM_RCL;
     *(currentStep++) = STRING_LABEL_VARIABLE;
     *(currentStep++) = 1; // String length
-    *(currentStep++) = 'X';
+    *(currentStep++) = 'x';
 
     *(currentStep++) = ITM_RCLMULT;
     *(currentStep++) = STRING_LABEL_VARIABLE;
     *(currentStep++) = 1; // String length
-    *(currentStep++) = 'X';
+    *(currentStep++) = 'x';
 
     *(currentStep++) = ITM_LITERAL;
     *(currentStep++) = STRING_LONG_INTEGER;
@@ -11658,6 +11658,9 @@ int main(int argc, char* argv[]) {
 
     *(currentStep++) = (ITM_SQRT >> 8) | 0x80;
     *(currentStep++) =  ITM_SQRT       & 0xff;
+
+    *(currentStep++) = (ITM_atan2 >> 8) | 0x80;
+    *(currentStep++) =  ITM_atan2       & 0xff;
 
     *(currentStep++) = (ITM_END >> 8) | 0x80;
     *(currentStep++) =  ITM_END       & 0xff;

@@ -265,7 +265,7 @@
       return;
     }
     else if(item == ITM_alpha) {
-      if(!tam.digitsSoFar && !tam.dot && !valueParameter && (tam.mode == TM_STORCL || tam.mode == TM_M_DIM)) {
+      if(!tam.digitsSoFar && !tam.dot && !valueParameter && (tam.mode == TM_STORCL || tam.mode == TM_M_DIM || tam.function == ITM_MVAR)) {
         tam.alpha = true;
         setSystemFlag(FLAG_ALPHA);
         aimBuffer[0] = 0;
@@ -475,7 +475,7 @@
     }
     else {
       char *buffer = (forcedVar ? forcedVar : aimBuffer);
-      bool_t tryAllocate = ((tam.function == ITM_STO || tam.function == ITM_M_DIM) && !tam.indirect);
+      bool_t tryAllocate = ((tam.function == ITM_STO || tam.function == ITM_M_DIM || tam.function == ITM_MVAR) && !tam.indirect);
       int16_t value;
       if(tam.mode == TM_NEWMENU) {
         value = 1;

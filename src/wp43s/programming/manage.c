@@ -649,15 +649,15 @@ void pemCloseNumberInput(void) {
 }
 
 void insertStepInProgram(int16_t func) {
-  if(func == ITM_AIM || getSystemFlag(FLAG_ALPHA)) {
+  if(func == ITM_AIM || (!tam.mode && getSystemFlag(FLAG_ALPHA))) {
     pemAlpha(func);
     return;
   }
-  if(indexOfItems[func].func == addItemToBuffer || (aimBuffer[0] != 0 && (func == ITM_CHS || func == ITM_CC || func == ITM_toINT || (nimNumberPart == NP_INT_BASE && (func == ITM_YX || func == ITM_LN || func == ITM_RCL))))) {
+  if(indexOfItems[func].func == addItemToBuffer || (!tam.mode && aimBuffer[0] != 0 && (func == ITM_CHS || func == ITM_CC || func == ITM_toINT || (nimNumberPart == NP_INT_BASE && (func == ITM_YX || func == ITM_LN || func == ITM_RCL))))) {
     pemAddNumber(func);
     return;
   }
-  if(!tam.alpha && aimBuffer[0] != 0) {
+  if(!tam.mode && !tam.alpha && aimBuffer[0] != 0) {
     pemCloseNumberInput();
     aimBuffer[0] = 0;
   }

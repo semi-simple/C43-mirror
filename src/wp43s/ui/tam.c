@@ -482,7 +482,7 @@
       }
       else if(tam.mode == TM_LABEL || tam.mode == TM_SOLVE) {
         value = findNamedLabel(buffer);
-        if(value == INVALID_VARIABLE) {
+        if(value == INVALID_VARIABLE && tam.function != ITM_LBL) {
           displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             sprintf(errorMessage, "string '%s' is not a named label", buffer);

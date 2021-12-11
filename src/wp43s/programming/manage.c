@@ -567,7 +567,12 @@ void pemAddNumber(int16_t item) {
         break;
     }
   }
-  addItemToNimBuffer(item);
+  if(item == ITM_BACKSPACE && ((aimBuffer[0] == '+' && aimBuffer[1] != 0 && aimBuffer[2] == 0) || aimBuffer[1] == 0)) {
+    aimBuffer[0] = 0;
+  }
+  else {
+    addItemToNimBuffer(item);
+  }
   clearSystemFlag(FLAG_ALPHA);
 
   if(aimBuffer[0] != '!') {

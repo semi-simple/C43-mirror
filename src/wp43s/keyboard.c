@@ -277,7 +277,7 @@
             // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two
-            if(calcMode == CM_PEM) {
+            if(calcMode == CM_PEM && !tam.mode) {
               if(getSystemFlag(FLAG_ALPHA)) {
                 pemAlpha(item);
               }

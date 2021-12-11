@@ -583,6 +583,7 @@ void decodeOneStep(uint8_t *step) {
         case ITM_TDISP:          //  1619
         case ITM_TONE:           //  1624
         case ITM_WSIZE:          //  1638
+        case ITM_toINT:          //  1687
         case ITM_SHUFFLE:        //  1694
         case ITM_PRINTERCHAR:    //  1709
         case ITM_PRINTERDLAY:    //  1710
@@ -1175,7 +1176,6 @@ void decodeOneStep(uint8_t *step) {
         case ITM_dn:             //  1684
         case ITM_toHR:           //  1685
         case ITM_toHMS:          //  1686
-        case ITM_toINT:          //  1687
         case ITM_toPOL:          //  1688
         case ITM_MPItoR:         //  1689
         case ITM_RtoMPI:         //  1690

@@ -329,12 +329,22 @@
       return;
     }
     else if(tam.function == ITM_toINT && item == ITM_REG_I) {
-      fnIp(NOPARAM);
+      if(calcMode == CM_PEM) {
+        insertStepInProgram(ITM_IP);
+      }
+      else {
+        fnIp(NOPARAM);
+      }
       tamLeaveMode();
       return;
     }
     else if(tam.function == ITM_toINT && item == ITM_alpha) {
-      fnFp(NOPARAM);
+      if(calcMode == CM_PEM) {
+        insertStepInProgram(ITM_FP);
+      }
+      else {
+        fnFp(NOPARAM);
+      }
       tamLeaveMode();
       return;
     }
@@ -440,7 +450,7 @@
         if(tam.dot) {
           value += FIRST_LOCAL_REGISTER;
         }
-        if(tam.indirect) {
+        if(tam.indirect && calcMode != CM_PEM) {
           value = indirectAddressing(value, (tam.mode == TM_STORCL || tam.mode == TM_M_DIM), min, max);
           run = (lastErrorCode == 0);
         }
@@ -507,7 +517,7 @@
         insertStepInProgram(tamOperation());
       }
       if(tam.mode != TM_NEWMENU) aimBuffer[0] = 0;
-      if(tam.indirect && value != INVALID_VARIABLE) {
+      if(tam.indirect && value != INVALID_VARIABLE && calcMode != CM_PEM) {
         value = indirectAddressing(value, (tam.mode == TM_STORCL || tam.mode == TM_M_DIM), min, max);
         if(lastErrorCode != 0) {
           value = INVALID_VARIABLE;

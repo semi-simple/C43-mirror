@@ -2583,7 +2583,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1779 */  { fnRecallTimerApp,             TM_REGISTER,                 "RCL",                                         "",                                          (0 << TAM_MAX_BITS) |    99, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 
 /* 1780 */  { fnEqSolvGraph,                EQ_SOLVE,                    "xSLV",                                        "xSLV",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
-/* 1781 */  { fnEqSolvGraph,                EQ_PLOT,                     "xPLT",                                        "xPLT",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
+/* 1781 */  { fnEqSolvGraph,                EQ_PLOT,                     "Draw",                                        "Draw",                                        (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1782 */  { itemToBeCoded,                NOPARAM,                     "GRAPH",                                       "GRAPH",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1783 */  { graph_eqn,                    1,                           "rePLT",                                       "rePLT",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 

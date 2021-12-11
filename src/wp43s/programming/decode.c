@@ -540,7 +540,6 @@ void decodeOneStep(uint8_t *step) {
         case ITM_FDQX:           //  1476
         case ITM_INDEX:          //  1486
         case ITM_LBLQ:           //  1503
-        case ITM_MVAR:           //  1524
         case ITM_PGMINT:         //  1546
         case ITM_PGMSLV:         //  1547
         case ITM_SOLVE:          //  1608
@@ -602,6 +601,7 @@ void decodeOneStep(uint8_t *step) {
         case ITM_RCLMAX:         //  1432
         case ITM_RCLMIN:         //  1462
         case ITM_KTYP:           //  1501
+        case ITM_MVAR:           //  1524
         case ITM_STOMIN:         //  1545
         case ITM_PUTK:           //  1556
         case ITM_RCLCFG:         //  1561

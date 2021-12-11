@@ -327,7 +327,7 @@ uint8_t *findNextStep(uint8_t *step) {
       return step;
 
     case ITM_LITERAL:     // 114
-       return countLiteralBytes(step);
+      return countLiteralBytes(step);
 
     default:
       if((item8 & 0x80) == 0) {

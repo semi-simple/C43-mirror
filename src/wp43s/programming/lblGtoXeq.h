@@ -22,7 +22,19 @@
 
 #include <stdint.h>
 
-void fnGoto   (uint16_t label);
-void fnGotoDot(uint16_t globalStepNumber);
+void   fnGoto        (uint16_t label);
+void   fnGotoDot     (uint16_t globalStepNumber);
+
+/**
+ * Executes one step
+ *
+ * \param[in]  step   Instruction pointer
+ * \return            -2 if XEQ,
+ *                    -1 if GTO,
+ *                    0 if the end of the routine reached,
+ *                    1 if the routine continues,
+ *                    2 if the next step shall be skipped
+ */
+int16_t executeOneStep(uint8_t *step);
 
 #endif // LBLGTOXEQ_H

@@ -26,7 +26,9 @@
 #include "items.h"
 #include "mathematics/integerPart.h"
 #include "mathematics/iteration.h"
+#include "programming/lblGtoXeq.h"
 #include "programming/manage.h"
+#include "programming/nextStep.h"
 #include "realType.h"
 #include "registers.h"
 #include "solver/solve.h"
@@ -42,7 +44,9 @@ static void _sumProdIteration(uint16_t label) {
   //
   uint8_t *step = labelList[label - FIRST_LABEL].instructionPointer;
   lastErrorCode = ERROR_NONE;
-  while(executeStep_test(&step)) {}
+  while(executeOneStep(step)) {
+    step = findNextStep(step);
+  }
 }
 
 static void _programmableSumProd(uint16_t label, bool_t prod) {

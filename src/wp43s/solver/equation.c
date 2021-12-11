@@ -92,7 +92,7 @@ void fnEqNew(uint16_t unusedButMandatoryParameter) {
       currentFormula = 0;
       allFormulae[0].pointerToFormulaData = WP43S_NULL;
       allFormulae[0].sizeInBlocks = 0;
-      graphVariable =0;
+      graphVariable = 0;
     }
     else {
       displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -114,7 +114,7 @@ void fnEqNew(uint16_t unusedButMandatoryParameter) {
       wp43sFree(allFormulae, TO_BLOCKS(sizeof(formulaHeader_t)) * (numberOfFormulae));
       allFormulae = newPtr;
       ++numberOfFormulae;
-      graphVariable =0;
+      graphVariable = 0;
     }
     else {
       displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -196,7 +196,7 @@ void deleteEquation(uint16_t equationId) {
       allFormulae = NULL;
     if(numberOfFormulae > 0 && currentFormula >= numberOfFormulae)
       currentFormula = numberOfFormulae - 1;
-    graphVariable =0;
+    graphVariable = 0;
   }
 }
 

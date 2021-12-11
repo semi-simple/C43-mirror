@@ -175,7 +175,6 @@ uint16_t               currentSolverStatus;
 uint16_t               currentSolverProgram;
 uint16_t               currentSolverVariable;
 uint16_t               currentSolverNestingDepth;
-uint16_t               graphVariable;
 uint16_t               numberOfFormulae;
 uint16_t               currentFormula;
 uint16_t               numberOfUserMenus;
@@ -187,6 +186,7 @@ uint16_t               userKeyLabelSize;
 
 int32_t                numberOfFreeMemoryRegions;
 int32_t                lgCatalogSelection;
+int32_t                graphVariable;
 
 uint32_t               firstGregorianDay;
 uint32_t               denMax;

@@ -138,30 +138,19 @@ void fnPlot(uint16_t unusedButMandatoryParameter) {
 
 static void initialize_function(void){
   #ifndef TESTSUITE_BUILD
-    calcRegister_t regStats;
+    calcRegister_t regStats = 0;
     if(graphVariable > 0) {
       regStats = graphVariable;
       reallocateRegister(regStats,  dtReal34, REAL34_SIZE, amNone);
-    }
-    else {
-  	  regStats = findNamedVariable("x");
-  	  if(regStats == INVALID_VARIABLE) {
-  	    allocateNamedVariable("x", dtReal34, REAL34_SIZE);
-        regStats = findNamedVariable("x");
-      }
-	  }
-    if(regStats != INVALID_VARIABLE) {
-      doubleToXRegisterReal34(0.0);
-      fnStore(regStats);                  //place X register into x
-      fnEqCalc(0);
-      fnRCL(regStats);
     }
   #endif //TESTSUITE_BUILD
 }
 
 #ifndef TESTSUITE_BUILD
   static void execute_rpn_function(void){
-    calcRegister_t regStats = findNamedVariable("x");
+    if(graphVariable <= 0) return;
+
+    calcRegister_t regStats = graphVariable;
     if(regStats != INVALID_VARIABLE) {
       fnStore(regStats);                  //place X register into x
       fnEqCalc(0);
@@ -251,6 +240,8 @@ void check_osc(uint8_t ii){
 
 void graph_eqn(uint16_t mode) {
   #ifndef TESTSUITE_BUILD
+  if(graphVariable <= 0) return;
+
   double x; 
   char buff[100];
   runFunction(ITM_CLSTK);
@@ -309,6 +300,7 @@ void graph_eqn(uint16_t mode) {
 
 static void graph_solver() {         //Input parameters in registers SREG_STARTX0, SREG_STARTX1
   #ifndef TESTSUITE_BUILD
+  if(graphVariable <= 0) return;
 
   calcRegister_t SREG_TMP  = __TMP ;
   calcRegister_t SREG_Xold = __Xold; //: x old difference
@@ -329,6 +321,9 @@ static void graph_solver() {         //Input parameters in registers SREG_STARTX
   calcRegister_t SREG_STARTX1 = __STARTX1;
   calcRegister_t SREG_TICKS = __TICKS; 
   
+  runFunction(ITM_CLSTK);
+  runFunction(ITM_RAD);
+  clearSystemFlag(FLAG_SSIZE8);
   setSystemFlag(FLAG_CPXRES);
   int16_t ix,ixd;
   int16_t oscillations = 0; 
@@ -337,6 +332,8 @@ static void graph_solver() {         //Input parameters in registers SREG_STARTX
   bool_t checkzero = false;
   osc = 0;
   DXR = 0, DYR = 0, DXI = 0, DYI = 0;
+  ix = 0; ixd = 0;
+  int16_t kicker = 0;
 
   // Initialize all temporary registers
   // Registers are being used in the DEMO data programs
@@ -385,46 +382,38 @@ static void graph_solver() {         //Input parameters in registers SREG_STARTX
   execute_rpn_function();                               
   copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y1); 
 
-/*
-  fnRCL(SREG_Y1);
-  fnRCL(SREG_Y0);
-  runFunction(ITM_SUB);        //dy=y1-y0
-  fnRCL(SREG_X1);
-  fnRCL(SREG_X0);
-  runFunction(ITM_SUB);        //dx=x1-x0
-  divFunction(ADD_RAN, SREG_TOL);               //dy/dx
-  fnRCL(SREG_Y1);
-  runFunction(ITM_XexY);
-  divFunction(ADD_RAN, SREG_TOL);               //Y1 / (dy/dx)
 
-  fnRCL(SREG_X1);
-  runFunction(ITM_MULT);
-  fnStore(SREG_X2);
-  execute_rpn_function();                               
-  copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y2); 
-*/ //replaced with simplified section below
+  checkzero = checkzero ||   regIsLowerThanTol(SREG_Y0,SREG_TOL);
+  if(checkzero) {
+    copySourceRegisterToDestRegister(SREG_Y0,SREG_Y2); 
+    copySourceRegisterToDestRegister(SREG_X0,SREG_X2); 
+  } else {
+    checkzero = checkzero ||   regIsLowerThanTol(SREG_Y1,SREG_TOL);
+    if(checkzero) {
+      copySourceRegisterToDestRegister(SREG_Y1,SREG_Y2); 
+      copySourceRegisterToDestRegister(SREG_X1,SREG_X2); 
+    }
+  }
 
-  fnRCL(SREG_X1);
-  fnRCL(SREG_X0);
-  runFunction(ITM_SUB);                         //dx=x1-x0
-  fnRCL(SREG_Y1);
-  fnRCL(SREG_Y0);
-  runFunction(ITM_SUB);                         //dy=y1-y0
-  divFunction(ADD_RAN, SREG_TOL);               //dx/dy
-  fnRCL(SREG_Y1);
-  runFunction(ITM_MULT);                        //deltaX = x1 - x2 = Y1 / (dy/dx) = Y1 x 1/(dy/dx) = Y1 x dx/dy
+  if(!checkzero) {
+    fnRCL(SREG_X1);
+    fnRCL(SREG_X0);
+    runFunction(ITM_SUB);                         //dx=x1-x0
+    fnRCL(SREG_Y1);
+    fnRCL(SREG_Y0);
+    runFunction(ITM_SUB);                         //dy=y1-y0
+    divFunction(ADD_RAN, SREG_TOL);               //dx/dy
+    fnRCL(SREG_Y1);
+    runFunction(ITM_MULT);                        //deltaX = x1 - x2 = Y1 / (dy/dx) = Y1 x 1/(dy/dx) = Y1 x dx/dy
 
-  fnRCL(SREG_X1);
-  runFunction(ITM_XexY);
-  runFunction(ITM_SUB);
-  fnStore(SREG_X2);
-  execute_rpn_function();                               
-  copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y2); 
+    fnRCL(SREG_X1);
+    runFunction(ITM_XexY);
+    runFunction(ITM_SUB);
+    fnStore(SREG_X2);
+    execute_rpn_function();                               
+    copySourceRegisterToDestRegister(REGISTER_Y,SREG_Y2); 
+  }
 
-
-
-  ix = 0; ixd = 0;
-  int16_t kicker = 0;
 
                         #if ((defined VERBOSE_SOLVER00) || (defined VERBOSE_SOLVER0) || (defined VERBOSE_SOLVER1) || (defined VERBOSE_SOLVER2)) && (defined PC_BUILD)
                           printf("INIT:   ix=%d \n",ix); 
@@ -435,12 +424,6 @@ static void graph_solver() {         //Input parameters in registers SREG_STARTX
                           printRegisterToConsole(SREG_Y1,"Init Y1= ","\n");
                           printRegisterToConsole(SREG_Y2,"Init Y2= ","\n");
                         #endif //
-
-  //Start STAT/GRAPH memory
-  runFunction(ITM_CLSTK);
-  runFunction(ITM_RAD);
-
-  clearSystemFlag(FLAG_SSIZE8);
 
 
 //###############################################################################################################
@@ -968,7 +951,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
     runFunction(ITM_ADD);
 
   } else {
-    fnStrtoX(" f(x)= ");
+    fnStrtoX(" f(x)=");
     fnRCL(SREG_Y2);
     runFunction(ITM_ADD);
     fnStrtoX(" at x= ");
@@ -1005,18 +988,13 @@ void fnEqSolvGraph (uint16_t func) {
     refreshLcd(NULL);
   #endif // DMCP_BUILD
 
-
-  if(!(currentSolverStatus & SOLVER_STATUS_READY_TO_EXECUTE)) return;
+//  if(!(currentSolverStatus & SOLVER_STATUS_READY_TO_EXECUTE)) return;
 
   fnClSigma(0);
   statGraphReset();
 
   //initialize x
   currentSolverStatus &= ~SOLVER_STATUS_READY_TO_EXECUTE;
-  calcRegister_t regStats = findNamedVariable("x");
-  if(regStats == INVALID_VARIABLE) {
-    allocateNamedVariable("x", dtReal34, REAL34_SIZE);
-  }
 
   switch (func) {
      case EQ_SOLVE:{

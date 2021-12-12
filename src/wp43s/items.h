@@ -1844,8 +1844,8 @@
 #define ITM_TIMER_RESET               1778
 #define ITM_TIMER_RCL                 1779
 
-#define ITM_XSLV                      1780
-#define ITM_XPLT                      1781
+#define ITM_CPXSLV                    1780
+#define ITM_DRAW                      1781
 #define MNU_GRAPH                     1782
 #define ITM_REPLT                     1783
 

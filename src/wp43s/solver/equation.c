@@ -858,9 +858,9 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           bufPtr += stringByteLength(strPtr) + 1;
           bufPtr[0] = 0;
           if(tmpVal == 2) {   // If the 4th variable has just been added, add Draw and Calc.
-            _menuItem(ITM_XSLV, bufPtr);
+            _menuItem(ITM_CPXSLV, bufPtr);
             bufPtr += stringByteLength(bufPtr) + 1;
-            _menuItem(ITM_XPLT, bufPtr);
+            _menuItem(ITM_DRAW, bufPtr);
             bufPtr += stringByteLength(bufPtr) + 1;
             _menuItem(ITM_CALC, bufPtr);
           }
@@ -1215,9 +1215,9 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
       *(bufPtr++) = 0;
     }
     if(tmpVal == 3) {
-      _menuItem(ITM_XSLV, bufPtr);
+      _menuItem(ITM_CPXSLV, bufPtr);
       bufPtr += stringByteLength(bufPtr) + 1;
-      _menuItem(ITM_XPLT, bufPtr);
+      _menuItem(ITM_DRAW, bufPtr);
       bufPtr += stringByteLength(bufPtr) + 1;
       _menuItem(ITM_CALC, bufPtr);
     }

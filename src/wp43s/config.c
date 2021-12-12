@@ -980,6 +980,8 @@ void fnReset(uint16_t confirmation) {
     numberOfFormulae = 0;
     currentFormula = 0;
 
+    graphVariable = 0;
+
     // Timer application
     timerCraAndDeciseconds = 0x80u;
     timerValue             = 0u;
@@ -997,7 +999,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_107_04_KEY"
+#define VERSION1 "_107_06 NewKEY Draw/Solve"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2

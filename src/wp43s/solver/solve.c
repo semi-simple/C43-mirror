@@ -170,8 +170,6 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter) {
       graphVariable = -regist;
     } else if(graphVariable < 0 && -graphVariable == regist) {
         graphVariable = regist;
-//        reallyRunFunction(ITM_XPLT, EQ_PLOT);
-//        fnEqSolvGraph(EQ_PLOT);
       } else graphVariable = -regist;
     }
 #endif /* TESTSUITE_BUILD */

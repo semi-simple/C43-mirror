@@ -1486,16 +1486,18 @@
         closeNim();
       }
 
-      alphaCase = AC_UPPER;
-      nextChar = NC_NORMAL;
+      if(calcMode != CM_PEM || !getSystemFlag(FLAG_ALPHA)) {
+        alphaCase = AC_UPPER;
+        nextChar = NC_NORMAL;
 
-      clearSystemFlag(FLAG_ALPHA);
-      resetAlphaSelectionBuffer();
+        clearSystemFlag(FLAG_ALPHA);
+        resetAlphaSelectionBuffer();
 
-      #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
-        if(catalog != CATALOG_MVAR)
-          calcModeAimGui();
-      #endif // PC_BUILD && (SCREEN_800X480 == 0)
+        #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+          if(catalog != CATALOG_MVAR)
+            calcModeAimGui();
+        #endif // PC_BUILD && (SCREEN_800X480 == 0)
+      }
     }
   }
 
@@ -1529,18 +1531,23 @@
       return;
     }
 
-    calcMode = CM_NIM;
     clearSystemFlag(FLAG_ALPHA);
+    if(calcMode != CM_PEM && calcMode != CM_MIM) {
+      calcMode = CM_NIM;
 
-    liftStack();
-    real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+      liftStack();
+      real34Zero(REGISTER_REAL34_DATA(REGISTER_X));
+    }
 
     aimBuffer[0] = 0;
     hexDigits = 0;
 
-    clearRegisterLine(NIM_REGISTER_LINE, true, true);
-    xCursor = 1;
-    cursorEnabled = true;
-    cursorFont = &numericFont;
+    if(calcMode != CM_PEM) {
+      clearRegisterLine(NIM_REGISTER_LINE, true, true);
+      xCursor = 1;
+      yCursor = Y_POSITION_OF_NIM_LINE;
+      cursorEnabled = true;
+      cursorFont = &numericFont;
+    }
   }
 #endif // !TESTSUITE_BUILD

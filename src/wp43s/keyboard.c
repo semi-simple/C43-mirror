@@ -277,9 +277,20 @@
             // If we are in the catalog then a normal key press should affect the Alpha Selection Buffer to choose
             // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
             // Use this variable to distinguish between the two
-            fnKeyInCatalog = 1;
-            addItemToBuffer(item);
-            fnKeyInCatalog = 0;
+            if(calcMode == CM_PEM && !tam.mode) {
+              if(getSystemFlag(FLAG_ALPHA)) {
+                pemAlpha(item);
+              }
+              else {
+                pemAddNumber(item);
+              }
+              hourGlassIconEnabled = false;
+            }
+            else {
+              fnKeyInCatalog = 1;
+              addItemToBuffer(item);
+              fnKeyInCatalog = 0;
+            }
             if(calcMode == CM_EIM) {
               while(softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_EQ_EDIT) {
                 popSoftmenu();
@@ -389,7 +400,18 @@
             return;
           }
           else if(calcMode == CM_PEM && catalog && catalog != CATALOG_MVAR) { // TODO: is that correct
-            runFunction(item);
+            if(tam.mode) {
+              const char *itmLabel = dynmenuGetLabel(dynamicMenuItem);
+              uint16_t nameLength = stringByteLength(itmLabel);
+              xcopy(aimBuffer, itmLabel, nameLength + 1);
+              tam.alpha = true;
+              insertStepInProgram(tamOperation());
+              tamLeaveMode();
+              hourGlassIconEnabled = false;
+            }
+            else {
+              runFunction(item);
+            }
             refreshScreen();
             return;
           }
@@ -496,7 +518,7 @@
       return ITM_NOP;
     }
 
-    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR && calcMode != CM_NIM) || calcMode == CM_EIM || tam.alpha || (calcMode == CM_ASSIGN && (previousCalcMode == CM_AIM || previousCalcMode == CM_EIM))) {
+    if(calcMode == CM_AIM || (catalog && catalog != CATALOG_MVAR && calcMode != CM_NIM) || calcMode == CM_EIM || tam.alpha || (calcMode == CM_ASSIGN && (previousCalcMode == CM_AIM || previousCalcMode == CM_EIM)) || (calcMode == CM_PEM && getSystemFlag(FLAG_ALPHA))) {
       result = shiftF ? key->fShiftedAim :
                shiftG ? key->gShiftedAim :
                         key->primaryAim;
@@ -803,6 +825,10 @@
         else if(calcMode == CM_REGISTER_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_FONT_BROWSER || calcMode == CM_TIMER) {
           keyActionProcessed = true;
         }
+        else if(calcMode == CM_PEM && item == ITM_dotD && aimBuffer[0] == 0) {
+          insertStepInProgram(ITM_toREAL);
+          keyActionProcessed = true;
+        }
         break;
 
       case ITM_ENTER:
@@ -842,7 +868,7 @@
           calcMode = previousCalcMode;
           keyActionProcessed = true;
         }
-        else if(catalog && catalog != CATALOG_MVAR) {
+        else if((calcMode != CM_PEM || !getSystemFlag(FLAG_ALPHA)) && catalog && catalog != CATALOG_MVAR) {
           if(ITM_A <= item && item <= ITM_Z && alphaCase == AC_LOWER) {
             addItemToBuffer(item + 26);
             keyActionProcessed = true;
@@ -999,6 +1025,14 @@
               }
               else if(item == ITM_OFF) {
                 fnOff(NOPARAM);
+                keyActionProcessed = true;
+              }
+              else if(aimBuffer[0] != 0 && !getSystemFlag(FLAG_ALPHA) && (item == ITM_toINT || (nimNumberPart == NP_INT_BASE && item == ITM_RCL))) {
+                pemAddNumber(item);
+                keyActionProcessed = true;
+              }
+              else if(item == ITM_RS) {
+                insertStepInProgram(ITM_STOP);
                 keyActionProcessed = true;
               }
               break;
@@ -1319,6 +1353,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           break;
         }
 
+        aimBuffer[0] = 0;
         leavePem();
         calcModeNormal();
         saveForUndo();
@@ -1434,6 +1469,12 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
         mimAddNumber(ITM_CC);
         break;
 
+      case CM_PEM:
+        if(aimBuffer[0] != 0 && !getSystemFlag(FLAG_ALPHA)) {
+          pemAddNumber(ITM_CC);
+        }
+        break;
+
       case CM_EIM:
       case CM_REGISTER_BROWSER:
       case CM_FLAG_BROWSER:
@@ -1526,9 +1567,17 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         break;
 
       case CM_PEM:
-        nextStep = findNextStep(currentStep);
-        if(*nextStep != 255 || *(nextStep + 1) != 255) { // Not the last END
-          deleteStepsFromTo(currentStep, nextStep);
+        if(getSystemFlag(FLAG_ALPHA)) {
+          pemAlpha(ITM_BACKSPACE);
+        }
+        else if(aimBuffer[0] == 0) {
+          nextStep = findNextStep(currentStep);
+          if(*currentStep != 255 || *(currentStep + 1) != 255) { // Not the last END
+            deleteStepsFromTo(currentStep, nextStep);
+          }
+        }
+        else {
+          pemAddNumber(ITM_BACKSPACE);
         }
         break;
 
@@ -1628,10 +1677,23 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         resetAlphaSelectionBuffer();
-        if(currentSoftmenuScrolls()) {
+        if(getSystemFlag(FLAG_ALPHA) && alphaCase == AC_LOWER) {
+          alphaCase = AC_UPPER;
+          if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_alpha_omega || softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_ALPHAintl) {
+            softmenuStack[0].softmenuId--; // Switch to the upper case menu
+          }
+        }
+        else if(currentSoftmenuScrolls()) {
           menuUp();
         }
         else {
+          if(aimBuffer[0] != 0) {
+            if(getSystemFlag(FLAG_ALPHA)) pemCloseAlphaInput();
+            else                          pemCloseNumberInput();
+            aimBuffer[0] = 0;
+            --currentLocalStepNumber;
+            currentStep = findPreviousStep(currentStep);
+          }
           fnBst(NOPARAM);
         }
         break;
@@ -1725,10 +1787,23 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
 
       case CM_PEM:
         resetAlphaSelectionBuffer();
-        if(currentSoftmenuScrolls()) {
+        if(getSystemFlag(FLAG_ALPHA) && alphaCase == AC_UPPER) {
+          alphaCase = AC_LOWER;
+          if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_ALPHA_OMEGA || softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_ALPHAINTL) {
+            softmenuStack[0].softmenuId++; // Switch to the lower case menu
+          }
+        }
+        else if(currentSoftmenuScrolls()) {
           menuDown();
         }
         else {
+          if(aimBuffer[0] != 0) {
+            if(getSystemFlag(FLAG_ALPHA)) pemCloseAlphaInput();
+            else                          pemCloseNumberInput();
+            aimBuffer[0] = 0;
+            --currentLocalStepNumber;
+            currentStep = findPreviousStep(currentStep);
+          }
           fnSst(NOPARAM);
         }
         break;

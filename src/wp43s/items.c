@@ -619,6 +619,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnExecute                   (uint16_t unusedButMandatoryParameter) {}
   void fnReturn                    (uint16_t unusedButMandatoryParameter) {}
   void fnRunProgram                (uint16_t unusedButMandatoryParameter) {}
+  void fnStopProgram               (uint16_t unusedButMandatoryParameter) {}
   void fnRegClr                    (uint16_t unusedButMandatoryParameter) {}
   void fnRegCopy                   (uint16_t unusedButMandatoryParameter) {}
   void fnRegSort                   (uint16_t unusedButMandatoryParameter) {}
@@ -828,7 +829,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /*   67 */  { fn10Pow,                      NOPARAM,                     "10" STD_SUP_x,                                "10" STD_SUP_x,                                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /*   68 */  { fnLog2,                       NOPARAM,                     "lb",                                          "lb x",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /*   69 */  { fnLn,                         NOPARAM,                     "ln",                                          "ln",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
-/*   70 */  { itemToBeCoded,                NOPARAM,                     "STOP",                                        "R/S",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/*   70 */  { fnStopProgram,                NOPARAM,                     "STOP",                                        "R/S",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /*   71 */  { fnLog10,                      NOPARAM,                     "lg",                                          "lg",                                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /*   72 */  { fnLogXY,                      NOPARAM,                     "log" STD_SUB_x "y",                           "log" STD_SUB_x "y",                           (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /*   73 */  { fnInvert,                     NOPARAM,                     "1/x",                                         "1/x",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},

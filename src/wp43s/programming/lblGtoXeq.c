@@ -220,7 +220,7 @@ void fnReturn(uint16_t skip) {
 
   /* A subroutine is running */
   if(currentSubroutineLevel > 0) {
-    uint16_t returnGlobalStepNumber = currentLocalStepNumber + programList[currentProgramNumber - 1].step; // the next step
+    uint16_t returnGlobalStepNumber = currentReturnLocalStep + programList[currentReturnProgramNumber - 1].step; // the next step
     fnGotoDot(returnGlobalStepNumber);
     if(skip > 0 && (*currentStep != ((ITM_END >> 8) | 0x80) || *(currentStep + 1) != (ITM_END & 0xff)) && (*currentStep != 255 || *(currentStep + 1) != 255)) {
       ++currentLocalStepNumber;
@@ -243,6 +243,12 @@ void fnReturn(uint16_t skip) {
 void fnRunProgram(uint16_t unusedButMandatoryParameter) {
   dynamicMenuItem = -1;
   runProgram();
+}
+
+
+
+void fnStopProgram(uint16_t unusedButMandatoryParameter) {
+  programIsRunning = false;
 }
 
 
@@ -1447,9 +1453,10 @@ void runProgram(void) {
     #ifdef DMCP_BUILD
       int key;
     #endif // DMCP_BUILD
+    int16_t stepsToBeAdvanced;
     uint16_t subLevel = currentSubroutineLevel;
     temporaryInformation = TI_NO_INFO;
-    int16_t stepsToBeAdvanced = executeOneStep(currentStep);
+    stepsToBeAdvanced = executeOneStep(currentStep);
     switch(stepsToBeAdvanced) {
       case -1: // Already the pointer is set
         break;
@@ -1496,7 +1503,9 @@ void runProgram(void) {
         break;
       }
     #endif // DMCP_BUILD
-    if(!programIsRunning) break;
+    if(!programIsRunning) {
+      break;
+    }
     #ifdef PC_BUILD
       refreshLcd(NULL);
     #endif // PC_BUILD

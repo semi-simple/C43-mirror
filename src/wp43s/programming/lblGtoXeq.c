@@ -22,16 +22,21 @@
 
 #include "charString.h"
 #include "constantPointers.h"
+#include "defines.h"
 #include "error.h"
+#include "flags.h"
 #include "fonts.h"
 #include "items.h"
 #include "longIntegerType.h"
+#include "memory.h"
 #include "programming/manage.h"
 #include "programming/nextStep.h"
 #include "realType.h"
 #include "registers.h"
 #include "registerValueConversions.h"
+#include "screen.h"
 #include "softmenus.h"
+#include "statusBar.h"
 #include "stack.h"
 
 #include "wp43s.h"
@@ -175,6 +180,60 @@ void fnGotoDot(uint16_t globalStepNumber) {
   else {
     firstDisplayedLocalStepNumber = 0;
     firstDisplayedStep = beginOfCurrentProgram;
+  }
+}
+
+
+
+void fnExecute(uint16_t label) {
+  if(programIsRunning) {
+    dataBlock_t *_currentSubroutineLevelData = currentSubroutineLevelData;
+    allSubroutineLevels.numberOfSubroutineLevels += 1;
+    currentSubroutineLevelData = allocWp43s(3);
+    _currentSubroutineLevelData[2].ptrToNextLevel = TO_WP43SMEMPTR(currentSubroutineLevelData);
+    currentReturnProgramNumber = currentProgramNumber;
+    currentReturnLocalStep = currentLocalStepNumber;
+    currentNumberOfLocalRegisters = 0; // No local register
+    currentNumberOfLocalFlags = 0; // No local flags
+    currentSubroutineLevel = allSubroutineLevels.numberOfSubroutineLevels - 1;
+    currentPtrToNextLevel = WP43S_NULL;
+    currentPtrToPreviousLevel = TO_WP43SMEMPTR(_currentSubroutineLevelData);
+    currentLocalFlags = NULL;
+    currentLocalRegisters = NULL;
+
+    fnGoto(label);
+    dynamicMenuItem = -1;
+  }
+  else {
+    fnGoto(label);
+    dynamicMenuItem = -1;
+    runProgram();
+  }
+}
+
+
+
+void fnReturn(uint16_t skip) {
+  const uint16_t sizeOfCurrentSubroutineLevelDataInBlocks = 3 + (currentNumberOfLocalFlags > 0 ? 1 : 0) + currentNumberOfLocalRegisters;
+  dataBlock_t *_currentSubroutineLevelData = currentSubroutineLevelData;
+
+  /* A subroutine is running */
+  if(currentSubroutineLevel > 0) {
+    uint16_t returnGlobalStepNumber = currentLocalStepNumber + programList[currentProgramNumber - 1].step; // the next step
+    fnGotoDot(returnGlobalStepNumber);
+    if(skip > 0 && (*currentStep != ((ITM_END >> 8) | 0x80) || *(currentStep + 1) != (ITM_END & 0xff)) && (*currentStep != 255 || *(currentStep + 1) != 255)) {
+      ++currentLocalStepNumber;
+      currentStep = findNextStep(currentStep);
+    }
+    // TODO: free local flags and registers
+    currentSubroutineLevelData = TO_PCMEMPTR(currentPtrToPreviousLevel);
+    freeWp43s(_currentSubroutineLevelData, sizeOfCurrentSubroutineLevelDataInBlocks);
+    currentPtrToNextLevel = WP43S_NULL;
+  }
+
+  /* Not in a subroutine */
+  else {
+    fnGotoDot(programList[currentProgramNumber - 1].step);
   }
 }
 
@@ -453,11 +512,9 @@ int16_t executeOneStep(uint8_t *step) {
       return 1;
 
     case ITM_GTO:         //   2
+    case ITM_XEQ:         //   3
       _executeOp(step, (uint16_t)item8, PARAM_LABEL);
       return -1;
-
-    //case ITM_XEQ:         //   3
-    //  return -2;
 
     case ITM_PAUSE:       //  38
       _executeOp(step, (uint16_t)item8, PARAM_NUMBER_8);
@@ -508,6 +565,7 @@ int16_t executeOneStep(uint8_t *step) {
       return temporaryInformation == TI_FALSE ? 2 : 1;
 
     case ITM_RTN:         //   4
+      runFunction(item8);
       return 0;
 
     case ITM_XEQUP0:      //  13
@@ -1340,7 +1398,11 @@ int16_t executeOneStep(uint8_t *step) {
 
         case ITM_END:            //  1458
         case ITM_RTNP1:          //  1579
+          runFunction(item16);
+          return 0;
+
         case 0x7fff:             // 32767  .END.
+          fnReturn(0);
           return 0;
 
         default: {
@@ -1350,5 +1412,73 @@ int16_t executeOneStep(uint8_t *step) {
           return 0;
         }
       }
+  }
+}
+
+
+
+void runProgram(void) {
+  lastErrorCode = ERROR_NONE;
+  hourGlassIconEnabled = true;
+  programIsRunning = true;
+  showHideHourGlass();
+  #ifdef DMCP_BUILD
+    lcd_refresh();
+  #else // !DMCP_BUILD
+    refreshLcd(NULL);
+  #endif // DMCP_BUILD
+
+  while(1) {
+    uint16_t subLevel = currentSubroutineLevel;
+    temporaryInformation = TI_NO_INFO;
+    int16_t stepsToBeAdvanced = executeOneStep(currentStep);
+    switch(stepsToBeAdvanced) {
+      case -1: // Already the pointer is set
+        break;
+
+      case 0: // End of the routine
+        if(subLevel == 0) {
+          programIsRunning = false;
+          showHideHourGlass();
+          #ifdef DMCP_BUILD
+            lcd_refresh();
+          #else // !DMCP_BUILD
+            refreshLcd(NULL);
+          #endif // DMCP_BUILD
+          return;
+        }
+        break;
+
+      default: // Find the next step
+        for(int16_t i = 0; i < stepsToBeAdvanced; ++i) {
+          if((*currentStep != ((ITM_END >> 8) | 0x80) || *(currentStep + 1) != (ITM_END & 0xff)) && (*currentStep != 255 || *(currentStep + 1) != 255)) {
+            ++currentLocalStepNumber;
+            currentStep = findNextStep(currentStep);
+          }
+          else {
+            break;
+          }
+        }
+        break;
+    }
+    if(lastErrorCode != ERROR_NONE) {
+      if(getSystemFlag(FLAG_IGN1ER)) {
+        lastErrorCode = ERROR_NONE;
+        clearSystemFlag(FLAG_IGN1ER);
+      }
+      else {
+        programIsRunning = false;
+        showHideHourGlass();
+        #ifdef DMCP_BUILD
+          lcd_refresh();
+        #else // !DMCP_BUILD
+          refreshLcd(NULL);
+        #endif // DMCP_BUILD
+        return;
+      }
+    }
+    #ifdef PC_BUILD
+      refreshLcd(NULL);
+    #endif // PC_BUILD
   }
 }

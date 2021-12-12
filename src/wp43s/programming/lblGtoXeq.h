@@ -24,17 +24,19 @@
 
 void   fnGoto        (uint16_t label);
 void   fnGotoDot     (uint16_t globalStepNumber);
+void   fnExecute     (uint16_t label);
+void   fnReturn      (uint16_t skip);
 
 /**
  * Executes one step
  *
  * \param[in]  step   Instruction pointer
- * \return            -2 if XEQ,
- *                    -1 if GTO,
+ * \return            -1 if already the pointer is set,
  *                    0 if the end of the routine reached,
  *                    1 if the routine continues,
- *                    2 if the next step shall be skipped
+ *                    > 1 if the next step shall be skipped
  */
 int16_t executeOneStep(uint8_t *step);
+void    runProgram    (void);
 
 #endif // LBLGTOXEQ_H

@@ -53,7 +53,7 @@ bool_t                 thereIsSomethingToUndo;
 bool_t                 lastProgramListEnd;
 bool_t                 programListEnd;
 bool_t                 serialIOIconEnabled;
-bool_t                 neverUsed;
+bool_t                 programIsRunning;
 
 realContext_t          ctxtRealShort;//   limited digits: used for higher speed internal real calcs
 realContext_t          ctxtReal34;   //   34 digits

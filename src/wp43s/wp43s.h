@@ -120,7 +120,7 @@
   extern bool_t                 lastProgramListEnd;
   extern bool_t                 programListEnd;
   extern bool_t                 serialIOIconEnabled;
-  extern bool_t                 neverUsed;
+  extern bool_t                 programIsRunning;
 
   extern realContext_t          ctxtRealShort;//   Limited digits: used for high speed internal calcs
   extern realContext_t          ctxtReal34;   //   34 digits

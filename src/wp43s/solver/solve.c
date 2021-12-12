@@ -178,16 +178,8 @@ static void _solverIteration(real34_t *res) {
     parseEquation(currentFormula, EQUATION_PARSER_XEQ, tmpString, tmpString + AIM_BUFFER_LENGTH);
   }
   else {
-    //
-    //  NOT A COMPLETE ENGINE: TESTING PURPOSE ONLY!!
-    //  The following decoder is minimally implemented ad hoc engine for testing of SOLVE feature.
-    //  Replace with the complete programming system when ready.
-    //
-    uint8_t *step = labelList[currentSolverProgram].instructionPointer;
-    lastErrorCode = ERROR_NONE;
-    while(executeOneStep(step)) {
-      step = findNextStep(step);
-    }
+    dynamicMenuItem = -1;
+    fnExecute(currentSolverProgram + FIRST_LABEL);
   }
   if(lastErrorCode == ERROR_OVERFLOW_PLUS_INF) {
     realToReal34(const_plusInfinity, res);

@@ -36,19 +36,6 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-static void _sumProdIteration(uint16_t label) {
-  //
-  //  NOT A COMPLETE ENGINE: TESTING PURPOSE ONLY!!
-  //  The following decoder is minimally implemented ad hoc engine for testing of SOLVE feature.
-  //  Replace with the complete programming system when ready.
-  //
-  uint8_t *step = labelList[label - FIRST_LABEL].instructionPointer;
-  lastErrorCode = ERROR_NONE;
-  while(executeOneStep(step)) {
-    step = findNextStep(step);
-  }
-}
-
 static void _programmableSumProd(uint16_t label, bool_t prod) {
   real34_t counter, result;
   bool_t finished = false;
@@ -62,7 +49,8 @@ static void _programmableSumProd(uint16_t label, bool_t prod) {
     fnIp(NOPARAM);
     fnFillStack(NOPARAM);
 
-    _sumProdIteration(label);
+    dynamicMenuItem = -1;
+    fnExecute(label);
     if(lastErrorCode != ERROR_NONE) break;
 
     fnToReal(NOPARAM);

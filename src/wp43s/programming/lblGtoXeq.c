@@ -247,6 +247,7 @@ void fnRunProgram(uint16_t unusedButMandatoryParameter) {
 
 
 
+#ifndef TESTSUITE_BUILD
 static void _getStringLabelOrVariableName(uint8_t *stringAddress) {
   uint8_t stringLength = *(uint8_t *)(stringAddress++);
   xcopy(tmpStringLabelOrVariableName, stringAddress, stringLength);
@@ -510,8 +511,12 @@ static void _putLiteral(uint8_t *literalAddress) {
     }
   }
 }
+#endif // TESTSUITE_BUILD
 
 int16_t executeOneStep(uint8_t *step) {
+#ifdef TESTSUITE_BUILD
+  return 0;
+#else // TESTSUITE_BUILD
   uint8_t item8 = *(uint8_t *)(step++);
   uint16_t item16;
 
@@ -1421,11 +1426,13 @@ int16_t executeOneStep(uint8_t *step) {
         }
       }
   }
+#endif // TESTSUITE_BUILD
 }
 
 
 
 void runProgram(void) {
+#ifndef TESTSUITE_BUILD
   lastErrorCode = ERROR_NONE;
   hourGlassIconEnabled = true;
   programIsRunning = true;
@@ -1505,4 +1512,5 @@ stopProgram:
     refreshLcd(NULL);
   #endif // DMCP_BUILD
   return;
+#endif // TESTSUITE_BUILD
 }

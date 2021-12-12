@@ -38,6 +38,7 @@
 #include "softmenus.h"
 #include "statusBar.h"
 #include "stack.h"
+#include "timer.h"
 
 #include "wp43s.h"
 
@@ -235,6 +236,13 @@ void fnReturn(uint16_t skip) {
   else {
     fnGotoDot(programList[currentProgramNumber - 1].step);
   }
+}
+
+
+
+void fnRunProgram(uint16_t unusedButMandatoryParameter) {
+  dynamicMenuItem = -1;
+  runProgram();
 }
 
 
@@ -1429,6 +1437,9 @@ void runProgram(void) {
   #endif // DMCP_BUILD
 
   while(1) {
+    #ifdef DMCP_BUILD
+      int key;
+    #endif // DMCP_BUILD
     uint16_t subLevel = currentSubroutineLevel;
     temporaryInformation = TI_NO_INFO;
     int16_t stepsToBeAdvanced = executeOneStep(currentStep);
@@ -1438,14 +1449,7 @@ void runProgram(void) {
 
       case 0: // End of the routine
         if(subLevel == 0) {
-          programIsRunning = false;
-          showHideHourGlass();
-          #ifdef DMCP_BUILD
-            lcd_refresh();
-          #else // !DMCP_BUILD
-            refreshLcd(NULL);
-          #endif // DMCP_BUILD
-          return;
+          goto stopProgram;
         }
         break;
 
@@ -1461,24 +1465,44 @@ void runProgram(void) {
         }
         break;
     }
+
     if(lastErrorCode != ERROR_NONE) {
       if(getSystemFlag(FLAG_IGN1ER)) {
         lastErrorCode = ERROR_NONE;
         clearSystemFlag(FLAG_IGN1ER);
       }
       else {
-        programIsRunning = false;
-        showHideHourGlass();
-        #ifdef DMCP_BUILD
-          lcd_refresh();
-        #else // !DMCP_BUILD
-          refreshLcd(NULL);
-        #endif // DMCP_BUILD
-        return;
+        break;
       }
     }
+    #ifdef DMCP_BUILD
+      key = key_pop();
+      if(key == 36) {
+        programIsRunning = false;
+        refreshScreen();
+        lcd_refresh();
+        fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 60000);
+        do {
+          key = key_pop();
+          sys_sleep();
+        } while(key == -1);
+        break;
+      }
+    #endif // DMCP_BUILD
+    if(!programIsRunning) break;
     #ifdef PC_BUILD
       refreshLcd(NULL);
     #endif // PC_BUILD
   }
+
+stopProgram:
+  programIsRunning = false;
+  refreshScreen();
+  #ifdef DMCP_BUILD
+    lcd_refresh();
+    fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, FAST_SCREEN_REFRESH_PERIOD+50);
+  #else // !DMCP_BUILD
+    refreshLcd(NULL);
+  #endif // DMCP_BUILD
+  return;
 }

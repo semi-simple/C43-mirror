@@ -583,6 +583,13 @@
         shiftG = true;
       }
       int16_t item = determineItem((char *)data);
+      if(programIsRunning) {
+        if(item == ITM_RS) {
+          programIsRunning = false;
+          showFunctionNameItem = 0;
+        }
+        return;
+      }
 
       if(getSystemFlag(FLAG_USER)) {
         int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';

@@ -857,7 +857,9 @@ static void _parseWord(char *strPtr, uint16_t parseMode, uint16_t parserHint, ch
           xcopy(bufPtr, strPtr, stringByteLength(strPtr) + 1);
           bufPtr += stringByteLength(strPtr) + 1;
           bufPtr[0] = 0;
-          if(tmpVal == 3) {   // If the 4th variable has just been added, add Draw and Calc.
+          if(tmpVal == 2) {   // If the 4th variable has just been added, add Draw and Calc.
+            _menuItem(ITM_XSLV, bufPtr);
+            bufPtr += stringByteLength(bufPtr) + 1;
             _menuItem(ITM_XPLT, bufPtr);
             bufPtr += stringByteLength(bufPtr) + 1;
             _menuItem(ITM_CALC, bufPtr);
@@ -1209,10 +1211,12 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
       bufPtr += stringByteLength(bufPtr) + 1;
       ++tmpVal;
     }
-    for(; tmpVal < 4; ++tmpVal) {  //If there are less than 4 variables, skip to the 5th item and add Draw & Calc.
+    for(; tmpVal < 3; ++tmpVal) {  //If there are less than 4 variables, skip to the 5th item and add Draw & Calc.
       *(bufPtr++) = 0;
     }
-    if(tmpVal == 4) {
+    if(tmpVal == 3) {
+      _menuItem(ITM_XSLV, bufPtr);
+      bufPtr += stringByteLength(bufPtr) + 1;
       _menuItem(ITM_XPLT, bufPtr);
       bufPtr += stringByteLength(bufPtr) + 1;
       _menuItem(ITM_CALC, bufPtr);

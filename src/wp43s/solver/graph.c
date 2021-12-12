@@ -44,15 +44,15 @@
 
 //Verbose directives can be simulataneously selected
 #define VERBOSE_SOLVER00   // minimal text
-//#define VERBOSE_SOLVER0    // a lot less text
+//#define VERBOSE_SOLVER0  // a lot less text
 //#define VERBOSE_SOLVER1  // a lot less text
 //#define VERBOSE_SOLVER2  // verbose a lot
 
 
-#define COMPLEXKICKER true
-#define CHANGE_TO_MOD_SECANT 0   //at iteration nn go to the modified secant method. 0 means immaediately
-#define CONVERGE_FACTOR 1
-#define NUMBERITERATIONS 35 // Must be smaller than LIM
+#define COMPLEXKICKER true       //flag to allow conversion to complex plane if no convergenge found
+#define CHANGE_TO_MOD_SECANT 0   //at iteration nn go to the modified secant method. 0 means immediately
+#define CONVERGE_FACTOR 1        //
+#define NUMBERITERATIONS 35      // Must be smaller than LIM (see STATS)
 
 
 #ifndef TESTSUITE_BUILD
@@ -68,19 +68,7 @@
 	  }
 	}
 
-/*
-	static void fnStrInputReal34(char inp1[]) { // CONVERT STRING to REAL IN X      //DONE
-	  char buff[100];
-	  buff[0] = 0;
-	  strcat(buff, inp1);
-	  setSystemFlag(FLAG_ASLIFT); // 5
-	  liftStack();
-	  reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
-	  stringToReal34(buff, REGISTER_REAL34_DATA(REGISTER_X));
-	  setSystemFlag(FLAG_ASLIFT);
-	}
-*/
-	static void fnStrtoX(char aimBuffer[]) {                             //DONE
+	static void fnStrtoX(char aimBuffer[]) {
 	  setSystemFlag(FLAG_ASLIFT); // 5
 	  liftStack();
 	  int16_t mem = stringByteLength(aimBuffer) + 1;
@@ -98,7 +86,6 @@
     reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
     snprintf(buff, 100, "%.16e", x);
     stringToReal34(buff, REGISTER_REAL34_DATA(REGISTER_X));
-    //adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
     setSystemFlag(FLAG_ASLIFT);
   }
 #endif
@@ -580,7 +567,6 @@ static void graph_solver() {         //Input parameters in registers SREG_STARTX
                       printRegisterToConsole(SREG_Y2,"Y2=","\n");
                     #endif //VERBOSE_SOLVER2
 
-//    if(checkzero || checkNaN) goto EndIteration;
 
 
 //*************** DETERMINE DX and DY, to calculate the slope (or the inverse of the slope in this case) *******************
@@ -752,8 +738,6 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
     }
   }
 
-//  if(checkzero || checkNaN) goto EndIteration;
-
 
 
 
@@ -800,7 +784,6 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
                           printf("               ");printRegisterToConsole(SREG_X2,"X2=","");printRegisterToConsole(SREG_Y2,"Y2=","\n");
                         #endif //VERBOSE_SOLVER1
 
-//EndIteration:
 
     copySourceRegisterToDestRegister(SREG_Y1,SREG_Y0); //old y1 copied to y0
     copySourceRegisterToDestRegister(SREG_X1,SREG_X0); //old x1 copied to x0

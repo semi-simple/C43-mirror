@@ -259,6 +259,18 @@ void fnTimerDel(uint8_t nr) {
 
 
 
+uint16_t fnTimerGetParam(uint8_t nr) {
+  uint16_t result = 0;
+  
+  if(nr < TMR_NUMBER) {
+    result = timer[nr].param;
+  }
+
+  return result;
+}
+
+
+
 uint8_t fnTimerGetStatus(uint8_t nr) {
   uint8_t result = TMR_UNUSED;
   
@@ -311,15 +323,15 @@ static uint32_t _getTimerValue(void) {
 }
 #endif // TESTSUITE_BUILD
 
-#ifdef PC_BUILD
-  static gboolean _updateTimer(gpointer unusedData) {
-    if(calcMode != CM_TIMER) {
-      return FALSE;
-    }
-    fnUpdateTimerApp();
-    return timerStartTime != TIMER_APP_STOPPED;
-  }
-#endif // PC_BUILD
+//--  #ifdef PC_BUILD
+//--    static gboolean _updateTimer(gpointer unusedData) {
+//--      if(calcMode != CM_TIMER) {
+//--        return FALSE;
+//--      }
+//--      fnUpdateTimerApp();
+//--      return timerStartTime != TIMER_APP_STOPPED;
+//--    }
+//--  #endif // PC_BUILD
 
 void fnTimer(uint16_t unusedButMandatoryParameter) {
 #ifndef TESTSUITE_BUILD
@@ -328,9 +340,10 @@ void fnTimer(uint16_t unusedButMandatoryParameter) {
   rbr1stDigit = true;
   watchIconEnabled = false;
   if(timerStartTime != TIMER_APP_STOPPED) {
-#ifdef PC_BUILD
-    gdk_threads_add_timeout(100, _updateTimer, NULL);
-#endif // PC_BUILD
+    fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
+//--  #ifdef PC_BUILD
+//--      gdk_threads_add_timeout(100, _updateTimer, NULL);
+//--  #endif // PC_BUILD
   }
 #endif // TESTSUITE_BUILD
 }
@@ -370,6 +383,7 @@ void fnResetTimerApp(uint16_t unusedButMandatoryParameter) {
   timerTotalTime = 0;
   if(timerStartTime != TIMER_APP_STOPPED) {
     timerStartTime = _currentTime();
+    fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
   }
   rbr1stDigit = true;
 #endif // TESTSUITE_BUILD
@@ -379,9 +393,10 @@ void fnStartStopTimerApp(void) {
 #ifndef TESTSUITE_BUILD
   if(timerStartTime == TIMER_APP_STOPPED) {
     timerStartTime = _currentTime();
-#ifdef PC_BUILD
-    gdk_threads_add_timeout(100, _updateTimer, NULL);
-#endif // PC_BUILD
+    fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
+//--  #ifdef PC_BUILD
+//--      gdk_threads_add_timeout(100, _updateTimer, NULL);
+//--  #endif // PC_BUILD
   }
   else {
     fnStopTimerApp();
@@ -397,6 +412,7 @@ void fnStopTimerApp(void) {
     timerValue += msec - timerStartTime;
     if(timerTotalTime > 0) timerTotalTime += msec - timerStartTime;
     timerStartTime = TIMER_APP_STOPPED;
+    fnTimerStop(TO_TIMER_APP);
   }
   watchIconEnabled = false;
 #endif // TESTSUITE_BUILD
@@ -490,6 +506,7 @@ void fnDotTimerApp(void) {
   timerTotalTime += msec;
   if(timerStartTime != TIMER_APP_STOPPED) {
     timerStartTime = _currentTime();
+    fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
   }
 #endif // TESTSUITE_BUILD
 }
@@ -522,6 +539,7 @@ void fnPlusTimerApp(void) {
   timerTotalTime += msec;
   if(timerStartTime != TIMER_APP_STOPPED) {
     timerStartTime = _currentTime();
+    fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
   }
 
   refreshScreen();
@@ -610,6 +628,7 @@ void fnRecallTimerApp(uint16_t regist) {
     timerValue = val;
     if(timerStartTime != TIMER_APP_STOPPED) {
       timerStartTime = _currentTime();
+      fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
     }
   }
 #endif // TESTSUITE_BUILD

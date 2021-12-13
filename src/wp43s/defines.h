@@ -390,11 +390,13 @@ typedef enum {
 #define TIMER_IDX_REFRESH_SLEEP                    0 // use timer 0 to wake up for screen refresh
 //#define TIMER_IDX_AUTO_REPEAT                    1 // use timer 1 to wake up for key auto-repeat
 
-#define TMR_NUMBER    2
+#define TMR_NUMBER                                 4
 
 // timer
 #define TO_AUTO_REPEAT                             0
-#define TO_KB_ACTV                                 1
+#define TO_TIMER_APP                               1
+#define TO_KB_ACTV                                 2
+#define TO_SHOW_NOP                                3
 
 
 #ifdef PC_BUILD
@@ -710,6 +712,7 @@ typedef enum {
 #define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
 #define KEY_AUTOREPEAT_FIRST_PERIOD              400 // in milliseconds
 #define KEY_AUTOREPEAT_PERIOD                    200 // in milliseconds
+#define TIMER_APP_PERIOD                         100 // in milliseconds
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 

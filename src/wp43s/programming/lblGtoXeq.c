@@ -1513,7 +1513,7 @@ void runProgram(void) {
 
 stopProgram:
   programIsRunning = false;
-  refreshScreen();
+  showHideHourGlass();
   #ifdef DMCP_BUILD
     lcd_refresh();
     fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, FAST_SCREEN_REFRESH_PERIOD+50);

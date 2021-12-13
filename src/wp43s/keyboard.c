@@ -465,6 +465,9 @@
               else {
                 temporaryInformation = TI_NO_INFO;
               }
+              if(programRunStop == PGM_WAITING) {
+                programRunStop = PGM_STOPPED;
+              }
               if(calcMode == CM_ASSIGN && itemToBeAssigned == 0 && item != ITM_NOP) {
                 itemToBeAssigned = item;
               }
@@ -499,6 +502,9 @@
       else {
         temporaryInformation = TI_NO_INFO;
       }
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       lastErrorCode = 0;
       shiftF = !shiftF;
       return ITM_NOP;
@@ -512,6 +518,9 @@
       }
       else {
         temporaryInformation = TI_NO_INFO;
+      }
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
       }
       lastErrorCode = 0;
       shiftG = !shiftG;
@@ -583,9 +592,9 @@
         shiftG = true;
       }
       int16_t item = determineItem((char *)data);
-      if(programIsRunning) {
-        if(item == ITM_RS) {
-          programIsRunning = false;
+      if(programRunStop == PGM_RUNNING) {
+        if(item == ITM_RS && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+          programRunStop = PGM_WAITING;
           showFunctionNameItem = 0;
         }
         return;
@@ -778,6 +787,9 @@
     }
     else {
       temporaryInformation = TI_NO_INFO;
+    }
+    if(programRunStop == PGM_WAITING) {
+      programRunStop = PGM_STOPPED;
     }
 
     #if (REAL34_WIDTH_TEST == 1)
@@ -1411,6 +1423,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       case CM_CONFIRMATION:
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
+        if(programRunStop == PGM_WAITING) {
+          programRunStop = PGM_STOPPED;
+        }
         break;
 
       case CM_ASSIGN:
@@ -1571,6 +1586,9 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       case CM_CONFIRMATION:
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
+        if(programRunStop == PGM_WAITING) {
+          programRunStop = PGM_STOPPED;
+        }
         break;
 
       case CM_PEM:

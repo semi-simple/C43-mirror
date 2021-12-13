@@ -53,7 +53,7 @@ bool_t                 thereIsSomethingToUndo;
 bool_t                 lastProgramListEnd;
 bool_t                 programListEnd;
 bool_t                 serialIOIconEnabled;
-bool_t                 programIsRunning;
+bool_t                 neverUsed;
 
 realContext_t          ctxtRealShort;//   limited digits: used for higher speed internal real calcs
 realContext_t          ctxtReal34;   //   34 digits
@@ -128,6 +128,7 @@ uint8_t                temporaryInformation;
 uint8_t                rbrMode;
 uint8_t                numScreensNumericFont;
 uint8_t                timerCraAndDeciseconds = 128u;
+uint8_t                programRunStop;
 uint8_t               *beginOfProgramMemory;
 uint8_t               *beginOfCurrentProgram;
 uint8_t               *endOfCurrentProgram;

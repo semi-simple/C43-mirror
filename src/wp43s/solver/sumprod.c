@@ -74,6 +74,9 @@ static void _programmableSumProd(uint16_t label, bool_t prod) {
   }
 
   temporaryInformation = TI_NO_INFO;
+  if(programRunStop == PGM_WAITING) {
+    programRunStop = PGM_STOPPED;
+  }
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
 }
 

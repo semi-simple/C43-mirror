@@ -962,6 +962,9 @@ void fnInvertMatrix(uint16_t unusedParamButMandatory) {
       }
       else {
         temporaryInformation = TI_NO_INFO;
+        if(programRunStop == PGM_WAITING) {
+          programRunStop = PGM_STOPPED;
+        }
       }
     }
   }
@@ -996,6 +999,9 @@ void fnInvertMatrix(uint16_t unusedParamButMandatory) {
       }
       else {
         temporaryInformation = TI_NO_INFO;
+        if(programRunStop == PGM_WAITING) {
+          programRunStop = PGM_STOPPED;
+        }
       }
     }
   }

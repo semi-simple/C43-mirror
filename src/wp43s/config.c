@@ -495,6 +495,9 @@ void fnClAll(uint16_t confirmation) {
     fnClFAll(CONFIRMED);
 
     temporaryInformation = TI_NO_INFO;
+    if(programRunStop == PGM_WAITING) {
+      programRunStop = PGM_STOPPED;
+    }
   }
 }
 

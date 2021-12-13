@@ -187,7 +187,7 @@ void fnGotoDot(uint16_t globalStepNumber) {
 
 
 void fnExecute(uint16_t label) {
-  if(programIsRunning) {
+  if(programRunStop == PGM_RUNNING) {
     dataBlock_t *_currentSubroutineLevelData = currentSubroutineLevelData;
     allSubroutineLevels.numberOfSubroutineLevels += 1;
     currentSubroutineLevelData = allocWp43s(3);
@@ -248,7 +248,7 @@ void fnRunProgram(uint16_t unusedButMandatoryParameter) {
 
 
 void fnStopProgram(uint16_t unusedButMandatoryParameter) {
-  programIsRunning = false;
+  programRunStop = PGM_WAITING;
 }
 
 
@@ -1441,7 +1441,7 @@ void runProgram(void) {
 #ifndef TESTSUITE_BUILD
   lastErrorCode = ERROR_NONE;
   hourGlassIconEnabled = true;
-  programIsRunning = true;
+  programRunStop = PGM_RUNNING;
   showHideHourGlass();
   #ifdef DMCP_BUILD
     lcd_refresh();
@@ -1450,9 +1450,6 @@ void runProgram(void) {
   #endif // DMCP_BUILD
 
   while(1) {
-    #ifdef DMCP_BUILD
-      int key;
-    #endif // DMCP_BUILD
     int16_t stepsToBeAdvanced;
     uint16_t subLevel = currentSubroutineLevel;
     temporaryInformation = TI_NO_INFO;
@@ -1490,20 +1487,22 @@ void runProgram(void) {
       }
     }
     #ifdef DMCP_BUILD
-      key = key_pop();
-      if(key == 36) {
-        programIsRunning = false;
-        refreshScreen();
-        lcd_refresh();
-        fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 60000);
-        do {
-          key = key_pop();
-          sys_sleep();
-        } while(key == -1);
-        break;
+      if(!getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+        int key = key_pop();
+        if(key == 36) {
+          programRunStop = PGM_WAITING;
+          refreshScreen();
+          lcd_refresh();
+          fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 60000);
+          do {
+            key = key_pop();
+            sys_sleep();
+          } while(key == -1);
+          break;
+        }
       }
     #endif // DMCP_BUILD
-    if(!programIsRunning) {
+    if(programRunStop != PGM_RUNNING) {
       break;
     }
     #ifdef PC_BUILD
@@ -1512,7 +1511,9 @@ void runProgram(void) {
   }
 
 stopProgram:
-  programIsRunning = false;
+  if(programRunStop == PGM_RUNNING) {
+    programRunStop = PGM_STOPPED;
+  }
   showHideHourGlass();
   #ifdef DMCP_BUILD
     lcd_refresh();

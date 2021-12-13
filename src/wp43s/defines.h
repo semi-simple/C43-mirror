@@ -630,8 +630,14 @@ typedef enum {
 #define CP_PERMUTATION                             0
 #define CP_COMBINATION                             1
 
+// Gudermannian
 #define GD_DIRECT_FUNCTION                         0
 #define GD_INVERSE_FUNCTION                        1
+
+// Program running mode
+#define PGM_STOPPED                                0
+#define PGM_RUNNING                                1
+#define PGM_WAITING                                2
 
 // Load mode
 #define LM_ALL                                     0

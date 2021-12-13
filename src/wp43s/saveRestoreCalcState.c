@@ -154,7 +154,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
     save(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
     save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
-    save(&programIsRunning,                   sizeof(programIsRunning),                   BACKUP);
+    save(&programRunStop,                     sizeof(programRunStop),                     BACKUP);
     save(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
     save(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
     save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
@@ -367,7 +367,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
       restore(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
       restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
-      restore(&programIsRunning,                   sizeof(programIsRunning),                   BACKUP);
+      restore(&programRunStop,                     sizeof(programRunStop),                     BACKUP);
       restore(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
       restore(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
       restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);

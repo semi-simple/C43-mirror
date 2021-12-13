@@ -40,5 +40,6 @@ void   fnStopProgram (uint16_t unusedButMandatoryParameter);
  */
 int16_t executeOneStep(uint8_t *step);
 void    runProgram    (void);
+void    execProgram   (uint16_t label);
 
 #endif // LBLGTOXEQ_H

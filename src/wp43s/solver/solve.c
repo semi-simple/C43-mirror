@@ -179,7 +179,7 @@ static void _solverIteration(real34_t *res) {
   }
   else {
     dynamicMenuItem = -1;
-    fnExecute(currentSolverProgram + FIRST_LABEL);
+    execProgram(currentSolverProgram + FIRST_LABEL);
   }
   if(lastErrorCode == ERROR_OVERFLOW_PLUS_INF) {
     realToReal34(const_plusInfinity, res);

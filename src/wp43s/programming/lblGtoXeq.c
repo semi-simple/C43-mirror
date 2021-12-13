@@ -1439,6 +1439,7 @@ int16_t executeOneStep(uint8_t *step) {
 
 void runProgram(void) {
 #ifndef TESTSUITE_BUILD
+  uint16_t startingSubLevel = currentSubroutineLevel;
   lastErrorCode = ERROR_NONE;
   hourGlassIconEnabled = true;
   programRunStop = PGM_RUNNING;
@@ -1459,7 +1460,7 @@ void runProgram(void) {
         break;
 
       case 0: // End of the routine
-        if(subLevel == 0) {
+        if(subLevel == startingSubLevel) {
           goto stopProgram;
         }
         break;
@@ -1524,4 +1525,13 @@ stopProgram:
   #endif // DMCP_BUILD
   return;
 #endif // TESTSUITE_BUILD
+}
+
+
+
+void execProgram(uint16_t label) {
+  fnExecute(label);
+  if(programRunStop == PGM_RUNNING && (getSystemFlag(FLAG_INTING) || getSystemFlag(FLAG_SOLVING))) {
+    runProgram();
+  }
 }

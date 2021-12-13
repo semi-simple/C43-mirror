@@ -42,6 +42,9 @@ static void _programmableSumProd(uint16_t label, bool_t prod) {
 
   real34Copy(prod ? const34_1 : const34_0, &result);
 
+  ++currentSolverNestingDepth;
+  setSystemFlag(FLAG_SOLVING);
+
   while(1) {
     fnToReal(NOPARAM);
     if(lastErrorCode != ERROR_NONE) break;
@@ -50,7 +53,7 @@ static void _programmableSumProd(uint16_t label, bool_t prod) {
     fnFillStack(NOPARAM);
 
     dynamicMenuItem = -1;
-    fnExecute(label);
+    execProgram(label);
     if(lastErrorCode != ERROR_NONE) break;
 
     fnToReal(NOPARAM);
@@ -78,6 +81,9 @@ static void _programmableSumProd(uint16_t label, bool_t prod) {
     programRunStop = PGM_STOPPED;
   }
   adjustResult(REGISTER_X, false, false, REGISTER_X, -1, -1);
+
+  if((--currentSolverNestingDepth) == 0)
+    clearSystemFlag(FLAG_SOLVING);
 }
 
 void _checkArgument(uint16_t label, bool_t prod) {

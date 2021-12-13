@@ -593,7 +593,7 @@
       }
       int16_t item = determineItem((char *)data);
       if(programRunStop == PGM_RUNNING) {
-        if(item == ITM_RS && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+        if((item == ITM_RS || item == ITM_EXIT) && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
           programRunStop = PGM_WAITING;
           showFunctionNameItem = 0;
         }

@@ -1489,7 +1489,8 @@ void runProgram(void) {
     #ifdef DMCP_BUILD
       if(!getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
         int key = key_pop();
-        if(key == 36) {
+        key = convertKeyCode(key);
+        if(key == 36 || key == 37) {
           programRunStop = PGM_WAITING;
           refreshScreen();
           lcd_refresh();

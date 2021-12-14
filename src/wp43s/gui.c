@@ -606,62 +606,41 @@
             }
 
             if(!strcmp(parameter + 5, "Normal")) {
-              if(!strcmp(value, "none")) {
-                calcKeyboard[calcKey].keyImage[0] = NULL;
-                calcKeyboard[calcKey].width[0] = 0;
-                calcKeyboard[calcKey].height[0] = 0;
+              sprintf(fileName, "%s%s", skinDirectory, value);
+              if(access(fileName, F_OK) != 0) {
+                moreInfoOnError("In function prepareSkin:", "error: cannot access file", fileName, NULL);
+                exit(1);
               }
-              else {
-                sprintf(fileName, "%s%s", skinDirectory, value);
-                if(access(fileName, F_OK) != 0) {
-                  moreInfoOnError("In function prepareSkin:", "error: cannot access file", fileName, NULL);
-                  exit(1);
-                }
-                calcKeyboard[calcKey].keyImage[0] = gtk_image_new_from_file(fileName);
-                const GdkPixbuf *pb = gtk_image_get_pixbuf(GTK_IMAGE(calcKeyboard[calcKey].keyImage[0]));
-                calcKeyboard[calcKey].width[0] = gdk_pixbuf_get_width(pb);
-                calcKeyboard[calcKey].height[0] = gdk_pixbuf_get_height(pb);
-              }
+              calcKeyboard[calcKey].keyImage[0] = gtk_image_new_from_file(fileName);
+              const GdkPixbuf *pb = gtk_image_get_pixbuf(GTK_IMAGE(calcKeyboard[calcKey].keyImage[0]));
+              calcKeyboard[calcKey].width[0] = gdk_pixbuf_get_width(pb);
+              calcKeyboard[calcKey].height[0] = gdk_pixbuf_get_height(pb);
               continue;
             }
 
             if(!strcmp(parameter + 5, "AIM")) {
-              if(!strcmp(value, "none")) {
-                calcKeyboard[calcKey].keyImage[1] = NULL;
-                calcKeyboard[calcKey].width[1] = 0;
-                calcKeyboard[calcKey].height[1] = 0;
+              sprintf(fileName, "%s%s", skinDirectory, value);
+              if(access(fileName, F_OK) != 0) {
+                moreInfoOnError("In function prepareSkin:", "error: cannot access file", fileName, NULL);
+                exit(1);
               }
-              else {
-                sprintf(fileName, "%s%s", skinDirectory, value);
-                if(access(fileName, F_OK) != 0) {
-                  moreInfoOnError("In function prepareSkin:", "error: cannot access file", fileName, NULL);
-                  exit(1);
-                }
-                calcKeyboard[calcKey].keyImage[1] = gtk_image_new_from_file(fileName);
-                const GdkPixbuf *pb = gtk_image_get_pixbuf(GTK_IMAGE(calcKeyboard[calcKey].keyImage[1]));
-                calcKeyboard[calcKey].width[1] = gdk_pixbuf_get_width(pb);
-                calcKeyboard[calcKey].height[1] = gdk_pixbuf_get_height(pb);
-              }
+              calcKeyboard[calcKey].keyImage[1] = gtk_image_new_from_file(fileName);
+              const GdkPixbuf *pb = gtk_image_get_pixbuf(GTK_IMAGE(calcKeyboard[calcKey].keyImage[1]));
+              calcKeyboard[calcKey].width[1] = gdk_pixbuf_get_width(pb);
+              calcKeyboard[calcKey].height[1] = gdk_pixbuf_get_height(pb);
               continue;
             }
 
             if(!strcmp(parameter + 5, "TAM")) {
-              if(!strcmp(value, "none")) {
-                calcKeyboard[calcKey].keyImage[2] = NULL;
-                calcKeyboard[calcKey].width[2] = 0;
-                calcKeyboard[calcKey].height[2] = 0;
+              sprintf(fileName, "%s%s", skinDirectory, value);
+              if(access(fileName, F_OK) != 0) {
+                moreInfoOnError("In function prepareSkin:", "error: cannot access file", fileName, NULL);
+                exit(1);
               }
-              else {
-                sprintf(fileName, "%s%s", skinDirectory, value);
-                if(access(fileName, F_OK) != 0) {
-                  moreInfoOnError("In function prepareSkin:", "error: cannot access file", fileName, NULL);
-                  exit(1);
-                }
-                calcKeyboard[calcKey].keyImage[2] = gtk_image_new_from_file(fileName);
-                const GdkPixbuf *pb = gtk_image_get_pixbuf(GTK_IMAGE(calcKeyboard[calcKey].keyImage[2]));
-                calcKeyboard[calcKey].width[2] = gdk_pixbuf_get_width(pb);
-                calcKeyboard[calcKey].height[2] = gdk_pixbuf_get_height(pb);
-              }
+              calcKeyboard[calcKey].keyImage[2] = gtk_image_new_from_file(fileName);
+              const GdkPixbuf *pb = gtk_image_get_pixbuf(GTK_IMAGE(calcKeyboard[calcKey].keyImage[2]));
+              calcKeyboard[calcKey].width[2] = gdk_pixbuf_get_width(pb);
+              calcKeyboard[calcKey].height[2] = gdk_pixbuf_get_height(pb);
               continue;
             }
           }
@@ -750,12 +729,9 @@
       currentBezel = 0;
 
       for(key=0; key<43; key++) {
-        if(calcKeyboard[key].keyImage[1] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[1], -999,                -999);
-        if(calcKeyboard[key].keyImage[2] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[2], -999,                -999);
-        if(calcKeyboard[key].keyImage[0] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[0], calcKeyboard[key].x, calcKeyboard[key].y);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[1], -999,                -999);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[2], -999,                -999);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[0], calcKeyboard[key].x, calcKeyboard[key].y);
       }
     }
 
@@ -768,12 +744,9 @@
       currentBezel = 1;
 
       for(key=0; key<43; key++) {
-        if(calcKeyboard[key].keyImage[0] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[0], -999,                -999);
-        if(calcKeyboard[key].keyImage[2] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[2], -999,                -999);
-        if(calcKeyboard[key].keyImage[1] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[1], calcKeyboard[key].x, calcKeyboard[key].y);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[0], -999,                -999);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[2], -999,                -999);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[1], calcKeyboard[key].x, calcKeyboard[key].y);
       }
     }
 
@@ -786,12 +759,9 @@
       currentBezel = 2;
 
       for(key=0; key<43; key++) {
-        if(calcKeyboard[key].keyImage[0] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[0], -999,                -999);
-        if(calcKeyboard[key].keyImage[1] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[1], -999,                -999);
-        if(calcKeyboard[key].keyImage[2] != NULL)
-          gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[2], calcKeyboard[key].x, calcKeyboard[key].y);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[0], -999,                -999);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[1], -999,                -999);
+        gtk_fixed_move(GTK_FIXED(grid), calcKeyboard[key].keyImage[2], calcKeyboard[key].x, calcKeyboard[key].y);
       }
     }
   #endif // (SCREEN_800X480 == 0)
@@ -898,9 +868,7 @@
       }
       for(int key=0; key<43; key++) {
         for(int bezel=0; bezel<3; bezel++) {
-          if(calcKeyboard[key].keyImage[bezel] != NULL) {
-            gtk_fixed_put(GTK_FIXED(grid), calcKeyboard[key].keyImage[bezel], -999, -999);
-          }
+          gtk_fixed_put(GTK_FIXED(grid), calcKeyboard[key].keyImage[bezel], -999, -999);
         }
       }
 

@@ -23,6 +23,7 @@
 #include "constantPointers.h"
 #include "defines.h"
 #include "error.h"
+#include "flags.h"
 #include "items.h"
 #include "mathematics/integerPart.h"
 #include "mathematics/iteration.h"

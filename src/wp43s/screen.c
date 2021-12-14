@@ -47,7 +47,7 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-  static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter," STD_SPACE_3_PER_EM "Mihail," STD_SPACE_3_PER_EM "and" STD_SPACE_3_PER_EM "Martin";
+  static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter," STD_SPACE_3_PER_EM "Mihail," STD_SPACE_3_PER_EM "Jaco," STD_SPACE_3_PER_EM "and" STD_SPACE_3_PER_EM "Martin";
   static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM VERSION_STRING;
 
   /* Names of day of week */
@@ -1666,7 +1666,7 @@
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
-              if(w == 1) 
+              if(w == 1)
                 sprintf(prefix, "%03" PRId16 " data point", w);
               else
                 sprintf(prefix, "%03" PRId16 " data points", w);

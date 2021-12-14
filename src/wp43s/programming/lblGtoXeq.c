@@ -209,10 +209,12 @@ void fnExecute(uint16_t label) {
   else {
     fnGoto(label);
     dynamicMenuItem = -1;
+#ifndef TESTSUITE_BUILD
     if(tam.mode) {
       tamLeaveMode();
       refreshScreen();
     }
+#endif // TESTSUITE_BUILD
     runProgram();
   }
 }

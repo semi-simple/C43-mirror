@@ -733,7 +733,9 @@
       else if(showFunctionNameItem != 0) {
         item = showFunctionNameItem;
         hideFunctionName();
-        if(item == ITM_RS || item == ITM_XEQ) key[0] = 0;
+        #ifdef PC_BUILD
+          if(item == ITM_RS || item == ITM_XEQ) key[0] = 0;
+        #endif // PC_BUILD
         if(item < 0) {
           showSoftmenu(item);
         }

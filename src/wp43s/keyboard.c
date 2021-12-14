@@ -602,6 +602,66 @@
         }
       }
     }
+
+    char key[3] = {0, 0, 0};
+    static void convertXYToKey(int x, int y, char *key) {
+      int xMin, xMax, yMin, yMax;
+      key[0] = 0;
+      key[1] = 0;
+      key[2] = 0;
+
+      for(int i=0; i<43; i++) {
+        xMin = calcKeyboard[i].x;
+        yMin = calcKeyboard[i].y;
+        xMax = xMin + calcKeyboard[i].width[currentBezel];
+        yMax = yMin + calcKeyboard[i].height[currentBezel];
+
+        if(   xMin <= x && x <= xMax
+           && yMin <= y && y <= yMax) {
+          if(i < 6) { // Function key
+            key[0] = '1' + i;
+          }
+          else {
+            key[0] = '0' + (i - 6)/10;
+            key[1] = '0' + (i - 6)%10;
+          }
+          break;
+        }
+      }
+
+      //printf("key = <%s>\n", key);
+    }
+
+    void frmCalcMouseButtonPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+      if(key[0] == 0) { // The previous click must be released
+        convertXYToKey((int)event->button.x, (int)event->button.y, key);
+        if(key[0] == 0) {
+          return;
+        }
+
+        if(key[1] == 0) { // Soft function key
+          btnFnPressed(NULL, event, (gpointer)key);
+        }
+        else { // Not a soft function key
+          btnPressed(NULL, event, (gpointer)key);
+        }
+      }
+    }
+
+    void frmCalcMouseButtonReleased(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+      if(key[0] == 0) {
+        return;
+      }
+
+      if(key[1] == 0) { // Soft function key
+        btnFnReleased(NULL, event, (gpointer)key);
+      }
+      else { // Not a soft function key
+        btnReleased(NULL, event, (gpointer)key);
+      }
+
+      key[0] = 0;
+    }
   #endif // PC_BUILD
 
 

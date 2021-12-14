@@ -212,16 +212,6 @@ typedef enum {
 // PC GUI
 #define CSSFILE                      "res/wp43s_pre.css"
 
-#define DELTA_KEYS_X                              78 // Horizontal key step in pixel (row of 6 keys)
-#define DELTA_KEYS_Y                              74 // Vertical key step in pixel
-#define KEY_WIDTH_1                               47 // Width of small keys (STO, RCL, ...)
-#define KEY_WIDTH_2                               56 // Width of large keys (1, 2, 3, ...)
-
-#define X_LEFT_PORTRAIT                           45 // Horizontal offset for a portrait calculator
-#define X_LEFT_LANDSCAPE                         544 // Horizontal offset for a landscape calculator
-#define Y_TOP_PORTRAIT                           376 // Vertical offset for a portrait calculator
-#define Y_TOP_LANDSCAPE                           30 // vertical offset for a landscape calculator
-
 #define TAM_MAX_BITS                              14
 #define TAM_MAX_MASK                          0x3fff
 

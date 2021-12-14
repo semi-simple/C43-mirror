@@ -38,6 +38,7 @@
 #include "softmenus.h"
 #include "sort.h"
 #include <stdlib.h>
+#include <string.h>
 
 #include "wp43s.h"
 

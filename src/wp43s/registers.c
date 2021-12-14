@@ -635,7 +635,7 @@ bool_t isUniqueName(const char *name) {
       case CAT_CNST:
       case CAT_RVAR:
       case CAT_SYFL:
-        if(compareString(name, indexOfItems[i].itemCatalogName, CMP_EXTENSIVE) == 0) {
+        if(compareString(name, indexOfItems[i].itemCatalogName, CMP_NAME) == 0) {
           return false;
         }
     }
@@ -648,7 +648,7 @@ bool_t isUniqueName(const char *name) {
 
   // User menus
   for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
-    if(compareString(name, userMenus[i].menuName, CMP_EXTENSIVE) == 0) {
+    if(compareString(name, userMenus[i].menuName, CMP_NAME) == 0) {
       return false;
     }
   }
@@ -665,7 +665,7 @@ static calcRegister_t _findReservedVariable(const char *variableName) {
   }
 
   for(int i = 0; i < NUMBER_OF_RESERVED_VARIABLES; i++) {
-    if (compareString((char *)(allReservedVariables[i].reservedVariableName + 1), variableName, CMP_EXTENSIVE) == 0) {
+    if (compareString((char *)(allReservedVariables[i].reservedVariableName + 1), variableName, CMP_NAME) == 0) {
       return i + FIRST_RESERVED_VARIABLE;
     }
   }
@@ -762,7 +762,7 @@ calcRegister_t findNamedVariable(const char *variableName) {
   if(regist != INVALID_VARIABLE) return regist;
 
   for(int i = 0; i < numberOfNamedVariables; i++) {
-    if (compareString((char *)(allNamedVariables[i].variableName + 1), variableName, CMP_EXTENSIVE) == 0) {
+    if (compareString((char *)(allNamedVariables[i].variableName + 1), variableName, CMP_NAME) == 0) {
       regist = i + FIRST_NAMED_VARIABLE;
       break;
     }

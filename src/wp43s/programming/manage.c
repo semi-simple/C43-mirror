@@ -1646,7 +1646,7 @@ calcRegister_t findNamedLabel(const char *labelName) {
     if(labelList[lbl].step > 0) {
       xcopy(tmpString, labelList[lbl].labelPointer + 1, *(labelList[lbl].labelPointer));
       tmpString[*(labelList[lbl].labelPointer)] = 0;
-      if(compareString(tmpString, labelName, CMP_EXTENSIVE) == 0) {
+      if(compareString(tmpString, labelName, CMP_NAME) == 0) {
         return lbl + FIRST_LABEL;
       }
     }

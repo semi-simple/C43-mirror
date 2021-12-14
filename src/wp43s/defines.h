@@ -615,6 +615,7 @@ typedef enum {
 #define CMP_BINARY                                 0
 #define CMP_CLEANED_STRING_ONLY                    1
 #define CMP_EXTENSIVE                              2
+#define CMP_NAME                                   3
 
 // Combination / permutation
 #define CP_PERMUTATION                             0

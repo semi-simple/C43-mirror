@@ -39,6 +39,7 @@
 #include "statusBar.h"
 #include "stack.h"
 #include "timer.h"
+#include "ui/tam.h"
 
 #include "wp43s.h"
 
@@ -208,6 +209,10 @@ void fnExecute(uint16_t label) {
   else {
     fnGoto(label);
     dynamicMenuItem = -1;
+    if(tam.mode) {
+      tamLeaveMode();
+      refreshScreen();
+    }
     runProgram();
   }
 }

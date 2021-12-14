@@ -1458,7 +1458,7 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
         for(i = 0; i < numberOfUserMenus; ++i) {
-          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_BINARY) == 0) {
+          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_NAME) == 0) {
             target = i;
           }
         }

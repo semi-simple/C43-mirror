@@ -126,12 +126,12 @@
         item = ITM_NOP;
         if(dynamicMenuItem < dynamicSoftmenu[menuId].numItems) {
           for(uint32_t i = 0; softmenu[i].menuItem < 0; ++i) {
-            if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_BINARY) == 0) {
+            if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), indexOfItems[-softmenu[i].menuItem].itemCatalogName, CMP_NAME) == 0) {
               item = softmenu[i].menuItem;
             }
           }
           for(uint32_t i = 0; i < numberOfUserMenus; ++i) {
-            if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), userMenus[i].menuName, CMP_BINARY) == 0) {
+            if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), userMenus[i].menuName, CMP_NAME) == 0) {
               item = -MNU_DYNAMIC;
               currentUserMenu = i;
             }
@@ -177,7 +177,7 @@
         case MNU_MENUS:
           if(item == -MNU_DYNAMIC) {
             for(int32_t i = 0; i < numberOfUserMenus; ++i) {
-              if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), userMenus[i].menuName, CMP_BINARY) == 0) {
+              if(compareString((char *)getNthString(dynamicSoftmenu[menuId].menuContent, dynamicMenuItem), userMenus[i].menuName, CMP_NAME) == 0) {
                 return ASSIGN_USER_MENU - i;
               }
             }

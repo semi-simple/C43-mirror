@@ -748,7 +748,7 @@
             // We are in TAM mode so need to cancel first (equivalent to EXIT)
             tamLeaveMode();
           }
-          if(item == ITM_RCL && funcParam[0] != 0) {
+          if(item == ITM_RCL && getSystemFlag(FLAG_USER) && funcParam[0] != 0) {
             calcRegister_t var = findNamedVariable(funcParam);
             if(var != INVALID_VARIABLE) {
               reallyRunFunction(item, var);
@@ -761,7 +761,7 @@
               #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
             }
           }
-          else if(item == ITM_XEQ && funcParam[0] != 0) {
+          else if(item == ITM_XEQ && getSystemFlag(FLAG_USER) && funcParam[0] != 0) {
             calcRegister_t label = findNamedLabel(funcParam);
             if(label != INVALID_VARIABLE) {
               reallyRunFunction(item, label);

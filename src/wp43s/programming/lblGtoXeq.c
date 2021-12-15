@@ -237,6 +237,7 @@ void fnReturn(uint16_t skip) {
     currentSubroutineLevelData = TO_PCMEMPTR(currentPtrToPreviousLevel);
     freeWp43s(_currentSubroutineLevelData, sizeOfCurrentSubroutineLevelDataInBlocks);
     currentPtrToNextLevel = WP43S_NULL;
+    allSubroutineLevels.numberOfSubroutineLevels -= 1;
   }
 
   /* Not in a subroutine */
@@ -739,7 +740,6 @@ int16_t executeOneStep(uint8_t *step) {
         case ITM_LBLQ:           //  1503
         case ITM_PGMINT:         //  1546
         case ITM_PGMSLV:         //  1547
-        case ITM_SOLVE:          //  1608
         case ITM_VARMNU:         //  1630
         case ITM_PIn:            //  1671
         case ITM_SIGMAn:         //  1672
@@ -803,6 +803,7 @@ int16_t executeOneStep(uint8_t *step) {
         case ITM_PUTK:           //  1556
         case ITM_RCLCFG:         //  1561
         case ITM_RCLS:           //  1564
+        case ITM_SOLVE:          //  1608
         case ITM_STOCFG:         //  1611
         case ITM_STOS:           //  1615
         case ITM_Tex:            //  1625
@@ -1460,7 +1461,9 @@ void runProgram(void) {
   while(1) {
     int16_t stepsToBeAdvanced;
     uint16_t subLevel = currentSubroutineLevel;
-    temporaryInformation = TI_NO_INFO;
+    if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE) {
+      temporaryInformation = TI_NO_INFO;
+    }
     stepsToBeAdvanced = executeOneStep(currentStep);
     switch(stepsToBeAdvanced) {
       case -1: // Already the pointer is set
@@ -1520,7 +1523,7 @@ void runProgram(void) {
   }
 
 stopProgram:
-  if(programRunStop == PGM_RUNNING) {
+  if(programRunStop == PGM_RUNNING && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
     programRunStop = PGM_STOPPED;
   }
   showHideHourGlass();
@@ -1537,8 +1540,12 @@ stopProgram:
 
 
 void execProgram(uint16_t label) {
+  uint16_t origLocalStepNumber = currentLocalStepNumber;
+  uint8_t *origStep = currentStep;
   fnExecute(label);
   if(programRunStop == PGM_RUNNING && (getSystemFlag(FLAG_INTING) || getSystemFlag(FLAG_SOLVING))) {
     runProgram();
+    currentLocalStepNumber = origLocalStepNumber;
+    currentStep = origStep;
   }
 }

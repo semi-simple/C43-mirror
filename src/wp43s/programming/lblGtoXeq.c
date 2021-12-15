@@ -233,7 +233,7 @@ void fnReturn(uint16_t skip) {
       ++currentLocalStepNumber;
       currentStep = findNextStep(currentStep);
     }
-    // TODO: free local flags and registers
+    allocateLocalRegisters(0);
     currentSubroutineLevelData = TO_PCMEMPTR(currentPtrToPreviousLevel);
     freeWp43s(_currentSubroutineLevelData, sizeOfCurrentSubroutineLevelDataInBlocks);
     currentPtrToNextLevel = WP43S_NULL;

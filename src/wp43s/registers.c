@@ -479,6 +479,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
       currentLocalFlags->localFlags = 0;
       currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
       currentNumberOfLocalFlags = NUMBER_OF_LOCAL_FLAGS;
+      currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
 
       // All the new local registers are real34s initialized to 0.0
       for(r=FIRST_LOCAL_REGISTER; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
@@ -502,8 +503,6 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
           return;
         }
       }
-
-      currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
     }
     else {
       currentSubroutineLevelData = oldSubroutineLevelData;
@@ -518,6 +517,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
       if((currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 4 + currentNumberOfLocalRegisters, 4 + numberOfRegistersToAllocate))) {
         currentLocalFlags = currentSubroutineLevelData + 3;
         currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
+        currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
 
         // All the new local registers are real34s initialized to 0.0
         for(r=FIRST_LOCAL_REGISTER+oldNumberOfLocalRegisters; r<FIRST_LOCAL_REGISTER+numberOfRegistersToAllocate; r++) {
@@ -532,7 +532,7 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
             for(uint16_t rr = FIRST_LOCAL_REGISTER + oldNumberOfLocalRegisters; rr < r; rr++) {
               freeRegisterData(FIRST_LOCAL_REGISTER + rr);
             }
-            reallocWp43s(currentSubroutineLevelData, 4 + numberOfRegistersToAllocate, 4 + currentNumberOfLocalRegisters);
+            reallocWp43s(currentSubroutineLevelData, 4 + numberOfRegistersToAllocate, 4 + oldNumberOfLocalRegisters);
             currentLocalFlags = currentSubroutineLevelData + 3;
             currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);
             currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
@@ -540,8 +540,6 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
             return;
           }
         }
-
-        currentNumberOfLocalRegisters = numberOfRegistersToAllocate;
       }
       else {
         currentSubroutineLevelData = oldSubroutineLevelData;

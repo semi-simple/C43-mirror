@@ -16,6 +16,7 @@
 
 #include "statusBar.h"
 
+#include "charString.h"
 #include "dateTime.h"
 #include "flags.h"
 #include "fonts.h"
@@ -222,8 +223,19 @@
 
 
   void showHideHourGlass(void) {
-    if(hourGlassIconEnabled) {
-      showGlyph(STD_HOURGLASS, &standardFont, calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
+    switch(programRunStop) {
+      case PGM_WAITING:
+        showGlyph(STD_NEG_EXCLAMATION_MARK, &standardFont, (calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS) - 1, 0, vmNormal, true, false);
+        break;
+      case PGM_RUNNING:
+        lcd_fill_rect((calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS) - 1, 0, stringWidth(STD_NEG_EXCLAMATION_MARK, &standardFont, true, false), 20, LCD_SET_VALUE);
+        showGlyph(STD_P, &standardFont, (calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS) + 1, 0, vmNormal, true, false);
+        break;
+      default:
+        if(hourGlassIconEnabled) {
+          lcd_fill_rect((calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS) - 1, 0, stringWidth(STD_NEG_EXCLAMATION_MARK, &standardFont, true, false), 20, LCD_SET_VALUE);
+          showGlyph(STD_HOURGLASS, &standardFont, calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
+        }
     }
   }
 

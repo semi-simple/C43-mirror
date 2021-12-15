@@ -465,6 +465,9 @@
               else {
                 temporaryInformation = TI_NO_INFO;
               }
+              if(programRunStop == PGM_WAITING) {
+                programRunStop = PGM_STOPPED;
+              }
               if(calcMode == CM_ASSIGN && itemToBeAssigned == 0 && item != ITM_NOP) {
                 itemToBeAssigned = item;
               }
@@ -499,6 +502,9 @@
       else {
         temporaryInformation = TI_NO_INFO;
       }
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       lastErrorCode = 0;
       shiftF = !shiftF;
       return ITM_NOP;
@@ -512,6 +518,9 @@
       }
       else {
         temporaryInformation = TI_NO_INFO;
+      }
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
       }
       lastErrorCode = 0;
       shiftG = !shiftG;
@@ -583,6 +592,13 @@
         shiftG = true;
       }
       int16_t item = determineItem((char *)data);
+      if(programRunStop == PGM_RUNNING) {
+        if((item == ITM_RS || item == ITM_EXIT) && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+          programRunStop = PGM_WAITING;
+          showFunctionNameItem = 0;
+        }
+        return;
+      }
 
       if(getSystemFlag(FLAG_USER)) {
         int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
@@ -717,6 +733,9 @@
       else if(showFunctionNameItem != 0) {
         item = showFunctionNameItem;
         hideFunctionName();
+        #ifdef PC_BUILD
+          if(item == ITM_RS || item == ITM_XEQ) key[0] = 0;
+        #endif // PC_BUILD
         if(item < 0) {
           showSoftmenu(item);
         }
@@ -729,7 +748,7 @@
             // We are in TAM mode so need to cancel first (equivalent to EXIT)
             tamLeaveMode();
           }
-          if(item == ITM_RCL && funcParam[0] != 0) {
+          if(item == ITM_RCL && getSystemFlag(FLAG_USER) && funcParam[0] != 0) {
             calcRegister_t var = findNamedVariable(funcParam);
             if(var != INVALID_VARIABLE) {
               reallyRunFunction(item, var);
@@ -742,7 +761,7 @@
               #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
             }
           }
-          else if(item == ITM_XEQ && funcParam[0] != 0) {
+          else if(item == ITM_XEQ && getSystemFlag(FLAG_USER) && funcParam[0] != 0) {
             calcRegister_t label = findNamedLabel(funcParam);
             if(label != INVALID_VARIABLE) {
               reallyRunFunction(item, label);
@@ -831,6 +850,9 @@
     }
     else {
       temporaryInformation = TI_NO_INFO;
+    }
+    if(programRunStop == PGM_WAITING) {
+      programRunStop = PGM_STOPPED;
     }
 
     #if (REAL34_WIDTH_TEST == 1)
@@ -1464,6 +1486,9 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       case CM_CONFIRMATION:
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
+        if(programRunStop == PGM_WAITING) {
+          programRunStop = PGM_STOPPED;
+        }
         break;
 
       case CM_ASSIGN:
@@ -1624,6 +1649,9 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       case CM_CONFIRMATION:
         calcMode = previousCalcMode;
         temporaryInformation = TI_NO_INFO;
+        if(programRunStop == PGM_WAITING) {
+          programRunStop = PGM_STOPPED;
+        }
         break;
 
       case CM_PEM:

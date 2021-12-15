@@ -204,6 +204,7 @@
   extern uint8_t                rbrMode;
   extern uint8_t                numScreensNumericFont;
   extern uint8_t                timerCraAndDeciseconds;
+  extern uint8_t                programRunStop;
   extern uint8_t               *beginOfProgramMemory;
   extern uint8_t               *beginOfCurrentProgram;
   extern uint8_t               *endOfCurrentProgram;
@@ -290,6 +291,8 @@
 //  extern int                  keyAutoRepeat; // Key repetition
 //  extern int16_t              previousItem;
     extern uint32_t             nextTimerRefresh;
+
+    int                         convertKeyCode(int key);
   #endif // DMCP_BUILD
 
 #endif // WP43S_H

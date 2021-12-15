@@ -127,6 +127,13 @@ TO_QSPI const char *errorMessages[NUMBER_OF_ERROR_CODES] = {
 #endif // PC_BUILD
 
 
+
+void fnRaiseError(uint16_t errorCode) {
+  displayCalcErrorMessage((uint8_t)errorCode, ERR_REGISTER_LINE, REGISTER_X);
+}
+
+
+
 void displayCalcErrorMessage(uint8_t errorCode, calcRegister_t errMessageRegisterLine, calcRegister_t errRegisterLine) {
   if(errorCode >= NUMBER_OF_ERROR_CODES || errorCode == 0) {
     sprintf(errorMessage, "In function displayCalcErrorMessage: %d is an unexpected value for errorCode!", errorCode);

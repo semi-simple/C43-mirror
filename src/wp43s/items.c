@@ -620,6 +620,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnReturn                    (uint16_t unusedButMandatoryParameter) {}
   void fnRunProgram                (uint16_t unusedButMandatoryParameter) {}
   void fnStopProgram               (uint16_t unusedButMandatoryParameter) {}
+  void fnRaiseError                (uint16_t unusedButMandatoryParameter) {}
   void fnRegClr                    (uint16_t unusedButMandatoryParameter) {}
   void fnRegCopy                   (uint16_t unusedButMandatoryParameter) {}
   void fnRegSort                   (uint16_t unusedButMandatoryParameter) {}
@@ -2264,7 +2265,8 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1465 */  { fnEqNew,                      NOPARAM,                     "EQ.NEW",                                      "NEW",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1466 */  { fnErf,                        NOPARAM,                     "erf",                                         "erf",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /* 1467 */  { fnErfc,                       NOPARAM,                     "erfc",                                        "erfc",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
-/* 1468 */  { itemToBeCoded,                NOPARAM,                     "ERR",                                         "ERR",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/* 1468 */  { fnRaiseError,                 TM_VALUE,                    "ERR",                                         "ERR",                                         (1 << TAM_MAX_BITS) | (NUMBER_OF_ERROR_CODES - 1),
+                                                                                                                                                                                                    CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1469 */  { itemToBeCoded,                NOPARAM,                     "EXITALL",                                     "EXITall",                                     (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1470 */  { fnExpt,                       NOPARAM,                     "EXPT",                                        "EXPT",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1471 */  { fnGetFirstGregorianDay,       NOPARAM,                     "J/G?",                                        "J/G?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},

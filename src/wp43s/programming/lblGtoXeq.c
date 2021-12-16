@@ -734,8 +734,10 @@ int16_t executeOneStep(uint8_t *step) {
         case ITM_FBR:            //  1722
         case ITM_UNDO:           //  1723
         case ITM_SYSTEM:         //  1743
-          sprintf(errorMessage, "In function decodeOneStep: non-programmable function " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE " appeared in the program!" , indexOfItems[item16].itemCatalogName);
-          displayBugScreen(errorMessage);
+          displayCalcErrorMessage(ERROR_NON_PROGRAMMABLE_COMMAND, ERR_REGISTER_LINE, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            moreInfoOnError("In function decodeOneStep:", "non-programmable function", indexOfItems[item16].itemCatalogName, "appeared in the program!");
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
           return 0;
 
         case ITM_DELITM:         //  1455

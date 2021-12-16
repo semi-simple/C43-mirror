@@ -369,7 +369,7 @@ size_t                 wp43sMemInBlocks;
 //--      uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
           uint32_t timeoutTime = sys_current_ms();
           if(nextTimerRefresh > timeoutTime) {
-            timeoutTime = max(1, nextTimerRefresh - timeoutTime);
+            timeoutTime = nextTimerRefresh - timeoutTime;
           }
           else {
             timeoutTime = 1;
@@ -378,7 +378,7 @@ size_t                 wp43sMemInBlocks;
 //--      uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());
           uint32_t sleepTime = sys_current_ms();
           if(nextScreenRefresh > sleepTime) {
-            sleepTime = max(1, nextScreenRefresh - sleepTime);
+            sleepTime = nextScreenRefresh - sleepTime;
           }
           else {
             sleepTime = 1;
@@ -388,7 +388,7 @@ size_t                 wp43sMemInBlocks;
           }
           sleepTime = min(sleepTime, timeoutTime);
 
-          sys_timer_start(TIMER_IDX_REFRESH_SLEEP, max(1, sleepTime));          // wake up for refresh
+          sys_timer_start(TIMER_IDX_REFRESH_SLEEP, max(sleepTime, 1));          // wake up for refresh
           sys_sleep();
           sys_timer_disable(TIMER_IDX_REFRESH_SLEEP);
         }

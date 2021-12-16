@@ -774,6 +774,14 @@
       GdkDisplay     *cssDisplay;
       GdkScreen      *cssScreen;
 
+      // Get the monitor geometry to determine whether the calc is portrait or landscape
+      GdkRectangle monitor;
+      gdk_monitor_get_geometry(gdk_display_get_monitor(gdk_display_get_default(), 0), &monitor);
+
+      if(calcAutoLandscapePortrait) {
+        calcLandscape = (monitor.height < 1025);
+      }
+
       prepareSkin();
       prepareCssData();
 
@@ -790,15 +798,6 @@
       }
       g_object_unref(cssProvider);
       free(cssData);
-
-      // Get the monitor geometry to determine whether the calc is portrait or landscape
-      GdkRectangle monitor;
-      gdk_monitor_get_geometry(gdk_display_get_monitor(gdk_display_get_default(), 0), &monitor);
-      //gdk_screen_get_monitor_geometry(gdk_screen_get_default(), 0, &monitor);
-
-      if(calcAutoLandscapePortrait) {
-        calcLandscape = (monitor.height < 1025);
-      }
 
       // The main window
       frmCalc = gtk_window_new(GTK_WINDOW_TOPLEVEL);

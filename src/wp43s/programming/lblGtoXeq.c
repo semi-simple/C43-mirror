@@ -233,11 +233,16 @@ void fnReturn(uint16_t skip) {
       ++currentLocalStepNumber;
       currentStep = findNextStep(currentStep);
     }
-    // TODO: free local flags and registers
+    if(currentNumberOfLocalRegisters > 0) {
+      allocateLocalRegisters(0);
+    }
     currentSubroutineLevelData = TO_PCMEMPTR(currentPtrToPreviousLevel);
     freeWp43s(_currentSubroutineLevelData, sizeOfCurrentSubroutineLevelDataInBlocks);
     currentPtrToNextLevel = WP43S_NULL;
     allSubroutineLevels.numberOfSubroutineLevels -= 1;
+
+    currentLocalFlags = (currentNumberOfLocalFlags == 0 ? NULL : currentSubroutineLevelData + 3);
+    currentLocalRegisters = (registerHeader_t *)(currentNumberOfLocalRegisters == 0 ? NULL : currentSubroutineLevelData + (currentLocalFlags == NULL ? 3 : 4));
   }
 
   /* Not in a subroutine */
@@ -729,8 +734,10 @@ int16_t executeOneStep(uint8_t *step) {
         case ITM_FBR:            //  1722
         case ITM_UNDO:           //  1723
         case ITM_SYSTEM:         //  1743
-          sprintf(errorMessage, "In function decodeOneStep: non-programmable function " STD_LEFT_SINGLE_QUOTE "%s" STD_RIGHT_SINGLE_QUOTE " appeared in the program!" , indexOfItems[item16].itemCatalogName);
-          displayBugScreen(errorMessage);
+          displayCalcErrorMessage(ERROR_NON_PROGRAMMABLE_COMMAND, ERR_REGISTER_LINE, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            moreInfoOnError("In function decodeOneStep:", "non-programmable function", indexOfItems[item16].itemCatalogName, "appeared in the program!");
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
           return 0;
 
         case ITM_DELITM:         //  1455
@@ -747,6 +754,11 @@ int16_t executeOneStep(uint8_t *step) {
           _executeOp(step, item16, PARAM_LABEL);
           return temporaryInformation == TI_FALSE ? 2 : 1;
 
+        case ITM_BACK:           //  1412
+        case ITM_SKIP:           //  1603
+          _executeOp(step, item16, PARAM_NUMBER_8);
+          return -1;
+
         case ITM_CNST:           //   207
         case ITM_RL:             //   410
         case ITM_RLC:            //   411
@@ -761,7 +773,6 @@ int16_t executeOneStep(uint8_t *step) {
         case ITM_SDR:            //   424
         case ITM_AGRAPH:         //  1409
         case ITM_ALL:            //  1410
-        case ITM_BACK:           //  1412
         case ITM_DSTACK:         //  1450
         case ITM_ENG:            //  1460
         case ITM_ERR:            //  1468
@@ -775,7 +786,6 @@ int16_t executeOneStep(uint8_t *step) {
         case ITM_RSD:            //  1577
         case ITM_SCI:            //  1587
         case ITM_SIM_EQ:         //  1602
-        case ITM_SKIP:           //  1603
         case ITM_TDISP:          //  1619
         case ITM_TONE:           //  1624
         case ITM_WSIZE:          //  1638
@@ -794,6 +804,9 @@ int16_t executeOneStep(uint8_t *step) {
           return temporaryInformation == TI_FALSE ? 2 : 1;
 
         case ITM_CASE:           //  1418
+          _executeOp(step, item16, PARAM_REGISTER);
+          return -1;
+
         case ITM_STOMAX:         //  1430
         case ITM_RCLMAX:         //  1432
         case ITM_RCLMIN:         //  1462
@@ -1447,6 +1460,7 @@ int16_t executeOneStep(uint8_t *step) {
 
 void runProgram(void) {
 #ifndef TESTSUITE_BUILD
+  bool_t nestedEngine = (programRunStop == PGM_RUNNING);
   uint16_t startingSubLevel = currentSubroutineLevel;
   lastErrorCode = ERROR_NONE;
   hourGlassIconEnabled = true;
@@ -1476,15 +1490,7 @@ void runProgram(void) {
         break;
 
       default: // Find the next step
-        for(int16_t i = 0; i < stepsToBeAdvanced; ++i) {
-          if((*currentStep != ((ITM_END >> 8) | 0x80) || *(currentStep + 1) != (ITM_END & 0xff)) && (*currentStep != 255 || *(currentStep + 1) != 255)) {
-            ++currentLocalStepNumber;
-            currentStep = findNextStep(currentStep);
-          }
-          else {
-            break;
-          }
-        }
+        fnSkip((uint16_t)(stepsToBeAdvanced - 1));
         break;
     }
 
@@ -1498,7 +1504,7 @@ void runProgram(void) {
       }
     }
     #ifdef DMCP_BUILD
-      if(!getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+      if(!nestedEngine) {
         int key = key_pop();
         key = convertKeyCode(key);
         if(key == 36 || key == 37) {
@@ -1523,7 +1529,7 @@ void runProgram(void) {
   }
 
 stopProgram:
-  if(programRunStop == PGM_RUNNING && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+  if(programRunStop == PGM_RUNNING && !nestedEngine) {
     programRunStop = PGM_STOPPED;
   }
   showHideHourGlass();

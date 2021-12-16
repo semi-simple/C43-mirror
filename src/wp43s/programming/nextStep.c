@@ -21,7 +21,16 @@
 #include "programming/manage.h"
 #include "programming/nextStep.h"
 
+#include "constantPointers.h"
+#include "debug.h"
+#include "defines.h"
+#include "error.h"
 #include "items.h"
+#include "longIntegerType.h"
+#include "mathematics/comparisonReals.h"
+#include "realType.h"
+#include "registers.h"
+#include "registerValueConversions.h"
 
 #include "wp43s.h"
 
@@ -1144,5 +1153,75 @@ void fnSst(uint16_t unusedButMandatoryParameter) {
     currentLocalStepNumber = 1;
     firstDisplayedLocalStepNumber = 0;
     firstDisplayedStep = programList[currentProgramNumber - 1].instructionPointer;
+  }
+}
+
+
+
+void fnBack(uint16_t numberOfSteps) {
+  if(numberOfSteps >= (currentLocalStepNumber - 1)) {
+    currentLocalStepNumber = 1;
+    currentStep = programList[currentProgramNumber - 1].instructionPointer;
+  }
+  else {
+    currentLocalStepNumber -= numberOfSteps;
+    currentStep = programList[currentProgramNumber - 1].instructionPointer;
+    for(uint16_t i = 1; i < numberOfSteps; ++i) {
+      currentStep = findNextStep(currentStep);
+    }
+  }
+}
+
+
+
+void fnSkip(uint16_t numberOfSteps) {
+  for(uint16_t i = 0; i <= numberOfSteps; ++i) { // '<=' is intended here because the pointer must be moved at least by 1 step
+    if((*currentStep != ((ITM_END >> 8) | 0x80) || *(currentStep + 1) != (ITM_END & 0xff)) && (*currentStep != 255 || *(currentStep + 1) != 255)) {
+      ++currentLocalStepNumber;
+      currentStep = findNextStep(currentStep);
+    }
+    else {
+      break;
+    }
+  }
+}
+
+
+
+void fnCase(uint16_t regist) {
+  real34_t arg;
+  switch(getRegisterDataType(regist)) {
+    case dtLongInteger:
+      convertLongIntegerRegisterToReal34(regist, &arg);
+      break;
+    case dtReal34:
+      if(getRegisterAngularMode(regist) == amNone) {
+        real34ToIntegralValue(REGISTER_REAL34_DATA(regist), &arg, DEC_ROUND_DOWN);
+        break;
+      }
+      /* fallthrough */
+    default:
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "cannot use %s for the parameter of CASE", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnCase:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
+  }
+
+  if(real34CompareLessThan(&arg, const34_1)) {
+    fnSkip(0);
+  }
+  else if(real34CompareGreaterEqual(&arg, const34_1e6)) {
+    fnSkip(65534u);
+  }
+  else {
+    uint32_t x = real34ToUInt32(&arg);
+    if(x < 65535u) {
+      fnSkip(x - 1);
+    }
+    else {
+      fnSkip(65534u);
+    }
   }
 }

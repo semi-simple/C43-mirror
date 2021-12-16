@@ -233,11 +233,16 @@ void fnReturn(uint16_t skip) {
       ++currentLocalStepNumber;
       currentStep = findNextStep(currentStep);
     }
-    allocateLocalRegisters(0);
+    if(currentNumberOfLocalRegisters > 0) {
+      allocateLocalRegisters(0);
+    }
     currentSubroutineLevelData = TO_PCMEMPTR(currentPtrToPreviousLevel);
     freeWp43s(_currentSubroutineLevelData, sizeOfCurrentSubroutineLevelDataInBlocks);
     currentPtrToNextLevel = WP43S_NULL;
     allSubroutineLevels.numberOfSubroutineLevels -= 1;
+
+    currentLocalFlags = (currentNumberOfLocalFlags == 0 ? NULL : currentSubroutineLevelData + 3);
+    currentLocalRegisters = (registerHeader_t *)(currentNumberOfLocalRegisters == 0 ? NULL : currentSubroutineLevelData + (currentLocalFlags == NULL ? 3 : 4));
   }
 
   /* Not in a subroutine */
@@ -1447,6 +1452,7 @@ int16_t executeOneStep(uint8_t *step) {
 
 void runProgram(void) {
 #ifndef TESTSUITE_BUILD
+  bool_t nestedEngine = (programRunStop == PGM_RUNNING);
   uint16_t startingSubLevel = currentSubroutineLevel;
   lastErrorCode = ERROR_NONE;
   hourGlassIconEnabled = true;
@@ -1498,7 +1504,7 @@ void runProgram(void) {
       }
     }
     #ifdef DMCP_BUILD
-      if(!getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+      if(!nestedEngine) {
         int key = key_pop();
         key = convertKeyCode(key);
         if(key == 36 || key == 37) {
@@ -1523,7 +1529,7 @@ void runProgram(void) {
   }
 
 stopProgram:
-  if(programRunStop == PGM_RUNNING && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+  if(programRunStop == PGM_RUNNING && !nestedEngine) {
     programRunStop = PGM_STOPPED;
   }
   showHideHourGlass();

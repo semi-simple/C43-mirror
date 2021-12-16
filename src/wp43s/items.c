@@ -620,6 +620,9 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnReturn                    (uint16_t unusedButMandatoryParameter) {}
   void fnRunProgram                (uint16_t unusedButMandatoryParameter) {}
   void fnStopProgram               (uint16_t unusedButMandatoryParameter) {}
+  void fnBack                      (uint16_t unusedButMandatoryParameter) {}
+  void fnSkip                      (uint16_t unusedButMandatoryParameter) {}
+  void fnCase                      (uint16_t unusedButMandatoryParameter) {}
   void fnRaiseError                (uint16_t unusedButMandatoryParameter) {}
   void fnRegClr                    (uint16_t unusedButMandatoryParameter) {}
   void fnRegCopy                   (uint16_t unusedButMandatoryParameter) {}
@@ -2209,13 +2212,13 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1409 */  { itemToBeCoded,                NOPARAM,                     "AGRAPH",                                      "AGRAPH",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1410 */  { fnDisplayFormatAll,           TM_VALUE,                    "ALL" ,                                        "ALL",                                         (0 << TAM_MAX_BITS) |    15, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1411 */  { fnAssign,                     0,                           "ASSIGN",                                      "ASN",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
-/* 1412 */  { itemToBeCoded,                NOPARAM,                     "BACK",                                        "BACK",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/* 1412 */  { fnBack,                       TM_VALUE,                    "BACK",                                        "BACK",                                        (0 << TAM_MAX_BITS) |   255, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1413 */  { fnBatteryVoltage,             NOPARAM,                     "BATT?",                                       "BATT?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1414 */  { fnBeep,                       NOPARAM,                     "BEEP",                                        "BEEP",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1415 */  { fnTvmBeginMode,               NOPARAM,                     "BeginP",                                      "Begin",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1416 */  { fnBn,                         NOPARAM,                     "B" STD_SUB_n,                                 "B" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /* 1417 */  { fnBnStar,                     NOPARAM,                     "B" STD_SUB_n STD_SUP_ASTERISK,                "B" STD_SUB_n STD_SUP_ASTERISK,                (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
-/* 1418 */  { itemToBeCoded,                NOPARAM,                     "CASE",                                        "CASE",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/* 1418 */  { fnCase,                       TM_REGISTER,                 "CASE",                                        "CASE",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1419 */  { fnClAll,                      NOT_CONFIRMED,               "CLALL",                                       "CLall",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABL_XEQ | EIM_DISABLED},
 /* 1420 */  { itemToBeCoded,                NOPARAM,                     "CLCVAR",                                      "CLCVAR",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABL_XEQ | EIM_DISABLED},
 /* 1421 */  { fnClFAll,                     NOT_CONFIRMED,               "CLFALL",                                      "CLFall",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABL_XEQ | EIM_DISABLED},
@@ -2401,7 +2404,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1600 */  { fnSign,                       NOPARAM,                     "SIGN",                                        "sign",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1601 */  { fnIntegerMode,                SIM_SIGNMT,                  "SIGNMT",                                      "SIGNMT",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1602 */  { fnSimultaneousLinearEquation, TM_VALUE,                    "SIM_EQ",                                      "SIM EQ",                                      (1 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
-/* 1603 */  { itemToBeCoded,                NOPARAM,                     "SKIP",                                        "SKIP",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/* 1603 */  { fnSkip,                       TM_VALUE,                    "SKIP",                                        "SKIP",                                        (0 << TAM_MAX_BITS) |   255, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1604 */  { fnSlvq,                       NOPARAM,                     "SLVQ",                                        "SLVQ",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1605 */  { fnStandardError,              NOPARAM,                     "s" STD_SUB_m,                                 "s" STD_SUB_m,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1606 */  { fnGetIntegerSignMode,         NOPARAM,                     "ISM?",                                        "ISM?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},

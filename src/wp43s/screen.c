@@ -544,7 +544,7 @@
         showDateTime();
       #endif // (DEBUG_INSTEAD_STATUS_BAR != 1)
 
-      if(!getSystemFlag(FLAG_AUTOFF) || timerStartTime != TIMER_APP_STOPPED) {
+      if(!getSystemFlag(FLAG_AUTOFF) || (nextTimerRefresh != 0)) {
         reset_auto_off();
       }
       fnPollTimerApp();
@@ -591,6 +591,13 @@
     }
   }
 #endif // PC_BUILD DMCP_BUILD
+
+
+
+void execTimerApp(uint16_t timerType) {
+  fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
+  fnUpdateTimerApp();
+}
 
 
 

@@ -418,16 +418,15 @@ size_t                 wp43sMemInBlocks;
 
     lcd_refresh();
   //previousRefresh = sys_current_ms();
-    if(timerStartTime == TIMER_APP_STOPPED)
-      nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
-    else
-      nextScreenRefresh = sys_current_ms() + FAST_SCREEN_REFRESH_PERIOD;
+    nextScreenRefresh = sys_current_ms() + SCREEN_REFRESH_PERIOD;
   //now = sys_current_ms();
     //runner_key_tout_init(0); // Enables fast auto repeat
 
     fnTimerReset();
     fnTimerConfig(TO_AUTO_REPEAT, execAutoRepeat, 0);
+    fnTimerConfig(TO_TIMER_APP, execTimerApp, 0);
     fnTimerConfig(TO_KB_ACTV, fnTimerDummyTest, TO_KB_ACTV);
+//--fnTimerConfig(TO_SHOW_NOP, execNOPTimeout, TO_SHOW_NOP);
     nextTimerRefresh = 0;
 
     // Status flags:
@@ -446,23 +445,35 @@ size_t                 wp43sMemInBlocks;
       else if((!ST(STAT_PGM_END) && key_empty())) {         // Just wait if no keys available.
         CLR_ST(STAT_RUNNING);
 
-        if(timerStartTime == TIMER_APP_STOPPED || calcMode != CM_TIMER) {
-          if(nextTimerRefresh == 0) {                                             // no timeout available
-            sys_sleep();
+        if(nextTimerRefresh == 0) {                         // no timeout available
+          sys_sleep();
+        }
+        else {                                                                  // timeout available
+//--      uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
+          uint32_t timeoutTime = sys_current_ms();
+          if(nextTimerRefresh > timeoutTime) {
+            timeoutTime = nextTimerRefresh - timeoutTime;
           }
-          else {                                                                  // timeout available
-            uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
-
-            uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());
-            if(showFunctionNameCounter > 0) {
-              sleepTime = min(sleepTime, FAST_SCREEN_REFRESH_PERIOD);
-            }
-            sleepTime = min(sleepTime, timeoutTime);
-
-            sys_timer_start(TIMER_IDX_REFRESH_SLEEP, max(1, sleepTime));          // wake up for refresh
-            sys_sleep();
-            sys_timer_disable(TIMER_IDX_REFRESH_SLEEP);
+          else {
+            timeoutTime = 1;
           }
+
+//--      uint32_t sleepTime = max(1, nextScreenRefresh - sys_current_ms());
+          uint32_t sleepTime = sys_current_ms();
+          if(nextScreenRefresh > sleepTime) {
+            sleepTime = nextScreenRefresh - sleepTime;
+          }
+          else {
+            sleepTime = 1;
+          }
+          if(showFunctionNameCounter > 0) {
+            sleepTime = min(sleepTime, FAST_SCREEN_REFRESH_PERIOD);
+          }
+          sleepTime = min(sleepTime, timeoutTime);
+
+          sys_timer_start(TIMER_IDX_REFRESH_SLEEP, max(sleepTime, 1));          // wake up for refresh
+          sys_sleep();
+          sys_timer_disable(TIMER_IDX_REFRESH_SLEEP);
         }
 
 
@@ -532,7 +543,7 @@ size_t                 wp43sMemInBlocks;
       }
 
       // Key is ready -> clear auto off timer
-      if(!key_empty() || timerStartTime != TIMER_APP_STOPPED) {
+      if(!key_empty() || (nextTimerRefresh != 0)) {
         reset_auto_off();
       }
 
@@ -667,17 +678,14 @@ size_t                 wp43sMemInBlocks;
       now = sys_current_ms();
       if(nextScreenRefresh <= now) {
 //      previousRefresh = now;
-        nextScreenRefresh += ((showFunctionNameCounter > 0 || (calcMode == CM_TIMER && timerStartTime != TIMER_APP_STOPPED)) ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);
+        nextScreenRefresh += ((showFunctionNameCounter > 0) ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);
         if(nextScreenRefresh < now) {
-          nextScreenRefresh = now + ((showFunctionNameCounter > 0 || (calcMode == CM_TIMER && timerStartTime != TIMER_APP_STOPPED)) ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);         // we were out longer than expected; just skip ahead.
+          nextScreenRefresh = now + ((showFunctionNameCounter > 0) ? FAST_SCREEN_REFRESH_PERIOD : SCREEN_REFRESH_PERIOD);         // we were out longer than expected; just skip ahead.
         }
-        if(calcMode == CM_TIMER && timerStartTime != TIMER_APP_STOPPED) {
-          fnUpdateTimerApp();
-        }
-        else {
+        if(calcMode != CM_TIMER) {
           refreshLcd();
+          lcd_refresh();
         }
-        lcd_refresh();
       }
     }
   }

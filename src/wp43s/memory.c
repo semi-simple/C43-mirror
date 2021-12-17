@@ -306,6 +306,23 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBlocks) {
     }
   }
 
+  // check for overlap
+  for(i=1; i<numberOfFreeMemoryRegions; i++) {
+    if((freeMemoryRegions[i-1].address + freeMemoryRegions[i-1].sizeInBlocks) >= freeMemoryRegions[i].address) {
+      if((freeMemoryRegions[i-1].address + freeMemoryRegions[i-1].sizeInBlocks) >= (freeMemoryRegions[i].address + freeMemoryRegions[i].sizeInBlocks)) {
+        xcopy(freeMemoryRegions + i, freeMemoryRegions + i + 1, (numberOfFreeMemoryRegions - i - 1) * sizeof(freeMemoryRegion_t));
+        numberOfFreeMemoryRegions--;
+        i--;
+      }
+      else {
+        freeMemoryRegions[i-1].sizeInBlocks = freeMemoryRegions[i].address + freeMemoryRegions[i].sizeInBlocks - freeMemoryRegions[i-1].address;
+        xcopy(freeMemoryRegions + i, freeMemoryRegions + i + 1, (numberOfFreeMemoryRegions - i - 1) * sizeof(freeMemoryRegion_t));
+        numberOfFreeMemoryRegions--;
+        i--;
+      }
+    }
+  }
+
   // new free block
   if(!done) {
     if(numberOfFreeMemoryRegions == MAX_FREE_REGION) {

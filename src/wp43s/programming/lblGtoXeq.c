@@ -192,19 +192,27 @@ void fnExecute(uint16_t label) {
     dataBlock_t *_currentSubroutineLevelData = currentSubroutineLevelData;
     allSubroutineLevels.numberOfSubroutineLevels += 1;
     currentSubroutineLevelData = allocWp43s(3);
-    _currentSubroutineLevelData[2].ptrToNextLevel = TO_WP43SMEMPTR(currentSubroutineLevelData);
-    currentReturnProgramNumber = currentProgramNumber;
-    currentReturnLocalStep = currentLocalStepNumber;
-    currentNumberOfLocalRegisters = 0; // No local register
-    currentNumberOfLocalFlags = 0; // No local flags
-    currentSubroutineLevel = allSubroutineLevels.numberOfSubroutineLevels - 1;
-    currentPtrToNextLevel = WP43S_NULL;
-    currentPtrToPreviousLevel = TO_WP43SMEMPTR(_currentSubroutineLevelData);
-    currentLocalFlags = NULL;
-    currentLocalRegisters = NULL;
+    if(currentSubroutineLevelData) {
+      _currentSubroutineLevelData[2].ptrToNextLevel = TO_WP43SMEMPTR(currentSubroutineLevelData);
+      currentReturnProgramNumber = currentProgramNumber;
+      currentReturnLocalStep = currentLocalStepNumber;
+      currentNumberOfLocalRegisters = 0; // No local register
+      currentNumberOfLocalFlags = 0; // No local flags
+      currentSubroutineLevel = allSubroutineLevels.numberOfSubroutineLevels - 1;
+      currentPtrToNextLevel = WP43S_NULL;
+      currentPtrToPreviousLevel = TO_WP43SMEMPTR(_currentSubroutineLevelData);
+      currentLocalFlags = NULL;
+      currentLocalRegisters = NULL;
 
-    fnGoto(label);
-    dynamicMenuItem = -1;
+      fnGoto(label);
+      dynamicMenuItem = -1;
+    }
+    else {
+      // OUT OF MEMORY
+      // May occur if nested too deeply: we don't have tail recursion optimization
+      currentSubroutineLevelData = _currentSubroutineLevelData;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    }
   }
   else {
     fnGoto(label);

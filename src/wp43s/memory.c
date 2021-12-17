@@ -316,6 +316,7 @@ void wp43sFree(void *pcMemPtr, size_t sizeInBlocks) {
       for(j=0; j<numberOfFreeMemoryRegions; j++) {
         printf("  %2" PRId32 " starting at %5" PRIu16 ": %5" PRIu16 " blocks = %6" PRIu32 " bytes\n", j, freeMemoryRegions[j].address, freeMemoryRegions[j].sizeInBlocks, TO_BYTES((uint32_t)freeMemoryRegions[j].sizeInBlocks));
       }
+      break;
     }
   }
   #endif // PC_BUILD

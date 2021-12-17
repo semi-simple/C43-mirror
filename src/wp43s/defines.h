@@ -131,8 +131,8 @@
 #define ERROR_EQUATION_TOO_COMPLEX                46
 #define ERROR_CANNOT_ASSIGN_HERE                  47
 #define ERROR_INVALID_NAME                        48
-#define ERROR_NON_PROGRAMMABLE_COMMAND            49
-#define ERROR_TOO_MANY_VARIABLES                  50 // unlikely
+#define ERROR_TOO_MANY_VARIABLES                  49 // unlikely
+#define ERROR_NON_PROGRAMMABLE_COMMAND            50
 #define ERROR_BAD_INPUT                           51 // This error is not in ReM and cannot occur (theoretically).
 
 #define NUMBER_OF_ERROR_CODES                     52

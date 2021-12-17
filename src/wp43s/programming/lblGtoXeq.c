@@ -807,6 +807,16 @@ int16_t executeOneStep(uint8_t *step) {
           _executeOp(step, item16, PARAM_REGISTER);
           return -1;
 
+        case ITM_SOLVE:          //  1608
+          _executeOp(step, item16, PARAM_REGISTER);
+          if(temporaryInformation == TI_SOLVER_FAILED) {
+            lastErrorCode = ERROR_NONE;
+            return 2;
+          }
+          else {
+            return 1;
+          }
+
         case ITM_STOMAX:         //  1430
         case ITM_RCLMAX:         //  1432
         case ITM_RCLMIN:         //  1462
@@ -816,7 +826,6 @@ int16_t executeOneStep(uint8_t *step) {
         case ITM_PUTK:           //  1556
         case ITM_RCLCFG:         //  1561
         case ITM_RCLS:           //  1564
-        case ITM_SOLVE:          //  1608
         case ITM_STOCFG:         //  1611
         case ITM_STOS:           //  1615
         case ITM_Tex:            //  1625
@@ -1475,7 +1484,7 @@ void runProgram(void) {
   while(1) {
     int16_t stepsToBeAdvanced;
     uint16_t subLevel = currentSubroutineLevel;
-    if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE) {
+    if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE || temporaryInformation == TI_SOLVER_FAILED) {
       temporaryInformation = TI_NO_INFO;
     }
     stepsToBeAdvanced = executeOneStep(currentStep);

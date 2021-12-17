@@ -16,7 +16,7 @@
 
 /**
  * \file bufferize.h
- ***********************************************/
+ */
 #ifndef BUFFERIZE_H
 #define BUFFERIZE_H
 
@@ -25,13 +25,19 @@
 #include "realType.h"
 
 #ifndef TESTSUITE_BUILD
-  void    fnAim                    (uint16_t unusedButMandatoryParameter);
-  void    resetAlphaSelectionBuffer(void);
-  bool_t  timeoutAlphaSelectionBuffer(void);           //JM
-  void    startAlphaSelectionBuffer  (void);           //JM
-  void    light_ASB_icon(void);                        //JM
-  void    kill_ASB_icon(void);                         //JM
+  void     fnAim                    (uint16_t unusedButMandatoryParameter);
+  void     resetAlphaSelectionBuffer(void);
+  uint16_t convertItemToSubOrSup    (uint16_t item, int16_t subOrSup);
+  bool_t   timeoutAlphaSelectionBuffer(void);           //JM
+  void     startAlphaSelectionBuffer  (void);           //JM
+  void     light_ASB_icon(void);                        //JM
+  void     kill_ASB_icon(void);                         //JM
 
+  /**
+   * Adds an item to the alpha buffer.
+   *
+   * \param[in] item item to add to the buffer
+   */
   void    addItemToBuffer          (uint16_t item);
   void    addItemToNimBuffer       (int16_t item);
   void    closeNimWithFraction     (real34_t *dest);

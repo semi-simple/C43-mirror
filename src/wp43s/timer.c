@@ -20,6 +20,7 @@
 #include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
+#include "flags.h"
 #include "fonts.h"
 #include "items.h"
 #include "realType.h"
@@ -394,6 +395,7 @@ void fnResetTimerApp(uint16_t unusedButMandatoryParameter) {
 void fnStartStopTimerApp(void) {
 #ifndef TESTSUITE_BUILD
   if(timerStartTime == TIMER_APP_STOPPED) {
+    setSystemFlag(FLAG_RUNTIM);
     timerStartTime = _currentTime();
     fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
 //--  #ifdef PC_BUILD
@@ -416,6 +418,7 @@ void fnStopTimerApp(void) {
     timerStartTime = TIMER_APP_STOPPED;
     fnTimerStop(TO_TIMER_APP);
   }
+  clearSystemFlag(FLAG_RUNTIM);
   watchIconEnabled = false;
 #endif // TESTSUITE_BUILD
 }

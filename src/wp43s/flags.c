@@ -217,6 +217,9 @@ void fnSetFlag(uint16_t flag) {
   if(flag & 0x8000) { // System flag
     if(isSystemFlagWriteProtected(flag)) {
       temporaryInformation = TI_NO_INFO;
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));
@@ -272,6 +275,9 @@ void fnClearFlag(uint16_t flag) {
   if(flag & 0x8000) { // System flag
     if(isSystemFlagWriteProtected(flag)) {
       temporaryInformation = TI_NO_INFO;
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));
@@ -327,6 +333,9 @@ void fnFlipFlag(uint16_t flag) {
   if(flag & 0x8000) { // System flag
     if(isSystemFlagWriteProtected(flag)) {
       temporaryInformation = TI_NO_INFO;
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));

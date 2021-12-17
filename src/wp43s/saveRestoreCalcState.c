@@ -40,7 +40,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         263  // Save graphVariable
+#define BACKUP_VERSION         363  // Save timer application status
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -155,6 +155,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
     save(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
     save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+    save(&programRunStop,                     sizeof(programRunStop),                     BACKUP);
     save(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
     save(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
     save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
@@ -405,6 +406,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
       restore(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
       restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+      restore(&programRunStop,                     sizeof(programRunStop),                     BACKUP);
       restore(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
       restore(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
       restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
@@ -1548,7 +1550,7 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
         for(i = 0; i < numberOfUserMenus; ++i) {
-          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_BINARY) == 0) {
+          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_NAME) == 0) {
             target = i;
           }
         }

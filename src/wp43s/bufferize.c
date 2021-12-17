@@ -35,6 +35,7 @@
 #include "mathematics/toRect.h"
 #include "mathematics/wp34s.h"
 #include "matrix.h"
+#include "programming/manage.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -2081,6 +2082,11 @@ void kill_ASB_icon(void) {
     }
 
     int16_t lastChar = strlen(aimBuffer) - 1;
+
+    if(calcMode == CM_PEM) {
+      pemCloseNumberInput();
+      return;
+    }
 
     if(nimNumberPart != NP_INT_16) { // We need a # and a base
       if(nimNumberPart != NP_INT_BASE || aimBuffer[lastChar] != '#') { // We need a base

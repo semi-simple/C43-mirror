@@ -2902,4 +2902,12 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 void fnView(uint16_t regist) {
   currentViewRegister = regist;
   temporaryInformation = TI_VIEW;
+  if(programRunStop == PGM_RUNNING) {
+    refreshScreen();
+    #ifdef DMCP_BUILD
+      lcd_refresh();
+    #else // !DMCP_BUILD
+      refreshLcd(NULL);
+    #endif // DMCP_BUILD
+  }
 }

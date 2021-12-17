@@ -477,10 +477,8 @@ void allocateLocalRegisters(uint16_t numberOfRegistersToAllocate) {
   if(currentLocalFlags == NULL) {
     // 1st allocation of local registers in this level of subroutine
 //TOCHECK XXXX
-    if(numberOfRegistersToAllocate == 0) {
-      return;
-    }
-    else if((currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 3, 4 + numberOfRegistersToAllocate))) {
+
+    if((currentSubroutineLevelData = reallocWp43s(currentSubroutineLevelData, 3, 4 + numberOfRegistersToAllocate))) {
       currentLocalFlags = currentSubroutineLevelData + 3;
       currentLocalFlags->localFlags = 0;
       currentLocalRegisters = (registerHeader_t *)(currentSubroutineLevelData + 4);

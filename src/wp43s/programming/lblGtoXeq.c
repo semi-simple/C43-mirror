@@ -192,19 +192,27 @@ void fnExecute(uint16_t label) {
     dataBlock_t *_currentSubroutineLevelData = currentSubroutineLevelData;
     allSubroutineLevels.numberOfSubroutineLevels += 1;
     currentSubroutineLevelData = allocWp43s(3);
-    _currentSubroutineLevelData[2].ptrToNextLevel = TO_WP43SMEMPTR(currentSubroutineLevelData);
-    currentReturnProgramNumber = currentProgramNumber;
-    currentReturnLocalStep = currentLocalStepNumber;
-    currentNumberOfLocalRegisters = 0; // No local register
-    currentNumberOfLocalFlags = 0; // No local flags
-    currentSubroutineLevel = allSubroutineLevels.numberOfSubroutineLevels - 1;
-    currentPtrToNextLevel = WP43S_NULL;
-    currentPtrToPreviousLevel = TO_WP43SMEMPTR(_currentSubroutineLevelData);
-    currentLocalFlags = NULL;
-    currentLocalRegisters = NULL;
+    if(currentSubroutineLevelData) {
+      _currentSubroutineLevelData[2].ptrToNextLevel = TO_WP43SMEMPTR(currentSubroutineLevelData);
+      currentReturnProgramNumber = currentProgramNumber;
+      currentReturnLocalStep = currentLocalStepNumber;
+      currentNumberOfLocalRegisters = 0; // No local register
+      currentNumberOfLocalFlags = 0; // No local flags
+      currentSubroutineLevel = allSubroutineLevels.numberOfSubroutineLevels - 1;
+      currentPtrToNextLevel = WP43S_NULL;
+      currentPtrToPreviousLevel = TO_WP43SMEMPTR(_currentSubroutineLevelData);
+      currentLocalFlags = NULL;
+      currentLocalRegisters = NULL;
 
-    fnGoto(label);
-    dynamicMenuItem = -1;
+      fnGoto(label);
+      dynamicMenuItem = -1;
+    }
+    else {
+      // OUT OF MEMORY
+      // May occur if nested too deeply: we don't have tail recursion optimization
+      currentSubroutineLevelData = _currentSubroutineLevelData;
+      displayCalcErrorMessage(ERROR_RAM_FULL, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
+    }
   }
   else {
     fnGoto(label);
@@ -222,8 +230,8 @@ void fnExecute(uint16_t label) {
 
 
 void fnReturn(uint16_t skip) {
-  const uint16_t sizeOfCurrentSubroutineLevelDataInBlocks = 3 + (currentNumberOfLocalFlags > 0 ? 1 : 0) + currentNumberOfLocalRegisters;
   dataBlock_t *_currentSubroutineLevelData = currentSubroutineLevelData;
+  uint16_t sizeToBeFreedInBlocks;
 
   /* A subroutine is running */
   if(currentSubroutineLevel > 0) {
@@ -235,9 +243,11 @@ void fnReturn(uint16_t skip) {
     }
     if(currentNumberOfLocalRegisters > 0) {
       allocateLocalRegisters(0);
+      _currentSubroutineLevelData = currentSubroutineLevelData;
     }
+    sizeToBeFreedInBlocks = 3 + (currentNumberOfLocalFlags > 0 ? 1 : 0);
     currentSubroutineLevelData = TO_PCMEMPTR(currentPtrToPreviousLevel);
-    freeWp43s(_currentSubroutineLevelData, sizeOfCurrentSubroutineLevelDataInBlocks);
+    freeWp43s(_currentSubroutineLevelData, sizeToBeFreedInBlocks);
     currentPtrToNextLevel = WP43S_NULL;
     allSubroutineLevels.numberOfSubroutineLevels -= 1;
 

@@ -473,7 +473,21 @@ size_t                 wp43sMemInBlocks;
           sys_sleep();
         }
         else {                                                                 // timeout available
-          uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
+//--      uint32_t timeoutTime = max(1, nextTimerRefresh - sys_current_ms());
+          uint32_t timeoutTime = sys_current_ms();
+          if(nextTimerRefresh > timeoutTime) {
+            timeoutTime = nextTimerRefresh - timeoutTime;
+          }
+          else {
+#ifdef TMR_OBSERVE
+            if(fnTestBitIsSet(3) == true) {
+              char snum[50];
+              itoa(timeoutTime - nextTimerRefresh, snum, 10);
+              showString(snum, &standardFont, 20, 120, vmNormal, false, false);
+            }
+#endif
+            timeoutTime = 1;
+          }
 
           if(fnTimerGetStatus(TO_KB_ACTV) == TMR_RUNNING) {
             timeoutTime = min(timeoutTime, 40);
@@ -489,7 +503,7 @@ size_t                 wp43sMemInBlocks;
 
           uint32_t sleepTime = SCREEN_REFRESH_PERIOD;
           sleepTime = min(sleepTime, timeoutTime);
-          sys_timer_start(TIMER_IDX_REFRESH_SLEEP, max(1, sleepTime));         // wake up for screen refresh
+          sys_timer_start(TIMER_IDX_REFRESH_SLEEP, max(sleepTime, 1));         // wake up for screen refresh
 #ifdef TMR_OBSERVE
           if(fnTestBitIsSet(1) == true) {
             char snum[50];
@@ -675,7 +689,7 @@ size_t                 wp43sMemInBlocks;
 
 #ifdef AUTOREPEAT
       // Increase the refresh rate if we are in an UP/DOWN key press so we pick up auto key repeats
-      if(key == 27 || key == 32) {
+      if(key == 18 || key == 23) {
 //      inDownUpPress = 1;
 //      nextAutoRepeat = now + KEY_AUTOREPEAT_FIRST_PERIOD;
         if(fnTimerGetStatus(TO_AUTO_REPEAT) != TMR_RUNNING) {
@@ -874,9 +888,11 @@ size_t                 wp43sMemInBlocks;
         if(nextScreenRefresh < now) {
           nextScreenRefresh = now + SCREEN_REFRESH_PERIOD;  // we were out longer than expected; just skip ahead.
         }
+        if((calcMode != CM_TIMER) || (fnTimerGetStatus(TO_TIMER_APP) != TMR_RUNNING)) {
         refreshLcd();
         if(key >= 0) lcd_refresh();                         //JMTOCHECK if key>0 is needed. what about -1?
         else {lcd_refresh_wait();}
+      }
       }
 
     /*if(nextScreenRefresh <= now) {                        // removed autorepeat stuff

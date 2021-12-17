@@ -230,7 +230,6 @@ void fnExecute(uint16_t label) {
 
 
 void fnReturn(uint16_t skip) {
-  const uint16_t sizeOfCurrentSubroutineLevelDataInBlocks = 3 + (currentNumberOfLocalFlags > 0 ? 1 : 0) + currentNumberOfLocalRegisters;
   dataBlock_t *_currentSubroutineLevelData = currentSubroutineLevelData;
 
   /* A subroutine is running */
@@ -245,7 +244,7 @@ void fnReturn(uint16_t skip) {
       allocateLocalRegisters(0);
     }
     currentSubroutineLevelData = TO_PCMEMPTR(currentPtrToPreviousLevel);
-    freeWp43s(_currentSubroutineLevelData, sizeOfCurrentSubroutineLevelDataInBlocks);
+    freeWp43s(_currentSubroutineLevelData, 3);
     currentPtrToNextLevel = WP43S_NULL;
     allSubroutineLevels.numberOfSubroutineLevels -= 1;
 

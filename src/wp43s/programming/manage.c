@@ -780,8 +780,11 @@ void insertStepInProgram(int16_t func) {
         tmpString[1] = (char)(real34IsZero(REGISTER_REAL34_DATA(TEMP_REGISTER_1)) ? VALUE_0 : VALUE_1);
         _insertInProgram((uint8_t *)tmpString, 2);
       }
-      else if((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.alpha) {
-        // not implemented
+      else if((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.alpha && !tam.indirect) {
+        tmpString[0] = func;
+        tmpString[1] = (char)SYSTEM_FLAG_NUMBER;
+        tmpString[2] = tam.value;
+        _insertInProgram((uint8_t *)tmpString, 3);
       }
       else if(tam.alpha) {
         uint16_t nameLength = stringByteLength(aimBuffer);
@@ -907,6 +910,11 @@ void insertStepInProgram(int16_t func) {
 
     // Double-byte, 8-bit integer parameter
     case ITM_CNST:           //  207
+    case ITM_BS:             //  405
+    case ITM_BC:             //  406
+    case ITM_CB:             //  407
+    case ITM_SB:             //  408
+    case ITM_FB:             //  409
     case ITM_RL:             //  410
     case ITM_RLC:            //  411
     case ITM_RR:             //  412
@@ -991,11 +999,6 @@ void insertStepInProgram(int16_t func) {
     case ITM_FSC:            //  399
     case ITM_FSS:            //  400
     case ITM_FSF:            //  401
-    case ITM_BS:             //  405
-    case ITM_BC:             //  406
-    case ITM_CB:             //  407
-    case ITM_SB:             //  408
-    case ITM_FB:             //  409
 
       if(tam.mode == TM_CMP && tam.value == TEMP_REGISTER_1) {
         tmpString[0] = (func >> 8) | 0x80;
@@ -1003,8 +1006,12 @@ void insertStepInProgram(int16_t func) {
         tmpString[2] = (char)(real34IsZero(REGISTER_REAL34_DATA(TEMP_REGISTER_1)) ? VALUE_0 : VALUE_1);
         _insertInProgram((uint8_t *)tmpString, 3);
       }
-      else if((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.alpha) {
-        // not implemented
+      else if((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.alpha && !tam.indirect) {
+        tmpString[0] = (func >> 8) | 0x80;
+        tmpString[1] =  func       & 0xff;
+        tmpString[2] = (char)SYSTEM_FLAG_NUMBER;
+        tmpString[3] = tam.value;
+        _insertInProgram((uint8_t *)tmpString, 4);
       }
       else if(tam.alpha) {
         uint16_t nameLength = stringByteLength(aimBuffer);

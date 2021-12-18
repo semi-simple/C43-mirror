@@ -97,7 +97,7 @@ uint8_t *countOpBytes(uint8_t *step, uint16_t paramMode) {
       if(opParam <= LAST_LOCAL_FLAG) { // Global flags from 00 to 99, lettered flags from X to K, and local flags from .00 to .15 (or .31)
         return step;
       }
-      else if(opParam == INDIRECT_REGISTER) {
+      else if(opParam == INDIRECT_REGISTER || opParam == SYSTEM_FLAG_NUMBER) {
         return step + 1;
       }
       else if(opParam == INDIRECT_VARIABLE) {
@@ -370,6 +370,11 @@ uint8_t *findNextStep(uint8_t *step) {
           return countOpBytes(step, PARAM_LABEL);
 
         case ITM_CNST:           //   207
+        case ITM_BS:             //   405
+        case ITM_BC:             //   406
+        case ITM_CB:             //   407
+        case ITM_SB:             //   408
+        case ITM_FB:             //   409
         case ITM_RL:             //   410
         case ITM_RLC:            //   411
         case ITM_RR:             //   412
@@ -442,11 +447,6 @@ uint8_t *findNextStep(uint8_t *step) {
         case ITM_FSC:            //   399
         case ITM_FSS:            //   400
         case ITM_FSF:            //   401
-        case ITM_BS:             //   405
-        case ITM_BC:             //   406
-        case ITM_CB:             //   407
-        case ITM_SB:             //   408
-        case ITM_FB:             //   409
           return countOpBytes(step, PARAM_FLAG);
 
         case CST_01:             //   128

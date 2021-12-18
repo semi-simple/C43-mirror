@@ -3035,9 +3035,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   jm_show_calc_state("refreshScreen");
   printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCounter++, calcMode, last_CM);    //JMYY
 #endif
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(3); }     //dr
-#endif
 
   //clearScreen();  //JM do not use this clearscreen. Rather use the distributed clearscreens, WITH the if(last_CM != calcMode)
 
@@ -3083,9 +3080,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       case CM_ERROR_MESSAGE:
       case CM_CONFIRMATION:
       case CM_TIMER:
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(0); }     //dr
-#endif
       if(last_CM != calcMode) {
           clearScreen();
 
@@ -3097,12 +3091,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         clearScreen_old(true,false,false); 
       }                                    //jm v
 
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(0); }      //dr
-#endif
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(1); }     //dr
-#endif
         refreshRegisterLine(REGISTER_X);
         if(temporaryInformation == TI_VIEW) {
           clearRegisterLine(REGISTER_T, true, true);
@@ -3144,13 +3132,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
           }
         }
 
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(1); }      //dr
-#endif
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(2); }     //dr
-#endif
-
       if((last_CM != calcMode) || (doRefreshSoftMenu)) {
         last_CM = calcMode;
         doRefreshSoftMenu = false;
@@ -3165,12 +3146,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
           for(int y=Y_POSITION_OF_REGISTER_Y_LINE; y<Y_POSITION_OF_REGISTER_Y_LINE + 2*REGISTER_LINE_HEIGHT; y++ ) setBlackPixel(SCREEN_WIDTH - largeur - 1, y); // For the real34 width test
         #endif // (REAL34_WIDTH_TEST == 1)
                                         //jm ^
-
-
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(2); }      //dr
-#endif
-
       break;
 
     case CM_LISTXY:                     //JM
@@ -3222,10 +3197,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   #ifndef DMCP_BUILD
     refreshLcd(NULL);
   #endif // !DMCP_BUILD
-
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(3); }      //dr
-#endif
 }
 #endif // !TESTSUITE_BUILD
 

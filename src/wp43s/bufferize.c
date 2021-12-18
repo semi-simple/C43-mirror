@@ -1572,7 +1572,7 @@ void kill_ASB_icon(void) {
         break;
 
       case ITM_dotD :
-        if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_FLOAT_PART) {
+        if(nimNumberPart == NP_REAL_FLOAT_PART) {
           done = true;
 
           closeNim();

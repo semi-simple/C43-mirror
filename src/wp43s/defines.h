@@ -966,6 +966,7 @@ typedef enum {
 #define STRING_DATE                               12
 
 // OP parameter special values
+#define SYSTEM_FLAG_NUMBER                       250
 #define VALUE_0                                  251
 #define VALUE_1                                  252
 #define STRING_LABEL_VARIABLE                    253

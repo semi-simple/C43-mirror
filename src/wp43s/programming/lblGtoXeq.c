@@ -22,6 +22,7 @@
 
 #include "charString.h"
 #include "constantPointers.h"
+#include "dateTime.h"
 #include "defines.h"
 #include "error.h"
 #include "flags.h"
@@ -356,6 +357,31 @@ static void _executeOp(uint8_t *paramAddress, uint16_t op, uint16_t paramMode) {
       else if(FIRST_LOCAL_FLAG + NUMBER_OF_LOCAL_FLAGS <= opParam && opParam < FIRST_LOCAL_FLAG + NUMBER_OF_LOCAL_FLAGS + NUMBER_OF_SYSTEM_FLAGS) { // Local register from .00 to .15 (or .31)
         reallyRunFunction(op, opParam);
       }
+      else if(opParam == SYSTEM_FLAG_NUMBER) {
+        switch((uint16_t)(*paramAddress) | 0xc000) { 
+          case FLAG_YMD:
+          case FLAG_DMY:
+          case FLAG_MDY:
+          case FLAG_ALPHA:
+          case FLAG_alphaCAP:
+          case FLAG_RUNTIM:
+          case FLAG_RUNIO:
+          case FLAG_PRINT:
+          case FLAG_LOWBAT:
+          case FLAG_NUMIN:
+          case FLAG_ALPIN:
+          case FLAG_ASLIFT:
+          case FLAG_INTING:
+          case FLAG_SOLVING:
+          case FLAG_VMDISP:
+          case FLAG_USB:
+          case FLAG_ENDPMT:
+            reallyRunFunction(op, (uint16_t)(*paramAddress) | 0xc000);
+            break;
+          default:
+            reallyRunFunction(op, (uint16_t)(*paramAddress) | 0x8000);
+        }
+      }
       else if(opParam == INDIRECT_REGISTER) {
         _executeWithIndirectRegister(paramAddress, op);
       }
@@ -527,11 +553,21 @@ static void _putLiteral(uint8_t *literalAddress) {
       xcopy(REGISTER_STRING_DATA(REGISTER_X), tmpStringLabelOrVariableName, stringByteLength(tmpStringLabelOrVariableName) + 1);
       break;
 
-    //case STRING_DATE:
-    //  break;
+    case STRING_DATE:
+      _getStringLabelOrVariableName(literalAddress);
+      liftStack();
+      reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
+      stringToReal34(tmpStringLabelOrVariableName, REGISTER_REAL34_DATA(REGISTER_X));
+      julianDayToInternalDate(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+      break;
 
-    //case STRING_TIME:
-    //  break;
+    case STRING_TIME:
+      _getStringLabelOrVariableName(literalAddress);
+      liftStack();
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      stringToReal34(tmpStringLabelOrVariableName, REGISTER_REAL34_DATA(REGISTER_X));
+      hmmssInRegisterToSeconds(REGISTER_X);
+      break;
 
     default: {
       #ifndef DMCP_BUILD
@@ -770,6 +806,11 @@ int16_t executeOneStep(uint8_t *step) {
           return -1;
 
         case ITM_CNST:           //   207
+        case ITM_BS:             //   405
+        case ITM_BC:             //   406
+        case ITM_CB:             //   407
+        case ITM_SB:             //   408
+        case ITM_FB:             //   409
         case ITM_RL:             //   410
         case ITM_RLC:            //   411
         case ITM_RR:             //   412
@@ -858,11 +899,6 @@ int16_t executeOneStep(uint8_t *step) {
         case ITM_FSC:            //   399
         case ITM_FSS:            //   400
         case ITM_FSF:            //   401
-        case ITM_BS:             //   405
-        case ITM_BC:             //   406
-        case ITM_CB:             //   407
-        case ITM_SB:             //   408
-        case ITM_FB:             //   409
           _executeOp(step, item16, PARAM_FLAG);
           return temporaryInformation == TI_FALSE ? 2 : 1;
 

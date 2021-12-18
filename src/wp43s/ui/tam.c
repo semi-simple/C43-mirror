@@ -575,6 +575,11 @@
     if(calcMode == CM_NIM) {
       closeNim();
     }
+    else if(calcMode == CM_PEM && aimBuffer[0] != 0) {
+      if(getSystemFlag(FLAG_ALPHA)) pemCloseAlphaInput();
+      else                          pemCloseNumberInput();
+      aimBuffer[0] = 0;
+    }
 
     tam.alpha = (func == ITM_ASSIGN);
     tam.currentOperation = tam.function;

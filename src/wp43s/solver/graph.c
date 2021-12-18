@@ -68,6 +68,7 @@
 	  }
 	}
 
+#ifndef SAVE_SPACE_DM42_13GRF
 	static void fnStrtoX(char aimBuffer[]) {
 	  setSystemFlag(FLAG_ASLIFT); // 5
 	  liftStack();
@@ -88,9 +89,11 @@
     stringToReal34(buff, REGISTER_REAL34_DATA(REGISTER_X));
     setSystemFlag(FLAG_ASLIFT);
   }
-#endif
+#endif //SAVE_SPACE_DM42_13GRF
+#endif //TESTSUITE_BUILD
 
 
+#ifndef SAVE_SPACE_DM42_13GRF
 #define DOUBLEINVALID 123.432f
 static double convert_to_double(calcRegister_t regist) { //Convert from X register to double
   double y;
@@ -115,6 +118,8 @@ static double convert_to_double(calcRegister_t regist) { //Convert from X regist
   y = strtof(buff, NULL);
   return y;
 }
+#endif //SAVE_SPACE_DM42_13GRF
+
 
 #ifndef TESTSUITE_BUILD
   static void fnPlot(uint16_t unusedButMandatoryParameter) {
@@ -124,6 +129,7 @@ static double convert_to_double(calcRegister_t regist) { //Convert from X regist
 #endif //TESTSUITE
 
 
+#ifndef SAVE_SPACE_DM42_13GRF
 static void initialize_function(void){
   #ifndef TESTSUITE_BUILD
     calcRegister_t regStats = 0;
@@ -133,6 +139,7 @@ static void initialize_function(void){
     }
   #endif //TESTSUITE_BUILD
 }
+#endif //SAVE_SPACE_DM42_13GRF
 
 #ifndef TESTSUITE_BUILD
   static void execute_rpn_function(void){
@@ -150,6 +157,7 @@ static void initialize_function(void){
     }
   }
 
+#ifndef SAVE_SPACE_DM42_13GRF
   static bool_t regIsLowerThanTol(calcRegister_t REG, calcRegister_t TOL) {
     return ( (real34IsZero(REGISTER_REAL34_DATA(REG)) && (getRegisterDataType(REG) == dtComplex34 ? real34IsZero(REGISTER_IMAG34_DATA(REG)) : 1 )) 
 
@@ -194,6 +202,7 @@ static void divFunction(bool_t addRandom, calcRegister_t TOL) {
   }
   runFunction(ITM_DIV);
 }
+#endif //SAVE_SPACE_DM42_13GRF
 
 
 int16_t osc = 0;
@@ -286,6 +295,7 @@ void graph_eqn(uint16_t mode) {
 #define __L1     98
 
 
+#ifndef SAVE_SPACE_DM42_13GRF
 static void graph_solver() {         //Input parameters in registers SREG_STARTX0, SREG_STARTX1
   #ifndef TESTSUITE_BUILD
   if(graphVariable <= 0) return;
@@ -957,6 +967,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
 
   #endif
 }
+#endif //SAVE_SPACE_DM42_13GRF
 
 
 
@@ -964,6 +975,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
 
 
 void fnEqSolvGraph (uint16_t func) {
+#ifndef SAVE_SPACE_DM42_13GRF
   hourGlassIconEnabled = true;
   showHideHourGlass();
   #ifdef DMCP_BUILD
@@ -1019,6 +1031,7 @@ void fnEqSolvGraph (uint16_t func) {
           }
      default:;
      }
+#endif //SAVE_SPACE_DM42_13GRF
 }
 
 

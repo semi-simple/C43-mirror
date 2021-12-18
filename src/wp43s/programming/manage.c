@@ -332,7 +332,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
       else {
         showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 21 * line, vmNormal,  false, true);
       }
-      lblOrEnd = (*step == ITM_LBL) || ((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff)));
+      lblOrEnd = (*step == ITM_LBL) || ((*step == ((ITM_END >> 8) | 0x80)) && (*(step + 1) == (ITM_END & 0xff))) || ((*step == 0xff) && (*(step + 1) == 0xff));
       decodeOneStep(step);
       if(firstDisplayedStepNumber + line - lineOffset == currentStepNumber) {
         if(getSystemFlag(FLAG_ALPHA)) {

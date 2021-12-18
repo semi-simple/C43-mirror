@@ -1086,6 +1086,7 @@ uint8_t *findPreviousStep(uint8_t *step) {
 
 
 static void _showStep(void) {
+#ifndef TESTSUITE_BUILD
   bool_t lblOrEnd = (*currentStep == ITM_LBL) || ((*currentStep == ((ITM_END >> 8) | 0x80)) && (*(currentStep + 1) == (ITM_END & 0xff))) || ((*currentStep == 0xff) && (*(currentStep + 1) == 0xff));
   int16_t xPos = (lblOrEnd ? 42 : 62);
   int16_t maxWidth = SCREEN_WIDTH - xPos;
@@ -1116,6 +1117,7 @@ static void _showStep(void) {
     xstrOrig[2] = 0;
   }
   showString(tmpString, &standardFont, xPos, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+#endif // TESTSUITE_BUILD
 }
 
 

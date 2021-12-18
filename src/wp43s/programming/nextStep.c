@@ -21,16 +21,22 @@
 #include "programming/manage.h"
 #include "programming/nextStep.h"
 
+#include "charString.h"
 #include "constantPointers.h"
 #include "debug.h"
 #include "defines.h"
 #include "error.h"
+#include "fonts.h"
 #include "items.h"
 #include "longIntegerType.h"
 #include "mathematics/comparisonReals.h"
+#include "programming/decode.h"
+#include "programming/lblGtoXeq.h"
 #include "realType.h"
 #include "registers.h"
 #include "registerValueConversions.h"
+#include "screen.h"
+#include <stdint.h>
 
 #include "wp43s.h"
 
@@ -1079,7 +1085,44 @@ uint8_t *findPreviousStep(uint8_t *step) {
 
 
 
-void fnBst(uint16_t unusedButMandatoryParameter) {
+static void _showStep(void) {
+#ifndef TESTSUITE_BUILD
+  bool_t lblOrEnd = (*currentStep == ITM_LBL) || ((*currentStep == ((ITM_END >> 8) | 0x80)) && (*(currentStep + 1) == (ITM_END & 0xff))) || ((*currentStep == 0xff) && (*(currentStep + 1) == 0xff));
+  int16_t xPos = (lblOrEnd ? 42 : 62);
+  int16_t maxWidth = SCREEN_WIDTH - xPos;
+
+  sprintf(tmpString, "%04" PRIu16 ":" STD_SPACE_4_PER_EM, currentLocalStepNumber);
+  showString(tmpString, &standardFont, 1, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+
+  decodeOneStep(currentStep);
+  if(stringWidth(tmpString, &standardFont, true, true) >= maxWidth) {
+    char *xstr = tmpString;
+    char *xstrOrig = tmpString;
+    char *glyph = tmpString + TMP_STR_LENGTH - 4;
+    maxWidth -= stringWidth(STD_ELLIPSIS, &standardFont, true, true);
+    while(maxWidth > 0) {
+      xstrOrig = xstr;
+      glyph[0] = *(xstr++);
+      if(glyph[0] & 0x80) {
+        glyph[1] = *(xstr++);
+        glyph[2] = 0;
+      }
+      else {
+        glyph[1] = 0;
+      }
+      maxWidth -= stringWidth(glyph, &standardFont, true, true);
+    }
+    xstrOrig[0] = STD_ELLIPSIS[0];
+    xstrOrig[1] = STD_ELLIPSIS[1];
+    xstrOrig[2] = 0;
+  }
+  showString(tmpString, &standardFont, xPos, Y_POSITION_OF_REGISTER_T_LINE + 6, vmNormal, true, true);
+#endif // TESTSUITE_BUILD
+}
+
+
+
+static void _bstInPem(void) {
   //  - currentProgramNumber
   //  - currentLocalStepNumber
   //  - firstDisplayedLocalStepNumber
@@ -1122,9 +1165,20 @@ void fnBst(uint16_t unusedButMandatoryParameter) {
   }
 }
 
+void fnBst(uint16_t unusedButMandatoryParameter) {
+  _bstInPem();
+  if(calcMode != CM_PEM) {
+    currentStep = programList[currentProgramNumber - 1].instructionPointer;
+    for(int i = 1; i < currentLocalStepNumber; ++i) {
+      currentStep = findNextStep(currentStep);
+    }
+    _showStep();
+  }
+}
 
 
-void fnSst(uint16_t unusedButMandatoryParameter) {
+
+static void _sstInPem(void) {
   uint16_t numberOfSteps = getNumberOfSteps();
 
   if(currentLocalStepNumber < numberOfSteps) {
@@ -1153,6 +1207,16 @@ void fnSst(uint16_t unusedButMandatoryParameter) {
     currentLocalStepNumber = 1;
     firstDisplayedLocalStepNumber = 0;
     firstDisplayedStep = programList[currentProgramNumber - 1].instructionPointer;
+  }
+}
+
+void fnSst(uint16_t unusedButMandatoryParameter) {
+  if(calcMode == CM_PEM) {
+    _sstInPem();
+  }
+  else {
+    _showStep();
+    runProgram(true);
   }
 }
 

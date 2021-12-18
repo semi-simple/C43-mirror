@@ -868,7 +868,9 @@
 
       case ITM_UP:
         fnKeyUp(NOPARAM);
-        refreshScreen();
+        if(currentSoftmenuScrolls() || calcMode != CM_NORMAL) {
+          refreshScreen();
+        }
         keyActionProcessed = true;
         #if (REAL34_WIDTH_TEST == 1)
           if(++largeur > SCREEN_WIDTH) largeur--;
@@ -879,7 +881,9 @@
 
       case ITM_DOWN:
         fnKeyDown(NOPARAM);
-        refreshScreen();
+        if(currentSoftmenuScrolls() || calcMode != CM_NORMAL) {
+          refreshScreen();
+        }
         keyActionProcessed = true;
         #if (REAL34_WIDTH_TEST == 1)
           if(--largeur < 20) largeur++;
@@ -1724,6 +1728,14 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
         if(currentSoftmenuScrolls()) {
           menuUp();
         }
+        else if(calcMode == CM_NORMAL) {
+          fnBst(NOPARAM);
+          #ifdef DMCP_BUILD
+            lcd_refresh();
+          #else // !DMCP_BUILD
+            refreshLcd(NULL);
+          #endif // DMCP_BUILD
+        }
         if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_PLOT_LR){
           fnPlotStat(PLOT_NXT);
         }
@@ -1833,6 +1845,9 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
         resetAlphaSelectionBuffer();
         if(currentSoftmenuScrolls()) {
           menuDown();
+        }
+        else if(calcMode == CM_NORMAL) {
+          fnSst(NOPARAM);
         }
         if(softmenu[softmenuStack[0].softmenuId].menuItem == -MNU_PLOT_LR){
           fnPlotStat(PLOT_REV); //REVERSE

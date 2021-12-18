@@ -223,7 +223,7 @@ void fnExecute(uint16_t label) {
       refreshScreen();
     }
 #endif // TESTSUITE_BUILD
-    runProgram();
+    runProgram(false);
   }
 }
 
@@ -265,7 +265,7 @@ void fnReturn(uint16_t skip) {
 
 void fnRunProgram(uint16_t unusedButMandatoryParameter) {
   dynamicMenuItem = -1;
-  runProgram();
+  runProgram(false);
 }
 
 
@@ -1477,7 +1477,7 @@ int16_t executeOneStep(uint8_t *step) {
 
 
 
-void runProgram(void) {
+void runProgram(bool_t singleStep) {
 #ifndef TESTSUITE_BUILD
   bool_t nestedEngine = (programRunStop == PGM_RUNNING);
   uint16_t startingSubLevel = currentSubroutineLevel;
@@ -1542,6 +1542,9 @@ void runProgram(void) {
     if(programRunStop != PGM_RUNNING) {
       break;
     }
+    if(singleStep) {
+      break;
+    }
     #ifdef PC_BUILD
       refreshLcd(NULL);
     #endif // PC_BUILD
@@ -1569,7 +1572,7 @@ void execProgram(uint16_t label) {
   uint8_t *origStep = currentStep;
   fnExecute(label);
   if(programRunStop == PGM_RUNNING && (getSystemFlag(FLAG_INTING) || getSystemFlag(FLAG_SOLVING))) {
-    runProgram();
+    runProgram(false);
     currentLocalStepNumber = origLocalStepNumber;
     currentStep = origStep;
   }

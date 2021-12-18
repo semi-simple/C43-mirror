@@ -372,7 +372,7 @@ size_t                 wp43sMemInBlocks;
     return key;
   }
 
-#define TMR_OBSERVE
+//#define TMR_OBSERVE
 
   void program_main(void) {
     int key = 0;

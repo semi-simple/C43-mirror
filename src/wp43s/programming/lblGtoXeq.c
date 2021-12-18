@@ -22,6 +22,7 @@
 
 #include "charString.h"
 #include "constantPointers.h"
+#include "dateTime.h"
 #include "defines.h"
 #include "error.h"
 #include "flags.h"
@@ -552,11 +553,21 @@ static void _putLiteral(uint8_t *literalAddress) {
       xcopy(REGISTER_STRING_DATA(REGISTER_X), tmpStringLabelOrVariableName, stringByteLength(tmpStringLabelOrVariableName) + 1);
       break;
 
-    //case STRING_DATE:
-    //  break;
+    case STRING_DATE:
+      _getStringLabelOrVariableName(literalAddress);
+      liftStack();
+      reallocateRegister(REGISTER_X, dtDate, REAL34_SIZE, amNone);
+      stringToReal34(tmpStringLabelOrVariableName, REGISTER_REAL34_DATA(REGISTER_X));
+      julianDayToInternalDate(REGISTER_REAL34_DATA(REGISTER_X), REGISTER_REAL34_DATA(REGISTER_X));
+      break;
 
-    //case STRING_TIME:
-    //  break;
+    case STRING_TIME:
+      _getStringLabelOrVariableName(literalAddress);
+      liftStack();
+      reallocateRegister(REGISTER_X, dtReal34, REAL34_SIZE, amNone);
+      stringToReal34(tmpStringLabelOrVariableName, REGISTER_REAL34_DATA(REGISTER_X));
+      hmmssInRegisterToSeconds(REGISTER_X);
+      break;
 
     default: {
       #ifndef DMCP_BUILD

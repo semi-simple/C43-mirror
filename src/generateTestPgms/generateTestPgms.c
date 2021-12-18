@@ -5988,6 +5988,28 @@ int main(int argc, char* argv[]) {
     *(currentStep++) = 'i';
     *(currentStep++) = '2';
 
+    *(currentStep++) = ITM_LITERAL;
+    *(currentStep++) = STRING_TIME;
+    *(currentStep++) =  7;  // String length
+    *(currentStep++) =  '-';
+    *(currentStep++) =  '1';
+    *(currentStep++) =  '.';
+    *(currentStep++) =  '2';
+    *(currentStep++) =  '3';
+    *(currentStep++) =  '4';
+    *(currentStep++) =  '5';
+
+    *(currentStep++) = ITM_LITERAL;
+    *(currentStep++) = STRING_DATE;
+    *(currentStep++) =  7;  // String length
+    *(currentStep++) =  '2';
+    *(currentStep++) =  '4';
+    *(currentStep++) =  '5';
+    *(currentStep++) =  '6';
+    *(currentStep++) =  '7';
+    *(currentStep++) =  '8';
+    *(currentStep++) =  '9';
+
     *(currentStep++) = ITM_toDEG;
 
     *(currentStep++) = ITM_toDMS;

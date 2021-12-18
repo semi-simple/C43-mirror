@@ -23,6 +23,7 @@
 #include "bufferize.h"
 #include "charString.h"
 #include "config.h"
+#include "dateTime.h"
 #include "defines.h"
 #include "flags.h"
 #include "fonts.h"
@@ -34,6 +35,7 @@
 #include "programming/nextStep.h"
 #include "realType.h"
 #include "registers.h"
+#include "registerValueConversions.h"
 #include "screen.h"
 #include "softmenus.h"
 #include "sort.h"
@@ -655,6 +657,55 @@ void pemCloseNumberInput(void) {
 #endif // TESTSUITE_BUILD
 }
 
+static void _pemCloseTimeInput(void) {
+#ifndef TESTSUITE_BUILD
+  switch(nimNumberPart) {
+    case NP_INT_10:
+    case NP_REAL_FLOAT_PART:
+      deleteStepsFromTo(currentStep, findNextStep(currentStep));
+      if(aimBuffer[0] != 0) {
+        char *numBuffer = aimBuffer[0] == '+' ? aimBuffer + 1 : aimBuffer;
+        char *tmpPtr = tmpString;
+        *(tmpPtr++) = ITM_LITERAL;
+        *(tmpPtr++) = STRING_TIME;
+        *(tmpPtr++) = stringByteLength(numBuffer);
+        xcopy(tmpPtr, numBuffer, stringByteLength(numBuffer));
+        _insertInProgram((uint8_t *)tmpString, stringByteLength(numBuffer) + (int32_t)(tmpPtr - tmpString));
+      }
+
+      aimBuffer[0] = '!';
+      break;
+  }
+#endif // TESTSUITE_BUILD
+}
+
+static void _pemCloseDateInput(void) {
+#ifndef TESTSUITE_BUILD
+  if(nimNumberPart == NP_REAL_FLOAT_PART) {
+    deleteStepsFromTo(currentStep, findNextStep(currentStep));
+    if(aimBuffer[0] != 0) {
+      char *numBuffer = aimBuffer[0] == '+' ? aimBuffer + 1 : aimBuffer;
+      char *tmpPtr = tmpString;
+      *(tmpPtr++) = ITM_LITERAL;
+      *(tmpPtr++) = STRING_DATE;
+
+      reallocateRegister(TEMP_REGISTER_1, dtReal34, REAL34_SIZE, amNone);
+      stringToReal34(numBuffer, REGISTER_REAL34_DATA(TEMP_REGISTER_1));
+      convertReal34RegisterToDateRegister(TEMP_REGISTER_1, TEMP_REGISTER_1);
+      internalDateToJulianDay(REGISTER_REAL34_DATA(TEMP_REGISTER_1), REGISTER_REAL34_DATA(TEMP_REGISTER_1));
+
+      real34ToString(REGISTER_REAL34_DATA(TEMP_REGISTER_1), tmpPtr + 1);
+      *tmpPtr = stringByteLength(tmpPtr + 1);
+      ++tmpPtr;
+
+      _insertInProgram((uint8_t *)tmpString, stringByteLength(tmpPtr) + (int32_t)(tmpPtr - tmpString));
+    }
+
+    aimBuffer[0] = '!';
+  }
+#endif // TESTSUITE_BUILD
+}
+
 void insertStepInProgram(int16_t func) {
   if(func == ITM_AIM || (!tam.mode && getSystemFlag(FLAG_ALPHA))) {
     pemAlpha(func);
@@ -664,7 +715,14 @@ void insertStepInProgram(int16_t func) {
     pemAddNumber(func);
     return;
   }
-  if(!tam.mode && !tam.alpha && aimBuffer[0] != 0) {
+  if(!tam.mode && !tam.alpha && aimBuffer[0] != 0 && func != ITM_toHMS) {
+    if(func == ITM_dotD) {
+      _pemCloseDateInput();
+      if(aimBuffer[0] == '!') {
+        aimBuffer[0] = 0;
+        return;
+      }
+    }
     pemCloseNumberInput();
     aimBuffer[0] = 0;
   }
@@ -1034,6 +1092,26 @@ void insertStepInProgram(int16_t func) {
         tmpString[1] =  func       & 0xff;
         tmpString[2] = tam.value;
         _insertInProgram((uint8_t *)tmpString, 3);
+      }
+      break;
+
+    // h.ms
+    case ITM_toHMS:          // 1686
+      if(aimBuffer[0] != 0 && !getSystemFlag(FLAG_ALPHA)) {
+        _pemCloseTimeInput();
+        if(aimBuffer[0] != '!') {
+          pemCloseNumberInput();
+          aimBuffer[0] = 0;
+          tmpString[0] = (func >> 8) | 0x80;
+          tmpString[1] =  func       & 0xff;
+          _insertInProgram((uint8_t *)tmpString, 2);
+        }
+        aimBuffer[0] = 0;
+      }
+      else {
+        tmpString[0] = (func >> 8) | 0x80;
+        tmpString[1] =  func       & 0xff;
+        _insertInProgram((uint8_t *)tmpString, 2);
       }
       break;
 
@@ -1577,7 +1655,6 @@ void insertStepInProgram(int16_t func) {
     case ITM_cn:             // 1683
     case ITM_dn:             // 1684
     case ITM_toHR:           // 1685
-    case ITM_toHMS:          // 1686
     case ITM_toPOL:          // 1688
     case ITM_MPItoR:         // 1689
     case ITM_RtoMPI:         // 1690

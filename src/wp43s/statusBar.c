@@ -367,16 +367,16 @@ void showFracMode(void) {
   void showHideHourGlass(void) {
     switch(programRunStop) {
       case PGM_WAITING:
-        showGlyph(STD_NEG_EXCLAMATION_MARK, &standardFont, (calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS) - 1, 0, vmNormal, true, false);
+        showGlyph(STD_NEG_EXCLAMATION_MARK, &standardFont, (calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH  ? 160-20 : X_HOURGLASS) - 1, 0, vmNormal, true, false);
         break;
       case PGM_RUNNING:
-        lcd_fill_rect((calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS) - 1, 0, stringWidth(STD_NEG_EXCLAMATION_MARK, &standardFont, true, false), 20, LCD_SET_VALUE);
-        showGlyph(STD_P, &standardFont, (calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS) + 1, 0, vmNormal, true, false);
+        lcd_fill_rect((calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH ? 160-20 : X_HOURGLASS) - 1, 0, stringWidth(STD_NEG_EXCLAMATION_MARK, &standardFont, true, false), 20, LCD_SET_VALUE);
+        showGlyph(STD_P, &standardFont, (calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH ? 160-20 : X_HOURGLASS) + 1, 0, vmNormal, true, false);
         break;
       default:
         if(hourGlassIconEnabled) {
           lcd_fill_rect((calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH ? 160-20 : X_HOURGLASS) - 1, 0, stringWidth(STD_NEG_EXCLAMATION_MARK, &standardFont, true, false), 20, LCD_SET_VALUE);
-          showGlyph(STD_HOURGLASS, &standardFont, calcMode == CM_PLOT_STAT ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
+          showGlyph(STD_HOURGLASS, &standardFont, calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH ? 160-20 : X_HOURGLASS, 0, vmNormal, true, false); // is 0+11+3 pixel wide //Shift the hourglass to a visible part of the status bar
         }
     }
   }

@@ -44,7 +44,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         363  // Save timer application status
+#define BACKUP_VERSION         463
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 

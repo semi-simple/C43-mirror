@@ -525,7 +525,9 @@
     // If LCD has changed: update the GTK screen
     if(screenChange) {
       #if defined(LINUX) && (DEBUG_PANEL == 1)
-        refreshDebugPanel();
+        if(programRunStop != PGM_RUNNING) {
+          refreshDebugPanel();
+        }
       #endif // defined(LINUX) && (DEBUG_PANEL == 1)
 
       gtk_widget_queue_draw(screen);
@@ -1606,9 +1608,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
   }                                                                             //JMSHOI
 }                                                                               //JMSHOI
 
-  #if (DEBUG_PANEL == 1)
-    refreshDebugPanel();
-  #endif
+    #if (DEBUG_PANEL == 1)
+      if(programRunStop != PGM_RUNNING) {
+        refreshDebugPanel();
+      }
+    #endif // (DEBUG_PANEL == 1)
 
     if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_X) { //JM frame the SHOW window
       lcd_fill_rect(0,Y_POSITION_OF_REGISTER_T_LINE-4,SCREEN_WIDTH,1,LCD_EMPTY_VALUE);
@@ -3194,10 +3198,10 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       default: {}
     }
 
-  #ifndef DMCP_BUILD
-    refreshLcd(NULL);
-  #endif // !DMCP_BUILD
-}
+    #ifndef DMCP_BUILD
+      refreshLcd(NULL);
+    #endif // !DMCP_BUILD
+  }
 #endif // !TESTSUITE_BUILD
 
 

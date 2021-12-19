@@ -513,7 +513,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
         else if(calcMode == CM_PLOT_STAT)             {}
-        else if(calcMode == CM_GRAPH).                {}
+        else if(calcMode == CM_GRAPH)                 {}
         else if(calcMode == CM_MIM)                   {mimRestore();}
         else if(calcMode == CM_EIM)                   {}
         else if(calcMode == CM_ASSIGN)                {}

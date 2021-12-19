@@ -456,7 +456,6 @@ void debugNIM(void) {
     if(cm == CM_EIM)                   return "eim    ";
     if(cm == CM_TIMER)                 return "timer  ";
     if(cm == CM_CONFIRMATION)          return "confirm";
-    if(cm == CM_GRAPH)                 return "graph  ";    //JM
     if(cm == CM_LISTXY)                return "listxy ";    //JM
 
     return "???    ";

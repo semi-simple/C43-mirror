@@ -1092,7 +1092,7 @@ void graphDrawLRline(uint16_t selection) {
 
 #ifndef TESTSUITE_BUILD
   void drawline(uint16_t selection, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){
-#ifdef SAVE_SPACE_DM42_13GRF
+#ifndef SAVE_SPACE_DM42_13GRF
     int32_t n;
     uint16_t NN;
     realToInt32(SIGMA_N, n);
@@ -1318,7 +1318,7 @@ void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
 //** plotSelection = 0 means that no curve fit is plotted
 //
 void fnPlotStat(uint16_t plotMode){
-#ifdef SAVE_SPACE_DM42_13GRF
+#ifndef SAVE_SPACE_DM42_13GRF
 #if defined STATDEBUG && defined PC_BUILD
   printf("fnPlotStat1: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);

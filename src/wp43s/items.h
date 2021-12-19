@@ -1843,7 +1843,7 @@
 #define ITM_TIMER_0_1S                1777
 #define ITM_TIMER_RESET               1778
 #define ITM_TIMER_RCL                 1779
-#define ITM_CLBUP                     1780
+#define ITM_CLBKUP                    1780
 
 #define LAST_ITEM                     1781
 

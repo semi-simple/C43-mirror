@@ -883,7 +883,7 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
     }
 
     char key[3] = {0, 0, 0};
-    static void convertXYToKey(int x, int y, char *key) {
+    static void convertXYToKey(int x, int y) {
       int xMin, xMax, yMin, yMax;
       key[0] = 0;
       key[1] = 0;
@@ -913,7 +913,7 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
 
     void frmCalcMouseButtonPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
       if(key[0] == 0) { // The previous click must be released
-        convertXYToKey((int)event->button.x, (int)event->button.y, key);
+        convertXYToKey((int)event->button.x, (int)event->button.y);
         if(key[0] == 0) {
           return;
         }
@@ -1010,9 +1010,6 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
         fnTimerStop(TO_3S_CTFF);      //dr
 
         hideFunctionName();
-        #ifdef PC_BUILD
-          if(item == ITM_RS || item == ITM_XEQ) key[0] = 0;
-        #endif // PC_BUILD
         if(item < 0) {
           showSoftmenu(item);
         }
@@ -1020,6 +1017,10 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
           int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
           int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
           char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
+
+          #ifdef PC_BUILD
+            if(item == ITM_RS || item == ITM_XEQ) key[0] = 0;
+          #endif // PC_BUILD
 
           if(item != ITM_NOP && tam.alpha && indexOfItems[item].func != addItemToBuffer) {
             // We are in TAM mode so need to cancel first (equivalent to EXIT)

@@ -1639,8 +1639,8 @@ void doLoad(uint16_t loadMode, uint16_t s, uint16_t n, uint16_t d) {
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
-        return;
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
     }
   #else // !DMCP_BUILD
     FILE *ppgm_fp;
@@ -1649,8 +1649,8 @@ void doLoad(uint16_t loadMode, uint16_t s, uint16_t n, uint16_t d) {
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
-        return;
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
     }
   #endif // DMCP_BUILD
 

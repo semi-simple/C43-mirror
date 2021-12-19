@@ -606,6 +606,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnBeep                      (uint16_t unusedButMandatoryParameter) {}
   void fnSave                      (uint16_t unusedButMandatoryParameter) {}
   void fnLoad                      (uint16_t unusedButMandatoryParameter) {}
+  void fnDeleteBackup              (uint16_t unusedButMandatoryParameter) {}
   void fnUndo                      (uint16_t unusedButMandatoryParameter) {}
   void fnXmax                      (uint16_t unusedButMandatoryParameter) {}
   void fnXmin                      (uint16_t unusedButMandatoryParameter) {}
@@ -2588,6 +2589,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1777 */  { fnDecisecondTimerApp,         NOPARAM,                     "",                                            "0.1s?",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1778 */  { fnResetTimerApp,              NOPARAM,                     "",                                            "RESET",                                       (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1779 */  { fnRecallTimerApp,             TM_REGISTER,                 "RCL",                                         "",                                            (0 << TAM_MAX_BITS) |    99, CAT_NONE | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
+/* 1780 */  { fnDeleteBackup,               NOT_CONFIRMED,               "CLBUP",                                       "CLBUP",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 
-/* 1780 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
+/* 1781 */  { itemToBeCoded,                NOPARAM,                     "",                                            "Last item",                                   (0 << TAM_MAX_BITS) |     0, CAT_NONE | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
 };

@@ -36,6 +36,10 @@
 #include "sort.h"
 #include "stats.h"
 #include <string.h>
+#ifdef PC_BUILD
+#include <stdio.h>
+#include <errno.h>
+#endif
 
 #include "wp43s.h"
 
@@ -1680,3 +1684,34 @@ void fnLoad(uint16_t loadMode) {
 }
 
 #undef BACKUP
+
+
+
+void fnDeleteBackup(uint16_t confirmation) {
+  if(confirmation == NOT_CONFIRMED) {
+    setConfirmationMode(fnDeleteBackup);
+  }
+  else {
+    #ifdef DMCP_BUILD
+      FRESULT result;
+      sys_disk_write_enable(1);
+      result = f_unlink("SAVFILES\\wp43s.sav");
+      if(result != FR_OK && result != FR_NO_FILE && result != FR_NO_PATH) {
+        displayCalcErrorMessage(ERROR_IO, ERR_REGISTER_LINE, REGISTER_X);
+      }
+      sys_disk_write_enable(0);
+    #else // !DMCP_BUILD
+      int result = remove("wp43s.sav");
+      if(result == -1) {
+        int e = errno;
+        if(e != ENOENT) {
+          displayCalcErrorMessage(ERROR_IO, ERR_REGISTER_LINE, REGISTER_X);
+          #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+            sprintf(errorMessage, "removing the backup failed with error code %d", e);
+            moreInfoOnError("In function fnDeleteBackup:", errorMessage, NULL, NULL);
+          #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+        }
+      }
+    #endif // DMCP_BUILD
+  }
+}

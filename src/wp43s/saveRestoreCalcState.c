@@ -36,10 +36,14 @@
 #include "sort.h"
 #include "stats.h"
 #include <string.h>
+#ifdef PC_BUILD
+#include <stdio.h>
+#include <errno.h>
+#endif
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         63  // Save graphVariable
+#define BACKUP_VERSION         363  // Save program running flag
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -154,6 +158,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
     save(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
     save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+    save(&programRunStop,                     sizeof(programRunStop),                     BACKUP);
     save(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
     save(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
     save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
@@ -367,6 +372,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
       restore(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
       restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+      restore(&programRunStop,                     sizeof(programRunStop),                     BACKUP);
       restore(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
       restore(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
       restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
@@ -1460,7 +1466,7 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
         for(i = 0; i < numberOfUserMenus; ++i) {
-          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_BINARY) == 0) {
+          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_NAME) == 0) {
             target = i;
           }
         }
@@ -1641,8 +1647,8 @@ void doLoad(uint16_t loadMode, uint16_t s, uint16_t n, uint16_t d) {
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
-        return;
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
     }
   #else // !DMCP_BUILD
     FILE *ppgm_fp;
@@ -1651,8 +1657,8 @@ void doLoad(uint16_t loadMode, uint16_t s, uint16_t n, uint16_t d) {
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
-        return;
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
     }
   #endif // DMCP_BUILD
 
@@ -1682,3 +1688,36 @@ void fnLoad(uint16_t loadMode) {
 }
 
 #undef BACKUP
+
+
+
+void fnDeleteBackup(uint16_t confirmation) {
+  if(confirmation == NOT_CONFIRMED) {
+    setConfirmationMode(fnDeleteBackup);
+  }
+  else {
+    #ifdef DMCP_BUILD
+      FRESULT result;
+      sys_disk_write_enable(1);
+      result = f_unlink("SAVFILES\\wp43s.sav");
+      if(result != FR_OK && result != FR_NO_FILE && result != FR_NO_PATH) {
+        displayCalcErrorMessage(ERROR_IO, ERR_REGISTER_LINE, REGISTER_X);
+      }
+      sys_disk_write_enable(0);
+    #else // !DMCP_BUILD
+      int result = remove("wp43s.sav");
+      if(result == -1) {
+        #ifndef TESTSUITE_BUILD
+          int e = errno;
+          if(e != ENOENT) {
+            displayCalcErrorMessage(ERROR_IO, ERR_REGISTER_LINE, REGISTER_X);
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              sprintf(errorMessage, "removing the backup failed with error code %d", e);
+              moreInfoOnError("In function fnDeleteBackup:", errorMessage, NULL, NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+          }
+        #endif // TESTSUITE_BUILD
+      }
+    #endif // DMCP_BUILD
+  }
+}

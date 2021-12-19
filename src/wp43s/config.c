@@ -1002,7 +1002,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_107_07 KEY/Draw/Solve"
+#define VERSION1 "_107_08 KEY/Draw/Solve"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2

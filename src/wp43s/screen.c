@@ -3165,21 +3165,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       break;
 
 
-    case CM_GRAPH:                      //JM
-/*
-      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
-        last_CM = calcMode;
-        doRefreshSoftMenu = false;
-        displayShiftAndTamBuffer();
-        showSoftmenuCurrentPart();
-        refreshStatusBar();
-        graph_plotmem();
-        hourGlassIconEnabled = false;
-        refreshStatusBar();
-      }
-      break;
-*/
-
+    case CM_GRAPH:
     case CM_PLOT_STAT:
       if((last_CM != calcMode) || (doRefreshSoftMenu)) {
         if(last_CM == 252) last_CM--; else last_CM = 252; //calcMode;
@@ -3188,7 +3174,8 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         showSoftmenuCurrentPart();
         refreshStatusBar();
         hourGlassIconEnabled = true;
-        graphPlotstat(plotSelection);
+        if (calcMode == CM_PLOT_STAT) graphPlotstat(plotSelection);
+        else graph_plotmem();
         if (calcMode == CM_PLOT_STAT) graphDrawLRline(plotSelection);
         hourGlassIconEnabled = false;
         refreshStatusBar();

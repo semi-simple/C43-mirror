@@ -383,10 +383,28 @@ void fnListXY(uint16_t unusedButMandatoryParameter) {
 
 void graph_text(void){
   #ifndef TESTSUITE_BUILD
-  uint32_t ypos = Y_POSITION_OF_REGISTER_T_LINE -11 + 12 * 5;
+  uint32_t ypos = Y_POSITION_OF_REGISTER_T_LINE -11 + 12 * 5 -45;
   uint16_t ii;
   static uint16_t oo;
   static char outstr[300];
+
+        char ss[100], tt[100];
+        int32_t n;
+        eformat_eng2(ss,"(",x_max,2,"");
+        eformat_eng2(tt,radixProcess("#"),y_max,2,")");
+        strcat(tt,ss);                   
+        ypos += 38;
+        n = showString(padEquals(ss), &standardFont,160-2 - stringWidth(tt, &standardFont, false, false), ypos, vmNormal, false, false);
+        
+        eformat_eng2(ss,radixProcess("#"),y_max,2,")");
+        showString(padEquals(ss), &standardFont,n+3,       ypos, vmNormal, false, false);
+        
+        ypos += 19;
+        eformat_eng2(ss,"(",x_min,2,""); n = showString(padEquals(ss), &standardFont,1, ypos, vmNormal, false, false);
+        eformat_eng2(ss,radixProcess("#"),y_min,2,")");
+                                             showString(padEquals(ss), &standardFont,n+3,       ypos, vmNormal, false, false);
+        ypos -= 38;
+
 
   snprintf(tmpString, TMP_STR_LENGTH, "y %.3f/tick  ",tick_int_y);
   ii = 0;
@@ -412,6 +430,7 @@ void graph_text(void){
   outstr[oo]=0;
   showString(outstr, &standardFont, 1, ypos, vmNormal, true, true);  //JM
   ypos -= 12;
+
 
   uint32_t minnx, minny;
   if (!Aspect_Square) {
@@ -452,7 +471,7 @@ void graph_text(void){
     plotline((uint16_t)(ii-17),(uint8_t)(ypos-1+sp),(uint16_t)(ii-11),(uint8_t)(ypos-1+sp));
     plotline((uint16_t)(ii-17),(uint8_t)(ypos-2+sp),(uint16_t)(ii-11),(uint8_t)(ypos-2+sp));
   }
-  ypos += 48;
+  ypos += 48 + 2*19;
   
 
 
@@ -495,6 +514,7 @@ void graph_text(void){
 //####################################################
 
 void graph_plotmem(void) {
+#ifndef SAVE_SPACE_DM42_13GRF
 
 #if defined STATDEBUG && defined PC_BUILD
   uint16_t i;
@@ -537,23 +557,17 @@ void graph_plotmem(void) {
   if(PLOT_VECT || PLOT_NVECT) {plotmode = _VECT;} else {plotmode = _SCAT;}
 
   if(checkMinimumDataPoints(const_2)) {
-
-    runFunction(ITM_NSIGMA);
-
     realToInt32(SIGMA_N, statnum);
-   
-    runFunction(ITM_DROP);
-
     #ifdef STATDEBUG
-    printf("statnum n=%d\n",statnum);
+      printf("statnum n=%d\n",statnum);
     #endif 
   }
+
     runFunction(ITM_XRMS);                                       //Determine the RMS of the y for an arbitrary integral offset
     runFunction(ITM_DROP);
     real34ToString(REGISTER_REAL34_DATA(REGISTER_X), tmpString);
     inty_off = strtof (tmpString, NULL);
     runFunction(ITM_DROP);
-
 
 
   if(statnum >= 2) {
@@ -672,27 +686,25 @@ void graph_plotmem(void) {
     //Manipulate the obtained axes positions
 
     #ifdef STATDEBUG
-    printf("Axis1a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+      printf("Axis1a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
 
     //Check and correct if min and max is swapped
-    if(x_min>0 && x_min > x_max*0.99) {x_min = x_min - (-x_max+x_min)* 1.1;}
-    if(x_min<0 && x_min > x_max*0.99) {x_min = x_min + (-x_max+x_min)* 1.1;}
-
-
+    if(x_min>0.0f && x_min > x_max) {x_min = x_min - (-x_max+x_min)* 1.1f;}
+    if(x_min<0.0f && x_min > x_max) {x_min = x_min + (-x_max+x_min)* 1.1f;}
     #ifdef STATDEBUG
-    printf("Axis1b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+      printf("Axis1b: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
 
 
     //Always include the 0 axis
     if(!extentx) {
-      if(x_min>0 && x_max>0) {if(x_min<=x_max) {x_min = -0.05*x_max;} else {x_min = 0;}}
-      if(x_min<0 && x_max<0) {if(x_min>=x_max) {x_min = -0.05*x_max;} else {x_max = 0;}}
+      if(x_min>0.0f && x_max>0.0f) {if(x_min<=x_max) {x_min = -0.05f*x_max;} else {x_min = 0.0f;}}
+      if(x_min<0.0f && x_max<0.0f) {if(x_min>=x_max) {x_min = -0.05f*x_max;} else {x_max = 0.0f;}}
     }
     if(!extenty) {
-      if(y_min>0 && y_max>0) {if(y_min<=y_max) {y_min = -0.05*y_max;} else {y_min = 0;}}
-      if(y_min<0 && y_max<0) {if(y_min>=y_max) {y_min = -0.05*y_max;} else {y_max = 0;}}
+      if(y_min>0.0f && y_max>0.0f) {if(y_min<=y_max) {y_min = -0.05f*y_max;} else {y_min = 0.0f;}}
+      if(y_min<0.0f && y_max<0.0f) {if(y_min>=y_max) {y_min = -0.05f*y_max;} else {y_max = 0.0f;}}
     }
 
     //Cause scales to be the same    
@@ -703,49 +715,41 @@ void graph_plotmem(void) {
       y_max = x_max;
     }
 
+    //Calc zoom scales
     if(PLOT_ZMX != 0) {
-      x_min = pow(2.0,-PLOT_ZMX) * x_min;
-      x_max = pow(2.0,-PLOT_ZMX) * x_max;
+      x_min = pow(2.0f,-PLOT_ZMX) * x_min;
+      x_max = pow(2.0f,-PLOT_ZMX) * x_max;
     }
-
     if(PLOT_ZMY != 0) {
-      y_min = pow(2.0,-PLOT_ZMY) * y_min;
-      y_max = pow(2.0,-PLOT_ZMY) * y_max;      
+      y_min = pow(2.0f,-PLOT_ZMY) * y_min;
+      y_max = pow(2.0f,-PLOT_ZMY) * y_max;
     }
-
     #ifdef STATDEBUG
     printf("Axis2: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
     #endif
 
-    //Create a visible axis on the edge
-//    x_min = 1.05 * x_min;
-//    x_max = 1.05 * x_max;
-//    y_min = 1.05 * y_min;
-//    y_max = 1.05 * y_max;
-
     float dx = x_max-x_min;
     float dy = y_max-y_min;
 
-    if (dy == 0) {
-      dy = 1;
-      y_max = y_min + dy/2;
+    if (dy == 0.0f) {
+      dy = 1.0f;
+      y_max = y_min + dy/2.0f;
       y_min = y_max - dy;
     }
-    if (dx == 0) {
-      dx = 1;
-      x_max = x_min + dx/2;
+    if (dx == 0.0f) {
+      dx = 1.0f;
+      x_max = x_min + dx/2.0f;
       x_min = x_max - dx;
     }
-   
-    x_min = x_min - dx * 0.015*3;
-    y_min = y_min - dy * 0.015*3;
-    x_max = x_max + dx * 0.015*3;
-    y_max = y_max + dy * 0.015*3;
 
-
-    #ifdef STATDEBUG
-    printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);   
+    x_min = x_min - dx * zoomfactor * (pow(4.5f,(int8_t)(PLOT_ZOOM & 0x03)));
+    y_min = y_min - dy * zoomfactor * (pow(4.5f,(int8_t)(PLOT_ZOOM & 0x03)));
+    x_max = x_max + dx * zoomfactor * (pow(4.5f,(int8_t)(PLOT_ZOOM & 0x03)));
+    y_max = y_max + dy * zoomfactor * (pow(4.5f,(int8_t)(PLOT_ZOOM & 0x03)));
+    #if defined STATDEBUG && defined PC_BUILD
+      printf("Axis3a: x: %f -> %f y: %f -> %f   \n",x_min, x_max, y_min, y_max);
     #endif
+
 
     roundedTicks = true;
     graph_axis();
@@ -955,6 +959,8 @@ void graph_plotmem(void) {
     #endif
   }
 #endif
+#endif //SAVE_SPACE_DM42_13GRF
+
 }
 
 

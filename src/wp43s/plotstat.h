@@ -100,6 +100,11 @@ float   auto_tick          (float tick_int_f);
 float grf_x(int i);
 float grf_y(int i);
 
+char * radixProcess(const char * ss);
+void eformat_eng2 (char* s02, const char* s01, double inreal, int8_t digits, const char* s05);
+char * padEquals(const char * ss);
+
+
 #ifndef TESTSUITE_BUILD
 int16_t screen_window_x(float x_min, float x, float x_max);
 int16_t screen_window_y(float y_min, float y, float y_max);

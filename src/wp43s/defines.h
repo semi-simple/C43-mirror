@@ -127,9 +127,15 @@
 #define ERROR_SOLVER_REACHED_LOCAL_EXTREMUM       42
 #define ERROR_INITIAL_GUESS_OUT_OF_DOMAIN         43
 #define ERROR_FUNCTION_VALUES_LOOK_CONSTANT       44
-#define ERROR_BAD_INPUT                           45 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_SYNTAX_ERROR_IN_EQUATION            45
+#define ERROR_EQUATION_TOO_COMPLEX                46
+#define ERROR_CANNOT_ASSIGN_HERE                  47
+#define ERROR_INVALID_NAME                        48
+#define ERROR_TOO_MANY_VARIABLES                  49 // unlikely
+#define ERROR_NON_PROGRAMMABLE_COMMAND            50
+#define ERROR_BAD_INPUT                           51 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     46
+#define NUMBER_OF_ERROR_CODES                     52
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
@@ -194,7 +200,8 @@
 #define FLAG_SOLVING                          0xc026
 #define FLAG_VMDISP                           0xc027
 #define FLAG_USB                              0xc028
-#define NUMBER_OF_SYSTEM_FLAGS                    41
+#define FLAG_ENDPMT                           0xc029
+#define NUMBER_OF_SYSTEM_FLAGS                    42
 
 typedef enum {
   LI_ZERO     = 0, // Long integer sign 0
@@ -205,16 +212,6 @@ typedef enum {
 
 // PC GUI
 #define CSSFILE                      "res/wp43s_pre.css"
-
-#define DELTA_KEYS_X                              78 // Horizontal key step in pixel (row of 6 keys)
-#define DELTA_KEYS_Y                              74 // Vertical key step in pixel
-#define KEY_WIDTH_1                               47 // Width of small keys (STO, RCL, ...)
-#define KEY_WIDTH_2                               56 // Width of large keys (1, 2, 3, ...)
-
-#define X_LEFT_PORTRAIT                           45 // Horizontal offset for a portrait calculator
-#define X_LEFT_LANDSCAPE                         544 // Horizontal offset for a landscape calculator
-#define Y_TOP_PORTRAIT                           376 // Vertical offset for a portrait calculator
-#define Y_TOP_LANDSCAPE                           30 // vertical offset for a landscape calculator
 
 #define TAM_MAX_BITS                              14
 #define TAM_MAX_MASK                          0x3fff
@@ -245,6 +242,11 @@ typedef enum {
 #define CAT_SYFL                           ( 8 << 4) // System flags
 #define CAT_AINT                           ( 9 << 4) // Upper case alpha_INTL
 #define CAT_aint                           (10 << 4) // Lower case alpha_intl
+
+// EIM (Equation Input Mode) status (1 bit)
+#define EIM_STATUS                            0x0100
+#define EIM_DISABLED                        (0 << 8) // Function disabled in EIM
+#define EIM_ENABLED                         (1 << 8) // Function enabled in EIM
 
 #define INC_FLAG                                   0
 #define DEC_FLAG                                   1
@@ -356,7 +358,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               16
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               18
 #define SOFTMENU_HEIGHT                           23
 
 // Horizontal offsets in the status bar
@@ -379,11 +381,13 @@ typedef enum {
 #define TIMER_IDX_REFRESH_SLEEP                    0 // use timer 0 to wake up for screen refresh
 //#define TIMER_IDX_AUTO_REPEAT                    1 // use timer 1 to wake up for key auto-repeat
 
-#define TMR_NUMBER    2
+#define TMR_NUMBER                                 4
 
 // timer
 #define TO_AUTO_REPEAT                             0
-#define TO_KB_ACTV                                 1
+#define TO_TIMER_APP                               1
+#define TO_KB_ACTV                                 2
+#define TO_SHOW_NOP                                3
 
 
 #ifdef PC_BUILD
@@ -484,7 +488,9 @@ typedef enum {
 #define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
-#define CM_MIM                                    12 // Matrix imput mode tbd reorder
+#define CM_MIM                                    12 // Matrix input mode tbd reorder
+#define CM_EIM                                    13 // Equation input mode
+#define CM_TIMER                                  14 // Timer application
 
 // Next character in AIM 2 bits
 #define NC_NORMAL                                  0
@@ -506,7 +512,8 @@ typedef enum {
 #define TM_SHUFFLE                             10008
 #define TM_LABEL                               10009
 #define TM_SOLVE                               10010
-#define TM_CMP                                 10011 // TM_CMP must be the last in this list
+#define TM_NEWMENU                             10011
+#define TM_CMP                                 10012 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -608,15 +615,23 @@ typedef enum {
 #define NUMBER_OF_CATALOGS                        19
 
 // String comparison type
+#define CMP_BINARY                                 0
 #define CMP_CLEANED_STRING_ONLY                    1
 #define CMP_EXTENSIVE                              2
+#define CMP_NAME                                   3
 
 // Combination / permutation
 #define CP_PERMUTATION                             0
 #define CP_COMBINATION                             1
 
+// Gudermannian
 #define GD_DIRECT_FUNCTION                         0
 #define GD_INVERSE_FUNCTION                        1
+
+// Program running mode
+#define PGM_STOPPED                                0
+#define PGM_RUNNING                                1
+#define PGM_WAITING                                2
 
 // Load mode
 #define LM_ALL                                     0
@@ -695,6 +710,7 @@ typedef enum {
 #define SCREEN_REFRESH_PERIOD                    500 // in milliseconds
 #define KEY_AUTOREPEAT_FIRST_PERIOD              400 // in milliseconds
 #define KEY_AUTOREPEAT_PERIOD                    200 // in milliseconds
+#define TIMER_APP_PERIOD                         100 // in milliseconds
 #define RAM_SIZE                               16384 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 //#define RAM_SIZE                                3072 // 16384 blocks = 65536 bytes  MUST be a multiple of 4 and MUST be <= 262140 (not 262144)
 
@@ -715,6 +731,7 @@ typedef enum {
 #define STRING_DATE                               12
 
 // OP parameter special values
+#define SYSTEM_FLAG_NUMBER                       250
 #define VALUE_0                                  251
 #define VALUE_1                                  252
 #define STRING_LABEL_VARIABLE                    253
@@ -771,12 +788,22 @@ typedef enum {
 
 #define SOLVER_STATUS_READY_TO_EXECUTE             0x0001
 #define SOLVER_STATUS_INTERACTIVE                  0x0002
+#define SOLVER_STATUS_USES_FORMULA                 0x0100
+#define SOLVER_STATUS_MVAR_BEING_OPENED            0x0200
+#define SOLVER_STATUS_TVM_APPLICATION              0x1000
 
 #define SOLVER_RESULT_NORMAL                       0
 #define SOLVER_RESULT_SIGN_REVERSAL                1
 #define SOLVER_RESULT_EXTREMUM                     2
 #define SOLVER_RESULT_BAD_GUESS                    3
 #define SOLVER_RESULT_CONSTANT                     4
+
+#define ASSIGN_NAMED_VARIABLES                 10000
+#define ASSIGN_LABELS                          12000
+#define ASSIGN_RESERVED_VARIABLES                  (ASSIGN_NAMED_VARIABLES + FIRST_RESERVED_VARIABLE - FIRST_NAMED_VARIABLE)
+#define ASSIGN_USER_MENU                     (-10000)
+
+#define TIMER_APP_STOPPED                          0xFFFFFFFFu
 
 #ifndef DMCP_BUILD
   #define LCD_SET_VALUE                            0 // Black pixel

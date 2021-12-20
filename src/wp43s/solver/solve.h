@@ -24,9 +24,9 @@
 #include "typeDefinitions.h"
 #include <stdint.h>
 
-void fnPgmSlv  (uint16_t label);
-void fnSolve   (uint16_t labelOrVariable);
-void fnSolveVar(uint16_t unusedButMandatoryParameter);
+void fnPgmSlv          (uint16_t label);
+void fnSolve           (uint16_t labelOrVariable);
+void fnSolveVar        (uint16_t unusedButMandatoryParameter);
 
 /**
  * Solves an equation f(x) = 0 stored as a program.
@@ -43,6 +43,6 @@ void fnSolveVar(uint16_t unusedButMandatoryParameter);
  *                        3 if at least one of the initial guesses is out of the domain,
  *                        4 if the function values look constant
  */
-int solver     (calcRegister_t variable, const real34_t *y, const real34_t *x, real34_t *resZ, real34_t *resY, real34_t *resX);
+int solver             (calcRegister_t variable, const real34_t *y, const real34_t *x, real34_t *resZ, real34_t *resY, real34_t *resX);
 
 #endif // SOLVE_H

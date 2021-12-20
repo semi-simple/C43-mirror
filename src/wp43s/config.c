@@ -27,6 +27,7 @@
 #include "debug.h"
 #include "display.h"
 #include "error.h"
+#include "fonts.h"
 #include "flags.h"
 #include "gui.h"
 #include "items.h"
@@ -35,8 +36,10 @@
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
+#include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"
+#include "solver/equation.h"
 #include "stack.h"
 #include "stats.h"
 #include <stdlib.h>
@@ -177,14 +180,7 @@ TO_QSPI const enum rounding roundingModeTable[7] = {
 
 
 void fnGetIntegerSignMode(uint16_t unusedButMandatoryParameter) {
-  longInteger_t ism;
-
-  liftStack();
-
-  longIntegerInit(ism);
-  uIntToLongInteger((shortIntegerMode==SIM_2COMPL ? 2 : (shortIntegerMode==SIM_1COMPL ? 1 : (shortIntegerMode==SIM_UNSIGN ? 0 : -1))), ism);
-  convertLongIntegerToLongIntegerRegister(ism, REGISTER_X);
-  longIntegerFree(ism);
+  fnRecall(RESERVED_VARIABLE_ISM);
 }
 
 
@@ -499,13 +495,16 @@ void fnClAll(uint16_t confirmation) {
     fnClFAll(CONFIRMED);
 
     temporaryInformation = TI_NO_INFO;
+    if(programRunStop == PGM_WAITING) {
+      programRunStop = PGM_STOPPED;
+    }
   }
 }
 
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8557));
+  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8873));
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -613,6 +612,8 @@ void fnReset(uint16_t confirmation) {
     firstFreeProgramByte          = beginOfProgramMemory + 2;
     firstDisplayedStep            = beginOfProgramMemory;
     firstDisplayedLocalStepNumber = 0;
+    labelList                     = NULL;
+    programList                   = NULL;
     *(beginOfProgramMemory + 0) = (ITM_END >> 8) | 0x80;
     *(beginOfProgramMemory + 1) =  ITM_END       & 0xff;
     *(beginOfProgramMemory + 2) = 255; // .END.
@@ -773,6 +774,7 @@ void fnReset(uint16_t confirmation) {
     setSystemFlag(FLAG_YMD);   // date format = yyyy-mm-dd
     setSystemFlag(FLAG_ASLIFT);
     setSystemFlag(FLAG_PROPFR);
+    setSystemFlag(FLAG_ENDPMT);// TVM application = END mode
 
     hourGlassIconEnabled = false;
     watchIconEnabled = false;
@@ -830,6 +832,15 @@ void fnReset(uint16_t confirmation) {
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
 
+    memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
+    memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);
+    userMenus = NULL;
+    numberOfUserMenus = 0;
+    currentUserMenu = 0;
+    userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
+    userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
+    memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
+
     // The following lines are test data
     addTestPrograms();
     //fnSetFlag(  3);
@@ -857,6 +868,17 @@ void fnReset(uint16_t confirmation) {
     //allocateNamedVariable("Z" STD_a_DIARESIS "hler");
     //allocateNamedVariable(STD_omega STD_SUB_1);
     //allocateNamedVariable(STD_omega STD_SUB_2);
+
+    // Equation formulae
+    allFormulae = NULL;
+    numberOfFormulae = 0;
+    currentFormula = 0;
+
+    // Timer application
+    timerCraAndDeciseconds = 0x80u;
+    timerValue             = 0u;
+    timerStartTime         = TIMER_APP_STOPPED;
+    timerTotalTime         = 0u;
 
     #if (DEBUG_PANEL == 1)
       debugWindow = DBG_REGISTERS;

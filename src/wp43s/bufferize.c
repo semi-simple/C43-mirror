@@ -32,6 +32,7 @@
 #include "mathematics/toRect.h"
 #include "mathematics/wp34s.h"
 #include "matrix.h"
+#include "programming/manage.h"
 #include "registers.h"
 #include "registerValueConversions.h"
 #include "saveRestoreCalcState.h"
@@ -251,14 +252,41 @@
       if(calcMode == CM_NORMAL && fnKeyInCatalog && isAlphabeticSoftmenu()) {
         fnAim(NOPARAM);
       }
-      if((fnKeyInCatalog || !catalog || catalog == CATALOG_MVAR) && (calcMode == CM_AIM || tam.alpha)) {
+      if((fnKeyInCatalog || !catalog || catalog == CATALOG_MVAR) && (calcMode == CM_AIM || calcMode == CM_EIM || tam.alpha)) {
         item = convertItemToSubOrSup(item, nextChar);
         if(stringByteLength(aimBuffer) + stringByteLength(indexOfItems[item].itemSoftmenuName) >= AIM_BUFFER_LENGTH) { /// TODO this error should never happen but who knows!
           sprintf(errorMessage, "In function addItemToBuffer: the AIM input buffer is full! %d bytes for now", AIM_BUFFER_LENGTH);
           displayBugScreen(errorMessage);
         }
+        else if(calcMode == CM_EIM) {
+          const char *addChar = item == ITM_PAIR_OF_PARENTHESES ? "()" :
+                                item == ITM_VERTICAL_BAR        ? "||" :
+                                item == ITM_ROOT_SIGN           ? STD_SQUARE_ROOT "()" :
+                                item == ITM_ALOG_SYMBOL         ? "e" STD_SUB_E "^()" :
+                                indexOfItems[item].itemSoftmenuName;
+          char *aimCursorPos = aimBuffer;
+          char *aimBottomPos = aimBuffer + stringByteLength(aimBuffer);
+          uint32_t itemLen = stringByteLength(addChar);
+          for(uint32_t i = 0; i < xCursor; ++i) aimCursorPos += (*aimCursorPos & 0x80) ? 2 : 1;
+          for(; aimBottomPos >= aimCursorPos; --aimBottomPos) *(aimBottomPos + itemLen) = *aimBottomPos; 
+          xcopy(aimCursorPos, addChar, itemLen);
+          switch(item) {
+            case ITM_ALOG_SYMBOL:
+              xCursor += 5;
+              break;
+            case ITM_ROOT_SIGN:
+              xCursor += 3;
+              break;
+            case ITM_PAIR_OF_PARENTHESES:
+            case ITM_VERTICAL_BAR:
+              xCursor += 2;
+              break;
+            default:
+              xCursor += stringGlyphLength(indexOfItems[item].itemSoftmenuName);
+          }
+        }
         else {
-          xcopy(aimBuffer + stringNextGlyph(aimBuffer, stringLastGlyph(aimBuffer)), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
+          xcopy(aimBuffer + stringByteLength(aimBuffer), indexOfItems[item].itemSoftmenuName, stringByteLength(indexOfItems[item].itemSoftmenuName) + 1);
         }
       }
 
@@ -781,13 +809,13 @@
         }
       }
 
-      else if(calcMode != CM_AIM && (item >= ITM_A && item <= ITM_F)) {
+      else if(calcMode != CM_AIM && calcMode != CM_EIM && (item >= ITM_A && item <= ITM_F)) {
         // We are not in NIM, but should enter NIM - this should be handled here
         // unlike digits 0 to 9 which are handled by processKeyAction
         addItemToNimBuffer(item);
       }
 
-      else if(calcMode != CM_AIM) {
+      else if(calcMode != CM_AIM && calcMode != CM_EIM) {
         funcOK = false;
         return;
       }
@@ -1416,7 +1444,7 @@
         break;
 
       case ITM_dotD :
-        if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_FLOAT_PART) {
+        if(nimNumberPart == NP_REAL_FLOAT_PART) {
           done = true;
 
           closeNim();
@@ -1829,6 +1857,11 @@
     }
 
     int16_t lastChar = strlen(aimBuffer) - 1;
+
+    if(calcMode == CM_PEM) {
+      pemCloseNumberInput();
+      return;
+    }
 
     if(nimNumberPart != NP_INT_16) { // We need a # and a base
       if(nimNumberPart != NP_INT_BASE || aimBuffer[lastChar] != '#') { // We need a base

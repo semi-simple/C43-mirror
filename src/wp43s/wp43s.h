@@ -74,12 +74,14 @@
     extern bool_t               screenChange;
     extern char                 debugString[10000];
     #if (DEBUG_REGISTER_L == 1)
-      extern GtkWidget        *lblRegisterL1;
-      extern GtkWidget        *lblRegisterL2;
+      extern GtkWidget         *lblRegisterL1;
+      extern GtkWidget         *lblRegisterL2;
     #endif // (DEBUG_REGISTER_L == 1)
     #if (SHOW_MEMORY_STATUS == 1)
-      extern GtkWidget        *lblMemoryStatus;
+      extern GtkWidget         *lblMemoryStatus;
     #endif // (SHOW_MEMORY_STATUS == 1)
+    extern calcKeyboard_t       calcKeyboard[43];
+    extern int                  currentBezel; // 0=normal, 1=AIM, 2=TAM
   #endif //PC_BUILD
 
   // Variables stored in FLASH
@@ -144,6 +146,9 @@
 
   extern namedVariableHeader_t *allNamedVariables;
   extern softmenuStack_t        softmenuStack[SOFTMENU_STACK_SIZE];
+  extern userMenuItem_t         userMenuItems[18];
+  extern userMenuItem_t         userAlphaItems[18];
+  extern userMenu_t            *userMenus;
   extern calcKey_t              kbd_usr[37];
   extern calcRegister_t         errorMessageRegisterLine;
   extern glyph_t                glyphNotFound;
@@ -152,6 +157,7 @@
   extern labelList_t           *labelList;
   extern programList_t         *programList;
   extern angularMode_t          currentAngularMode;
+  extern formulaHeader_t       *allFormulae;
 
   extern char                  *tmpString;
   extern char                  *tmpStringLabelOrVariableName;
@@ -165,6 +171,7 @@
    * part of the screen.
    */
   extern char                  *tamBuffer;
+  extern char                  *userKeyLabel;
   extern char                   asmBuffer[5];
   extern char                   oldTime[8];
   extern char                   dateTimeString[12];
@@ -196,6 +203,8 @@
   extern uint8_t                temporaryInformation;
   extern uint8_t                rbrMode;
   extern uint8_t                numScreensNumericFont;
+  extern uint8_t                timerCraAndDeciseconds;
+  extern uint8_t                programRunStop;
   extern uint8_t               *beginOfProgramMemory;
   extern uint8_t               *beginOfCurrentProgram;
   extern uint8_t               *endOfCurrentProgram;
@@ -223,6 +232,8 @@
   extern int16_t                dynamicMenuItem;
   extern int16_t               *menu_RAM;
   extern int16_t                numberOfTamMenusToPop;
+  extern int16_t                itemToBeAssigned;
+  extern int16_t                cachedDynamicMenu;
 
   extern uint16_t               globalFlags[7];
   extern uint16_t               glyphRow[NUMBER_OF_GLYPH_ROWS];
@@ -244,6 +255,11 @@
   extern uint16_t               currentSolverProgram;
   extern uint16_t               currentSolverVariable;
   extern uint16_t               currentSolverNestingDepth;
+  extern uint16_t               numberOfFormulae;
+  extern uint16_t               currentFormula;
+  extern uint16_t               numberOfUserMenus;
+  extern uint16_t               currentUserMenu;
+  extern uint16_t               userKeyLabelSize;
   #if (REAL34_WIDTH_TEST == 1)
     extern uint16_t               largeur;
   #endif // (REAL34_WIDTH_TEST == 1)
@@ -258,6 +274,9 @@
   extern uint32_t               xCursor;
   extern uint32_t               yCursor;
   extern uint32_t               tamOverPemYPos;
+  extern uint32_t               timerValue;
+  extern uint32_t               timerStartTime;
+  extern uint32_t               timerTotalTime;
 
   extern uint64_t               shortIntegerMask;
   extern uint64_t               shortIntegerSignBit;
@@ -272,6 +291,8 @@
 //  extern int                  keyAutoRepeat; // Key repetition
 //  extern int16_t              previousItem;
     extern uint32_t             nextTimerRefresh;
+
+    int                         convertKeyCode(int key);
   #endif // DMCP_BUILD
 
 #endif // WP43S_H

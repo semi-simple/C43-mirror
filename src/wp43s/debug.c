@@ -448,7 +448,9 @@ void debugNIM(void) {
     if(cm == CM_PLOT_STAT)             return "plot.st";
     if(cm == CM_ERROR_MESSAGE)         return "err.msg";
     if(cm == CM_BUG_ON_SCREEN)         return "bug.scr";
-    if(cm == CM_CONFIRMATION)          return "confirm";
+    if(cm == CM_MIM)                   return "mim    ";
+    if(cm == CM_EIM)                   return "eim    ";
+    if(cm == CM_TIMER)                 return "timer  ";
 
     return "???    ";
   }
@@ -966,6 +968,12 @@ void debugNIM(void) {
 
       if(row < DEBUG_LINES) {
         sprintf(string, "FLAG_ASLIFT                               = %s",          getBooleanName(getSystemFlag(FLAG_ASLIFT)));
+        gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
+        gtk_widget_show(lbl1[row++]);
+      }
+
+      if(row < DEBUG_LINES) {
+        sprintf(string, "FLAG_ENDPMT                               = %s",          getBooleanName(getSystemFlag(FLAG_ENDPMT)));
         gtk_label_set_label(GTK_LABEL(lbl1[row]), string);
         gtk_widget_show(lbl1[row++]);
       }

@@ -22,6 +22,10 @@
 
 #include "realType.h"
 #include <stdint.h>
+#ifdef PC_BUILD
+  #include <gtk/gtk.h>
+  #include <gdk/gdk.h>
+#endif // PC_BUILD
 
 /**
  * \union multiplyDivide_t
@@ -240,6 +244,17 @@ typedef struct {
 
 
 /**
+ * \struct formulaHeader_t
+ * Header for EQN formulae.
+ */
+typedef struct {
+  uint16_t pointerToFormulaData; ///< Memory block number
+  uint8_t  sizeInBlocks;         ///< Size of allocated memory block
+  uint8_t  unused;               ///< Padding
+} formulaHeader_t;
+
+
+/**
  * \enum videoMode_t
  * Video mode: normal video or reverse video.
  */
@@ -345,6 +360,26 @@ typedef struct {
 
 
 /**
+ * \struct userMenuItem_t
+ * Structure keeping the information for one item of MyMenu and MyAlpha.
+ */
+typedef struct {
+  int16_t  item;               ///< Item ID
+  int16_t  unused;             ///< Padding
+  char     argumentName[16];   ///< Name of variable or label
+} userMenuItem_t;
+
+/**
+ * \struct userMenu_t
+ * Structure keeping the information for a user-defined menu.
+ */
+typedef struct {
+  char           menuName[16];  ///< Name of menu
+  userMenuItem_t menuItem[18];  ///< Items
+} userMenu_t;
+
+
+/**
  * \struct labelList_t
  * Structure keeping the information for a program label.
  */
@@ -395,5 +430,17 @@ typedef struct {
   int16_t    min;
   int16_t    max;
 } tamState_t;
+
+#ifdef PC_BUILD
+  /**
+   * \struct calcKeyboard_t
+   * Structure keeping key images, image sizes, and image locations.
+   */
+  typedef struct {
+    int x, y;
+    int width[3], height[3];
+    GtkWidget *keyImage[3];
+  } calcKeyboard_t;
+#endif // PC_BUILD
 
 #endif // TYPEDEFINITIONS_H

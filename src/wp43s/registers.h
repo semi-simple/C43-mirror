@@ -91,7 +91,21 @@ void           setRegisterMaxDataLength        (calcRegister_t regist, uint16_t 
  *
  * \param[in] numberOfRegistersToAllocate Number of registers to allocate
  */
-void           allocateLocalRegisters          (uint16_t n);
+void           allocateLocalRegisters          (uint16_t numberOfRegistersToAllocate);
+/**
+ * Check if the given name follows the naming convention
+ *
+ * \param[in] name                 Name of variable/label/menu
+ * \return `true` if given name is valid, `false` otherwise
+ */
+bool_t         validateName                    (const char *name);
+/**
+ * Check if the given name is not yet in use
+ *
+ * \param[in] name                 Name of variable/label/menu
+ * \return `true` if given name is unique, `false` if duplicate
+ */
+bool_t         isUniqueName                    (const char *name);
 /**
  * Allocates one named variable.
  *

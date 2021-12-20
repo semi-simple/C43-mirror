@@ -545,7 +545,7 @@
 #define SFL_SOLVING                    501
 #define SFL_VMDISP                     502
 #define SFL_USB                        503
-#define ITM_0504                       504
+#define SFL_TVMBGN                     504
 #define ITM_0505                       505
 #define ITM_0506                       506
 #define ITM_0507                       507
@@ -1194,13 +1194,13 @@
 #define ITM_M_GOTO_ROW                1147
 #define ITM_M_GOTO_COLUMN             1148
 #define ITM_SOLVE_VAR                 1149
-#define ITM_1150                      1150
-#define ITM_1151                      1151
-#define ITM_1152                      1152
-#define ITM_1153                      1153
-#define ITM_1154                      1154
-#define ITM_1155                      1155
-#define ITM_1156                      1156
+#define ITM_EQ_LEFT                   1150
+#define ITM_EQ_RIGHT                  1151
+#define ITM_PAIR_OF_PARENTHESES       1152
+#define ITM_VERTICAL_BAR              1153
+#define ITM_ALOG_SYMBOL               1154
+#define ITM_ROOT_SIGN                 1155
+#define ITM_TIMER_SYMBOL              1156
 #define ITM_1157                      1157
 #define ITM_1158                      1158
 #define ITM_1159                      1159
@@ -1455,8 +1455,8 @@
 #define MNU_PLOT_LR                   1396
 #define MNU_ELLIPT                    1397
 #define MNU_MVAR                      1398
-#define MNU_1399                      1399
-#define MNU_1400                      1400
+#define MNU_EQ_EDIT                   1399
+#define MNU_TIMERF                    1400
 #define MNU_1401                      1401
 #define MNU_1402                      1402
 #define MNU_1403                      1403
@@ -1827,8 +1827,25 @@
 #define ITM_Ephik                     1764
 #define ITM_ZETAphik                  1765
 #define ITM_GETHIDE                   1766
+#define ITM_CALC                      1767
+#define ITM_SQRT                      1768
 
-#define LAST_ITEM                     1767
+#define ITM_RCL_FV                    1769
+#define ITM_RCL_IPonA                 1770
+#define ITM_RCL_NPER                  1771
+#define ITM_RCL_PERonA                1772
+#define ITM_RCL_PMT                   1773
+#define ITM_RCL_PV                    1774
+
+#define ITM_atan2                     1775
+
+#define ITM_TIMER_ADD                 1776
+#define ITM_TIMER_0_1S                1777
+#define ITM_TIMER_RESET               1778
+#define ITM_TIMER_RCL                 1779
+#define ITM_CLBKUP                    1780
+
+#define LAST_ITEM                     1781
 
 #define NOPARAM                       9876 // Item for function who don't need an item
 #define CONFIRMED                     9877 // Confirmation for RESET, CLPALL, CLALL

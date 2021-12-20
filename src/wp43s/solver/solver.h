@@ -21,6 +21,9 @@
 #define SOLVER_H
 
 
+#include "equation.h"
 #include "solve.h"
+#include "sumprod.h"
+#include "tvm.h"
 
 #endif // SOLVER_H

@@ -16,6 +16,7 @@
 
 #include "screen.h"
 
+#include "assign.h"
 #include "browsers/browsers.h"
 #include "bufferize.h"
 #include "charString.h"
@@ -23,6 +24,7 @@
 #include "curveFitting.h"
 #include "dateTime.h"
 #include "debug.h"
+#include "defines.h"
 #include "display.h"
 #include "error.h"
 #include "flags.h"
@@ -45,7 +47,7 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-  static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter" STD_SPACE_3_PER_EM "&" STD_SPACE_3_PER_EM "Martin";
+  static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter," STD_SPACE_3_PER_EM "Mihail," STD_SPACE_3_PER_EM "Jaco," STD_SPACE_3_PER_EM "and" STD_SPACE_3_PER_EM "Martin";
   static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM VERSION_STRING;
 
   /* Names of day of week */
@@ -476,6 +478,7 @@
       showFunctionNameCounter -= SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
+        tmpString[0] = 0;
         showFunctionName(ITM_NOP, 0);
       }
     }
@@ -492,7 +495,9 @@
     // If LCD has changed: update the GTK screen
     if(screenChange) {
       #if defined(LINUX) && (DEBUG_PANEL == 1)
-        refreshDebugPanel();
+        if(programRunStop != PGM_RUNNING) {
+          refreshDebugPanel();
+        }
       #endif // defined(LINUX) && (DEBUG_PANEL == 1)
 
       gtk_widget_queue_draw(screen);
@@ -528,6 +533,7 @@
       showFunctionNameCounter -= FAST_SCREEN_REFRESH_PERIOD;
       if(showFunctionNameCounter <= 0) {
         hideFunctionName();
+        tmpString[0] = 0;
         showFunctionName(ITM_NOP, 0);
       }
     }
@@ -540,9 +546,10 @@
         showDateTime();
       #endif // (DEBUG_INSTEAD_STATUS_BAR != 1)
 
-      if(!getSystemFlag(FLAG_AUTOFF)) {
+      if(!getSystemFlag(FLAG_AUTOFF) || (nextTimerRefresh != 0)) {
         reset_auto_off();
       }
+      fnPollTimerApp();
 
 
     }
@@ -586,6 +593,13 @@
     }
   }
 #endif // PC_BUILD DMCP_BUILD
+
+
+
+void execTimerApp(uint16_t timerType) {
+  fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
+  fnUpdateTimerApp();
+}
 
 
 
@@ -830,7 +844,10 @@
   void showFunctionName(int16_t item, int16_t delayInMs) {
     uint32_t fcol, frow, gcol, grow;
     char *functionName;
-    if(item != MNU_DYNAMIC) {
+    if(tmpString[0] != 0) {
+      functionName = tmpString;
+    }
+    else if(item != MNU_DYNAMIC) {
       functionName = indexOfItems[abs(item)].itemCatalogName;
     }
     else {
@@ -855,7 +872,7 @@
 
   void hideFunctionName(void) {
     uint32_t col, row;
-    getStringBounds(indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
+    getStringBounds(tmpString[0] != 0 ? tmpString : indexOfItems[abs(showFunctionNameItem)].itemCatalogName, &standardFont, &col, &row);
     lcd_fill_rect(1, Y_POSITION_OF_REGISTER_T_LINE+6, col, row, LCD_SET_VALUE);
     showFunctionNameItem = 0;
     showFunctionNameCounter = 0;
@@ -898,6 +915,10 @@
     else if(currentViewRegister >= FIRST_NAMED_VARIABLE && currentViewRegister <= LAST_NAMED_VARIABLE) {
       memcpy(prefix, allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName[0]);
       strcpy(prefix + allNamedVariables[currentViewRegister - FIRST_NAMED_VARIABLE].variableName[0], " =");
+    }
+    else if(currentViewRegister >= FIRST_RESERVED_VARIABLE && currentViewRegister <= LAST_RESERVED_VARIABLE) {
+      memcpy(prefix, allReservedVariables[currentViewRegister - FIRST_RESERVED_VARIABLE].reservedVariableName + 1, allReservedVariables[currentViewRegister - FIRST_RESERVED_VARIABLE].reservedVariableName[0]);
+      strcpy(prefix + allReservedVariables[currentViewRegister - FIRST_RESERVED_VARIABLE].reservedVariableName[0], " =");
     }
     else {
       sprintf(prefix, "? =");
@@ -967,7 +988,9 @@
     char prefix[200], lastBase[4];
 
     #if (DEBUG_PANEL == 1)
-      refreshDebugPanel();
+      if(programRunStop != PGM_RUNNING) {
+        refreshDebugPanel();
+      }
     #endif // (DEBUG_PANEL == 1)
 
     if((calcMode != CM_BUG_ON_SCREEN) && (calcMode != CM_PLOT_STAT)) {
@@ -1166,7 +1189,13 @@
         const int16_t baseY = Y_POSITION_OF_REGISTER_X_LINE - REGISTER_LINE_HEIGHT*(regist - REGISTER_X + ((temporaryInformation == TI_VIEW && regist == REGISTER_T) ? 0 : (getRegisterDataType(REGISTER_X) == dtReal34Matrix || getRegisterDataType(REGISTER_X) == dtComplex34Matrix) ? 4 - displayStack : 0));
         calcRegister_t origRegist = regist;
         if(temporaryInformation == TI_VIEW && regist == REGISTER_T) {
-          regist = currentViewRegister;
+          if(currentViewRegister >= FIRST_RESERVED_VARIABLE && currentViewRegister < LAST_RESERVED_VARIABLE && allReservedVariables[currentViewRegister - FIRST_RESERVED_VARIABLE].header.pointerToRegisterData == WP43S_NULL) {
+            copySourceRegisterToDestRegister(currentViewRegister, TEMP_REGISTER_1);
+            regist = TEMP_REGISTER_1;
+          }
+          else {
+            regist = currentViewRegister;
+          }
         }
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
@@ -1648,7 +1677,7 @@
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
             if(regist == REGISTER_Y) {
-              if(w == 1) 
+              if(w == 1)
                 sprintf(prefix, "%03" PRId16 " data point", w);
               else
                 sprintf(prefix, "%03" PRId16 " data points", w);
@@ -1671,8 +1700,14 @@
 
           else if(temporaryInformation == TI_SOLVER_VARIABLE) {
             if(regist == REGISTER_X) {
-              memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
-              strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              if(currentSolverVariable >= FIRST_RESERVED_VARIABLE) {
+                memcpy(prefix, allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName + 1, allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName[0]);
+                strcpy(prefix + allReservedVariables[currentSolverVariable - FIRST_RESERVED_VARIABLE].reservedVariableName[0], " =");
+              }
+              else {
+                memcpy(prefix, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0]);
+                strcpy(prefix + allNamedVariables[currentSolverVariable - FIRST_NAMED_VARIABLE].variableName[0], " =");
+              }
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
             }
           }
@@ -1972,15 +2007,21 @@
 
 
 
-  static void displayShiftAndTamBuffer(void) {
-    if(shiftF) {
-      showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
-    }
-    else if(shiftG) {
-      showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+  void displayShiftAndTamBuffer(void) {
+    if(calcMode == CM_ASSIGN) {
+      updateAssignTamBuffer();
     }
 
-    if(tam.mode) {
+    if(calcMode != CM_ASSIGN || itemToBeAssigned == 0) {
+      if(shiftF) {
+        showGlyph(STD_SUP_f, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // f is pixel 4+8+3 wide
+      }
+      else if(shiftG) {
+        showGlyph(STD_SUP_g, &numericFont, 0, Y_POSITION_OF_REGISTER_T_LINE, vmNormal, true, true); // g is pixel 4+10+1 wide
+      }
+    }
+
+    if(tam.mode || calcMode == CM_ASSIGN) {
       if(calcMode == CM_PEM) { // Variable line to display TAM informations
         lcd_fill_rect(45+20, tamOverPemYPos, 168, 20, LCD_SET_VALUE);
         showString(tamBuffer, &standardFont, 75+20, tamOverPemYPos, vmNormal,  false, false);
@@ -2032,13 +2073,15 @@
       case CM_AIM:
       case CM_NIM:
       case CM_MIM:
+      case CM_EIM:
       case CM_ASSIGN:
       case CM_ERROR_MESSAGE:
       case CM_CONFIRMATION:
+      case CM_TIMER:
         //clearScreen();
 
         // The ordering of the 4 lines below is important for SHOW (temporaryInformation == TI_SHOW_REGISTER)
-        if(temporaryInformation != TI_VIEW) refreshRegisterLine(REGISTER_T);
+        if(calcMode != CM_TIMER && temporaryInformation != TI_VIEW) refreshRegisterLine(REGISTER_T);
         refreshRegisterLine(REGISTER_Z);
         refreshRegisterLine(REGISTER_Y);
         refreshRegisterLine(REGISTER_X);
@@ -2049,6 +2092,9 @@
         if(calcMode == CM_MIM) {
           showMatrixEditor();
         }
+        if(calcMode == CM_TIMER) {
+          fnShowTimerApp();
+        }
         if(currentSolverStatus & SOLVER_STATUS_INTERACTIVE) {
           bool_t mvarMenu = false;
           for(int i = 0; i < SOFTMENU_STACK_SIZE; i++) {
@@ -2058,7 +2104,24 @@
             }
           }
           if(!mvarMenu) {
-            showSoftmenu(-MNU_MVAR);
+            if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
+              showSoftmenu(-MNU_Solver);
+            }
+            else {
+              showSoftmenu(-MNU_MVAR);
+            }
+          }
+        }
+        if(calcMode == CM_EIM) {
+          bool_t mvarMenu = false;
+          for(int i = 0; i < SOFTMENU_STACK_SIZE; i++) {
+            if(softmenu[softmenuStack[i].softmenuId].menuItem == -MNU_EQ_EDIT) {
+              mvarMenu = true;
+              break;
+            }
+          }
+          if(!mvarMenu) {
+            showSoftmenu(-MNU_EQ_EDIT);
           }
         }
 

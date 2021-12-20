@@ -49,9 +49,11 @@
 //#define VERBOSE_SOLVER2  // verbose a lot
 
 
+//Todo: involve https://en.wikipedia.org/wiki/Brent%27s_method#Brent's_method
+
 #define COMPLEXKICKER true       //flag to allow conversion to complex plane if no convergenge found
 #define CHANGE_TO_MOD_SECANT 0   //at iteration nn go to the modified secant method. 0 means immediately
-#define CONVERGE_FACTOR 1        //
+#define CONVERGE_FACTOR 1.0f        //
 #define NUMBERITERATIONS 35      // Must be smaller than LIM (see STATS)
 
 
@@ -586,16 +588,15 @@ static void graph_solver() {         //Input parameters in registers SREG_STARTX
 
 
 
-/*Not used right now
 if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation methods
-        if( (ix<5 || oscillations < 4) )  {
+        if(ix < 3)  {
         //###########################
         //  normal Secant, 2-sample slope
         //  DX = X2 - X1 in YREGISTER
         //  DY = Y2 - Y1 in XREGISTER
         //###########################
                         #if (defined VERBOSE_SOLVER00) || (defined VERBOSE_SOLVER0) || (defined VERBOSE_SOLVER1) || (defined VERBOSE_SOLVER2)
-                          printf("%3i ---------- Using normal Secant dydx 2-samples -\n",ix);
+                          printf("%3i ---------- Using normal Secant dydx 2-samples - osc=%d conv=%d",ix, oscillations, convergent);
                         #endif            
             fnRCL  (SREG_X2); fnRCL(SREG_X1); runFunction(ITM_SUB);      // dx
             fnStore(SREG_DX);                                     // store difference for later
@@ -614,7 +615,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
             //  ChE 205 — Formulas for Numerical Differentiation
             //  Handout 5 05/08/02: from Pauli          
                         #if (defined VERBOSE_SOLVER00) || (defined VERBOSE_SOLVER0) || (defined VERBOSE_SOLVER1) || (defined VERBOSE_SOLVER2)
-                          printf("%3i ---------- Using Secant with 3 samples dy/dx --\n",ix);
+                          printf("%3i ---------- Using Secant with 3 samples dy/dx -- osc=%d conv=%d",ix, oscillations, convergent);
                         #endif
             fnRCL      (SREG_X2); fnRCL(SREG_X1); runFunction(ITM_SUB); //Determine x2-x1
             fnStore    (SREG_DX);  //store difference DX for later
@@ -642,7 +643,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
             //-3-sample slope-  //Leave DX in YREG, and DY in XREG, so DX/DY can be computed
         }
       //###########################
-      //  Start with DX and DY
+      //  Start with DX and DY FROM EITHER 2- or 3- SAMPLE SECANT
       //  
       //  
       //###########################
@@ -653,7 +654,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
                           fnInvert(0); 
                         #endif
 
-        fnRCL(SREG_Y1);      // determine increment in x
+        fnRCL(SREG_Y2);      // determine increment in x
         runFunction(ITM_MULT);       // increment to x is: y1 . DX/DY
         fnRCL(SREG_F);       // factor to stabilize Newton method. factor=1 is straight. factor=0.1 converges 10x slower.
         runFunction(ITM_MULT);       // increment to x
@@ -664,22 +665,26 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
                           printRegisterToConsole(REGISTER_X," - (",")\n");
                         #endif
 
-        fnRCL(SREG_X1);
+        fnRCL(SREG_X2);
         runFunction(ITM_XexY);
         runFunction(ITM_SUB);       // subtract as per Newton, x1 - f/f'
         fnStore(SREG_X2N);          // store temporarily to new x2n
+                        #if (defined VERBOSE_SOLVER00) || (defined VERBOSE_SOLVER0) || (defined VERBOSE_SOLVER1) || (defined VERBOSE_SOLVER2)
+                        printf("  ");
+                        printRegisterToConsole(SREG_X2N,"New X=","\n");
+//                        printRegisterToConsole(REGISTER_Y,"Secant DeltaX=","\n");
+                        #endif //VERBOSE_SOLVER1
 
 } else 
-*/
+
+
 
 {
-
-
      // ---------- Modified 3 point Secant ------------
   if((ix == 0) || (!checkzero && !checkNaN)) {
 
                         #if (defined VERBOSE_SOLVER00) || (defined VERBOSE_SOLVER0) || (defined VERBOSE_SOLVER1) || (defined VERBOSE_SOLVER2)
-                        printf("%3i ---------- Modified 3 point Secant ------------ osc=%d conv=%d\n",ix, oscillations, convergent);
+                        printf("%3i ---------- Modified 3 point Secant ------------ osc=%d conv=%d",ix, oscillations, convergent);
                         #endif //VERBOSE_SOLVER1
     
     fnRCL(SREG_Y2);fnRCL(SREG_Y0);runFunction(ITM_SUB);fnStore(SREG_DY);
@@ -742,16 +747,29 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
                           printRegisterToConsole(SREG_X0,"    New X =        "," - (");
                           printRegisterToConsole(REGISTER_X,"",")\n");
                         #endif //VERBOSE_SOLVER1
+
+                        #if (defined VERBOSE_SOLVER00) || (defined VERBOSE_SOLVER0) || (defined VERBOSE_SOLVER1) || (defined VERBOSE_SOLVER2)
+                        printf("  ");
+                        printRegisterToConsole(REGISTER_X,"DeltaX=","\n");
+                        #endif //VERBOSE_SOLVER1
     fnRCL(SREG_X0);
     runFunction(ITM_XexY);
     runFunction(ITM_SUB);        // subtract as per Newton, x1 - f/f'
+
+    //try round numbers
+    if(convergent > 3 && ix > 6 && oscillations == 0 && real34CompareLessEqual(REGISTER_REAL34_DATA(REGISTER_X),const34_1e_4)) {
+      convergent = 0;
+      double ix1 = convert_to_double(REGISTER_X);
+      doubleToXRegisterReal34(roundf(1000.0 * ix1)/1000.0);
+    }
+
     fnStore(SREG_X2N);           // store temporarily to new x2n
     }
   }
 
 
 
-
+/* Not in use
   //Experimental bisection method to kick out  in case of real arguments
   bool_t bisect = false;
    if(   !checkzero && !checkNaN &&
@@ -783,7 +801,7 @@ if(ix < CHANGE_TO_MOD_SECANT) {              //Secant and Newton approximation m
     divFunction(!ADD_RAN, SREG_TOL);
     fnStore(SREG_X2N);   // store temporarily to new x2n
   }
-
+*/
 //#############################################
 
 

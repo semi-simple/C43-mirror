@@ -358,9 +358,12 @@ printRealToConsole(y,"  y:", "\n");
   if(!realSubtractIfValid(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext)) goto toReturn;
 
   toReturn:
+
 #ifdef PC_BUILD
 printf(" >>>\n");
 #endif
+
+  return;
 }
 
 

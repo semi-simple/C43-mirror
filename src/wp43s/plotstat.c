@@ -42,7 +42,6 @@
 
 
 static char tmp_names1[30];
-char * padEquals(const char * ss);
 void fnPlotRegressionLine(uint16_t plotMode);
 
 

@@ -197,7 +197,9 @@ printRealToConsole(r2,"  r2 ","\n ");
   calcMax(1);
     return false;
   }
+#ifdef PC_BUILD
 printf(">>> ignoring calcMax\n");
+#endif
   return true;
 }
 
@@ -211,18 +213,24 @@ printRealToConsole(r2,"  r2 ","\n ");
   calcMin(1);
     return false;
   }
+#ifdef PC_BUILD
 printf(">>> ignoring calcMin\n");
+#endif
   return true;
 }
 
 
 static bool_t realSubtractIfValid(real_t *r1, real_t *r2, real_t *r3, realContext_t *ct){
   if(realIsNaN (r1) || realIsNaN (r2) || realIsInfinite (r1) || realIsInfinite (r2)) {
+#ifdef PC_BUILD
 printf(">>> spawning calcSigma %u %u %u %u ", realIsNaN (r1) , realIsNaN (r2) , realIsInfinite (r1) , realIsInfinite (r2));
+#endif
     calcSigma(1);
     return false;
   }
-printf(">s ");
+#ifdef PC_BUILD
+printf(">>>s ");
+#endif
   realSubtract(r1, r2, r3, ct);
   return true;
 }
@@ -350,7 +358,9 @@ printRealToConsole(y,"  y:", "\n");
   if(!realSubtractIfValid(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext)) goto toReturn;
 
   toReturn:
+#ifdef PC_BUILD
 printf(" >>>\n");
+#endif
 }
 
 
@@ -504,7 +514,9 @@ static void getLastRowStatsMatrix(real_t *x, real_t *y) {
     linkToRealMatrixRegister(regStats, &stats);
     rows = stats.header.matrixRows;
     cols = stats.header.matrixColumns;
+#ifdef PC_BUILD
 printf(">>> STATS matrix: rows=0-%u cols=0-%u\n",rows-1,cols-1);
+#endif
     real34ToReal(&stats.matrixElements[(rows-1) * cols    ], x);
     real34ToReal(&stats.matrixElements[(rows-1) * cols + 1], y);
 #ifdef PC_BUILD
@@ -642,6 +654,9 @@ void fnSigma(uint16_t plusMinus) {
 
       addSigma(&x, &y);
       AddtoStatsMatrix(&x, &y);
+      realCopy(&x, SIGMA_LASTX);
+      realCopy(&y, SIGMA_LASTY);
+      realCopy(const_1, SIGMA_LAct);
 
 
       temporaryInformation = TI_STATISTIC_SUMS;
@@ -693,6 +708,9 @@ void fnSigma(uint16_t plusMinus) {
     getLastRowStatsMatrix(&x, &y);
     subSigma(&x, &y);
     removeLastRowFromStatsMatrix();
+    realCopy(&x, SIGMA_LASTX);
+    realCopy(&y, SIGMA_LASTY);
+    realCopy(const__1, SIGMA_LAct);
 
     if(statisticalSumsPointer != NULL) temporaryInformation = TI_STATISTIC_SUMS;
   } 

@@ -17,11 +17,14 @@
 #include "stack.h"
 
 #include "charString.h"
+#include "constantPointers.h"
+#include "mathematics/comparisonReals.h"
 #include "error.h"
 #include "flags.h"
 #include "memory.h"
 #include "registers.h"
 #include "registerValueConversions.h"
+#include "stats.h"
 
 #include "wp43s.h"
 
@@ -297,6 +300,18 @@ void fnUndo(uint16_t unusedButMandatoryParameter) {
 
 
 void undo(void) {
+
+  if(statisticalSumsPointer != NULL) {
+    if(realCompareEqual(const_1, SIGMA_LAct)) {
+      fnSigma(-1);
+    } else
+    if(realCompareEqual(const__1, SIGMA_LAct)) {
+      convertRealToReal34ResultRegister(SIGMA_LASTX, REGISTER_X);
+      convertRealToReal34ResultRegister(SIGMA_LASTY, REGISTER_Y);
+      fnSigma(+1);
+    }
+  }
+
   systemFlags = savedSystemFlags;
   synchronizeLetteredFlags();
 
@@ -321,6 +336,7 @@ void undo(void) {
       statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
     xcopy(statisticalSumsPointer, savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
+    realCopy(const_0, SIGMA_LAct);
   }
 
   thereIsSomethingToUndo = false;

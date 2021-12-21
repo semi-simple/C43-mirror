@@ -217,6 +217,14 @@ static void _showExponent(char **bufPtr, const char **strPtr, int16_t *strWidth)
       **bufPtr         = STD_SUP_3[0];
       *((*bufPtr) + 1) = STD_SUP_3[1];
       break;
+    case '+':
+      **bufPtr         = STD_SUP_PLUS[0];
+      *((*bufPtr) + 1) = STD_SUP_PLUS[1];
+      break;
+    case '-':
+      **bufPtr         = STD_SUP_MINUS[0];
+      *((*bufPtr) + 1) = STD_SUP_MINUS[1];
+      break;
     default:
       **bufPtr         = STD_SUP_0[0];
       *((*bufPtr) + 1) = STD_SUP_0[1] + ((**strPtr) - '0');
@@ -245,6 +253,16 @@ static uint32_t _checkExponent(const char *strPtr) {
       case '^':
       case '.':
         return 0;
+      case '+':
+      case '-':
+        if(digits == 0) {
+          ++digits;
+          ++strPtr;
+          break;
+        }
+        else {
+          return digits;
+        }
       default:
         return digits;
     }
@@ -279,6 +297,8 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
     uint32_t tmpVal = 0;
     bool_t inLabel = false;
     bool_t unaryMinus = true;
+    bool_t inNumeric = true;
+    bool_t inExponent = false;
     const char *tmpPtr = strPtr;
 
     bool_t _cursorShown, _rightEllipsis;
@@ -336,6 +356,8 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory |= 1;
           bufPtr += 1;
           unaryMinus = true;
+          inNumeric = true;
+          inExponent = false;
         }
 
         /* End of label */
@@ -355,6 +377,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
           unaryMinus = false;
+          inExponent = false;
         }
 
         /* Opening parenthesis */
@@ -368,6 +391,8 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory |= 1;
           bufPtr += 1;
           unaryMinus = true;
+          inNumeric = true;
+          inExponent = false;
         }
 
         /* Power (if not editing) */
@@ -383,6 +408,7 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
             doubleBytednessHistory |= 1;
           }
           unaryMinus = false;
+          inExponent = false;
         }
 
         /* Closing parenthesis or power (when editing) */
@@ -391,6 +417,15 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           *bufPtr       = *strPtr;
           *(bufPtr + 1) = 0;
           unaryMinus = false;
+          inExponent = false;
+        }
+
+        /* Sign of exponent */
+        else if((!inLabel) && inNumeric && inExponent && ((*strPtr) == '+' || (*strPtr) == '-')) {
+          *(bufPtr + 1) = 0;
+          unaryMinus = false;
+          inNumeric = false;
+          inExponent = false;
         }
 
         /* Operators */
@@ -407,6 +442,8 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory |= 1;
           bufPtr += 1;
           unaryMinus = false;
+          inNumeric = true;
+          inExponent = false;
         }
 
         /* Multiply */
@@ -429,6 +466,47 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           doubleBytednessHistory |= 3;
           bufPtr += 2;
           unaryMinus = false;
+          inNumeric = true;
+          inExponent = false;
+        }
+
+        /* Numbers */
+        else if((!inLabel) && (((*strPtr) >= '0' && (*strPtr) <= '9') || (*strPtr) == '.')) {
+          *(bufPtr + 1) = 0;
+          unaryMinus = false;
+          inExponent = false;
+        }
+
+        /* Exponent */
+        else if((!inLabel) && inNumeric && (!inExponent) && ((*strPtr) == 'E' || (*strPtr) == 'e')) {
+          if(cursorAt == EQUATION_NO_CURSOR) {
+            *bufPtr       = STD_DOT[0];
+            *(bufPtr + 1) = STD_DOT[1];
+            *(bufPtr + 2) = STD_SUB_10[0];
+            *(bufPtr + 3) = STD_SUB_10[1];
+            *(bufPtr + 4) = 0;
+            doubleBytednessHistory <<= 1;
+            doubleBytednessHistory |= 3;
+            strWidth += stringWidth(bufPtr, &standardFont, true, true);
+            bufPtr += 4;
+            tmpVal = _checkExponent(strPtr + 1);
+            for(uint32_t i = 0; i < tmpVal; ++i)
+              _showExponent(&bufPtr, &strPtr, &strWidth);
+            *bufPtr = 0;
+            bufPtr -= 2;
+            strWidth -= stringWidth(bufPtr, &standardFont, true, true);
+            for(uint32_t i = 0; i < tmpVal; ++i) {
+              doubleBytednessHistory <<= 1;
+              doubleBytednessHistory |= 1;
+            }
+            unaryMinus = false;
+            inExponent = false;
+          }
+          else {
+            *(bufPtr + 1) = 0;
+            unaryMinus = false;
+            inExponent = true;
+          }
         }
 
         /* Other double-byte characters */
@@ -437,12 +515,16 @@ void showEquation(uint16_t equationId, uint16_t startAt, uint16_t cursorAt, bool
           *(bufPtr + 2) = 0;
           doubleBytednessHistory |= 1;
           unaryMinus = false;
+          inNumeric = false;
+          inExponent = false;
         }
 
         /* Other single-byte characters */
         else {
           *(bufPtr + 1) = 0;
           unaryMinus = false;
+          inNumeric = false;
+          inExponent = false;
         }
 
         /* Add the character */
@@ -992,6 +1074,7 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
   char *bufPtr = buffer;
   int16_t numericCount = 0;
   bool_t equalAppeared = false, labeled = false, afterClosingParenthesis = false, unaryMinusCanOccur = true, afterSpace = false;
+  bool_t inExponent = false, exponentSignCanOccur = false;
 
   for(uint32_t i = 0; i < PARSER_OPERATOR_STACK_SIZE; ++i) {
     PARSER_OPERATOR_STACK[i] = 0;
@@ -1058,6 +1141,8 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
             afterClosingParenthesis = false;
             unaryMinusCanOccur = true;
             afterSpace = false;
+            inExponent = false;
+            exponentSignCanOccur = false;
             break;
           }
         }
@@ -1089,6 +1174,19 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           afterClosingParenthesis = true;
           unaryMinusCanOccur = false;
           afterSpace = false;
+          inExponent = false;
+          exponentSignCanOccur = false;
+        }
+        else if(exponentSignCanOccur && (*strPtr == '+' || *strPtr == '-')) {
+          /* exponent sign */
+          *(bufPtr++) = *(strPtr++);
+          ++numericCount;
+          afterClosingParenthesis = false;
+          unaryMinusCanOccur = false;
+          afterSpace = false;
+          inExponent = true;
+          exponentSignCanOccur = false;
+          break;
         }
         else if(bufPtr != buffer) {
           *(bufPtr++) = 0;
@@ -1096,6 +1194,8 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           afterClosingParenthesis = (*strPtr == ')');
           unaryMinusCanOccur = false;
           afterSpace = false;
+          inExponent = false;
+          exponentSignCanOccur = false;
         }
         else if(unaryMinusCanOccur && *strPtr == '-') {
           /* unary minus */
@@ -1114,22 +1214,30 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           unaryMinusCanOccur = false;
           ++strPtr;
           afterSpace = false;
+          inExponent = false;
+          exponentSignCanOccur = false;
           break;
         }
         else if((*strPtr == '(') || (*strPtr == '|')) {
           afterClosingParenthesis = false;
           unaryMinusCanOccur = true;
           afterSpace = false;
+          inExponent = false;
+          exponentSignCanOccur = false;
         }
         else if(*strPtr == ')') {
           afterClosingParenthesis = true;
           unaryMinusCanOccur = false;
           afterSpace = false;
+          inExponent = false;
+          exponentSignCanOccur = false;
         }
         else if(afterClosingParenthesis && *strPtr != ':') {
           afterClosingParenthesis = false;
           unaryMinusCanOccur = false;
           afterSpace = false;
+          inExponent = false;
+          exponentSignCanOccur = false;
         }
         else {
           displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
@@ -1142,6 +1250,8 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
           equalAppeared = true;
           unaryMinusCanOccur = true;
           afterSpace = false;
+          inExponent = false;
+          exponentSignCanOccur = false;
         }
 
         if(compareString("|)", buffer, CMP_BINARY) != 0) {
@@ -1155,6 +1265,8 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         bufPtr = buffer;
         buffer[0] = 0;
         numericCount = 0;
+        inExponent = false;
+        exponentSignCanOccur = false;
         break;
 
       default:
@@ -1167,6 +1279,16 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
         }
         if((*strPtr >= '0' && *strPtr <= '9') || *strPtr == '.') {
           ++numericCount;
+          exponentSignCanOccur = false;
+        }
+        else if((!inExponent) && (*strPtr == 'E' || *strPtr == 'e') && ((*bufPtr = 0), numericCount == stringGlyphLength(buffer))) {
+          ++numericCount;
+          inExponent = true;
+          exponentSignCanOccur = true;
+        }
+        else {
+          inExponent = false;
+          exponentSignCanOccur = false;
         }
         if(compareChar(strPtr, STD_CROSS) == 0 || compareChar(strPtr, STD_DOT) == 0) {
           *(bufPtr++) = 0;
@@ -1194,14 +1316,6 @@ void parseEquation(uint16_t equationId, uint16_t parseMode, char *buffer, char *
   if(bufPtr != buffer) {
     *(bufPtr++) = 0;
     _parseWord(buffer, parseMode, PARSER_HINT_REGULAR, mvarBuffer);
-  }
-
-  if(stringGlyphLength(buffer) > 7) {
-    displayCalcErrorMessage(ERROR_SYNTAX_ERROR_IN_EQUATION, ERR_REGISTER_LINE, NIM_REGISTER_LINE);
-    #if (EXTRA_INFO_ON_CALC_ERROR == 1)
-      moreInfoOnError("In function parseEquation:", buffer, "token too long!", NULL);
-    #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
-    return;
   }
 
   if(parseMode == EQUATION_PARSER_MVAR) {

@@ -240,6 +240,8 @@ void saveForUndo(void) {
     return;
   }
 
+  clearRegister(TEMP_REGISTER_2_SAVED_STATS); //clear it here, and set it only in fnEditMatrix()
+
   savedSystemFlags = systemFlags;
 
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
@@ -302,6 +304,16 @@ void fnUndo(uint16_t unusedButMandatoryParameter) {
 void undo(void) {
 printf("Undo Begin\n");
 
+  if(getRegisterDataType(TEMP_REGISTER_2_SAVED_STATS) == dtReal34Matrix) {
+    calcRegister_t regStats = findNamedVariable("STATS");
+    if(regStats == INVALID_VARIABLE) {
+      allocateNamedVariable("STATS", dtReal34, REAL34_SIZE);
+      regStats = findNamedVariable("STATS");
+    }
+    clearRegister(regStats);
+    copySourceRegisterToDestRegister(TEMP_REGISTER_2_SAVED_STATS, findNamedVariable("STATS"));
+  }
+  
 
   if(SAVED_SIGMA_LAct == +1 && statisticalSumsPointer != NULL) {
     fnSigma(-1);
@@ -340,5 +352,6 @@ printf("Undo Begin\n");
   }
 
   thereIsSomethingToUndo = false;
+  clearRegister(TEMP_REGISTER_2_SAVED_STATS);
 printf("Undo End\n");
 }

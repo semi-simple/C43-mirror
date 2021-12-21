@@ -302,35 +302,14 @@ void fnUndo(uint16_t unusedButMandatoryParameter) {
 void undo(void) {
 printf("Undo Begin\n");
 
-  real_t _X, _Y, _A;
-  realZero(&_X);
-  realZero(&_Y);
-  realZero(&_A);
-  if(statisticalSumsPointer != NULL) {
-    realCopy(SIGMA_LASTX, &_X);
-    realCopy(SIGMA_LASTY, &_Y);
-    realCopy(SIGMA_LAct,  &_A);
+
+  if(SAVED_SIGMA_LAct == +1 && statisticalSumsPointer != NULL) {
+    fnSigma(-1);
   } else
-  if(savedStatisticalSumsPointer != NULL) { //When last row is deleted using Sigma-, there is no data, only saved data
-    realCopy(SIGMA_SAVED_LASTX, &_X);
-    realCopy(SIGMA_SAVED_LASTY, &_Y);
-    realCopy(SIGMA_SAVED_LAct,  &_A);
-  }
-
-
-  if(statisticalSumsPointer != NULL) {
-    if(realCompareEqual(const_1, &_A)) {
-      fnSigma(-1);
-printf(">>> -1 ");
-printRealToConsole(&_A,"A:","\n");
-    } else
-    if(realCompareEqual(const__1, &_A)) {
-      convertRealToReal34ResultRegister(&_X, REGISTER_X);             // Can use stack, as the stack will be undone below
-      convertRealToReal34ResultRegister(&_Y, REGISTER_Y);
-      fnSigma(+1);
-printf(">>> +1");
-printRealToConsole(&_A,"A:","\n");
-    }
+  if(SAVED_SIGMA_LAct == -1) {
+    convertRealToReal34ResultRegister(&SAVED_SIGMA_LASTX, REGISTER_X);             // Can use stack, as the stack will be undone below
+    convertRealToReal34ResultRegister(&SAVED_SIGMA_LASTY, REGISTER_Y);
+    fnSigma(+1);
   }
 
   systemFlags = savedSystemFlags;
@@ -357,7 +336,7 @@ printRealToConsole(&_A,"A:","\n");
       statisticalSumsPointer = allocWp43s(NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
     }
     xcopy(statisticalSumsPointer, savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * TO_BYTES(REAL_SIZE));
-    realCopy(const_0, SIGMA_LAct);
+    SAVED_SIGMA_LAct = 0;
   }
 
   thereIsSomethingToUndo = false;

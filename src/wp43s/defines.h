@@ -670,12 +670,9 @@ typedef enum {
 #define SUM_XMAX                                  25
 #define SUM_YMIN                                  26
 #define SUM_YMAX                                  27
-#define LAST_X                                    28 //Used for UNDO of SIGMA+ and SIGMA-
-#define LAST_Y                                    29 //Used for UNDO of SIGMA+ and SIGMA-
-#define LAST_ACT                                  30 //Used for UNDO of SIGMA+ and SIGMA-
 
 
-#define NUMBER_OF_STATISTICAL_SUMS                31
+#define NUMBER_OF_STATISTICAL_SUMS                28
 #define SIGMA_N      ((real_t *)(statisticalSumsPointer)) // could be a 32 bit unsigned integer
 #define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X     )) // could be a real34
 #define SIGMA_Y      ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_Y     )) // could be a real34
@@ -704,13 +701,6 @@ typedef enum {
 #define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_XMAX  )) // could be a real34
 #define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_YMIN  )) // could be a real34
 #define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_YMAX  )) // could be a real34
-#define SIGMA_LASTX  ((real_t *)(statisticalSumsPointer + REAL_SIZE * LAST_X    )) //Used for UNDO of SIGMA+ and SIGMA-
-#define SIGMA_LASTY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * LAST_Y    )) //Used for UNDO of SIGMA+ and SIGMA-
-#define SIGMA_LAct   ((real_t *)(statisticalSumsPointer + REAL_SIZE * LAST_ACT  )) //Used for UNDO of SIGMA+ and SIGMA-
-
-#define SIGMA_SAVED_LASTX  ((real_t *)(savedStatisticalSumsPointer + REAL_SIZE * LAST_X    )) //Used for UNDO of SIGMA+ and SIGMA-
-#define SIGMA_SAVED_LASTY  ((real_t *)(savedStatisticalSumsPointer + REAL_SIZE * LAST_Y    )) //Used for UNDO of SIGMA+ and SIGMA-
-#define SIGMA_SAVED_LAct   ((real_t *)(savedStatisticalSumsPointer + REAL_SIZE * LAST_ACT  )) //Used for UNDO of SIGMA+ and SIGMA-
 
 
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196

@@ -42,11 +42,19 @@
 #include <math.h>
 #include <string.h>
 
-//Verbose directives can be simulataneously selected
-#define VERBOSE_SOLVER00   // minimal text
-//#define VERBOSE_SOLVER0  // a lot less text
-//#define VERBOSE_SOLVER1  // a lot less text
-//#define VERBOSE_SOLVER2  // verbose a lot
+
+#ifdef PC_BUILD
+  //Verbose directives can be simulataneously selected
+  #define VERBOSE_SOLVER00   // minimal text
+  //#define VERBOSE_SOLVER0  // a lot less text
+  //#define VERBOSE_SOLVER1  // a lot less text
+  //#define VERBOSE_SOLVER2  // verbose a lot
+#else
+  #undef VERBOSE_SOLVER00
+  #undef VERBOSE_SOLVER0
+  #undef VERBOSE_SOLVER1
+  #undef VERBOSE_SOLVER2
+#endif
 
 
 //Todo: involve https://en.wikipedia.org/wiki/Brent%27s_method#Brent's_method

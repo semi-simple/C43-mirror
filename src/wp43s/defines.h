@@ -708,6 +708,10 @@ typedef enum {
 #define SIGMA_LASTY  ((real_t *)(statisticalSumsPointer + REAL_SIZE * LAST_Y    )) //Used for UNDO of SIGMA+ and SIGMA-
 #define SIGMA_LAct   ((real_t *)(statisticalSumsPointer + REAL_SIZE * LAST_ACT  )) //Used for UNDO of SIGMA+ and SIGMA-
 
+#define SIGMA_SAVED_LASTX  ((real_t *)(savedStatisticalSumsPointer + REAL_SIZE * LAST_X    )) //Used for UNDO of SIGMA+ and SIGMA-
+#define SIGMA_SAVED_LASTY  ((real_t *)(savedStatisticalSumsPointer + REAL_SIZE * LAST_Y    )) //Used for UNDO of SIGMA+ and SIGMA-
+#define SIGMA_SAVED_LAct   ((real_t *)(savedStatisticalSumsPointer + REAL_SIZE * LAST_ACT  )) //Used for UNDO of SIGMA+ and SIGMA-
+
 
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
 #define NUMBER_OF_GLYPH_ROWS                     101 // Used in the font browser application

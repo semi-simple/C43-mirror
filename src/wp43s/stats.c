@@ -86,6 +86,7 @@ static void addMin(real_t *x, real_t *y) {
 static void addSigma(real_t *x, real_t *y) {
   real_t tmpReal1, tmpReal2, tmpReal3;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
+printf(">>>addSigma Begin\n");
 
   addMax(x, y);
   addMin(x, y);
@@ -183,6 +184,7 @@ static void addSigma(real_t *x, real_t *y) {
   // sigma 1/y
   realDivide(const_1, y, &tmpReal1, realContext);
   realAdd(SIGMA_1onY, &tmpReal1, SIGMA_1onY, realContext);
+printf(">>>addSigma End\n");
 
 }
 
@@ -240,6 +242,7 @@ static void subSigma(real_t *x, real_t *y) {
   real_t tmpReal1, tmpReal2, tmpReal3;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
  // SIGMA-
+printf(">>>subSigma Begin\n");
 
 #ifdef PC_BUILD
 printRealToConsole(x,">>> subsigma: x:", " ");
@@ -362,6 +365,7 @@ printRealToConsole(y,"  y:", "\n");
 #ifdef PC_BUILD
 printf(" >>>\n");
 #endif
+printf(">>>subSigma End\n");
 
   return;
 }
@@ -480,7 +484,7 @@ printReal34ToConsole(&stats.matrixElements[i * cols +1 ],"y:","\n");  //temporar
 
 void calcSigma(uint16_t maxOffset) {
 #ifndef TESTSUITE_BUILD
-
+printf(">>>calcSigma Begin\n");
   clearStatisticalSums();
   if(!statisticalSumsPointer) initStatisticalSums();
   calcRegister_t regStats = findNamedVariable("STATS");
@@ -503,6 +507,7 @@ printReal34ToConsole(&stats.matrixElements[i * cols +1 ],"y:","\n");  //temporar
       addSigma(&x, &y);
     }
   }
+printf(">>>calcSigma End\n");
 #endif //TESTSUITE_BUILD
 }
 
@@ -626,6 +631,7 @@ void fnSigma(uint16_t plusMinus) {
 #ifndef TESTSUITE_BUILD
   real_t x, y;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
+printf(">>> fnSigma Begin\n");
 
   lrChosen = 0;
 
@@ -660,7 +666,6 @@ void fnSigma(uint16_t plusMinus) {
       realCopy(&x, SIGMA_LASTX);
       realCopy(&y, SIGMA_LASTY);
       realCopy(const_1, SIGMA_LAct);
-
 
       temporaryInformation = TI_STATISTIC_SUMS;
     }
@@ -711,13 +716,22 @@ void fnSigma(uint16_t plusMinus) {
     getLastRowStatsMatrix(&x, &y);
     subSigma(&x, &y);
     removeLastRowFromStatsMatrix();
-    realCopy(&x, SIGMA_LASTX);
-    realCopy(&y, SIGMA_LASTY);
-    realCopy(const__1, SIGMA_LAct);
 
-    if(statisticalSumsPointer != NULL) temporaryInformation = TI_STATISTIC_SUMS;
+    if(statisticalSumsPointer != NULL) {
+      temporaryInformation = TI_STATISTIC_SUMS;
+      realCopy(&x, SIGMA_LASTX);
+      realCopy(&y, SIGMA_LASTY);
+      realCopy(const__1, SIGMA_LAct);
+    }
+    if(savedStatisticalSumsPointer != NULL) { //When last row is deleted using Sigma-, there is no data, only saved data
+      realCopy(&x, SIGMA_SAVED_LASTX);
+      realCopy(&y, SIGMA_SAVED_LASTY);
+      realCopy(const__1, SIGMA_SAVED_LAct);
+    }
+
   } 
 
+printf(">>> fnSigma End\n");
 #endif // TESTSUITE_BUILD
 }
 

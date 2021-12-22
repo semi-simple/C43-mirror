@@ -1531,7 +1531,11 @@ void runProgram(bool_t singleStep) {
   while(1) {
     int16_t stepsToBeAdvanced;
     uint16_t subLevel = currentSubroutineLevel;
-    if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE || temporaryInformation == TI_SOLVER_FAILED) {
+    uint16_t opCode = *currentStep;
+    if(opCode & 0x80) {
+      opCode = ((uint16_t)(opCode & 0x7F) << 8) | *(currentStep + 1);
+    }
+    if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE || temporaryInformation == TI_SOLVER_FAILED || (opCode != ITM_RTN && opCode != ITM_STOP && opCode != ITM_END && opCode != 0x7fff)) {
       temporaryInformation = TI_NO_INFO;
     }
     stepsToBeAdvanced = executeOneStep(currentStep);

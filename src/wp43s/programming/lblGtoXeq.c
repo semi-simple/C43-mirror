@@ -527,13 +527,14 @@ static void _putLiteral(uint8_t *literalAddress) {
       {
         char *imag = tmpStringLabelOrVariableName;
         _getStringLabelOrVariableName(literalAddress);
-        while(*imag != 'i' || *imag != 0) ++imag;
+        while(*imag != 'i' && *imag != 0) ++imag;
         if(*imag == 'i') {
           if(imag > tmpStringLabelOrVariableName && *(imag - 1) == '-') {
             *imag = '-'; *(imag - 1) = 0;
           }
           else if(imag > tmpStringLabelOrVariableName && *(imag - 1) == '+') {
             *imag = 0; *(imag - 1) = 0;
+            ++imag;
           }
           else {
             *imag = 0;

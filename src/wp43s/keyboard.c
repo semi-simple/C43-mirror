@@ -392,6 +392,9 @@
             refreshScreen();
             return;
           }
+          if(tam.mode && catalog && (tam.digitsSoFar || tam.function == ITM_BESTF || tam.function == ITM_CNST || (!tam.indirect && (tam.mode == TM_VALUE || tam.mode == TM_VALUE_CHB)))) {
+            // disabled
+          }
           else if(tam.function == ITM_GTOP && catalog == CATALOG_PROG) {
             runFunction(item);
             tamLeaveMode();
@@ -427,7 +430,10 @@
           // an item from the catalog, but a function key press should put the item in the AIM (or TAM) buffer
           // Use this variable to distinguish between the two
           fnKeyInCatalog = 1;
-          if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
+          if(tam.mode && catalog && (tam.digitsSoFar || tam.function == ITM_BESTF || tam.function == ITM_CNST || (!tam.indirect && (tam.mode == TM_VALUE || tam.mode == TM_VALUE_CHB)))) {
+            // disabled
+          }
+          else if(tam.mode && (!tam.alpha || isAlphabeticSoftmenu())) {
             addItemToBuffer(item);
           }
           else if((calcMode == CM_NORMAL || calcMode == CM_AIM) && isAlphabeticSoftmenu()) {

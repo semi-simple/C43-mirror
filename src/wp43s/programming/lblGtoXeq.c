@@ -39,6 +39,7 @@
 #include "softmenus.h"
 #include "statusBar.h"
 #include "stack.h"
+#include "store.h"
 #include "timer.h"
 #include "ui/tam.h"
 
@@ -238,6 +239,10 @@ void fnReturn(uint16_t skip) {
 
 
 void fnRunProgram(uint16_t unusedButMandatoryParameter) {
+  if(currentInputVariable != INVALID_VARIABLE) {
+    fnStore(currentInputVariable);
+    currentInputVariable = INVALID_VARIABLE;
+  }
   dynamicMenuItem = -1;
   runProgram(false);
 }
@@ -1506,6 +1511,7 @@ void runProgram(bool_t singleStep) {
     int16_t stepsToBeAdvanced;
     uint16_t subLevel = currentSubroutineLevel;
     uint16_t opCode = *currentStep;
+    currentInputVariable = INVALID_VARIABLE; // INPUT is already executed
     if(opCode & 0x80) {
       opCode = ((uint16_t)(opCode & 0x7F) << 8) | *(currentStep + 1);
     }

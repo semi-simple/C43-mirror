@@ -15,16 +15,18 @@
  */
 
 /********************************************//**
- * \file programming.h
+ * \file inputVar.c
  ***********************************************/
-#ifndef PROGRAMMING_H
-#define PROGRAMMING_H
 
+#include "programming/inputVar.h"
+#include "defines.h"
+#include "recall.h"
+#include "wp43s.h"
 
-#include "decode.h"
-#include "inputVar.h"
-#include "lblGtoXeq.h"
-#include "manage.h"
-#include "nextStep.h"
-
-#endif // PROGRAMMING_H
+void fnInput(uint16_t regist) {
+  if(programRunStop == PGM_RUNNING) {
+    programRunStop = PGM_WAITING;
+    currentInputVariable = regist;
+    fnRecall(regist);
+  }
+}

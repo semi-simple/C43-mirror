@@ -1417,7 +1417,12 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
           lastErrorCode = 0;
         }
         else {
-          popSoftmenu();
+          if(softmenuStack[0].softmenuId <= 1) { // MyMenu or MyAlpha is displayed
+            currentInputVariable = INVALID_VARIABLE;
+          }
+          else {
+            popSoftmenu();
+          }
         }
         break;
 

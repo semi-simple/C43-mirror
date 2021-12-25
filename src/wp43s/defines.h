@@ -632,6 +632,9 @@ typedef enum {
 #define PGM_STOPPED                                0
 #define PGM_RUNNING                                1
 #define PGM_WAITING                                2
+#define PGM_PAUSED                                 3
+#define PGM_KEY_PRESSED_WHILE_PAUSED               4
+#define PGM_RESUMING                               5
 
 // Load mode
 #define LM_ALL                                     0

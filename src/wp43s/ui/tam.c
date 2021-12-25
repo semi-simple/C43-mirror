@@ -330,7 +330,7 @@
             tam.currentOperation = item;
             if(item == ITM_dddEL || item == ITM_dddIJ) {
               reallyRunFunction(tamOperation(), NOPARAM);
-              tamLeaveMode();
+              if(tam.mode) tamLeaveMode();
               hourGlassIconEnabled = false;
               return;
             }
@@ -513,7 +513,7 @@
           tamEnterMode(ITM_M_GOTO_COLUMN);
         }
         else {
-          tamLeaveMode();
+          if(tam.mode) tamLeaveMode();
         }
       }
     }
@@ -576,7 +576,7 @@
         tamEnterMode(ITM_M_GOTO_COLUMN);
       }
       else {
-        tamLeaveMode();
+        if(tam.mode) tamLeaveMode();
       }
     }
   }

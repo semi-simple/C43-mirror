@@ -229,6 +229,10 @@
 
   #ifdef PC_BUILD
     void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+      if(programRunStop == PGM_PAUSED) {
+        programRunStop = PGM_KEY_PRESSED_WHILE_PAUSED;
+        return;
+      }
       if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
         return;
       }
@@ -324,6 +328,10 @@
   #ifdef DMCP_BUILD
     void btnFnReleased(void *data) {
   #endif // DMCP_BUILD
+    if(programRunStop == PGM_KEY_PRESSED_WHILE_PAUSED) {
+      programRunStop = PGM_RESUMING;
+      return;
+    }
     if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
       if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
         switch(-softmenu[softmenuStack[0].softmenuId].menuItem) {
@@ -608,10 +616,13 @@
         shiftG = true;
       }
       int16_t item = determineItem((char *)data);
-      if(programRunStop == PGM_RUNNING) {
+      if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
         if((item == ITM_RS || item == ITM_EXIT) && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
           programRunStop = PGM_WAITING;
           showFunctionNameItem = 0;
+        }
+        else if(programRunStop == PGM_PAUSED) {
+          programRunStop = PGM_KEY_PRESSED_WHILE_PAUSED;
         }
         return;
       }
@@ -739,6 +750,11 @@
     void btnReleased(void *data) {
   #endif // DMCP_BUILD
       int16_t item;
+
+      if(programRunStop == PGM_KEY_PRESSED_WHILE_PAUSED) {
+        programRunStop = PGM_RESUMING;
+        return;
+      }
 
       if(calcMode == CM_ASSIGN && itemToBeAssigned != 0 && tamBuffer[0] == 0) {
         assignToKey((char *)data);

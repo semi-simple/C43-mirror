@@ -22,7 +22,7 @@
 
 
 #include "decode.h"
-#include "inputVar.h"
+#include "input.h"
 #include "lblGtoXeq.h"
 #include "manage.h"
 #include "nextStep.h"

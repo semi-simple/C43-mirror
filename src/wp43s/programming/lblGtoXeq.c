@@ -1563,10 +1563,8 @@ void runProgram(bool_t singleStep) {
           refreshScreen();
           lcd_refresh();
           fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 60000);
-          do {
-            key = key_pop();
-            sys_sleep();
-          } while(key == -1);
+          wait_for_key_release(0);
+          key_pop();
           break;
         }
       }

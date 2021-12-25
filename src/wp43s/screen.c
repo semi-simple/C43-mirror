@@ -2136,6 +2136,7 @@ void execTimerApp(uint16_t timerType) {
               showSoftmenu(-MNU_Solver);
             }
             else {
+              currentMvarLabel = INVALID_VARIABLE;
               showSoftmenu(-MNU_MVAR);
             }
           }

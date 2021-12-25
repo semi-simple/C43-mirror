@@ -576,7 +576,17 @@ void fnDynamicMenu(uint16_t unusedButMandatoryParameter) {
     uint16_t numberOfVars = 0;
     memset(tmpString, 0, TMP_STR_LENGTH);
 
-    if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
+    if(currentMvarLabel != INVALID_VARIABLE) {
+      uint8_t *step = labelList[currentMvarLabel - FIRST_LABEL].instructionPointer;
+      while((numberOfVars < 18) && *step == ((ITM_MVAR >> 8) | 0x80) && *(step + 1) == (ITM_MVAR & 0xff) && *(step + 2) == STRING_LABEL_VARIABLE) {
+        xcopy(tmpString + numberOfBytes, step + 4, *(step + 3));
+        (void)findOrAllocateNamedVariable(tmpString + numberOfBytes);
+        numberOfBytes += *(step + 3) + 1;
+        numberOfVars++;
+        step = findNextStep(step);
+      }
+    }
+    else if(currentSolverStatus & SOLVER_STATUS_USES_FORMULA) {
       char *bufPtr = tmpString;
       uint8_t errorCode = lastErrorCode;
       lastErrorCode = ERROR_NONE;

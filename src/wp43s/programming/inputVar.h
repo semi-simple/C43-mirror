@@ -22,6 +22,7 @@
 
 #include <stdint.h>
 
-void fnInput(uint16_t regist);
+void fnInput (uint16_t regist);
+void fnVarMnu(uint16_t label);
 
 #endif // INPUTVAR_H

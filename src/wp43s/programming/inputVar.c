@@ -20,7 +20,9 @@
 
 #include "programming/inputVar.h"
 #include "defines.h"
+#include "items.h"
 #include "recall.h"
+#include "softmenus.h"
 #include "wp43s.h"
 
 void fnInput(uint16_t regist) {
@@ -29,4 +31,9 @@ void fnInput(uint16_t regist) {
     currentInputVariable = regist;
     fnRecall(regist);
   }
+}
+
+void fnVarMnu(uint16_t label) {
+  currentMvarLabel = label;
+  showSoftmenu(-MNU_MVAR);
 }

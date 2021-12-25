@@ -833,6 +833,7 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     currentInputVariable = INVALID_VARIABLE;
+    currentMvarLabel = INVALID_VARIABLE;
 
     memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
     memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);

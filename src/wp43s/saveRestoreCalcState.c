@@ -274,6 +274,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&timerValue,                         sizeof(timerValue),                         BACKUP);
     save(&timerTotalTime,                     sizeof(timerTotalTime),                     BACKUP);
     save(&currentInputVariable,               sizeof(currentInputVariable),               BACKUP);
+    save(&currentMvarLabel,                   sizeof(currentMvarLabel),                   BACKUP);
 
 
     fclose(BACKUP);
@@ -492,6 +493,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&timerValue,                         sizeof(timerValue),                         BACKUP);
       restore(&timerTotalTime,                     sizeof(timerTotalTime),                     BACKUP);
       restore(&currentInputVariable,               sizeof(currentInputVariable),               BACKUP);
+      restore(&currentMvarLabel,                   sizeof(currentMvarLabel),                   BACKUP);
 
       fclose(BACKUP);
       printf("End of calc's restoration\n");

@@ -632,6 +632,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnRegSort                   (uint16_t unusedButMandatoryParameter) {}
   void fnRegSwap                   (uint16_t unusedButMandatoryParameter) {}
   void fnInput                     (uint16_t unusedButMandatoryParameter) {}
+  void fnVarMnu                    (uint16_t unusedButMandatoryParameter) {}
   void fnDynamicMenu               (uint16_t unusedButMandatoryParameter) {}
   void fnCheckInteger              (uint16_t unusedButMandatoryParameter) {}
   void fnNormalP                   (uint16_t unusedButMandatoryParameter) {}
@@ -2435,7 +2436,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1627 */  { fnChebyshevU,                 NOPARAM,                     "U" STD_SUB_n,                                 "U" STD_SUB_n,                                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /* 1628 */  { fnUnitVector,                 NOPARAM,                     "UNITV",                                       "UNITV",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1629 */  { fnIntegerMode,                SIM_UNSIGN,                  "UNSIGN",                                      "UNSIGN",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
-/* 1630 */  { itemToBeCoded,                NOPARAM,                     "VARMNU",                                      "VARMNU",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/* 1630 */  { fnVarMnu,                     TM_LABEL,                    "VARMNU",                                      "VARMNU",                                      (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1631 */  { fnVersion,                    NOPARAM,                     "VERS?",                                       "VERS?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1632 */  { fnIDivR,                      NOPARAM,                     "IDIVR",                                       "IDIVR",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1633 */  { fnWday,                       NOPARAM,                     "WDAY",                                        "WDAY",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},

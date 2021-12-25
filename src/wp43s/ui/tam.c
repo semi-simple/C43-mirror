@@ -244,7 +244,7 @@
       }
       else if(tam.indirect) {
         tam.indirect = false;
-        if(tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) {
+        if(tam.mode == TM_FLAGR || tam.mode == TM_FLAGW || tam.mode == TM_LABEL) {
           popSoftmenu();
           showSoftmenu(-MNU_TAMFLAG);
           --numberOfTamMenusToPop;
@@ -448,7 +448,7 @@
     }
     else if(item == ITM_INDIRECTION) {
       if(!tam.alpha && !tam.digitsSoFar && !tam.dot && !valueParameter) {
-        if(!tam.indirect && (tam.mode == TM_FLAGR || tam.mode == TM_FLAGW)) {
+        if(!tam.indirect && (tam.mode == TM_FLAGR || tam.mode == TM_FLAGW || tam.mode == TM_LABEL)) {
           popSoftmenu();
           showSoftmenu(-MNU_TAM);
           --numberOfTamMenusToPop;

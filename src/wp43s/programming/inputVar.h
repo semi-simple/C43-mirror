@@ -15,16 +15,13 @@
  */
 
 /********************************************//**
- * \file programming.h
+ * \file inputVar.h
  ***********************************************/
-#ifndef PROGRAMMING_H
-#define PROGRAMMING_H
+#ifndef INPUTVAR_H
+#define INPUTVAR_H
 
+#include <stdint.h>
 
-#include "decode.h"
-#include "inputVar.h"
-#include "lblGtoXeq.h"
-#include "manage.h"
-#include "nextStep.h"
+void fnInput(uint16_t regist);
 
-#endif // PROGRAMMING_H
+#endif // INPUTVAR_H

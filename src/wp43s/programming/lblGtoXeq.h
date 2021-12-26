@@ -30,6 +30,7 @@ void    fnReturn      (uint16_t skip);
 void    fnRunProgram  (uint16_t unusedButMandatoryParameter);
 void    fnStopProgram (uint16_t unusedButMandatoryParameter);
 void    fnCheckLabel  (uint16_t label);
+void    fnIsTopRoutine(uint16_t unusedButMandatoryParameter);
 
 /**
  * Executes one step

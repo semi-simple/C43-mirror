@@ -627,6 +627,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnSkip                      (uint16_t unusedButMandatoryParameter) {}
   void fnCase                      (uint16_t unusedButMandatoryParameter) {}
   void fnCheckLabel                (uint16_t unusedButMandatoryParameter) {}
+  void fnIsTopRoutine              (uint16_t unusedButMandatoryParameter) {}
   void fnRaiseError                (uint16_t unusedButMandatoryParameter) {}
   void fnRegClr                    (uint16_t unusedButMandatoryParameter) {}
   void fnRegCopy                   (uint16_t unusedButMandatoryParameter) {}
@@ -805,7 +806,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /*   31 */  { fnIsString,                   NOPARAM,                     "STRI?",                                       "STRI?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
 /*   32 */  { fnCheckValue,                 CHECK_VALUE_INFINITY,        STD_PLUS_MINUS STD_INFINITY "?",               STD_PLUS_MINUS STD_INFINITY "?",               (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /*   33 */  { fnIsPrime,                    NOPARAM,                     "PRIME?",                                      "PRIME?",                                      (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
-/*   34 */  { itemToBeCoded,                NOPARAM,                     "TOP?",                                        "TOP?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_UNCHANGED | EIM_DISABLED},
+/*   34 */  { fnIsTopRoutine,               NOPARAM,                     "TOP?",                                        "TOP?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /*   35 */  { fnKeyEnter,                   NOPARAM,                     "ENTER" STD_UP_ARROW,                          "ENTER" STD_UP_ARROW,                          (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_DISABLED  | US_ENABLED   | EIM_DISABLED},
 /*   36 */  { fnSwapXY,                     NOPARAM,                     "x" STD_LEFT_RIGHT_ARROWS "y",                 "x" STD_LEFT_RIGHT_ARROWS "y",                 (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABL_XEQ | EIM_DISABLED},
 /*   37 */  { fnDrop,                       NOPARAM,                     "DROP",                                        "DROP" STD_DOWN_ARROW,                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},

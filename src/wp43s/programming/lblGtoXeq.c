@@ -1641,3 +1641,17 @@ void fnCheckLabel(uint16_t label) {
     temporaryInformation = TI_FALSE;
   }
 }
+
+
+
+void fnIsTopRoutine(uint16_t unusedButMandatoryParameter) {
+  /* A subroutine is running */
+  if(currentSubroutineLevel > 0) {
+    temporaryInformation = TI_FALSE;
+  }
+
+  /* Not in a subroutine */
+  else {
+    temporaryInformation = TI_TRUE;
+  }
+}

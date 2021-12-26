@@ -28,6 +28,7 @@
 #include "flags.h"
 #include "fonts.h"
 #include "items.h"
+#include "keyboard.h"
 #include "longIntegerType.h"
 #include "memory.h"
 #include "programming/manage.h"
@@ -1566,6 +1567,9 @@ void runProgram(bool_t singleStep) {
           wait_for_key_release(0);
           key_pop();
           break;
+        }
+        else if(key > 0) {
+          setLastKeyCode(key);
         }
       }
     #endif // DMCP_BUILD

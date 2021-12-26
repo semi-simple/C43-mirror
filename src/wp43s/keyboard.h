@@ -147,4 +147,6 @@ void execAutoRepeat(uint16_t key);
   void btnReleased  (void *data);
 #endif // DMCP_BUILD
 
+void setLastKeyCode  (int key);
+
 #endif // KEYBOARD_H

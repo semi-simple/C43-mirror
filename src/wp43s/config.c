@@ -834,6 +834,7 @@ void fnReset(uint16_t confirmation) {
 
     currentInputVariable = INVALID_VARIABLE;
     currentMvarLabel = INVALID_VARIABLE;
+    lastKeyCode = 0;
 
     memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
     memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);

@@ -229,10 +229,6 @@
 
   #ifdef PC_BUILD
     void btnFnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
-      if(programRunStop == PGM_PAUSED) {
-        programRunStop = PGM_KEY_PRESSED_WHILE_PAUSED;
-        return;
-      }
       if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
         return;
       }
@@ -248,6 +244,17 @@
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
   #endif // DMCP_BUILD
+      if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
+        setLastKeyCode((*((char *)data) - '0') + 37);
+      }
+      else {
+        lastKeyCode = 0;
+      }
+
+      if(programRunStop == PGM_PAUSED) {
+        programRunStop = PGM_KEY_PRESSED_WHILE_PAUSED;
+        return;
+      }
       if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
         int16_t item = determineFunctionKeyItem((char *)data);
 
@@ -604,6 +611,14 @@
 
   #ifdef PC_BUILD
     void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
+      int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+      if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
+        setLastKeyCode(keyCode + 1);
+      }
+      else {
+        lastKeyCode = 0;
+      }
+
       if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
         return;
       }
@@ -628,7 +643,6 @@
       }
 
       if(getSystemFlag(FLAG_USER)) {
-        int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
         int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
         char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
         xcopy(tmpString, funcParam, stringByteLength(funcParam) + 1);
@@ -711,6 +725,14 @@
   #ifdef DMCP_BUILD
     void btnPressed(void *data) {
       int16_t item;
+      int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+
+      if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
+        lastKeyCode = keyCode;
+      }
+      else {
+        lastKeyCode = 0;
+      }
 
 //    if(keyAutoRepeat) {
 //      //beep(880, 50);
@@ -722,7 +744,6 @@
 //    }
 
       if(getSystemFlag(FLAG_USER)) {
-        int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
         int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
         char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
         xcopy(tmpString, funcParam, stringByteLength(funcParam) + 1);
@@ -2041,3 +2062,18 @@ void fnKeyAngle(uint16_t unusedButMandatoryParameter) {
   #endif // !TESTSUITE_BUILD
 }
 
+
+
+void setLastKeyCode(int key) {
+  if(1 <= key && key <= 43) {
+    if     (key <=  6) lastKeyCode = key      + 20;
+    else if(key <= 12) lastKeyCode = key -  6 + 30;
+    else if(key == 13) lastKeyCode =            41;
+    else if(key <= 17) lastKeyCode = key - 12 + 41;
+    else if(key <= 22) lastKeyCode = key - 17 + 50;
+    else if(key <= 27) lastKeyCode = key - 22 + 60;
+    else if(key <= 32) lastKeyCode = key - 27 + 70;
+    else if(key <= 37) lastKeyCode = key - 32 + 80;
+    else if(key <= 43) lastKeyCode = key - 37 + 10; // function keys
+  }
+}

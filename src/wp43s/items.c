@@ -635,6 +635,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnVarMnu                    (uint16_t unusedButMandatoryParameter) {}
   void fnDynamicMenu               (uint16_t unusedButMandatoryParameter) {}
   void fnPause                     (uint16_t unusedButMandatoryParameter) {}
+  void fnKey                       (uint16_t unusedButMandatoryParameter) {}
   void fnCheckInteger              (uint16_t unusedButMandatoryParameter) {}
   void fnNormalP                   (uint16_t unusedButMandatoryParameter) {}
   void fnNormalL                   (uint16_t unusedButMandatoryParameter) {}
@@ -846,7 +847,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /*   74 */  { fnCos,                        NOPARAM,                     "cos",                                         "cos",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /*   75 */  { fnCosh,                       NOPARAM,                     "cosh",                                        "cosh",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /*   76 */  { fnSin,                        NOPARAM,                     "sin",                                         "sin",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
-/*   77 */  { itemToBeCoded,                NOPARAM,                     "KEY?",                                        "KEY?",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/*   77 */  { fnKey,                        TM_REGISTER,                 "KEY?",                                        "KEY?",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_UNCHANGED | US_ENABLED   | EIM_DISABLED},
 /*   78 */  { fnSinh,                       NOPARAM,                     "sinh",                                        "sinh",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /*   79 */  { fnTan,                        NOPARAM,                     "tan",                                         "tan",                                         (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
 /*   80 */  { fnTanh,                       NOPARAM,                     "tanh",                                        "tanh",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },

@@ -20,8 +20,13 @@
 
 #include "programming/input.h"
 #include "defines.h"
+#include "debug.h"
+#include "error.h"
 #include "items.h"
+#include "keyboard.h"
+#include "longIntegerType.h"
 #include "recall.h"
+#include "registerValueConversions.h"
 #include "screen.h"
 #include "softmenus.h"
 #include "timer.h"
@@ -39,10 +44,14 @@ void fnInput(uint16_t regist) {
   }
 }
 
+
+
 void fnVarMnu(uint16_t label) {
   currentMvarLabel = label;
   showSoftmenu(-MNU_MVAR);
 }
+
+
 
 void fnPause(uint16_t duration) {
   uint8_t previousProgramRunStop = programRunStop;
@@ -60,6 +69,7 @@ void fnPause(uint16_t duration) {
         if((key == 36 || key == 37) && previousProgramRunStop == PGM_RUNNING) {
           previousProgramRunStop = programRunStop = PGM_WAITING;
         }
+        setLastKeyCode(key);
         fnTimerStart(TO_KB_ACTV, TO_KB_ACTV, 60000);
         wait_for_key_release(0);
         key_pop();
@@ -87,5 +97,34 @@ void fnPause(uint16_t duration) {
     #else // !DMCP_BUILD
       refreshLcd(NULL);
     #endif // DMCP_BUILD
+  }
+}
+
+
+
+void fnKey(uint16_t regist) {
+  // no key was pressed
+  if(lastKeyCode == 0) {
+    temporaryInformation = TI_TRUE;
+  }
+
+  // a key was pressed
+  else {
+    temporaryInformation = TI_FALSE;
+    if(regist <= LAST_NAMED_VARIABLE) {
+      longInteger_t kc;
+      longIntegerInit(kc);
+      uIntToLongInteger(lastKeyCode, kc);
+      convertLongIntegerToLongIntegerRegister(kc, regist);
+      longIntegerFree(kc);
+      lastKeyCode = 0;
+    }
+    else {
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "register %u is out of range", regist);
+        moreInfoOnError("In function fnKey:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+    }
   }
 }

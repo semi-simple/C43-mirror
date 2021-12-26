@@ -23,6 +23,7 @@
 
 #include <stdint.h>
 
+
 #define ITM_NULL                         0
 
 // Items from 1 to 127 are 1 byte OP codes
@@ -1829,16 +1830,13 @@
 #define ITM_GETHIDE                   1766
 #define ITM_CALC                      1767
 #define ITM_SQRT                      1768
-
 #define ITM_RCL_FV                    1769
 #define ITM_RCL_IPonA                 1770
 #define ITM_RCL_NPER                  1771
 #define ITM_RCL_PERonA                1772
 #define ITM_RCL_PMT                   1773
 #define ITM_RCL_PV                    1774
-
 #define ITM_atan2                     1775
-
 #define ITM_TIMER_ADD                 1776
 #define ITM_TIMER_0_1S                1777
 #define ITM_TIMER_RESET               1778

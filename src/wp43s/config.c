@@ -836,6 +836,8 @@ void fnReset(uint16_t confirmation) {
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
 
+    currentInputVariable = INVALID_VARIABLE;
+
     memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
     memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);
     userMenus = NULL;

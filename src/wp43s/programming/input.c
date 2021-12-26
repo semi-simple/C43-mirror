@@ -29,6 +29,7 @@
 #include "registerValueConversions.h"
 #include "screen.h"
 #include "softmenus.h"
+#include "stack.h"
 #include "timer.h"
 #include "ui/tam.h"
 #include "wp43s.h"
@@ -127,4 +128,72 @@ void fnKey(uint16_t regist) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
     }
   }
+}
+
+
+
+void fnKeyType(uint16_t keyCode) {
+  longInteger_t kt;
+  longIntegerInit(kt);
+  switch(keyCode) {
+    case 82: uIntToLongInteger( 0, kt); break;
+    case 72: uIntToLongInteger( 1, kt); break;
+    case 73: uIntToLongInteger( 2, kt); break;
+    case 74: uIntToLongInteger( 3, kt); break;
+    case 62: uIntToLongInteger( 4, kt); break;
+    case 63: uIntToLongInteger( 5, kt); break;
+    case 64: uIntToLongInteger( 6, kt); break;
+    case 52: uIntToLongInteger( 7, kt); break;
+    case 53: uIntToLongInteger( 8, kt); break;
+    case 54: uIntToLongInteger( 9, kt); break;
+
+    case 44:
+    case 45:
+    case 83: uIntToLongInteger(10, kt); break;
+
+    case 35:
+    case 36: uIntToLongInteger(11, kt); break;
+
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16: uIntToLongInteger(12, kt); break;
+
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 41:
+    case 43:
+    case 46:
+    case 51:
+    case 55:
+    case 61:
+    case 65:
+    case 71:
+    case 75:
+    case 81:
+    case 84:
+    case 85: uIntToLongInteger(13, kt); break;
+
+    default:
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "keycode %u is out of range", keyCode);
+        moreInfoOnError("In function fnKeyType:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      longIntegerFree(kt);
+      return;
+  }
+  liftStack();
+  convertLongIntegerToLongIntegerRegister(kt, REGISTER_X);
+  longIntegerFree(kt);
 }

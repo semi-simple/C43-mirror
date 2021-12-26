@@ -638,6 +638,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
   void fnDynamicMenu               (uint16_t unusedButMandatoryParameter) {}
   void fnPause                     (uint16_t unusedButMandatoryParameter) {}
   void fnKey                       (uint16_t unusedButMandatoryParameter) {}
+  void fnKeyType                   (uint16_t unusedButMandatoryParameter) {}
   void fnCheckInteger              (uint16_t unusedButMandatoryParameter) {}
   void fnNormalP                   (uint16_t unusedButMandatoryParameter) {}
   void fnNormalL                   (uint16_t unusedButMandatoryParameter) {}
@@ -2311,7 +2312,7 @@ TO_QSPI const item_t indexOfItems[] = {
 /* 1498 */  { itemToBeCoded,                NOPARAM,                     "KEYG",                                        "KEYG",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1499 */  { itemToBeCoded,                NOPARAM,                     "KEYX",                                        "KEYX",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1500 */  { fnSinc,                       NOPARAM,                     "sinc",                                        "sinc",                                        (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_ENABLED },
-/* 1501 */  { itemToBeCoded,                NOPARAM,                     "KTYP?",                                       "KTYP?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
+/* 1501 */  { fnKeyType,                    TM_VALUE,                    "KTYP?",                                       "KTYP?",                                       (0 << TAM_MAX_BITS) |    85, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1502 */  { fnLastX,                      NOPARAM,                     "LASTx",                                       "LASTx",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},
 /* 1503 */  { fnCheckLabel,                 TM_LABEL,                    "LBL?",                                        "LBL?",                                        (0 << TAM_MAX_BITS) |    99, CAT_FNCT | SLS_UNCHANGED | US_UNCHANGED | EIM_DISABLED},
 /* 1504 */  { fnIsLeap,                     NOPARAM,                     "LEAP?",                                       "LEAP?",                                       (0 << TAM_MAX_BITS) |     0, CAT_FNCT | SLS_ENABLED   | US_ENABLED   | EIM_DISABLED},

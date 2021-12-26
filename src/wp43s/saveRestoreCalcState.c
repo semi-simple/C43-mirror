@@ -44,7 +44,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         463
+#define BACKUP_VERSION        466  // Save graphVariable
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -274,6 +274,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&timerCraAndDeciseconds,             sizeof(timerCraAndDeciseconds),             BACKUP);
     save(&timerValue,                         sizeof(timerValue),                         BACKUP);
     save(&timerTotalTime,                     sizeof(timerTotalTime),                     BACKUP);
+    save(&currentInputVariable,               sizeof(currentInputVariable),               BACKUP);
+    save(&SAVED_SIGMA_LASTX,                  sizeof(SAVED_SIGMA_LASTX),                  BACKUP);
+    save(&SAVED_SIGMA_LASTY,                  sizeof(SAVED_SIGMA_LASTY),                  BACKUP);
+    save(&SAVED_SIGMA_LAct,                   sizeof(SAVED_SIGMA_LAct),                   BACKUP);
     save(&graphVariable,                      sizeof(graphVariable),                      BACKUP);
 
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
@@ -529,6 +533,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&timerCraAndDeciseconds,             sizeof(timerCraAndDeciseconds),             BACKUP);
       restore(&timerValue,                         sizeof(timerValue),                         BACKUP);
       restore(&timerTotalTime,                     sizeof(timerTotalTime),                     BACKUP);
+      restore(&currentInputVariable,               sizeof(currentInputVariable),               BACKUP);
+      restore(&SAVED_SIGMA_LASTX,                  sizeof(SAVED_SIGMA_LASTX),                  BACKUP);
+      restore(&SAVED_SIGMA_LASTY,                  sizeof(SAVED_SIGMA_LASTY),                  BACKUP);
+      restore(&SAVED_SIGMA_LAct,                   sizeof(SAVED_SIGMA_LAct),                   BACKUP);
       restore(&graphVariable,                      sizeof(graphVariable),                      BACKUP);
 
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv

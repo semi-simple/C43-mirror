@@ -301,6 +301,7 @@ void fnPem(uint16_t unusedButMandatoryParameter) {
       calcMode = CM_PEM;
       hourGlassIconEnabled = false;
       aimBuffer[0] = 0;
+      currentInputVariable = INVALID_VARIABLE;
       return;
     }
 

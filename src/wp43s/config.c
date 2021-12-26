@@ -754,6 +754,10 @@ void fnReset(uint16_t confirmation) {
     lrChosenUndo = 0;
     lastPlotMode = PLOT_NOTHING;
     plotSelection = 0;
+    realZero(&SAVED_SIGMA_LASTX);
+    realZero(&SAVED_SIGMA_LASTY);
+    SAVED_SIGMA_LAct = 0;
+    
     x_min = -10;
     x_max = 10;
     y_min = 0;

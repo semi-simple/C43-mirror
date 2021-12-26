@@ -527,13 +527,14 @@ static void _putLiteral(uint8_t *literalAddress) {
       {
         char *imag = tmpStringLabelOrVariableName;
         _getStringLabelOrVariableName(literalAddress);
-        while(*imag != 'i' || *imag != 0) ++imag;
+        while(*imag != 'i' && *imag != 0) ++imag;
         if(*imag == 'i') {
           if(imag > tmpStringLabelOrVariableName && *(imag - 1) == '-') {
             *imag = '-'; *(imag - 1) = 0;
           }
           else if(imag > tmpStringLabelOrVariableName && *(imag - 1) == '+') {
             *imag = 0; *(imag - 1) = 0;
+            ++imag;
           }
           else {
             *imag = 0;
@@ -1531,7 +1532,11 @@ void runProgram(bool_t singleStep) {
   while(1) {
     int16_t stepsToBeAdvanced;
     uint16_t subLevel = currentSubroutineLevel;
-    if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE || temporaryInformation == TI_SOLVER_FAILED) {
+    uint16_t opCode = *currentStep;
+    if(opCode & 0x80) {
+      opCode = ((uint16_t)(opCode & 0x7F) << 8) | *(currentStep + 1);
+    }
+    if(temporaryInformation == TI_TRUE || temporaryInformation == TI_FALSE || temporaryInformation == TI_SOLVER_FAILED || (opCode != ITM_RTN && opCode != ITM_STOP && opCode != ITM_END && opCode != 0x7fff)) {
       temporaryInformation = TI_NO_INFO;
     }
     stepsToBeAdvanced = executeOneStep(currentStep);

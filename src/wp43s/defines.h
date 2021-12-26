@@ -35,7 +35,6 @@
   #undef SAVE_SPACE_DM42_2
   #undef SAVE_SPACE_DM42_3
   #undef SAVE_SPACE_DM42_4
-  #undef SAVE_SPACE_DM42_5
   #undef SAVE_SPACE_DM42_6
   #undef SAVE_SPACE_DM42_7
   #undef SAVE_SPACE_DM42_8
@@ -43,6 +42,7 @@
   #undef SAVE_SPACE_DM42_10
   #undef SAVE_SPACE_DM42_11
   #undef SAVE_SPACE_DM42_12
+  #undef SAVE_SPACE_DM42_13GRF
   #undef SAVE_SPACE_DM42_20
   #undef SAVE_SPACE_DM42_21
 
@@ -60,7 +60,6 @@
   #define SAVE_SPACE_DM42_1  //001568 bytes: STAT DEMOS 105-107-109
 //  #define SAVE_SPACE_DM42_2  //005672 bytes: XEQM
     #define SAVE_SPACE_DM42_4  //000736 bytes: XY GRAPHDEMOS (Plot)
-//    #define SAVE_SPACE_DM42_5  //001168 bytes: old SHOW (old WP43S on VIEW) (I think irrelevant now)
 //  #define SAVE_SPACE_DM42_6  //001648 bytes: ELEC functions
   #define SAVE_SPACE_DM42_7  //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
 #define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions

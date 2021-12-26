@@ -2109,7 +2109,7 @@ void complex34MatrixToDisplayString(calcRegister_t regist, char *displayString) 
 }
 
 void fnShow(uint16_t unusedButMandatoryParameter) {
-#if (!defined SAVE_SPACE_DM42_5) || (defined SAVE_SPACE_DM42_9)
+#if (defined SAVE_SPACE_DM42_9)
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
   uint8_t savedSigFigMode = SigFigMode;           //JM
   bool_t savedUNITDisplay = UNITDisplay;          //JM
@@ -2255,7 +2255,7 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
   SigFigMode = savedSigFigMode;                            //JM SIGFIG
   UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
 
-#endif //SAVE_SPACE_DM42_5
+#endif //SAVE_SPACE_DM42_9 new
 }
 
 

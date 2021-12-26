@@ -23,12 +23,13 @@
 #include "typeDefinitions.h"
 #include <stdint.h>
 
-void   fnGoto        (uint16_t label);
-void   fnGotoDot     (uint16_t globalStepNumber);
-void   fnExecute     (uint16_t label);
-void   fnReturn      (uint16_t skip);
-void   fnRunProgram  (uint16_t unusedButMandatoryParameter);
-void   fnStopProgram (uint16_t unusedButMandatoryParameter);
+void    fnGoto        (uint16_t label);
+void    fnGotoDot     (uint16_t globalStepNumber);
+void    fnExecute     (uint16_t label);
+void    fnReturn      (uint16_t skip);
+void    fnRunProgram  (uint16_t unusedButMandatoryParameter);
+void    fnStopProgram (uint16_t unusedButMandatoryParameter);
+void    fnCheckLabel  (uint16_t label);
 
 /**
  * Executes one step

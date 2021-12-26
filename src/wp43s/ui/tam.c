@@ -270,19 +270,12 @@
       return;
     }
     else if(item == ITM_alpha) {
-      if(!tam.digitsSoFar && !tam.dot && !valueParameter && (tam.mode == TM_STORCL || tam.mode == TM_M_DIM || tam.mode == TM_REGISTER || tam.mode == TM_CMP || tam.function == ITM_MVAR)) {
-        tam.alpha = true;
-        setSystemFlag(FLAG_ALPHA);
-        aimBuffer[0] = 0;
-        calcModeAim(NOPARAM);
-      }
-      else if(!tam.digitsSoFar && !tam.dot && tam.indirect) {
-        tam.alpha = true;
-        setSystemFlag(FLAG_ALPHA);
-        aimBuffer[0] = 0;
-        calcModeAim(NOPARAM);
-      }
-      else if(!tam.digitsSoFar && (tam.function == ITM_LBL || tam.function == ITM_GTOP)) {
+      bool_t allowAlphaMode = false;
+      allowAlphaMode = allowAlphaMode || (!tam.digitsSoFar && !tam.dot && !valueParameter && (tam.mode == TM_STORCL || tam.mode == TM_M_DIM || tam.mode == TM_REGISTER || tam.mode == TM_CMP || tam.function == ITM_MVAR));
+      allowAlphaMode = allowAlphaMode || (!tam.digitsSoFar && !tam.dot && tam.indirect);
+      allowAlphaMode = allowAlphaMode || (!tam.digitsSoFar && !tam.dot && tam.mode == TM_LABEL);
+      allowAlphaMode = allowAlphaMode || (!tam.digitsSoFar && (tam.function == ITM_LBL || tam.function == ITM_GTOP));
+      if(allowAlphaMode) {
         tam.alpha = true;
         setSystemFlag(FLAG_ALPHA);
         aimBuffer[0] = 0;
@@ -526,7 +519,7 @@
       }
       else if(tam.mode == TM_LABEL || tam.mode == TM_SOLVE) {
         value = findNamedLabel(buffer);
-        if(value == INVALID_VARIABLE && tam.function != ITM_LBL) {
+        if(value == INVALID_VARIABLE && tam.function != ITM_LBL && tam.function != ITM_LBLQ) {
           displayCalcErrorMessage(ERROR_LABEL_NOT_FOUND, ERR_REGISTER_LINE, REGISTER_X);
           #if (EXTRA_INFO_ON_CALC_ERROR == 1)
             sprintf(errorMessage, "string '%s' is not a named label", buffer);
@@ -557,7 +550,7 @@
           value = INVALID_VARIABLE;
         }
       }
-      if(value != INVALID_VARIABLE) {
+      if(value != INVALID_VARIABLE || tamOperation() == ITM_LBLQ) {
         if(calcMode == CM_MIM) {
           mimRunFunction(tamOperation(), value);
         }

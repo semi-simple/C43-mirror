@@ -307,7 +307,7 @@ static void _executeOp(uint8_t *paramAddress, uint16_t op, uint16_t paramMode) {
       else if(opParam == STRING_LABEL_VARIABLE) {
         _getStringLabelOrVariableName(paramAddress);
         calcRegister_t label = findNamedLabel(tmpStringLabelOrVariableName);
-        if(label != INVALID_VARIABLE) {
+        if(label != INVALID_VARIABLE || op == ITM_LBLQ) {
           reallyRunFunction(op, label);
         }
         else {
@@ -1609,5 +1609,35 @@ void execProgram(uint16_t label) {
     runProgram(false);
     currentLocalStepNumber = origLocalStepNumber;
     currentStep = origStep;
+  }
+}
+
+
+
+void fnCheckLabel(uint16_t label) {
+  if(dynamicMenuItem >= 0) {
+    label = findNamedLabel(dynmenuGetLabel(dynamicMenuItem));
+  }
+
+  // Local Label 00 to 99 and A, B, C, D, I, and J
+  if(label <= 109) {
+    // Search for local label
+    for(uint16_t lbl=0; lbl<numberOfLabels; lbl++) {
+      if(labelList[lbl].program == currentProgramNumber && labelList[lbl].step < 0 && *(labelList[lbl].labelPointer) == label) { // Is in the current program and is a local label and is the searched label
+        temporaryInformation = TI_TRUE;
+        return;
+      }
+    }
+    temporaryInformation = TI_FALSE;
+  }
+  else if(label >= FIRST_LABEL && label <= LAST_LABEL) { // Global named label
+    if((label - FIRST_LABEL) < numberOfLabels) {
+      temporaryInformation = TI_TRUE;
+      return;
+    }
+    temporaryInformation = TI_FALSE;
+  }
+  else {
+    temporaryInformation = TI_FALSE;
   }
 }

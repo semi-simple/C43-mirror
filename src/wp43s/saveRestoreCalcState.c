@@ -43,7 +43,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION        964  // Added SAVED SIGMA
+#define BACKUP_VERSION         65  // Added SAVED SIGMA
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 

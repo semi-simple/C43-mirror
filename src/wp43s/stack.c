@@ -263,7 +263,6 @@ void saveForUndo(void) {
   }
 
   lrSelectionUndo = lrSelection;  
-  //printf(">>>Storing for UNDO lrSelectionUndo = %i \n",lrSelection);
   if(statisticalSumsPointer == NULL) { // There are no statistical sums to save for undo
     if(savedStatisticalSumsPointer != NULL) {
       freeWp43s(savedStatisticalSumsPointer, NUMBER_OF_STATISTICAL_SUMS * REAL_SIZE);
@@ -302,8 +301,6 @@ void fnUndo(uint16_t unusedButMandatoryParameter) {
 
 
 void undo(void) {
-printf("Undo Begin\n");
-
   if(getRegisterDataType(TEMP_REGISTER_2_SAVED_STATS) == dtReal34Matrix) {
     calcRegister_t regStats = findNamedVariable("STATS");
     if(regStats == INVALID_VARIABLE) {
@@ -333,7 +330,6 @@ printf("Undo Begin\n");
 
   copySourceRegisterToDestRegister(SAVED_REGISTER_L, REGISTER_L);
 
-  //printf(">>>UNDOING lrSelection was %i becomes %i\n",lrSelection,lrSelectionUndo);
   lrSelection = lrSelectionUndo;
   if(savedStatisticalSumsPointer == NULL) { // There are no statistical sums to restore
     if(statisticalSumsPointer != NULL) {
@@ -353,5 +349,4 @@ printf("Undo Begin\n");
 
   thereIsSomethingToUndo = false;
   clearRegister(TEMP_REGISTER_2_SAVED_STATS);
-printf("Undo End\n");
 }

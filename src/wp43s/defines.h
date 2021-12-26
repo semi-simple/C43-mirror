@@ -672,7 +672,6 @@ typedef enum {
 #define SUM_YMIN                                  26
 #define SUM_YMAX                                  27
 
-
 #define NUMBER_OF_STATISTICAL_SUMS                28
 #define SIGMA_N      ((real_t *)(statisticalSumsPointer)) // could be a 32 bit unsigned integer
 #define SIGMA_X      ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_X     )) // could be a real34
@@ -702,7 +701,6 @@ typedef enum {
 #define SIGMA_XMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_XMAX  )) // could be a real34
 #define SIGMA_YMIN   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_YMIN  )) // could be a real34
 #define SIGMA_YMAX   ((real_t *)(statisticalSumsPointer + REAL_SIZE * SUM_YMAX  )) // could be a real34
-
 
 #define MAX_NUMBER_OF_GLYPHS_IN_STRING           196
 #define NUMBER_OF_GLYPH_ROWS                     101 // Used in the font browser application

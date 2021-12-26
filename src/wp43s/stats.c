@@ -189,48 +189,26 @@ static void addSigma(real_t *x, real_t *y) {
 
 static bool_t ignoreMaxIfValid(real_t *r1, real_t *r2){
   if(realIsNaN (r1) || realIsNaN (r2) || realIsInfinite (r1) || realIsInfinite (r2) || !realCompareEqual(r1, r2)) {
-#ifdef PC_BUILD
-printf(">>> spawning calcMax %u %u %u %u ", realIsNaN (r1) , realIsNaN (r2) , realIsInfinite (r1) , realIsInfinite (r2));
-printRealToConsole(r1,"  r1 ",", ");
-printRealToConsole(r2,"  r2 ","\n ");
-#endif
-  calcMax(1);
+    calcMax(1);
     return false;
   }
-#ifdef PC_BUILD
-printf(">>> ignoring calcMax\n");
-#endif
   return true;
 }
 
 static bool_t ignoreMinIfValid(real_t *r1, real_t *r2){
   if(realIsNaN (r1) || realIsNaN (r2) || realIsInfinite (r1) || realIsInfinite (r2) || !realCompareEqual(r1, r2)) {
-#ifdef PC_BUILD
-printf(">>> spawning calcMin %u %u %u %u ", realIsNaN (r1) , realIsNaN (r2) , realIsInfinite (r1) , realIsInfinite (r2));
-printRealToConsole(r1,"  r1 ",", ");
-printRealToConsole(r2,"  r2 ","\n ");
-#endif
-  calcMin(1);
+    calcMin(1);
     return false;
   }
-#ifdef PC_BUILD
-printf(">>> ignoring calcMin\n");
-#endif
   return true;
 }
 
 
 static bool_t realSubtractIfValid(real_t *r1, real_t *r2, real_t *r3, realContext_t *ct){
   if(realIsNaN (r1) || realIsNaN (r2) || realIsInfinite (r1) || realIsInfinite (r2)) {
-#ifdef PC_BUILD
-printf(">>> spawning calcSigma %u %u %u %u ", realIsNaN (r1) , realIsNaN (r2) , realIsInfinite (r1) , realIsInfinite (r2));
-#endif
     calcSigma(1);
     return false;
   }
-#ifdef PC_BUILD
-printf(">>>s ");
-#endif
   realSubtract(r1, r2, r3, ct);
   return true;
 }
@@ -240,11 +218,6 @@ static void subSigma(real_t *x, real_t *y) {
   real_t tmpReal1, tmpReal2, tmpReal3;
   realContext_t *realContext = &ctxtReal75; // Summation data with 75 digits
  // SIGMA-
-
-#ifdef PC_BUILD
-printRealToConsole(x,">>> subsigma: x:", " ");
-printRealToConsole(y,"  y:", "\n");
-#endif
 
   // xmax
   if(!ignoreMaxIfValid(x, SIGMA_XMAX)) goto endMax;
@@ -359,10 +332,6 @@ printRealToConsole(y,"  y:", "\n");
 
   toReturn:
 
-#ifdef PC_BUILD
-printf(" >>>\n");
-#endif
-
   return;
 }
 
@@ -431,17 +400,10 @@ static void calcMax(uint16_t maxOffset) {
     linkToRealMatrixRegister(regStats, &stats);
     const uint16_t rows = stats.header.matrixRows, cols = stats.header.matrixColumns;
 
-#ifdef PC_BUILD
-printf(">>> Recalculating max:\n");                                  //temporary debugging matrix display
-#endif
     real_t x, y;
     for(uint16_t i = 0; i < rows - maxOffset; i++) {
       real34ToReal(&stats.matrixElements[i * cols    ], &x);
       real34ToReal(&stats.matrixElements[i * cols + 1], &y);
-#ifdef PC_BUILD
-printReal34ToConsole(&stats.matrixElements[i * cols    ],">>> x:",", ");  //temporary debugging matrix display
-printReal34ToConsole(&stats.matrixElements[i * cols +1 ],"y:","\n");  //temporary debugging matrix display
-#endif
       addMax(&x, &y);
     }
   }
@@ -458,18 +420,10 @@ static void calcMin(uint16_t maxOffset) {
     real34Matrix_t stats;
     linkToRealMatrixRegister(regStats, &stats);
     const uint16_t rows = stats.header.matrixRows, cols = stats.header.matrixColumns;
-
-#ifdef PC_BUILD
-printf(">>> Recalculating min:\n");                                  //temporary debugging matrix display
-#endif
     real_t x, y;
     for(uint16_t i = 0; i < rows - maxOffset; i++) {
       real34ToReal(&stats.matrixElements[i * cols    ], &x);
       real34ToReal(&stats.matrixElements[i * cols + 1], &y);
-#ifdef PC_BUILD
-printReal34ToConsole(&stats.matrixElements[i * cols    ],">>> x:",", ");  //temporary debugging matrix display
-printReal34ToConsole(&stats.matrixElements[i * cols +1 ],"y:","\n");  //temporary debugging matrix display
-#endif
       addMin(&x, &y);
     }
   }
@@ -487,18 +441,10 @@ void calcSigma(uint16_t maxOffset) {
     real34Matrix_t stats;
     linkToRealMatrixRegister(regStats, &stats);
     const uint16_t rows = stats.header.matrixRows, cols = stats.header.matrixColumns;
-
-#ifdef PC_BUILD
-printf(">>> Recalculating sums:\n");                                  //temporary debugging matrix display
-#endif
     real_t x, y;
     for(uint16_t i = 0; i < rows - maxOffset; i++) {
       real34ToReal(&stats.matrixElements[i * cols    ], &x);
       real34ToReal(&stats.matrixElements[i * cols + 1], &y);
-#ifdef PC_BUILD
-printReal34ToConsole(&stats.matrixElements[i * cols    ],">>> x:",", ");  //temporary debugging matrix display
-printReal34ToConsole(&stats.matrixElements[i * cols +1 ],"y:","\n");  //temporary debugging matrix display
-#endif
       addSigma(&x, &y);
     }
   }
@@ -516,9 +462,6 @@ static void getLastRowStatsMatrix(real_t *x, real_t *y) {
     linkToRealMatrixRegister(regStats, &stats);
     rows = stats.header.matrixRows;
     cols = stats.header.matrixColumns;
-#ifdef PC_BUILD
-printf(">>> STATS matrix: rows=0-%u cols=0-%u\n",rows-1,cols-1);
-#endif
     real34ToReal(&stats.matrixElements[(rows-1) * cols    ], x);
     real34ToReal(&stats.matrixElements[(rows-1) * cols + 1], y);
 #ifdef PC_BUILD

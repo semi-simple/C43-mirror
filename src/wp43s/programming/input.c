@@ -48,13 +48,16 @@ void fnInput(uint16_t regist) {
 
 
 void fnVarMnu(uint16_t label) {
+#ifndef TESTSUITE_BUILD
   currentMvarLabel = label;
   showSoftmenu(-MNU_MVAR);
+#endif // TESTSUITE_BUILD
 }
 
 
 
 void fnPause(uint16_t duration) {
+#ifndef TESTSUITE_BUILD
   uint8_t previousProgramRunStop = programRunStop;
   if(tam.mode) tamLeaveMode();
   programRunStop = PGM_PAUSED;
@@ -99,6 +102,7 @@ void fnPause(uint16_t duration) {
       refreshLcd(NULL);
     #endif // DMCP_BUILD
   }
+#endif // TESTSUITE_BUILD
 }
 
 

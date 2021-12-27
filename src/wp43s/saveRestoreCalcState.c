@@ -135,6 +135,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(savedStatisticalSumsPointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(labelList);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(programList);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     save(&xCursor,                            sizeof(xCursor),                            BACKUP);
     save(&yCursor,                            sizeof(yCursor),                            BACKUP);
     save(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
@@ -350,6 +354,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       savedStatisticalSumsPointer = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      labelList = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      programList = TO_PCMEMPTR(ramPtr);
       restore(&xCursor,                            sizeof(xCursor),                            BACKUP);
       restore(&yCursor,                            sizeof(yCursor),                            BACKUP);
       restore(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);

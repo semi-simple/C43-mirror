@@ -114,7 +114,14 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     indexOfItems[func].func(param);
 
     if(lastErrorCode != 0) {
-      if(thereIsSomethingToUndo) undo();
+      if(getSystemFlag(FLAG_IGN1ER)) {
+        if(thereIsSomethingToUndo) undo();
+        lastErrorCode = ERROR_NONE;
+      }
+      else {
+        if(thereIsSomethingToUndo) undo();
+      }
+      clearSystemFlag(FLAG_IGN1ER);
     }
     else {
       if((indexOfItems[func].status & SLS_STATUS) == SLS_DISABLED) {

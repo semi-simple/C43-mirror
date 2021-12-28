@@ -1530,29 +1530,24 @@ void runProgram(bool_t singleStep) {
       temporaryInformation = TI_NO_INFO;
     }
     stepsToBeAdvanced = executeOneStep(currentStep);
-    switch(stepsToBeAdvanced) {
-      case -1: // Already the pointer is set
-        break;
+    if(lastErrorCode == ERROR_NONE) {
+      switch(stepsToBeAdvanced) {
+        case -1: // Already the pointer is set
+          break;
 
-      case 0: // End of the routine
-        if(subLevel == startingSubLevel) {
-          goto stopProgram;
-        }
-        break;
+        case 0: // End of the routine
+          if(subLevel == startingSubLevel) {
+            goto stopProgram;
+          }
+          break;
 
-      default: // Find the next step
-        fnSkip((uint16_t)(stepsToBeAdvanced - 1));
-        break;
+        default: // Find the next step
+          fnSkip((uint16_t)(stepsToBeAdvanced - 1));
+          break;
+      }
     }
-
-    if(lastErrorCode != ERROR_NONE) {
-      if(getSystemFlag(FLAG_IGN1ER)) {
-        lastErrorCode = ERROR_NONE;
-        clearSystemFlag(FLAG_IGN1ER);
-      }
-      else {
-        break;
-      }
+    else {
+      break;
     }
     #ifdef DMCP_BUILD
       if(!nestedEngine) {

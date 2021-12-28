@@ -298,6 +298,18 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       break;
 
+    case PARAM_KEYG_KEYX:
+      {
+        uint8_t *secondParam = findKey2ndParam(paramAddress - 3);
+        decodeOp(secondParam + 1, indexOfItems[*secondParam].itemCatalogName, PARAM_LABEL);
+        xcopy(tmpString + TMP_STR_LENGTH / 2, tmpString, stringByteLength(tmpString) + 1);
+        decodeOp(paramAddress - 1, op, PARAM_NUMBER_8);
+        tmpString[stringByteLength(tmpString) + 1] = 0;
+        tmpString[stringByteLength(tmpString)    ] = ' ';
+        xcopy(tmpString + stringByteLength(tmpString), tmpString + TMP_STR_LENGTH / 2, stringByteLength(tmpString + TMP_STR_LENGTH / 2) + 1);
+      }
+      break;
+
     default:
       sprintf(tmpString, "\nIn function decodeOp: paramMode %u is not valid!\n", paramMode);
   }
@@ -598,7 +610,6 @@ void decodeOneStep(uint8_t *step) {
         case ITM_ERR:            //  1468
         case ITM_FIX:            //  1473
         case ITM_GAP:            //  1477
-        case ITM_KEY:            //  1497
         case ITM_LocR:           //  1514
         case ITM_RDP:            //  1565
         case ITM_RM:             //  1571
@@ -617,6 +628,10 @@ void decodeOneStep(uint8_t *step) {
         case ITM_PRINTERMODE:    //  1712
         case ITM_PRINTERTAB:     //  1717
           decodeOp(step, indexOfItems[item16].itemCatalogName, PARAM_NUMBER_8);
+          break;
+
+        case ITM_KEY:            //  1497
+          decodeOp(step, indexOfItems[item16].itemCatalogName, PARAM_KEYG_KEYX);
           break;
 
         case ITM_BESTF:          //  1297

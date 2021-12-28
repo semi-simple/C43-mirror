@@ -197,6 +197,16 @@ uint8_t *countLiteralBytes(uint8_t *step) {
 
 
 uint8_t *findNextStep(uint8_t *step) {
+  if((*step == ((ITM_KEY >> 8) | 0x80)) && (*(step + 1) == (ITM_KEY & 0xff))) {
+    return findKey2ndParam(findKey2ndParam(step));
+  }
+  else {
+    return findKey2ndParam(step);
+  }
+}
+
+
+uint8_t *findKey2ndParam(uint8_t *step) {
   uint8_t item8 = *(step++);
   uint16_t item16;
 

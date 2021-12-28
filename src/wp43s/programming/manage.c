@@ -835,33 +835,29 @@ void insertStepInProgram(int16_t func) {
     case ITM_SF:             //  111
     case ITM_FF:             //  112
 
+      tmpString[0] = func;
       if(tam.mode == TM_CMP && tam.value == TEMP_REGISTER_1) {
-        tmpString[0] = func;
         tmpString[1] = (char)(real34IsZero(REGISTER_REAL34_DATA(TEMP_REGISTER_1)) ? VALUE_0 : VALUE_1);
         _insertInProgram((uint8_t *)tmpString, 2);
       }
       else if((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.alpha && !tam.indirect) {
-        tmpString[0] = func;
         tmpString[1] = (char)SYSTEM_FLAG_NUMBER;
         tmpString[2] = tam.value;
         _insertInProgram((uint8_t *)tmpString, 3);
       }
       else if(tam.alpha) {
         uint16_t nameLength = stringByteLength(aimBuffer);
-        tmpString[0] = func;
         tmpString[1] = (char)(tam.indirect ? INDIRECT_VARIABLE : STRING_LABEL_VARIABLE);
         tmpString[2] = nameLength;
         xcopy(tmpString + 3, aimBuffer, nameLength);
         _insertInProgram((uint8_t *)tmpString, nameLength + 3);
       }
       else if(tam.indirect) {
-        tmpString[0] = func;
         tmpString[1] = (char)INDIRECT_REGISTER;
         tmpString[2] = tam.value;
         _insertInProgram((uint8_t *)tmpString, 3);
       }
       else {
-        tmpString[0] = func;
         tmpString[1] = tam.value;
         _insertInProgram((uint8_t *)tmpString, 2);
       }
@@ -968,6 +964,49 @@ void insertStepInProgram(int16_t func) {
       _insertInProgram((uint8_t *)tmpString, 4);
       break;
 
+    case ITM_KEYG:           // 1498
+    case ITM_KEYX:           // 1499
+      {
+        int opLen;
+        tmpString[0] = (ITM_KEY >> 8) | 0x80;
+        tmpString[1] =  ITM_KEY       & 0xff;
+        if(tam.keyAlpha) {
+          uint16_t nameLength = stringByteLength(aimBuffer + AIM_BUFFER_LENGTH / 2);
+          tmpString[2] = (char)INDIRECT_VARIABLE;
+          tmpString[3] = (char)nameLength;
+          xcopy(tmpString + 4, aimBuffer + AIM_BUFFER_LENGTH / 2, nameLength);
+          opLen = nameLength + 4;
+        }
+        else if(tam.keyIndirect) {
+          tmpString[2] = (char)INDIRECT_REGISTER;
+          tmpString[3] = tam.key;
+          opLen = 4;
+        }
+        else {
+          tmpString[2] = tam.key;
+          opLen = 3;
+        }
+
+        tmpString[opLen + 0] = (func == ITM_KEYX ? ITM_XEQ : ITM_GTO);
+        if(tam.alpha) {
+          uint16_t nameLength = stringByteLength(aimBuffer);
+          tmpString[opLen + 1] = (char)(tam.indirect ? INDIRECT_VARIABLE : STRING_LABEL_VARIABLE);
+          tmpString[opLen + 2] = nameLength;
+          xcopy(tmpString + opLen + 3, aimBuffer, nameLength);
+          _insertInProgram((uint8_t *)tmpString, nameLength + opLen + 3);
+        }
+        else if(tam.indirect) {
+          tmpString[opLen + 1] = (char)INDIRECT_REGISTER;
+          tmpString[opLen + 2] = tam.value;
+          _insertInProgram((uint8_t *)tmpString, opLen + 3);
+        }
+        else {
+          tmpString[opLen + 1] = tam.value;
+          _insertInProgram((uint8_t *)tmpString, opLen + 2);
+        }
+      }
+      break;
+
     // Double-byte, 8-bit integer parameter
     case ITM_CNST:           //  207
     case ITM_BS:             //  405
@@ -1060,38 +1099,30 @@ void insertStepInProgram(int16_t func) {
     case ITM_FSS:            //  400
     case ITM_FSF:            //  401
 
+      tmpString[0] = (func >> 8) | 0x80;
+      tmpString[1] =  func       & 0xff;
       if(tam.mode == TM_CMP && tam.value == TEMP_REGISTER_1) {
-        tmpString[0] = (func >> 8) | 0x80;
-        tmpString[1] =  func       & 0xff;
         tmpString[2] = (char)(real34IsZero(REGISTER_REAL34_DATA(TEMP_REGISTER_1)) ? VALUE_0 : VALUE_1);
         _insertInProgram((uint8_t *)tmpString, 3);
       }
       else if((tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && tam.alpha && !tam.indirect) {
-        tmpString[0] = (func >> 8) | 0x80;
-        tmpString[1] =  func       & 0xff;
         tmpString[2] = (char)SYSTEM_FLAG_NUMBER;
         tmpString[3] = tam.value;
         _insertInProgram((uint8_t *)tmpString, 4);
       }
       else if(tam.alpha) {
         uint16_t nameLength = stringByteLength(aimBuffer);
-        tmpString[0] = (func >> 8) | 0x80;
-        tmpString[1] =  func       & 0xff;
         tmpString[2] = (char)(tam.indirect ? INDIRECT_VARIABLE : STRING_LABEL_VARIABLE);
         tmpString[3] = nameLength;
         xcopy(tmpString + 4, aimBuffer, nameLength);
         _insertInProgram((uint8_t *)tmpString, nameLength + 4);
       }
       else if(tam.indirect) {
-        tmpString[0] = (func >> 8) | 0x80;
-        tmpString[1] =  func       & 0xff;
         tmpString[2] = (char)INDIRECT_REGISTER;
         tmpString[3] = tam.value;
         _insertInProgram((uint8_t *)tmpString, 4);
       }
       else {
-        tmpString[0] = (func >> 8) | 0x80;
-        tmpString[1] =  func       & 0xff;
         tmpString[2] = tam.value;
         _insertInProgram((uint8_t *)tmpString, 3);
       }

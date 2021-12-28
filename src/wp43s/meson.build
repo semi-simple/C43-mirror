@@ -172,6 +172,7 @@ wp43s_src = files(
   'programming/lblGtoXeq.c',
   'programming/manage.c',
   'programming/nextStep.c',
+  'programming/programmableMenu.c',
   'recall.c',
   'registerValueConversions.c',
   'registers.c',

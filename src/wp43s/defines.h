@@ -514,7 +514,8 @@ typedef enum {
 #define TM_LABEL                               10009
 #define TM_SOLVE                               10010
 #define TM_NEWMENU                             10011
-#define TM_CMP                                 10012 // TM_CMP must be the last in this list
+#define TM_KEY                                 10012
+#define TM_CMP                                 10013 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -750,6 +751,7 @@ typedef enum {
 #define PARAM_NUMBER_8                             5
 #define PARAM_NUMBER_16                            6
 #define PARAM_COMPARE                              7
+#define PARAM_KEYG_KEYX                            8
 
 #define CHECK_INTEGER                              0
 #define CHECK_INTEGER_EVEN                         1

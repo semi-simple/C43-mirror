@@ -429,6 +429,14 @@ typedef struct {
   int16_t    value;
   int16_t    min;
   int16_t    max;
+  /**
+   * Only used for KEYG and KEYX
+   */
+  int16_t    key;
+  bool_t     keyAlpha;
+  bool_t     keyDot;
+  bool_t     keyIndirect;
+  bool_t     keyInputFinished;
 } tamState_t;
 
 #ifdef PC_BUILD

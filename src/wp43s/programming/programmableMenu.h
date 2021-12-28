@@ -15,17 +15,20 @@
  */
 
 /********************************************//**
- * \file programming.h
+ * \file programmableMenu.h
  ***********************************************/
-#ifndef PROGRAMMING_H
-#define PROGRAMMING_H
+#ifndef PROGRAMMABLEMENU_H
+#define PROGRAMMABLEMENU_H
 
+#include <stdint.h>
 
-#include "decode.h"
-#include "input.h"
-#include "lblGtoXeq.h"
-#include "manage.h"
-#include "nextStep.h"
-#include "programmableMenu.h"
+void fnKeyGtoXeq(uint16_t keyNum);
+void fnKeyGto   (uint16_t unusedButMandatoryParameter);
+void fnKeyXeq   (uint16_t unusedButMandatoryParameter);
 
-#endif // PROGRAMMING_H
+#ifndef TESTSUITE_BUILD
+void keyGto     (uint16_t keyNum, uint16_t label);
+void keyXeq     (uint16_t keyNum, uint16_t label);
+#endif // TESTSUITE_BUILD
+
+#endif // PROGRAMMABLEMENU_H

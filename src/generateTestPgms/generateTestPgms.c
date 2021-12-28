@@ -9282,14 +9282,326 @@ int main(int argc, char* argv[]) {
 
     *(currentStep++) = (ITM_KEY >> 8) | 0x80;
     *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
     *(currentStep++) = 0;
 
     *(currentStep++) = (ITM_KEY >> 8) | 0x80;
     *(currentStep++) =  ITM_KEY       & 0xff;
-    *(currentStep++) = 64;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
 
     *(currentStep++) = (ITM_KEY >> 8) | 0x80;
     *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
     *(currentStep++) = INDIRECT_REGISTER;
     *(currentStep++) = 0;
 
@@ -9297,9 +9609,215 @@ int main(int argc, char* argv[]) {
     *(currentStep++) =  ITM_KEY       & 0xff;
     *(currentStep++) = INDIRECT_REGISTER;
     *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
 
     *(currentStep++) = (ITM_KEY >> 8) | 0x80;
     *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
     *(currentStep++) = INDIRECT_REGISTER;
     *(currentStep++) = REGISTER_X;
 
@@ -9307,9 +9825,215 @@ int main(int argc, char* argv[]) {
     *(currentStep++) =  ITM_KEY       & 0xff;
     *(currentStep++) = INDIRECT_REGISTER;
     *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
 
     *(currentStep++) = (ITM_KEY >> 8) | 0x80;
     *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
     *(currentStep++) = INDIRECT_REGISTER;
     *(currentStep++) = FIRST_LOCAL_REGISTER;
 
@@ -9317,9 +10041,1063 @@ int main(int argc, char* argv[]) {
     *(currentStep++) =  ITM_KEY       & 0xff;
     *(currentStep++) = INDIRECT_REGISTER;
     *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
 
     *(currentStep++) = (ITM_KEY >> 8) | 0x80;
     *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_GTO;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 1;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = 21;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'A' - 'A' + 100; // A
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = 'J' - 'A' + 100; // J
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = STRING_LABEL_VARIABLE;
+    *(currentStep++) = 5;
+    *(currentStep++) = 'L';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'b';
+    *(currentStep++) = 'e';
+    *(currentStep++) = 'l';
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 0;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = 99;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_X;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = REGISTER_K;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = FIRST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
+    *(currentStep++) = INDIRECT_REGISTER;
+    *(currentStep++) = LAST_LOCAL_REGISTER;
+
+    *(currentStep++) = (ITM_KEY >> 8) | 0x80;
+    *(currentStep++) =  ITM_KEY       & 0xff;
+    *(currentStep++) = INDIRECT_VARIABLE;
+    *(currentStep++) = 3;
+    *(currentStep++) = 'V';
+    *(currentStep++) = 'a';
+    *(currentStep++) = 'r';
+    *(currentStep++) = ITM_XEQ;
     *(currentStep++) = INDIRECT_VARIABLE;
     *(currentStep++) = 3;
     *(currentStep++) = 'V';

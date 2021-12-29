@@ -111,8 +111,7 @@ static uint16_t _get2ndParamOfKey(uint8_t *paramAddress) {
 void fnKeyGtoXeq(uint16_t keyNum) {
   uint8_t *secondParam  = findKey2ndParam(currentStep);
   uint8_t *opParam      = secondParam + 1;
-  uint8_t *paramAddress = opParam + 1;
-  uint16_t label        = _get2ndParamOfKey(paramAddress);
+  uint16_t label        = _get2ndParamOfKey(opParam);
 
   if(*secondParam == ITM_XEQ) {
     keyXeq(keyNum, label);

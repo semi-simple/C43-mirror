@@ -1210,3 +1210,13 @@ char *dynmenuGetLabel(int16_t menuitem) {
   }
   return labelName;
 }
+
+
+
+void fnExitAllMenus(uint16_t unusedButMandatoryParameter) {
+#ifndef TESTSUITE_BUILD
+  while((softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_MyMenu && softmenu[softmenuStack[0].softmenuId].menuItem != -MNU_MyAlpha) || (softmenu[softmenuStack[1].softmenuId].menuItem != -MNU_MyMenu)) {
+    popSoftmenu();
+  }
+#endif // !TESTSUITE_BUILD
+}

@@ -199,7 +199,7 @@ void fnExecute(uint16_t label) {
       refreshScreen();
     }
 #endif // TESTSUITE_BUILD
-    runProgram(false);
+    runProgram(false, INVALID_VARIABLE);
   }
 }
 
@@ -245,7 +245,7 @@ void fnRunProgram(uint16_t unusedButMandatoryParameter) {
     currentInputVariable = INVALID_VARIABLE;
   }
   dynamicMenuItem = -1;
-  runProgram(false);
+  runProgram(false, INVALID_VARIABLE);
 }
 
 
@@ -643,10 +643,10 @@ int16_t executeOneStep(uint8_t *step) {
 
 
 
-void runProgram(bool_t singleStep) {
+void runProgram(bool_t singleStep, uint16_t menuLabel) {
 #ifndef TESTSUITE_BUILD
   bool_t nestedEngine = (programRunStop == PGM_RUNNING);
-  uint16_t startingSubLevel = currentSubroutineLevel;
+  uint16_t startingSubLevel = (nestedEngine && menuLabel == INVALID_VARIABLE) ? currentSubroutineLevel : 0;
   lastErrorCode = ERROR_NONE;
   hourGlassIconEnabled = true;
   programRunStop = PGM_RUNNING;
@@ -656,6 +656,16 @@ void runProgram(bool_t singleStep) {
   #else // !DMCP_BUILD
     refreshLcd(NULL);
   #endif // DMCP_BUILD
+
+  if(menuLabel != INVALID_VARIABLE) {
+    fnBack(1);
+    if(menuLabel & 0x8000) {
+      fnExecute(menuLabel & 0x7fff);
+    }
+    else {
+      fnGoto(menuLabel & 0x7fff);
+    }
+  }
 
   while(1) {
     int16_t stepsToBeAdvanced;
@@ -739,7 +749,7 @@ void execProgram(uint16_t label) {
   uint8_t *origStep = currentStep;
   fnExecute(label);
   if(programRunStop == PGM_RUNNING && (getSystemFlag(FLAG_INTING) || getSystemFlag(FLAG_SOLVING))) {
-    runProgram(false);
+    runProgram(false, INVALID_VARIABLE);
     currentLocalStepNumber = origLocalStepNumber;
     currentStep = origStep;
   }

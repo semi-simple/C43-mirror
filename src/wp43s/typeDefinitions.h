@@ -380,6 +380,17 @@ typedef struct {
 
 
 /**
+ * \struct programmableMenu_t
+ * Structure keeping the information for programmable menu.
+ */
+typedef struct {
+  char           itemName[18][16]; ///< Name of items
+  uint16_t       itemParam[21];    ///< Parameter, XEQ if MSB set, GTO if MSB clear
+  uint16_t       unused;           ///< Padding
+} programmableMenu_t;
+
+
+/**
  * \struct labelList_t
  * Structure keeping the information for a program label.
  */

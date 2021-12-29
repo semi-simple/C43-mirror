@@ -80,6 +80,7 @@ softmenuStack_t        softmenuStack[SOFTMENU_STACK_SIZE];
 userMenuItem_t         userMenuItems[18];
 userMenuItem_t         userAlphaItems[18];
 userMenu_t            *userMenus;
+programmableMenu_t     programmableMenu;
 calcKey_t              kbd_usr[37];
 calcRegister_t         errorMessageRegisterLine;
 glyph_t                glyphNotFound = {.charCode = 0x0000, .colsBeforeGlyph = 0, .colsGlyph = 13, .colsAfterGlyph = 0, .rowsGlyph = 19, .data = NULL};

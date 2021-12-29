@@ -149,6 +149,7 @@
   extern userMenuItem_t         userMenuItems[18];
   extern userMenuItem_t         userAlphaItems[18];
   extern userMenu_t            *userMenus;
+  extern programmableMenu_t     programmableMenu;
   extern calcKey_t              kbd_usr[37];
   extern calcRegister_t         errorMessageRegisterLine;
   extern glyph_t                glyphNotFound;

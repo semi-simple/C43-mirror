@@ -400,7 +400,7 @@ void fnSst(uint16_t unusedButMandatoryParameter) {
   }
   else {
     _showStep();
-    runProgram(true);
+    runProgram(true, INVALID_VARIABLE);
   }
 }
 

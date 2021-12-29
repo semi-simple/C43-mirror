@@ -30,6 +30,7 @@
 #include "plotstat.h"
 #include "programming/manage.h"
 #include "programming/nextStep.h"
+#include "programming/programmableMenu.h"
 #include "recall.h"
 #include "registers.h"
 #include "screen.h"
@@ -140,6 +141,11 @@
             }
           }
         }
+        break;
+
+      case ITM_MENU:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = ITM_MENU;
         break;
 
       case MNU_EQN:
@@ -1451,6 +1457,12 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       return;
     }
 
+    if(softmenu[softmenuStack[0].softmenuId].menuItem == -ITM_MENU) {
+      dynamicMenuItem = 20;
+      fnProgrammableMenu(NOPARAM);
+      return;
+    }
+
     switch(calcMode) {
       case CM_NORMAL:
         if(lastErrorCode != 0) {
@@ -1777,6 +1789,12 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       return;
     }
 
+    if(softmenu[softmenuStack[0].softmenuId].menuItem == -ITM_MENU) {
+      dynamicMenuItem = 18;
+      fnProgrammableMenu(NOPARAM);
+      return;
+    }
+
     switch(calcMode) {
       case CM_NORMAL:
       case CM_AIM:
@@ -1892,6 +1910,12 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       else {
         addItemToBuffer(ITM_Min);
       }
+      return;
+    }
+
+    if(softmenu[softmenuStack[0].softmenuId].menuItem == -ITM_MENU) {
+      dynamicMenuItem = 19;
+      fnProgrammableMenu(NOPARAM);
       return;
     }
 

@@ -36,6 +36,7 @@
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
+#include "programming/programmableMenu.h"
 #include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -847,6 +848,8 @@ void fnReset(uint16_t confirmation) {
     userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
     userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
     memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
+
+    fnClearMenu(NOPARAM);
 
     // The following lines are test data
     addTestPrograms();

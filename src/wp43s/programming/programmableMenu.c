@@ -23,20 +23,25 @@
 #include "charString.h"
 #include "debug.h"
 #include "defines.h"
+#include "display.h"
 #include "error.h"
 #include "fonts.h"
 #include "items.h"
+#include "programming/lblGtoXeq.h"
 #include "programming/manage.h"
 #include "programming/nextStep.h"
 #include "registers.h"
+#include "softmenus.h"
 #include "typeDefinitions.h"
 #include "wp43s.h"
 
 #ifdef TESTSUITE_BUILD
 
-void fnKeyGtoXeq(uint16_t unusedButMandatoryParameter) {}
-void fnKeyGto   (uint16_t unusedButMandatoryParameter) {}
-void fnKeyXeq   (uint16_t unusedButMandatoryParameter) {}
+void fnKeyGtoXeq       (uint16_t unusedButMandatoryParameter) {}
+void fnKeyGto          (uint16_t unusedButMandatoryParameter) {}
+void fnKeyXeq          (uint16_t unusedButMandatoryParameter) {}
+void fnProgrammableMenu(uint16_t unusedButMandatoryParameter) {}
+void fnClearMenu       (uint16_t unusedButMandatoryParameter) {}
 
 #else // TESTSUITE_BUILD
 
@@ -131,14 +136,110 @@ void fnKeyXeq(uint16_t unusedButMandatoryParameter) {
 
 
 
+void fnProgrammableMenu(uint16_t unusedButMandatoryParameter) {
+  /* Show the programmable menu */
+  if(dynamicMenuItem == -1 || softmenu[softmenuStack[0].softmenuId].menuItem != -ITM_MENU) {
+    showSoftmenu(-ITM_MENU);
+  }
+
+  /* Select the programmable menu */
+  else if(programmableMenu.itemParam[dynamicMenuItem] != INVALID_VARIABLE) {
+    int16_t prm = dynamicMenuItem;
+    dynamicMenuItem = -1;
+    popSoftmenu();
+    runProgram(false, programmableMenu.itemParam[prm]);
+  }
+
+  /* EXIT key */
+  else if(dynamicMenuItem == 20) {
+    dynamicMenuItem = -1;
+    popSoftmenu();
+  }
+}
+
+
+
+void fnClearMenu(uint16_t unusedButMandatoryParameter) {
+  for(int i = 0; i < 18; ++i) {
+    programmableMenu.itemName[i][0] = 0;
+    programmableMenu.itemParam[i] = INVALID_VARIABLE;
+  }
+  for(int i = 18; i < 21; ++i) {
+    programmableMenu.itemParam[i] = INVALID_VARIABLE;
+  }
+}
+
+
+
+static void _setCaption(uint16_t keyNum) {
+  if(1 <= keyNum && keyNum <= 18) {
+    char *ts = tmpString;
+    switch(getRegisterDataType(REGISTER_K)) {
+      case dtString:
+        xcopy(tmpString, REGISTER_STRING_DATA(REGISTER_K), stringByteLength(REGISTER_STRING_DATA(REGISTER_K)) + 1);
+        break;
+
+      case dtLongInteger:
+        longIntegerRegisterToDisplayString(REGISTER_K, tmpString, TMP_STR_LENGTH, SCREEN_WIDTH, 50, STD_SPACE_PUNCTUATION);
+        break;
+
+      case dtTime:
+        timeToDisplayString(REGISTER_K, tmpString, false);
+        break;
+
+      case dtDate:
+        dateToDisplayString(REGISTER_K, tmpString);
+        break;
+
+      case dtReal34Matrix:
+        real34MatrixToDisplayString(REGISTER_K, tmpString);
+        break;
+
+      case dtComplex34Matrix:
+        complex34MatrixToDisplayString(REGISTER_K, tmpString);
+        break;
+
+      case dtShortInteger:
+        shortIntegerToDisplayString(REGISTER_K, tmpString, false);
+        break;
+
+      case dtReal34:
+        real34ToDisplayString(REGISTER_REAL34_DATA(REGISTER_K), getRegisterAngularMode(REGISTER_K), tmpString, &standardFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION, true);
+        break;
+
+      case dtComplex34:
+        complex34ToDisplayString(REGISTER_COMPLEX34_DATA(REGISTER_K), tmpString, &numericFont, SCREEN_WIDTH, NUMBER_OF_DISPLAY_DIGITS, false, STD_SPACE_PUNCTUATION, true);
+        break;
+
+      case dtConfig:
+        xcopy(tmpString, "Configu", 8);
+        break;
+
+      default:
+        tmpString[0] = 0;
+    }
+
+    for(int i = 0; i < 7 && *ts != 0; ++i) {
+      ts += ((*ts) & 0x80) ? 2 : 1;
+    }
+    *ts = 0;
+
+    xcopy(programmableMenu.itemName[keyNum - 1], tmpString, stringByteLength(tmpString) + 1);
+  }
+}
+
+
+
 void keyGto(uint16_t keyNum, uint16_t label) {
-  
+  _setCaption(keyNum);
+  programmableMenu.itemParam[keyNum - 1] = label & 0x7fff;
 }
 
 
 
 void keyXeq(uint16_t keyNum, uint16_t label) {
-  
+  _setCaption(keyNum);
+  programmableMenu.itemParam[keyNum - 1] = label | 0x8000;
 }
 
 #endif // TESTSUITE_BUILD

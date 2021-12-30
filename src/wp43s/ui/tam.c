@@ -348,6 +348,9 @@
           setSystemFlag(FLAG_ALPHA);
           calcModeAim(NOPARAM);
         }
+        #if defined(PC_BUILD) && (SCREEN_800X480 == 0)
+          calcModeTamGui();
+        #endif // PC_BUILD && (SCREEN_800X480 == 0)
       }
       else {
         tamLeaveMode();
@@ -461,6 +464,11 @@
       tam.value = 16;
       forceTry = true;
     }
+    else if(tam.mode == TM_LABEL && !tam.indirect && item == ITM_E) {
+      tam.value = 100 - 'A' + 'E';
+      forceTry = true;
+      tryOoR = true;
+    }
     else if(REGISTER_X <= indexOfItems[item].param && indexOfItems[item].param <= REGISTER_K) {
       if(!tam.digitsSoFar && tam.function != ITM_BESTF && tam.function != ITM_CNST && (tam.indirect || (tam.mode != TM_VALUE && tam.mode != TM_VALUE_CHB))) {
         if(tam.mode == TM_LABEL && !tam.indirect) {
@@ -469,14 +477,14 @@
             case REGISTER_B: tam.value = 100 - 'A' + 'B'; forceTry = true; tryOoR = true; break;
             case REGISTER_C: tam.value = 100 - 'A' + 'C'; forceTry = true; tryOoR = true; break;
             case REGISTER_D: tam.value = 100 - 'A' + 'D'; forceTry = true; tryOoR = true; break;
-            case REGISTER_I: tam.value = 100 - 'A' + 'I'; forceTry = true; tryOoR = true; break;
-            case REGISTER_J: tam.value = 100 - 'A' + 'J'; forceTry = true; tryOoR = true; break;
             case REGISTER_X: tam.alpha = true; aimBuffer[0] = 'X'; aimBuffer[1] = 0; forceTry = true; break;
             case REGISTER_Y: tam.alpha = true; aimBuffer[0] = 'Y'; aimBuffer[1] = 0; forceTry = true; break;
             case REGISTER_Z: tam.alpha = true; aimBuffer[0] = 'Z'; aimBuffer[1] = 0; forceTry = true; break;
             case REGISTER_T: tam.alpha = true; aimBuffer[0] = 'T'; aimBuffer[1] = 0; forceTry = true; break;
-            case REGISTER_K: tam.alpha = true; aimBuffer[0] = 'K'; aimBuffer[1] = 0; forceTry = true; break;
             case REGISTER_L: tam.alpha = true; aimBuffer[0] = 'L'; aimBuffer[1] = 0; forceTry = true; break;
+            case REGISTER_I: tam.alpha = true; aimBuffer[0] = 'I'; aimBuffer[1] = 0; forceTry = true; break;
+            case REGISTER_J: tam.alpha = true; aimBuffer[0] = 'J'; aimBuffer[1] = 0; forceTry = true; break;
+            case REGISTER_K: tam.alpha = true; aimBuffer[0] = 'K'; aimBuffer[1] = 0; forceTry = true; break;
           }
         }
         else {

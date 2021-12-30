@@ -101,7 +101,7 @@
         if(*(labelList[i].labelPointer) < 100) {
           printf("%02d\n", *(labelList[i].labelPointer));
         }
-        else if(*(labelList[i].labelPointer) < 110) {
+        else if(*(labelList[i].labelPointer) < 105) {
           printf("%c\n", *(labelList[i].labelPointer) - 100 + 'A');
         }
       }
@@ -162,7 +162,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       if(opParam <= 99) { // Local label from 00 to 99
         sprintf(tmpString, "%s %02u", op, opParam);
       }
-      else if(opParam <= 109) { // Local label from A to J
+      else if(opParam <= 104) { // Local label from A to E
         sprintf(tmpString, "%s %c", op, 'A' + (opParam - 100));
       }
       else if(opParam == STRING_LABEL_VARIABLE) {
@@ -178,7 +178,7 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       if(opParam <= 99) { // Local label from 00 to 99
         sprintf(tmpString, "%s %02u", op, opParam);
       }
-      else if(opParam <= 109) { // Local label from A to J
+      else if(opParam <= 104) { // Local label from A to E
         sprintf(tmpString, "%s %c", op, 'A' + (opParam - 100));
       }
       else if(opParam == STRING_LABEL_VARIABLE) {

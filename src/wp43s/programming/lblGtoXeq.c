@@ -55,8 +55,8 @@ void fnGoto(uint16_t label) {
       return;
     }
 
-    // Local Label 00 to 99 and A, B, C, D, I, and J
-    if(label <= 109) {
+    // Local Label 00 to 99 and A, B, C, D, and E
+    if(label <= 104) {
       // Search for local label
       for(uint16_t lbl=0; lbl<numberOfLabels; lbl++) {
         if(labelList[lbl].program == currentProgramNumber && labelList[lbl].step < 0 && *(labelList[lbl].labelPointer) == label) { // Is in the current program and is a local label and is the searched label
@@ -301,7 +301,7 @@ static void _executeOp(uint8_t *paramAddress, uint16_t op, uint16_t paramMode) {
       break;
 
     case PARAM_LABEL:
-      if(opParam <= 109) { // Local label from 00 to 99 or from A to J
+      if(opParam <= 104) { // Local label from 00 to 99 or from A to E
         reallyRunFunction(op, opParam);
       }
       else if(opParam == STRING_LABEL_VARIABLE) {

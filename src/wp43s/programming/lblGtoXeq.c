@@ -253,7 +253,8 @@ void fnReturn(uint16_t skip) {
 
 void fnRunProgram(uint16_t unusedButMandatoryParameter) {
   if(currentInputVariable != INVALID_VARIABLE) {
-    fnStore(currentInputVariable);
+    if(currentInputVariable & 0x8000) fnDropY(NOPARAM);
+    fnStore(currentInputVariable & 0x3fff);
     currentInputVariable = INVALID_VARIABLE;
   }
   dynamicMenuItem = -1;

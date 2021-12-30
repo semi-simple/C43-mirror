@@ -15,13 +15,22 @@
  */
 
 /********************************************//**
- * \file inputVar.h
+ * \file programmableMenu.h
  ***********************************************/
-#ifndef INPUTVAR_H
-#define INPUTVAR_H
+#ifndef PROGRAMMABLEMENU_H
+#define PROGRAMMABLEMENU_H
 
 #include <stdint.h>
 
-void fnInput(uint16_t regist);
+void fnKeyGtoXeq       (uint16_t keyNum);
+void fnKeyGto          (uint16_t unusedButMandatoryParameter);
+void fnKeyXeq          (uint16_t unusedButMandatoryParameter);
+void fnProgrammableMenu(uint16_t unusedButMandatoryParameter);
+void fnClearMenu       (uint16_t unusedButMandatoryParameter);
 
-#endif // INPUTVAR_H
+#ifndef TESTSUITE_BUILD
+void keyGto            (uint16_t keyNum, uint16_t label);
+void keyXeq            (uint16_t keyNum, uint16_t label);
+#endif // TESTSUITE_BUILD
+
+#endif // PROGRAMMABLEMENU_H

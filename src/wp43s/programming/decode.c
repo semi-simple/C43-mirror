@@ -298,6 +298,18 @@ void decodeOp(uint8_t *paramAddress, const char *op, uint16_t paramMode) {
       }
       break;
 
+    case PARAM_KEYG_KEYX:
+      {
+        uint8_t *secondParam = findKey2ndParam(paramAddress - 3);
+        decodeOp(secondParam + 1, indexOfItems[*secondParam].itemCatalogName, PARAM_LABEL);
+        xcopy(tmpString + TMP_STR_LENGTH / 2, tmpString, stringByteLength(tmpString) + 1);
+        decodeOp(paramAddress - 1, op, PARAM_NUMBER_8);
+        tmpString[stringByteLength(tmpString) + 1] = 0;
+        tmpString[stringByteLength(tmpString)    ] = ' ';
+        xcopy(tmpString + stringByteLength(tmpString), tmpString + TMP_STR_LENGTH / 2, stringByteLength(tmpString + TMP_STR_LENGTH / 2) + 1);
+      }
+      break;
+
     default:
       sprintf(tmpString, "\nIn function decodeOp: paramMode %u is not valid!\n", paramMode);
   }

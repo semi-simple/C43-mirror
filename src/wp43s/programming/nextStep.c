@@ -197,6 +197,16 @@ uint8_t *countLiteralBytes(uint8_t *step) {
 
 
 uint8_t *findNextStep(uint8_t *step) {
+  if((*step == ((ITM_KEY >> 8) | 0x80)) && (*(step + 1) == (ITM_KEY & 0xff))) {
+    return findKey2ndParam(findKey2ndParam(step));
+  }
+  else {
+    return findKey2ndParam(step);
+  }
+}
+
+
+uint8_t *findKey2ndParam(uint8_t *step) {
   uint16_t op = *(step++);
   if(op & 0x80) {
     op &= 0x7f;
@@ -215,6 +225,9 @@ uint8_t *findNextStep(uint8_t *step) {
 
       case PTP_LITERAL:
         return countLiteralBytes(step);
+
+      case PTP_KEYG_KEYX:
+        return countOpBytes(step, PARAM_NUMBER_8);
 
       default:
         return countOpBytes(step, (indexOfItems[op].status & PTP_STATUS) >> 9);
@@ -387,7 +400,7 @@ void fnSst(uint16_t unusedButMandatoryParameter) {
   }
   else {
     _showStep();
-    runProgram(true);
+    runProgram(true, INVALID_VARIABLE);
   }
 }
 
@@ -447,16 +460,10 @@ void fnCase(uint16_t regist) {
   if(real34CompareLessThan(&arg, const34_1)) {
     fnSkip(0);
   }
-  else if(real34CompareGreaterEqual(&arg, const34_1e6)) {
+  else if(real34CompareGreaterEqual(&arg, const34_65535)) {
     fnSkip(65534u);
   }
   else {
-    uint32_t x = real34ToUInt32(&arg);
-    if(x < 65535u) {
-      fnSkip(x - 1);
-    }
-    else {
-      fnSkip(65534u);
-    }
+    fnSkip(real34ToUInt32(&arg) - 1);
   }
 }

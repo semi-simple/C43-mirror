@@ -36,6 +36,7 @@
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
+#include "programming/programmableMenu.h"
 #include "recall.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -504,7 +505,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8873));
+  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(10444));
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -844,6 +845,8 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     currentInputVariable = INVALID_VARIABLE;
+    currentMvarLabel = INVALID_VARIABLE;
+    lastKeyCode = 0;
 
     memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
     memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);
@@ -853,6 +856,8 @@ void fnReset(uint16_t confirmation) {
     userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
     userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
     memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
+
+    fnClearMenu(NOPARAM);
 
     // The following lines are test data
     addTestPrograms();

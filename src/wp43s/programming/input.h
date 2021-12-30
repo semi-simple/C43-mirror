@@ -15,18 +15,18 @@
  */
 
 /********************************************//**
- * \file inputVar.c
+ * \file input.h
  ***********************************************/
+#ifndef INPUT_H
+#define INPUT_H
 
-#include "programming/inputVar.h"
-#include "defines.h"
-#include "recall.h"
-#include "wp43s.h"
+#include <stdint.h>
 
-void fnInput(uint16_t regist) {
-  if(programRunStop == PGM_RUNNING) {
-    programRunStop = PGM_WAITING;
-    currentInputVariable = regist;
-    fnRecall(regist);
-  }
-}
+void fnInput  (uint16_t regist);
+void fnVarMnu (uint16_t label);
+void fnPause  (uint16_t duration);
+void fnKey    (uint16_t regist);
+void fnKeyType(uint16_t regist);
+void fnPutKey (uint16_t regist);
+
+#endif // INPUT_H

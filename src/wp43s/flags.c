@@ -210,10 +210,12 @@ void fnSetFlag(uint16_t flag) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
+#ifndef TESTSUITE_BUILD
     else if(flag == FLAG_ALPHA) {
       tamLeaveMode();
       calcModeAim(NOPARAM);
     }
+#endif // TESTSUITE_BUILD
     else {
       setSystemFlag(flag);
     }
@@ -272,10 +274,12 @@ void fnClearFlag(uint16_t flag) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
+#ifndef TESTSUITE_BUILD
     else if(flag == FLAG_ALPHA) {
       tamLeaveMode();
       calcModeNormal();
     }
+#endif // TESTSUITE_BUILD
     else {
       clearSystemFlag(flag);
     }
@@ -334,6 +338,7 @@ void fnFlipFlag(uint16_t flag) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
+#ifndef TESTSUITE_BUILD
     else if(flag == FLAG_ALPHA) {
       tamLeaveMode();
       if(getSystemFlag(FLAG_ALPHA)) {
@@ -343,6 +348,7 @@ void fnFlipFlag(uint16_t flag) {
         calcModeAim(NOPARAM);
       }
     }
+#endif // TESTSUITE_BUILD
     else {
       flipSystemFlag(flag);
     }

@@ -112,6 +112,9 @@ void fnPause(uint16_t duration) {
 
 
 static uint16_t _getKeyArg(uint16_t regist) {
+#ifdef TESTSUITE_BUILD
+  return 0;
+#else // TESTSUITE_BUILD
   real34_t arg;
   switch(getRegisterDataType(regist)) {
     case dtLongInteger:
@@ -141,6 +144,7 @@ static uint16_t _getKeyArg(uint16_t regist) {
   else {
     return real34ToUInt32(&arg);
   }
+#endif // TESTSUITE_BUILD
 }
 
 
@@ -244,6 +248,7 @@ void fnKeyType(uint16_t regist) {
 
 
 void fnPutKey(uint16_t regist) {
+#ifndef TESTSUITE_BUILD
   char kc[4];
   uint16_t keyCode = _getKeyArg(regist);
 
@@ -335,4 +340,5 @@ void fnPutKey(uint16_t regist) {
   }
 
   programRunStop = PGM_WAITING;
+#endif // TESTSUITE_BUILD
 }

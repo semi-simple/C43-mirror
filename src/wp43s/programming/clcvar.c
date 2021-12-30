@@ -135,7 +135,7 @@ static void _processOp(uint8_t *paramAddress, uint16_t op, uint16_t paramMode) {
       break;
 
     case PARAM_LABEL:
-      if(opParam <= 109) { // Local label from 00 to 99 or from A to J
+      if(opParam <= 104) { // Local label from 00 to 99 or from A to E
         // nothing to do
       }
       else if(opParam == STRING_LABEL_VARIABLE) {

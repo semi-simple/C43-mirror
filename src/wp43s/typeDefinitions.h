@@ -457,8 +457,8 @@ typedef struct {
    */
   typedef struct {
     int x, y;
-    int width[3], height[3];
-    GtkWidget *keyImage[3];
+    int width[4], height[4];
+    GtkWidget *keyImage[4];
   } calcKeyboard_t;
 #endif // PC_BUILD
 

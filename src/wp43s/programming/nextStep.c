@@ -460,16 +460,10 @@ void fnCase(uint16_t regist) {
   if(real34CompareLessThan(&arg, const34_1)) {
     fnSkip(0);
   }
-  else if(real34CompareGreaterEqual(&arg, const34_1e6)) {
+  else if(real34CompareGreaterEqual(&arg, const34_65535)) {
     fnSkip(65534u);
   }
   else {
-    uint32_t x = real34ToUInt32(&arg);
-    if(x < 65535u) {
-      fnSkip(x - 1);
-    }
-    else {
-      fnSkip(65534u);
-    }
+    fnSkip(real34ToUInt32(&arg) - 1);
   }
 }

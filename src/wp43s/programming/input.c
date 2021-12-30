@@ -19,13 +19,17 @@
  ***********************************************/
 
 #include "programming/input.h"
+#include "constantPointers.h"
 #include "defines.h"
 #include "debug.h"
 #include "error.h"
 #include "items.h"
 #include "keyboard.h"
 #include "longIntegerType.h"
+#include "mathematics/comparisonReals.h"
+#include "realType.h"
 #include "recall.h"
+#include "registers.h"
 #include "registerValueConversions.h"
 #include "screen.h"
 #include "softmenus.h"
@@ -107,6 +111,40 @@ void fnPause(uint16_t duration) {
 
 
 
+static uint16_t _getKeyArg(uint16_t regist) {
+  real34_t arg;
+  switch(getRegisterDataType(regist)) {
+    case dtLongInteger:
+      convertLongIntegerRegisterToReal34(regist, &arg);
+      break;
+    case dtReal34:
+      if(getRegisterAngularMode(regist) == amNone) {
+        real34ToIntegralValue(REGISTER_REAL34_DATA(regist), &arg, DEC_ROUND_DOWN);
+        break;
+      }
+      /* fallthrough */
+    default:
+      displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "cannot use %s for the parameter of CASE", getRegisterDataTypeName(REGISTER_X, true, false));
+        moreInfoOnError("In function fnCase:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return 0;
+  }
+
+  if(real34CompareLessThan(&arg, const34_1)) {
+    return 0;
+  }
+  else if(real34CompareGreaterEqual(&arg, const34_65535)) {
+    return 65534u;
+  }
+  else {
+    return real34ToUInt32(&arg);
+  }
+}
+
+
+
 void fnKey(uint16_t regist) {
   // no key was pressed
   if(lastKeyCode == 0) {
@@ -136,7 +174,8 @@ void fnKey(uint16_t regist) {
 
 
 
-void fnKeyType(uint16_t keyCode) {
+void fnKeyType(uint16_t regist) {
+  uint16_t keyCode = _getKeyArg(regist);
   longInteger_t kt;
   longIntegerInit(kt);
   switch(keyCode) {
@@ -200,4 +239,100 @@ void fnKeyType(uint16_t keyCode) {
   liftStack();
   convertLongIntegerToLongIntegerRegister(kt, REGISTER_X);
   longIntegerFree(kt);
+}
+
+
+
+void fnPutKey(uint16_t regist) {
+  char kc[4];
+  uint16_t keyCode = _getKeyArg(regist);
+
+  programRunStop = PGM_WAITING;
+
+  switch(keyCode) {
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+      kc[0] = keyCode - 10 + '0';
+      kc[1] = 0;
+      btnFnClicked(NULL, kc);
+      break;
+
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+      sprintf(kc, "%02u", keyCode - 21 + 0);
+      btnClicked(NULL, kc);
+      break;
+
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+      sprintf(kc, "%02u", keyCode - 31 + 6);
+      btnClicked(NULL, kc);
+      break;
+
+    case 41:
+    case 43:
+    case 44:
+    case 45:
+    case 46:
+      sprintf(kc, "%02u", keyCode - 41 + 12);
+      btnClicked(NULL, kc);
+      break;
+
+    case 51:
+    case 52:
+    case 53:
+    case 54:
+    case 55:
+      sprintf(kc, "%02u", keyCode - 51 + 17);
+      btnClicked(NULL, kc);
+      break;
+
+    case 61:
+    case 62:
+    case 63:
+    case 64:
+    case 65:
+      sprintf(kc, "%02u", keyCode - 61 + 22);
+      btnClicked(NULL, kc);
+      break;
+
+    case 71:
+    case 72:
+    case 73:
+    case 74:
+    case 75:
+      sprintf(kc, "%02u", keyCode - 71 + 27);
+      btnClicked(NULL, kc);
+      break;
+
+    case 81:
+    case 82:
+    case 83:
+    case 84:
+    case 85:
+      sprintf(kc, "%02u", keyCode - 81 + 32);
+      btnClicked(NULL, kc);
+      break;
+
+    default:
+      displayCalcErrorMessage(ERROR_OUT_OF_RANGE, ERR_REGISTER_LINE, REGISTER_X);
+      #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+        sprintf(errorMessage, "keycode %u is out of range", keyCode);
+        moreInfoOnError("In function fnPutKey:", errorMessage, NULL, NULL);
+      #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+  }
+
+  programRunStop = PGM_WAITING;
 }

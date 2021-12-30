@@ -26,6 +26,7 @@ void fnInput  (uint16_t regist);
 void fnVarMnu (uint16_t label);
 void fnPause  (uint16_t duration);
 void fnKey    (uint16_t regist);
-void fnKeyType(uint16_t keyCode);
+void fnKeyType(uint16_t regist);
+void fnPutKey (uint16_t regist);
 
 #endif // INPUT_H

@@ -217,6 +217,13 @@
     }
   #endif // PC_BUILD
 
+  #ifdef DMCP_BUILD
+    void btnFnClicked(void *unused, void *data) {
+      btnFnPressed(data);
+      btnFnReleased(data);
+    }
+  #endif // DMCP_BUILD
+
 
     void execAutoRepeat(uint16_t key) {
 #ifdef DMCP_BUILD

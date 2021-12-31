@@ -254,6 +254,13 @@ void saveForUndo(void) {
     }
   }
 
+  if(entryStatus & 0x01) {
+    entryStatus |= 0x02;
+  }
+  else {
+    entryStatus &= 0xfd;
+  }
+
   for(calcRegister_t regist=getStackTop(); regist>=REGISTER_X; regist--) {
     copySourceRegisterToDestRegister(regist, SAVED_REGISTER_X - REGISTER_X + regist);
     if(lastErrorCode == ERROR_RAM_FULL) {
@@ -328,6 +335,13 @@ void undo(void) {
     else {
       currentInputVariable &= 0x7fff;
     }
+  }
+
+  if(entryStatus & 0x02) {
+    entryStatus |= 0x01;
+  }
+  else {
+    entryStatus &= 0xfe;
   }
 
   if(SAVED_SIGMA_LAct == +1 && statisticalSumsPointer != NULL) {

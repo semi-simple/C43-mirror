@@ -342,3 +342,14 @@ void fnPutKey(uint16_t regist) {
   programRunStop = PGM_WAITING;
 #endif // TESTSUITE_BUILD
 }
+
+
+
+void fnEntryQ(uint16_t unusedButMandatoryParameter) {
+  if(entryStatus & 0x01) {
+    temporaryInformation = TI_TRUE;
+  }
+  else {
+    temporaryInformation = TI_FALSE;
+  }
+}

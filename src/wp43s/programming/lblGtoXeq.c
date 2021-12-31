@@ -743,6 +743,9 @@ stopProgram:
   if(programRunStop == PGM_RUNNING && !nestedEngine) {
     programRunStop = PGM_STOPPED;
   }
+  if(programRunStop != PGM_RUNNING) {
+    entryStatus &= 0xfe;
+  }
   showHideHourGlass();
   #ifdef DMCP_BUILD
     lcd_refresh();

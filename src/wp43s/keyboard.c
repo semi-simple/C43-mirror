@@ -218,13 +218,22 @@
 
   #ifdef PC_BUILD
     void btnFnClicked(GtkWidget *notUsed, gpointer data) {
-  #endif
-  #ifdef DMCP_BUILD
-    void btnFnClicked(void *notUsed, void *data) {
-  #endif
+//      GdkEvent mouseButton; //JM
+//      mouseButton.button.button = 1; //JM
       executeFunction(data, 0);
     }
+  #endif
     
+  #ifdef DMCP_BUILD
+    void btnFnClicked(void *unused, void *data) {
+//      btnFnPressed(data); //JM
+//      btnFnReleased(data); //JM
+      executeFunction(data, 0);
+    }
+  #endif // DMCP_BUILD
+
+
+
   #ifdef PC_BUILD
     void btnFnClickedP(GtkWidget *notUsed, gpointer data) { //JM Added this portion to be able to go to NOP on emulator
       GdkEvent mouseButton;
@@ -240,13 +249,6 @@
       btnFnReleased(notUsed, &mouseButton, data);
     }
   #endif // PC_BUILD
-
-  #ifdef DMCP_BUILD
-    void btnFnClicked(void *unused, void *data) {
-      btnFnPressed(data);
-      btnFnReleased(data);
-    }
-  #endif // DMCP_BUILD
 
 
     void execAutoRepeat(uint16_t key) {
@@ -894,7 +896,7 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
       lastshiftG = shiftG;
       int16_t item = determineItem((char *)data);
       if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
-        if((item == ITM_RS || item == ITM_EXIT) && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+        if((item == ITM_RS || item == ITM_EXIT1) && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
           programRunStop = PGM_WAITING;
           showFunctionNameItem = 0;
         }
@@ -1941,6 +1943,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         }
         break;
+--- */
 
       case CM_EIM:
         if(aimBuffer[0] != 0) {

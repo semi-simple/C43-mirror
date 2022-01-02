@@ -292,7 +292,7 @@ static void _executeWithIndirectVariable(uint8_t *stringAddress, uint16_t op) {
 
 static void _executeOp(uint8_t *paramAddress, uint16_t op, uint16_t paramMode) {
   uint8_t opParam = *(uint8_t *)(paramAddress++);
-  bool_t tryAllocate = (op == ITM_STO || op == ITM_M_DIM || op == ITM_MVAR);
+  bool_t tryAllocate = (op == ITM_STO || op == ITM_M_DIM || op == ITM_MVAR || op == ITM_INPUT);
 
   switch(paramMode) {
     case PARAM_DECLARE_LABEL:
@@ -1530,29 +1530,24 @@ void runProgram(bool_t singleStep) {
       temporaryInformation = TI_NO_INFO;
     }
     stepsToBeAdvanced = executeOneStep(currentStep);
-    switch(stepsToBeAdvanced) {
-      case -1: // Already the pointer is set
-        break;
+    if(lastErrorCode == ERROR_NONE) {
+      switch(stepsToBeAdvanced) {
+        case -1: // Already the pointer is set
+          break;
 
-      case 0: // End of the routine
-        if(subLevel == startingSubLevel) {
-          goto stopProgram;
-        }
-        break;
+        case 0: // End of the routine
+          if(subLevel == startingSubLevel) {
+            goto stopProgram;
+          }
+          break;
 
-      default: // Find the next step
-        fnSkip((uint16_t)(stepsToBeAdvanced - 1));
-        break;
+        default: // Find the next step
+          fnSkip((uint16_t)(stepsToBeAdvanced - 1));
+          break;
+      }
     }
-
-    if(lastErrorCode != ERROR_NONE) {
-      if(getSystemFlag(FLAG_IGN1ER)) {
-        lastErrorCode = ERROR_NONE;
-        clearSystemFlag(FLAG_IGN1ER);
-      }
-      else {
-        break;
-      }
+    else {
+      break;
     }
     #ifdef DMCP_BUILD
       if(!nestedEngine) {

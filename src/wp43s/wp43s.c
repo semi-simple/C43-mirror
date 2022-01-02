@@ -189,6 +189,7 @@ uint16_t               currentInputVariable = INVALID_VARIABLE;
 
 int32_t                numberOfFreeMemoryRegions;
 int32_t                lgCatalogSelection;
+int32_t                graphVariable;
 
 uint32_t               firstGregorianDay;
 uint32_t               denMax;

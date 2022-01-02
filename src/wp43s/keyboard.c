@@ -93,6 +93,12 @@
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
         if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && dynamicMenuItem == 5) {
           item = ITM_CALC;
+        } 
+        else if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && dynamicMenuItem == 4) {
+          item = ITM_DRAW;
+        }
+        else if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && dynamicMenuItem == 3) {
+          item = ITM_CPXSLV;
         }
         else if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && *getNthString(dynamicSoftmenu[softmenuStack[0].softmenuId].menuContent, dynamicMenuItem) == 0) {
           item = ITM_NOP;
@@ -507,7 +513,7 @@
     key = getSystemFlag(FLAG_USER) ? (kbd_usr + (*data - '0')*10 + *(data+1) - '0') : (kbd_std + (*data - '0')*10 + *(data+1) - '0');
 
     // Shift f pressed and shift g not active
-    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN)) {
+    if(key->primary == ITM_SHIFTf && !shiftG && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH || calcMode == CM_ASSIGN)) {
       if(temporaryInformation == TI_VIEW) {
         temporaryInformation = TI_NO_INFO;
         updateMatrixHeightCache();
@@ -524,7 +530,7 @@
     }
 
     // Shift g pressed and shift f not active
-    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN)) {
+    else if(key->primary == ITM_SHIFTg && !shiftF && (calcMode == CM_NORMAL || calcMode == CM_AIM || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_EIM || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH || calcMode == CM_ASSIGN)) {
       if(temporaryInformation == TI_VIEW) {
         temporaryInformation = TI_NO_INFO;
         updateMatrixHeightCache();
@@ -549,7 +555,7 @@
     else if(tam.mode) {
       result = key->primaryTam; // No shifted function in TAM
     }
-    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_ASSIGN || calcMode == CM_TIMER) {
+    else if(calcMode == CM_NORMAL || calcMode == CM_NIM || calcMode == CM_MIM || calcMode == CM_FONT_BROWSER || calcMode == CM_FLAG_BROWSER || calcMode == CM_REGISTER_BROWSER || calcMode == CM_BUG_ON_SCREEN || calcMode == CM_CONFIRMATION || calcMode == CM_PEM || calcMode == CM_PLOT_STAT || calcMode == CM_GRAPH || calcMode == CM_ASSIGN || calcMode == CM_TIMER) {
       result = shiftF ? key->fShifted :
                shiftG ? key->gShifted :
                         key->primary;
@@ -1094,6 +1100,7 @@
               keyActionProcessed = true;
               break;
 
+            case CM_GRAPH:
             case CM_PLOT_STAT:
               if(item == ITM_EXIT || item == ITM_BACKSPACE) {
                 fnPlotClose(0);
@@ -1350,6 +1357,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
       case CM_ERROR_MESSAGE:
       case CM_BUG_ON_SCREEN:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
         break;
 
       case CM_TIMER:
@@ -1498,6 +1506,7 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
         calcMode = previousCalcMode;
         break;
 
+      case CM_GRAPH:
       case CM_PLOT_STAT:
         lastPlotMode = PLOT_NOTHING;
         plotSelection = 0;
@@ -1589,6 +1598,7 @@ void fnKeyCC(uint16_t unusedButMandatoryParameter) {
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
       case CM_TIMER:
+      case CM_GRAPH:
         break;
 
       default:
@@ -1666,6 +1676,7 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
 
       case CM_BUG_ON_SCREEN:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
         calcMode = previousCalcMode;
         break;
 
@@ -1970,6 +1981,7 @@ void fnKeyDotD(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
       case CM_MIM:
       case CM_EIM:
       case CM_TIMER:
@@ -2004,6 +2016,7 @@ void fnKeyAngle(uint16_t unusedButMandatoryParameter) {
       case CM_FLAG_BROWSER:
       case CM_FONT_BROWSER:
       case CM_PLOT_STAT:
+      case CM_GRAPH:
       case CM_MIM:
       case CM_EIM:
       case CM_TIMER:

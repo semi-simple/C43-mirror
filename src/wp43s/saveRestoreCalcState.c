@@ -43,7 +43,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         65  // Added SAVED SIGMA
+#define BACKUP_VERSION         66  // Added graphVariable
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -277,6 +277,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&SAVED_SIGMA_LASTX,                  sizeof(SAVED_SIGMA_LASTX),                  BACKUP);
     save(&SAVED_SIGMA_LASTY,                  sizeof(SAVED_SIGMA_LASTY),                  BACKUP);
     save(&SAVED_SIGMA_LAct,                   sizeof(SAVED_SIGMA_LAct),                   BACKUP);
+    save(&graphVariable,                      sizeof(graphVariable),                      BACKUP);
 
 
     fclose(BACKUP);
@@ -498,6 +499,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&SAVED_SIGMA_LASTX,                  sizeof(SAVED_SIGMA_LASTX),                  BACKUP);
       restore(&SAVED_SIGMA_LASTY,                  sizeof(SAVED_SIGMA_LASTY),                  BACKUP);
       restore(&SAVED_SIGMA_LAct,                   sizeof(SAVED_SIGMA_LAct),                   BACKUP);
+      restore(&graphVariable,                      sizeof(graphVariable),                      BACKUP);
 
       fclose(BACKUP);
       printf("End of calc's restoration\n");
@@ -519,6 +521,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
         else if(calcMode == CM_PLOT_STAT)             {}
+        else if(calcMode == CM_GRAPH)                 {}
         else if(calcMode == CM_MIM)                   {mimRestore();}
         else if(calcMode == CM_EIM)                   {}
         else if(calcMode == CM_ASSIGN)                {}
@@ -536,6 +539,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)           calcModeNormalGui();
         else if(calcMode == CM_PEM)                    calcModeNormalGui();
         else if(calcMode == CM_PLOT_STAT)              calcModeNormalGui();
+        else if(calcMode == CM_GRAPH)                  calcModeNormalGui();
         else if(calcMode == CM_MIM)                   {calcModeNormalGui(); mimRestore();}
         else if(calcMode == CM_EIM)                   {calcModeAimGui();}
         else if(calcMode == CM_ASSIGN)                {calcModeNormalGui();}

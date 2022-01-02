@@ -267,6 +267,7 @@
 
   extern int32_t                numberOfFreeMemoryRegions;
   extern int32_t                lgCatalogSelection;
+  extern int32_t                graphVariable;
 
   extern uint32_t               firstGregorianDay;
   extern uint32_t               denMax;

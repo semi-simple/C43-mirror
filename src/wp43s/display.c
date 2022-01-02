@@ -35,6 +35,7 @@
 #include "c43Extensions/jm.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
+#include "programming/input.h"
 #include "mathematics/wp34s.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
@@ -1096,7 +1097,6 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   real34_t real34, imag34;
   real_t real, imagIc;
 
-
   if(getSystemFlag(FLAG_POLAR)) { // polar mode
     real34ToReal(VARIABLE_REAL34_DATA(complex34), &real);
     real34ToReal(VARIABLE_IMAG34_DATA(complex34), &imagIc);
@@ -2109,7 +2109,7 @@ void complex34MatrixToDisplayString(calcRegister_t regist, char *displayString) 
 }
 
 void fnShow(uint16_t unusedButMandatoryParameter) {
-#if (!defined SAVE_SPACE_DM42_5) || (defined SAVE_SPACE_DM42_9)
+#if (defined SAVE_SPACE_DM42_9)
   uint8_t savedDisplayFormat = displayFormat, savedDisplayFormatDigits = displayFormatDigits;
   uint8_t savedSigFigMode = SigFigMode;           //JM
   bool_t savedUNITDisplay = UNITDisplay;          //JM
@@ -2239,6 +2239,9 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
 
     default:
       temporaryInformation = TI_NO_INFO;
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       displayCalcErrorMessage(ERROR_INVALID_DATA_TYPE_FOR_OP, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "cannot SHOW %s", getRegisterDataTypeName(REGISTER_X, true, false));
@@ -2252,7 +2255,7 @@ void fnShow(uint16_t unusedButMandatoryParameter) {
   SigFigMode = savedSigFigMode;                            //JM SIGFIG
   UNITDisplay = savedUNITDisplay;                          //JM SIGFIG
 
-#endif //SAVE_SPACE_DM42_5
+#endif //SAVE_SPACE_DM42_9 new
 }
 
 
@@ -2899,4 +2902,8 @@ void fnShow_SCROLL(uint16_t fnShow_param) {                // Heavily modified b
 void fnView(uint16_t regist) {
   currentViewRegister = regist;
   temporaryInformation = TI_VIEW;
+  if(programRunStop == PGM_RUNNING) {
+    refreshScreen();
+    fnPause(10);
+  }
 }

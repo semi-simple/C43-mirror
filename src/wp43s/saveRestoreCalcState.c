@@ -37,10 +37,14 @@
 #include "sort.h"
 #include "stats.h"
 #include <string.h>
+#ifdef PC_BUILD
+#include <stdio.h>
+#include <errno.h>
+#endif
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         262  // Save timer application status
+#define BACKUP_VERSION         69  // Added graphVariable
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -132,6 +136,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     ramPtr = TO_WP43SMEMPTR(savedStatisticalSumsPointer);
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(labelList);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+    ramPtr = TO_WP43SMEMPTR(programList);
+    save(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
     save(&xCursor,                            sizeof(xCursor),                            BACKUP);
     save(&yCursor,                            sizeof(yCursor),                            BACKUP);
     save(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
@@ -155,6 +163,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
     save(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
     save(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+    save(&programRunStop,                     sizeof(programRunStop),                     BACKUP);
+    save(&entryStatus,                        sizeof(entryStatus),                        BACKUP);
     save(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
     save(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
     save(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
@@ -215,6 +225,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
     save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
     save(&firstDisplayedLocalStepNumber,      sizeof(firstDisplayedLocalStepNumber),      BACKUP);
+    save(&numberOfLabels,                     sizeof(numberOfLabels),                     BACKUP);
+    save(&numberOfPrograms,                   sizeof(numberOfPrograms),                   BACKUP);
     save(&currentLocalStepNumber,             sizeof(currentLocalStepNumber),             BACKUP);
     save(&currentProgramNumber,               sizeof(currentProgramNumber),               BACKUP);
     save(&lastProgramListEnd,                 sizeof(lastProgramListEnd),                 BACKUP);
@@ -269,6 +281,12 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&timerCraAndDeciseconds,             sizeof(timerCraAndDeciseconds),             BACKUP);
     save(&timerValue,                         sizeof(timerValue),                         BACKUP);
     save(&timerTotalTime,                     sizeof(timerTotalTime),                     BACKUP);
+    save(&currentInputVariable,               sizeof(currentInputVariable),               BACKUP);
+    save(&SAVED_SIGMA_LASTX,                  sizeof(SAVED_SIGMA_LASTX),                  BACKUP);
+    save(&SAVED_SIGMA_LASTY,                  sizeof(SAVED_SIGMA_LASTY),                  BACKUP);
+    save(&SAVED_SIGMA_LAct,                   sizeof(SAVED_SIGMA_LAct),                   BACKUP);
+    save(&currentMvarLabel,                   sizeof(currentMvarLabel),                   BACKUP);
+    save(&graphVariable,                      sizeof(graphVariable),                      BACKUP);
 
     save(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
     save(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -381,6 +399,10 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       statisticalSumsPointer = TO_PCMEMPTR(ramPtr);
       restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
       savedStatisticalSumsPointer = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      labelList = TO_PCMEMPTR(ramPtr);
+      restore(&ramPtr,                             sizeof(ramPtr),                             BACKUP);
+      programList = TO_PCMEMPTR(ramPtr);
       restore(&xCursor,                            sizeof(xCursor),                            BACKUP);
       restore(&yCursor,                            sizeof(yCursor),                            BACKUP);
       restore(&firstGregorianDay,                  sizeof(firstGregorianDay),                  BACKUP);
@@ -404,6 +426,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&watchIconEnabled,                   sizeof(watchIconEnabled),                   BACKUP);
       restore(&serialIOIconEnabled,                sizeof(serialIOIconEnabled),                BACKUP);
       restore(&printerIconEnabled,                 sizeof(printerIconEnabled),                 BACKUP);
+      restore(&programRunStop,                     sizeof(programRunStop),                     BACKUP);
+      restore(&entryStatus,                        sizeof(entryStatus),                        BACKUP);
       restore(&cursorEnabled,                      sizeof(cursorEnabled),                      BACKUP);
       restore(&cursorFont,                         sizeof(cursorFont),                         BACKUP);
       restore(&rbr1stDigit,                        sizeof(rbr1stDigit),                        BACKUP);
@@ -468,6 +492,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       currentStep += ramPtr;
       restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
       restore(&firstDisplayedLocalStepNumber,      sizeof(firstDisplayedLocalStepNumber),      BACKUP);
+      restore(&numberOfLabels,                     sizeof(numberOfLabels),                     BACKUP);
+      restore(&numberOfPrograms,                   sizeof(numberOfPrograms),                   BACKUP);
       restore(&currentLocalStepNumber,             sizeof(currentLocalStepNumber),             BACKUP);
       restore(&currentProgramNumber,               sizeof(currentProgramNumber),               BACKUP);
       restore(&lastProgramListEnd,                 sizeof(lastProgramListEnd),                 BACKUP);
@@ -522,6 +548,12 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       restore(&timerCraAndDeciseconds,             sizeof(timerCraAndDeciseconds),             BACKUP);
       restore(&timerValue,                         sizeof(timerValue),                         BACKUP);
       restore(&timerTotalTime,                     sizeof(timerTotalTime),                     BACKUP);
+      restore(&currentInputVariable,               sizeof(currentInputVariable),               BACKUP);
+      restore(&SAVED_SIGMA_LASTX,                  sizeof(SAVED_SIGMA_LASTX),                  BACKUP);
+      restore(&SAVED_SIGMA_LASTY,                  sizeof(SAVED_SIGMA_LASTY),                  BACKUP);
+      restore(&SAVED_SIGMA_LAct,                   sizeof(SAVED_SIGMA_LAct),                   BACKUP);
+      restore(&currentMvarLabel,                   sizeof(currentMvarLabel),                   BACKUP);
+      restore(&graphVariable,                      sizeof(graphVariable),                      BACKUP);
 
       restore(&eRPN,                               sizeof(eRPN),                               BACKUP);    //JM vv
       restore(&HOME3,                              sizeof(HOME3),                              BACKUP);
@@ -585,7 +617,7 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
         else if(calcMode == CM_FONT_BROWSER)          {}
         else if(calcMode == CM_PEM)                   {}
         else if(calcMode == CM_PLOT_STAT)             {}
-        else if(calcMode == CM_GRAPH).                {}
+        else if(calcMode == CM_GRAPH)                 {}
         else if(calcMode == CM_MIM)                   {mimRestore();}
         else if(calcMode == CM_LISTXY)                {}             //JM
         else if(calcMode == CM_GRAPH)                 {}             //JM
@@ -1546,7 +1578,7 @@ static bool_t restoreOneSection(void *stream, uint16_t loadMode, uint16_t s, uin
       if(loadMode == LM_ALL || loadMode == LM_SYSTEM_STATE) {
         utf8ToString((uint8_t *)tmpString, tmpString + TMP_STR_LENGTH / 2);
         for(i = 0; i < numberOfUserMenus; ++i) {
-          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_BINARY) == 0) {
+          if(compareString(tmpString + TMP_STR_LENGTH / 2, userMenus[i].menuName, CMP_NAME) == 0) {
             target = i;
           }
         }
@@ -1734,8 +1766,8 @@ void doLoad(uint16_t loadMode, uint16_t s, uint16_t n, uint16_t d) {
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
-        return;
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
     }
   #else // !DMCP_BUILD
     FILE *ppgm_fp;
@@ -1744,8 +1776,8 @@ void doLoad(uint16_t loadMode, uint16_t s, uint16_t n, uint16_t d) {
       displayCalcErrorMessage(ERROR_NO_BACKUP_DATA, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         moreInfoOnError("In function fnLoad: cannot find or read backup data file wp43s.sav", NULL, NULL, NULL);
-        return;
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+      return;
     }
   #endif // DMCP_BUILD
 
@@ -1775,3 +1807,36 @@ void fnLoad(uint16_t loadMode) {
 }
 
 #undef BACKUP
+
+
+
+void fnDeleteBackup(uint16_t confirmation) {
+  if(confirmation == NOT_CONFIRMED) {
+    setConfirmationMode(fnDeleteBackup);
+  }
+  else {
+    #ifdef DMCP_BUILD
+      FRESULT result;
+      sys_disk_write_enable(1);
+      result = f_unlink("SAVFILES\\wp43s.sav");
+      if(result != FR_OK && result != FR_NO_FILE && result != FR_NO_PATH) {
+        displayCalcErrorMessage(ERROR_IO, ERR_REGISTER_LINE, REGISTER_X);
+      }
+      sys_disk_write_enable(0);
+    #else // !DMCP_BUILD
+      int result = remove("wp43s.sav");
+      if(result == -1) {
+        #ifndef TESTSUITE_BUILD
+          int e = errno;
+          if(e != ENOENT) {
+            displayCalcErrorMessage(ERROR_IO, ERR_REGISTER_LINE, REGISTER_X);
+            #if (EXTRA_INFO_ON_CALC_ERROR == 1)
+              sprintf(errorMessage, "removing the backup failed with error code %d", e);
+              moreInfoOnError("In function fnDeleteBackup:", errorMessage, NULL, NULL);
+            #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
+          }
+        #endif // TESTSUITE_BUILD
+      }
+    #endif // DMCP_BUILD
+  }
+}

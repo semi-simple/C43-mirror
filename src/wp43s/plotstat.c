@@ -42,7 +42,6 @@
 
 
 static char tmp_names1[30];
-char * padEquals(const char * ss);
 void fnPlotRegressionLine(uint16_t plotMode);
 
 
@@ -437,6 +436,7 @@ void force_refresh1(void) {
 
 
 void graphAxisDraw (void){
+#ifndef SAVE_SPACE_DM42_13GRF
   #ifndef TESTSUITE_BUILD
   uint32_t cnt;
 
@@ -620,10 +620,12 @@ void graphAxisDraw (void){
   }
   force_refresh1();
   #endif
+#endif //SAVE_SPACE_DM42_13GRF
 }
 
 
 float auto_tick(float tick_int_f) {
+#ifndef SAVE_SPACE_DM42_13GRF
   char tmpString2[100];
   if (!roundedTicks) return tick_int_f;
   //Obtain scaling of ticks, to about 20 intervals left to right.
@@ -650,10 +652,12 @@ float auto_tick(float tick_int_f) {
   tick_int_f = strtof (tmpString2, NULL);                                        //printf("string:%s converted:%f \n",tmpString2, tick_int_f);
 
   //printf("tick2 %f str %s tx %s \n",tick_int_f, tmpString, tx);
+#endif //SAVE_SPACE_DM42_13GRF
   return tick_int_f;
 }
 
 void graph_axis (void){
+#ifndef SAVE_SPACE_DM42_13GRF
   #ifndef TESTSUITE_BUILD
     graph_dx = 0; //XXX override manual setting from GRAPH to auto, temporarily. Can program these to fixed values.
     graph_dy = 0;
@@ -671,6 +675,7 @@ void graph_axis (void){
     }
   #endif //TESTSUITE_BUILD
   graphAxisDraw();
+#endif //SAVE_SPACE_DM42_13GRF
 }
 
 
@@ -851,6 +856,7 @@ void eformat_eng2 (char* s02, const char* s01, double inreal, int8_t digits, con
 
 
 void graphPlotstat(uint16_t selection){
+#ifndef SAVE_SPACE_DM42_13GRF
   #if defined STATDEBUG && defined PC_BUILD
     printf("#####>>> graphPlotstat: selection:%u:%s  lastplotmode:%u  lrSelection:%u lrChosen:%u\n",selection, getCurveFitModeName(selection), lastPlotMode, lrSelection, lrChosen);
   #endif //STATDEBUG
@@ -1066,6 +1072,7 @@ void graphPlotstat(uint16_t selection){
     #endif
   }
 #endif
+#endif //SAVE_SPACE_DM42_13GRF
 }
 
 
@@ -1084,6 +1091,7 @@ void graphDrawLRline(uint16_t selection) {
 
 #ifndef TESTSUITE_BUILD
   void drawline(uint16_t selection, real_t *RR, real_t *SMI, real_t *aa0, real_t *aa1, real_t *aa2){
+#ifndef SAVE_SPACE_DM42_13GRF
     int32_t n;
     uint16_t NN;
     realToInt32(SIGMA_N, n);
@@ -1280,6 +1288,7 @@ void graphDrawLRline(uint16_t selection) {
       else
         showString("L.R. error", &standardFont, horOffset, Y_POSITION_OF_REGISTER_Z_LINE + autoinc * index++ -7+2 +autoshift, vmNormal, false, false);
     }
+#endif //SAVE_SPACE_DM42_13GRF
   }
 #endif //TESTSUITE_BUILD
 
@@ -1308,6 +1317,7 @@ void fnPlotCloseSmi(uint16_t unusedButMandatoryParameter){
 //** plotSelection = 0 means that no curve fit is plotted
 //
 void fnPlotStat(uint16_t plotMode){
+#ifndef SAVE_SPACE_DM42_13GRF
 #if defined STATDEBUG && defined PC_BUILD
   printf("fnPlotStat1: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
   printf("#####>>> fnPlotStat1: plotSelection:%u:%s  Plotmode:%u lastplotmode:%u  lrSelection:%u lrChosen:%u\n",plotSelection, getCurveFitModeName(plotSelection), plotMode, lastPlotMode, lrSelection, lrChosen);
@@ -1395,10 +1405,12 @@ if(checkMinimumDataPoints(const_2)) {
       moreInfoOnError("In function fnPlotStat:", errorMessage, NULL, NULL);
     #endif
   }
+#endif //SAVE_SPACE_DM42_13GRF
 }
 
 
 void fnPlotRegressionLine(uint16_t plotMode){
+#ifndef SAVE_SPACE_DM42_13GRF
   #if defined STATDEBUG && defined PC_BUILD
   printf("fnPlotRegressionLine: plotSelection = %u; Plotmode=%u\n",plotSelection,plotMode);
   #endif //STATDEBUG
@@ -1459,6 +1471,7 @@ void fnPlotRegressionLine(uint16_t plotMode){
       break;
     default:break;
   }
+#endif //SAVE_SPACE_DM42_13GRF
 }
 
 

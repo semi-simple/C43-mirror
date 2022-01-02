@@ -52,7 +52,7 @@
 #include "wp43s.h"
 
 #ifndef TESTSUITE_BUILD
-  static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter," STD_SPACE_3_PER_EM "Mihail," STD_SPACE_3_PER_EM "and" STD_SPACE_3_PER_EM "Martin";
+  static const char *whoStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM "by" STD_SPACE_3_PER_EM "Pauli," STD_SPACE_3_PER_EM "Walter," STD_SPACE_3_PER_EM "Mihail," STD_SPACE_3_PER_EM "Jaco," STD_SPACE_3_PER_EM "and" STD_SPACE_3_PER_EM "Martin";
   static const char *versionStr = "WP" STD_SPACE_3_PER_EM "43S" STD_SPACE_3_PER_EM VERSION_STRING;
 
   /* Names of day of week */
@@ -525,7 +525,9 @@
     // If LCD has changed: update the GTK screen
     if(screenChange) {
       #if defined(LINUX) && (DEBUG_PANEL == 1)
-        refreshDebugPanel();
+        if(programRunStop != PGM_RUNNING) {
+          refreshDebugPanel();
+        }
       #endif // defined(LINUX) && (DEBUG_PANEL == 1)
 
       gtk_widget_queue_draw(screen);
@@ -1531,6 +1533,30 @@ uint8_t   displayStack_m = 255;                                                 
     *prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
   }
 
+  static void inputRegName(char *prefix, int16_t *prefixWidth) {
+    if((currentInputVariable & 0x3fff) < REGISTER_X) {
+      sprintf(prefix, "R%02" PRIu16 "?", (currentInputVariable & 0x3fff));
+    }
+    else if((currentInputVariable & 0x3fff) < FIRST_LOCAL_REGISTER) {
+      sprintf(prefix, "%c?", "XYZTABCDLIJK"[(currentInputVariable & 0x3fff) - REGISTER_X]);
+    }
+    else if((currentInputVariable & 0x3fff) <= LAST_LOCAL_REGISTER) {
+      sprintf(prefix, "R.%02" PRIu16 "?", (uint16_t)((currentInputVariable & 0x3fff) - FIRST_LOCAL_REGISTER));
+    }
+    else if((currentInputVariable & 0x3fff) >= FIRST_NAMED_VARIABLE && (currentInputVariable & 0x3fff) <= LAST_NAMED_VARIABLE) {
+      memcpy(prefix, allNamedVariables[(currentInputVariable & 0x3fff) - FIRST_NAMED_VARIABLE].variableName + 1, allNamedVariables[(currentInputVariable & 0x3fff) - FIRST_NAMED_VARIABLE].variableName[0]);
+      strcpy(prefix + allNamedVariables[(currentInputVariable & 0x3fff) - FIRST_NAMED_VARIABLE].variableName[0], "?");
+    }
+    else if((currentInputVariable & 0x3fff) >= FIRST_RESERVED_VARIABLE && (currentInputVariable & 0x3fff) <= LAST_RESERVED_VARIABLE) {
+      memcpy(prefix, allReservedVariables[(currentInputVariable & 0x3fff) - FIRST_RESERVED_VARIABLE].reservedVariableName + 1, allReservedVariables[(currentInputVariable & 0x3fff) - FIRST_RESERVED_VARIABLE].reservedVariableName[0]);
+      strcpy(prefix + allReservedVariables[(currentInputVariable & 0x3fff) - FIRST_RESERVED_VARIABLE].reservedVariableName[0], "?");
+    }
+    else {
+      sprintf(prefix, "??");
+    }
+    *prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
+  }
+
 
   void updateMatrixHeightCache(void) {
     int16_t prefixWidth = 0;
@@ -1541,6 +1567,7 @@ uint8_t   displayStack_m = 255;                                                 
     if(getRegisterDataType(REGISTER_X) == dtReal34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtReal34Matrix)) {
       real34Matrix_t matrix;
       if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
+      if(temporaryInformation == TI_NO_INFO && currentInputVariable != INVALID_VARIABLE) inputRegName(prefix, &prefixWidth);
       if(calcMode == CM_MIM)
         matrix = openMatrixMIMPointer.realMatrix;
       else
@@ -1561,6 +1588,7 @@ uint8_t   displayStack_m = 255;                                                 
     else if(getRegisterDataType(REGISTER_X) == dtComplex34Matrix || (calcMode == CM_MIM && getRegisterDataType(matrixIndex) == dtComplex34Matrix)) {
       complex34Matrix_t matrix;
       if(temporaryInformation == TI_VIEW) viewRegName(prefix, &prefixWidth);
+      if(temporaryInformation == TI_NO_INFO && currentInputVariable != INVALID_VARIABLE) inputRegName(prefix, &prefixWidth);
       if(calcMode == CM_MIM)
         matrix = openMatrixMIMPointer.complexMatrix;
       else
@@ -1606,9 +1634,11 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
   }                                                                             //JMSHOI
 }                                                                               //JMSHOI
 
-  #if (DEBUG_PANEL == 1)
-    refreshDebugPanel();
-  #endif
+    #if (DEBUG_PANEL == 1)
+      if(programRunStop != PGM_RUNNING) {
+        refreshDebugPanel();
+      }
+    #endif // (DEBUG_PANEL == 1)
 
     if((temporaryInformation == TI_SHOW_REGISTER || temporaryInformation == TI_SHOW_REGISTER_BIG || temporaryInformation == TI_SHOW_REGISTER_SMALL) && regist == REGISTER_X) { //JM frame the SHOW window
       lcd_fill_rect(0,Y_POSITION_OF_REGISTER_T_LINE-4,SCREEN_WIDTH,1,LCD_EMPTY_VALUE);
@@ -1910,6 +1940,8 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             regist = currentViewRegister;
           }
         }
+
+        if(regist == REGISTER_X && currentInputVariable != INVALID_VARIABLE) inputRegName(prefix, &prefixWidth);
 
         if(lastErrorCode != 0 && regist == errorMessageRegisterLine) {
           if(stringWidth(errorMessages[lastErrorCode], &standardFont, true, true) <= SCREEN_WIDTH - 1) {
@@ -2439,9 +2471,9 @@ if(displayStackSHOIDISP != 0 && lastIntegerBase != 0 && getRegisterDataType(REGI
             }
             if(regist == REGISTER_Y) {
               if(w == 1) 
-                sprintf(prefix, "%03" PRId32 " data point", w);
+                sprintf(prefix, "%03" PRId32 " data point", w);   //jm
               else
-                sprintf(prefix, "%03" PRId32 " data points", w);
+                sprintf(prefix, "%03" PRId32 " data points", w);   //jm
               prefixWidth = stringWidth(prefix, &standardFont, true, true) + 1;
               lcd_fill_rect(0, Y_POSITION_OF_REGISTER_Y_LINE - 2, SCREEN_WIDTH, 1, LCD_EMPTY_VALUE);
             }
@@ -3035,9 +3067,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
   jm_show_calc_state("refreshScreen");
   printf(">>> refreshScreenCounter=%d calcMode=%d last_CM=%d \n",refreshScreenCounter++, calcMode, last_CM);    //JMYY
 #endif
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(3); }     //dr
-#endif
 
   //clearScreen();  //JM do not use this clearscreen. Rather use the distributed clearscreens, WITH the if(last_CM != calcMode)
 
@@ -3083,9 +3112,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       case CM_ERROR_MESSAGE:
       case CM_CONFIRMATION:
       case CM_TIMER:
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(0); }     //dr
-#endif
       if(last_CM != calcMode) {
           clearScreen();
 
@@ -3097,12 +3123,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         clearScreen_old(true,false,false); 
       }                                    //jm v
 
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(0); }      //dr
-#endif
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(1); }     //dr
-#endif
         refreshRegisterLine(REGISTER_X);
         if(temporaryInformation == TI_VIEW) {
           clearRegisterLine(REGISTER_T, true, true);
@@ -3127,6 +3147,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
               showSoftmenu(-MNU_Solver);
             }
             else {
+              currentMvarLabel = INVALID_VARIABLE;
               showSoftmenu(-MNU_MVAR);
             }
           }
@@ -3144,13 +3165,6 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
           }
         }
 
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(1); }      //dr
-#endif
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStart(2); }     //dr
-#endif
-
       if((last_CM != calcMode) || (doRefreshSoftMenu)) {
         last_CM = calcMode;
         doRefreshSoftMenu = false;
@@ -3159,18 +3173,14 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         showSoftmenuCurrentPart();
       } 
                                         //jm v
-      hourGlassIconEnabled = false;
-      refreshStatusBar();
+        if(programRunStop == PGM_STOPPED || programRunStop == PGM_WAITING) {
+          hourGlassIconEnabled = false;
+        }
+        refreshStatusBar();
         #if (REAL34_WIDTH_TEST == 1)
           for(int y=Y_POSITION_OF_REGISTER_Y_LINE; y<Y_POSITION_OF_REGISTER_Y_LINE + 2*REGISTER_LINE_HEIGHT; y++ ) setBlackPixel(SCREEN_WIDTH - largeur - 1, y); // For the real34 width test
         #endif // (REAL34_WIDTH_TEST == 1)
                                         //jm ^
-
-
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(2); }      //dr
-#endif
-
       break;
 
     case CM_LISTXY:                     //JM
@@ -3186,21 +3196,7 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       break;
 
 
-    case CM_GRAPH:                      //JM
-/*
-      if((last_CM != calcMode) || (doRefreshSoftMenu)) {
-        last_CM = calcMode;
-        doRefreshSoftMenu = false;
-        displayShiftAndTamBuffer();
-        showSoftmenuCurrentPart();
-        refreshStatusBar();
-        graph_plotmem();
-        hourGlassIconEnabled = false;
-        refreshStatusBar();
-      }
-      break;
-*/
-
+    case CM_GRAPH:
     case CM_PLOT_STAT:
       if((last_CM != calcMode) || (doRefreshSoftMenu)) {
         if(last_CM == 252) last_CM--; else last_CM = 252; //calcMode;
@@ -3209,7 +3205,8 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
         showSoftmenuCurrentPart();
         refreshStatusBar();
         hourGlassIconEnabled = true;
-        graphPlotstat(plotSelection);
+        if (calcMode == CM_PLOT_STAT) graphPlotstat(plotSelection);
+        else graph_plotmem();
         if (calcMode == CM_PLOT_STAT) graphDrawLRline(plotSelection);
         hourGlassIconEnabled = false;
         refreshStatusBar();
@@ -3219,14 +3216,10 @@ if (running_program_jm) return;          //JM TEST PROGRAM!
       default: {}
     }
 
-  #ifndef DMCP_BUILD
-    refreshLcd(NULL);
-  #endif // !DMCP_BUILD
-
-#ifdef INLINE_TEST
-  if(testEnabled) { fnSwStop(3); }      //dr
-#endif
-}
+    #ifndef DMCP_BUILD
+      refreshLcd(NULL);
+    #endif // !DMCP_BUILD
+  }
 #endif // !TESTSUITE_BUILD
 
 

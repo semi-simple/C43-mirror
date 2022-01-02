@@ -298,16 +298,28 @@ switch (event_keyval) {
 
 //ROW 0
     case 65362:                                               //JM     // CursorUp //JM
-      btnFnClicked(w, "1");
+      if(calcMode != CM_EIM)
+        btnFnClicked(w, "1");
+      else
+        btnClicked(w, "17");
       break;
     case 65361:                                               //JM     // CursorLt BST //JM
-      btnFnClicked(w, "5");
+      if(calcMode != CM_EIM)
+        btnFnClicked(w, "5");
+      else
+        btnFnClicked(w, "1");
       break;
     case 65364:                                               //JM     // CursorDown //JM
-      btnFnClicked(w, "2");
+      if(calcMode != CM_EIM)
+        btnFnClicked(w, "2");
+      else
+        btnClicked(w, "22");
       break;
     case 65363:                                               //JM     // CursorRt SST //JM
-      btnFnClicked(w, "6");
+      if(calcMode != CM_EIM)
+        btnFnClicked(w, "6");
+      else
+        btnFnClicked(w, "6");
       break;
 
 

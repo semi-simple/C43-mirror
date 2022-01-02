@@ -22,8 +22,10 @@
 
 #include "config.h"
 #include "error.h"
+#include "gui.h"
 #include "items.h"
 #include "c43Extensions/radioButtonCatalog.h"
+#include "ui/tam.h"
 #include <string.h>
 
 #include "wp43s.h"
@@ -217,6 +219,9 @@ void fnSetFlag(uint16_t flag) {
   if(flag & 0x8000) { // System flag
     if(isSystemFlagWriteProtected(flag)) {
       temporaryInformation = TI_NO_INFO;
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));
@@ -224,6 +229,12 @@ void fnSetFlag(uint16_t flag) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
+#ifndef TESTSUITE_BUILD
+    else if(flag == FLAG_ALPHA) {
+      tamLeaveMode();
+      calcModeAim(NOPARAM);
+    }
+#endif // TESTSUITE_BUILD
     else {
       setSystemFlag(flag);
     }
@@ -272,6 +283,9 @@ void fnClearFlag(uint16_t flag) {
   if(flag & 0x8000) { // System flag
     if(isSystemFlagWriteProtected(flag)) {
       temporaryInformation = TI_NO_INFO;
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));
@@ -279,6 +293,12 @@ void fnClearFlag(uint16_t flag) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
+#ifndef TESTSUITE_BUILD
+    else if(flag == FLAG_ALPHA) {
+      tamLeaveMode();
+      calcModeNormal();
+    }
+#endif // TESTSUITE_BUILD
     else {
       clearSystemFlag(flag);
     }
@@ -327,6 +347,9 @@ void fnFlipFlag(uint16_t flag) {
   if(flag & 0x8000) { // System flag
     if(isSystemFlagWriteProtected(flag)) {
       temporaryInformation = TI_NO_INFO;
+      if(programRunStop == PGM_WAITING) {
+        programRunStop = PGM_STOPPED;
+      }
       displayCalcErrorMessage(ERROR_WRITE_PROTECTED_SYSTEM_FLAG, ERR_REGISTER_LINE, REGISTER_X);
       #if (EXTRA_INFO_ON_CALC_ERROR == 1)
         sprintf(errorMessage, "protected system flag (%" PRIu16 ")!", (uint16_t)(flag & 0x3fff));
@@ -334,6 +357,17 @@ void fnFlipFlag(uint16_t flag) {
       #endif // (EXTRA_INFO_ON_CALC_ERROR == 1)
       return;
     }
+#ifndef TESTSUITE_BUILD
+    else if(flag == FLAG_ALPHA) {
+      tamLeaveMode();
+      if(getSystemFlag(FLAG_ALPHA)) {
+        calcModeNormal();
+      }
+      else {
+        calcModeAim(NOPARAM);
+      }
+    }
+#endif // TESTSUITE_BUILD
     else {
       flipSystemFlag(flag);
     }

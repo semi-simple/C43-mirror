@@ -20,6 +20,7 @@
 #include "constantPointers.h"
 #include "debug.h"
 #include "error.h"
+#include "flags.h"
 #include "fonts.h"
 #include "items.h"
 #include "realType.h"
@@ -45,6 +46,7 @@ gint64      timerLastCalled;
 #endif
 #ifdef DMCP_BUILD
 uint32_t    timerLastCalled;
+bool_t      mutexRefreshTimer = false;
 #endif
 
 
@@ -76,24 +78,21 @@ void fnTicks(uint16_t unusedButMandatoryParameter) {
 
 void fnRebuildTimerRefresh(void) {
 #ifdef DMCP_BUILD
-  bool_t hasRunning = false;
   uint32_t next;
 
-  for(int i = 0; i < TMR_NUMBER; i++) {
-    if (timer[i].state == TMR_RUNNING) {
-      hasRunning = true;
-      next = timer[i].timer_will_expire;
-      if(nextTimerRefresh != 0 && next < nextTimerRefresh) {
-        nextTimerRefresh = next;
-      }
-      if(nextTimerRefresh == 0) {
-        nextTimerRefresh = next;
+  if(mutexRefreshTimer == false) {
+    nextTimerRefresh = 0;
+    for(int i = 0; i < TMR_NUMBER; i++) {
+      if (timer[i].state == TMR_RUNNING) {
+        next = timer[i].timer_will_expire;
+        if(nextTimerRefresh != 0 && next < nextTimerRefresh) {
+          nextTimerRefresh = next;
+        }
+        if(nextTimerRefresh == 0) {
+          nextTimerRefresh = next;
+        }
       }
     }
-  }
-
-  if(!hasRunning) {
-    nextTimerRefresh = 0;
   }
 #endif
 }
@@ -147,7 +146,9 @@ void refreshTimer(void) {                   // This function is called when next
     for(int i = 0; i < TMR_NUMBER; i++) {
       if(timer[i].state == TMR_RUNNING) {
         timer[i].state = TMR_COMPLETED;
+        mutexRefreshTimer = true;
         timer[i].func(timer[i].param);      // Callback to configured function
+        mutexRefreshTimer = false;
       }
     }
   }
@@ -156,7 +157,9 @@ void refreshTimer(void) {                   // This function is called when next
       if(timer[i].state == TMR_RUNNING) {
         if(timer[i].timer_will_expire <= now) {
           timer[i].state = TMR_COMPLETED;
+          mutexRefreshTimer = true;
           timer[i].func(timer[i].param);    // Callback to configured function
+          mutexRefreshTimer = false;
         }
       }
     }
@@ -188,6 +191,9 @@ void fnTimerReset(void) {
     timer[i].param = 0;
   }
 
+#ifdef DMCP_BUILD
+  mutexRefreshTimer = false;
+#endif
   fnRebuildTimerRefresh();
 }
 
@@ -210,9 +216,6 @@ void fnTimerStart(uint8_t nr, uint16_t param, uint32_t time) {
 #endif
 #ifdef PC_BUILD
   gint64 now = g_get_monotonic_time();
-#endif
-#ifndef TESTSUITE_BUILD
-  timerLastCalled = now;
 #endif
 
   if(nr < TMR_NUMBER) {
@@ -392,6 +395,7 @@ void fnResetTimerApp(uint16_t unusedButMandatoryParameter) {
 void fnStartStopTimerApp(void) {
 #ifndef TESTSUITE_BUILD
   if(timerStartTime == TIMER_APP_STOPPED) {
+    setSystemFlag(FLAG_RUNTIM);
     timerStartTime = _currentTime();
     fnTimerStart(TO_TIMER_APP, TO_TIMER_APP, TIMER_APP_PERIOD);
 //--  #ifdef PC_BUILD
@@ -414,6 +418,7 @@ void fnStopTimerApp(void) {
     timerStartTime = TIMER_APP_STOPPED;
     fnTimerStop(TO_TIMER_APP);
   }
+  clearSystemFlag(FLAG_RUNTIM);
   watchIconEnabled = false;
 #endif // TESTSUITE_BUILD
 }
@@ -462,6 +467,7 @@ void fnUpdateTimerApp(void) {
     fnShowTimerApp();
     displayShiftAndTamBuffer();
     #ifdef DMCP_BUILD
+      refreshLcd();
       lcd_refresh();
     #else // !DMCP_BUILD
       refreshLcd(NULL);

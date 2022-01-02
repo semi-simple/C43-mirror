@@ -35,7 +35,6 @@
   #undef SAVE_SPACE_DM42_2
   #undef SAVE_SPACE_DM42_3
   #undef SAVE_SPACE_DM42_4
-  #undef SAVE_SPACE_DM42_5
   #undef SAVE_SPACE_DM42_6
   #undef SAVE_SPACE_DM42_7
   #undef SAVE_SPACE_DM42_8
@@ -43,6 +42,7 @@
   #undef SAVE_SPACE_DM42_10
   #undef SAVE_SPACE_DM42_11
   #undef SAVE_SPACE_DM42_12
+  #undef SAVE_SPACE_DM42_13GRF
   #undef SAVE_SPACE_DM42_20
   #undef SAVE_SPACE_DM42_21
 
@@ -60,15 +60,14 @@
   #define SAVE_SPACE_DM42_1  //001568 bytes: STAT DEMOS 105-107-109
 //  #define SAVE_SPACE_DM42_2  //005672 bytes: XEQM
     #define SAVE_SPACE_DM42_4  //000736 bytes: XY GRAPHDEMOS (Plot)
-    #define SAVE_SPACE_DM42_5  //001168 bytes: old SHOW (old WP43S on VIEW) (I think irrelevant now)
 //  #define SAVE_SPACE_DM42_6  //001648 bytes: ELEC functions
   #define SAVE_SPACE_DM42_7  //002144 bytes: KEYS USER_DM42; USER_SHIFTS; USER USER_PRIM00U
-  #define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
-  #define SAVE_SPACE_DM42_9  //004448 bytes: define for original SHOW (WP43S) instead of SHOW (new C43)
+#define SAVE_SPACE_DM42_8  //007136 bytes: Standard Flag-, Register-, Font- Browser functions
+#define SAVE_SPACE_DM42_9  //004448 bytes: define for original SHOW (WP43S) instead of SHOW (new C43)
   #define SAVE_SPACE_DM42_10 //005800 bytes: WP43S programming ...
 //  #define SAVE_SPACE_DM42_11 //001552 bytes: Matrix function on entry ...
     #define SAVE_SPACE_DM42_12 //047246 bytes: Standard extra 43S math: SLVQ, PRIME, BESSEL, ELLIPTIC, ZETA, BETA, ORTHO_POLY
-
+    #define SAVE_SPACE_DM42_13GRF //           JM Solver & graphics & stat graphics
 
 
   //Key layout options
@@ -308,9 +307,10 @@
 #define ERROR_CANNOT_ASSIGN_HERE                  47
 #define ERROR_INVALID_NAME                        48
 #define ERROR_TOO_MANY_VARIABLES                  49 // unlikely
-#define ERROR_BAD_INPUT                           50 // This error is not in ReM and cannot occur (theoretically).
+#define ERROR_NON_PROGRAMMABLE_COMMAND            50
+#define ERROR_BAD_INPUT                           51 // This error is not in ReM and cannot occur (theoretically).
 
-#define NUMBER_OF_ERROR_CODES                     51
+#define NUMBER_OF_ERROR_CODES                     52
 
 #define NUMBER_OF_GLOBAL_FLAGS                   112
 #define FIRST_LOCAL_FLAG                         112 // There are 112 global flag from 0 to 111
@@ -348,7 +348,7 @@
 #define FLAG_CARRY                            0x800b
 #define FLAG_OVERFLOW                         0x800c
 #define FLAG_LEAD0                            0x800d
-#define FLAG_ALPHA                            0xc00e
+#define FLAG_ALPHA                            0x800e
 #define FLAG_alphaCAP                         0xc00f
 #define FLAG_RUNTIM                           0xc010
 #define FLAG_RUNIO                            0xc011
@@ -462,6 +462,21 @@ typedef enum {
 #define EIM_DISABLED                        (0 << 8) // Function disabled in EIM
 #define EIM_ENABLED                         (1 << 8) // Function enabled in EIM
 
+// Parameter Type in Program status (4 bit)
+#define PTP_STATUS                            0x1e00
+#define PTP_NONE                           ( 0 << 9) // No parameters
+#define PTP_DECLARE_LABEL                  ( 1 << 9) // These
+#define PTP_LABEL                          ( 2 << 9) //   parameter
+#define PTP_REGISTER                       ( 3 << 9) //   types
+#define PTP_FLAG                           ( 4 << 9) //   must match
+#define PTP_NUMBER_8                       ( 5 << 9) //   with
+#define PTP_NUMBER_16                      ( 6 << 9) //   PARAM_*
+#define PTP_COMPARE                        ( 7 << 9) //   defined
+#define PTP_KEYG_KEYX                      ( 8 << 9) //   below.
+#define PTP_LITERAL                        ( 9 << 9) // Literal
+#define PTP_DISABLED                       (10 << 9) // Not programmable
+
+
 #define INC_FLAG                                   0
 #define DEC_FLAG                                   1
 
@@ -501,11 +516,12 @@ typedef enum {
 #define SAVED_REGISTER_D                         218
 #define SAVED_REGISTER_L                         219
 #define LAST_SAVED_STACK_REGISTER                219
-#define NUMBER_OF_TEMP_REGISTERS                   1 // 220
+#define NUMBER_OF_TEMP_REGISTERS                   2 // 220, 221
 #define FIRST_TEMP_REGISTER                      220
 #define TEMP_REGISTER_1                          220
-#define LAST_TEMP_REGISTER                       220
-#define FIRST_NAMED_VARIABLE                     221
+#define TEMP_REGISTER_2_SAVED_STATS              221
+#define LAST_TEMP_REGISTER                       221
+#define FIRST_NAMED_VARIABLE                     222
 #define LAST_NAMED_VARIABLE                     1999
 #define FIRST_RESERVED_VARIABLE                 2000
 #define RESERVED_VARIABLE_X                     2000
@@ -572,7 +588,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               18
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               19
 #define MY_ALPHA_MENU_CNST                         1  //JM This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT                           23
 
@@ -633,7 +649,7 @@ typedef enum {
 #define NUMBER_OF_CONSTANTS_39                   189+2   //JM 2 additionalconstants
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
-#define NUMBER_OF_CONSTANTS_34                    43
+#define NUMBER_OF_CONSTANTS_34                    44
 
 #define MAX_FREE_REGION                           50 // Maximum number of free memory regions
 
@@ -715,8 +731,8 @@ typedef enum {
 #define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
-#define CM_MIM                                    12 // Matrix input mode tbd reorder
-#define CM_EIM                                    13 // Equation input mode
+#define CM_MIM                                    12 // Matrix imput mode tbd reorder
+#define CM_EIM                                    13 // Equation imput mode
 #define CM_TIMER                                  14 // Timer application
 #define CM_GRAPH                                  15 // Plot graph mode
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
@@ -742,7 +758,8 @@ typedef enum {
 #define TM_LABEL                               10009
 #define TM_SOLVE                               10010
 #define TM_NEWMENU                             10011
-#define TM_CMP                                 10012 // TM_CMP must be the last in this list
+#define TM_KEY                                 10012
+#define TM_CMP                                 10013 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -847,13 +864,23 @@ typedef enum {
 #define CMP_BINARY                                 0
 #define CMP_CLEANED_STRING_ONLY                    1
 #define CMP_EXTENSIVE                              2
+#define CMP_NAME                                   3
 
 // Combination / permutation
 #define CP_PERMUTATION                             0
 #define CP_COMBINATION                             1
 
+// Gudermannian
 #define GD_DIRECT_FUNCTION                         0
 #define GD_INVERSE_FUNCTION                        1
+
+// Program running mode
+#define PGM_STOPPED                                0
+#define PGM_RUNNING                                1
+#define PGM_WAITING                                2
+#define PGM_PAUSED                                 3
+#define PGM_KEY_PRESSED_WHILE_PAUSED               4
+#define PGM_RESUMING                               5
 
 // Load mode
 #define LM_ALL                                     0
@@ -958,6 +985,7 @@ typedef enum {
 #define STRING_DATE                               12
 
 // OP parameter special values
+#define SYSTEM_FLAG_NUMBER                       250
 #define VALUE_0                                  251
 #define VALUE_1                                  252
 #define STRING_LABEL_VARIABLE                    253
@@ -972,6 +1000,7 @@ typedef enum {
 #define PARAM_NUMBER_8                             5
 #define PARAM_NUMBER_16                            6
 #define PARAM_COMPARE                              7
+#define PARAM_KEYG_KEYX                            8
 
 #define CHECK_INTEGER                              0
 #define CHECK_INTEGER_EVEN                         1

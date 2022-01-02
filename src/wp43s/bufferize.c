@@ -35,6 +35,7 @@
 #include "mathematics/toRect.h"
 #include "mathematics/wp34s.h"
 #include "matrix.h"
+#include "programming/manage.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
 #include "registerValueConversions.h"
@@ -54,6 +55,9 @@
     resetShiftState();  //JM
     aimBuffer[0] = 0;
     calcModeAim(NOPARAM); // Alpha Input Mode
+    if(programRunStop != PGM_RUNNING) {
+      entryStatus |= 0x01;
+    }
   }
 
 
@@ -1001,6 +1005,10 @@ void kill_ASB_icon(void) {
           return;
       }
 
+      if(programRunStop != PGM_RUNNING) {
+        entryStatus |= 0x01;
+      }
+
       //debugNIM();
     }
 
@@ -1571,7 +1579,7 @@ void kill_ASB_icon(void) {
         break;
 
       case ITM_dotD :
-        if(nimNumberPart == NP_REAL_FLOAT_PART || nimNumberPart == NP_REAL_FLOAT_PART) {
+        if(nimNumberPart == NP_REAL_FLOAT_PART) {
           done = true;
 
           closeNim();
@@ -2081,6 +2089,11 @@ void kill_ASB_icon(void) {
     }
 
     int16_t lastChar = strlen(aimBuffer) - 1;
+
+    if(calcMode == CM_PEM) {
+      pemCloseNumberInput();
+      return;
+    }
 
     if(nimNumberPart != NP_INT_16) { // We need a # and a base
       if(nimNumberPart != NP_INT_BASE || aimBuffer[lastChar] != '#') { // We need a base

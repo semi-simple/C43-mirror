@@ -74,12 +74,14 @@
     extern bool_t               screenChange;
     extern char                 debugString[10000];
     #if (DEBUG_REGISTER_L == 1)
-      extern GtkWidget        *lblRegisterL1;
-      extern GtkWidget        *lblRegisterL2;
+      extern GtkWidget         *lblRegisterL1;
+      extern GtkWidget         *lblRegisterL2;
     #endif // (DEBUG_REGISTER_L == 1)
     #if (SHOW_MEMORY_STATUS == 1)
-      extern GtkWidget        *lblMemoryStatus;
+      extern GtkWidget         *lblMemoryStatus;
     #endif // (SHOW_MEMORY_STATUS == 1)
+    extern calcKeyboard_t       calcKeyboard[43];
+    extern int                  currentBezel; // 0=normal, 1=AIM, 2=TAM
   #endif //PC_BUILD
 
   // Variables stored in FLASH
@@ -148,6 +150,7 @@
   extern userMenuItem_t         userMenuItems[18];
   extern userMenuItem_t         userAlphaItems[18];
   extern userMenu_t            *userMenus;
+  extern programmableMenu_t     programmableMenu;
   extern calcKey_t              kbd_usr[37];
   extern calcRegister_t         errorMessageRegisterLine;
   extern glyph_t                glyphNotFound;
@@ -205,6 +208,9 @@
   extern uint8_t                rbrMode;
   extern uint8_t                numScreensNumericFont;
   extern uint8_t                timerCraAndDeciseconds;
+  extern uint8_t                programRunStop;
+  extern uint8_t                lastKeyCode;
+  extern uint8_t                entryStatus; // 0x01 for the entry flag, backed up to 0x02 for undo
   extern uint8_t               *beginOfProgramMemory;
   extern uint8_t               *beginOfCurrentProgram;
   extern uint8_t               *endOfCurrentProgram;
@@ -285,12 +291,15 @@
   extern uint16_t               numberOfUserMenus;
   extern uint16_t               currentUserMenu;
   extern uint16_t               userKeyLabelSize;
+  extern uint16_t               currentInputVariable;
+  extern uint16_t               currentMvarLabel;
   #if (REAL34_WIDTH_TEST == 1)
     extern uint16_t               largeur;
   #endif // (REAL34_WIDTH_TEST == 1)
 
   extern int32_t                numberOfFreeMemoryRegions;
   extern int32_t                lgCatalogSelection;
+  extern int32_t                graphVariable;
 
   extern uint32_t               firstGregorianDay;
   extern uint32_t               denMax;
@@ -311,6 +320,10 @@
   extern size_t                 gmpMemInBytes;
   extern size_t                 wp43sMemInBlocks;
 
+  extern real_t                 SAVED_SIGMA_LASTX;
+  extern real_t                 SAVED_SIGMA_LASTY;
+  extern int32_t                SAVED_SIGMA_LAct;
+
   #ifdef DMCP_BUILD
     extern bool_t              backToDMCP;
   #ifdef BUFFER_CLICK_DETECTION
@@ -319,6 +332,8 @@
 //  extern int                  keyAutoRepeat; // Key repetition
 //  extern int16_t              previousItem;
     extern uint32_t             nextTimerRefresh;
+
+    int                         convertKeyCode(int key);
   #endif // DMCP_BUILD
 
 #endif // WP43S_H

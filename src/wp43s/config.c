@@ -38,6 +38,7 @@
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
+#include "programming/programmableMenu.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "recall.h"
 #include "registers.h"
@@ -522,13 +523,16 @@ void fnClAll(uint16_t confirmation) {
     fnClFAll(CONFIRMED);
 
     temporaryInformation = TI_NO_INFO;
+    if(programRunStop == PGM_WAITING) {
+      programRunStop = PGM_STOPPED;
+    }
   }
 }
 
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8594));
+  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(10444));
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -752,18 +756,26 @@ void fnReset(uint16_t confirmation) {
 
     decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
     ctxtReal39.digits = 39;
+    ctxtReal39.emax   = 99999;
+    ctxtReal39.emin   = -99999;
     ctxtReal39.traps  = 0;
 
     decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
     ctxtReal51.digits = 51;
+    ctxtReal51.emax   = 99999;
+    ctxtReal51.emin   = -99999;
     ctxtReal51.traps  = 0;
 
     decContextDefault(&ctxtReal75, DEC_INIT_DECQUAD);
     ctxtReal75.digits = 75;
+    ctxtReal75.emax   = 99999;
+    ctxtReal75.emin   = -99999;
     ctxtReal75.traps  = 0;
 
     decContextDefault(&ctxtReal1071,  DEC_INIT_DECQUAD);
     ctxtReal1071.digits = 1071;
+    ctxtReal1071.emax   = 99999;
+    ctxtReal1071.emin   = -99999;
     ctxtReal1071.traps  = 0;
 
     //decContextDefault(&ctxtReal2139,  DEC_INIT_DECQUAD);
@@ -778,12 +790,16 @@ void fnReset(uint16_t confirmation) {
     lrChosenUndo = 0;
     lastPlotMode = PLOT_NOTHING;
     plotSelection = 0;
+    realZero(&SAVED_SIGMA_LASTX);
+    realZero(&SAVED_SIGMA_LASTY);
+    SAVED_SIGMA_LAct = 0;
+    
     x_min = -10;
     x_max = 10;
     y_min = 0;
     y_max = 1;
 
-//    shortIntegerMode = SIM_2COMPL;
+    shortIntegerMode = SIM_2COMPL;
     fnSetWordSize(64);
     fnIntegerMode(SIM_2COMPL);                       //JM
 
@@ -862,6 +878,11 @@ void fnReset(uint16_t confirmation) {
     lastIntegerBase = 0;
     temporaryInformation = TI_RESET;
 
+    currentInputVariable = INVALID_VARIABLE;
+    currentMvarLabel = INVALID_VARIABLE;
+    lastKeyCode = 0;
+    entryStatus = 0;
+
     memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
     memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);
     userMenus = NULL;
@@ -870,6 +891,8 @@ void fnReset(uint16_t confirmation) {
     userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
     userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
     memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
+
+    fnClearMenu(NOPARAM);
 
 
 
@@ -980,6 +1003,8 @@ void fnReset(uint16_t confirmation) {
     numberOfFormulae = 0;
     currentFormula = 0;
 
+    graphVariable = 0;
+
     // Timer application
     timerCraAndDeciseconds = 0x80u;
     timerValue             = 0u;
@@ -997,7 +1022,7 @@ void fnReset(uint16_t confirmation) {
 
 
 
-#define VERSION1 "_107_04_KEY"
+#define VERSION1 "_107_10 KEY/Draw/Solve"
 
     #ifdef JM_LAYOUT_1A
       #undef L1L2

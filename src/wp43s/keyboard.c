@@ -437,7 +437,7 @@
             if(indexOfItems[item].func == fnGetSystemFlag && (tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && !tam.indirect) {
               tam.value = (indexOfItems[item].param & 0xff);
               tam.alpha = true;
-              insertStepInProgram(tamOperation());
+              addStepInProgram(tamOperation());
               tamLeaveMode();
               hourGlassIconEnabled = false;
             }
@@ -446,7 +446,7 @@
               uint16_t nameLength = stringByteLength(itmLabel);
               xcopy(aimBuffer, itmLabel, nameLength + 1);
               tam.alpha = true;
-              insertStepInProgram(tamOperation());
+              addStepInProgram(tamOperation());
               tamLeaveMode();
               hourGlassIconEnabled = false;
             }
@@ -985,7 +985,7 @@
           keyActionProcessed = true;
         }
         else if(calcMode == CM_PEM && item == ITM_dotD && aimBuffer[0] == 0) {
-          insertStepInProgram(ITM_toREAL);
+          addStepInProgram(ITM_toREAL);
           keyActionProcessed = true;
         }
         break;
@@ -1191,7 +1191,7 @@
                 keyActionProcessed = true;
               }
               else if(item == ITM_RS) {
-                insertStepInProgram(ITM_STOP);
+                addStepInProgram(ITM_STOP);
                 keyActionProcessed = true;
               }
               break;
@@ -1745,15 +1745,27 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
       case CM_PEM:
         if(getSystemFlag(FLAG_ALPHA)) {
           pemAlpha(ITM_BACKSPACE);
+          if(aimBuffer[0] == 0 && !getSystemFlag(FLAG_ALPHA) && currentLocalStepNumber > 1) {
+            currentStep = findPreviousStep(currentStep);
+            --currentLocalStepNumber;
+          }
         }
         else if(aimBuffer[0] == 0) {
           nextStep = findNextStep(currentStep);
           if(*currentStep != 255 || *(currentStep + 1) != 255) { // Not the last END
             deleteStepsFromTo(currentStep, nextStep);
           }
+          if(currentLocalStepNumber > 1) {
+            currentStep = findPreviousStep(currentStep);
+            --currentLocalStepNumber;
+          }
         }
         else {
           pemAddNumber(ITM_BACKSPACE);
+          if(aimBuffer[0] == 0 && currentLocalStepNumber > 1) {
+            currentStep = findPreviousStep(currentStep);
+            --currentLocalStepNumber;
+          }
         }
         break;
 

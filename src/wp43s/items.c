@@ -187,7 +187,7 @@ void fnNop(uint16_t unusedButMandatoryParameter) {
     }
 
     if(calcMode == CM_PEM && !tam.mode) {
-      insertStepInProgram(func);
+      addStepInProgram(func);
       return;
     }
 

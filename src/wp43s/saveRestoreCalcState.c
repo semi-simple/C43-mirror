@@ -43,7 +43,7 @@
 
 #include "wp43s.h"
 
-#define BACKUP_VERSION         67  // Added ENTRY? status
+#define BACKUP_VERSION         68  // Added number of labels and programs
 #define START_REGISTER_VALUE 1000  // was 1522, why?
 #define BACKUP               ppgm_fp // The FIL *ppgm_fp pointer is provided by DMCP
 
@@ -224,6 +224,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
     save(&ramPtr,                             sizeof(ramPtr),                             BACKUP); // currentStep offset within block
     save(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
     save(&firstDisplayedLocalStepNumber,      sizeof(firstDisplayedLocalStepNumber),      BACKUP);
+    save(&numberOfLabels,                     sizeof(numberOfLabels),                     BACKUP);
+    save(&numberOfPrograms,                   sizeof(numberOfPrograms),                   BACKUP);
     save(&currentLocalStepNumber,             sizeof(currentLocalStepNumber),             BACKUP);
     save(&currentProgramNumber,               sizeof(currentProgramNumber),               BACKUP);
     save(&lastProgramListEnd,                 sizeof(lastProgramListEnd),                 BACKUP);
@@ -451,6 +453,8 @@ static uint32_t restore(void *buffer, uint32_t size, void *stream) {
       currentStep += ramPtr;
       restore(&freeProgramBytes,                   sizeof(freeProgramBytes),                   BACKUP);
       restore(&firstDisplayedLocalStepNumber,      sizeof(firstDisplayedLocalStepNumber),      BACKUP);
+      restore(&numberOfLabels,                     sizeof(numberOfLabels),                     BACKUP);
+      restore(&numberOfPrograms,                   sizeof(numberOfPrograms),                   BACKUP);
       restore(&currentLocalStepNumber,             sizeof(currentLocalStepNumber),             BACKUP);
       restore(&currentProgramNumber,               sizeof(currentProgramNumber),               BACKUP);
       restore(&lastProgramListEnd,                 sizeof(lastProgramListEnd),                 BACKUP);

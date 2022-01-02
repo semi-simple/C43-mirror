@@ -869,6 +869,20 @@ void insertStepInProgram(int16_t func) {
 
 
 
+void addStepInProgram(int16_t func) {
+  if((aimBuffer[0] == 0 && !getSystemFlag(FLAG_ALPHA)) && ((*currentStep != ((ITM_END >> 8) | 0x80)) || (*(currentStep + 1) != (ITM_END & 0xff))) && ((*currentStep != 0xff) || (*(currentStep + 1) != 0xff))) {
+    currentStep = findNextStep(currentStep);
+    ++currentLocalStepNumber;
+  }
+  insertStepInProgram(func);
+  if(aimBuffer[0] == 0 && !getSystemFlag(FLAG_ALPHA)) {
+    currentStep = findPreviousStep(currentStep);
+    --currentLocalStepNumber;
+  }
+}
+
+
+
 calcRegister_t findNamedLabel(const char *labelName) {
   for(uint16_t lbl = 0; lbl < numberOfLabels; lbl++) {
     if(labelList[lbl].step > 0) {

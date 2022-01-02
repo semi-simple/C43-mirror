@@ -55,6 +55,9 @@
     resetShiftState();  //JM
     aimBuffer[0] = 0;
     calcModeAim(NOPARAM); // Alpha Input Mode
+    if(programRunStop != PGM_RUNNING) {
+      entryStatus |= 0x01;
+    }
   }
 
 
@@ -1000,6 +1003,10 @@ void kill_ASB_icon(void) {
           sprintf(errorMessage, "In function addItemToNimBuffer: %d is an unexpected item value when initializing NIM!", item);
           displayBugScreen(errorMessage);
           return;
+      }
+
+      if(programRunStop != PGM_RUNNING) {
+        entryStatus |= 0x01;
       }
 
       //debugNIM();

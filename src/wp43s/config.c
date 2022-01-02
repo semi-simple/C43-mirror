@@ -38,6 +38,7 @@
 #include "memory.h"
 #include "plotstat.h"
 #include "programming/manage.h"
+#include "programming/programmableMenu.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "recall.h"
 #include "registers.h"
@@ -531,7 +532,7 @@ void fnClAll(uint16_t confirmation) {
 
 
 void addTestPrograms(void) {
-  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(8873));
+  uint32_t numberOfBytesUsed, numberOfBytesForTheTestPrograms = TO_BYTES(TO_BLOCKS(10444));
 
   resizeProgramMemory(TO_BLOCKS(numberOfBytesForTheTestPrograms));
   firstDisplayedStep            = beginOfProgramMemory;
@@ -755,18 +756,26 @@ void fnReset(uint16_t confirmation) {
 
     decContextDefault(&ctxtReal39, DEC_INIT_DECQUAD);
     ctxtReal39.digits = 39;
+    ctxtReal39.emax   = 99999;
+    ctxtReal39.emin   = -99999;
     ctxtReal39.traps  = 0;
 
     decContextDefault(&ctxtReal51, DEC_INIT_DECQUAD);
     ctxtReal51.digits = 51;
+    ctxtReal51.emax   = 99999;
+    ctxtReal51.emin   = -99999;
     ctxtReal51.traps  = 0;
 
     decContextDefault(&ctxtReal75, DEC_INIT_DECQUAD);
     ctxtReal75.digits = 75;
+    ctxtReal75.emax   = 99999;
+    ctxtReal75.emin   = -99999;
     ctxtReal75.traps  = 0;
 
     decContextDefault(&ctxtReal1071,  DEC_INIT_DECQUAD);
     ctxtReal1071.digits = 1071;
+    ctxtReal1071.emax   = 99999;
+    ctxtReal1071.emin   = -99999;
     ctxtReal1071.traps  = 0;
 
     //decContextDefault(&ctxtReal2139,  DEC_INIT_DECQUAD);
@@ -870,6 +879,9 @@ void fnReset(uint16_t confirmation) {
     temporaryInformation = TI_RESET;
 
     currentInputVariable = INVALID_VARIABLE;
+    currentMvarLabel = INVALID_VARIABLE;
+    lastKeyCode = 0;
+    entryStatus = 0;
 
     memset(userMenuItems,  0, sizeof(userMenuItem_t) * 18);
     memset(userAlphaItems, 0, sizeof(userMenuItem_t) * 18);
@@ -879,6 +891,8 @@ void fnReset(uint16_t confirmation) {
     userKeyLabelSize = 37/*keys*/ * 6/*states*/ * 1/*byte terminator*/ + 1/*byte sentinel*/;
     userKeyLabel = allocWp43s(TO_BLOCKS(userKeyLabelSize));
     memset(userKeyLabel,   0, TO_BYTES(TO_BLOCKS(userKeyLabelSize)));
+
+    fnClearMenu(NOPARAM);
 
 
 

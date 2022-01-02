@@ -745,6 +745,49 @@ void insertStepInProgram(int16_t func) {
   switch(indexOfItems[func].status & PTP_STATUS) {
     case PTP_DISABLED:
       switch(func) {
+        case ITM_KEYG:           // 1498
+        case ITM_KEYX:           // 1499
+          {
+            int opLen;
+            tmpString[0] = (ITM_KEY >> 8) | 0x80;
+            tmpString[1] =  ITM_KEY       & 0xff;
+            if(tam.keyAlpha) {
+              uint16_t nameLength = stringByteLength(aimBuffer + AIM_BUFFER_LENGTH / 2);
+              tmpString[2] = (char)INDIRECT_VARIABLE;
+              tmpString[3] = (char)nameLength;
+              xcopy(tmpString + 4, aimBuffer + AIM_BUFFER_LENGTH / 2, nameLength);
+              opLen = nameLength + 4;
+            }
+            else if(tam.keyIndirect) {
+              tmpString[2] = (char)INDIRECT_REGISTER;
+              tmpString[3] = tam.key;
+              opLen = 4;
+            }
+            else {
+              tmpString[2] = tam.key;
+              opLen = 3;
+            }
+
+            tmpString[opLen + 0] = (func == ITM_KEYX ? ITM_XEQ : ITM_GTO);
+            if(tam.alpha) {
+              uint16_t nameLength = stringByteLength(aimBuffer);
+              tmpString[opLen + 1] = (char)(tam.indirect ? INDIRECT_VARIABLE : STRING_LABEL_VARIABLE);
+              tmpString[opLen + 2] = nameLength;
+              xcopy(tmpString + opLen + 3, aimBuffer, nameLength);
+              _insertInProgram((uint8_t *)tmpString, nameLength + opLen + 3);
+            }
+            else if(tam.indirect) {
+              tmpString[opLen + 1] = (char)INDIRECT_REGISTER;
+              tmpString[opLen + 2] = tam.value;
+              _insertInProgram((uint8_t *)tmpString, opLen + 3);
+            }
+            else {
+              tmpString[opLen + 1] = tam.value;
+              _insertInProgram((uint8_t *)tmpString, opLen + 2);
+            }
+          }
+          break;
+
         case ITM_GTOP:           // 1482
           #ifndef DMCP_BUILD
             stringToUtf8(indexOfItems[func].itemCatalogName, (uint8_t *)tmpString);
@@ -826,6 +869,20 @@ void insertStepInProgram(int16_t func) {
   }
 
   aimBuffer[0] = 0;
+}
+
+
+
+void addStepInProgram(int16_t func) {
+  if((aimBuffer[0] == 0 && !getSystemFlag(FLAG_ALPHA)) && ((*currentStep != ((ITM_END >> 8) | 0x80)) || (*(currentStep + 1) != (ITM_END & 0xff))) && ((*currentStep != 0xff) || (*(currentStep + 1) != 0xff))) {
+    currentStep = findNextStep(currentStep);
+    ++currentLocalStepNumber;
+  }
+  insertStepInProgram(func);
+  if(aimBuffer[0] == 0 && !getSystemFlag(FLAG_ALPHA)) {
+    currentStep = findPreviousStep(currentStep);
+    --currentLocalStepNumber;
+  }
 }
 
 

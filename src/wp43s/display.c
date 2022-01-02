@@ -35,6 +35,7 @@
 #include "c43Extensions/jm.h"
 #include "mathematics/comparisonReals.h"
 #include "mathematics/toPolar.h"
+#include "programming/input.h"
 #include "mathematics/wp34s.h"
 #include "c43Extensions/radioButtonCatalog.h"
 #include "registers.h"
@@ -1095,7 +1096,6 @@ void complex34ToDisplayString2(const complex34_t *complex34, char *displayString
   int16_t i=100;
   real34_t real34, imag34;
   real_t real, imagIc;
-
 
   if(getSystemFlag(FLAG_POLAR)) { // polar mode
     real34ToReal(VARIABLE_REAL34_DATA(complex34), &real);
@@ -2904,10 +2904,6 @@ void fnView(uint16_t regist) {
   temporaryInformation = TI_VIEW;
   if(programRunStop == PGM_RUNNING) {
     refreshScreen();
-    #ifdef DMCP_BUILD
-      lcd_refresh();
-    #else // !DMCP_BUILD
-      refreshLcd(NULL);
-    #endif // DMCP_BUILD
+    fnPause(10);
   }
 }

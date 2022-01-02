@@ -429,6 +429,17 @@ typedef struct {
 
 
 /**
+ * \struct programmableMenu_t
+ * Structure keeping the information for programmable menu.
+ */
+typedef struct {
+  char           itemName[18][16]; ///< Name of items
+  uint16_t       itemParam[21];    ///< Parameter, XEQ if MSB set, GTO if MSB clear
+  uint16_t       unused;           ///< Padding
+} programmableMenu_t;
+
+
+/**
  * \struct labelList_t
  * Structure keeping the information for a program label.
  */
@@ -478,6 +489,14 @@ typedef struct {
   int16_t    value;
   int16_t    min;
   int16_t    max;
+  /**
+   * Only used for KEYG and KEYX
+   */
+  int16_t    key;
+  bool_t     keyAlpha;
+  bool_t     keyDot;
+  bool_t     keyIndirect;
+  bool_t     keyInputFinished;
 } tamState_t;
 
 #ifdef PC_BUILD
@@ -487,8 +506,8 @@ typedef struct {
    */
   typedef struct {
     int x, y;
-    int width[3], height[3];
-    GtkWidget *keyImage[3];
+    int width[4], height[4];
+    GtkWidget *keyImage[4];
   } calcKeyboard_t;
 #endif // PC_BUILD
 

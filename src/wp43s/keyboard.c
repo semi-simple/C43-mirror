@@ -33,6 +33,7 @@
 #include "plotstat.h"
 #include "programming/manage.h"
 #include "programming/nextStep.h"
+#include "programming/programmableMenu.h"
 #include "recall.h"
 #include "registers.h"
 #include "screen.h"
@@ -94,7 +95,10 @@
 
       case MNU_MVAR:
         dynamicMenuItem = firstItem + itemShift + (fn - 1);
-        if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && dynamicMenuItem == 5) {
+        if(currentMvarLabel != INVALID_VARIABLE) {
+          item = (dynamicMenuItem >= dynamicSoftmenu[menuId].numItems ? ITM_NOP : ITM_SOLVE_VAR);
+        }
+        else if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && dynamicMenuItem == 5) {
           item = ITM_CALC;
         } 
         else if((currentSolverStatus & SOLVER_STATUS_USES_FORMULA) && (currentSolverStatus & SOLVER_STATUS_INTERACTIVE) && dynamicMenuItem == 4) {
@@ -146,6 +150,11 @@
             }
           }
         }
+        break;
+
+      case ITM_MENU:
+        dynamicMenuItem = firstItem + itemShift + (fn - 1);
+        item = ITM_MENU;
         break;
 
       case MNU_EQN:
@@ -232,6 +241,13 @@
     }
   #endif // PC_BUILD
 
+  #ifdef DMCP_BUILD
+    void btnFnClicked(void *unused, void *data) {
+      btnFnPressed(data);
+      btnFnReleased(data);
+    }
+  #endif // DMCP_BUILD
+
 
     void execAutoRepeat(uint16_t key) {
 #ifdef DMCP_BUILD
@@ -268,6 +284,18 @@ bool_t lastshiftG = false;
   #ifdef DMCP_BUILD
     void btnFnPressed(void *data) {
   #endif // DMCP_BUILD
+      if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
+        setLastKeyCode((*((char *)data) - '0') + 37);
+      }
+      else {
+        lastKeyCode = 0;
+      }
+
+      if(programRunStop == PGM_PAUSED) {
+        programRunStop = PGM_KEY_PRESSED_WHILE_PAUSED;
+        return;
+      }
+
       lastshiftF = shiftF;
       lastshiftG = shiftG;
 
@@ -363,6 +391,10 @@ bool_t lastshiftG = false;
   #ifdef DMCP_BUILD
     void btnFnReleased(void *data) {
   #endif // DMCP_BUILD
+    if(programRunStop == PGM_KEY_PRESSED_WHILE_PAUSED) {
+      programRunStop = PGM_RESUMING;
+      return;
+    }
     if(calcMode != CM_REGISTER_BROWSER && calcMode != CM_FLAG_BROWSER && calcMode != CM_FONT_BROWSER) {
       if(calcMode == CM_ASSIGN && itemToBeAssigned != 0) {
         switch(-softmenu[softmenuStack[0].softmenuId].menuItem) {
@@ -463,7 +495,7 @@ bool_t lastshiftG = false;
             refreshScreen();
             return;
           }
-          if(tam.mode && catalog && (tam.digitsSoFar || tam.function == ITM_BESTF || tam.function == ITM_CNST || (!tam.indirect && (tam.mode == TM_VALUE || tam.mode == TM_VALUE_CHB)))) {
+          if(tam.mode && catalog && (tam.digitsSoFar || tam.function == ITM_BESTF || tam.function == ITM_CNST || (!tam.indirect && (tam.mode == TM_VALUE || tam.mode == TM_VALUE_CHB || (tam.mode == TM_KEY && !tam.keyInputFinished))))) {
             // disabled
           }
           else if(tam.function == ITM_GTOP && catalog == CATALOG_PROG) {
@@ -477,7 +509,7 @@ bool_t lastshiftG = false;
             if(indexOfItems[item].func == fnGetSystemFlag && (tam.mode == TM_FLAGR || tam.mode == TM_FLAGW) && !tam.indirect) {
               tam.value = (indexOfItems[item].param & 0xff);
               tam.alpha = true;
-              insertStepInProgram(tamOperation());
+              addStepInProgram(tamOperation());
               tamLeaveMode();
               hourGlassIconEnabled = false;
             }
@@ -486,7 +518,7 @@ bool_t lastshiftG = false;
               uint16_t nameLength = stringByteLength(itmLabel);
               xcopy(aimBuffer, itmLabel, nameLength + 1);
               tam.alpha = true;
-              insertStepInProgram(tamOperation());
+              addStepInProgram(tamOperation());
               tamLeaveMode();
               hourGlassIconEnabled = false;
             }
@@ -831,9 +863,22 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
    * \param data gpointer pointer to a string containing the key number pressed: 00=1/x, ..., 36=EXIT
    * \return void
    ***********************************************/
+
+
+
+
   #ifdef PC_BUILD
     void btnPressed(GtkWidget *notUsed, GdkEvent *event, gpointer data) {
       nimWhenButtonPressed = (calcMode == CM_NIM);                  //PHM eRPN 2021-07
+
+     int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+      if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
+        setLastKeyCode(keyCode + 1);
+      }
+      else {
+        lastKeyCode = 0;
+      }
+
       if(event->type == GDK_DOUBLE_BUTTON_PRESS || event->type == GDK_TRIPLE_BUTTON_PRESS) { // return unprocessed for double or triple click
         return;
       }
@@ -848,16 +893,18 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
       lastshiftF = shiftF;
       lastshiftG = shiftG;
       int16_t item = determineItem((char *)data);
-      if(programRunStop == PGM_RUNNING) {
-        if((item == ITM_RS || item == ITM_EXIT1) && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
+      if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
+        if((item == ITM_RS || item == ITM_EXIT) && !getSystemFlag(FLAG_INTING) && !getSystemFlag(FLAG_SOLVING)) {
           programRunStop = PGM_WAITING;
           showFunctionNameItem = 0;
+        }
+        else if(programRunStop == PGM_PAUSED) {
+          programRunStop = PGM_KEY_PRESSED_WHILE_PAUSED;
         }
         return;
       }
 
       if(getSystemFlag(FLAG_USER)) {
-        int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
         int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
         char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
         xcopy(tmpString, funcParam, stringByteLength(funcParam) + 1);
@@ -898,8 +945,14 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
       for(int i=0; i<43; i++) {
         xMin = calcKeyboard[i].x;
         yMin = calcKeyboard[i].y;
-        xMax = xMin + calcKeyboard[i].width[currentBezel];
-        yMax = yMin + calcKeyboard[i].height[currentBezel];
+        if(i == 10 && currentBezel == 2 && (tam.mode == TM_LABEL || (tam.mode == TM_SOLVE && (tam.function != ITM_SOLVE || calcMode != CM_PEM)) || (tam.mode == TM_KEY && tam.keyInputFinished))) {
+          xMax = xMin + calcKeyboard[10].width[3];
+          yMax = yMin + calcKeyboard[10].height[3];
+        }
+        else {
+          xMax = xMin + calcKeyboard[i].width[currentBezel];
+          yMax = yMin + calcKeyboard[i].height[currentBezel];
+        }
 
         if(   xMin <= x && x <= xMax
            && yMin <= y && y <= yMax) {
@@ -954,6 +1007,14 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
     void btnPressed(void *data) {
       nimWhenButtonPressed = (calcMode == CM_NIM);                  //PHM eRPN 2021-07
       int16_t item;
+      int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
+
+      if(programRunStop == PGM_RUNNING || programRunStop == PGM_PAUSED) {
+        lastKeyCode = keyCode;
+      }
+      else {
+        lastKeyCode = 0;
+      }
 
 //      if(keyAutoRepeat) {            // AUTOREPEAT
 //        //beep(880, 50);
@@ -967,7 +1028,6 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
 //    }
 
       if(getSystemFlag(FLAG_USER)) {
-        int keyCode = (*((char *)data) - '0')*10 + *(((char *)data) + 1) - '0';
         int keyStateCode = (getSystemFlag(FLAG_ALPHA) ? 3 : 0) + (shiftG ? 2 : shiftF ? 1 : 0);
         char *funcParam = (char *)getNthString((uint8_t *)userKeyLabel, keyCode * 6 + keyStateCode);
         xcopy(tmpString, funcParam, stringByteLength(funcParam) + 1);
@@ -998,6 +1058,11 @@ bool_t nimWhenButtonPressed = false;                  //PHM eRPN 2021-07
       int16_t item;
       Shft_timeouts = false;                         //JM SHIFT NEW
       JM_auto_longpress_enabled = 0;                 //JM TIMER CLRCLSTK ON LONGPRESS
+
+      if(programRunStop == PGM_KEY_PRESSED_WHILE_PAUSED) {
+        programRunStop = PGM_RESUMING;
+        return;
+      }
 
       if(calcMode == CM_ASSIGN && itemToBeAssigned != 0 && tamBuffer[0] == 0) {
         assignToKey((char *)data);
@@ -1324,7 +1389,7 @@ bool_t lowercaseselected;
           keyActionProcessed = true;
         }
         else if(calcMode == CM_PEM && item == ITM_dotD && aimBuffer[0] == 0) {
-          insertStepInProgram(ITM_toREAL);
+          addStepInProgram(ITM_toREAL);
           keyActionProcessed = true;
         }
         break;
@@ -1628,7 +1693,7 @@ bool_t lowercaseselected;
                 keyActionProcessed = true;
               }
               else if(item == ITM_RS) {
-                insertStepInProgram(ITM_STOP);
+                addStepInProgram(ITM_STOP);
                 keyActionProcessed = true;
               }
               break;
@@ -1876,8 +1941,7 @@ void fnKeyEnter(uint16_t unusedButMandatoryParameter) {
           if(lastErrorCode == ERROR_RAM_FULL) goto ram_full;
         }
         break;
---- */
-        
+
       case CM_EIM:
         if(aimBuffer[0] != 0) {
           setEquation(currentFormula, aimBuffer);
@@ -1970,6 +2034,12 @@ void fnKeyExit(uint16_t unusedButMandatoryParameter) {
       else {
         tamLeaveMode();
       }
+      return;
+    }
+
+    if(softmenu[softmenuStack[0].softmenuId].menuItem == -ITM_MENU) {
+      dynamicMenuItem = 20;
+      fnProgrammableMenu(NOPARAM);
       return;
     }
 
@@ -2305,15 +2375,27 @@ void fnKeyBackspace(uint16_t unusedButMandatoryParameter) {
         #ifndef SAVE_SPACE_DM42_10
         if(getSystemFlag(FLAG_ALPHA)) {
           pemAlpha(ITM_BACKSPACE);
+          if(aimBuffer[0] == 0 && !getSystemFlag(FLAG_ALPHA) && currentLocalStepNumber > 1) {
+            currentStep = findPreviousStep(currentStep);
+            --currentLocalStepNumber;
+          }
         }
         else if(aimBuffer[0] == 0) {
           nextStep = findNextStep(currentStep);
           if(*currentStep != 255 || *(currentStep + 1) != 255) { // Not the last END
             deleteStepsFromTo(currentStep, nextStep);
           }
+          if(currentLocalStepNumber > 1) {
+            currentStep = findPreviousStep(currentStep);
+            --currentLocalStepNumber;
+          }
         }
         else {
           pemAddNumber(ITM_BACKSPACE);
+          if(aimBuffer[0] == 0 && currentLocalStepNumber > 1) {
+            currentStep = findPreviousStep(currentStep);
+            --currentLocalStepNumber;
+          }
         }
         #endif //SAVE_SPACE_DM42_10
         break;
@@ -2373,6 +2455,12 @@ void fnKeyUp(uint16_t unusedButMandatoryParameter) {
       else {
         addItemToBuffer(ITM_Max);
       }
+      return;
+    }
+
+    if(softmenu[softmenuStack[0].softmenuId].menuItem == -ITM_MENU) {
+      dynamicMenuItem = 18;
+      fnProgrammableMenu(NOPARAM);
       return;
     }
 
@@ -2520,6 +2608,12 @@ void fnKeyDown(uint16_t unusedButMandatoryParameter) {
       else {
         addItemToBuffer(ITM_Min);
       }
+      return;
+    }
+
+    if(softmenu[softmenuStack[0].softmenuId].menuItem == -ITM_MENU) {
+      dynamicMenuItem = 19;
+      fnProgrammableMenu(NOPARAM);
       return;
     }
 
@@ -2711,3 +2805,17 @@ void fnKeyAngle(uint16_t unusedButMandatoryParameter) {
   #endif // !TESTSUITE_BUILD
 }
 
+
+
+void setLastKeyCode(int key) {
+  if(1 <= key && key <= 43) {
+    if     (key <=  6) lastKeyCode = key      + 20;
+    else if(key <= 12) lastKeyCode = key -  6 + 30;
+    else if(key <= 17) lastKeyCode = key - 12 + 40;
+    else if(key <= 22) lastKeyCode = key - 17 + 50;
+    else if(key <= 27) lastKeyCode = key - 22 + 60;
+    else if(key <= 32) lastKeyCode = key - 27 + 70;
+    else if(key <= 37) lastKeyCode = key - 32 + 80;
+    else if(key <= 43) lastKeyCode = key - 37 + 10; // function keys
+  }
+}

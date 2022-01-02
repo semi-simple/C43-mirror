@@ -348,7 +348,7 @@
 #define FLAG_CARRY                            0x800b
 #define FLAG_OVERFLOW                         0x800c
 #define FLAG_LEAD0                            0x800d
-#define FLAG_ALPHA                            0xc00e
+#define FLAG_ALPHA                            0x800e
 #define FLAG_alphaCAP                         0xc00f
 #define FLAG_RUNTIM                           0xc010
 #define FLAG_RUNIO                            0xc011
@@ -469,11 +469,12 @@ typedef enum {
 #define PTP_LABEL                          ( 2 << 9) //   parameter
 #define PTP_REGISTER                       ( 3 << 9) //   types
 #define PTP_FLAG                           ( 4 << 9) //   must match
-#define PTP_NUMBER_8                       ( 5 << 9) //   with PARAM_*
-#define PTP_NUMBER_16                      ( 6 << 9) //   defined
-#define PTP_COMPARE                        ( 7 << 9) //   below.
-#define PTP_LITERAL                        ( 8 << 9) // Literal
-#define PTP_DISABLED                       ( 9 << 9) // Not programmable
+#define PTP_NUMBER_8                       ( 5 << 9) //   with
+#define PTP_NUMBER_16                      ( 6 << 9) //   PARAM_*
+#define PTP_COMPARE                        ( 7 << 9) //   defined
+#define PTP_KEYG_KEYX                      ( 8 << 9) //   below.
+#define PTP_LITERAL                        ( 9 << 9) // Literal
+#define PTP_DISABLED                       (10 << 9) // Not programmable
 
 
 #define INC_FLAG                                   0
@@ -587,7 +588,7 @@ typedef enum {
 #define Y_POSITION_OF_REGISTER_Y_LINE             96
 #define Y_POSITION_OF_REGISTER_X_LINE            132
 
-#define NUMBER_OF_DYNAMIC_SOFTMENUS               18
+#define NUMBER_OF_DYNAMIC_SOFTMENUS               19
 #define MY_ALPHA_MENU_CNST                         1  //JM This is the index of the MyAlpha   softmenu in the softmenu[] array. //JM changed this to a variable: int16_t MY_ALPHA_MENU;
 #define SOFTMENU_HEIGHT                           23
 
@@ -648,7 +649,7 @@ typedef enum {
 #define NUMBER_OF_CONSTANTS_39                   189+2   //JM 2 additionalconstants
 #define NUMBER_OF_CONSTANTS_51                    30
 #define NUMBER_OF_CONSTANTS_1071                   1
-#define NUMBER_OF_CONSTANTS_34                    43
+#define NUMBER_OF_CONSTANTS_34                    44
 
 #define MAX_FREE_REGION                           50 // Maximum number of free memory regions
 
@@ -730,8 +731,8 @@ typedef enum {
 #define CM_ERROR_MESSAGE                           9 // Error message in one of the register lines
 #define CM_BUG_ON_SCREEN                          10 // Bug message on screen
 #define CM_CONFIRMATION                           11 // Waiting for confirmation or canceling
-#define CM_MIM                                    12 // Matrix input mode tbd reorder
-#define CM_EIM                                    13 // Equation input mode
+#define CM_MIM                                    12 // Matrix imput mode tbd reorder
+#define CM_EIM                                    13 // Equation imput mode
 #define CM_TIMER                                  14 // Timer application
 #define CM_GRAPH                                  15 // Plot graph mode
 #define CM_LISTXY                                 98 //JM Display stat list   //JM
@@ -757,7 +758,8 @@ typedef enum {
 #define TM_LABEL                               10009
 #define TM_SOLVE                               10010
 #define TM_NEWMENU                             10011
-#define TM_CMP                                 10012 // TM_CMP must be the last in this list
+#define TM_KEY                                 10012
+#define TM_CMP                                 10013 // TM_CMP must be the last in this list
 
 // NIM number part
 #define NP_EMPTY                                   0
@@ -876,6 +878,9 @@ typedef enum {
 #define PGM_STOPPED                                0
 #define PGM_RUNNING                                1
 #define PGM_WAITING                                2
+#define PGM_PAUSED                                 3
+#define PGM_KEY_PRESSED_WHILE_PAUSED               4
+#define PGM_RESUMING                               5
 
 // Load mode
 #define LM_ALL                                     0
@@ -995,6 +1000,7 @@ typedef enum {
 #define PARAM_NUMBER_8                             5
 #define PARAM_NUMBER_16                            6
 #define PARAM_COMPARE                              7
+#define PARAM_KEYG_KEYX                            8
 
 #define CHECK_INTEGER                              0
 #define CHECK_INTEGER_EVEN                         1
